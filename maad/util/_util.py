@@ -223,45 +223,36 @@ def linear_scale(datain, minval= 0.0, maxval=1.0):
     dataout = dataout + minval;
     return dataout
 
-def db_scale (datain, db_range=60, db_gain=None, db_norm_val=1):
+def db_scale (datain, db_range=60, db_gain=None):
     """
     Rescale the data in dB scale after normalizing the data
     
     Parameters
     ----------
-    datain : scalars
-        data to rescale in dB
-        
-    db_floor : scalar, optional, default : -60
-        Anything less than db_floor is set to db_floor
-    
-    db_norm_val : scalar, optional, default : None
-        value used to normalized datain. If None, the maximum value is used
-        for the normalization
-    
+    datain : array-like
+        data to rescale in dB 
+    db_range : scalar, optional, default : 60
+        Anything larger than db_range is set to db_range  
+    db_gain : scalar, optional, default is None
+        Gain added to the results 
+                --> 20*log10(a) + db_gain
+                
     Returns
     -------
     dataout : scalars
+        --> 20*log10(a) + db_gain 
     """
     
-    # take the absolute value of datain
-    datain = abs(datain)
     
-    # if no value is provided to normalize the data, the maximum value of the 
-    # signal is used
-    if db_norm_val is None: 
-        db_norm_val = datain.max() 
-        print ("max value: %.2f" % db_norm_val)
-        
-    datain[datain ==0] = 1e-32              # Avoid zero value for log10
-    dataout = datain / db_norm_val          # normalize to a value (max by default) 
-    dataout = 20*np.log10(dataout)          # take log
+    datain = abs(datain)            # take the absolute value of datain
+    datain[datain ==0] = 1e-32      # Avoid zero value for log10          
+    dataout = 20*np.log10(datain)   # take log
+    if db_gain : dataout = dataout + db_gain    # Add gain if needed
     
-    # Add a gain if needed
-    if db_gain : dataout = dataout + db_gain
-    
-    # set anything less than the db_floor as db_floor
-    dataout[dataout < -db_range] = -db_range  
+    # set anything less than the db_range as 
+    #dataout[dataout < 0] = 0 
+    dataout[dataout > 0] = 0  
+    dataout[dataout < -(db_range)] = -db_range  
         
     return dataout
 
@@ -292,6 +283,10 @@ def plot1D(x, y, ax=None, **kwargs):
              
     y : 1d ndarray of scalar
         Vector containing the ordinate values (vertical axis)  
+    
+    ax : axis, optional, default is None
+        Draw the signal on this specific axis. Allow multiple plots on the same
+        axis.
             
     **kwargs, optional
         figsize : tuple of integers, optional, default: (4,10)
@@ -324,6 +319,14 @@ def plot1D(x, y, ax=None, **kwargs):
             width in pixels
         figtitle: string, optional, default: 'Audiogram'
             Title of the plot 
+        xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
+        ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
+        legend : string, optional, default : None
+            Legend for the plot
+        
+        ... and more, see matplotlib
     Returns
     -------
         fig : Figure
@@ -332,15 +335,15 @@ def plot1D(x, y, ax=None, **kwargs):
             The Axis instance
     """  
 
-    figsize=kwargs.get('figsize', (4, 10))
-    facecolor=kwargs.get('facecolor', 'w')
-    edgecolor=kwargs.get('edgecolor', 'k')
-    linewidth=kwargs.get('linewidth', 0.1)
-    linecolor=kwargs.get('linecolor', 'k')
-    title=kwargs.get('figtitle', 'Audiogram')
-    xlabel=kwargs.get('xlabel', 'Time [s]')
-    ylabel=kwargs.get('ylabel', 'Amplitude [AU]')
-    legend=kwargs.get('legend', None)
+    figsize=kwargs.pop('figsize', (4, 10))
+    facecolor=kwargs.pop('facecolor', 'w')
+    edgecolor=kwargs.pop('edgecolor', 'k')
+    linewidth=kwargs.pop('linewidth', 0.1)
+    linecolor=kwargs.pop('linecolor', 'k')
+    title=kwargs.pop('figtitle', 'Audiogram')
+    xlabel=kwargs.pop('xlabel', 'Time [s]')
+    ylabel=kwargs.pop('ylabel', 'Amplitude [AU]')
+    legend=kwargs.pop('legend', None)
        
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -378,19 +381,51 @@ def plot2D(im,ax=None,**kwargs):
     ----------
     im : 2D numpy array 
         The name or path of the .wav file to load
-
+             
+    ax : axis, optional, default is None
+        Draw the image on this specific axis. Allow multiple plots on the same
+        axis.
+            
+    **kwargs, optional
+        figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
+        title : string, optional, default : 'Spectrogram'
+            title of the figure
+        xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
+        ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
+        cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+                      'viridis'...
+        vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+        ext : scalars (left, right, bottom, top), optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
+        ... and more, see matplotlib
     Returns
-    -------   
-    """     
+    -------
+        fig : Figure
+            The Figure instance 
+        ax : Axis
+            The Axis instance
+    """ 
+   
     # matplotlib parameters
-    figsize=kwargs.get('figsize', (4, 13))
-    title=kwargs.get('title', 'Spectrogram')
-    ylabel=kwargs.get('ylabel', 'Frequency [Hz]')
-    xlabel=kwargs.get('xlabel', 'Time [sec]')  
-    cmap=kwargs.get('cmap', 'gray') 
-    vmin=kwargs.get('vmin', None) 
-    vmax=kwargs.get('vmax', None)    
-    ext=kwargs.get('extent', None)   
+    figsize=kwargs.pop('figsize', (4, 13))
+    title=kwargs.pop('title', 'Spectrogram')
+    ylabel=kwargs.pop('ylabel', 'Frequency [Hz]')
+    xlabel=kwargs.pop('xlabel', 'Time [sec]')  
+    cmap=kwargs.pop('cmap', 'gray') 
+    vmin=kwargs.pop('vmin', None) 
+    vmax=kwargs.pop('vmax', None)    
+    ext=kwargs.pop('extent', None)   
     
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
