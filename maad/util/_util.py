@@ -434,7 +434,7 @@ def plot2D(im,ax=None,**kwargs):
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : scalars (left, right, bottom, top), optional, default: None
+        ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
