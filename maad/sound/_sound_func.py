@@ -28,13 +28,17 @@ def load(filename, channel='left', display=False, savefig=None, **kwargs):
             XXXX_yyyymmdd_hhmmss.wav
             with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
             mm : minutes / ss : seconds
+            
     channel : {'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
+        
     display : boolean, optional, default is False
         Display the signal if True
+        
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
+        
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
         ****************************************************    
         savefilename : str, optional, default :'_audiogram.png'
@@ -57,7 +61,7 @@ def load(filename, channel='left', display=False, savefig=None, **kwargs):
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : scalars (left, right, bottom, top), optional, default: None
+        ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
@@ -89,7 +93,7 @@ def load(filename, channel='left', display=False, savefig=None, **kwargs):
     """
 
     print(72 * '_' )
-    print("loading wav file...")   
+    print("loading %s..." %filename)   
     
     # read the .wav file and return the sampling frequency fs (Hz) 
     # and the audiogram s as a 1D array of integer
@@ -148,20 +152,27 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
     ----------
     s :  1d ndarray of integer
         Vector containing the audiogram     
+        
     fs : int
         The sampling frequency in Hz
+        
     lfc : int, optional, default: None
         Low frequency cut (Hz) in the range [0;fs/2]   
+        
     hfc : int, optional, default: None
         High frequency cut (Hz) in the range [0;fs/2]
         if lfc and hfc are declared and lfc<hfc, bandpass filter is performed
+        
     order : int, optional, default: 3
         Order of the Butterworth filter. 
+        
     display : boolean, optional, default is False
         Display the signal if True
+        
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
+        
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
         ****************************************************    
         savefilename : str, optional, default :'_filt_audiogram.png'
@@ -184,7 +195,7 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : scalars (left, right, bottom, top), optional, default: None
+        ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
@@ -285,41 +296,52 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
     Parameters
     ----------
     s : 1d ndarray of integer
-        Vector containing the audiogram        
+        Vector containing the audiogram   
+        
     fs : int
         The sampling frequency in Hz       
+        
     nperseg : int, optional, default: 512
         Number of points par segment (short window).
         This parameter sets the resolution in time of the spectrogram,
         the higher is the number, the lower is the resolution in time but
         better is the resolution in frequency.
         This number is used to compute the short fourier transform (sfft).
-        For fast calculation, it's better to use a number that is a power 2.          
+        For fast calculation, it's better to use a number that is a power 2.  
+        
     overlap : scalar, optional, default: 0.5
         Pourcentage of overlap between each short windows
         The number ranges between 0 (no overlap) and 1 (complete overlap)
+        
     dt_df_res : list of two scalars [dt, df], optional, default is None
         **Priority to dt_df_res is provided**, 
         nperseg and overlap are not taken into account
         usage : 
             dt_df_res = [0.02, 20] means
             time resolution dt = 0.02s / frequency resolution df = 20Hz
+            
     db_range : int, optional, default is 60
         Final dB range of the spectrogram values.
         If dB_range is None, no db scale is performed.
+        
     db_gain : int, optional, default is 20
         After db scale, a db gain is added to the spectrogram values.
+        
     rescale : boolean, optional, default is True
         a linear rescale is performed between 0 to 1 on the final spectrogram.
         The spectrogram can be in dB scale or linear scale
+        
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
         tcrop corresponds to the min and max boundary time values    
+        
     display : boolean, optional, default is False
         Display the signal if True
+        
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
+        
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
         ****************************************************    
         savefilename : str, optional, default :'_filt_audiogram.png'
@@ -342,7 +364,7 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : scalars (left, right, bottom, top), optional, default: None
+        ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
@@ -356,13 +378,28 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
         ... and more, see matplotlib  
   
     Returns
-    -------
-    fn : 1d ndarray of scalar
-        Array of sample frequencies.       
-    tn : 1d ndarray of scalar
-        Array of segment times.        
+    -------        
     Sxx : ndarray
-        Spectrogram of s equivalent to Matlab       
+        Spectrogram of s equivalent to Matlab  
+        
+    dt : scalar
+        Time resolution of the spectrogram (horizontal x-axis)
+        
+    df : scalar
+        Frequency resolution of the spectrogram (vertical y-axis)
+        
+    ext : list of scalars [left, right, bottom, top]
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners. If `None`, the image is positioned such that
+        the pixel centers fall on zero-based (row, column) indices.
+        
+    date : object datetime
+        This object contains the date of creation of the file extracted from
+        the filename postfix. 
+        The filename must follow this format :
+            XXXX_yyyymmdd_hhmmss.wav
+            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+            mm : minutes / ss : seconds
     """   
 
     # Convert dt and df into overlap and nperseg (pixel-based)
@@ -418,7 +455,6 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
           % (dt, df))  
     print("*************************************************************")
            
-    
     # Display
     if display : 
         ylabel =kwargs.pop('ylabel','Frequency [Hz]')
@@ -462,12 +498,15 @@ def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
         must have this postfix :
             XXXX_yyyymmdd_hhmmss.wav
             with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds     
+            mm : minutes / ss : seconds    
+            
     display : boolean, optional, default is False
         Display the signals and the spectrograms if True
+        
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
+        
     **kwargs, optional. This parameter is used by the maad function as well
         as the plt.plot and savefig functions.
         All the input arguments required or optional in the signature functions
@@ -488,13 +527,25 @@ def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
                                tcrop=[0,30])
   
     Returns
-    -------
-    fn : 1d ndarray of scalar
-        Array of sample frequencies.       
-    tn : 1d ndarray of scalar
-        Array of segment times.        
-    Sxx : ndarray
-        Spectrogram of s equivalent to Matlab       
+    ------- 
+    Sxx : 2d ndarray
+        Spectrogram of s equivalent to Audacity     
+        
+    fs : Scalar
+        Sampling frequency
+        
+    ext : list of scalars [left, right, bottom, top], optional, default: None
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners. If `None`, the image is positioned such that
+        the pixel centers fall on zero-based (row, column) indices.   
+    
+    date : object datetime
+        This object contains the date of creation of the file extracted from
+        the filename postfix. 
+        The filename must follow this format :
+            XXXX_yyyymmdd_hhmmss.wav
+            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+            mm : minutes / ss : seconds   
     """ 
 
     channel=kwargs.pop('channel','left')
