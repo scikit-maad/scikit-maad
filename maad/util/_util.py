@@ -347,6 +347,10 @@ def plot1D(x, y, ax=None, **kwargs):
             label of the vertical axis
         legend : string, optional, default : None
             Legend for the plot
+        now : boolean, optional, default : True
+            if True, display now. Cannot display multiple plots. 
+            To display mutliple plots, set now=False until the last call for 
+            the last plot         
         
         ... and more, see matplotlib
     Returns
@@ -366,6 +370,7 @@ def plot1D(x, y, ax=None, **kwargs):
     xlabel=kwargs.pop('xlabel', 'Time [s]')
     ylabel=kwargs.pop('ylabel', 'Amplitude [AU]')
     legend=kwargs.pop('legend', None)
+    now=kwargs.pop('now', True)
        
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -394,7 +399,7 @@ def plot1D(x, y, ax=None, **kwargs):
     if legend is not None: ax.legend()
     
     # Display the figure now
-    plt.show()
+    if now : plt.show()
 
     return ax, fig
 
@@ -433,6 +438,11 @@ def plot2D(im,ax=None,**kwargs):
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
+        now : boolean, optional, default : True
+            if True, display now. Cannot display multiple images. 
+            To display mutliple images, set now=False until the last call for 
+            the last image      
+            
         ... and more, see matplotlib
     Returns
     -------
@@ -451,6 +461,7 @@ def plot2D(im,ax=None,**kwargs):
     vmin=kwargs.pop('vmin', None) 
     vmax=kwargs.pop('vmax', None)    
     ext=kwargs.pop('extent', None)   
+    now=kwargs.pop('now', True)
     
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -477,7 +488,7 @@ def plot2D(im,ax=None,**kwargs):
     fig.tight_layout()
     
     # Display the figure now
-    plt.show()
+    if now: plt.show()
 
     return ax, fig
 
