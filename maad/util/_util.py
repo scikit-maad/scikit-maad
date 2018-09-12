@@ -257,6 +257,28 @@ def db_scale (datain, db_range=60, db_gain=None):
     return dataout
 
 def crop_image (im, tn, fn, fcrop=None, tcrop=None):
+    """
+    Crop a spectrogram (or an image) in time (horizontal X axis) and frequency
+    (vertical y axis)
+    
+    Parameters
+    ----------
+    im : 2d ndarray
+        image to be cropped
+    tn, fn : 1d ndarray
+        tn is the time vector. fn is the frequency vector. They are required 
+        in order to know the correspondance between pixels and (time,frequency)
+    fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
+        fcrop corresponds to the min and max boundary frequency values
+        tcrop corresponds to the min and max boundary time values
+                
+    Returns
+    -------
+    im : 2d ndarray
+        image cropped
+    tn, fn, 1d ndarray
+        new time and frequency vectors
+    """
     
     if tcrop is not None : 
         indt = (tn>=tcrop[0]) *(tn<=tcrop[1])
