@@ -370,6 +370,9 @@ def plot1D(x, y, ax=None, **kwargs):
     ax.axis('tight')
     ax.grid(True)
     if legend is not None: ax.legend()
+    
+    # Display the figure now
+    plt.show()
 
     return ax, fig
 
@@ -450,6 +453,9 @@ def plot2D(im,ax=None,**kwargs):
     ax.axis('tight') 
 
     fig.tight_layout()
+    
+    # Display the figure now
+    plt.show()
 
     return ax, fig
 
