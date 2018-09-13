@@ -589,7 +589,7 @@ def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
                                 fcrop=fcrop, tcrop=tcrop, display=display, 
                                 savefig=savefig, **kwargs)
    
-    return Sxx, fs, ext, date
+    return Sxx, fs, dt, df, ext, date
 
 
 
