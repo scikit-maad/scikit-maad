@@ -10,19 +10,25 @@
 from ._rois_func import (load,
                         remove_background,
                         select_bandwidth,
-                        blurr,
+                        smooth,
+                        double_threshold_rel,
+                        double_threshold_abs,
                         create_mask,
                         select_rois,
-                        select_rois_manually,
+                        select_rois_auto,
+                        select_rois_man,
                         overlay_rois,
-                        find_rois_wrapper,)
+                        find_rois_wrapper)
 
 __all__ = ['load', 
            'remove_background', 
            'select_bandwidth',
-           'blurr',
+           'smooth',
+           'double_threshold_rel',
+           'double_threshold_abs',
            'create_mask',
            'select_rois',
-           'select_rois_manually',
+           'select_rois_auto',
+           'select_rois_man',
            'overlay_rois',
-           'find_rois_wrapper',]
+           'find_rois_wrapper']
