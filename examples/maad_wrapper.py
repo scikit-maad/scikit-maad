@@ -26,7 +26,12 @@ import maad
 import os
 # Get the current dir of the current file
 dir_path = os.path.dirname(os.path.realpath('__file__'))
-os.chdir(dir_path)
+print ("Current working directory %s" % dir_path)
+# Go to the parent directory
+parent_dir,_,_=dir_path.rpartition('\\')
+os.chdir(parent_dir)
+# Check current working directory.
+print ("Directory changed successfully %s" % os.getcwd())
 
 # Close all the figures (like in Matlab)
 plt.close("all")
@@ -34,31 +39,31 @@ plt.close("all")
 """****************************************************************************
 # -------------------          options              ---------------------------
 ****************************************************************************"""
-#filename = "data\demo.wav"
-#filename = "data\JURA_JUILLET_2018.wav"
-#filename="data\MNHN-SO-2018-128.wav'
-#filename = "data\S4A03902_20171124_065000.wav"
-#filename="data\S4A03998_20180712_060000.wav"
-#filename='data\.wav"
-#filename='data\S4A04430_20180713_103000.wav"
-#filename='data\S4A04430_20180712_141500.wav"
-filename="data\S4A04430_20180713_103000.wav"
-savefig_root = filename[0:-4]
-display=True
+#list 
+# demo.wav
+# JURA_20180812_173000.wav
+# MNHN_20180712_05300.wav
+# S4A03902_20171124_065000.wav
+# S4A03998_20180712_060000.wav
+# S4A04430_20180713_103000.wav
+# S4A04430_20180712_141500.wav
+filename=".\\data\\S4A04430_20180713_103000.wav"
 
 """****************************************************************************
 # -------------- LOAD SOUND AND PREPROCESS SOUND    ---------------------------
 ****************************************************************************"""
-im_ref,fs,ext,date = maad.sound.preprocess(filename, display=False,
-                                           dt=0.02, df=20,
-                                           fcrop=[100,10100], tcrop=[0,60])
+im_ref, fs, dt, df, ext, date = maad.sound.preprocess_wrapper(filename, display=True,
+                                db_range=60, db_gain=40, dt_df_res=[0.02,20],                               
+                                fcrop=[100,10100], tcrop=[0,60])
 
 """****************************************************************************
 # --------------------------- FIND ROIs    ------------------------------------
 ****************************************************************************"""
-im_rois, rois_bbox = maad.rois.find_rois(im_ref, ext, display=True, 
-                                          mode='relative',bin_std=3, 
-                                          bin_per=0.90)
+im_rois, rois_bbox, roi_label = maad.rois.find_rois_wrapper(im_ref, ext, display=True,
+                                std_pre = 2, std_post=1, 
+                                llambda=1.1, gauss_win = round(1000/df),
+                                mode_bin='relative', bin_std=5, bin_per=0.5,
+                                mode_roi='auto')
 
 """****************************************************************************
 # ---------------           GET FEATURES                 ----------------------
@@ -121,3 +126,4 @@ plt.figure()
 pca = PCA(n_components=2)
 Xp = pca.fit_transform(X)
 plt.scatter(Xp[:, 0], Xp[:, 1], c=Y, s=40)
+

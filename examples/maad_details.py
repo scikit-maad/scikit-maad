@@ -31,7 +31,12 @@ import maad
 import os
 # Get the current dir of the current file
 dir_path = os.path.dirname(os.path.realpath('__file__'))
-os.chdir(dir_path)
+print ("Current working directory %s" % dir_path)
+# Go to the parent directory
+parent_dir,_,_=dir_path.rpartition('\\')
+os.chdir(parent_dir)
+# Check current working directory.
+print ("Directory changed successfully %s" % os.getcwd())
 
 # Close all the figures (like in Matlab)
 plt.close("all")
@@ -39,14 +44,17 @@ plt.close("all")
 """****************************************************************************
 # -------------------          options              ---------------------------
 ****************************************************************************"""
-#filename="data\demo.wav"
-#filename="data\S4A03902_20171124_065000.wav"
-#filename="data\S4A03998_20180712_060000.wav"
-#filename='data\S4A04430_20180713_103000.wav"
-#filename='data\S4A04430_20180712_141500.wav"
-filename="data\S4A04430_20180713_103000.wav"
+#list 
+# demo.wav
+# JURA_20180812_173000.wav
+# MNHN_20180712_05300.wav
+# S4A03902_20171124_065000.wav
+# S4A03998_20180712_060000.wav
+# S4A04430_20180713_103000.wav
+# S4A04430_20180712_141500.wav
+filename=".\\data\\S4A04430_20180713_103000.wav"
 
-MANUAL = True
+
                  
 """****************************************************************************
 # -------------------          end options          ---------------------------
@@ -64,31 +72,32 @@ s,fs,date = maad.sound.load(filename=filename, channel="left",
 s_filt = maad.sound.select_bandwidth(s, fs, lfc=500, hfc=None, order=3, 
                                      display=False, savefig=None)
 # Compute the spectrogram of the sound
-overlap, nperseg, dt, df = maad.sound.convert_dt_df_into_points(dt=0.02,df=20,fs=fs)
-im_ref,tn,fn,ext = maad.sound.spectrogram(s_filt, fs, nperseg=nperseg, 
-                                       overlap=overlap, db_range=60, 
-                                       db_gain=30, db_norm_val=1, rescale=True, 
-                                       fcrop =[100,10100], tcrop = [0,60],
-                                       display=True, savefig=None)
-dt = tn[1]-tn[0]
-df = fn[1]-fn[0]
+im_ref,dt,df,ext = maad.sound.spectrogram(s_filt, fs, dt_df_res=[0.02, 20], 
+                                          db_range=60, db_gain=30, rescale=True, 
+                                          fcrop =[100,10100], tcrop = [0,60],
+                                          display=True, savefig=None)
+
+#im_ref,dt,df,ext = maad.sound.spectrogram(s_filt, fs, noverlap=0.5, nperseg=2048,
+#                                          db_range=60, db_gain=30, rescale=True, 
+#                                          fcrop =[100,10100], tcrop = [0,60],
+#                                          display=True, savefig=savefig_root)
 
 """****************************************************************************
 # --------------------------- FIND ROIs    ------------------------------------
 ****************************************************************************"""
-# blurr
-im_blurr_pre = maad.rois.blurr(im_ref, ext, std=3, display=True)
+# smooth
+im_smooth_pre = maad.rois.smooth(im_ref, ext, std=2, display=True)
 
 # Noise subtraction()
 win_px=round(1000/df)   # convert window width from Hz into pixels
-std_px=round(500/df)*2         # convert std from im_blurr into pixels
-im_denoized = maad.rois.remove_background(im_blurr_pre, ext, gauss_win=win_px, 
+std_px=round(500/df)    # convert std from im_blurr into pixels
+im_denoized = maad.rois.remove_background(im_smooth_pre, ext, gauss_win=win_px, 
                                           gauss_std=std_px, beta1=0.8, beta2=1, 
                                           llambda=1, display=True, 
                                           savefig=None)
 
-# blurr
-im_blurr_post = maad.rois.blurr(im_denoized, ext, std=1, display=True)
+# smooth
+im_smooth_post = maad.rois.smooth(im_denoized, ext, std=1, display=True)
 
 # FAIRE UNE FONCTION QUI AUGMENTE LES CONTRASTES
 # methode 1.exposure.equalize_adapthist(image, kernel_size=None, clip_limit=0.01, nbins=256)
@@ -96,32 +105,28 @@ im_blurr_post = maad.rois.blurr(im_denoized, ext, std=1, display=True)
 
 
 # Binarization
-im_bin = maad.rois.create_mask(im_blurr_post, ext, bin_std=6, bin_per=0.25, mode='relative',
-                               display=True, savefig=None)
+im_bin = maad.rois.create_mask(im_smooth_post, ext, bin_std=5, bin_per=0.5, 
+                               mode='relative', display=True, savefig=None)
 
 # Rois extraction
-if MANUAL :
-    #==========================================================================
-    im_rois, rois_bbox, rois_label = maad.rois.select_rois_manually(im_bin, ext, 
-                                                         filename='.\data\S4A03998_20180712_060000_label.txt',
-                                                         mask=True, display=True, savefig=None)
-    # display overlay ROIs
-    maad.rois.overlay_rois(im_ref, ext, rois_bbox, rois_label, savefig=None)
-    #==========================================================================
-else:
-    # min : 100Hz during 100ms (bird) or 25Hz during 1s (insect)
-    min_f = ceil(100/df) # 100Hz 
-    min_t = ceil(0.1/dt) # 100ms 
-    max_f = np.asarray([round(1000/df), im_ref.shape[0]])
-    max_t = np.asarray([im_ref.shape[1], round(1/dt)])
-    im_rois, rois_bbox, rois_label = maad.rois.select_rois(im_bin, ext, min_roi=np.min(min_f*min_t), 
-                                                 max_roi=np.max(max_f*max_t), display=True, 
-                                                 savefig=None)
-    # display overlay ROIs
-    maad.rois.overlay_rois(im_ref, ext, rois_bbox, savefig=None)
-    #=========================================================================
+#==== MANUAL ======
+im_rois, rois_bbox, rois_label = maad.rois.select_rois(im_bin,ext,mode='manual', 
+                                 filename='.\data\S4A03998_20180712_060000_label.txt',
+                                 mask=False, display=True, savefig=None)
 
-print(82 * '_')
+#==== AUTO ========
+min_f = ceil(100/df) # 100Hz 
+min_t = ceil(0.1/dt) # 100ms 
+max_f = np.asarray([round(1000/df), im_ref.shape[0]])
+max_t = np.asarray([im_ref.shape[1], round(1/dt)])
+im_rois, rois_bbox, rois_label = maad.rois.select_rois(im_bin, ext,mode='auto',
+                                 min_roi=np.min(min_f*min_t), max_roi=np.max(max_f*max_t), 
+                                 display=True,savefig=None)
+
+# display overlay ROIs
+maad.rois.overlay_rois(im_ref, ext, rois_bbox, rois_label, savefig=None)
+
+
 
 """****************************************************************************
 # ---------------           GET FEATURES                 ----------------------
@@ -139,6 +144,7 @@ params, kernels = maad.features.filter_bank_2d_nodc(frequency=freq,
 im_filtlist = maad.features.filter_multires(im_ref, ext, kernels, params,
                                             npyr=4,display=False, 
                                             savefig=None, dpi=50)
+
 # Extract shape features for each roi
 params_shape, shape_features = maad.features.shapes(im_list = im_filtlist, 
                                                        params = params, 
@@ -152,7 +158,8 @@ features = maad.features.save_csv(filename[:-4]+'.csv',
                        shape_features, centroid_features,
                        label_features = rois_label)
 
-print(82 * '_')
+
+print(72 * '_')
 
 """****************************************************************************
 # ---------------   FEATURES VIZUALIZATION WITH PANDAS   ----------------------
@@ -170,7 +177,7 @@ plt.show()
 corr_matrix = features.corr()
 corr_matrix["shp1"].sort_values(ascending=False)
  
-print(82 * '_')
+print(72 * '_')
 
 """****************************************************************************
 # ---------------           CLASSIFY FEATURES            ----------------------
