@@ -1,4 +1,6 @@
 # scikit-maad
 Python toolbox for Multiresolution Analysis of Acoustic Diversity (MAAD) on audio recordings
 
-See Docs section for detail explanations
+See docs in "docs dir" for detail explanations
+See scripts in "examples dir" for a direct approach of MAAD
+
