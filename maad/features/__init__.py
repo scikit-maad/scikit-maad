@@ -12,6 +12,7 @@ from ._features_func import (filter_multires,
                             shapes,
                             centroids,
                             save_csv,
+                            create_csv,
                             get_features_wrapper)
 
 __all__ = ['filter_multires', 
@@ -19,4 +20,5 @@ __all__ = ['filter_multires',
            'shapes',
            'centroids',
            'save_csv',
+           'create_csv'
            'get_features_wrapper']
