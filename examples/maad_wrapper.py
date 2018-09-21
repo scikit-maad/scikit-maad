@@ -53,45 +53,28 @@ filename=".\\data\\S4A04430_20180713_103000.wav"
 # -------------- LOAD SOUND AND PREPROCESS SOUND    ---------------------------
 ****************************************************************************"""
 im_ref, fs, dt, df, ext, date = maad.sound.preprocess_wrapper(filename, display=True,
-                                db_range=60, db_gain=40, dt_df_res=[0.02,20],                               
-                                fcrop=[100,10100], tcrop=[0,60])
+                                db_range=60, db_gain=40, dt_df_res=[0.02,20],
+                                lfc=250, hfc=None, order=2,
+                                fcrop=[0,10000], tcrop=[0,60])
 
 """****************************************************************************
 # --------------------------- FIND ROIs    ------------------------------------
 ****************************************************************************"""
-im_rois, rois_bbox, roi_label = maad.rois.find_rois_wrapper(im_ref, ext, display=True,
+im_rois, rois_bbox, rois_label = maad.rois.find_rois_wrapper(im_ref, ext, display=True,
                                 std_pre = 2, std_post=1, 
-                                llambda=1.1, gauss_win = round(1000/df),
+                                llambda=1.1, gauss_win = round(500/df),
                                 mode_bin='relative', bin_std=5, bin_per=0.5,
                                 mode_roi='auto')
 
 """****************************************************************************
 # ---------------           GET FEATURES                 ----------------------
 ****************************************************************************"""
-features, param_features = maad.features.get_features(im_ref, ext, date=date, 
-                                            im_rois=im_rois,
+features, params_shape = maad.features.get_features_wrapper(im_ref, ext, 
+                                            date=date,im_rois=im_rois,
+                                            label_features=rois_label,
                                             display=True,savefig =None,
-                                            npyr=2, freq=(0.75, 0.5, 0.25), 
-                                            ntheta = 2)
-
-
-"""****************************************************************************
-# ---------------   FEATURES VIZUALIZATION WITH PANDAS   ----------------------
-****************************************************************************"""
-features = pd.read_csv(filename[:-4]+'.csv')
- 
-# table with a summray of the features value
-features.describe()
- 
-# histograpm for each features
-features.hist(bins=50, figsize=(20,15))
-plt.show()
- 
-# Find correlations. 
-corr_matrix = features.corr()
-corr_matrix["shp1"].sort_values(ascending=False)
- 
-print(82 * '_')
+                                            npyr=4, freq=(0.75, 0.5, 0.25), 
+                                            ntheta = 4, gamma=0.5)
 
 """****************************************************************************
 # ---------------           CLASSIFY FEATURES            ----------------------
@@ -102,28 +85,4 @@ print(82 * '_')
 # Clustering/classication :  PCA
 # =============================================================================
 
-from sklearn.decomposition import PCA
-import numpy as np
-
-X = []
-nshp = len(params_shape)
-nrow, ncol = features.shape
-select_header = list(features.columns[ncol-nshp:ncol-nshp+6])
-#select_header.append('cfreq')
-# Get the relevant shapes values
-X = features[select_header].values
-
-Y = []
-# Create a vector Y with colors corresponding to the label
-unique_labelName = np.unique(np.array(features.labelName))
-for label in features.labelName:
-    for ii, name in enumerate(unique_labelName):   
-        if label in name :
-            Y.append(int(ii))
-
-# Calcul the PCA and display th results
-plt.figure()
-pca = PCA(n_components=2)
-Xp = pca.fit_transform(X)
-plt.scatter(Xp[:, 0], Xp[:, 1], c=Y, s=40)
-
+pca, Xp, YlabelID = maad.cluster.do_PCA(features,col_min=9)
