@@ -4,7 +4,7 @@
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 #
-# License: BSD 3 clause
+# License: New BSD License
 
 # =============================================================================
 # Load the modules
