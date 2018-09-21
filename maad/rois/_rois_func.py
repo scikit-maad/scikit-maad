@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-""" functions for processing ROIS """
+""" Multiresolution Analysis of Acoustic Diversity
+    functions for processing ROIS """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
@@ -986,18 +987,18 @@ def select_rois_man(im_bin, ext, filename, software='audacity', mask=True,
 
     Returns
     -------
-        im_label: 2d ndarray
-            image with labels as values
+    im_label: 2d ndarray
+       image with labels as values
             
-        rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
-            Contain the bounding box of each ROI
+    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
+        Contain the bounding box of each ROI
             
-        rois_label : list of tuple (labelID, labelname)
-            Contain the label (LabelID=scalar,labelname=string) for each ROI
-            LabelID is a number from 1 to the number of ROI. The pixel value 
-            of im_label correspond the labelID
-            Labname is a string. As the selection is auto, label is 'unknown'
-            by default.
+    rois_label : list of tuple (labelID, labelname)
+        Contain the label (LabelID=scalar,labelname=string) for each ROI
+        LabelID is a number from 1 to the number of ROI. The pixel value 
+        of im_label correspond the labelID
+        Labelname is a string. As the selection is auto, label is 'unknown'
+        by default.
     """
  
     if filename is None:     
@@ -1016,34 +1017,36 @@ def select_rois_man(im_bin, ext, filename, software='audacity', mask=True,
     
     # get the offset in x and y depending on the starting time and freq
     offset_x = np.round((t0)/dt).astype(int)
-    offset_y = np.round((f0)/df).astype(int)  
+    offset_y = np.round((f0)/df).astype(int) 
 
     im_rois = np.zeros(im_bin.shape).astype(int) 
+    bbox = []
     rois_bbox = []
     rois_label = []
     if software=='audacity':
         tab_out = read_audacity_annot(filename)
         
-        ymin = (tab_out['fmin']/df+offset_y).astype(int)
-        xmin = (tab_out['tmin']/dt+offset_x).astype(int)
-        ymax = (tab_out['fmax']/df+offset_y).astype(int)
-        xmax = (tab_out['tmax']/dt+offset_x).astype(int)
+        ymin = (tab_out['fmin']/df-offset_y).astype(int)
+        xmin = (tab_out['tmin']/dt-offset_x).astype(int)
+        ymax = (tab_out['fmax']/df-offset_y).astype(int)
+        xmax = (tab_out['tmax']/dt-offset_x).astype(int)
         zipped = zip(ymin,xmin,ymax,xmax)
         
-        # bbox
-        bbbox= list(zipped)
         # add current bbox to the list of bbox
-        rois_bbox.extend(bbbox)        
+        bbox= list(zipped) 
 
     # Construction of the ROIS image with the bbox and labels
     index = 0
     labelID = []
     labelName = []
-    for ymin, xmin, ymax, xmax in bbbox:
-        index= index +1
-        im_rois[ymin:ymax,xmin:xmax] = index
-        labelName.append(tab_out['label'][index-1])
-        labelID.append(index)
+    for ymin,xmin,ymax,xmax in bbox:
+        # test if bbox limit is inside the rois image
+        if (ymin>0 and xmin>0 and ymax>0 and xmax>0) :
+            rois_bbox.extend([(ymin,xmin,ymax,xmax)])
+            index= index +1
+            im_rois[ymin:ymax,xmin:xmax] = index
+            labelName.append(tab_out['label'][index-1])
+            labelID.append(index)
         
     rois_label = list(zip(labelID,labelName)) 
 
@@ -1154,7 +1157,7 @@ def select_rois(im_bin,ext,mode_roi='auto',display=False,savefig=None,**kwargs):
             Labname is a string. As the selection is auto, label is 'unknown'
             by default.
     """    
-    
+
     if mode_roi == 'auto':
         min_roi=kwargs.pop('min_roi', None) 
         max_roi=kwargs.pop('max_roi', None) 
