@@ -22,8 +22,8 @@ from ._rois_func import (load,
 
 from .rois_1d import (sinc,
                       corresp_onset_offset,
-                      rms_windowed,
-                      find_rois_1d)
+                      energy_windowed,
+                      find_rois_cwt)
 
 __all__ = ['load', 
            'remove_background', 
@@ -39,5 +39,5 @@ __all__ = ['load',
            'find_rois_wrapper',
            'sinc',
            'corresp_onset_offset',
-           'rms_windowed',
-           'find_rois_1d']
+           'energy_windowed',
+           'find_rois_cwt']

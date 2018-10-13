@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 17:39:19 2018
+""" Segmentation methods for 1D signals
 
-@author: Juan Sebastian Ulloa - juan.ulloa@mnhn.fr
+This module gathers a collection of functions to detect regions of interest on 1D signals
+
+Authors: Juan Sebastian Ulloa, Sylvain Haupert
+License: 3-Clause BSD license
 """
 import numpy as np
 from scipy import signal
@@ -16,11 +18,16 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     Filter 1D signal with a Kaiser-windowed filter
     
     Parameters: 
-        s (array): input signal
-        cutoff (int): upper and lower frequencies 
-        atten (int): attenuation in dB
-        transition_bw (float): transition bandwidth in %. default 5% of total band
-        bandpass (bool): bandpass or bandreject filter
+        s : ndarray
+            input 1D signal
+        cutoff : float 
+            upper and lower frequencies 
+        atten : int 
+            attenuation in dB
+        transition_bw : float
+            transition bandwidth in %. default 5% of total band
+        bandpass : bool
+            bandpass (True) or bandreject (False) filter, default is bandpass
     Return
         s_filt (array): signal filtered
             
@@ -64,22 +71,41 @@ def corresp_onset_offset(onset, offset, tmin, tmax):
         pass
     return onset, offset
 
-def rms_windowed(s, wl=512, fs=None):
-    """
-    Windowed rms
+def energy_windowed(s, wl=512, fs=None):
+    """ Computse windowed energy on signal
+    
+    Computes the energy of the signals by windows of length wl. Used to amplify sectors where the density of energy is higher
+    
+    Parameters
+    ----------
+        s : ndarray
+            input signal
+        wl : float
+            length of the window to summarize the rms value
+        fs : float
+            frequency sampling of the signal, used to keep track of temporal information of the signal
+
+    Returns
+    -------
+        time : ndarray
+            temporal index vector
+        s_rms : ndarray
+            windowed rms signal
+        
     """
     s_aux = np.lib.pad(s, (0, wl-len(s)%wl), 'reflect')  # padding
-    s_aux = np.sqrt(s_aux**2)  # rms of signal
+    s_aux = s_aux**2 
+    #  s_aux = np.abs(s_aux) # absolute value. alternative option
     s_aux = np.reshape(s_aux,(int(len(s_aux)/wl),wl))
-    s_rms = np.sum(s_aux,1)
+    s_rms = np.mean(s_aux,1)
     time = np.arange(0,len(s_rms)) * wl / fs + wl*0.5/fs
     return time, s_rms
 
-def find_rois_1d(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwargs):
+def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwargs):
     """
     Find region of interest (ROIS) based on predetermined temporal length and frequency limits
     
-    The general approach is based on a three step process
+    The general approach is based on continous wavelet transform following a three step process
         1. Filter the signal with a bandpass sinc filter
         2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]
         3. Binarize the signal applying a linear threshold
@@ -94,13 +120,13 @@ def find_rois_1d(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwargs
             temporal length of signal searched (in s)
         th : float, optional
             threshold to binarize the output
-        display: boolean, optional
-            plot results if set to True
+        display: boolean, optional, default is False
+            plot results if set to True, default is False
         save_csv: boolean, optional
             save results to csv file
             
-    Return
-    ------
+    Returns
+    -------
         rois : pandas DataFrame
             an object with temporal and frequencial limits of regions of interest            
     
@@ -110,9 +136,9 @@ def find_rois_1d(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwargs
     """
     # filter signal
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)
-    # rms: calculate window of maximum 5% of the signal. improves speed of cwt
+    # rms: calculate window of maximum 5% of tlen. improves speed of cwt
     wl = 2**np.floor(np.log2(tlen*fs*0.05)) 
-    t, s_rms = rms_windowed(s_filt, int(wl), fs)
+    t, s_rms = energy_windowed(s_filt, int(wl), fs)
     # find peaks
     cwt_width = [round(tlen*fs/wl/2)]
     npad = 5 ## seems to work with 3, but not sure
