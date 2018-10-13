@@ -20,6 +20,11 @@ from ._rois_func import (load,
                         overlay_rois,
                         find_rois_wrapper)
 
+from .rois_1d import (sinc,
+                      corresp_onset_offset,
+                      rms_windowed,
+                      find_rois_1d)
+
 __all__ = ['load', 
            'remove_background', 
            'select_bandwidth',
@@ -31,4 +36,8 @@ __all__ = ['load',
            'select_rois_auto',
            'select_rois_man',
            'overlay_rois',
-           'find_rois_wrapper']
+           'find_rois_wrapper',
+           'sinc',
+           'corresp_onset_offset',
+           'rms_windowed',
+           'find_rois_1d']
