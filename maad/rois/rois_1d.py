@@ -177,7 +177,6 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwarg
         cmap = kwargs.pop('cmap','gray')
         nfft = kwargs.pop('nfft',512)
         noverlap = kwargs.pop('noverlap',256)
-        figsize = kwargs.pop('sigsize',(8,4))
         # plot
         fig,(ax1,ax2) = plt.subplots(2,1,figsize=figsize)
         ax1.margins(x=0)
