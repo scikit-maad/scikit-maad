@@ -14,7 +14,7 @@
 import numpy as np 
 from scipy.io import wavfile 
 from scipy.signal import butter, sosfilt, hann, stft
-from ..util import plot1D, plot2D, db_scale, crop_image, date_from_filename
+from ..util import plot1D, plot2D, db_scale, crop_image, date_from_filename, linear_scale
 
 def load(filename, channel='left', detrend=True, verbose=False,
          display=False, savefig=None, **kwargs): 
@@ -288,8 +288,8 @@ def _convert_dt_df_into_points(dt, df, fs):
     dt = (1-overlap)*nperseg/fs
     return overlap,int(nperseg), dt, df
 
-def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db_gain=20,  
-                rescale=True, fcrop=None, tcrop=None, display=False, 
+def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, db_gain=20,  
+                rescale=False, fcrop=None, tcrop=None, display=False, 
                 savefig = None, **kwargs):
     """
     Calcul the spectrogram of a signal s
@@ -321,15 +321,16 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
             dt_df_res = [0.02, 20] means
             time resolution dt = 0.02s / frequency resolution df = 20Hz
             
-    db_range : int, optional, default is 60
+    db_range : int, optional, default is None
         Final dB range of the spectrogram values.
-        If dB_range is None, no db scale is performed.
+        If dB_range is None, no db scale is performed. Output is linear
         
     db_gain : int, optional, default is 20
         After db scale, a db gain is added to the spectrogram values.
         
-    rescale : boolean, optional, default is True
-        a linear rescale is performed between 0 to 1 on the final spectrogram.
+    rescale : boolean, optional, default is False
+        a linear rescale is performed between 0 to 1 on the final (linear 
+        or dB scale) spectrogram.
         The spectrogram can be in dB scale or linear scale
         
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
@@ -381,7 +382,10 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
     Returns
     -------        
     Sxx : ndarray
-        Spectrogram of s equivalent to Matlab  
+        Spectrogram (collection of Power Spectrum Density (PSD)) of s.
+        Spectrogram(s) = abs(STFD)²
+        This is equivalent to Audacity, in linear or dB scale. Values
+        is normalized between 0 to 1 if rescale is True
         
     dt : scalar
         Time resolution of the spectrogram (horizontal x-axis)
@@ -418,15 +422,12 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
     
     # spectrogram function from scipy via stft
     # Normalize by win.sum()
-    fn, tn, Sxx = stft(s, fs, win, nperseg, 
-                       noverlap, nfft=nperseg, detrend=False, 
-                       return_onesided=True, boundary=None, 
-                       padded=True, axis=-1)
+    fn, tn, Sxx = stft(s, fs, win, nperseg, noverlap, nfft=nperseg)
     
     # stft (complex) without normalisation
     scale_stft = sum(win)/len(win)
-    Sxx = Sxx / scale_stft  # remove normalization
-    Sxx = np.abs(Sxx)       # same result as abs(spectrogram) with Matlab
+    Sxx = Sxx / scale_stft      # normalization 
+    Sxx = np.abs(Sxx)**2        # Get the PSD (power spectra density)
     
     print('max value in the audiogram %.5f' % Sxx.max())
  
@@ -438,8 +439,8 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
         vmax = 0
     else:
     # stay in linear scale
-        vmin = 0
-        vmax = 1        
+        vmin = np.min(Sxx)
+        vmax = np.max(Sxx)              
 
     # Crop the image in order to analyzed only a portion of it
     if (fcrop or tcrop) is not None:
@@ -482,7 +483,11 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db
     # Rescale
     if rescale :
         print ('Linear rescale between 0 to 1')
-        Sxx = (Sxx + db_range)/db_range
+        if db_range is not None : 
+            Sxx = (Sxx + db_range)/db_range
+        else:
+            Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0)
+                
   
     return Sxx, dt, df, ext
 
