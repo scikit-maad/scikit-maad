@@ -14,9 +14,10 @@
 import numpy as np 
 from scipy.io import wavfile 
 from scipy.signal import butter, sosfilt, hann, stft
-from ..util import plot1D, plot2D, db_scale, crop_image, date_from_filename, linear_scale
+from ..util import plot1D, plot2D, db_scale, crop_image, date_from_filename
 
-def load(filename, channel='left', display=False, savefig=None, **kwargs): 
+def load(filename, channel='left', detrend=True, verbose=False,
+         display=False, savefig=None, **kwargs): 
     """
     Load a wav file (stereo or mono)
     
@@ -32,6 +33,12 @@ def load(filename, channel='left', display=False, savefig=None, **kwargs):
             
     channel : {'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
+
+    detrend : boolean, optional, default is True
+        Subtract the DC value.
+    
+    verbose : boolean, optional, default is False
+        print messages in the consol or terminal if verbose is True
         
     display : boolean, optional, default is False
         Display the signal if True
@@ -81,51 +88,44 @@ def load(filename, channel='left', display=False, savefig=None, **kwargs):
         Vector containing the audiogram 
         
     fs : int 
-        The sampling frequency in Hz of the audiogram  
-    
-    date : object datetime
-        This object contains the date of creation of the file extracted from
-        the filename postfix. 
-        The filename must follow this format :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds
-       
+        The sampling frequency in Hz of the audiogram         
     """
-
-    print(72 * '_' )
-    print("loading %s..." %filename)   
+    if verbose :
+        print(72 * '_' )
+        print("loading %s..." %filename)   
     
     # read the .wav file and return the sampling frequency fs (Hz) 
     # and the audiogram s as a 1D array of integer
     fs, s = wavfile.read(filename)
-    print("Sampling frequency: %dHz" % fs)
+    if verbose :print("Sampling frequency: %dHz" % fs)
     
-    # Be sure that 's' is an array of integer 16bits
-    s.astype('int16')
-    
-    # Normalize the signal between -1 to 1 by dividing with 2**15
-    s = s/2**15
+    # Normalize the signal between -1 to 1 depending on the type
+    if s.dtype == np.int32:
+        bit = 32
+        s = s/2**(bit-1)
+    elif s.dtype == np.int16:
+        bit = 16
+        s = s/2**(bit-1)
+    elif s.dtype == np.uint8:
+        bit = 8
+        s = s/2**(bit) # as it's unsigned
     
     # test if stereo signal. if YES => keep only the ch_select
     if s.ndim==2 :
         if channel == 'left' :
-            print("Select left channel")
-            s_out = s[:,0] - np.mean(s[:,0]) 
+            if verbose :print("Select left channel")
+            s_out = s[:,0] 
         else:
-            print("Select right channel")
-            s_out = s[:,1] - np.mean(s[:,1]) 
+            if verbose :print("Select right channel")
+            s_out = s[:,1] 
     else:
         s_out = s;
         
     # Detrend the signal by removing the DC offset
-    s_out = s_out - np.mean(s_out)
+    if detrend: s_out = s_out - np.mean(s_out)
     
     # Time vector
     tn = np.arange(s_out.size)/fs 
-    
-    # get the date from the filename
-    date = date_from_filename (filename)
     
     # DISPLAY
     if display : 
@@ -138,11 +138,11 @@ def load(filename, channel='left', display=False, savefig=None, **kwargs):
             format=kwargs.pop('format','png')
             savefilename=kwargs.pop('savefilename', '_audiogram')  
             filename = savefig+savefilename+'.'+format
-            print('\n''save figure : %s' %filename)
+            if verbose :print('\n''save figure : %s' %filename)
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
                         format=format, **kwargs)  
                            
-    return s_out, fs, date
+    return s_out, fs
 
 def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
                      savefig=None, **kwargs):
@@ -288,8 +288,8 @@ def _convert_dt_df_into_points(dt, df, fs):
     dt = (1-overlap)*nperseg/fs
     return overlap,int(nperseg), dt, df
 
-def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, db_gain=20,  
-                rescale=False, fcrop=None, tcrop=None, display=False, 
+def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=60, db_gain=20,  
+                rescale=True, fcrop=None, tcrop=None, display=False, 
                 savefig = None, **kwargs):
     """
     Calcul the spectrogram of a signal s
@@ -321,16 +321,15 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
             dt_df_res = [0.02, 20] means
             time resolution dt = 0.02s / frequency resolution df = 20Hz
             
-    db_range : int, optional, default is None
+    db_range : int, optional, default is 60
         Final dB range of the spectrogram values.
-        If dB_range is None, no db scale is performed. Output is linear
+        If dB_range is None, no db scale is performed.
         
     db_gain : int, optional, default is 20
         After db scale, a db gain is added to the spectrogram values.
         
-    rescale : boolean, optional, default is False
-        a linear rescale is performed between 0 to 1 on the final (linear 
-        or dB scale) spectrogram.
+    rescale : boolean, optional, default is True
+        a linear rescale is performed between 0 to 1 on the final spectrogram.
         The spectrogram can be in dB scale or linear scale
         
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
@@ -382,8 +381,7 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     Returns
     -------        
     Sxx : ndarray
-        Spectrogram of s equivalent to Audacity, in linear or dB scale. Values
-        can be normalized between 0 to 1 fi rescale is True
+        Spectrogram of s equivalent to Matlab  
         
     dt : scalar
         Time resolution of the spectrogram (horizontal x-axis)
@@ -420,12 +418,15 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     
     # spectrogram function from scipy via stft
     # Normalize by win.sum()
-    fn, tn, Sxx = stft(s, fs, win, nperseg, noverlap, nfft=nperseg)
+    fn, tn, Sxx = stft(s, fs, win, nperseg, 
+                       noverlap, nfft=nperseg, detrend=False, 
+                       return_onesided=True, boundary=None, 
+                       padded=True, axis=-1)
     
     # stft (complex) without normalisation
     scale_stft = sum(win)/len(win)
-    Sxx = Sxx / scale_stft      # normalization 
-    Sxx = np.abs(Sxx)**2        # Get the PSD (power spectra density)
+    Sxx = Sxx / scale_stft  # remove normalization
+    Sxx = np.abs(Sxx)       # same result as abs(spectrogram) with Matlab
     
     print('max value in the audiogram %.5f' % Sxx.max())
  
@@ -437,8 +438,8 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         vmax = 0
     else:
     # stay in linear scale
-        vmin = np.min(Sxx)
-        vmax = np.max(Sxx)        
+        vmin = 0
+        vmax = 1        
 
     # Crop the image in order to analyzed only a portion of it
     if (fcrop or tcrop) is not None:
@@ -481,10 +482,7 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     # Rescale
     if rescale :
         print ('Linear rescale between 0 to 1')
-        if db_range is not None :   
-            Sxx = (Sxx + db_range)/db_range
-        else:
-            Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0)
+        Sxx = (Sxx + db_range)/db_range
   
     return Sxx, dt, df, ext
 
