@@ -7,7 +7,7 @@
 # Load the py files with their functions
 # =============================================================================
 
-from ._util import (linear_scale,
+from .util import (linear_scale,
                    db_scale,
                    read_audacity_annot,
                    rand_cmap,
