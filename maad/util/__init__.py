@@ -7,20 +7,23 @@
 # Load the py files with their functions
 # =============================================================================
 
-from ._util import (linear_scale,
+from .util import (linear_scale,
                    db_scale,
-                   read_audacity_annot,
                    rand_cmap,
                    crop_image,
-                   date_from_filename,
                    plot1D,
                    plot2D)
 
+from .parser_func import (read_audacity_annot,
+                          date_from_filename,
+                          date_parser)
+
 __all__ = ['linear_scale',
            'db_scale',
-           'read_audacity_annot',
            'rand_cmap',
            'crop_image',
+           'read_audacity_annot',
            'date_from_filename',
+           'date_parser',
            'plot1D', 
            'plot2D']
