@@ -38,7 +38,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
         Subtract the DC value.
     
     verbose : boolean, optional, default is False
-        print messages in the consol or terminal if verbose is True
+        print messages into the consol or terminal if verbose is True
         
     display : boolean, optional, default is False
         Display the signal if True
@@ -288,9 +288,9 @@ def _convert_dt_df_into_points(dt, df, fs):
     dt = (1-overlap)*nperseg/fs
     return overlap,int(nperseg), dt, df
 
-def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, db_gain=20,  
-                rescale=False, fcrop=None, tcrop=None, display=False, 
-                savefig = None, **kwargs):
+def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, mode='amplitude',
+                db_range=60, db_gain=20, rescale=False, fcrop=None, tcrop=None, 
+                verbose=False, display=False, savefig = None, **kwargs):
     """
     Calcul the spectrogram of a signal s
     
@@ -321,12 +321,20 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
             dt_df_res = [0.02, 20] means
             time resolution dt = 0.02s / frequency resolution df = 20Hz
             
-    db_range : int, optional, default is None
-        Final dB range of the spectrogram values.
-        If dB_range is None, no db scale is performed. Output is linear
+    mode : str, optional, default is 'amplitude'
+        select the type of spectrogram :
+            - 'amplitude' : Sxx = A
+            - 'energy'    : Sxx = A² (= Power Spectrum Density (PSD))
+            - 'decibel'   : Sxx = 20*log10(A)
+            
+    db_range : int, optional, default is 60
+        **Only use if mode = 'decibel'**    
+        dB range of the spectrogram values.
         
     db_gain : int, optional, default is 20
+        **Only use if mode = 'decibel'**   
         After db scale, a db gain is added to the spectrogram values.
+        Sxx = 20*log10(A) + db_gain
         
     rescale : boolean, optional, default is False
         a linear rescale is performed between 0 to 1 on the final (linear 
@@ -335,7 +343,10 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
-        tcrop corresponds to the min and max boundary time values    
+        tcrop corresponds to the min and max boundary time values  
+        
+    verbose : boolean, optional, default is False
+        print messages into the consol or terminal if verbose is True
         
     display : boolean, optional, default is False
         Display the signal if True
@@ -417,8 +428,9 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     # sliding window 
     win = hann(nperseg)
     
-    print(72 * '_')
-    print("Computing spectrogram with nperseg=%d and noverlap=%d..." % (nperseg, noverlap))
+    if verbose:
+        print(72 * '_')
+        print("Computing spectrogram with nperseg=%d and noverlap=%d..." % (nperseg, noverlap))
     
     # spectrogram function from scipy via stft
     # Normalize by win.sum()
@@ -427,24 +439,30 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     # stft (complex) without normalisation
     scale_stft = sum(win)/len(win)
     Sxx = Sxx / scale_stft      # normalization 
-    Sxx = np.abs(Sxx)**2        # Get the PSD (power spectra density)
     
-    print('max value in the audiogram %.5f' % Sxx.max())
- 
-    # Convert in dB scale 
-    if db_range is not None :
-        print ('Convert in dB scale')
-        Sxx = db_scale(Sxx, db_range, db_gain)
-        vmin = -db_range
-        vmax = 0
-    else:
-    # stay in linear scale
+    if mode == 'amplitude':
+        Sxx = np.abs(Sxx)
+        if verbose:print('max value of the amplitude spectrogram %.5f' % Sxx.max())
+        # in linear scale
         vmin = np.min(Sxx)
-        vmax = np.max(Sxx)              
+        vmax = np.max(Sxx)   
+  
+    elif mode == 'energy':
+        Sxx = np.abs(Sxx)**2        # Get the PSD (power spectra density)
+        if verbose:print('max value of the energy spectrogram %.5f' % Sxx.max())
+        # in linear scale
+        vmin = np.min(Sxx)
+        vmax = np.max(Sxx)   
+    elif mode == 'decibel':
+        Sxx = np.abs(Sxx)
+        Sxx = db_scale(Sxx, db_range, db_gain)
+        if verbose:print('max value of the decibel spectrogram %.5f' % Sxx.max())
+        vmin = -db_range
+        vmax = 0         
 
     # Crop the image in order to analyzed only a portion of it
     if (fcrop or tcrop) is not None:
-        print ('Crop the spectrogram along time axis and frequency axis')
+        if verbose:print ('Crop the spectrogram along time axis and frequency axis')
         Sxx, tn, fn = crop_image(Sxx,tn,fn,fcrop,tcrop)
     
     # Extent
@@ -452,10 +470,11 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     # dt and df resolution
     dt = tn[1]-tn[0]
     df = fn[1]-fn[0]
-    print("*************************************************************")
-    print("   Time resolution dt=%.2fs | Frequency resolution df=%.2fHz "
-          % (dt, df))  
-    print("*************************************************************")
+    if verbose:
+        print("*************************************************************")
+        print("   Time resolution dt=%.2fs | Frequency resolution df=%.2fHz "
+              % (dt, df))  
+        print("*************************************************************")
            
     # Display
     if display : 
@@ -476,16 +495,16 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
             format=kwargs.pop('format','png')
             savefilename=kwargs.pop('savefilename', '_spectrogram')  
             filename = savefig+savefilename+'.'+format
-            print('\n''save figure : %s' %filename)
+            if verbose:print('\n''save figure : %s' %filename)
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
                         format=format, **kwargs)       
-
     # Rescale
     if rescale :
-        print ('Linear rescale between 0 to 1')
-        if db_range is not None : 
+        if mode=='decibel' : 
+            if verbose:print ('Linear rescale [-db_range dB; 0dB] to [0; 1]')
             Sxx = (Sxx + db_range)/db_range
         else:
+            if verbose:print ('Linear rescale between 0 to 1')
             Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0)
                 
   
