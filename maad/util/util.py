@@ -135,7 +135,8 @@ def linear_scale(datain, minval= 0.0, maxval=1.0):
 
 def db_scale (datain, db_range=60, db_gain=None):
     """
-    Rescale the data in dB scale after normalizing the data
+    Transform linear date into decibel scale within the dB range (db_range).
+    A gain (db_gain) could be added at the end.    
     
     Parameters
     ----------
@@ -150,7 +151,7 @@ def db_scale (datain, db_range=60, db_gain=None):
     Returns
     -------
     dataout : scalars
-        --> 20*log10(a) + db_gain 
+        --> 20*log10(datain) + db_gain 
     """
     
     
