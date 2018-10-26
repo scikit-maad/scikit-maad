@@ -7,7 +7,7 @@
 # Load the py files with their functions
 # =============================================================================
 
-from ._rois_func import (load,
+from ._rois2d import (load,
                         remove_background,
                         select_bandwidth,
                         smooth,
