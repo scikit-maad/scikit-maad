@@ -7,7 +7,7 @@
 # Load the py files with their functions
 # =============================================================================
 
-from ._sound_func import (load,
+from .sound_func import (load,
                          select_bandwidth,
                          spectrogram,
                          preprocess_wrapper)

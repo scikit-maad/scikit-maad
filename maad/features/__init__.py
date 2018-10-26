@@ -7,7 +7,7 @@
 # Load the py files with their functions
 # =============================================================================
 
-from ._features_func import (filter_multires,
+from .features_func import (filter_multires,
                             filter_bank_2d_nodc,
                             shapes,
                             centroids,
