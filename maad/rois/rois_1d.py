@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """ Segmentation methods for 1D signals
 
-This module gathers a collection of functions to detect regions of interest on 1D signals
+This module gathers a collection of functions to detect regions of interest 
+on 1D signals
 
 Authors: Juan Sebastian Ulloa, Sylvain Haupert
 License: 3-Clause BSD license
@@ -20,15 +21,15 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     Parameters: 
         s : ndarray
             input 1D signal
-        cutoff : float 
-            upper and lower frequencies 
-        atten : int 
+        cutoff : ndarray
+            upper and lower frequencies (min_f, max_f)
+        atten : float 
             attenuation in dB
         transition_bw : float
-            transition bandwidth in %. default 5% of total band
+            transition bandwidth in percent default 5% of total band
         bandpass : bool
             bandpass (True) or bandreject (False) filter, default is bandpass
-    Return
+    Returns:
         s_filt (array): signal filtered
             
     """
@@ -41,7 +42,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     return s_filt
 
 
-def corresp_onset_offset(onset, offset, tmin, tmax):
+def _corresp_onset_offset(onset, offset, tmin, tmax):
     """ Check that each onsets have a corresponding offset 
 
     Parameters
@@ -71,7 +72,7 @@ def corresp_onset_offset(onset, offset, tmin, tmax):
         pass
     return onset, offset
 
-def energy_windowed(s, wl=512, fs=None):
+def _energy_windowed(s, wl=512, fs=None):
     """ Computse windowed energy on signal
     
     Computes the energy of the signals by windows of length wl. Used to amplify sectors where the density of energy is higher
@@ -101,7 +102,8 @@ def energy_windowed(s, wl=512, fs=None):
     time = np.arange(0,len(s_rms)) * wl / fs + wl*0.5/fs
     return time, s_rms
 
-def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwargs):
+def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
+                  savefilename='rois.csv', **kwargs):
     """
     Find region of interest (ROIS) based on predetermined temporal length and frequency limits
     
@@ -122,9 +124,10 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwarg
             threshold to binarize the output
         display: boolean, optional, default is False
             plot results if set to True, default is False
-        save_csv: boolean, optional
+        save_df : boolean, optional
             save results to csv file
-            
+        savefilename : str, optional
+            Name of the file to save the table as comma separatd values (csv)        
     Returns
     -------
         rois : pandas DataFrame
@@ -138,7 +141,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwarg
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)
     # rms: calculate window of maximum 5% of tlen. improves speed of cwt
     wl = 2**np.floor(np.log2(tlen*fs*0.05)) 
-    t, s_rms = energy_windowed(s_filt, int(wl), fs)
+    t, s_rms = _energy_windowed(s_filt, int(wl), fs)
     # find peaks
     cwt_width = [round(tlen*fs/wl/2)]
     npad = 5 ## seems to work with 3, but not sure
@@ -153,23 +156,21 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwarg
     if onset.size==0 or offset.size==0:
     # No detection found
         print('Warning: No detection found')
-        savefilename=kwargs.pop('savefilename', 'rois.csv')
         df = pd.DataFrame(data=None)
         if save_df==True:
             df.to_csv(savefilename, sep=',',header=False, index=False)
 
     else:
     # A detection was found, save results to csv
-        onset, offset = corresp_onset_offset(onset, offset, tmin=0, tmax=len(s)/fs)
-        rois_tf = np.transpose([np.round(onset,5),  
-                                np.repeat(flims[0],repeats=len(onset)),
-                                np.round(offset,5),   
-                                np.repeat(flims[1],repeats=len(onset))])
-        cols=['onset','fmin','offset','fmax']
+        onset, offset = _corresp_onset_offset(onset, offset, tmin=0, tmax=len(s)/fs)
+        rois_tf = np.transpose([np.repeat(flims[0],repeats=len(onset)),
+                                np.round(onset,5),  
+                                np.repeat(flims[1],repeats=len(onset)),
+                                np.round(offset,5)])
+        cols=['min_f', 'min_t','max_f', 'max_t']
         df = pd.DataFrame(data=rois_tf,columns=cols)
         if save_df==True:
-            savefilename=kwargs.pop('savefilename', 'rois.csv')
-            df.to_csv(savefilename, sep=',',header=True, index=False)
+            df.to_csv(savefilename, sep=',', header=True, index=False)
 
     # Display
     if display==True: 
@@ -190,10 +191,11 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,**kwarg
         ax2.set_xlabel('Time (s)')
         if not(df.empty):
             for idx, _ in df.iterrows():
-                xy = (df.onset[idx],df.fmin[idx])
-                width = df.offset[idx] - df.onset[idx]
-                height = df.fmax[idx] - df.fmin[idx]
-                rect = patches.Rectangle(xy,width,height,lw=1,edgecolor='r',facecolor='none')
+                xy = (df.min_t[idx],df.min_f[idx])
+                width = df.max_t[idx] - df.min_t[idx]
+                height = df.max_f[idx] - df.min_f[idx]
+                rect = patches.Rectangle(xy, width, height, lw=1, 
+                                         edgecolor='r', facecolor='none')
                 ax2.add_patch(rect)
         plt.show()
     return df
