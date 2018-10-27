@@ -111,3 +111,4 @@ venv.bak/
 maad/__pycache__/__init__.cpython-36.pyc
 maad/__pycache__/__init__.cpython-36.pyc
 *.pyc
+*.pyc
