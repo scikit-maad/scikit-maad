@@ -18,7 +18,8 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     """
     Filter 1D signal with a Kaiser-windowed filter
     
-    Parameters: 
+    Parameters:
+    ----------
         s : ndarray
             input 1D signal
         cutoff : ndarray
@@ -30,6 +31,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
         bandpass : bool
             bandpass (True) or bandreject (False) filter, default is bandpass
     Returns:
+    -------
         s_filt (array): signal filtered
             
     """
