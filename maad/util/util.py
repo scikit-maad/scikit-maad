@@ -402,3 +402,139 @@ def plot2D(im,ax=None,**kwargs):
 
     return ax, fig
 
+def nearest_idx(array,value):
+    """ Find nearest value on array and return index
+    
+        Parameters
+        ----------
+        array: ndarray
+            array of values to search for nearest values
+        value: float
+            value to be searched in array
+            
+        Returns
+        -------
+        idx: int
+            index of nearest value on array
+        
+        Examples
+        --------
+        >>> x = np.array([1,2,3])
+        >>> ig.nearest_idx(x, 1.3)
+        [0]
+        >>> ig.nearest_idx(x, 1.6)
+        [1]
+    """
+    idx = (np.abs(array-value)).argmin()
+    return idx
+
+
+def rois_to_audacity(fname, onset, offset):
+    """ Write audio segmentation to file (Audacity format)
+    
+        Parameters
+        ----------
+        fname: str
+            filename to save the segmentation
+        onset: int, float array_like
+            output of a detection method (e.g. find_rois_1d)
+        offset: int, float array_like
+            output of a detection method (e.g. find_rois_1d)
+            
+        Return
+        ------
+        Returns a csv file
+            
+    """
+    if onset.size==0:
+        print(fname, '< No detection found')
+        df = pd.DataFrame(data=None)
+        df.to_csv(fname, sep=',',header=False, index=False)
+    else:
+        label = range(len(onset))
+        rois_tf = pd.DataFrame({'t_begin':onset, 't_end':offset, 'xlabel':label})
+        rois_tf.to_csv(fname, index=False, header=False, sep='\t') 
+
+def rois_to_imblobs(im_blobs, rois_bbox):
+    """ Add rois to im_blobs 
+    
+    """
+    # roi to image blob
+    for min_y, min_x, max_y, max_x in rois_bbox.values:
+        im_blobs[min_y:max_y+1, min_x:max_x+1]=1
+    return im_blobs
+
+def normalize_2d(im, min_value, max_value):
+    """ Normalize 2d array between two values
+    To check
+    """
+    im = (im - np.min(im))/(np.max(im)-np.min(im))
+    im = im * (max_value - min_value) + min_value
+    return im
+
+
+def format_rois(rois, ts, fs, fmt=None):
+    """ Setup rectangular rois to a predifined format: 
+        time-frequency or bounding box
+    
+    Parameters
+    ----------
+    rois : pandas DataFrame
+        array must have a valid input format with column names
+        - bounding box: min_y, min_x, max_y, max_x
+        - time frequency: min_f, min_t, max_f, max_t
+    ts : ndarray
+        vector with temporal indices, output from the spectrogram function (in seconds)
+    fs: ndarray
+        vector with frequencial indices, output from the spectrogram function (in Hz)
+    fmt: str
+        A string indicating the desired output format: 'bbox' or 'tf'
+        
+    Returns
+        -------
+        rois_bbox: ndarray
+            array with indices of ROIs matched on spectrogram
+    """
+    # Check format of the input data
+    if type(rois) is not pd.core.frame.DataFrame and type(rois) is not pd.core.series.Series:
+        raise TypeError('Rois must be of type pandas DataFrame or Series.')    
+
+    elif fmt is not 'bbox' and fmt is not 'tf':
+        raise TypeError('Format must be either fmt=\'bbox\' or fmt=\'tf\'.')
+
+    # Compute new format
+    elif type(rois) is pd.core.series.Series and fmt is 'bbox':
+        min_y = nearest_idx(fs, rois.min_f)
+        min_x = nearest_idx(ts, rois.min_t)
+        max_y = nearest_idx(fs, rois.max_f)
+        max_x = nearest_idx(ts, rois.max_t)
+        rois_out = pd.Series({'min_y': min_y, 'min_x': min_x, 
+                              'max_y': max_y, 'max_x': max_x})
+        
+    elif type(rois) is pd.core.series.Series and fmt is 'tf':
+        rois_out = pd.Series({'min_f': fs[rois.min_y.astype(int)], 
+                              'min_t': ts[rois.min_x.astype(int)],
+                              'max_f': fs[rois.max_y.astype(int)],
+                              'max_t': ts[rois.max_x.astype(int)]})
+            
+    elif type(rois) is pd.core.frame.DataFrame and fmt is 'bbox':
+        rois_bbox = []
+        for idx in rois.index:            
+            min_y = nearest_idx(fs, rois.loc[idx, 'min_f'])
+            min_x = nearest_idx(ts, rois.loc[idx, 'min_t'])
+            max_y = nearest_idx(fs, rois.loc[idx, 'max_f'])
+            max_x = nearest_idx(ts, rois.loc[idx, 'max_t'])
+            rois_bbox.append((min_y, min_x, max_y, max_x))
+        
+        rois_out = pd.DataFrame(rois_bbox, 
+                                columns=['min_y','min_x','max_y','max_x'])
+    
+    elif type(rois) is pd.core.frame.DataFrame and fmt is 'tf':
+        rois_out = pd.DataFrame({'min_f': fs[rois.min_y.astype(int)], 
+                                 'min_t': ts[rois.min_x.astype(int)],
+                                 'max_f': fs[rois.max_y.astype(int)],
+                                 'max_t': ts[rois.max_x.astype(int)]})
+
+    else:
+        raise TypeError('Rois type or format not understood, please check docstring.')
+    return rois_out
