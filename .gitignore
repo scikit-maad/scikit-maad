@@ -110,5 +110,6 @@ venv.bak/
 *.DS_Store
 maad/__pycache__/__init__.cpython-36.pyc
 maad/__pycache__/__init__.cpython-36.pyc
-*.pyc
+
+# Ignore *.pyc files reulting from compilation of module
 *.pyc

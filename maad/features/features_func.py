@@ -447,7 +447,8 @@ def filter_multires(im_in, ext, kernels, params, npyr=4, display=False,
     for ii, im in enumerate(im_filt):
         ratio = np.array(dims_raw)/np.array(im.shape)
         if ratio[0] > 1:
-            im = transform.rescale(im, scale = ratio, mode='reflect')
+            im = transform.rescale(im, scale = ratio, mode='reflect', 
+                                   multichannel=False)
         else:
             pass
         im_filt[ii] = im
