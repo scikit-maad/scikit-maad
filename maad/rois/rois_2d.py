@@ -1306,7 +1306,10 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
     else :
         # Colormap
         color = rand_cmap(len(labelNames)+1,first_color_black=False) 
+        cc = 0
         for bbox, label in zip(rois_bbox, rois_label):
+            cc = cc+1
+            print(cc)
             y0 = bbox[0]
             x0 = bbox[1]
             y1 = bbox[2]

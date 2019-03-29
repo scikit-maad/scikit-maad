@@ -16,27 +16,24 @@ get_ipython().magic('reset -sf')
 # =============================================================================
 # Load the modules
 # =============================================================================
-
 import matplotlib.pyplot as plt
 import pandas as pd # for csv
 import numpy as np
 from math import ceil
 
-# Import MAAD modules   
-import sys
-sys.path.append('D:\\mes_projets\\2018\\_TOOLBOX\\Python\\scikit-maad') 
-import maad
-
-# change the path to the current path where the script is
+# =============================================================================
+# ############## Import MAAD module
+from pathlib import Path # in order to be wind/linux/MacOS compatible
 import os
+
+# change the path to the current path where the script is located
 # Get the current dir of the current file
 dir_path = os.path.dirname(os.path.realpath('__file__'))
-print ("Current working directory %s" % dir_path)
-# Go to the parent directory
-parent_dir,_,_=dir_path.rpartition('\\')
-os.chdir(parent_dir)
-# Check current working directory.
-print ("Directory changed successfully %s" % os.getcwd())
+os.chdir(dir_path)
+
+maad_path = Path(dir_path).parents[0]
+os.sys.path.append(maad_path.as_posix())
+import maad
 
 # Close all the figures (like in Matlab)
 plt.close("all")
@@ -52,9 +49,9 @@ plt.close("all")
 # S4A03998_20180712_060000.wav
 # S4A04430_20180713_103000.wav
 # S4A04430_20180712_141500.wav
-filename=".\\data\\S4A03998_20180712_060000.wav"
-
-                 
+filename= str(maad_path / 'data/jura_cold_forest.wav')
+filename_label= filename[0:-4] +'_label.txt'
+                                          
 """****************************************************************************
 # -------------------          end options          ---------------------------
 ****************************************************************************"""
@@ -64,8 +61,8 @@ filename=".\\data\\S4A03998_20180712_060000.wav"
 # -------------- LOAD SOUND AND PREPROCESS SOUND    ---------------------------
 ****************************************************************************"""
 # Load the original sound
-savefig_root = filename[0:-4]
-s,fs,date = maad.sound.load(filename=filename, channel="left",
+#datadir = filename[0:-4]
+s,fs = maad.sound.load(filename=filename, channel="left",
                             display=False, savefig=None)
 # Filter the sound between Low frequency cut (lfc) and High frequency cut (hlc)
 s_filt = maad.sound.select_bandwidth(s, fs, lfc=250, hfc=None, order=2, 
@@ -73,7 +70,7 @@ s_filt = maad.sound.select_bandwidth(s, fs, lfc=250, hfc=None, order=2,
 # Compute the spectrogram of the sound
 im_ref,dt,df,ext = maad.sound.spectrogram(s_filt, fs, dt_df_res=[0.02, 20], 
                                           db_range=60, db_gain=40, rescale=True, 
-                                          fcrop =[0,10000], tcrop = [0,60],
+                                          fcrop =[0,20000], tcrop = [0,60],
                                           display=True, savefig=None)
 
 #im_ref,dt,df,ext = maad.sound.spectrogram(s_filt, fs, noverlap=0.5, nperseg=2048,
@@ -149,7 +146,8 @@ params_shape, shape_features = maad.features.shapes(im_filtlist = im_filtlist,
                                                        params = params, 
                                                        im_rois=im_rois)
 # Extract centroids features for each roi
-centroid_features = maad.features.centroids(im=im_ref, ext=ext, date=date, 
+centroid_features = maad.features.centroids(im=im_ref, ext=ext, 
+                                            date=maad.util.date_from_filename(filename), 
                                             im_rois=im_rois)
 
 # 

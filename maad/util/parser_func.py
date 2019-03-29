@@ -47,7 +47,7 @@ def read_audacity_annot (audacity_filename):
     f_info = f_info.reset_index(drop=True)
     
     # return dataframe
-    tab_out = pd.concat([t_info['label'], 
+    tab_out = pd.concat([t_info['label'].astype('str'), 
                          t_info['tmin'].astype('float32'), 
                          f_info['fmin'].astype('float32'), 
                          t_info['tmax'].astype('float32'), 

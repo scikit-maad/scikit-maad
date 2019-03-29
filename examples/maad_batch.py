@@ -16,23 +16,27 @@ get_ipython().magic('reset -sf')
 # =============================================================================
 # Load the modules
 # =============================================================================
-
 import matplotlib.pyplot as plt
 import pandas as pd # for csv
+import numpy as np
 
-# Import MAAD modules   
-import sys
-sys.path.append('D:\\mes_projets\\2018\\_TOOLBOX\\Python\\scikit-maad') 
-import maad
-
-# change the path to the current path where the script is
+# =============================================================================
+# ############## Import MAAD module
+from pathlib import Path # in order to be wind/linux/MacOS compatible
 import os
+
+# change the path to the current path where the script is located
 # Get the current dir of the current file
 dir_path = os.path.dirname(os.path.realpath('__file__'))
 os.chdir(dir_path)
 
+maad_path = Path(dir_path).parents[0]
+os.sys.path.append(maad_path.as_posix())
+import maad
+
 # Close all the figures (like in Matlab)
 plt.close("all")
+
 
 """****************************************************************************
 # -------------------          options              ---------------------------
@@ -61,7 +65,7 @@ for root, subFolders, files in os.walk(rootdir):
             savefile = savedir+savefile_base
             
             # Load the original sound
-            s,fs,date = maad.sound.load(filename=filename, channel="left",
+            s,fs = maad.sound.load(filename=filename, channel="left",
                                         display=False, savefig=None)
             # Filter the sound between Low frequency cut (lfc) and High frequency cut (hlc)
             s_filt = maad.sound.select_bandwidth(s, fs, lfc=1000, hfc=None, order=3, 
@@ -117,7 +121,7 @@ for root, subFolders, files in os.walk(rootdir):
             
             # Extract centroids features for each roi
             centroid_features = maad.features.centroids(im=im_ref, df=df, dt=dt, 
-                                                        date=date, 
+                                                        date=maad.util.date_from_filename(filename), 
                                                         im_rois=im_rois)
             
             # table = maad.features.create_csv(shape_features, centroid_features)

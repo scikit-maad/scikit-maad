@@ -619,7 +619,13 @@ def centroids (im, ext, date=None, im_rois=None):
         centroids = ndi.center_of_mass(im)
     else:
         rprops = measure.regionprops(im_rois, intensity_image=im)
-        centroids = [roi.weighted_centroid for roi in rprops]
+        for roi in rprops :
+            # Test if the intensity of the ROI is not null
+            if roi.mean_intensity >0:
+                centroids.append(roi.weighted_centroid)
+            else:
+            # if Null, then just take the centroid of the bbox
+                centroids.append(roi.centroid)
           
     # Convert pixels in frequency Hz and time in s
     if date is None : date = datetime(1900,1,1,0,0,0,0)

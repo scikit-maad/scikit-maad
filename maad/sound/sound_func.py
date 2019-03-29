@@ -11,10 +11,13 @@
 # Load the modules
 # =============================================================================
 # Import external modules
-import numpy as np 
+import numpy as np
+import scipy as sp 
 from scipy.io import wavfile 
 from scipy.signal import butter, sosfilt, hann, stft
 from ..util import plot1D, plot2D, db_scale, crop_image, date_from_filename, linear_scale
+
+
 
 def load(filename, channel='left', detrend=True, verbose=False,
          display=False, savefig=None, **kwargs): 
@@ -272,7 +275,6 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
     
     return s_out
 
-
 def _convert_dt_df_into_points(dt, df, fs):
     
     nperseg = round(fs/df)
@@ -288,9 +290,11 @@ def _convert_dt_df_into_points(dt, df, fs):
     dt = (1-overlap)*nperseg/fs
     return overlap,int(nperseg), dt, df
 
-def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, mode='amplitude',
-                db_range=60, db_gain=20, rescale=False, fcrop=None, tcrop=None, 
-                verbose=False, display=False, savefig = None, **kwargs):
+
+def spectrogram(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
+                mode='amplitude', fcrop=None, tcrop=None, 
+                verbose=False, display=False, 
+                savefig = None, **kwargs):
     """
     Calcul the spectrogram of a signal s
     
@@ -321,25 +325,14 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, mode='amplitude
             dt_df_res = [0.02, 20] means
             time resolution dt = 0.02s / frequency resolution df = 20Hz
             
-    mode : str, optional, default is 'amplitude'
-        select the type of spectrogram :
-            - 'amplitude' : Sxx = A
-            - 'energy'    : Sxx = A² (= Power Spectrum Density (PSD))
-            - 'decibel'   : Sxx = 20*log10(A)
+    detrend : boolean, optional, default is False
+        if detrend is True, the DC value (ie. mean value of signal) is
+        subtracted from the signal. This results by a lower value at 0Hz
             
-    db_range : int, optional, default is 60
-        **Only use if mode = 'decibel'**    
-        dB range of the spectrogram values.
-        
-    db_gain : int, optional, default is 20
-        **Only use if mode = 'decibel'**   
-        After db scale, a db gain is added to the spectrogram values.
-        Sxx = 20*log10(A) + db_gain
-        
-    rescale : boolean, optional, default is False
-        a linear rescale is performed between 0 to 1 on the final (linear 
-        or dB scale) spectrogram.
-        The spectrogram can be in dB scale or linear scale
+    mode : str, optional, default is 'amplitude'
+        select the output values of spectrogram :
+            - 'amplitude' : Sxx = A
+            - 'psd'       : Sxx = A² (= Power Spectrum Density (PSD))
         
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
@@ -417,48 +410,55 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, mode='amplitude
             with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
             mm : minutes / ss : seconds
     """   
-
     # Convert dt and df into overlap and nperseg (pixel-based)
     if dt_df_res is not None :
         dt, df = dt_df_res
         overlap,nperseg,_,_ = _convert_dt_df_into_points(dt, df, fs)
     
     noverlap = round(overlap*nperseg) 
+    
+    # transform s into array
+    s = np.asarray(s)
+    
+   # compute the number of frames
+    K = len(s)//nperseg
 
     # sliding window 
+    #win = tukey(nperseg, 1/32)
+    #win = np.ones(nperseg)
     win = hann(nperseg)
     
     if verbose:
         print(72 * '_')
-        print("Computing spectrogram with nperseg=%d and noverlap=%d..." % (nperseg, noverlap))
-    
-    # spectrogram function from scipy via stft
-    # Normalize by win.sum()
-    fn, tn, Sxx = stft(s, fs, win, nperseg, noverlap, nfft=nperseg)
-    
-    # stft (complex) without normalisation
-    scale_stft = sum(win)/len(win)
-    Sxx = Sxx / scale_stft      # normalization 
+        print("Computing spectrogram with nperseg=%d and noverlap=%d..." 
+              % (nperseg, noverlap))
     
     if mode == 'amplitude':
-        Sxx = np.abs(Sxx)
-        if verbose:print('max value of the amplitude spectrogram %.5f' % Sxx.max())
-        # in linear scale
-        vmin = np.min(Sxx)
-        vmax = np.max(Sxx)   
-  
-    elif mode == 'energy':
-        Sxx = np.abs(Sxx)**2        # Get the PSD (power spectra density)
-        if verbose:print('max value of the energy spectrogram %.5f' % Sxx.max())
-        # in linear scale
-        vmin = np.min(Sxx)
-        vmax = np.max(Sxx)   
-    elif mode == 'decibel':
-        Sxx = np.abs(Sxx)
-        Sxx = db_scale(Sxx, db_range, db_gain)
-        if verbose:print('max value of the decibel spectrogram %.5f' % Sxx.max())
-        vmin = -db_range
-        vmax = 0         
+        fn, tn, Sxx = sp.signal.spectrogram(s, fs, win, nperseg=nperseg, 
+                                            noverlap=noverlap, nfft=nperseg, 
+                                            scaling ='spectrum', mode='complex', 
+                                            detrend=detrend)    
+    if mode == 'psd':
+        fn, tn, Sxx = sp.signal.spectrogram(s, fs, win, nperseg=nperseg, 
+                                            noverlap=noverlap, nfft=nperseg, 
+                                            scaling ='spectrum', mode='psd', 
+                                            detrend=detrend)    
+        
+    # Get the magnitude of the complex and multiply by 2 (because take only 
+    # half of the spectrum (positive frequencies))
+    Sxx = abs(Sxx)*2
+   
+    # test if the last frames are computed on a whole time frame. 
+    # if note => remove these frames
+    if Sxx.shape[1] > K:
+        sup = Sxx.shape[1] - K
+        Sxx = Sxx[:,:-sup]
+        tn = tn[:-sup]
+        
+    # Remove the last frequency bin in order to obtain nperseg/2 frequency bins
+    # instead of nperseg/2 + 1 
+    Sxx = Sxx[:-1,:]
+    fn = fn[:-1]
 
     # Crop the image in order to analyzed only a portion of it
     if (fcrop or tcrop) is not None:
@@ -470,24 +470,35 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, mode='amplitude
     # dt and df resolution
     dt = tn[1]-tn[0]
     df = fn[1]-fn[0]
+    
     if verbose:
         print("*************************************************************")
         print("   Time resolution dt=%.2fs | Frequency resolution df=%.2fHz "
               % (dt, df))  
+        print("   Maximum value of the spectrogram : df=%.2f" % (abs(np.max(Sxx))))
         print("*************************************************************")
            
     # Display
-    if display : 
+    if display :        
         ylabel =kwargs.pop('ylabel','Frequency [Hz]')
         xlabel =kwargs.pop('xlabel','Time [sec]') 
         title  =kwargs.pop('title','Spectrogram')
         cmap   =kwargs.pop('cmap','gray') 
         figsize=kwargs.pop('figsize',(4, 13)) 
-        vmin=kwargs.pop('vmin',vmin) 
-        vmax=kwargs.pop('vmax',vmax) 
-        _, fig = plot2D (Sxx, extent=ext, figsize=figsize,title=title, 
+        vmin=kwargs.pop('vmin',-120) 
+        vmax=kwargs.pop('vmax',0) 
+     
+        # transform data in dB
+        if mode == 'psd':
+            Sxx = np.sqrt(Sxx)
+        #### convert into dB
+        SxxdB = db_scale(Sxx, db_range=-vmin, db_gain=0)
+        
+        # Plot
+        _, fig = plot2D (SxxdB, extent=ext, figsize=figsize,title=title, 
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax,
                          cmap=cmap, **kwargs)
+        
         # SAVE FIGURE
         if savefig is not None : 
             dpi   =kwargs.pop('dpi',96)
@@ -497,18 +508,9 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, mode='amplitude
             filename = savefig+savefilename+'.'+format
             if verbose:print('\n''save figure : %s' %filename)
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
-                        format=format, **kwargs)       
-    # Rescale
-    if rescale :
-        if mode=='decibel' : 
-            if verbose:print ('Linear rescale [-db_range dB; 0dB] to [0; 1]')
-            Sxx = (Sxx + db_range)/db_range
-        else:
-            if verbose:print ('Linear rescale between 0 to 1')
-            Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0)
-                
-  
-    return Sxx, dt, df, ext
+                        format=format, **kwargs)                       
+            
+    return Sxx, tn, fn, ext
 
 
 def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
