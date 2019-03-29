@@ -47,7 +47,7 @@ def read_audacity_annot (audacity_filename):
     f_info = f_info.reset_index(drop=True)
     
     # return dataframe
-    tab_out = pd.concat([t_info['label'], 
+    tab_out = pd.concat([t_info['label'].astype('str'), 
                          t_info['tmin'].astype('float32'), 
                          f_info['fmin'].astype('float32'), 
                          t_info['tmax'].astype('float32'), 
@@ -111,13 +111,13 @@ def date_from_filename (filename):
     
     return date
 
-def date_parser (datadir):
+def date_parser (datadir, verbose=False):
     c_file = []
     c_date = []
     # find a file in subdirectories
     for root, subFolders, files in os.walk(datadir):
         for count, file in enumerate(files):
-            print(file)
+            if verbose:print(file)
             if '.wav' in file:
                 filename = os.path.join(root, file)
                 c_date.append(date_from_filename(filename))    

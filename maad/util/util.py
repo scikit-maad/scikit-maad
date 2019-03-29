@@ -133,16 +133,18 @@ def linear_scale(datain, minval= 0.0, maxval=1.0):
     dataout = dataout + minval;
     return dataout
 
-def db_scale (datain, db_range=60, db_gain=None):
+def db_scale (datain, db_range=None, db_gain=None):
     """
-    Rescale the data in dB scale after normalizing the data
+    Transform linear date into decibel scale within the dB range (db_range).
+    A gain (db_gain) could be added at the end.    
     
     Parameters
     ----------
     datain : array-like
         data to rescale in dB 
-    db_range : scalar, optional, default : 60
-        Anything larger than db_range is set to db_range  
+    db_range : scalar, optional, default : None
+        if db_range is a number, anything lower than -db_range is set to 
+        -db_range and anything larger than 0 is set to 0
     db_gain : scalar, optional, default is None
         Gain added to the results 
                 --> 20*log10(a) + db_gain
@@ -150,7 +152,7 @@ def db_scale (datain, db_range=60, db_gain=None):
     Returns
     -------
     dataout : scalars
-        --> 20*log10(a) + db_gain 
+        --> 20*log10(datain) + db_gain 
     """
     
     
@@ -159,10 +161,11 @@ def db_scale (datain, db_range=60, db_gain=None):
     dataout = 20*np.log10(datain)   # take log
     if db_gain : dataout = dataout + db_gain    # Add gain if needed
     
-    # set anything less than the db_range as 
-    #dataout[dataout < 0] = 0 
-    dataout[dataout > 0] = 0  
-    dataout[dataout < -(db_range)] = -db_range  
+    if db_range is not None :
+        # set anything less than the db_range as 
+        #dataout[dataout < 0] = 0 
+        dataout[dataout > 0] = 0  
+        dataout[dataout < -(db_range)] = -db_range  
         
     return dataout
 

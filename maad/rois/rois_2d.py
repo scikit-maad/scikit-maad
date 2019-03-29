@@ -332,6 +332,30 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
             
     return im_out  
 
+def median_equalizer (x):
+    """
+    Median equalizer : remove background noise in a spectrogram
+    
+    Parameters
+    ----------
+    x : 2D numpy array 
+        Original spectrogram (or image)
+    Returns
+    -------
+    y : 1D numpy array 
+        Ouput spectrogram (or image) without background noise
+    
+    References:
+    ----------
+    This function has been proposed first by Carol BEDOYA <carol.bedoya@pg.canterbury.ac.nz>
+    Adapted by S. Haupert Oct 9, 2018 for Python
+    """ 
+    
+    y = (((x.transpose()-np.median(x.transpose(),axis=0)))/(np.median(x.transpose())-np.min(x.transpose(),axis=0))).transpose()
+
+    return y
+
+
 """****************************************************************************
 *************                      smooth                            ***********
 ****************************************************************************"""
@@ -1282,7 +1306,10 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
     else :
         # Colormap
         color = rand_cmap(len(labelNames)+1,first_color_black=False) 
+        cc = 0
         for bbox, label in zip(rois_bbox, rois_label):
+            cc = cc+1
+            print(cc)
             y0 = bbox[0]
             x0 = bbox[1]
             y1 = bbox[2]

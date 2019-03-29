@@ -16,27 +16,23 @@ get_ipython().magic('reset -sf')
 # =============================================================================
 # Load the modules
 # =============================================================================
-
 import matplotlib.pyplot as plt
 import pandas as pd # for csv
 import numpy as np
-from math import ceil
 
-# Import MAAD modules   
-import sys
-sys.path.append('D:\\mes_projets\\2018\\_TOOLBOX\\Python\\scikit-maad') 
-import maad
-
-# change the path to the current path where the script is
+# =============================================================================
+# ############## Import MAAD module
+from pathlib import Path # in order to be wind/linux/MacOS compatible
 import os
+
+# change the path to the current path where the script is located
 # Get the current dir of the current file
 dir_path = os.path.dirname(os.path.realpath('__file__'))
-print ("Current working directory %s" % dir_path)
-# Go to the parent directory
-parent_dir,_,_=dir_path.rpartition('\\')
-os.chdir(parent_dir)
-# Check current working directory.
-print ("Directory changed successfully %s" % os.getcwd())
+os.chdir(dir_path)
+
+maad_path = Path(dir_path).parents[0]
+os.sys.path.append(maad_path.as_posix())
+import maad
 
 # Close all the figures (like in Matlab)
 plt.close("all")
@@ -52,9 +48,9 @@ plt.close("all")
 # S4A03998_20180712_060000.wav
 # S4A04430_20180713_103000.wav
 # S4A04430_20180712_141500.wav
-filename=".\\data\\S4A03998_20180712_060000.wav"
-
-                 
+filename= str(maad_path / 'data/jura_cold_forest.wav')
+filename_label= filename[0:-4] +'_label.txt'
+                          
 """****************************************************************************
 # -------------------          end options          ---------------------------
 ****************************************************************************"""
@@ -65,14 +61,14 @@ filename=".\\data\\S4A03998_20180712_060000.wav"
 ****************************************************************************"""
 # Load the original sound
 savefig_root = filename[0:-4]
-s,fs,date = maad.sound.load(filename=filename, channel="left",
+s,fs = maad.sound.load(filename=filename, channel="left",
                             display=False, savefig=None)
 # Filter the sound between Low frequency cut (lfc) and High frequency cut (hlc)
 s_filt = maad.sound.select_bandwidth(s, fs, lfc=250, hfc=None, order=2, 
                                      display=False, savefig=None)
 # Compute the spectrogram of the sound
 im_ref,dt,df,ext = maad.sound.spectrogram(s_filt, fs, dt_df_res=[0.02, 20], 
-                                          db_range=60, db_gain=40, rescale=True, 
+                                          db_range=90, db_gain=0, mode='decibel', rescale=True, 
                                           fcrop =[0,10000], tcrop = [0,60],
                                           display=True, savefig=None)
 
@@ -111,7 +107,7 @@ im_bin = maad.rois.create_mask(im_smooth_post, ext, bin_std=7, bin_per=0.5,
 
 #==== MANUAL ======
 im_rois, rois_bbox, rois_label = maad.rois.select_rois(im_bin,ext,mode_roi='manual', 
-                                 filename='.\data\S4A03998_20180712_060000_label.txt',
+                                 filename=filename_label,
                                  mask=False, display=True, savefig=None)
 """
 #==== AUTO ========
@@ -141,7 +137,7 @@ params, kernels = maad.features.filter_bank_2d_nodc(frequency=freq,
 
 # multiresolution image filtering (Gaussian pyramids)
 im_filtlist = maad.features.filter_multires(im_ref, ext, kernels, params,
-                                            npyr=2,display=True, 
+                                            npyr=2,display=False, 
                                             savefig=None, dpi=48)
 
 # Extract shape features for each roi
@@ -149,7 +145,8 @@ params_shape, shape_features = maad.features.shapes(im_filtlist = im_filtlist,
                                                        params = params, 
                                                        im_rois=im_rois)
 # Extract centroids features for each roi
-centroid_features = maad.features.centroids(im=im_ref, ext=ext, date=date, 
+centroid_features = maad.features.centroids(im=im_ref, ext=ext,
+                                            date=maad.util.date_from_filename(filename), 
                                             im_rois=im_rois)
 
 # 
@@ -192,16 +189,16 @@ X = []
 nshp = len(params_shape)
 nrow, ncol = features.shape
 select_header = list(features.columns[ncol-nshp:ncol])
-#select_header.append('cfreq')
-# Get the relevant shapes values
-X = features[select_header].values
+select_header.append('cfreq')
+# Get the relevant shapes values and normlize each features by their maximum value
+X = features[select_header].values / features[select_header].values.max(0)
 
 Y = []
 # Create a vector Y with colors corresponding to the label
 unique_labelName = np.unique(np.array(features.labelName))
 for label in features.labelName:
     for ii, name in enumerate(unique_labelName):   
-        if label in name :
+        if label == name :
             Y.append(int(ii))
 
 # Calcul the PCA and display th results
@@ -215,7 +212,7 @@ plt.scatter(Xp[:, 0], Xp[:, 1], c=Y, s=40, cmap='hsv')
 # Clustering/classication :  Gaussian Mixture Model (GMM)
 # =============================================================================
 from sklearn import mixture
-C = 5 # Number of clusters
+C = 8 # Number of clusters
 clf = mixture.GaussianMixture(n_components=C, covariance_type='full')
 clf.fit(X)
 yp=clf.predict(X)
