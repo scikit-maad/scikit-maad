@@ -1,27 +1,47 @@
-#!/usr/bin/env python
-"""  Multiresolution Analysis of Acoustic Diversity
-     features funtions 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-#
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
-# License: New BSD License
+ High level functions for multiresolution analysis of spectrograms
+ Code licensed under both GPL and BSD licenses
+ Authors:  Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
+           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
+
+"""
 
 # Load required modules
 from __future__ import print_function
 import numpy as np
-from datetime import datetime, timedelta
-from scipy import ndimage as ndi
-import matplotlib.pyplot as plt 
-from skimage import transform, measure
 import pandas as pd
-from ..util import plot2D
+from scipy import ndimage as ndi
+import itertools as it
+import matplotlib.pyplot as plt
+from skimage.io import imsave 
+from skimage import transform, measure
+from scipy import ndimage
+from maad import sound
+from maad.util import format_rois, rois_to_imblobs, normalize_2d
 
 
+def _sigma_prefactor(bandwidth):
+    """
+    Function from skimage. 
+    
+    Parameters
+    ----------
 
-def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1, sigma_x=None, 
-                       sigma_y=None, n_stds=3, offset=0):
+    Returns
+    -------
+
+
+    """
+
+    b = bandwidth
+    # See http://www.cs.rug.nl/~imaging/simplecell.html
+    return 1.0 / np.pi * np.sqrt(np.log(2) / 2.0) * \
+        (2.0 ** b + 1) / (2.0 ** b - 1)
+
+def gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
+                      n_stds=3, offset=0):
     """
     Return complex 2D Gabor filter kernel with no DC offset.
     
@@ -83,40 +103,30 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1, sigma_x=None,
     >>> io.show()           # doctest: +SKIP
     """
     
-   # set gaussian parameters
+     # set gaussian parameters
     b = bandwidth
-    sigma_prefactor = 1.0 / np.pi * np.sqrt(np.log(2) / 2.0) * (2.0 ** b + 1) / (2.0 ** b - 1)
-
-    if sigma_x is None:
-        sigma_x = sigma_prefactor / frequency
-    if sigma_y is None:
-        sigma_y = sigma_prefactor / frequency /gamma
-    
+    sigma_pref = 1.0 / np.pi * np.sqrt(np.log(2) / 2.0) * (2.0 ** b + 1) / (2.0 ** b - 1)
+    sigma_y = sigma_pref / frequency
+    sigma_x = sigma_y/gamma
     # meshgrid
     x0 = np.ceil(max(np.abs(n_stds * sigma_x * np.cos(theta)),
                      np.abs(n_stds * sigma_y * np.sin(theta)), 1))
     y0 = np.ceil(max(np.abs(n_stds * sigma_y * np.cos(theta)),
                      np.abs(n_stds * sigma_x * np.sin(theta)), 1))
     y, x = np.mgrid[-y0:y0 + 1, -x0:x0 + 1]
-    
     # rotation matrix
     rotx = x * np.cos(theta) + y * np.sin(theta)
     roty = -x * np.sin(theta) + y * np.cos(theta)
-    
-    # combine gabor and oscillatory function
+    # combine gambor and 
     g = np.zeros(y.shape, dtype=np.complex)
     g[:] = np.exp(-0.5 * (rotx ** 2 / sigma_x ** 2 + roty ** 2 / sigma_y ** 2))
     g /= 2 * np.pi * sigma_x * sigma_y # gaussian envelope
     oscil = np.exp(1j * (2 * np.pi * frequency * rotx + offset)) # harmonic / oscilatory function
     g_dc = g*oscil
-    
     # remove dc component by subtracting the envelope weighted by K
     K = np.sum(g_dc)/np.sum(g)
     g_nodc = g_dc - K*g
-
-    # normalize between -1 and 1
-    # g_nodc = (g_nodc - np.min(g_nodc))*(2 / (np.max(g_nodc)-np.min(g_nodc))) -1
-    
+ 
     return g_nodc
 
 
@@ -286,23 +296,22 @@ def _plot_filter_results(im_ref, im_list, kernels, params, m, n):
     return ax, fig
 
 
-def _filter_mag(im, kernel):
+def filter_mag(im, kernel):
     """
     Normalizes the image and computes im and real part of filter response using 
     the complex kernel and the modulus operation
     
     Parameters
     ----------
-    im: 2d ndarray of scalars
-        Input image to process 
-    
-    kernel: 2d ndarray of scalars
-        Complex kernel (or filter)
+        im: 2D array
+            Input image to process 
+        kernel: 2D array
+            Complex kernel (or filter)
             
     Returns
     -------
-    im_out: 2d ndarray of scalars
-        Modulus operand on filtered image
+        im_out: Modulus operand on filtered image
+
     """    
     
     im = (im - im.mean()) / im.std()
@@ -310,150 +319,59 @@ def _filter_mag(im, kernel):
                    ndi.convolve(im, np.imag(kernel), mode='reflect')**2)
     return im_out
 
-def filter_multires(im_in, ext, kernels, params, npyr=4, display=False, 
-                    savefig=True, **kwargs):
+def filter_multires(im_in, kernels, npyr=4, rescale=True):
     """
     Computes 2D wavelet coefficients at multiple octaves/pyramids
     
     Parameters
     ----------
-    im_in: list of 2D ndarray of scalars
-        List of input images to process 
-        
-    ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
-        
-    kernels: list of 2D ndarray of scalars
-        List of 2D kernel (Gabor) to filter the images
-        
-    npyr: int, optional, default is 4
-        Number of pyramids to compute
-        
-    display : boolean, optional, default is False
-        Display the signal if True
-        
-    savefig : string, optional, default is None
-        Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.
-
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        figsize : tuple of integers, optional, default: (4,13)
-            width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
-            title of the figure
-        xlabel : string, optional, default : 'Time [s]'
-            label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
-            See https://matplotlib.org/examples/color/colormaps_reference.html
-            in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
-        vmin, vmax : scalar, optional, default: None
-            `vmin` and `vmax` are used in conjunction with norm to normalize
-            luminance data.  Note if you pass a `norm` instance, your
-            settings for `vmin` and `vmax` will be ignored.
-        ext : scalars (left, right, bottom, top), optional, default: None
-            The location, in data-coordinates, of the lower-left and
-            upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
-            Dot per inch. 
-            For printed version, choose high dpi (i.e. dpi=300) => slow
-            For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
-            Format to save the figure
+        im_in: list of 2D arrays
+            List of input images to process 
+        kernels: list of 2D arrays
+            List of 2D wavelets to filter the images
+        npyr: int
+            Number of pyramids to compute
+        rescale: boolean
+            Indicates if the reduced images should be rescaled
             
-        ... and more, see matplotlib  
-
     Returns
     -------
-    im_filt : list of 2D ndarray of scalars
-        List of images filtered by each 2D kernel
+        im_out: list of 2D arrays
+            List of images filtered by each 2D kernel
     """    
 
     # Downscale image using gaussian pyramid
     if npyr<2:
-        print('Warning: npyr should be int and larger than 1 for  multiresolution')
-        im_pyr = tuple(transform.pyramid_gaussian(im_in, downscale=2, max_layer=0)) 
+        print('Warning: npyr should be int and larger than 2 for multiresolution')
+        im_pyr = tuple(transform.pyramid_gaussian(im_in, downscale=2, 
+                                                  max_layer=1, multichannel=False)) 
     else:    
-        im_pyr = tuple(transform.pyramid_gaussian(im_in, downscale=2, max_layer=npyr-1)) 
-    
-    # Display the image pyramids
-    if display:
-        rows, cols = im_in.shape  
-        composite_image = np.zeros((rows+ int(np.ceil(rows/2)), cols), dtype=np.double)
-        composite_image[:rows, :cols] = im_pyr[0]
-        i_col = 0
-        for p in im_pyr[1:]:
-            n_rows, n_cols = p.shape[:2]
-            composite_image[rows:rows + n_rows, i_col:i_col + n_cols] = p
-            i_col += n_cols
-
-        cmap=kwargs.pop('cmap','gray') 
-        vmin=kwargs.pop('vmin',0) 
-        vmax=kwargs.pop('vmax',1) 
-        _, fig = plot2D (composite_image, figsize=(6, 13),title='Spetrogram Pyramides', 
-                         ylabel = 'pixels', xlabel = 'pixels', vmin = vmin, vmax= vmax,
-                         cmap=cmap)
-        kwargs.update({'cmap': cmap})
-        kwargs.update({'vmin': vmin})
-        kwargs.update({'vmax': vmax})
-        
-        # SAVE FIGURE
-        if savefig is not None : 
-            format=kwargs.pop('format','png') 
-            dpi = kwargs.pop('dpi', 96)               
-            filename = savefig+'_spectro_pyramides.'+format
-            fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format,
-                        **kwargs) 
-            kwargs.update({'dpi': dpi})
-
+        im_pyr = tuple(transform.pyramid_gaussian(im_in, downscale=2, 
+                                                  max_layer=npyr-1, multichannel=False)) 
 
     # filter 2d array at multiple resolutions using gabor kernels
     im_filt=[]
+    for im in im_pyr:  # for each pyramid
+        for kernel, param in kernels:  # for each kernel
+            im_filt.append(filter_mag(im, kernel))  #  magnitude response of filter
     
-    if display: 
-        ylabel =kwargs.pop('ylabel','Frequency [Hz]')
-        xlabel =kwargs.pop('xlabel','Time [sec]') 
-        title  =kwargs.pop('title','Spectrogram')
-        figsize=kwargs.pop('figsize',(4, 13)) 
-        cmap=kwargs.pop('cmap','gray') 
-        vmin=kwargs.pop('vmin',0) 
-        vmax=kwargs.pop('vmax',1) 
-    if savefig is not None :
-        filename=kwargs.pop('filename','_spectro_multires')  
-        dpi=kwargs.pop('dpi',96)  
-    
-    for ii, im in enumerate(im_pyr):  # for each pyramid
-        for jj, kernel in enumerate(kernels):  # for each kernel
-            im_filt.append(_filter_mag(im, kernel))  #  magnitude response of filter
-            if display: 
-                _, fig = plot2D(im_filt[-1], extent=ext, figsize=figsize,
-                                title=title+' shp'+str(ii*len(kernels)+jj+1), 
-                                ylabel = ylabel, xlabel = xlabel, cmap=cmap, 
-                                vmin = vmin, vmax= vmax,
-                                **kwargs)
-                if savefig is not None :              
-                    ff = savefig+filename+'_shp'+str(ii*len(kernels)+jj+1)+'.'+format
-                    fig.savefig(ff, bbox_inches='tight', dpi=dpi, format=format,
-                                **kwargs)  
-                                        
     # Rescale image using gaussian pyramid
-    dims_raw = im_in.shape
-    for ii, im in enumerate(im_filt):
-        ratio = np.array(dims_raw)/np.array(im.shape)
-        if ratio[0] > 1:
-            im = transform.rescale(im, scale = ratio, mode='reflect', 
-                                   multichannel=False)
-        else:
-            pass
-        im_filt[ii] = im
+    if rescale:
+        dims_raw = im_in.shape
+        im_out=[]
+        for im in im_filt:
+            ratio = np.array(dims_raw)/np.array(im.shape)
+            if ratio[0] > 1:
+                im = transform.rescale(im, scale = ratio, mode='reflect',
+                                       multichannel=False, anti_aliasing=True)
+            else:
+                pass
+            im_out.append(im)
+    else:
+        pass
 
-    return im_filt
+    return im_out
+
         
 
 
@@ -491,15 +409,18 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False,
          Gabor kernels
     """
     
+    theta = np.arange(ntheta)
+    theta = theta / ntheta * np.pi
+    params=[i for i in it.product(theta,frequency)]
     kernels = []
-    params = []
-    for theta in range(ntheta):
-        theta = theta/ntheta * np.pi
-        for freq in frequency:
-            params.append([freq, theta, bandwidth, gamma])
-            kernel = np.real(_gabor_kernel_nodc(frequency=freq, theta=theta,
-                                                bandwidth=bandwidth, gamma=gamma))
-            kernels.append(kernel)
+    for param in params:
+        kernel = gabor_kernel_nodc(frequency=param[1],
+                                   theta=param[0],
+                                   bandwidth=bandwidth,
+                                   gamma=gamma,
+                                   offset=0,
+                                   n_stds=3)
+        kernels.append((kernel, param))
             
     if display: 
         _, fig = _plot_filter_bank(kernels, frequency, ntheta, bandwidth, 
@@ -514,133 +435,126 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False,
     return params, kernels  
 
 
-def shapes (im_filtlist, params, im_rois=None):
+def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
     """
-    Computes the mean value obtained with each filter (shape) for each ROI
+    Computes shape of 2D signal (image or spectrogram) at multiple resolutions 
+    using 2D Gabor filters
     
     Parameters
     ----------
-    im_filtlist : list of 2D ndarray of scalars
-        List of images filtered by each 2D Gabor kernel
-    
-    params: 2d structured array
-        Parameters used to calculate 2D gabor kernels. 
-        Params array has 4 fields (theta, freq, bandwidth, gamma)
-        
-    im_rois : 2D ndarray of int, optional, default is None
-        image with labels as values
-
+        im: 2D array
+            Input image to process 
+        im_blobs: 2D array, optional
+            Optional binary array with '1' on the region of interest and '0' otherwise
+        opt: dictionary
+            options for the filter bank (kbank_opt) and the number of scales (npyr)
+            
     Returns
     -------
-    params_multires : 2d structured array
-        Parameters used to calculate 2D gabor kernels. 
-        Params array has 4 fields (theta, freq, bandwidth, gamma)
-         
-    shape_features : 2d nd array of scalars
-        Each column corresponds to a shape (linked to a kernel filter) 
-        Each row corresponds to a ROI
-        
-    """
+        shape: 1D array
+            Shape coeficients of each filter
+        params: 2D numpy structured array
+            Corresponding parameters of the 2D fileters used to calculate the 
+            shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
+        bbox: 
+            If im_blobs provided, corresponding bounding box
+    """    
+    # unpack settings
+    opt_shape = opt_shape_presets(resolution, opt_shape=opt_shape)
+    npyr = opt_shape['npyr']
+    # build filterbank
+    params, kernels = filter_bank_2d_nodc(ntheta=opt_shape['ntheta'],
+                                          bandwidth=opt_shape['bandwidth'],
+                                          frequency=opt_shape['frequency'],
+                                          gamma=opt_shape['gamma'])
+    # filter images
+    im_rs = filter_multires(im, kernels, npyr, rescale=True) 
+
     # Get mean intensity
-    shapes = []
-    if im_rois is None:
-        for im in im_filtlist:
-            shapes.append(np.mean(im))
+    shape = []
+    if im_blobs is None:
+        for im in im_rs:
+            shape.append(np.mean(im))
+            rois_bbox=None
     else:
-        for im in im_filtlist:           
-            rprops = measure.regionprops(im_rois, intensity_image=im)
+        for im in im_rs:
+            labels = measure.label(im_blobs)
+            rprops = measure.regionprops(labels, intensity_image=im)
             roi_mean = [roi.mean_intensity for roi in rprops]
-            shapes.append(roi_mean)
-        shapes = list(map(list, zip(*shapes)))  # transpose shape
-        
-    shape_features = np.asarray(shapes)
+            shape.append(roi_mean)
+        rois_bbox = [roi.bbox for roi in rprops]
+        shape = list(map(list, zip(*shape)))  # transpose shape
     
     # organise parameters
-    npyr = int(len(im_filtlist) / len(params)) # number of pyramids
     params = np.asarray(params)
-    orient = params[:,1]*180/np.pi
+    orient = params[:,0]*180/np.pi
     orient = orient.tolist()*npyr
     pyr_level = np.sort(np.arange(npyr).tolist()*len(params))+1
-    freq = params[:,0].tolist()*npyr
-    bandwidth = params[:,2].tolist()*npyr 
-    gamma = params[:,3].tolist()*npyr 
+    freq = params[:,1].tolist()*npyr
+    #params_multires = np.vstack((np.asarray(orient), freq, pyr_level))
     nparams = len(params)*npyr
-    
-    params_multires = np.zeros(nparams,dtype={'names':('theta', 'freq', 
-                                              'bandwidth','gamma','pyr_level'),
-                                              'formats':('f8','f8','f8','f8','f8')})
+    params_multires = np.zeros(nparams, dtype={'names':('theta', 'freq', 'pyr_level','scale'),
+                                               'formats':('f8', 'f8', 'f8','f8')})
     params_multires['theta'] = orient
     params_multires['freq'] = freq
-    params_multires['bandwidth'] = bandwidth
-    params_multires['gamma'] = gamma
+    params_multires['scale'] = 1/np.asarray(freq)
     params_multires['pyr_level'] = pyr_level
+    params_multires = pd.DataFrame(params_multires)
     
-    return params_multires, shape_features
+    # format shape into dataframe
+    cols=['shp' + str(idx) for idx in range(1,len(shape[0])+1)]
+    shape = pd.DataFrame(data=np.asarray(shape),columns=cols)
+    
+    # format rois into dataframe
+    rois_bbox = pd.DataFrame(rois_bbox, columns=['min_y','min_x',
+                                                 'max_y','max_x'])
+    # compensate half-open interval of bbox from skimage
+    rois_bbox.max_y = rois_bbox.max_y - 1
+    rois_bbox.max_x = rois_bbox.max_x - 1
+    
+    return rois_bbox, params_multires, shape
 
-def centroids (im, ext, date=None, im_rois=None):
+
+def centroid(im, im_blobs=None):
     """
-    Computes the intensity centroid (in time and frequency domain) of the 2D 
-    signal 
+    Computes intensity centroid of the 2D signal (usually time-frequency representation) 
+    along a margin, frequency (0) or time (1).
     
     Parameters
     ----------
-    im : list of 2D ndarray of scalars
-        Reference spectrogram
-        
-    ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices. 
-    
-    date: datetime object, optional, default is None
-        Position of the ROI in time (Year-Month-Day-Hour-Min-Sec). If date is 
-        None, the default date : (1900,1,1,0,0,0,0) is taken.
-        
-    im_rois : 2D ndarray of int, optional, default is None
-        image with labels as values
-
-    Returns
-    -------        
-    centroid_features: 2d nd array of scalars (centroid in freq and time)
-        Centroid of image. If labels provided, centroid for each ROI (rows)
-        column 0 is 'cyear' 
-        column 1 is 'cmonth' 
-        column 2 is 'chour' 
-        column 3 is 'cminute'
-        column 4 is 'csecond' 
-        column 5 is 'cfreq' 
+        im: 2D array
+            Input image to process 
+        im_blobs: 2D array, optional
+            Optional binary array with '1' on the region of interest and '0' otherwise
+        margin: 0 or 1
+            Margin of the centroid, frequency=1, time=0
             
+    Returns
+    -------
+        centroid: 1D array
+            centroid of image. If im_blobs provided, centroid for each region of interest
+
     """    
-    
-    df = (ext[3]-ext[2])/(im.shape[0]-1)
-    dt = (ext[1]-ext[0])/(im.shape[1]-1)
-    
-    centroids=[]
-    if im_rois is None:
-        centroids = ndi.center_of_mass(im)
+    centroid=[]
+    rois_bbox=[]
+    if im_blobs is None:
+        centroid = ndimage.center_of_mass(im)
     else:
-        rprops = measure.regionprops(im_rois, intensity_image=im)
-        for roi in rprops :
-            # Test if the intensity of the ROI is not null
-            if roi.mean_intensity >0:
-                centroids.append(roi.weighted_centroid)
-            else:
-            # if Null, then just take the centroid of the bbox
-                centroids.append(roi.centroid)
-          
-    # Convert pixels in frequency Hz and time in s
-    if date is None : date = datetime(1900,1,1,0,0,0,0)
-    centroids = [((timedelta(seconds = int(t*dt))+date).year, 
-                  (timedelta(seconds = int(t*dt))+date).month,
-                  (timedelta(seconds = int(t*dt))+date).day,
-                  (timedelta(seconds = int(t*dt))+date).hour,
-                  (timedelta(seconds = int(t*dt))+date).minute,
-                  (timedelta(seconds = int(t*dt))+date).second,
-                  f*df) for f,t in centroids]   
+        labels = measure.label(im_blobs)
+        rprops = measure.regionprops(labels, intensity_image=im)
+        centroid = [roi.weighted_centroid for roi in rprops]
+        rois_bbox = [roi.bbox for roi in rprops]
+
+    # variables to dataframes
+    centroid = pd.DataFrame(centroid, columns=['y', 'x'])
+    rois_bbox = pd.DataFrame(rois_bbox, columns=['min_y','min_x',
+                                                 'max_y','max_x'])
+    # compensate half-open interval of bbox from skimage
+    rois_bbox.max_y = rois_bbox.max_y - 1
+    rois_bbox.max_x = rois_bbox.max_x - 1
     
-    centroid_features = np.asarray(centroids)    
-    
-    return centroid_features
+    return rois_bbox, centroid
+
 
 def create_csv(shape_features, centroid_features, label_features = None, 
                display=False):
@@ -843,18 +757,216 @@ def get_features_wrapper(im, ext, display=False, savefig=None, save_csv=None,
                                   display=display, savefig=savefig)
     
     # Extract shape features for each roi
-    params_shape, shape_features = shapes(im_filtlist=im_filtlist, 
+    params_shape, shape = shape_features(im_filtlist=im_filtlist, 
                                           params = params, 
                                           im_rois=im_rois)
     # Extract centroids features for each roi
-    centroid_features = centroids(im=im, ext=ext, date=date, im_rois=im_rois)
+    centroid_features = centroid(im=im, ext=ext, date=date, im_rois=im_rois)
     
     if save_csv :
         table = save_csv(save_csv+'.csv', 
-                         shape_features, centroid_features, label_features,
+                         shape, centroid_features, label_features,
                          display=display)
     else:
-        table = create_csv(shape_features, centroid_features, label_features,
+        table = create_csv(shape, centroid_features, label_features,
                            display=display)
     
     return table, params_shape 
+
+
+def save_figlist(fname, figlist):
+    """
+    Save a list of figures to file.
+    
+    Parameters
+    ----------
+        fname: string
+            suffix name to save the figure. Extension indicates the format 
+            of the image
+
+    Returns
+    -------
+        Nothing
+        
+    """
+    for i, fig in enumerate(figlist):
+        fname_save='%d_%s' % (i, fname)
+        imsave(fname_save,fig)
+
+
+def opt_shape_presets(resolution, opt_shape=None):
+    """ 
+    Set values for multiresolution analysis using presets or custom parameters
+    
+    Parameters
+    ----------
+        resolution: str
+            Chooses the opt_shape presets. 
+            Supportes presets are: 'low', 'med', 'high' and 'custom'
+        
+        opt_shape: dict
+            Key and values for shape settings.
+            Valid keys are: ntheta, bandwidth, frequency, gamma, npyr
+    Returns
+    -------
+        opt_shape: dict
+        A valid dictionary with shape settings
+    """
+    # Factory presets
+    opt_shape_low = dict(ntheta=2, 
+                         bandwidth=1, 
+                         frequency=(2**-1, 2**-2), 
+                         gamma=2, 
+                         npyr = 4)
+    opt_shape_med =  dict(ntheta=4, 
+                          bandwidth=1, 
+                          frequency=(2**-1, 2**-2), 
+                          gamma=2, 
+                          npyr = 6)
+    opt_shape_high =  dict(ntheta=8, 
+                           bandwidth=1, 
+                           frequency=(2**-0.5, 2**-1, 2**-1.5, 2**-2), 
+                           gamma=2, 
+                           npyr = 6)
+    
+    if resolution == 'low':
+        opt_shape = opt_shape_low
+    
+    elif resolution == 'med':
+       opt_shape = opt_shape_med
+        
+    elif resolution == 'high':
+       opt_shape = opt_shape_high
+    
+    elif resolution == 'custom':
+        if opt_shape is not None:  # check valid values on opt_shape 
+           if all (opt in opt_shape for opt in ('ntheta', 'bandwidth', 'frequency', 'gamma', 'npyr')):
+               pass
+           else:
+               print('Warning: opt_shape must have all keys-values pairs:')
+               print('ntheta, bandwidth, frequency, gamma, npyr')
+               print('Setting resolution to low')
+               opt_shape = opt_shape_low
+
+        else:
+            print('Warning: if resolution is set to custom, a valid opt_shape dictionnary should be provided.')
+            print('Setting resolution to low')
+            opt_shape = opt_shape_low
+   
+    else:
+       print('Resolution should be: low, med or high. Setting resolution to low')
+       opt_shape = opt_shape_low
+
+    return opt_shape
+
+
+def plot_shape(shape_plt, params, display_values=False):
+    """
+    Plot shape features in 2D representation
+    
+    Parameters
+    ----------
+        shape: 1D array
+        params: structured array returned by maad.features_rois.shape_features
+        
+    Returns
+    -------
+        plot
+    """
+    unique_theta = np.unique(params.theta)
+    # compute shape of matrix
+    dirs_size = unique_theta.size
+    scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size
+    # reshape feature vector
+    idx = params.sort_values(['theta','pyr_level','scale']).index
+    shape_plt = np.reshape(shape_plt[idx].values, (dirs_size, scale_size))
+    unique_scale = params.scale * 2**params.pyr_level[idx]
+    # get textlab
+    textlab = shape_plt
+    textlab = np.round(textlab,2)
+    
+    # plot figure
+    fig = plt.figure(figsize=(12,8))
+    ax = fig.add_subplot(111)
+    ax.imshow(shape_plt, origin='lower', interpolation='None', cmap='viridis')
+    if display_values:    
+        for (j,i),label in np.ndenumerate(textlab):
+            ax.text(i,j,label,ha='center',va='center')
+    else:
+        pass
+        
+    yticklab = unique_theta
+    xticklab = np.reshape(unique_scale.values, 
+                          (dirs_size, scale_size))
+    ax.set_xticks(np.arange(scale_size))
+    ax.set_xticklabels(np.round(xticklab,2)[0,:])
+    ax.set_yticks(np.arange(dirs_size))
+    ax.set_yticklabels(yticklab)
+    ax.set_xlabel('Scale')
+    ax.set_ylabel('Theta')
+    plt.show()
+
+
+def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
+    """
+    Computes shape and central frequency features from signal at specified
+    time-frequency limits defined by regions of interest (ROIs)
+    
+    Parameters
+    ----------
+        s: ndarray
+            Singal to be analysed
+        fs: int
+            Sampling frequency of the signal
+        rois_tf: pandas DataFrame
+            Time frequency limits for the analysis. Columns should have at
+            least min_t, max_t, min_f, max_f. Can be computed with multiple
+            detection methods, such as find_rois_cwt
+        opt_spec: dictionnary
+            Options for the spectrogram with keys, window lenght 'nperseg' and,
+            window overlap in percentage 'overlap'
+        opt_shape: dictionary
+            Options for the filter bank (kbank_opt) and the number of scales (npyr)
+        flims: list of 2 scalars
+            Minimum and maximum boundary frequency values in Hertz
+    
+    Returns
+    -------
+        feature_rois: pandas Dataframe
+            A dataframe with each column corresponding to a feature
+    
+    Example
+    -------
+        s, fs = sound.load('spinetail.wav')        
+        rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)
+        opt_spec = {'nperseg': 512, 'overlap': 0.5}
+        opt_shape = opt_shape_presets('med')
+        features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, 
+                                              opt_shape, flims)
+        
+    """
+    im, dt, df, ext = sound.spectrogram(s, fs, nperseg=opt_spec['nperseg'], 
+                                        overlap=opt_spec['overlap'], fcrop=flims, 
+                                        rescale=False, db_range=100)
+    
+    # format rois to bbox
+    ts = np.arange(ext[0], ext[1], dt)
+    f = np.arange(ext[2],ext[3]+df,df)
+    rois_bbox = format_rois(rois_tf, ts, f, fmt='bbox')
+        
+    # roi to image blob
+    im_blobs = rois_to_imblobs(np.zeros(im.shape), rois_bbox)
+    
+    # get features: shape, center frequency
+    im = normalize_2d(im, 0, 1)
+    bbox, params, shape = shape_features(im, im_blobs, resolution='custom', 
+                                         opt_shape=opt_shape)
+    _, cent = centroid(im, im_blobs)
+    cent['frequency']= f[round(cent.y).astype(int)]  # y values to frequency
+    
+    # format rois to time-frequency
+    rois_out = format_rois(bbox, ts, f, fmt='tf')
+    
+    # combine into a single df
+    rois_features = pd.concat([rois_out, shape, cent.frequency], axis=1)
+    return rois_features
