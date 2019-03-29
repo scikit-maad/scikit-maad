@@ -102,3 +102,14 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Ignore compiled files from python 
+*.pyc
+
+# Ignore files from macosx .DS_Store that are to store custom attributes of the folders
+*.DS_Store
+maad/__pycache__/__init__.cpython-36.pyc
+maad/__pycache__/__init__.cpython-36.pyc
+
+# Ignore *.pyc files reulting from compilation of module
+*.pyc

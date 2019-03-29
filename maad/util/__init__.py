@@ -12,7 +12,12 @@ from .util import (linear_scale,
                    rand_cmap,
                    crop_image,
                    plot1D,
-                   plot2D)
+                   plot2D,
+                   nearest_idx,
+                   rois_to_audacity,
+                   rois_to_imblobs,
+                   format_rois,
+                   normalize_2d)
 
 from .parser_func import (read_audacity_annot,
                           date_from_filename,
@@ -26,4 +31,9 @@ __all__ = ['linear_scale',
            'date_from_filename',
            'date_parser',
            'plot1D', 
-           'plot2D']
+           'plot2D',
+           'nearest_idx',
+           'rois_to_audacity',
+           'rois_to_imblobs',
+           'format_rois',
+           'normalize_2d']

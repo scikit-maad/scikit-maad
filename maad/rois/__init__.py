@@ -21,8 +21,8 @@ from .rois_2d import (load,
                      find_rois_wrapper)
 
 from .rois_1d import (sinc,
-                      corresp_onset_offset,
-                      energy_windowed,
+                      _corresp_onset_offset,
+                      _energy_windowed,
                       find_rois_cwt)
 
 __all__ = ['load', 
