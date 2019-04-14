@@ -1,86 +1,56 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2018 Juan Sebastian ULLOA <lisofomia@gmail.com>
+# Copyright (C) 2018 Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
 #                    Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 # License: BSD 3 clause
 
 import os
-import sys
-import subprocess
-
-from numpy.distutils.core import setup
-
-DISTNAME            = 'scikit-maad'
-DESCRIPTION         = 'Set of functions to extract features in a non-supervised manner from an audio recording',
-LONG_DESCRIPTION    = open('README.md').read()
-MAINTAINER          = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
-MAINTAINER_EMAIL    = 'lisofomia@gmail.com and sylvain.haupert@mnhn.fr',
-URL                 = 'https://github.com/'
-LICENSE             = 'BSD 3 Clause'
-DOWNLOAD_URL        = URL
-PACKAGE_NAME        = 'maad'
-EXTRA_INFO          = dict(
-    install_requires=['numpy', 'scipy','scikit-image','scikit-learn','pandas'],
-    classifiers=['Intended Audience :: Science/Research',
-                 'License :: OSI Approved :: BSD 3 clause',
-                 'Topic :: Scientific/Biology'
-                 'Programming Language :: Python :: 3',
-                 'Operating System :: OS Independent']
-)
+import textwrap
+from setuptools import setup, find_packages, Command
 
 
-def configuration(parent_package='', top_path=None, package_name=DISTNAME):
-    if os.path.exists('MANIFEST'): os.remove('MANIFEST')
+class CleanCommand(Command):
+    """Custom clean command to tidy up the project root.
+    Deletes directories ./build, ./dist and ./*.egg-info
+    From the terminal type:
+        > python setup.py clean
+    """
+    user_options = []
+    def initialize_options(self):
+        pass
+    def finalize_options(self):
+        pass
+    def run(self):
+        os.system('rm -vrf ./build ./dist ./*.egg-info')
 
-    from numpy.distutils.misc_util import Configuration
-    config = Configuration(None, parent_package, top_path)
+setup(
+      name = 'scikit-maad',
+      version = '0.1.4',
+      #packages = find_namespace_packages(include=['maad.*']),
+      packages = find_packages(),
+      author = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
+      author_email = 'jseb.ulloa@gmail.com, sylvain.haupert@mnhn.fr',
+      maintainer = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
+      description = 'scikit-maad is a modular toolbox to analyze ecoacoustics datasets',
+      long_description = 'scikit-maad is a modular toolbox to analyze ecoacoustics datasets in Python 3. This package was designed to bring flexibility to find regions of interest, and to compute acoustic features in audio recordings. This workflow opens the possibility to use powerfull machine learning algorithms through scikit-learn, allowing to identify key patterns in all kind of soundscapes.',
+      license = 'BSD 3 Clause',
+      keywords = ['ecoacoustics', 'machine learning', 'ecology', 'wavelets', 'signal processing'],
+      url = 'https://github.com/scikit-maad/scikit-maad',
+      platform = 'OS Independent',
+      cmdclass={'clean': CleanCommand},                     
 
-    # Avoid non-useful msg: "Ignoring attempt to set 'name' (from ... "
-    config.set_options(ignore_setup_xxx_py=True,
-                       assume_default_configuration=True,
-                       delegate_options_to_subpackages=True,
-                       quiet=True)
+      install_requires = ['docutils>=0.3', 'numpy>=1.13', 'scipy>=0.18', 
+                          'scikit-image>=0.14', 'scikit-learn>=0.18',
+                          'pandas>=0.23.4'],
 
-    config.add_subpackage(PACKAGE_NAME)
-    return config
-
-def get_version():
-    """Obtain the version number"""
-    import imp
-    mod = imp.load_source('version', os.path.join(PACKAGE_NAME, 'version.py'))
-    return mod.__version__
-
-# Documentation building command
-try:
-    from sphinx.setup_command import BuildDoc as SphinxBuildDoc
-    class BuildDoc(SphinxBuildDoc):
-        """Run in-place build before Sphinx doc build"""
-        def run(self):
-            ret = subprocess.call([sys.executable, sys.argv[0], 'build_ext', '-i'])
-            if ret != 0:
-                raise RuntimeError("Building Scipy failed!")
-            SphinxBuildDoc.run(self)
-    cmdclass = {'build_sphinx': BuildDoc}
-except ImportError:
-    cmdclass = {}
-
-# Call the setup function
-if __name__ == "__main__":
-    setup(configuration=configuration,
-          name=DISTNAME,
-          maintainer=MAINTAINER,
-          maintainer_email=MAINTAINER_EMAIL,
-          description=DESCRIPTION,
-          license=LICENSE,
-          url=URL,
-          download_url=DOWNLOAD_URL,
-          long_description=LONG_DESCRIPTION,
-          include_package_data=True,
-          test_suite="nose.collector",
-          cmdclass=cmdclass,
-          version=get_version(),
-**EXTRA_INFO)   
-    
-    
-    
-    
+      classifiers=textwrap.dedent("""
+        Development Status :: 4 - Beta
+        Intended Audience :: Science/Research
+        License :: OSI Approved :: BSD License
+        Operating System :: OS Independent
+        Programming Language :: Python :: 3.5
+        Programming Language :: Python :: 3.6
+        Programming Language :: Python :: 3.7
+        Topic :: Scientific/Engineering :: Artificial Intelligence 
+        """).strip().splitlines()
+                          )

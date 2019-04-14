@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-@author: haupert
-"""
+""" Sound functions for scikit-maad
+Load, filter and transform 1D audio signals
 
-# =============================================================================
-# Load the py files with their functions
-# =============================================================================
+"""
 
 from .sound_func import (load,
                          select_bandwidth,

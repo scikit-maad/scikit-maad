@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-@author: haupert
-"""
+""" rois functions for scikit-maad
+Collection of methods to find regions of interest in 1D and 2D signals.
 
-# =============================================================================
-# Load the py files with their functions
-# =============================================================================
+"""
 
 from .rois_2d import (load,
                      remove_background,
@@ -38,6 +35,6 @@ __all__ = ['load',
            'overlay_rois',
            'find_rois_wrapper',
            'sinc',
-           'corresp_onset_offset',
-           'energy_windowed',
+           '_corresp_onset_offset',
+           '_energy_windowed',
            'find_rois_cwt']

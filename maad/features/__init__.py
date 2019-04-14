@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+""" feature functions for scikit-maad
+Methods to compute multiple descriptors to characterize sounds
 
-
-# =============================================================================
-# Load the py files with their functions
-# =============================================================================
+"""
 
 from .features_func import (filter_multires,
                             filter_bank_2d_nodc,
