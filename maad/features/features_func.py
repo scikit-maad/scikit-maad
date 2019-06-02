@@ -460,7 +460,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
             If im_blobs provided, corresponding bounding box
     """    
     # unpack settings
-    opt_shape = opt_shape_presets(resolution, opt_shape=opt_shape)
+    opt_shape = opt_shape_presets(resolution, opt_shape)
     npyr = opt_shape['npyr']
     # build filterbank
     params, kernels = filter_bank_2d_nodc(ntheta=opt_shape['ntheta'],
@@ -476,6 +476,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
         for im in im_rs:
             shape.append(np.mean(im))
             rois_bbox=None
+        shape = [shape]  # for dataframe formating below
     else:
         for im in im_rs:
             labels = measure.label(im_blobs)
@@ -502,7 +503,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
     params_multires = pd.DataFrame(params_multires)
     
     # format shape into dataframe
-    cols=['shp' + str(idx) for idx in range(1,len(shape[0])+1)]
+    cols=['shp_' + str(idx).zfill(3) for idx in range(1,len(shape[0])+1)]
     shape = pd.DataFrame(data=np.asarray(shape),columns=cols)
     
     # format rois into dataframe

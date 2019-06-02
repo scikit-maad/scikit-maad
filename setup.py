@@ -37,7 +37,8 @@ setup(
       keywords = ['ecoacoustics', 'machine learning', 'ecology', 'wavelets', 'signal processing'],
       url = 'https://github.com/scikit-maad/scikit-maad',
       platform = 'OS Independent',
-      cmdclass={'clean': CleanCommand},                     
+      cmdclass={'clean': CleanCommand},
+      license_file = 'LICENSE',                     
 
       install_requires = ['docutils>=0.3', 'numpy>=1.13', 'scipy>=0.18', 
                           'scikit-image>=0.14', 'scikit-learn>=0.18',
