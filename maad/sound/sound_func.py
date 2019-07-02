@@ -293,7 +293,7 @@ def _convert_dt_df_into_points(dt, df, fs):
 
 def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, db_gain=20,  
                 rescale=False, fcrop=None, tcrop=None, display=False, 
-                savefig = None, **kwargs):
+                savefig = None, verbose=False, **kwargs):
     """
     Calcul the spectrogram of a signal s
     
@@ -419,9 +419,9 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
 
     # sliding window 
     win = hann(nperseg)
-    
-    print(72 * '_')
-    print("Computing spectrogram with nperseg=%d and noverlap=%d..." % (nperseg, noverlap))
+    if verbose==True:
+        print(72 * '_')
+        print("Computing spectrogram with nperseg=%d and noverlap=%d..." % (nperseg, noverlap))
     
     # spectrogram function from scipy via stft
     # Normalize by win.sum()
@@ -431,12 +431,14 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     scale_stft = sum(win)/len(win)
     Sxx = Sxx / scale_stft      # normalization 
     Sxx = np.abs(Sxx)**2        # Get the PSD (power spectra density)
-    
-    print('max value in the audiogram %.5f' % Sxx.max())
+
+    if verbose==True:    
+        print('max value in the audiogram %.5f' % Sxx.max())
  
     # Convert in dB scale 
     if db_range is not None :
-        print ('Convert in dB scale')
+        if verbose==True:
+            print ('Convert in dB scale')
         Sxx = db_scale(Sxx, db_range, db_gain)
         vmin = -db_range
         vmax = 0
@@ -447,7 +449,8 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
 
     # Crop the image in order to analyzed only a portion of it
     if (fcrop or tcrop) is not None:
-        print ('Crop the spectrogram along time axis and frequency axis')
+        if verbose==True:
+            print ('Crop the spectrogram along time axis and frequency axis')
         Sxx, tn, fn = crop_image(Sxx,tn,fn,fcrop,tcrop)
     
     # Extent
@@ -455,10 +458,12 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     # dt and df resolution
     dt = tn[1]-tn[0]
     df = fn[1]-fn[0]
-    print("*************************************************************")
-    print("   Time resolution dt=%.2fs | Frequency resolution df=%.2fHz "
-          % (dt, df))  
-    print("*************************************************************")
+    
+    if verbose==True:
+        print("*************************************************************")
+        print("   Time resolution dt=%.2fs | Frequency resolution df=%.2fHz "
+              % (dt, df))  
+        print("*************************************************************")
            
     # Display
     if display : 
@@ -485,7 +490,8 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
 
     # Rescale
     if rescale :
-        print ('Linear rescale between 0 to 1')
+        if verbose==True:
+            print ('Linear rescale between 0 to 1')
         if db_range is not None : 
             Sxx = (Sxx + db_range)/db_range
         else:

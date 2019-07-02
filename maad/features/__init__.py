@@ -12,7 +12,10 @@ from .features_func import (filter_multires,
                             create_csv,
                             get_features_wrapper,
                             opt_shape_presets,
-                            compute_rois_features)
+                            compute_rois_features,
+                            plot_shape)
+
+from .features_1d import psd
 
 __all__ = ['filter_multires', 
            'filter_bank_2d_nodc',
@@ -22,4 +25,6 @@ __all__ = ['filter_multires',
            'create_csv',
            'get_features_wrapper',
            'opt_shape_presets',
-           'compute_rois_features']
+           'compute_rois_features',
+           'psd',
+           'plot_shape']

@@ -880,7 +880,7 @@ def plot_shape(shape_plt, params, display_values=False):
     scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size
     # reshape feature vector
     idx = params.sort_values(['theta','pyr_level','scale']).index
-    shape_plt = np.reshape(shape_plt[idx].values, (dirs_size, scale_size))
+    shape_plt = np.reshape(shape_plt.iloc[0,idx].values, (dirs_size, scale_size))
     unique_scale = params.scale * 2**params.pyr_level[idx]
     # get textlab
     textlab = shape_plt
@@ -889,7 +889,7 @@ def plot_shape(shape_plt, params, display_values=False):
     # plot figure
     fig = plt.figure(figsize=(12,8))
     ax = fig.add_subplot(111)
-    ax.imshow(shape_plt, origin='lower', interpolation='None', cmap='viridis')
+    ax.imshow(shape_plt, aspect='auto', origin='lower', interpolation='None', cmap='viridis')
     if display_values:    
         for (j,i),label in np.ndenumerate(textlab):
             ax.text(i,j,label,ha='center',va='center')
