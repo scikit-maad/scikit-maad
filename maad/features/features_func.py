@@ -880,7 +880,10 @@ def plot_shape(shape_plt, params, display_values=False):
     scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size
     # reshape feature vector
     idx = params.sort_values(['theta','pyr_level','scale']).index
-    shape_plt = np.reshape(shape_plt.iloc[0,idx].values, (dirs_size, scale_size))
+    if isinstance(shape_plt, pd.DataFrame):
+        shape_plt = np.reshape(shape_plt.iloc[0,idx].values, (dirs_size, scale_size))
+    elif isinstance(shape_plt, np.ndarray):
+        shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size))
     unique_scale = params.scale * 2**params.pyr_level[idx]
     # get textlab
     textlab = shape_plt
