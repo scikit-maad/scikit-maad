@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-@author: haupert
+""" cluster functions for scikit-maad
+Cluster regions of interest using High Dimensional Data Clsutering (HDDC). 
+
 """
 
-# =============================================================================
-# Load the py files with their functions
-# =============================================================================
 
 from .hdda import (HDDC)
 

@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-@author: haupert
-"""
+""" Utility functions for scikit-maad
+Collection of miscelaneous functions that help to simplify the framework
 
-# =============================================================================
-# Load the py files with their functions
-# =============================================================================
+"""
 
 from .util import (linear_scale,
                    db_scale,

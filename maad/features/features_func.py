@@ -460,7 +460,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
             If im_blobs provided, corresponding bounding box
     """    
     # unpack settings
-    opt_shape = opt_shape_presets(resolution, opt_shape=opt_shape)
+    opt_shape = opt_shape_presets(resolution, opt_shape)
     npyr = opt_shape['npyr']
     # build filterbank
     params, kernels = filter_bank_2d_nodc(ntheta=opt_shape['ntheta'],
@@ -476,6 +476,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
         for im in im_rs:
             shape.append(np.mean(im))
             rois_bbox=None
+        shape = [shape]  # for dataframe formating below
     else:
         for im in im_rs:
             labels = measure.label(im_blobs)
@@ -502,7 +503,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
     params_multires = pd.DataFrame(params_multires)
     
     # format shape into dataframe
-    cols=['shp' + str(idx) for idx in range(1,len(shape[0])+1)]
+    cols=['shp_' + str(idx).zfill(3) for idx in range(1,len(shape[0])+1)]
     shape = pd.DataFrame(data=np.asarray(shape),columns=cols)
     
     # format rois into dataframe
@@ -879,7 +880,10 @@ def plot_shape(shape_plt, params, display_values=False):
     scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size
     # reshape feature vector
     idx = params.sort_values(['theta','pyr_level','scale']).index
-    shape_plt = np.reshape(shape_plt[idx].values, (dirs_size, scale_size))
+    if isinstance(shape_plt, pd.DataFrame):
+        shape_plt = np.reshape(shape_plt.iloc[0,idx].values, (dirs_size, scale_size))
+    elif isinstance(shape_plt, np.ndarray):
+        shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size))
     unique_scale = params.scale * 2**params.pyr_level[idx]
     # get textlab
     textlab = shape_plt
@@ -888,7 +892,7 @@ def plot_shape(shape_plt, params, display_values=False):
     # plot figure
     fig = plt.figure(figsize=(12,8))
     ax = fig.add_subplot(111)
-    ax.imshow(shape_plt, origin='lower', interpolation='None', cmap='viridis')
+    ax.imshow(shape_plt, aspect='auto', origin='lower', interpolation='None', cmap='viridis')
     if display_values:    
         for (j,i),label in np.ndenumerate(textlab):
             ax.text(i,j,label,ha='center',va='center')
