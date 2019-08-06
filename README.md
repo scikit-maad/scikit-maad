@@ -16,5 +16,17 @@ scikit-maad dependencies:
 - SciPy >= 0.18
 - scikit-image >= 0.14
 
+**scikit-maad** is hosted on PyPI. To install, run the following command in your Python environment:
+
+```bash
+$ pip install scikit-maad
+```
+
+To install the latest version from source clone the master repository and from the top-level folder call:
+
+```bash
+$ python setup.py install
+```
+
 ## About the authors
 This work started in 2016 at the Museum National d'Histoire Naturelle (MNHN) in Paris, France. It was initiated by [Juan Sebastian Ulloa](https://www.researchgate.net/profile/Juan_Ulloa), supervised by Jérôme Sueur and Thierry Aubin at the [Muséum National d'Histoire Naturelle](http://isyeb.mnhn.fr/fr) and the [Université Paris Saclay](http://neuro-psi.cnrs.fr/) respectively. Python functions were added by [Sylvain Haupert](https://www.researchgate.net/profile/Sylvain_Haupert) and Chloe Huetz in 2018. New features are currently being developped and a stable release will be available by the end of 2019.
