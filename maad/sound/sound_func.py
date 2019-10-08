@@ -400,14 +400,6 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         The location, in data-coordinates, of the lower-left and
         upper-right corners. If `None`, the image is positioned such that
         the pixel centers fall on zero-based (row, column) indices.
-        
-    date : object datetime
-        This object contains the date of creation of the file extracted from
-        the filename postfix. 
-        The filename must follow this format :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds
     """   
 
     # Convert dt and df into overlap and nperseg (pixel-based)
@@ -612,13 +604,6 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         upper-right corners. If `None`, the image is positioned such that
         the pixel centers fall on zero-based (row, column) indices.
         
-    date : object datetime
-        This object contains the date of creation of the file extracted from
-        the filename postfix. 
-        The filename must follow this format :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds
     """   
     # Convert dt and df into overlap and nperseg (pixel-based)
     if dt_df_res is not None :
@@ -634,7 +619,7 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
     K = len(s)//nperseg
 
     # sliding window 
-    #win = tukey(nperseg, 1/32)
+    #win = sp.signal.tukey(nperseg, 0.9)
     #win = np.ones(nperseg)
     win = hann(nperseg)
     
@@ -647,17 +632,26 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         fn, tn, Sxx = sp.signal.spectrogram(s, fs, win, nperseg=nperseg, 
                                             noverlap=noverlap, nfft=nperseg, 
                                             scaling ='spectrum', mode='complex', 
-                                            detrend=detrend)    
+                                            detrend=detrend) 
+   
     if mode == 'psd':
         fn, tn, Sxx = sp.signal.spectrogram(s, fs, win, nperseg=nperseg, 
                                             noverlap=noverlap, nfft=nperseg, 
                                             scaling ='spectrum', mode='psd', 
                                             detrend=detrend)    
         
-    # Get the magnitude of the complex and multiply by 2 (because take only 
-    # half of the spectrum (positive frequencies))
-    Sxx = abs(Sxx)*2
-   
+
+    # Get the magnitude of the complex 
+    Sxx = abs(Sxx)  
+
+    if mode == 'amplitude':
+        scale_stft = np.mean(win) 
+        Sxx = Sxx / scale_stft # normalization   
+    if mode == 'psd': 
+        scale_stft = np.sqrt(1/np.sqrt(np.mean(win**2)))
+        Sxx = Sxx / scale_stft  # normalization        
+
+    
     # test if the last frames are computed on a whole time frame. 
     # if note => remove these frames
     if Sxx.shape[1] > K:
