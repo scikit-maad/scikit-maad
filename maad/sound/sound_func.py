@@ -14,9 +14,8 @@
 import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
-from scipy.signal import butter, sosfilt, hann, stft
-from ..util import plot1D, plot2D, db_scale, crop_image, date_from_filename, linear_scale
-
+from scipy.signal import butter, sosfilt, hann, stft, convolve, iirfilter, get_window
+from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
 
 
 def load(filename, channel='left', detrend=True, verbose=False,
@@ -146,6 +145,117 @@ def load(filename, channel='left', detrend=True, verbose=False,
                         format=format, **kwargs)  
                            
     return s_out, fs
+
+
+#=============================================================================
+def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None, 
+              rs=None):
+    """
+    x : array_like
+        1d vector of scalar to be filtered
+        
+    fs : scalar
+        sampling frequency   
+        
+    fcut : array_like
+        A scalar or length-2 sequence giving the critical frequencies.             
+    
+    forder : int
+        The order of the filter.
+    
+    ftype : {‘bandpass’, ‘lowpass’, ‘highpass’, ‘bandstop’}, optional, default 
+        is ‘bandpass’
+        The type of filter.
+        
+    fname : {‘butter’, ‘cheby1’, ‘cheby2’, ‘ellip’, ‘bessel’}, optional, default
+        is ‘butter’
+        
+    The type of IIR filter to design:
+            Butterworth : ‘butter’
+            Chebyshev I : ‘cheby1’
+            Chebyshev II : ‘cheby2’
+            Cauer/elliptic: ‘ellip’
+            Bessel/Thomson: ‘bessel’
+            
+    rp : float, optional
+        For Chebyshev and elliptic filters, provides the maximum ripple in 
+        the passband. (dB)
+        
+    rs : float, optional
+        For Chebyshev and elliptic filters, provides the minimum attenuation 
+        in the stop band. (dB)           
+            
+    """
+    sos = iirfilter(N=forder, Wn=np.asarray(fcut)/(fs/2), btype=ftype,ftype=fname, rp=rp, 
+                     rs=rs, output='sos')
+    y = sosfilt(sos, x)
+    return y
+ 
+#=============================================================================
+def fir_filter(x, kernel, axis=0):
+    """
+    x : array_like
+        1d vector or 2d matrix of scalars to be filtered
+   
+    kernel : array_like or tuple
+        Pass directly the kernel (1d vector of scalars) 
+        Or pass the arguments in a tuple to create a kernel. Arguments are
+                window : string, float, or tuple
+                    The type of window to create. 
+                - boxcar, triang, blackman, hamming, hann, bartlett, 
+                  flattop,parzen, bohman, blackmanharris, nuttall, barthann, 
+                - (kaiser, beta), 
+                - (gaussian, standard deviation), 
+                - (general_gaussian, power, width), 
+                - (slepian, width), 
+                - (dpss, normalized half-bandwidth), 
+                - (chebwin, attenuation), 
+                - (exponential, decay scale), 
+                - (tukey, taper fraction)
+                Nx : int
+                    The number of samples in the window.
+                    
+        examples:
+            kernel = ('boxcar', 9)
+            kernel = (('gaussian', 0.5), 5)
+            kernel = [1 3 5 7 5 3 1] 
+    axis : int
+        Determine along which axis is performed the filtering in case of 2d matrix
+    """
+    if isinstance(kernel,tuple) :
+        if len(kernel) ==1 :
+            win = get_window(kernel[0])
+        if len(kernel) ==2 :
+            win = get_window(kernel[0], kernel[1])
+    elif isinstance(kernel,list) or isinstance(kernel,np.ndarray):
+        win = kernel
+
+    if x.ndim == 1:
+        # Trick to avoid strange values at the beginning and end of the convolve
+        # signal. Add mirror values
+        x = np.insert(x, 0, np.flipud(x[0:len(win)//2]), axis=0) 
+        x = np.insert(x, len(x), np.flipud(x[-(len(win)//2):]), axis=0) 
+        # convolve and normalized the result by the sum of the kernel
+        y = convolve(x, win, mode='same') / sum(win)
+        y = y[len(win)//2:-(len(win)//2)]
+    elif x.ndim == 2:
+        
+        if axis ==1 : x = x.transpose()
+        
+        # Trick to avoid strange values at the beginning and end of the convolve
+        # signal. Add mirror values
+        x = np.insert(x, 0, np.flipud(x[0:len(win)//2]), axis=0) 
+        x = np.insert(x,  x.shape[0], np.flipud(x[-(len(win)//2):]), axis=0) 
+        y = np.zeros(x.shape)
+        for i in np.arange (x.shape[1]):
+            y[:,i] = convolve(x[:,i], win, mode='same') / sum(win)
+        y = y[len(win)//2:-(len(win)//2),:]
+        
+        if axis ==1 :y = y.transpose()
+
+    return y
+
+
 
 def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
                      savefig=None, **kwargs):
@@ -431,7 +541,7 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
     if db_range is not None :
         if verbose==True:
             print ('Convert in dB scale')
-        Sxx = db_scale(Sxx, db_range, db_gain)
+        Sxx = linear2dB(Sxx, mode='amplitude')
         vmin = -db_range
         vmax = 0
     else:
@@ -695,8 +805,9 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         # transform data in dB
         if mode == 'psd':
             Sxx = np.sqrt(Sxx)
+            
         #### convert into dB
-        SxxdB = db_scale(Sxx, db_range=-vmin, db_gain=0)
+        SxxdB = linear2dB(Sxx, mode='amplitude')
         
         # Plot
         _, fig = plot2D (SxxdB, extent=ext, figsize=figsize,title=title, 
@@ -716,6 +827,190 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
             
     return Sxx, tn, fn, ext
 
+def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None, 
+                 fcrop=None, tcrop=None, 
+                 verbose=False, display=False, 
+                 savefig = None, **kwargs):
+     
+    """
+    Convert a sound waveform into a Power Spectrum Densiy (PSD) Spectrogram 
+    
+    Parameters
+    ----------
+    x : 1d ndarray
+        Vector containing the sound waveform 
+        
+    fs : int
+        The sampling frequency in Hz 
+        
+    window : str or tuple or array_like, optional, default to 'hann'
+        Desired window to use. If window is a string or tuple, it is passed to 
+        get_window to generate the window values, which are DFT-even by default. 
+        See get_window for a list of windows and required parameters. 
+        If window is array_like it will be used directly as the window and its length must be nperseg. 
+        
+    nperseg: int, optional
+        Length of each segment. Defaults to None, but if window is str or tuple, 
+        is set to 256, and if window is array_like, is set to the length of the window.
+    
+    noverlap : int, optional. Defaults to None.
+        Number of points to overlap between segments. If None, noverlap = nperseg // 8. 
+        
+    nfft : int, optional. Defaults to None.
+        Length of the FFT used, if a zero padded FFT is desired. 
+        If None, the FFT length is nperseg. 
+        For fast calculation, it's better to use a number that is a power 2. 
+        This parameter sets the resolution in frequency as the spectrogram will
+        contains N/2 frequency bins between 0Hz-(fs/2)Hz, with a resolution
+        df = fs/N
+        It sets also the time slot (dt) of each frequency frames : dt = N/fs
+        The higher is the number, the lower is the resolution in time (dt) 
+        but better is the resolution in frequency (df).
+        
+    fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
+        fcrop corresponds to the min and max boundary frequency values
+        tcrop corresponds to the min and max boundary time values  
+        
+    verbose : boolean, optional, default is False
+        print messages into the consol or terminal if verbose is True
+        
+    display : boolean, optional, default is False
+        Display the signal if True
+        
+    savefig : string, optional, default is None
+        Root filename (with full path) is required to save the figures. Postfix
+        is added to the root filename.
+        
+    **kwargs, optional. This parameter is used by plt.plot and savefig functions
+        ****************************************************    
+        savefilename : str, optional, default :'_filt_audiogram.png'
+            Postfix of the figure filename
+        **************************************************** 
+        figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
+        title : string, optional, default : 'Spectrogram'
+            title of the figure
+        xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
+        ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
+        cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+                      'viridis'...
+        vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+        ext : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
+        dpi : integer, optional, default is 96
+            Dot per inch. 
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
+        format : string, optional, default is 'png'
+            Format to save the figure
+        
+        ... and more, see matplotlib  
+              
+    Returns
+    -------
+    PSDxx : 2d ndarray of floats
+        Spectrogram : Matrix containing K frames with N/2 frequency bins, 
+        K*N <= length (wave)
+        
+    dt : scalar
+        Time resolution of the spectrogram (horizontal x-axis)
+        
+    df : scalar
+        Frequency resolution of the spectrogram (vertical y-axis)
+        
+    ext : list of scalars [left, right, bottom, top]
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners. If `None`, the image is positioned such that
+        the pixel centers fall on zero-based (row, column) indices.
+        
+    """
+
+    # compute the number of frames
+    K = len(x)*(nfft+noverlap)//nfft**2
+ 
+    # compute spectrogram
+    fn, tn, PSDxx = sp.signal.spectrogram(x, fs, window=window, 
+                                      nperseg=nfft, noverlap=noverlap, nfft=nfft, 
+                                      detrend='constant', return_onesided=True, 
+                                      scaling='density', axis=-1, mode='psd')      
+        
+    if verbose :
+        print ('PSDxx dimension Nx=%d Ny=%d' % (PSDxx.shape[0], PSDxx.shape[1]))
+        
+    # Mutliply by the frequency resolution step (fs/nfft) to get the power
+    PSDxx = PSDxx * (fs/nfft) # fs/nfft is the frequency increment
+    
+    # test if the last frames are computed on a whole time frame. 
+    # if note => remove these frames
+    if PSDxx.shape[1] > K:
+        sup = PSDxx.shape[1] - K
+        PSDxx = PSDxx[:,:-sup]
+        tn = tn[:-sup]
+        
+    # Remove the last frequency bin in order to obtain nperseg/2 frequency bins
+    # instead of nperseg/2 + 1 
+    PSDxx = PSDxx[:-1,:]
+    fn = fn[:-1]
+    
+    # Crop the image in order to analyzed only a portion of it
+    if (fcrop or tcrop) is not None:
+        if verbose:print ('Crop the spectrogram along time axis and frequency axis')
+        PSDxx, tn, fn = crop_image(PSDxx,tn,fn,fcrop,tcrop)
+
+    if verbose:
+        print('max value of the spectrogram %.5f' % PSDxx.max())
+
+    # Extent
+    ext = [tn[0], tn[-1], fn[0], fn[-1]]
+    # dt and df resolution
+    dt = tn[1]-tn[0]
+    df = fn[1]-fn[0]
+
+    if verbose==True:
+        print("*************************************************************")
+        print("   Time resolution dt=%.2fs | Frequency resolution df=%.2fHz "
+              % (dt, df))  
+        print("*************************************************************")
+           
+    # Display
+    if display : 
+        
+        #### convert into dB
+        PSDxx_dB = linear2dB(PSDxx, mode='power')
+        
+        ylabel =kwargs.pop('ylabel','Frequency [Hz]')
+        xlabel =kwargs.pop('xlabel','Time [sec]') 
+        title  =kwargs.pop('title','Spectrogram')
+        cmap   =kwargs.pop('cmap','gray') 
+        figsize=kwargs.pop('figsize',(4, 13)) 
+        vmin=kwargs.pop('vmin',PSDxx_dB.min()) 
+        vmax=kwargs.pop('vmax',PSDxx_dB.max()) 
+        
+        _, fig = plot2D (PSDxx_dB, extent=ext, figsize=figsize,title=title, 
+                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax,
+                         cmap=cmap, **kwargs)
+        # SAVE FIGURE
+        if savefig is not None : 
+            dpi   =kwargs.pop('dpi',96)
+            bbox_inches=kwargs.pop('bbox_inches', 'tight') 
+            format=kwargs.pop('format','png')
+            savefilename=kwargs.pop('savefilename', '_spectrogram')  
+            filename = savefig+savefilename+'.'+format
+            print('\n''save figure : %s' %filename)
+            fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
+                        format=format, **kwargs)     
+
+    return PSDxx, tn, fn, ext   
 
 def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
     """
