@@ -951,7 +951,7 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     """
     im, dt, df, ext = sound.spectrogram(s, fs, nperseg=opt_spec['nperseg'], 
                                         overlap=opt_spec['overlap'], fcrop=flims, 
-                                        rescale=False, db_range=100)
+                                        rescale=False, db_range=opt_spec['db_range'])
     
     # format rois to bbox
     ts = np.arange(ext[0], ext[1], dt)
