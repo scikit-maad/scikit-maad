@@ -5,7 +5,7 @@ to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)
 
 """
 
-from .wavedBSPL import (wav2volt,
+from .wav2dBSPL import (wav2volt,
                         volt2SPL,
                         wav2SPL,
                         SPL2dBSPL,
