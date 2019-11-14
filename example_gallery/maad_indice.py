@@ -65,7 +65,7 @@ N  = 1024           # fft size (in points)
 NOVLP = N//2        # N//2
 WIN = 'hanning'     #'boxcar' hanning'
 
-MIN_dB = 120
+dB_RANGE = 120
 dB_GAIN = 0
 
 FREQ_ANTHRO_MIN = 0
@@ -192,7 +192,7 @@ for index, row in sub_df.iterrows() :
 
     #### Envelope (mode fast => see TOWSEY)
     env = maad.ecoacoustics.envelope(wave, mode=MODE_ENV, N=Nt)
-    envdB = maad.util.linear2dB(env, db_range=MIN_dB, db_gain=dB_GAIN)
+    envdB = maad.util.linear2dB(env, db_range=dB_RANGE, db_gain=dB_GAIN)
     
     # time step
     if MODE_ENV == 'fast' : dt_env=1/fs*Nt
@@ -313,31 +313,30 @@ for index, row in sub_df.iterrows() :
     Sxx = sqrt(PSDxx)
     #### Average Spectrum and PSD (better to compute the mean on the PSD)
     mean_PSD = mean(PSDxx, axis = 1)
-    mean_S = sqrt(mean_PSD)
     
     #### convert into dB
-    SxxdB = maad.util.linear2dB(Sxx, db_range=MIN_dB, db_gain=dB_GAIN, mode='amplitude')
-    PSDxxdB = maad.util.linear2dB(PSDxx, db_range=MIN_dB, db_gain=dB_GAIN, mode ='power')
+    SxxdB = maad.util.linear2dB(Sxx, db_range=dB_RANGE, mode='amplitude')
+    PSDxxdB = maad.util.linear2dB(PSDxx, db_range=dB_RANGE, mode ='power')
              
-    # display MEAN SPECTROGRAM in dB [anthropological and Biological bands]
+    # display MEAN PSD SPECTROGRAM in dB [anthropological and Biological bands]
     if DISPLAY :
         fig5, ax5 = plt.subplots()
         ax5.plot(fn[iANTHRO_BAND], 
-                    maad.util.linear2dB(mean(Sxx[iANTHRO_BAND], axis=1)), 
-                    color='#555555', lw=2, alpha=1)
+                 maad.util.linear2dB(mean_PSD[iANTHRO_BAND], db_range=dB_RANGE, mode ='power'), 
+                 color='#555555', lw=2, alpha=1)
         ax5.plot(fn[iBIO_BAND], 
-                    maad.util.linear2dB(mean(Sxx[iBIO_BAND], axis=1)), 
-                    color='#55DD00', lw=2, alpha=1)
+                 maad.util.linear2dB(mean_PSD[iBIO_BAND], db_range=dB_RANGE, mode ='power'), 
+                 color='#55DD00', lw=2, alpha=1)
         ax5.plot(fn[iINSECT_BAND], 
-                    maad.util.linear2dB(mean(Sxx[iINSECT_BAND], axis=1)), 
-                    color='#DDDC00', lw=2, alpha=1)                
+                 maad.util.linear2dB(mean_PSD[iINSECT_BAND], db_range=dB_RANGE, mode ='power'), 
+                 color='#DDDC00', lw=2, alpha=1)                
         
     #### Noise estimation 
     """BGNf [TOWSEY] """
     """ 
         COMMENT : Result a bit different due to smoothing
     """
-    BKdB_f = maad.util.get_unimode (SxxdB, mode ='ale', axis=1, 
+    BKdB_f = maad.util.get_unimode (PSDxxdB, mode ='ale', axis=1, 
                                     verbose=False, display=False)
     
     """ ********************  TO CHECK    """
@@ -370,12 +369,12 @@ for index, row in sub_df.iterrows() :
     
     #### Signal to Noise ratio estimation
     """ SNRf [TOWSEY] """
-    SNRf = maad.util.linear2dB(max(Sxx[iBIO_BAND])) - maad.util.linear2dB(mean(maad.util.dB2linear(BKdB_f[iBIO_BAND], mode='amplitude')), mode='amplitude')
+    SNRf = max(PSDxxdB[iBIO_BAND]) - maad.util.linear2dB(mean(maad.util.dB2linear(BKdB_f[iBIO_BAND], mode='power')), db_range=dB_RANGE, mode='power')
 
     """ Spectrogram in dB without noise """
     # Remove background noise (BGNf is an estimation) and negative value to zero
-    SxxdB_SansNoise =SxxdB - BGNf[..., np.newaxis]
-    SxxdB_SansNoise[SxxdB_SansNoise<0] =0
+    PSDxxdB_SansNoise =PSDxxdB - BKdB_f[..., np.newaxis]
+    PSDxxdB_SansNoise[PSDxxdB_SansNoise<0] =0
 
     """ ********************  OPTION TO CHECK    """   
 #    # TOWSEY : smooth the spectro and set value lower than threshold (2dB in Towsey
@@ -387,14 +386,17 @@ for index, row in sub_df.iterrows() :
     """ ********************  OPTION TO CHECK    """   
     
     # Conversion dB to linear
-    Sxx_SansNoise = maad.util.dB2linear(SxxdB_SansNoise, db_gain=dB_GAIN, mode ='amplitude')
-    PSDxx_SansNoise = Sxx_SansNoise**2
+    PSDxx_SansNoise = maad.util.dB2linear(PSDxxdB_SansNoise, mode ='power')
+    Sxx_SansNoise = sqrt(PSDxx_SansNoise)
+    
+    # Conversion linear to dB for the Amplitude Spectrum
+    SxxdB_SansNoise = maad.util.linear2dB(Sxx_SansNoise, db_range=dB_RANGE, mode='amplitude')
     
     # display the MEAN spectrogram in dB without noise
     if DISPLAY :
         fig6, ax6 = plt.subplots()
-        plt.plot(fn, mean(SxxdB_SansNoise,axis=1))
-        ax6.set_title('Amplitude Spectrum in dB without uniform background noise')
+        plt.plot(fn, mean(PSDxxdB_SansNoise,axis=1))
+        ax6.set_title('Power Spectrum Density (PSD) in dB without uniform background noise')
         ax6.set_xlabel('Frequency [Hz]')
         ax6.axis('tight') 
     
@@ -407,12 +409,12 @@ for index, row in sub_df.iterrows() :
         fig7.set_figheight(4)
         fig7.set_figwidth (13)
         # display image
-        _im = ax7.imshow(SxxdB_SansNoise, extent=(tn[0], tn[-1], fn[0], fn[-1]), 
+        _im = ax7.imshow(PSDxxdB_SansNoise, extent=(tn[0], tn[-1], fn[0], fn[-1]), 
                          interpolation='none', origin='lower', 
-                         vmin =0, vmax=max(SxxdB_SansNoise), cmap='gray')
+                         vmin =0, vmax=max(PSDxxdB_SansNoise), cmap='gray')
         plt.colorbar(_im, ax=ax7)
         # set the parameters of the subplot
-        ax7.set_title('Amplitude Spectrogram')
+        ax7.set_title('Power Spectrum Density (PSD)')
         ax7.set_xlabel('Time [sec]')
         ax7.set_ylabel('Frequency [Hz]')
         ax7.axis('tight') 
