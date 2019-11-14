@@ -42,6 +42,9 @@ def wav2volt (wave, bit=16, Vadc = sqrt(2)):
     volt : 1d ndarray of floats
         Vector containing the sound waveform in volt
     """
+    # be sure they are ndarray
+    wave = np.asarray(wave)
+    
     volt = (wave/(2**(bit-1))) * Vadc
     return volt
 
@@ -70,6 +73,9 @@ def volt2SPL(volt, gain, sensitivity=-35, dBref=94):
     wave_SPL : 1d ndarray of floats
         Vector containing the sound waveform in SPL (Sound Pressure level : Pa)
     """
+    # be sure they are ndarray
+    volt = np.asarray(volt)
+    
     # wav to instantaneous sound pressure level (SPL)
     # coefficient to convert Volt into pressure (Pa)
     Volt2Pa = 1/10**(sensitivity/20) 
@@ -127,11 +133,7 @@ def SPL2dBSPL (waveSPL, pRef=20e-6):
     -------
     wave_dBSPL : 1d ndarray of floats
         Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)
-    """
-    # if waveSPL is a list, convert waveSPL into ndarray 
-    if isinstance(waveSPL, list):
-        waveSPL = np.asarray(waveSPL)
-    
+    """    
     wave_dBSPL = energy2dBSPL(waveSPL**2, pRef)
     return (wave_dBSPL)
 
@@ -167,11 +169,7 @@ def wav2dBSPL (wave, gain, Vadc = sqrt(2), bit=16, sensitivity=-35, dBref=94, pR
     -------
     wave_dBSPL : 1d ndarray of floats
         Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)
-    """
-    # if wave is a list, convert wave into ndarray 
-    if isinstance(wave, list):
-        wave = np.asarray(wave)
-        
+    """        
     wave_SPL   = wav2SPL(wave, bit, Vadc, sensitivity, gain, dBref) 
     wave_dBSPL = energy2dBSPL(wave_SPL**2, pRef)
     return (wave_dBSPL)
@@ -258,6 +256,9 @@ def wavSPL2Leq (wave_SPL, f, dt=1, pRef = 20e-6):
     sig_Leq : float
         Equivalent Continuous Sound level (Leq)
     """     
+    # be sure they are ndarray
+    wave_SPL = np.asarray(wave_SPL)
+    
     ##### wav SPLto Leq 
     # wav to RMS
     dN = int(np.floor(dt*f)) # RMS period in number of points
@@ -289,17 +290,7 @@ def energy2dBSPL(energy_SPL, pRef = 20e-6):
     -------
     PSD_dBSPL : 1d ndarray of floats
          Vector containing the energy signal in dB SPL
-    """  
-###### !!! DON'T know why this changes the value of the variable energy_SPL that is passed to the function !!!!
-###### Is this a pointer ?
-#    #Avoid negative value
-#    #if it's a scalar
-#    if hasattr(energy_SPL, "__len__") == False:
-#        if (energy_SPL<=pRef**2): 
-#            energy_SPL = pRef**2   
-#    else : 
-#        energy_SPL[energy_SPL<=pRef**2] = pRef**2 
-    
+    """      
     # be sure they are ndarray
     energy_SPL = np.asarray(energy_SPL)
         
@@ -350,15 +341,8 @@ def PSD2Leq (PSD_SPL, pRef = 20e-6):
     PSD_Leq : float
         Equivalent Continuous Sound level (Leq)
     """  
-###### !!! DON'T know why this changes the value of the variable energy_SPL that is passed to the function !!!!
-###### Is this a pointer ?
-#    # Avoid negative value
-#    # if it's a scalar
-#    if hasattr(PSD_SPL, "__len__") == False:
-#        if PSD_SPL <=pRef**2 : 
-#            PSD_SPL = pRef**2   
-#    else :     
-#        PSD_SPL[PSD_SPL<=pRef**2] = pRef**2 
+    # be sure they are ndarray
+    PSD_SPL = np.asarray(PSD_SPL)
     
     # Energy (pressure^2) to Leq (=> Leq (Equivalent Continuous Sound level) 
     # if the sum is performed on the whole PSD)
@@ -366,67 +350,72 @@ def PSD2Leq (PSD_SPL, pRef = 20e-6):
     return(PSD_Leq)
    
 ########### TEST
-############### Import OWN modules
 ## Test the current operating system
-#import os
-#import scipy as sp
-#from pathlib import Path # in order to be wind/linux/MacOS compatible
-#if os.name =='nt':
-#    # Path
-#    root_module_path = Path("D:\\")
-#elif os.name =='posix':
-#    # LINUX or MACOS
-#    root_module_path = Path("/home/haupert/DATA")
-#else:
-#    print ("WARNING : operating system unknow")   
-#    
-#maad_path = root_module_path/Path('mes_projets/_TOOLBOX/Python/maad_project/scikit-maad')
-#os.sys.path.append(maad_path.as_posix())
-#import maad
-#
-## Sensbility microphone
-#S = -35   #dBV
-## Amplification gain
-#G = 30 #4  # total amplification gain : preamplifier gain = 26dB and gain = 4dB
-## Reference pressure (in the air : 20µPa)
-#P_REF = 20e-6
-## Leq integration time dt in s
-#deltaT = 1
-##
-#NFFT = 512
-##
-#bit = 16
-#
-#filename = "/home/haupert/DATA/mes_projets/02_GUYANE/dB@NOURAGUES/DATA_PROCESSING/Propagation_sonore/GUYANE/04_Propagation_100m_direction_sud_4dB_essai3/output/wn_1m.wav"
-#
-#volt,fs = maad.sound.load(filename=filename, channel='left', detrend=False, verbose=False)
-#
-## convert sounds (wave) into SPL and subtract DC offset
-#volt = volt - mean(volt)
-## wav -> SPL -> Leq
-#wav_SPL = volt2SPL(volt, sensitivity=S, gain=G, dBref=94)
-#wav_Leq = wavSPL2Leq(wav_SPL, f=fs, dt=deltaT)
-#
-## wav -> Leq
-#wav = volt*2**15
-#wav_Leq2 = wav2Leq(wav, f=fs, dt=deltaT, sensitivity=S, gain=G, dBref = 94) 
-#
-#
-## Power Density Spetrum : PSD
-#PSD,_,_,_  = maad.sound.spectrogram(wav_SPL, fs=fs, nperseg=NFFT, overlap=0, display=False)
-#PSD_mean = mean(PSD,axis=1)
-## average Leq from PSD
-#PSD_Leq3  = PSD2Leq(PSD_mean)
-#
-###### OK OK OK OK
-#PSD,_,_,_  = maad.sound.spectrogram2(wav_SPL, fs=fs, nperseg=NFFT, overlap=0, mode='psd', detrend=False)
-#PSD_mean = mean(PSD,axis=1)
-## average Leq from PSD
-#PSD_Leq4  = PSD2Leq(PSD_mean)
-#
-##### !!!!! SOMETHING WRONG WITH THE CORRECTION OF THE AMPLITUDE WHEN USING A WINDOW OTHER THAN RECTANGULAR WIN
-#amp,_,_,_  = maad.sound.spectrogram2(wav_SPL, fs=fs, nperseg=NFFT, overlap=0, mode='amplitude', detrend=False)
-#PSD_mean = mean((amp**2),axis=1)
-## average Leq from PSD
-#PSD_Leq5  = PSD2Leq(PSD_mean)
+if __name__ == "__main__":
+    # ############## Import MAAD module
+    from pathlib import Path # in order to be wind/linux/MacOS compatible
+    import os
+    
+    # change the path to the current path where the script is located
+    # Get the current dir of the current file
+    dir_path = os.path.dirname(os.path.realpath('__file__'))
+    os.chdir(dir_path)
+    
+    maad_path = Path(dir_path).parents[0]
+    os.sys.path.append(maad_path.as_posix())
+    import maad
+    
+    # Sensbility microphone (for SM4 it is -35dBV)
+    S = -35 #dBV
+    # Amplification gain
+    G = 42 # total amplification gain : preamplifier gain = 26dB and gain = 16dB
+    # Reference pressure (in the air : 20µPa)
+    P_REF = 20e-6
+    # Leq integration time dt in s
+    deltaT = 1
+    #
+    NFFT = 512
+    #
+    bit = 16
+    #
+    Vadc = sqrt(2)
+    
+    # root directory of the files
+    base_path = Path(__file__).parent
+    datadir = (base_path / "../../data/").resolve()
+    filename = datadir/"jura_cold_forest_jour.wav"
+    
+    volt,fs = maad.sound.load(filename=filename, channel='right', detrend=False, verbose=False)
+    
+    # convert sounds (wave) into SPL and subtract DC offset
+    volt = volt - mean(volt)
+    # wav -> SPL -> Leq
+    wav_SPL = volt2SPL(volt, sensitivity=S, gain=G, dBref=94)
+    wav_Leq = wavSPL2Leq(wav_SPL, f=fs, dt=deltaT)
+    print('Leq from volt', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq, mode="power")),mode="power"))
+    
+    # wav -> Leq
+    wav = volt*2**(bit-1)/Vadc
+    wav_Leq2 = wav2Leq(wav, f=fs, dt=deltaT, sensitivity=S, gain=G, dBref = 94) 
+    print('Leq from wav', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq2, mode="power")),mode="power"))
+    
+    # Power Density Spetrum : PSDxx
+    from numpy import fft
+    PSD = abs(fft.fft(wav_SPL)/len(wav_SPL))**2
+    # average Leq from PSD
+    PSD_Leq3  = PSD2Leq(PSD)
+    print('Leq from PSD',PSD_Leq3 )
+    
+    # Power Density Spetrum : PSDxx
+    PSDxx,tn,fn,_ = maad.sound.spectrogramPSD (wav_SPL, fs=fs, window='boxcar', 
+                                               noverlap=0, nfft=NFFT, 
+                                               fcrop=None, tcrop=None, 
+                                               verbose=False, display=False, 
+                                               savefig = None)  
+    PSD_mean = mean(PSDxx,axis=1)
+    # average Leq from PSD
+    PSD_Leq4  = PSD2Leq(PSD_mean)
+    print('Leq from PSDxx spectrogram',PSD_Leq4 )
+    print('The difference with previous Leq is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy ')
+
  
