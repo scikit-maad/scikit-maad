@@ -163,19 +163,19 @@ def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None
     forder : int
         The order of the filter.
     
-    ftype : {‘bandpass’, ‘lowpass’, ‘highpass’, ‘bandstop’}, optional, default 
-        is ‘bandpass’
+    ftype : {'bandpass', 'lowpass', 'highpass', 'bandstop'}, optional, default 
+        is 'bandpass'
         The type of filter.
         
-    fname : {‘butter’, ‘cheby1’, ‘cheby2’, ‘ellip’, ‘bessel’}, optional, default
-        is ‘butter’
+    fname : {'butter', 'cheby1', 'cheby2', 'ellip', 'bessel'}, optional, default
+        is 'butter'
         
     The type of IIR filter to design:
-            Butterworth : ‘butter’
-            Chebyshev I : ‘cheby1’
-            Chebyshev II : ‘cheby2’
-            Cauer/elliptic: ‘ellip’
-            Bessel/Thomson: ‘bessel’
+            Butterworth : 'butter'
+            Chebyshev I : 'cheby1'
+            Chebyshev II : 'cheby2'
+            Cauer/elliptic: 'ellip'
+            Bessel/Thomson: 'bessel'
             
     rp : float, optional
         For Chebyshev and elliptic filters, provides the maximum ripple in 
