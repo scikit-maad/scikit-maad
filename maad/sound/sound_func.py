@@ -986,8 +986,8 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
     if display : 
         
         #### convert into dB
-        PSDxx_dB = linear2dB(PSDxx, mode='power')
-        
+        PSDxx_dB = linear2dB(PSDxx, db_range=120, mode='power')
+
         ylabel =kwargs.pop('ylabel','Frequency [Hz]')
         xlabel =kwargs.pop('xlabel','Time [sec]') 
         title  =kwargs.pop('title','Spectrogram')
