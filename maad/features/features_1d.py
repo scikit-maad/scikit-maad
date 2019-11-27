@@ -18,7 +18,7 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     
     Parameters
     ----------
-        s: 1D array
+        s: 1D array 
             Input signal to process 
         fs: float, optional
             Sampling frequency of audio signal
@@ -30,7 +30,7 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         method: {'welch', 'periodogram'}
             Method used to estimate the power spectral density of the signal
         tlims: tuple of ints or floats
-            Temporal limits to compute the power spectral density
+            Temporal limits to compute the power spectral density in seconds (s)
     Returns
     -------
         psd: pandas Series
@@ -46,7 +46,7 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     if tlims is not None:
     # trim audio signal
         try:
-            s = s[tlims[0]*fs:tlims[1]*fs]
+            s = s[int(tlims[0]*fs): int(tlims[1]*fs)]
         except:
             raise Exception('length of tlims tuple should be 2')
     
