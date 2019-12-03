@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" Created on Mon Jun 24 10:28:51 2019
-    Convert raw wav data into calibrated dB SPL"""
+
+""" SPL conversion functions for scikit-maad
+Collection of miscelaneous functions that help to convert wav and volt data
+to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)
+"""   
 #
-# Authors:  Sylvain HAUPERT <sylvain.haupert@mnhn.fr>             
+# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 #
-# License: New BSD License
+# License: New BSD License 
 
 
 """****************************************************************************
