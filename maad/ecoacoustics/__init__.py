@@ -19,7 +19,8 @@ from .alpha_indices import (envelope, # should be in sounds
                             bioacousticsIndex,
                             acousticDiversityIndex,
                             acousticEvenessIndex,
-                            roughness)
+                            roughness,
+                            surfaceRoughness)
 
 __all__ = ["envelope",
            "index_bw",
@@ -34,4 +35,5 @@ __all__ = ["envelope",
            "soundscapeIndex",
            "acousticDiversityIndex",
            "acousticEvenessIndex",
-           "roughness"]
+           "roughness",
+           "surfaceRoughness"]
