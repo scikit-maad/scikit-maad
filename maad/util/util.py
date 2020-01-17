@@ -717,12 +717,33 @@ def rois_to_imblobs(im_blobs, rois_bbox):
     return im_blobs
 
 def normalize_2d(im, min_value, max_value):
-    """ Normalize 2d array between two values
-    To check
+    """ Normalize 2d array between two values. 
+        
+        Parameters
+        ----------
+        im: 2D ndarray
+            Bidimensinal array to be normalized
+        min_value: int, float
+            Minimum value in normalization
+        max_value: int, float
+            Maximum value in normalization
+        
+        Returns
+        -------
+        im_out: 2D ndarray
+            Array normalized between min and max values
+        
     """
-    im = (im - np.min(im))/(np.max(im)-np.min(im))
-    im = im * (max_value - min_value) + min_value
-    return im
+    # avoid problems with inf and -inf values
+    min_im = np.min(im.ravel()[im.ravel()!=-np.inf]) 
+    im[np.where(im == -np.inf)] = min_im
+    max_im = np.max(im.ravel()[im.ravel()!=np.inf]) 
+    im[np.where(im == np.inf)] = max_im
+
+    # normalize between min max
+    im = (im - min_im) / (max_im - min_im)
+    im_out = im * (max_value - min_value) + min_value
+    return im_out
 
 
 def format_rois(rois, ts, fs, fmt=None):

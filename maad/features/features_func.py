@@ -19,6 +19,7 @@ from skimage.io import imsave
 from skimage import transform, measure
 from scipy import ndimage
 from maad import sound
+from skimage.filters import gaussian
 from maad.util import format_rois, rois_to_imblobs, normalize_2d
 
 
@@ -952,7 +953,7 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     im, dt, df, ext = sound.spectrogram(s, fs, nperseg=opt_spec['nperseg'], 
                                         overlap=opt_spec['overlap'], fcrop=flims, 
                                         rescale=False, db_range=opt_spec['db_range'])
-    
+
     # format rois to bbox
     ts = np.arange(ext[0], ext[1], dt)
     f = np.arange(ext[2],ext[3]+df,df)
@@ -963,6 +964,7 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     
     # get features: shape, center frequency
     im = normalize_2d(im, 0, 1)
+    im = gaussian(im) # smooth image
     bbox, params, shape = shape_features(im, im_blobs, resolution='custom', 
                                          opt_shape=opt_shape)
     _, cent = centroid(im, im_blobs)
