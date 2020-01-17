@@ -1070,6 +1070,7 @@ def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
         
     rejectDuration : scalar, optional, default is None
         event shorter than rejectDuration are discarded
+        duration is in s
     
     Returns
     -------    

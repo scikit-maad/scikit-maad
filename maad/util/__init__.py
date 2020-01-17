@@ -26,6 +26,17 @@ from .parser_func import (read_audacity_annot,
                           date_from_filename,
                           date_parser)
 
+from .wav2dBSPL import (wav2volt,
+                        volt2SPL,
+                        wav2SPL,
+                        SPL2dBSPL,
+                        wav2dBSPL,
+                        wav2Leq,
+                        wavSPL2Leq,
+                        energy2dBSPL,
+                        dBSPL2energy,
+                        PSD2Leq)
+
 __all__ = ['index_bw',
            'running_mean',
            'shift_bit_length',
@@ -45,4 +56,14 @@ __all__ = ['index_bw',
            'rois_to_audacity',
            'rois_to_imblobs',
            'format_rois',
-           'normalize_2d']
+           'normalize_2d',
+           'wav2volt',
+           'volt2SPL',
+           'wav2SPL',
+           'SPL2dBSPL',
+           'wav2dBSPL',
+           'wav2Leq',
+           'wavSPL2Leq',
+           'energy2dBSPL',
+           'dBSPL2energy',
+           'PSD2Leq']
