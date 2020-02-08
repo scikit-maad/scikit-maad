@@ -964,7 +964,7 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     
     # get features: shape, center frequency
     im = normalize_2d(im, 0, 1)
-    im = gaussian(im) # smooth image
+    #im = gaussian(im) # smooth image
     bbox, params, shape = shape_features(im, im_blobs, resolution='custom', 
                                          opt_shape=opt_shape)
     _, cent = centroid(im, im_blobs)
