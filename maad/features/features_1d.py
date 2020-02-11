@@ -10,6 +10,7 @@
 
 from scipy.signal import periodogram, welch
 import pandas as pd
+import numpy as np
 
 def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None):
     """ 
@@ -65,3 +66,20 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     psd_s = pd.Series(psd_s, index=index_names)
     f_idx = pd.Series(f_idx, index=index_names)
     return psd_s, f_idx
+
+def rms(s):
+    """
+    Computes the root-mean-square (RMS) of a signal
+
+    Parameters
+    ----------
+    s : ndarray
+        1D audio signal
+
+    Returns
+    -------
+    rms: float
+        Root mean square of signal
+
+    """
+    return np.sqrt(np.mean(s**2))
