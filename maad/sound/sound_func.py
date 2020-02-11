@@ -334,28 +334,23 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
     if hfc is None:
         hfc = fs/2         
     
-    print(72 * '_')
     if lfc!=0 and hfc!=fs/2:
         # bandpass filter the signal
         Wn = [lfc/fs*2, hfc/fs*2]
-        print("Bandpass filter [%dHz; %dfHz] in progress..." % (lfc, hfc))
         sos = butter(order, Wn, analog=False, btype='bandpass', output='sos')
         s_out = sosfilt(sos, s) 
     elif lfc==0 and hfc!=fs/2 :     
         # lowpass filter the signal
         Wn = hfc/fs*2
-        print("Lowpass filter <%dHz in progress..." % hfc)
         sos = butter(order, Wn, analog=False, btype='lowpass', output='sos')
         s_out = sosfilt(sos, s)    
     elif lfc!=0 and hfc==fs/2 :  
         # highpass filter the signal
         Wn = lfc/fs*2
-        print("Highpass filter >%dHz in progress..." % lfc)
         sos = butter(order, Wn, analog=False, btype='highpass', output='sos')
         s_out = sosfilt(sos, s)       
     else:
         # do nothing
-        print("No filtering in progress")
         s_out = s
         
     if display : 
