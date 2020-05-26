@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import os
 from datetime import datetime
+from pathlib import Path # in order to be Windows/linux/MacOS compatible
 
 def read_audacity_annot (audacity_filename):
     """
@@ -111,17 +112,25 @@ def date_from_filename (filename):
     
     return date
 
-def date_parser (datadir, verbose=False):
+def date_parser (datadir, dateformat ="SM4", verbose=False):
     c_file = []
     c_date = []
     # find a file in subdirectories
     for root, subFolders, files in os.walk(datadir):
         for count, file in enumerate(files):
-            if verbose:print(file)
-            if '.wav' in file:
+            if verbose: print(file)
+            if '.wav' in file or '.WAV' in file :
                 filename = os.path.join(root, file)
-                c_date.append(date_from_filename(filename))    
-                c_file.append(filename)               
+                c_file.append(filename) 
+                if dateformat == "SM4":
+                    c_date.append(date_from_filename(filename))      
+                elif dateformat == "POSIX" :
+                    file_stem = Path(filename).stem
+                    print(file_stem)
+                    posix_time = int(file_stem, 16)
+                    dd = datetime.utcfromtimestamp(posix_time).strftime('%Y-%m-%d %H:%M:%S')
+                    print(dd)
+                    c_date.append(dd)                          
                 
     ####### SORTED BY DATE
     # create a Pandas dataframe with date as index
