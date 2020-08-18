@@ -18,12 +18,12 @@ sys.path.insert(0, os.path.abspath('../../'))
 # -- Project information -----------------------------------------------------
 
 project = 'scikit-maad'
-copyright = '2020, scikit-maad development team'
+copyright = '2020, scikit-maad development team.'
 author = 'scikit-maad development team'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.4'
-
+version = '0.1.4'
 
 # -- General configuration ---------------------------------------------------
 
@@ -64,7 +64,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-
+html_logo = '../../logo_maad.png'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
