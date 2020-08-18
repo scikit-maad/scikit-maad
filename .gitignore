@@ -114,3 +114,5 @@ maad/__pycache__/__init__.cpython-36.pyc
 # Ignore *.pyc files reulting from compilation of module
 *.pyc
 pending_fixes.txt
+/docs/sphinx/_build
+/docs/sphinx/_build
