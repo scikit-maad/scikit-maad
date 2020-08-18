@@ -16,6 +16,7 @@ Welcome to scikit-maad's documentation!
    :caption: Contents:
 
    install
+   tutorial
 
 Indices and tables
 ==================
