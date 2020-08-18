@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to scikit-maad’s documentation! &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>Installation instructions &mdash; scikit-maad 0.1.4 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation instructions" href="install.html" /> 
+    <link rel="prev" title="Welcome to scikit-maad’s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -50,7 +50,7 @@
           
 
           
-            <a href="#" class="icon icon-home" alt="Documentation Home"> scikit-maad
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
           
 
           
@@ -89,8 +89,11 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pypi">pypi</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -106,7 +109,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">scikit-maad</a>
+          <a href="index.html">scikit-maad</a>
         
       </nav>
 
@@ -135,15 +138,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Welcome to scikit-maad’s documentation!</li>
+      <li>Installation instructions</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -156,27 +159,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-scikit-maad-s-documentation">
-<h1>Welcome to scikit-maad’s documentation!<a class="headerlink" href="#welcome-to-scikit-maad-s-documentation" title="Permalink to this headline">¶</a></h1>
-<img alt="_images/logo_maad.png" src="_images/logo_maad.png" />
-<p><strong>scikit-maad</strong> is a free, open-source and modular toolbox to <strong>analyze ecoacoustics datasets</strong> in Python 3. This package was designed to bring flexibility to (1) <strong>find regions of interest</strong>, and (2) to compute <strong>acoustic features</strong> in audio recordings. This workflow opens the possibility to use powerfull <strong>machine learning</strong> algorithms through <strong>scikit-learn</strong>, allowing to identify key patterns in all kind of soundscapes.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install.html#pypi">pypi</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="installation-instructions">
+<h1>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
+<p>scikit-maad dependencies:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<li><p>Python &gt;= 3.5</p></li>
+<li><p>NumPy &gt;= 1.13</p></li>
+<li><p>SciPy &gt;= 0.18</p></li>
+<li><p>scikit-image &gt;= 0.14</p></li>
 </ul>
+<div class="section" id="pypi">
+<h2>pypi<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h2>
+<p><strong>scikit-maad</strong> is hosted on PyPI. To install, run the following command in your Python environment::</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">scikit</span><span class="o">-</span><span class="n">maad</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">scikit</span><span class="o">-</span><span class="n">maad</span>
+</pre></div>
+</div>
+<p>To install the latest version from source clone the master repository and from the top-level folder call::</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -187,8 +193,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install.html" class="btn btn-neutral float-right" title="Installation instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to scikit-maad’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
