@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.cluster.hdda.HDDC &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.version" href="maad.version.html" />
+    <link rel="prev" title="maad.cluster.hdda" href="maad.cluster.hdda.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="maad.cluster.html">maad.cluster</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.cluster.cluster_func.html">maad.cluster.cluster_func</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="maad.cluster.hdda.html">maad.cluster.hdda</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">maad.cluster.hdda.HDDC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maad.version.html">maad.version</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="maad.html">maad</a> &raquo;</li>
+        
+          <li><a href="maad.cluster.html">maad.cluster</a> &raquo;</li>
+        
+          <li><a href="maad.cluster.hdda.html">maad.cluster.hdda</a> &raquo;</li>
+        
+      <li>maad.cluster.hdda.HDDC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/maad.cluster.hdda.HDDC.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-cluster-hdda-hddc">
+<h1>maad.cluster.hdda.HDDC<a class="headerlink" href="#maad-cluster-hdda-hddc" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="maad.cluster.hdda.HDDC">
+<em class="property">class </em><code class="sig-prename descclassname">maad.cluster.hdda.</code><code class="sig-name descname">HDDC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">'M1'</span></em>, <em class="sig-param"><span class="n">th</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">init</span><span class="o">=</span><span class="default_value">'kmeans'</span></em>, <em class="sig-param"><span class="n">itermax</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">C</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">population</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">check_empty</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class implements the HDDA models proposed by Charles Bouveyron
+and Stephane Girard
+Details about methods can be found here:
+<a class="reference external" href="https://doi.org/10.1016/j.csda.2007.02.009">https://doi.org/10.1016/j.csda.2007.02.009</a></p>
+<p>This function initialize the HDDA stucture</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – the model used.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>M1 = aijbiQidi</p></li>
+<li><p>M2 = aijbiQid</p></li>
+<li><p>M3 = aijbQidi</p></li>
+<li><p>M4 = aijbQid</p></li>
+<li><p>M5 = aibiQidi</p></li>
+<li><p>M6 = aibiQid</p></li>
+<li><p>M7 = aibQidi</p></li>
+<li><p>M8 = aibQid</p></li>
+<li><p>M9 = abiQidi &lt;–</p></li>
+<li><p>M10 = abiQid</p></li>
+<li><p>M11 = abQidi</p></li>
+<li><p>m12 = abQid</p></li>
+</ul>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.e_step" title="maad.cluster.hdda.HDDC.e_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">e_step</span></code></a></p></td>
+<td><p>Compute the e-step of the algorithm</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.fit" title="maad.cluster.hdda.HDDC.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a></p></td>
+<td><p>Estimate the model parameters with the EM algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.free" title="maad.cluster.hdda.HDDC.free"><code class="xref py py-obj docutils literal notranslate"><span class="pre">free</span></code></a></p></td>
+<td><p>This  function free some  parameters of the  model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.m_step" title="maad.cluster.hdda.HDDC.m_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">m_step</span></code></a></p></td>
+<td><p>M step of the algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.predict" title="maad.cluster.hdda.HDDC.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a></p></td>
+<td><p>Predict the labels for the data samples in X using trained model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.predict_proba" title="maad.cluster.hdda.HDDC.predict_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_proba</span></code></a></p></td>
+<td><p>Predict the membership probabilities for the data samples in X using trained model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.score" title="maad.cluster.hdda.HDDC.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a></p></td>
+<td><p>Compute the per-sample log-likelihood of the given data X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#maad.cluster.hdda.HDDC.score_samples" title="maad.cluster.hdda.HDDC.score_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score_samples</span></code></a></p></td>
+<td><p>Compute the negative weighted log probabilities for each sample.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.e_step">
+<code class="sig-name descname">e_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.e_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.e_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the e-step of the algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_dimensions).
+List of n_features-dimensional data points. Each row
+corresponds to a single data point.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the model parameters with the EM algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+List of n_features-dimensional data points. Each row
+corresponds to a single data point.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.free">
+<code class="sig-name descname">free</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.free"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.free" title="Permalink to this definition">¶</a></dt>
+<dd><p>This  function free some  parameters of the  model.</p>
+<p>Use in the EM algorithm</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.m_step">
+<code class="sig-name descname">m_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.m_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.m_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>M step of the algorithm</p>
+<p>This function  computes the  empirical estimators of  the mean
+vector,  the convariance  matrix  and the  proportion of  each
+class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the labels for the data samples in X using trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+List of n_features-dimensional data points. Each row
+corresponds to a single data point.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>labels (array) - shape (n_samples,). Component labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.predict_proba">
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the membership probabilities for the data samples
+in X using trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+List of n_features-dimensional data points. Each row
+corresponds to a single data point.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>proba (array) - shape (n_samples, n_clusters)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.score">
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the per-sample log-likelihood of the given data X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_dimensions).
+List of n_features-dimensional data points. Each row
+corresponds to a single data point.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>log_likelihood (float) - Log likelihood of the Gaussian mixture given X.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maad.cluster.hdda.HDDC.score_samples">
+<code class="sig-name descname">score_samples</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.score_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.score_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the negative weighted log probabilities for each sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+List of n_features-dimensional data points. Each row
+corresponds to a single data point.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>log_prob (array) - shape (n_samples, n_clusters). Log probabilities of each data point in X.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.version.html" class="btn btn-neutral float-right" title="maad.version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.cluster.hdda.html" class="btn btn-neutral float-left" title="maad.cluster.hdda" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

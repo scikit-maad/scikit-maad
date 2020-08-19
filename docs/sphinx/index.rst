@@ -17,6 +17,15 @@ Welcome to scikit-maad's documentation!
 
    install
    tutorial
+   
+.. autosummary::
+   :toctree: _autosummary
+   :caption: API Reference
+   :template: custom-module-template.rst
+   :recursive:
+   
+   maad
+
 
 Indices and tables
 ==================
