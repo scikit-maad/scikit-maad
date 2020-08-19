@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.sound_func.spectrogram &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.sound.sound_func.spectrogram2" href="maad.sound.sound_func.spectrogram2.html" />
+    <link rel="prev" title="maad.sound.sound_func.select_bandwidth" href="maad.sound.sound_func.select_bandwidth.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.cluster.html">maad.cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.ecoacoustics.html">maad.ecoacoustics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.features.html">maad.features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.rois.html">maad.rois</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="maad.sound.html">maad.sound</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="maad.sound.sound_func.html">maad.sound.sound_func</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.fir_filter.html">maad.sound.sound_func.fir_filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.iir_filter1d.html">maad.sound.sound_func.iir_filter1d</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.load.html">maad.sound.sound_func.load</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.preprocess_wrapper.html">maad.sound.sound_func.preprocess_wrapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.select_bandwidth.html">maad.sound.sound_func.select_bandwidth</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">maad.sound.sound_func.spectrogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.spectrogram2.html">maad.sound.sound_func.spectrogram2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.sound.sound_func.spectrogramPSD.html">maad.sound.sound_func.spectrogramPSD</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maad.util.html">maad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.version.html">maad.version</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="maad.html">maad</a> &raquo;</li>
+        
+          <li><a href="maad.sound.html">maad.sound</a> &raquo;</li>
+        
+          <li><a href="maad.sound.sound_func.html">maad.sound.sound_func</a> &raquo;</li>
+        
+      <li>maad.sound.sound_func.spectrogram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/maad.sound.sound_func.spectrogram.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-sound-sound-func-spectrogram">
+<h1>maad.sound.sound_func.spectrogram<a class="headerlink" href="#maad-sound-sound-func-spectrogram" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.sound.sound_func.spectrogram">
+<code class="sig-prename descclassname">maad.sound.sound_func.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">512</span></em>, <em class="sig-param"><span class="n">overlap</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">dt_df_res</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">db_range</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">db_gain</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">rescale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/sound_func.html#spectrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.sound_func.spectrogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcul the spectrogram of a signal s</p>
+<dl>
+<dt>s<span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the audiogram</p>
+</dd>
+<dt>fs<span class="classifier">int</span></dt><dd><p>The sampling frequency in Hz</p>
+</dd>
+<dt>nperseg<span class="classifier">int, optional, default: 512</span></dt><dd><p>Number of points par segment (short window).
+This parameter sets the resolution in time of the spectrogram,
+the higher is the number, the lower is the resolution in time but
+better is the resolution in frequency.
+This number is used to compute the short fourier transform (sfft).
+For fast calculation, it’s better to use a number that is a power 2.</p>
+</dd>
+<dt>overlap<span class="classifier">scalar, optional, default: 0.5</span></dt><dd><p>Pourcentage of overlap between each short windows
+The number ranges between 0 (no overlap) and 1 (complete overlap)</p>
+</dd>
+<dt>dt_df_res<span class="classifier">list of two scalars [dt, df], optional, default is None</span></dt><dd><p><strong>Priority to dt_df_res is provided</strong>, 
+nperseg and overlap are not taken into account
+usage :</p>
+<blockquote>
+<div><p>dt_df_res = [0.02, 20] means
+time resolution dt = 0.02s / frequency resolution df = 20Hz</p>
+</div></blockquote>
+</dd>
+<dt>db_range<span class="classifier">int, optional, default is None</span></dt><dd><p>Final dB range of the spectrogram values.
+If dB_range is None, no db scale is performed. Output is linear</p>
+</dd>
+<dt>db_gain<span class="classifier">int, optional, default is 20</span></dt><dd><p>After db scale, a db gain is added to the spectrogram values.</p>
+</dd>
+<dt>rescale<span class="classifier">boolean, optional, default is False</span></dt><dd><p>a linear rescale is performed between 0 to 1 on the final (linear 
+or dB scale) spectrogram.
+The spectrogram can be in dB scale or linear scale</p>
+</dd>
+<dt>fcrop, tcrop<span class="classifier">list of 2 scalars [min, max], optional, default is None</span></dt><dd><p>fcrop corresponds to the min and max boundary frequency values
+tcrop corresponds to the min and max boundary time values</p>
+</dd>
+<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+</dd>
+<dt>savefig<span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+is added to the root filename.</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, optional. This parameter is used by plt.plot and savefig functions</dt><dd><dl class="simple">
+<dt>savefilename<span class="classifier">str, optional, default :’_filt_audiogram.png’</span></dt><dd><p>Postfix of the figure filename</p>
+</dd>
+</dl>
+<dl>
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+</dd>
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
+</dd>
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+</dd>
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+in order to get all the  existing colormaps
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,</p>
+<blockquote>
+<div><p>‘viridis’…</p>
+</div></blockquote>
+</dd>
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+luminance data.  Note if you pass a <cite>norm</cite> instance, your
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
+</dd>
+<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
+For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
+</dd>
+<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
+</dd>
+</dl>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Sxx<span class="classifier">ndarray</span></dt><dd><p>Spectrogram (collection of Power Spectrum Density (PSD)) of s.
+Spectrogram(s) = abs(STFD)²
+This is equivalent to Audacity, in linear or dB scale. Values
+is normalized between 0 to 1 if rescale is True</p>
+</dd>
+<dt>dt<span class="classifier">scalar</span></dt><dd><p>Time resolution of the spectrogram (horizontal x-axis)</p>
+</dd>
+<dt>df<span class="classifier">scalar</span></dt><dd><p>Frequency resolution of the spectrogram (vertical y-axis)</p>
+</dd>
+<dt>ext<span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.sound.sound_func.spectrogram2.html" class="btn btn-neutral float-right" title="maad.sound.sound_func.spectrogram2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.sound.sound_func.select_bandwidth.html" class="btn btn-neutral float-left" title="maad.sound.sound_func.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

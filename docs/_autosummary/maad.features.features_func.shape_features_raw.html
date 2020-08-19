@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.features.features_func.shape_features_raw &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.rois" href="maad.rois.html" />
+    <link rel="prev" title="maad.features.features_func.shape_features" href="maad.features.features_func.shape_features.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.cluster.html">maad.cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.ecoacoustics.html">maad.ecoacoustics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="maad.features.html">maad.features</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.features.features_1d.html">maad.features.features_1d</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="maad.features.features_func.html">maad.features.features_func</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.centroid.html">maad.features.features_func.centroid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.compute_rois_features.html">maad.features.features_func.compute_rois_features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.create_csv.html">maad.features.features_func.create_csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.filter_bank_2d_nodc.html">maad.features.features_func.filter_bank_2d_nodc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.filter_mag.html">maad.features.features_func.filter_mag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.filter_multires.html">maad.features.features_func.filter_multires</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.gabor_kernel_nodc.html">maad.features.features_func.gabor_kernel_nodc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.get_features_wrapper.html">maad.features.features_func.get_features_wrapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.opt_shape_presets.html">maad.features.features_func.opt_shape_presets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.plot_shape.html">maad.features.features_func.plot_shape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.save_csv.html">maad.features.features_func.save_csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.save_figlist.html">maad.features.features_func.save_figlist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.features.features_func.shape_features.html">maad.features.features_func.shape_features</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">maad.features.features_func.shape_features_raw</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maad.rois.html">maad.rois</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.sound.html">maad.sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.util.html">maad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.version.html">maad.version</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="maad.html">maad</a> &raquo;</li>
+        
+          <li><a href="maad.features.html">maad.features</a> &raquo;</li>
+        
+          <li><a href="maad.features.features_func.html">maad.features.features_func</a> &raquo;</li>
+        
+      <li>maad.features.features_func.shape_features_raw</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/maad.features.features_func.shape_features_raw.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-features-features-func-shape-features-raw">
+<h1>maad.features.features_func.shape_features_raw<a class="headerlink" href="#maad-features-features-func-shape-features-raw" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.features.features_func.shape_features_raw">
+<code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">shape_features_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">opt_shape</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#shape_features_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.shape_features_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions 
+using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw
+response of the spectrogram to the filter bank.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>im: 2D array</dt><dd><p>Input image to process</p>
+</dd>
+<dt>resolution: </dt><dd><p>Resolution of analysis, i.e. number of filters used. 
+Three presets are provided, ‘low’, ‘mid’ and ‘high’, which control 
+the number of filters.</p>
+</dd>
+<dt>opt_shape: dictionary (optional)</dt><dd><p>options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
+</dd>
+</dl>
+</div></blockquote>
+<blockquote>
+<div><dl class="simple">
+<dt>shape_im: 1D array</dt><dd><p>Raw shape response of spectrogram to every filter of the filter bank</p>
+</dd>
+<dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the 
+shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.rois.html" class="btn btn-neutral float-right" title="maad.rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.features.features_func.shape_features.html" class="btn btn-neutral float-left" title="maad.features.features_func.shape_features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

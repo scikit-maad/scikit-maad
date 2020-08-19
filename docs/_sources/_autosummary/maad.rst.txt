@@ -27,5 +27,10 @@
    :recursive:
 
    maad.cluster
+   maad.ecoacoustics
+   maad.features
+   maad.rois
+   maad.sound
+   maad.util
    maad.version
 
