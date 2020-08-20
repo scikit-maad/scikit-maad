@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -204,24 +203,26 @@
 <dt id="maad.features.features_func.filter_multires">
 <code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">filter_multires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_in</span></em>, <em class="sig-param"><span class="n">kernels</span></em>, <em class="sig-param"><span class="n">npyr</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">rescale</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#filter_multires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.filter_multires" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes 2D wavelet coefficients at multiple octaves/pyramids</p>
-<blockquote>
-<div><dl class="simple">
-<dt>im_in: list of 2D arrays</dt><dd><p>List of input images to process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>im_in: list of 2D arrays</strong></dt><dd><p>List of input images to process</p>
 </dd>
-<dt>kernels: list of 2D arrays</dt><dd><p>List of 2D wavelets to filter the images</p>
+<dt><strong>kernels: list of 2D arrays</strong></dt><dd><p>List of 2D wavelets to filter the images</p>
 </dd>
-<dt>npyr: int</dt><dd><p>Number of pyramids to compute</p>
+<dt><strong>npyr: int</strong></dt><dd><p>Number of pyramids to compute</p>
 </dd>
-<dt>rescale: boolean</dt><dd><p>Indicates if the reduced images should be rescaled</p>
+<dt><strong>rescale: boolean</strong></dt><dd><p>Indicates if the reduced images should be rescaled</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>im_out: list of 2D arrays</dt><dd><p>List of images filtered by each 2D kernel</p>
 </dd>
 </dl>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

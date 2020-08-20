@@ -1,4 +1,4 @@
-﻿maad.cluster.hdda.HDDC
+maad.cluster.hdda.HDDC
 ======================
 
 .. currentmodule:: maad.cluster.hdda

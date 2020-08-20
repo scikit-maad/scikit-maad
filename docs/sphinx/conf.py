@@ -10,6 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
@@ -35,8 +36,15 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
     'sphinx.ext.intersphinx',  # Link to other project's documentation (see mapping below)
     'sphinx.ext.viewcode',  # Add a link to the Python source code for classes, functions etc.
     'sphinx_autodoc_typehints', # Automatically document param types (less noise in class signature)
-    'sphinx.ext.githubpages'
+    'sphinx.ext.githubpages',
+#    'sphinx.ext.napoleon',
+    'numpydoc',  # docstring examples
+    'sphinx.ext.autosectionlabel',
 ]
+
+numpydoc_show_class_members = False
+
+#napoleon_numpy_docstring = True
 
 # Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
 intersphinx_mapping = {

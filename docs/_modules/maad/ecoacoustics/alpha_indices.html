@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -161,17 +160,19 @@
   <h1>Source code for maad.ecoacoustics.alpha_indices</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
+
 <span class="sd">&quot;&quot;&quot; Created on Wed Oct 24 11:56:28 2018</span>
-<span class="sd">    Alpha indices used in ecoacoustics&quot;&quot;&quot;</span>
+<span class="sd">    Alpha indices used in ecoacoustics</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">#</span>
 <span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
 <span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;        </span>
 <span class="c1">#</span>
 <span class="c1"># License: New BSD License</span>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd"># -------------------       Load modules            ---------------------------</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#***************************************************************************</span>
+<span class="c1"># -------------------       Load modules         ---------------------------</span>
+<span class="c1">#***************************************************************************</span>
 
 <span class="c1">#### Import external modules</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
@@ -240,8 +241,9 @@
 <span class="sd">    axis : integer, optional, default is 0</span>
 <span class="sd">        Determine  along which axis the transformation is done.</span>
 <span class="sd">        In case of matrix :</span>
-<span class="sd">            axis = 0 =&gt; transformation is done on column</span>
-<span class="sd">            axis = 1 =&gt; transformation is done on row </span>
+<span class="sd">        axis = 0 =&gt; transformation is done on column</span>
+<span class="sd">        </span>
+<span class="sd">        axis = 1 =&gt; transformation is done on row </span>
 <span class="sd">    bin_min : scalar, optional, default is None</span>
 <span class="sd">        This minimum value corresponds to the start of the first bin. </span>
 <span class="sd">        By default, the minimum value is the first value of an.</span>
@@ -324,7 +326,7 @@
 <span class="sd">        skewness of x </span>
 <span class="sd">        if x is a 1d vector =&gt; single value</span>
 <span class="sd">        if x is a 2d matrix =&gt; array of values corresponding to the number of</span>
-<span class="sd">                               points in the other axis</span>
+<span class="sd">        points in the other axis</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
@@ -347,8 +349,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : ndarray of floats </span>
-<span class="sd">        1d signal or 2d matrix</span>
-<span class="sd">        </span>
+<span class="sd">        1d signal or 2d matrix       </span>
 <span class="sd">    axis : integer, optional, default is 0</span>
 <span class="sd">        select the axis to compute the kurtosis</span>
 <span class="sd">                            </span>
@@ -358,8 +359,7 @@
 <span class="sd">        kurtosis of x </span>
 <span class="sd">        if x is a 1d vector =&gt; single value</span>
 <span class="sd">        if x is a 2d matrix =&gt; array of values corresponding to the number of</span>
-<span class="sd">                               points in the other axis</span>
-<span class="sd">        </span>
+<span class="sd">        points in the other axis</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">Nf</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
@@ -783,7 +783,7 @@
 <span class="sd">        &quot;shannon&quot; : Shannon entropy is calculated on the vector of scores</span>
 <span class="sd">        &quot;simpson&quot; : Simpson index is calculated on the vector of scores</span>
 <span class="sd">        &quot;invsimpson&quot; : Inverse Simpson index is calculated on the vector </span>
-<span class="sd">                        of scores</span>
+<span class="sd">        of scores</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------    </span>
@@ -896,9 +896,9 @@
     <span class="k">return</span> <span class="n">AEI</span></div>
 
 <span class="c1">#=============================================================================</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Indices based on the entropy</span>
-<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">####    Indices based on the entropy</span>
+
 <div class="viewcode-block" id="spectral_entropy"><a class="viewcode-back" href="../../../_autosummary/maad.ecoacoustics.alpha_indices.spectral_entropy.html#maad.ecoacoustics.alpha_indices.spectral_entropy">[docs]</a><span class="k">def</span> <span class="nf">spectral_entropy</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Spectral entropy : EAS, ECU, ECV, EPS, </span>
@@ -948,10 +948,10 @@
     <span class="n">iBAND</span> <span class="o">=</span> <span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">frange</span><span class="p">)</span>
 
     <span class="c1"># TOWSEY &amp; BUXTON : only on the bio band</span>
-    <span class="sd">&quot;&quot;&quot; EAS [TOWSEY] &quot;&quot;&quot;</span>
-    <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        COMMENT : Result a bit different due to different Hilbert implementation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># EAS [TOWSEY] #</span>
+     
+    <span class="c1">####  COMMENT : Result a bit different due to different Hilbert implementation</span>
+    
     <span class="n">X_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">iBAND</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">Hf</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">X_mean</span><span class="p">)</span>
     <span class="n">EAS</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Hf</span>
@@ -999,9 +999,9 @@
 
 
 <span class="c1">#=============================================================================</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Indices based on the energy</span>
-<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">####    Indices based on the energy</span>
+
     
 <span class="k">def</span> <span class="nf">_energy_per_freqbin</span> <span class="p">(</span><span class="n">PSDxx</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">frange</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">),</span> <span class="n">bin_step</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
         
@@ -1153,18 +1153,20 @@
         
     <span class="k">return</span> <span class="n">BI</span></div>
     
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Indices based on the acoustic event</span>
-<span class="sd">    </span>
-<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">####    Indices based on the acoustic event  ####</span>
+    
+
 
 <div class="viewcode-block" id="acoustic_activity"><a class="viewcode-back" href="../../../_autosummary/maad.ecoacoustics.alpha_indices.acoustic_activity.html#maad.ecoacoustics.alpha_indices.acoustic_activity">[docs]</a><span class="k">def</span> <span class="nf">acoustic_activity</span> <span class="p">(</span><span class="n">xdB</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Acoustic Activity :</span>
-<span class="sd">        for each frequency bin :</span>
-<span class="sd">            - ACTfract : proportion (fraction) of points above the threshold </span>
-<span class="sd">            - ACTcount : number of points above the threshold</span>
-<span class="sd">            - ACTmean : mean value (in dB) of the portion of the signal above the threhold</span>
+<span class="sd">    </span>
+<span class="sd">    for each frequency bin :</span>
+<span class="sd">    - ACTfract : proportion (fraction) of points above the threshold </span>
+<span class="sd">    - ACTcount : number of points above the threshold</span>
+<span class="sd">    - ACTmean : mean value (in dB) of the portion of the signal above the threhold</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    xdB : ndarray of floats</span>
@@ -1199,8 +1201,8 @@
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
 <span class="sd">    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
 <span class="sd">    </span>
-<span class="sd">        ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)</span>
-<span class="sd">        EVNsp [Towsey] : ACTcount (number of point value above the theshold)</span>
+<span class="sd">    ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)</span>
+<span class="sd">    EVNsp [Towsey] : ACTcount (number of point value above the theshold)</span>
 <span class="sd">    &quot;&quot;&quot;</span> 
     <span class="n">ACTfract</span><span class="p">,</span> <span class="n">ACTcount</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">xdB</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
     <span class="n">ACTfract</span><span class="o">=</span> <span class="n">ACTfract</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>

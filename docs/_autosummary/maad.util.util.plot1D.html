@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -206,26 +205,26 @@
 <h1>maad.util.util.plot1D<a class="headerlink" href="#maad-util-util-plot1d" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.util.util.plot1D">
-<code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">plot1D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#plot1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.plot1D" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">plot1D</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#plot1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.plot1D" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot a signal s</p>
-<dl>
-<dt>x<span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the abscissa values (horizontal axis)</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>x</strong><span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the abscissa values (horizontal axis)</p>
 </dd>
-<dt>y<span class="classifier">1d ndarray of scalar</span></dt><dd><p>Vector containing the ordinate values (vertical axis)</p>
+<dt><strong>y</strong><span class="classifier">1d ndarray of scalar</span></dt><dd><p>Vector containing the ordinate values (vertical axis)</p>
 </dd>
-<dt>ax<span class="classifier">axis, optional, default is None</span></dt><dd><p>Draw the signal on this specific axis. Allow multiple plots on the same
+<dt><strong>ax</strong><span class="classifier">axis, optional, default is None</span></dt><dd><p>Draw the signal on this specific axis. Allow multiple plots on the same
 axis.</p>
 </dd>
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, optional</dt><dd><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
-</dd>
-<dt>facecolor<span class="classifier">matplotlib color, optional, default: ‘w’ (white)</span></dt><dd><p>the background color.</p>
-</dd>
-<dt>edgecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the border color.</p>
-</dd>
-<dt>linecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the line color</p>
-</dd>
-</dl>
+<dt><strong>**kwargs, optional</strong></dt><dd><p>figsize : tuple of integers, optional, default: (4,10)
+width, height in inches.</p>
+<p>facecolor : matplotlib color, optional, default: ‘w’ (white)
+the background color.</p>
+<p>edgecolor : matplotlib color, optional, default: ‘k’ (black)
+the border color.</p>
+<p>linecolor : matplotlib color, optional, default: ‘k’ (black)
+the line color</p>
 <p>The following color abbreviations are supported:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -266,33 +265,33 @@ axis.</p>
 </table>
 <p>In addition, you can specify colors in many ways, including RGB tuples 
 (0.2,1,0.5). See matplotlib color</p>
-<dl class="simple">
-<dt>linewidth<span class="classifier">scalar, optional, default: 0.5</span></dt><dd><p>width in pixels</p>
-</dd>
-<dt>figtitle: string, optional, default: ‘Audiogram’</dt><dd><p>Title of the plot</p>
-</dd>
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
-</dd>
-<dt>legend<span class="classifier">string, optional, default</span><span class="classifier">None</span></dt><dd><p>Legend for the plot</p>
-</dd>
-<dt>now<span class="classifier">boolean, optional, default</span><span class="classifier">True</span></dt><dd><p>if True, display now. Cannot display multiple plots. 
+<p>linewidth : scalar, optional, default: 0.5
+width in pixels</p>
+<p>figtitle: string, optional, default: ‘Audiogram’
+Title of the plot</p>
+<p>xlabel : string, optional, default : ‘Time [s]’
+label of the horizontal axis</p>
+<p>ylabel : string, optional, default : ‘Amplitude [AU]’
+label of the vertical axis</p>
+<p>legend : string, optional, default : None
+Legend for the plot</p>
+<p>now : boolean, optional, default : True
+if True, display now. Cannot display multiple plots. 
 To display mutliple plots, set now=False until the last call for 
 the last plot</p>
+<p>…and more, see matplotlib</p>
 </dd>
 </dl>
-<p>… and more, see matplotlib</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fig</strong><span class="classifier">Figure</span></dt><dd><p>The Figure instance</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">Axis</span></dt><dd><p>The Axis instance</p>
 </dd>
 </dl>
-<blockquote>
-<div><dl class="simple">
-<dt>fig<span class="classifier">Figure</span></dt><dd><p>The Figure instance</p>
-</dd>
-<dt>ax<span class="classifier">Axis</span></dt><dd><p>The Axis instance</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 </div>

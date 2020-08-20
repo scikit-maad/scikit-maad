@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,36 +208,40 @@
 <dt id="maad.ecoacoustics.alpha_indices.intoBins">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">intoBins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">an</span></em>, <em class="sig-param"><span class="n">bin_step</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">bin_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bin_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#intoBins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.intoBins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform a vector or a matrix into bins</p>
-<dl>
-<dt>x<span class="classifier">array-like</span></dt><dd><p>1D or 2D array.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>1D or 2D array.</p>
 </dd>
-<dt>an :1d ndarray of floats </dt><dd><p>Vector containing the positions of each value. 
+<dt><strong>an :1d ndarray of floats</strong></dt><dd><p>Vector containing the positions of each value. 
 In case of 2D matrix, this vector corresponds to the horizontal (row)
 or vertical (columns) units</p>
 </dd>
-<dt>bin_step<span class="classifier">scalar</span></dt><dd><p>Determine the width of each bin.</p>
+<dt><strong>bin_step</strong><span class="classifier">scalar</span></dt><dd><p>Determine the width of each bin.</p>
 </dd>
-<dt>axis<span class="classifier">integer, optional, default is 0</span></dt><dd><p>Determine  along which axis the transformation is done.
-In case of matrix :</p>
-<blockquote>
-<div><p>axis = 0 =&gt; transformation is done on column
-axis = 1 =&gt; transformation is done on row</p>
-</div></blockquote>
+<dt><strong>axis</strong><span class="classifier">integer, optional, default is 0</span></dt><dd><p>Determine  along which axis the transformation is done.
+In case of matrix :
+axis = 0 =&gt; transformation is done on column</p>
+<p>axis = 1 =&gt; transformation is done on row</p>
 </dd>
-<dt>bin_min<span class="classifier">scalar, optional, default is None</span></dt><dd><p>This minimum value corresponds to the start of the first bin. 
+<dt><strong>bin_min</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>This minimum value corresponds to the start of the first bin. 
 By default, the minimum value is the first value of an.</p>
 </dd>
-<dt>bin_max<span class="classifier">scalar, optional, default is None</span></dt><dd><p>This maximum value corresponds to end of the last bin. 
+<dt><strong>bin_max</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>This maximum value corresponds to end of the last bin. 
 By default, the maximum value is the last value of an.</p>
 </dd>
-<dt>display<span class="classifier">boolean, optional, defualt is False</span></dt><dd><p>Display the result of the tranformation : an histogram
+<dt><strong>display</strong><span class="classifier">boolean, optional, defualt is False</span></dt><dd><p>Display the result of the tranformation : an histogram
 In case of matrix, the mean histogram is shown.</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>xbins<span class="classifier">array-like</span></dt><dd><p>1D or 2D array which correspond to the data after being transformed into bins</p>
 </dd>
-<dt>bin<span class="classifier">1d ndarray of floats </span></dt><dd><p>Vector containing the positions of each bin</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>xbins</strong><span class="classifier">array-like</span></dt><dd><p>1D or 2D array which correspond to the data after being transformed into bins</p>
+</dd>
+<dt><strong>bin</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Vector containing the positions of each bin</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

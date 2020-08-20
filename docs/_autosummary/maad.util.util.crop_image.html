@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,20 +208,26 @@
 <code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">crop_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tcrop</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#crop_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.crop_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Crop a spectrogram (or an image) in time (horizontal X axis) and frequency
 (vertical y axis)</p>
-<dl class="simple">
-<dt>im<span class="classifier">2d ndarray</span></dt><dd><p>image to be cropped</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>im</strong><span class="classifier">2d ndarray</span></dt><dd><p>image to be cropped</p>
 </dd>
-<dt>tn, fn<span class="classifier">1d ndarray</span></dt><dd><p>tn is the time vector. fn is the frequency vector. They are required 
+<dt><strong>tn, fn</strong><span class="classifier">1d ndarray</span></dt><dd><p>tn is the time vector. fn is the frequency vector. They are required 
 in order to know the correspondance between pixels and (time,frequency)</p>
 </dd>
-<dt>fcrop, tcrop<span class="classifier">list of 2 scalars [min, max], optional, default is None</span></dt><dd><p>fcrop corresponds to the min and max boundary frequency values
+<dt><strong>fcrop, tcrop</strong><span class="classifier">list of 2 scalars [min, max], optional, default is None</span></dt><dd><p>fcrop corresponds to the min and max boundary frequency values
 tcrop corresponds to the min and max boundary time values</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>im<span class="classifier">2d ndarray</span></dt><dd><p>image cropped</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>im</strong><span class="classifier">2d ndarray</span></dt><dd><p>image cropped</p>
 </dd>
 <dt>tn, fn, 1d ndarray</dt><dd><p>new time and frequency vectors</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

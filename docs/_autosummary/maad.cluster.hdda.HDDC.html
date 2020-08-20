@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -196,11 +195,8 @@ and Stephane Girard
 Details about methods can be found here:
 <a class="reference external" href="https://doi.org/10.1016/j.csda.2007.02.009">https://doi.org/10.1016/j.csda.2007.02.009</a></p>
 <p>This function initialize the HDDA stucture</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – the model used.</p>
-</dd>
-</dl>
+<p>param model: the model used.</p>
+<p>type mode: string</p>
 <ul class="simple">
 <li><p>M1 = aijbiQidi</p></li>
 <li><p>M2 = aijbiQid</p></li>
@@ -250,46 +246,51 @@ Details about methods can be found here:
 </table>
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.e_step">
-<code class="sig-name descname">e_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.e_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.e_step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">e_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.e_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.e_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the e-step of the algorithm</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_dimensions).
-List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like</span></dt><dd><p>Shape (n_samples, n_dimensions).</p>
+<p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the model parameters with the EM algorithm</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
-List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like</span></dt><dd><p>Shape (n_samples, n_features).</p>
+<p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
 </dd>
+</dl>
+</dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>self</p>
+<dd class="field-even"><dl class="simple">
+<dt>self</dt><dd></dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.free">
-<code class="sig-name descname">free</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.free"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.free" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">free</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.free"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.free" title="Permalink to this definition">¶</a></dt>
 <dd><p>This  function free some  parameters of the  model.</p>
 <p>Use in the EM algorithm</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.m_step">
-<code class="sig-name descname">m_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.m_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.m_step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">m_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.m_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.m_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>M step of the algorithm</p>
 <p>This function  computes the  empirical estimators of  the mean
 vector,  the convariance  matrix  and the  proportion of  each
@@ -298,65 +299,90 @@ class.</p>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the labels for the data samples in X using trained model.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like</span></dt><dd><p>Shape (n_samples, n_features).
 List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
 </dd>
+</dl>
+</dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>labels (array) - shape (n_samples,). Component labels.</p>
+<dd class="field-even"><dl>
+<dt><strong>labels</strong><span class="classifier">array</span></dt><dd><p>shape (n_samples,).</p>
+<p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.predict_proba">
-<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the membership probabilities for the data samples
 in X using trained model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like</span></dt><dd><p>Shape (n_samples, n_features).
 List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
 </dd>
+</dl>
+</dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>proba (array) - shape (n_samples, n_clusters)</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>proba</strong><span class="classifier">array</span></dt><dd><p>Shape (n_samples, n_clusters)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.score">
-<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the per-sample log-likelihood of the given data X.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_dimensions).
-List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like</span></dt><dd><p>Shape (n_samples, n_dimensions).</p>
+<p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
 </dd>
+</dl>
+</dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>log_likelihood (float) - Log likelihood of the Gaussian mixture given X.</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>log_likelihood</strong><span class="classifier">float</span></dt><dd><p>Log likelihood of the Gaussian mixture given X.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="maad.cluster.hdda.HDDC.score_samples">
-<code class="sig-name descname">score_samples</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.score_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.score_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">score_samples</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/cluster/hdda.html#HDDC.score_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.cluster.hdda.HDDC.score_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the negative weighted log probabilities for each sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em>) – Shape (n_samples, n_features).
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like</span></dt><dd><p>Shape (n_samples, n_features).
 List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
 </dd>
+</dl>
+</dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>log_prob (array) - shape (n_samples, n_clusters). Log probabilities of each data point in X.</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>log_prob</strong><span class="classifier">array</span></dt><dd><p>Shape (n_samples, n_clusters). Log probabilities of each data point in X.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

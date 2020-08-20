@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -201,74 +200,71 @@
 <h1>maad.rois.rois_2d.double_threshold_abs<a class="headerlink" href="#maad-rois-rois-2d-double-threshold-abs" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.rois.rois_2d.double_threshold_abs">
-<code class="sig-prename descclassname">maad.rois.rois_2d.</code><code class="sig-name descname">double_threshold_abs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">bin_h</span><span class="o">=</span><span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">bin_l</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_2d.html#double_threshold_abs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.rois_2d.double_threshold_abs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.rois.rois_2d.</code><code class="sig-name descname">double_threshold_abs</code><span class="sig-paren">(</span><em class="sig-param">im</em>, <em class="sig-param">ext</em>, <em class="sig-param">bin_h=0.7</em>, <em class="sig-param">bin_l=0.2</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_2d.html#double_threshold_abs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.rois_2d.double_threshold_abs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binarize an image based on a double relative threshold. 
 The values used for the thresholding are independent of the values in the
 image =&gt; absolute threshold</p>
-<dl>
-<dt>im<span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
 </dd>
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
-<dt>bin_h<span class="classifier">scalar, optional, default is 5</span></dt><dd><p>Set the first threshold. Value higher than this value are set to 1, 
+<dt><strong>bin_h</strong><span class="classifier">scalar, optional, default is 5</span></dt><dd><p>Set the first threshold. Value higher than this value are set to 1, 
 the others are set to 0. They are the seeds for the second step</p>
 </dd>
-<dt>bin_l: scalar, optional, defautl is 0.5</dt><dd><p>Set the second threshold. Value higher than this value and connected
+<dt><strong>bin_l: scalar, optional, defautl is 0.5</strong></dt><dd><p>Set the second threshold. Value higher than this value and connected
 to the seeds or to other pixels connected to the seeds are set to 1, 
 the other remains 0</p>
 </dd>
-<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
-<dt>savefig<span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
 is added to the root filename.</p>
 </dd>
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, optional. This parameter is used by plt.plot and savefig functions</dt><dd><dl class="simple">
-<dt>savefilename<span class="classifier">str, optional, default :’_spectro_after_noise_subtraction.png’</span></dt><dd><p>Postfix of the figure filename</p>
-</dd>
-</dl>
-<dl>
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
-</dd>
-<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
-</dd>
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
-</dd>
-<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><p>savefilename : str, optional, default :’_spectro_after_noise_subtraction.png’
+Postfix of the figure filename
+<strong>************************************************</strong> 
+figsize : tuple of integers, optional, default: (4,10)
+width, height in inches.</p>
+<p>title : string, optional, default : ‘Spectrogram’
+title of the figure</p>
+<p>xlabel : string, optional, default : ‘Time [s]’
+label of the horizontal axis</p>
+<p>ylabel : string, optional, default : ‘Amplitude [AU]’
+label of the vertical axis</p>
+<p>cmap : string or Colormap object, optional, default is ‘gray’
+See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
 in order to get all the  existing colormaps
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,</p>
-<blockquote>
-<div><p>‘viridis’…</p>
-</div></blockquote>
-</dd>
-<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
+‘viridis’…</p>
+<p>vmin, vmax : scalar, optional, default: None
+<cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
 luminance data.  Note if you pass a <cite>norm</cite> instance, your
 settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-<dt>ext<span class="classifier">scalars (left, right, bottom, top), optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<p>ext : scalars (left, right, bottom, top), optional, default: None
+The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
+<p>dpi : integer, optional, default is 96
+Dot per inch. 
 For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
 For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
+<p>format : string, optional, default is ‘png’
+Format to save the figure</p>
 <p>… and more, see matplotlib</p>
 </dd>
 </dl>
-<blockquote>
-<div><p>im_out: binary image</p>
-</div></blockquote>
-<blockquote>
-<div><p>from MATLAB: Threshold estimation (from Oliveira et al, 2015)
-Adapted by S. Haupert Dec 12, 2017</p>
-</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>im_out: binary image</dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

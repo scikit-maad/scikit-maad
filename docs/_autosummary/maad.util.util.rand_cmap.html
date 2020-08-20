@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -208,22 +207,29 @@
 <dt id="maad.util.util.rand_cmap">
 <code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">rand_cmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nlabels</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">'bright'</span></em>, <em class="sig-param"><span class="n">first_color_black</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">last_color_black</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#rand_cmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.rand_cmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a random colormap to be used together with matplotlib. Useful for segmentation tasks</p>
-<dl class="simple">
-<dt>nlabels<span class="classifier">Integer</span></dt><dd><p>Number of labels (size of colormap)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>nlabels</strong><span class="classifier">Integer</span></dt><dd><p>Number of labels (size of colormap)</p>
 </dd>
-<dt>type<span class="classifier">String</span></dt><dd><p>‘bright’ for strong colors, ‘soft’ for pastel colors. Default is ‘bright’</p>
+<dt><strong>type</strong><span class="classifier">String</span></dt><dd><p>‘bright’ for strong colors, ‘soft’ for pastel colors. Default is ‘bright’</p>
 </dd>
-<dt>first_color_black<span class="classifier">Boolean</span></dt><dd><p>Option to use first color as black. Default is True</p>
+<dt><strong>first_color_black</strong><span class="classifier">Boolean</span></dt><dd><p>Option to use first color as black. Default is True</p>
 </dd>
-<dt>last_color_black<span class="classifier">Boolean   </span></dt><dd><p>Option to use last color as black, Default is False</p>
+<dt><strong>last_color_black</strong><span class="classifier">Boolean</span></dt><dd><p>Option to use last color as black, Default is False</p>
 </dd>
-<dt>verbose<span class="classifier">Boolean   </span></dt><dd><p>Prints the number of labels and shows the colormap. Default is False</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>random_colormap<span class="classifier">Colormap </span></dt><dd><p>Colormap type used by matplotlib</p>
+<dt><strong>verbose</strong><span class="classifier">Boolean</span></dt><dd><p>Prints the number of labels and shows the colormap. Default is False</p>
 </dd>
 </dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>random_colormap</strong><span class="classifier">Colormap</span></dt><dd><p>Colormap type used by matplotlib</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
 <p>adapted from <a class="reference external" href="https://github.com/delestro/rand_cmap">https://github.com/delestro/rand_cmap</a> author : delestro</p>
 </dd></dl>
 

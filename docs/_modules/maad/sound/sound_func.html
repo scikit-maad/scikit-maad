@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -190,9 +189,9 @@
 <span class="sd">        The name or path of the .wav file to load      </span>
 <span class="sd">        if you want to extract the date of creation of the file, the filename </span>
 <span class="sd">        must have this postfix :</span>
-<span class="sd">            XXXX_yyyymmdd_hhmmss.wav</span>
-<span class="sd">            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
-<span class="sd">            mm : minutes / ss : seconds</span>
+<span class="sd">        XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">        mm : minutes / ss : seconds</span>
 <span class="sd">            </span>
 <span class="sd">    channel : {&#39;left&#39;, right&#39;}, optional, default: left</span>
 <span class="sd">        In case of stereo sound select the channel that is kept </span>
@@ -213,35 +212,35 @@
 <span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_audiogram.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
 <span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib     </span>
 <span class="sd">        </span>
@@ -361,25 +360,27 @@
 <span class="sd">    kernel : array_like or tuple</span>
 <span class="sd">        Pass directly the kernel (1d vector of scalars) </span>
 <span class="sd">        Or pass the arguments in a tuple to create a kernel. Arguments are</span>
-<span class="sd">                window : string, float, or tuple</span>
-<span class="sd">                    The type of window to create. </span>
-<span class="sd">                - boxcar, triang, blackman, hamming, hann, bartlett, </span>
-<span class="sd">                  flattop,parzen, bohman, blackmanharris, nuttall, barthann, </span>
-<span class="sd">                - (kaiser, beta), </span>
-<span class="sd">                - (gaussian, standard deviation), </span>
-<span class="sd">                - (general_gaussian, power, width), </span>
-<span class="sd">                - (slepian, width), </span>
-<span class="sd">                - (dpss, normalized half-bandwidth), </span>
-<span class="sd">                - (chebwin, attenuation), </span>
-<span class="sd">                - (exponential, decay scale), </span>
-<span class="sd">                - (tukey, taper fraction)</span>
-<span class="sd">                Nx : int</span>
-<span class="sd">                    The number of samples in the window.</span>
+<span class="sd">        window : string, float, or tuple</span>
+<span class="sd">        The type of window to create. </span>
+<span class="sd">        - boxcar, triang, blackman, hamming, hann, bartlett, </span>
+<span class="sd">        flattop,parzen, bohman, blackmanharris, nuttall, barthann, </span>
+<span class="sd">        - (kaiser, beta), </span>
+<span class="sd">        - (gaussian, standard deviation), </span>
+<span class="sd">        - (general_gaussian, power, width), </span>
+<span class="sd">        - (slepian, width), </span>
+<span class="sd">        - (dpss, normalized half-bandwidth), </span>
+<span class="sd">        - (chebwin, attenuation), </span>
+<span class="sd">        - (exponential, decay scale), </span>
+<span class="sd">        - (tukey, taper fraction)</span>
+<span class="sd">    </span>
+<span class="sd">    Nx : int</span>
+<span class="sd">        The number of samples in the window.</span>
 <span class="sd">                    </span>
-<span class="sd">        examples:</span>
-<span class="sd">            kernel = (&#39;boxcar&#39;, 9)</span>
-<span class="sd">            kernel = ((&#39;gaussian&#39;, 0.5), 5)</span>
-<span class="sd">            kernel = [1 3 5 7 5 3 1] </span>
+<span class="sd">    examples:</span>
+<span class="sd">    kernel = (&#39;boxcar&#39;, 9)</span>
+<span class="sd">    kernel = ((&#39;gaussian&#39;, 0.5), 5)</span>
+<span class="sd">    kernel = [1 3 5 7 5 3 1] </span>
+<span class="sd">    </span>
 <span class="sd">    axis : int</span>
 <span class="sd">        Determine along which axis is performed the filtering in case of 2d matrix</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -448,32 +449,41 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
+<span class="sd">        </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
 <span class="sd">            The location, in data-coordinates, of the lower-left and</span>
 <span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
 <span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
 <span class="sd">            Dot per inch. </span>
 <span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
@@ -587,8 +597,9 @@
 <span class="sd">        **Priority to dt_df_res is provided**, </span>
 <span class="sd">        nperseg and overlap are not taken into account</span>
 <span class="sd">        usage : </span>
-<span class="sd">            dt_df_res = [0.02, 20] means</span>
-<span class="sd">            time resolution dt = 0.02s / frequency resolution df = 20Hz</span>
+<span class="sd">        </span>
+<span class="sd">        dt_df_res = [0.02, 20] means</span>
+<span class="sd">        time resolution dt = 0.02s / frequency resolution df = 20Hz</span>
 <span class="sd">            </span>
 <span class="sd">    db_range : int, optional, default is None</span>
 <span class="sd">        Final dB range of the spectrogram values.</span>
@@ -613,38 +624,46 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">        </span>
 <span class="sd">        ... and more, see matplotlib  </span>
 <span class="sd">  </span>
@@ -790,8 +809,9 @@
 <span class="sd">        **Priority to dt_df_res is provided**, </span>
 <span class="sd">        nperseg and overlap are not taken into account</span>
 <span class="sd">        usage : </span>
-<span class="sd">            dt_df_res = [0.02, 20] means</span>
-<span class="sd">            time resolution dt = 0.02s / frequency resolution df = 20Hz</span>
+<span class="sd">        </span>
+<span class="sd">        dt_df_res = [0.02, 20] means</span>
+<span class="sd">        time resolution dt = 0.02s / frequency resolution df = 20Hz</span>
 <span class="sd">            </span>
 <span class="sd">    detrend : boolean, optional, default is False</span>
 <span class="sd">        if detrend is True, the DC value (ie. mean value of signal) is</span>
@@ -799,8 +819,8 @@
 <span class="sd">            </span>
 <span class="sd">    mode : str, optional, default is &#39;amplitude&#39;</span>
 <span class="sd">        select the output values of spectrogram :</span>
-<span class="sd">            - &#39;amplitude&#39; : Sxx = A</span>
-<span class="sd">            - &#39;psd&#39;       : Sxx = A² (= Power Spectrum Density (PSD))</span>
+<span class="sd">        - &#39;amplitude&#39; : Sxx = A</span>
+<span class="sd">        - &#39;psd&#39;       : Sxx = A² (= Power Spectrum Density (PSD))</span>
 <span class="sd">        </span>
 <span class="sd">    fcrop, tcrop : list of 2 scalars [min, max], optional, default is None</span>
 <span class="sd">        fcrop corresponds to the min and max boundary frequency values</span>
@@ -816,38 +836,45 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">        </span>
 <span class="sd">        ... and more, see matplotlib  </span>
 <span class="sd">  </span>
@@ -1037,32 +1064,38 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
 <span class="sd">            Dot per inch. </span>
 <span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
@@ -1088,7 +1121,6 @@
 <span class="sd">        The location, in data-coordinates, of the lower-left and</span>
 <span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
 <span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
-<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># compute the number of frames</span>
@@ -1178,9 +1210,9 @@
 <span class="sd">        The name or path of the .wav file to load      </span>
 <span class="sd">        if you want to extract the date of creation of the file, the filename </span>
 <span class="sd">        must have this postfix :</span>
-<span class="sd">            XXXX_yyyymmdd_hhmmss.wav</span>
-<span class="sd">            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
-<span class="sd">            mm : minutes / ss : seconds    </span>
+<span class="sd">        XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">        mm : minutes / ss : seconds    </span>
 <span class="sd">            </span>
 <span class="sd">    display : boolean, optional, default is False</span>
 <span class="sd">        Display the signals and the spectrograms if True</span>
@@ -1189,25 +1221,25 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by the maad function as well</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad function as well</span>
 <span class="sd">        as the plt.plot and savefig functions.</span>
 <span class="sd">        All the input arguments required or optional in the signature functions</span>
 <span class="sd">        can be passed.</span>
 <span class="sd">        see the signature of each maad function to know the parameters </span>
 <span class="sd">        that can be passed as kwargs :</span>
-<span class="sd">            load(filename, channel=&#39;left&#39;, display=False, savefig=None, </span>
-<span class="sd">                 **kwargs)</span>
-<span class="sd">            select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, </span>
-<span class="sd">                             savefig=None, **kwargs):</span>
-<span class="sd">            spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, </span>
-<span class="sd">                        db_range=60, db_gain=20, rescale=True, fcrop=None, </span>
-<span class="sd">                        tcrop=None, display=False, savefig = None, **kwargs):</span>
+<span class="sd">        load(filename, channel=&#39;left&#39;, display=False, savefig=None, </span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">        select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, </span>
+<span class="sd">        savefig=None, \*\*kwargs):</span>
+<span class="sd">        spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, </span>
+<span class="sd">        db_range=60, db_gain=20, rescale=True, fcrop=None, </span>
+<span class="sd">        tcrop=None, display=False, savefig = None, \*\*kwargs):</span>
 <span class="sd">        ... and more, see matplotlib  </span>
 <span class="sd">        </span>
 <span class="sd">        example : </span>
-<span class="sd">            preprocess_wrapper(&#39;audio.wav&#39;, display=False, savefig=None, </span>
-<span class="sd">                               tcrop=[0,30])</span>
-<span class="sd">  </span>
+<span class="sd">        preprocess_wrapper(&#39;audio.wav&#39;, display=False, savefig=None, </span>
+<span class="sd">        tcrop=[0,30])</span>
+<span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    ------- </span>
 <span class="sd">    Sxx : 2d ndarray</span>
@@ -1225,9 +1257,9 @@
 <span class="sd">        This object contains the date of creation of the file extracted from</span>
 <span class="sd">        the filename postfix. </span>
 <span class="sd">        The filename must follow this format :</span>
-<span class="sd">            XXXX_yyyymmdd_hhmmss.wav</span>
-<span class="sd">            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
-<span class="sd">            mm : minutes / ss : seconds   </span>
+<span class="sd">        XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">        mm : minutes / ss : seconds   </span>
 <span class="sd">    &quot;&quot;&quot;</span> 
 
     <span class="n">channel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>

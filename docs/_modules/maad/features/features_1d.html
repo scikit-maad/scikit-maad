@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -162,11 +161,12 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd"> High level functions for signal characterization from 1D signals</span>
-<span class="sd"> Code licensed under both GPL and BSD licenses</span>
-<span class="sd"> Authors:  Juan Sebastian ULLOA &lt;jseb.ulloa@gmail.com&gt;</span>
-<span class="sd">           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="sd">High level functions for signal characterization from 1D signals</span>
+<span class="sd">Code licensed under both GPL and BSD licenses</span>
 
+<span class="sd">Authors: Juan Sebastian ULLOA &lt;jseb.ulloa@gmail.com&gt;</span>
+
+<span class="sd">Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">periodogram</span><span class="p">,</span> <span class="n">welch</span>
@@ -180,29 +180,31 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        s: 1D array </span>
-<span class="sd">            Input signal to process </span>
-<span class="sd">        fs: float, optional</span>
-<span class="sd">            Sampling frequency of audio signal</span>
-<span class="sd">        nperseg: int, optional</span>
-<span class="sd">            Lenght of segment for &#39;welch&#39; method, default is 256</span>
-<span class="sd">        nfft: int, optional</span>
-<span class="sd">            Length of FFT for periodogram method. If None, length of signal will be used.</span>
-<span class="sd">            Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.</span>
-<span class="sd">        method: {&#39;welch&#39;, &#39;periodogram&#39;}</span>
-<span class="sd">            Method used to estimate the power spectral density of the signal</span>
-<span class="sd">        tlims: tuple of ints or floats</span>
-<span class="sd">            Temporal limits to compute the power spectral density in seconds (s)</span>
+<span class="sd">    s: 1D array </span>
+<span class="sd">        Input signal to process </span>
+<span class="sd">    fs: float, optional</span>
+<span class="sd">        Sampling frequency of audio signal</span>
+<span class="sd">    nperseg: int, optional</span>
+<span class="sd">        Lenght of segment for &#39;welch&#39; method, default is 256</span>
+<span class="sd">    nfft: int, optional</span>
+<span class="sd">        Length of FFT for periodogram method. If None, length of signal will be used.</span>
+<span class="sd">        Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.</span>
+<span class="sd">    method: {&#39;welch&#39;, &#39;periodogram&#39;}</span>
+<span class="sd">        Method used to estimate the power spectral density of the signal</span>
+<span class="sd">    tlims: tuple of ints or floats</span>
+<span class="sd">        Temporal limits to compute the power spectral density in seconds (s)</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        psd: pandas Series</span>
-<span class="sd">            Estimate of power spectral density</span>
-<span class="sd">        f_idx: pandas Series</span>
-<span class="sd">            Index of sample frequencies</span>
+<span class="sd">    psd: pandas Series</span>
+<span class="sd">        Estimate of power spectral density</span>
+<span class="sd">    f_idx: pandas Series</span>
+<span class="sd">        Index of sample frequencies</span>
+<span class="sd">    </span>
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
-<span class="sd">        s, fs = sound.load(&#39;spinetail.wav&#39;)</span>
-<span class="sd">        psd, f_idx = psd(s, fs, nperseg=512)</span>
+<span class="sd">    s, fs = sound.load(&#39;spinetail.wav&#39;)</span>
+<span class="sd">    psd, f_idx = psd(s, fs, nperseg=512)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">if</span> <span class="n">tlims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

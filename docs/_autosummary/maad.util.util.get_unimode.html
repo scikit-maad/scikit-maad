@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,28 +208,30 @@
 <code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">get_unimode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'ale'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#get_unimode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.get_unimode" title="Permalink to this definition">¶</a></dt>
 <dd><p>determine the statistical mode or modal value which is 
 the most common number in the dataset</p>
-<dl>
-<dt>X<span class="classifier">1d or 2d ndarray of scalar</span></dt><dd><p>Vector or matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">1d or 2d ndarray of scalar</span></dt><dd><p>Vector or matrix</p>
 </dd>
-<dt>mode<span class="classifier">str, optional, default is ‘ale’</span></dt><dd><p>Select the mode to remove the noise
-Possible values for mode are :</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>‘ale’ : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</p></li>
-<li><p>‘median’ : subtract the median value</p></li>
-<li><p>‘mean’ : subtract the mean value (DC)</p></li>
-</ul>
-</div></blockquote>
+<dt><strong>mode</strong><span class="classifier">str, optional, default is ‘ale’</span></dt><dd><p>Select the mode to remove the noise
+Possible values for mode are :
+- ‘ale’ : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]
+- ‘median’ : subtract the median value
+- ‘mean’ : subtract the mean value (DC)</p>
 </dd>
-<dt>axis<span class="classifier">integer, default is 1</span></dt><dd><p>if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</p>
+<dt><strong>axis</strong><span class="classifier">integer, default is 1</span></dt><dd><p>if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</p>
 </dd>
-<dt>verbose<span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages into the consol or terminal if verbose is True</p>
+<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages into the consol or terminal if verbose is True</p>
 </dd>
-<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>unimode_value<span class="classifier">float</span></dt><dd><p>The most common number in the dataset</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>unimode_value</strong><span class="classifier">float</span></dt><dd><p>The most common number in the dataset</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

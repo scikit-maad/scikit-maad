@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -201,45 +200,45 @@
 <h1>maad.rois.rois_2d.create_mask<a class="headerlink" href="#maad-rois-rois-2d-create-mask" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.rois.rois_2d.create_mask">
-<code class="sig-prename descclassname">maad.rois.rois_2d.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">mode_bin</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_2d.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.rois_2d.create_mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.rois.rois_2d.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param">im</em>, <em class="sig-param">ext</em>, <em class="sig-param">mode_bin='relative'</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_2d.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.rois_2d.create_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binarize an image based on a double threshold.</p>
-<dl>
-<dt>im<span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
 </dd>
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
-<dt>mode_bin<span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘relative’, a relative double threshold is performed
+<dt><strong>mode_bin</strong><span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘relative’, a relative double threshold is performed
 if ‘absolute’, an double threshold with absolute value is performed</p>
 </dd>
-<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
-<dt>savefig<span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
 is added to the root filename.</p>
 </dd>
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, optional. This parameter is used by the maad functions as well</dt><dd><p>as the plt.plot and savefig functions.
+<dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions.
 All the input arguments required or optional in the signature of the
-functions above can be passed as kwargs :</p>
-<blockquote>
-<div><dl class="simple">
-<dt>double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, </dt><dd><p>savefig=None, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</p>
-</dd>
-<dt>double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, </dt><dd><p>savefig=None, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs)</p>
-</dd>
-</dl>
-</div></blockquote>
+functions above can be passed as kwargs :
+double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, 
+savefig=None, **kwargs)
+double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, 
+savefig=None, **kwargs)</p>
 <p>… and more, see matplotlib</p>
 <p>example :
-im_bin = create_mask(im, ext, bin_std=5, bin_per=0.5, mode=’relative’,</p>
-<blockquote>
-<div><p>display=True, savefig=None, dpi=300)</p>
-</div></blockquote>
+im_bin = create_mask(im, ext, bin_std=5, bin_per=0.5, mode=’relative’,
+display=True, savefig=None, dpi=300)</p>
 </dd>
 </dl>
-<blockquote>
-<div><p>im_bin: binary image</p>
-</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>im_bin: binary image</dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

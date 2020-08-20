@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -199,9 +198,9 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function initialize the HDDA stucture</span>
 <span class="sd">        </span>
-<span class="sd">        :param model: the model used.</span>
+<span class="sd">        param model: the model used.</span>
 <span class="sd">        </span>
-<span class="sd">        :type mode: string</span>
+<span class="sd">        type mode: string</span>
 <span class="sd">        </span>
 <span class="sd">        - M1 = aijbiQidi</span>
 <span class="sd">        </span>
@@ -252,6 +251,8 @@
         <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span> <span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>  <span class="c1"># Name of the model</span>
         <span class="k">else</span><span class="p">:</span>
+        <span class="c1">#    print &quot;Model parameter {} is not available&quot;.format(model)</span>
+        <span class="c1">#     Modif SH             </span>
             <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Model parameter </span><span class="si">%s</span><span class="s2"> is not available&quot;</span> <span class="o">%</span> <span class="nb">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>        
             <span class="n">exit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># Number of parameters of the full models</span>
@@ -267,10 +268,17 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Estimate the model parameters with the EM algorithm</span>
 
-<span class="sd">        :param array-like X: Shape (n_samples, n_features).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features). </span>
+<span class="sd">        </span>
 <span class="sd">            List of n_features-dimensional data points. Each row</span>
 <span class="sd">            corresponds to a single data point.</span>
-<span class="sd">        :returns: self</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------        </span>
+<span class="sd">        self</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Initialization</span>
@@ -533,10 +541,16 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the e-step of the algorithm</span>
 <span class="sd">        </span>
-<span class="sd">        :param array-like X: Shape (n_samples, n_dimensions).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_dimensions).</span>
+<span class="sd">        </span>
 <span class="sd">            List of n_features-dimensional data points. Each row</span>
 <span class="sd">            corresponds to a single data point.</span>
-<span class="sd">        :returns:</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get some parameters</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -563,11 +577,18 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the per-sample log-likelihood of the given data X.</span>
 <span class="sd">        </span>
-<span class="sd">        :param array-like X: Shape (n_samples, n_dimensions).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_dimensions).</span>
+<span class="sd">            </span>
 <span class="sd">            List of n_features-dimensional data points. Each row</span>
 <span class="sd">            corresponds to a single data point.</span>
-<span class="sd">        :returns: </span>
-<span class="sd">            log_likelihood (float) - Log likelihood of the Gaussian mixture given X.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        log_likelihood : float </span>
+<span class="sd">            Log likelihood of the Gaussian mixture given X.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -592,11 +613,17 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the negative weighted log probabilities for each sample.</span>
 <span class="sd">        </span>
-<span class="sd">        :param array-like X: Shape (n_samples, n_features).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------- </span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features).</span>
 <span class="sd">            List of n_features-dimensional data points. Each row</span>
 <span class="sd">            corresponds to a single data point.</span>
-<span class="sd">        :returns:</span>
-<span class="sd">            log_prob (array) - shape (n_samples, n_clusters). Log probabilities of each data point in X.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        log_prob : array </span>
+<span class="sd">            Shape (n_samples, n_clusters). Log probabilities of each data point in X.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">nt</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
@@ -620,14 +647,22 @@
         <span class="k">return</span> <span class="o">-</span><span class="n">K</span></div>
 
 <div class="viewcode-block" id="HDDC.predict"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Predict the labels for the data samples in X using trained model.</span>
-
-<span class="sd">        :param array-like X: Shape (n_samples, n_features).</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict the labels for the data samples in X using trained model.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features).</span>
 <span class="sd">            List of n_features-dimensional data points. Each row</span>
 <span class="sd">            corresponds to a single data point.</span>
 
-<span class="sd">        :returns: </span>
-<span class="sd">            labels (array) - shape (n_samples,). Component labels.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        labels : array</span>
+<span class="sd">            shape (n_samples,). </span>
+<span class="sd">            </span>
+<span class="sd">            Component labels.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div>
@@ -637,12 +672,17 @@
 <span class="sd">        Predict the membership probabilities for the data samples</span>
 <span class="sd">        in X using trained model.</span>
 
-<span class="sd">        :param array-like X: Shape (n_samples, n_features).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------- </span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features).</span>
 <span class="sd">            List of n_features-dimensional data points. Each row</span>
 <span class="sd">            corresponds to a single data point.</span>
 
-<span class="sd">        :returns:</span>
-<span class="sd">            proba (array) - shape (n_samples, n_clusters)</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        proba : array </span>
+<span class="sd">            Shape (n_samples, n_clusters)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>

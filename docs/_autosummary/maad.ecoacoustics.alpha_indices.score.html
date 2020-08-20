@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -211,18 +210,24 @@
 <dd><p>Score</p>
 <p>count the number of times values in x that are greater than the threshold 
 and normalized by the total number of values in x</p>
-<dl class="simple">
-<dt>x<span class="classifier">ndarray of floats</span></dt><dd><p>Vector or matrix containing the data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>Vector or matrix containing the data</p>
 </dd>
-<dt>threshold<span class="classifier">scalar</span></dt><dd><p>Value &gt; threshold are counted</p>
+<dt><strong>threshold</strong><span class="classifier">scalar</span></dt><dd><p>Value &gt; threshold are counted</p>
 </dd>
-<dt>axis<span class="classifier">integer, optional, default is 0</span></dt><dd><p>score is calculated along this axis.</p>
+<dt><strong>axis</strong><span class="classifier">integer, optional, default is 0</span></dt><dd><p>score is calculated along this axis.</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>count<span class="classifier">scalar</span></dt><dd><p>the number of times values in x that are greater than the threshold</p>
 </dd>
-<dt>s<span class="classifier">scalar</span></dt><dd><p>count is normalized by the total number of values in x</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>count</strong><span class="classifier">scalar</span></dt><dd><p>the number of times values in x that are greater than the threshold</p>
+</dd>
+<dt><strong>s</strong><span class="classifier">scalar</span></dt><dd><p>count is normalized by the total number of values in x</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

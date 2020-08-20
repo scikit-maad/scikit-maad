@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -208,33 +207,23 @@
 <dl class="py function">
 <dt id="maad.ecoacoustics.alpha_indices.soundscapeIndex">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">soundscapeIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">frange_bioPh</span><span class="o">=</span><span class="default_value">1000, 10000</span></em>, <em class="sig-param"><span class="n">frange_antroPh</span><span class="o">=</span><span class="default_value">0, 1000</span></em>, <em class="sig-param"><span class="n">step</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#soundscapeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.soundscapeIndex" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Sxx<span class="classifier">ndarray of floats</span></dt><dd><p>2d : Amplitude Spectrogram</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Amplitude Spectrogram</p>
 </dd>
-<dt>fn<span class="classifier">vector</span></dt><dd><p>frequency vector</p>
+<dt><strong>fn</strong><span class="classifier">vector</span></dt><dd><p>frequency vector</p>
 </dd>
-<dt>frange_bioPh<span class="classifier">tupple (fmin, fmax), optional, default is (1000,10000)</span></dt><dd><p>Frequency band of the biophony</p>
+<dt><strong>frange_bioPh</strong><span class="classifier">tupple (fmin, fmax), optional, default is (1000,10000)</span></dt><dd><p>Frequency band of the biophony</p>
 </dd>
-<dt>frange_antroPh: tupple (fmin, fmax), optional, default is (0,1000)</dt><dd><p>Frequency band of the anthropophony</p>
+<dt><strong>frange_antroPh: tupple (fmin, fmax), optional, default is (0,1000)</strong></dt><dd><p>Frequency band of the anthropophony</p>
 </dd>
-<dt>step: optional, default is None</dt><dd><p>if step is None, keep the original frequency resolution, otherwise,
+<dt><strong>step: optional, default is None</strong></dt><dd><p>if step is None, keep the original frequency resolution, otherwise,
 the spectrogram is converted into new frequency bins</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>NDSI<span class="classifier">scalar</span></dt><dd><p>(bioPh-antroPh)/(bioPh+antroPh)</p>
-</dd>
-<dt>ratioBA<span class="classifier">scalar</span></dt><dd><p>biophonic energy / anthropophonic energy</p>
-</dd>
-<dt>antroPh<span class="classifier">scalar</span></dt><dd><p>Acoustic energy in the anthropophonic bandwidth</p>
-</dd>
-<dt>bioPh<span class="classifier">scalar</span></dt><dd><p>Acoustic energy in the biophonic bandwidth</p>
 </dd>
 </dl>
-<p>Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
-The Remote Environmental Assessment Laboratory’s Acoustic Library: An Archive 
-for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.</p>
-<p>Inspired by Seewave R package</p>
 </dd></dl>
 
 </div>

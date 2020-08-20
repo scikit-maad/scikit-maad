@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -214,7 +213,7 @@
 
 <div class="viewcode-block" id="running_mean"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.running_mean.html#maad.util.util.running_mean">[docs]</a><span class="k">def</span> <span class="nf">running_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">         moving average of x over a window N</span>
+<span class="sd">    moving average of x over a window N</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="n">cumsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="p">)</span> 
     <span class="k">return</span> <span class="p">(</span><span class="n">cumsum</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span> <span class="o">-</span> <span class="n">cumsum</span><span class="p">[:</span><span class="o">-</span><span class="n">N</span><span class="p">])</span> <span class="o">/</span> <span class="n">N</span></div>
@@ -223,7 +222,7 @@
 
 <div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.shift_bit_length.html#maad.util.util.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">         find the closest power of 2 that is superior or equal to the number x</span>
+<span class="sd">    find the closest power of 2 that is superior or equal to the number x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
 
@@ -231,8 +230,8 @@
        
 <div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.rle.html#maad.util.util.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Run--Length encoding    </span>
-<span class="sd">        from rle function R</span>
+<span class="sd">    Run--Length encoding    </span>
+<span class="sd">    from rle function R</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span><span class="mi">1</span> <span class="p">:</span> 
@@ -455,9 +454,9 @@
 <span class="sd">    mode : str, optional, default is &#39;ale&#39;</span>
 <span class="sd">        Select the mode to remove the noise</span>
 <span class="sd">        Possible values for mode are :</span>
-<span class="sd">            - &#39;ale&#39; : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</span>
-<span class="sd">            - &#39;median&#39; : subtract the median value</span>
-<span class="sd">            - &#39;mean&#39; : subtract the mean value (DC)</span>
+<span class="sd">        - &#39;ale&#39; : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</span>
+<span class="sd">        - &#39;median&#39; : subtract the median value</span>
+<span class="sd">        - &#39;mean&#39; : subtract the mean value (DC)</span>
 <span class="sd">    </span>
 <span class="sd">    axis : integer, default is 1</span>
 <span class="sd">        if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</span>
@@ -634,14 +633,19 @@
 <span class="sd">        axis.</span>
 <span class="sd">            </span>
 <span class="sd">    **kwargs, optional</span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        facecolor : matplotlib color, optional, default: &#39;w&#39; (white)</span>
-<span class="sd">            the background color.  </span>
+<span class="sd">        the background color.  </span>
+<span class="sd">        </span>
 <span class="sd">        edgecolor : matplotlib color, optional, default: &#39;k&#39; (black)</span>
-<span class="sd">            the border color. </span>
+<span class="sd">        the border color. </span>
+<span class="sd">        </span>
 <span class="sd">        linecolor : matplotlib color, optional, default: &#39;k&#39; (black)</span>
-<span class="sd">            the line color</span>
+<span class="sd">        the line color</span>
+<span class="sd">        </span>
 <span class="sd">        The following color abbreviations are supported:</span>
 <span class="sd">    </span>
 <span class="sd">        ==========  ========</span>
@@ -661,27 +665,33 @@
 <span class="sd">        (0.2,1,0.5). See matplotlib color </span>
 <span class="sd">        </span>
 <span class="sd">        linewidth : scalar, optional, default: 0.5</span>
-<span class="sd">            width in pixels</span>
-<span class="sd">        figtitle: string, optional, default: &#39;Audiogram&#39;</span>
-<span class="sd">            Title of the plot </span>
-<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
-<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
-<span class="sd">        legend : string, optional, default : None</span>
-<span class="sd">            Legend for the plot</span>
-<span class="sd">        now : boolean, optional, default : True</span>
-<span class="sd">            if True, display now. Cannot display multiple plots. </span>
-<span class="sd">            To display mutliple plots, set now=False until the last call for </span>
-<span class="sd">            the last plot         </span>
+<span class="sd">        width in pixels</span>
 <span class="sd">        </span>
-<span class="sd">        ... and more, see matplotlib</span>
+<span class="sd">        figtitle: string, optional, default: &#39;Audiogram&#39;</span>
+<span class="sd">        Title of the plot </span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        legend : string, optional, default : None</span>
+<span class="sd">        Legend for the plot</span>
+<span class="sd">        </span>
+<span class="sd">        now : boolean, optional, default : True</span>
+<span class="sd">        if True, display now. Cannot display multiple plots. </span>
+<span class="sd">        To display mutliple plots, set now=False until the last call for </span>
+<span class="sd">        the last plot         </span>
+<span class="sd">        </span>
+<span class="sd">        ...and more, see matplotlib</span>
+<span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        fig : Figure</span>
-<span class="sd">            The Figure instance </span>
-<span class="sd">        ax : Axis</span>
-<span class="sd">            The Axis instance</span>
+<span class="sd">    fig : Figure</span>
+<span class="sd">        The Figure instance </span>
+<span class="sd">    ax : Axis</span>
+<span class="sd">        The Axis instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>  
 
     <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
@@ -740,39 +750,47 @@
 <span class="sd">        axis.</span>
 <span class="sd">            </span>
 <span class="sd">    **kwargs, optional</span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        now : boolean, optional, default : True</span>
-<span class="sd">            if True, display now. Cannot display multiple images. </span>
-<span class="sd">            To display mutliple images, set now=False until the last call for </span>
-<span class="sd">            the last image      </span>
+<span class="sd">        if True, display now. Cannot display multiple images. </span>
+<span class="sd">        To display mutliple images, set now=False until the last call for </span>
+<span class="sd">        the last image      </span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        fig : Figure</span>
-<span class="sd">            The Figure instance </span>
-<span class="sd">        ax : Axis</span>
-<span class="sd">            The Axis instance</span>
+<span class="sd">    fig : Figure</span>
+<span class="sd">        The Figure instance </span>
+<span class="sd">    ax : Axis</span>
+<span class="sd">        The Axis instance</span>
 <span class="sd">    &quot;&quot;&quot;</span> 
    
     <span class="c1"># matplotlib parameters</span>

@@ -9,5 +9,5 @@ from .hdda import (HDDC)
 
 from .cluster_func import (do_PCA)
 
-#__all__ = ['HDDC', 
-#           'do_PCA']
+__all__ = ['HDDC', 
+           'do_PCA']

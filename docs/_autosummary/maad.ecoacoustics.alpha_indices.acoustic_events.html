@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -216,26 +215,30 @@
 </ul>
 </dd>
 </dl>
-<dl class="simple">
-<dt>xdB<span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram  in dB</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>xdB</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram  in dB</p>
 </dd>
-<dt>dt<span class="classifier">scalar</span></dt><dd><p>Time resolution</p>
+<dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution</p>
 </dd>
-<dt>dB_threshold<span class="classifier">scalar, optional, default is 6dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
+<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is 6dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
 if the length is &gt; rejectLength</p>
 </dd>
-<dt>rejectDuration<span class="classifier">scalar, optional, default is None</span></dt><dd><p>event shorter than rejectDuration are discarded
+<dt><strong>rejectDuration</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>event shorter than rejectDuration are discarded
 duration is in s</p>
 </dd>
 </dl>
-<p>EVNsum :scalar
-EVNmean: scalar
-EVNcount: scalar
-EVN: ndarray of floats</p>
-<p>Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-from natural recordings of the environment.
-Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>EVNsum :scalar</dt><dd></dd>
+<dt>EVNmean: scalar</dt><dd></dd>
+<dt>EVNcount: scalar</dt><dd></dd>
+<dt>EVN: ndarray of floats</dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

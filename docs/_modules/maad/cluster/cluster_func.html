@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -180,15 +179,25 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    if you want to know the keys in the table =&gt; features.keys()</span>
 <span class="sd">    </span>
-<span class="sd">    :param features: ...</span>
-<span class="sd">    :param headers_select=None: ...</span>
-<span class="sd">    :param col_min=8: ...</span>
-<span class="sd">    :param col_max=None: ...</span>
-<span class="sd">    :param \*\*kwargs: ...</span>
-<span class="sd">    :returns: </span>
-<span class="sd">        - pca - ... </span>
-<span class="sd">        - Xp - ...</span>
-<span class="sd">        - YlabelID - ...</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    features : ...</span>
+<span class="sd">    </span>
+<span class="sd">    headers_select=None : ...</span>
+<span class="sd">    </span>
+<span class="sd">    col_min=8 : ...</span>
+<span class="sd">    </span>
+<span class="sd">    col_max=None : ...</span>
+<span class="sd">    </span>
+<span class="sd">    \*\*kwargs : ...</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    ------- </span>
+<span class="sd">    pca : ... </span>
+<span class="sd">    </span>
+<span class="sd">    Xp : ...</span>
+<span class="sd">    </span>
+<span class="sd">    YlabelID : ...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
    
     <span class="n">n_components</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;n_components&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>

@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,19 +208,25 @@
 <code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">dB2linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'amplitude'</span></em>, <em class="sig-param"><span class="n">db_gain</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#dB2linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.dB2linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform linear date into decibel scale within the dB range (db_range).
 A gain (db_gain) could be added at the end.</p>
-<dl class="simple">
-<dt>x<span class="classifier">array-like</span></dt><dd><p>data in dB to rescale in linear</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>data in dB to rescale in linear</p>
 </dd>
-<dt>mode<span class="classifier">str, default is ‘amplitude’</span></dt><dd><p>select ‘amplitude’ or ‘power’ to compute the corresponding dB</p>
+<dt><strong>mode</strong><span class="classifier">str, default is ‘amplitude’</span></dt><dd><p>select ‘amplitude’ or ‘power’ to compute the corresponding dB</p>
 </dd>
-<dt>db_gain<span class="classifier">scalar, optional, default is 0</span></dt><dd><dl class="simple">
+<dt><strong>db_gain</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><dl class="simple">
 <dt>Gain added to the results </dt><dd><p>–&gt; 20*log10(x) + db_gain</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<dl class="simple">
-<dt>y<span class="classifier">scalars</span></dt><dd><p>–&gt; 10^(x/20 - db_gain)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">scalars</span></dt><dd><p>–&gt; 10^(x/20 - db_gain)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

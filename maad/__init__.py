@@ -10,30 +10,30 @@ scikit-learn, allowing to identify key patterns in all kind of soundscapes.
 Subpackages
 -----------
 sound
-    Load and transform (e.g. stft) audio signals
+    Load and transform (e.g. stft) audio signals - :ref:`maad.sound`
 
 rois
-    Find regions of interest in 1D and 2D signals
+    Find regions of interest in 1D and 2D signals - :ref:`maad.rois`
 
 features
-    Compute descriptors to characterize sounds
+    Compute descriptors to characterize sounds - :ref:`maad.features`
     
 cluster
-    Cluster regions of interest using High Dimensional Data Clsutering (HDDC)
+    Cluster regions of interest using High Dimensional Data Clsutering (HDDC) - :ref:`maad.cluster`
 
 util
-    Miscelaneous and useful set of tools used in the audio analysis framework
+    Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`
     
 ecoacoustics
     Miscelaneous and useful set of tools used to compute global indices for 
-    ecoacoustics
+    ecoacoustics - :ref:`maad.ecoacoustics`
     
 """
 
-#from . import sound
-#from . import rois
-#from . import features
+from . import sound
+from . import rois
+from . import features
 from . import cluster
-#from . import util
-#from . import ecoacoustics
+from . import util
+from . import ecoacoustics
 #from . import spl

@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -211,20 +210,26 @@
 <dd><p>Computes the roughness (depends on the number of peaks and their amplitude)
 of a vector or matrix x (i.e. waveform, spectrogram…)   
 Roughness = sum(second_derivation(x)²)</p>
-<dl class="simple">
-<dt>x<span class="classifier">ndarray of floats</span></dt><dd><p>x is a vector (1d) or a matrix (2d)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>x is a vector (1d) or a matrix (2d)</p>
 </dd>
-<dt>norm<span class="classifier">boolean, optional. Default is None</span></dt><dd><p>‘global’ : normalize by the maximum value in the vector or matrix
+<dt><strong>norm</strong><span class="classifier">boolean, optional. Default is None</span></dt><dd><p>‘global’ : normalize by the maximum value in the vector or matrix
 ‘per_axis’ : normalize by the maximum value found along each axis</p>
 </dd>
-<dt>axis<span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the second derivation is computed
+<dt><strong>axis</strong><span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the second derivation is computed
 if x is a vector, axis=0
 if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</p>
 </dd>
 </dl>
-<p>y : float or ndarray of floats</p>
-<p>Described in [Ramsay JO, Silverman BW (2005) Functional data analysis.]
-Ported from SEEWAVE R Package</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float or ndarray of floats</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

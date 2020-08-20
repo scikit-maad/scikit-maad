@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -202,66 +201,66 @@
 <h1>maad.features.features_func.get_features_wrapper<a class="headerlink" href="#maad-features-features-func-get-features-wrapper" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.features.features_func.get_features_wrapper">
-<code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">get_features_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_csv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#get_features_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.get_features_wrapper" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">get_features_wrapper</code><span class="sig-paren">(</span><em class="sig-param">im</em>, <em class="sig-param">ext</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">save_csv=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#get_features_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.get_features_wrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes shape of 2D signal (image or spectrogram) at multiple resolutions 
 using 2D Gabor filters</p>
-<dl>
-<dt>im: 2D array</dt><dd><p>Input image to process (spectrogram)</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>im: 2D array</strong></dt><dd><p>Input image to process (spectrogram)</p>
 </dd>
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
-<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
-<dt>savefig<span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
 is added to the root filename.</p>
 </dd>
-<dt>save_csv<span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the table. Postfix
+<dt><strong>save_csv</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the table. Postfix
 is added to the root filename.</p>
 </dd>
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, optional. This parameter is used by plt.plot and savefig functions</dt><dd><dl>
-<dt>figsize<span class="classifier">tuple of integers,</span></dt><dd><p>width, height in inches.</p>
-</dd>
-<dt>title<span class="classifier">string, </span></dt><dd><p>title of the figure</p>
-</dd>
-<dt>xlabel<span class="classifier">string, optional, </span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-<dt>ylabel<span class="classifier">string, optional, </span></dt><dd><p>label of the vertical axis</p>
-</dd>
-<dt>cmap<span class="classifier">string or Colormap object, </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><p>figsize : tuple of integers,
+width, height in inches.</p>
+<p>title : string, 
+title of the figure</p>
+<p>xlabel : string, optional, 
+label of the horizontal axis</p>
+<p>ylabel : string, optional, 
+label of the vertical axis</p>
+<p>cmap : string or Colormap object, 
+See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
 in order to get all the  existing colormaps
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,</p>
-<blockquote>
-<div><p>‘viridis’…</p>
-</div></blockquote>
-</dd>
-<dt>vmin, vmax<span class="classifier">scalar</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
+‘viridis’…</p>
+<p>vmin, vmax : scalar
+<cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
 luminance data.  Note if you pass a <cite>norm</cite> instance, your
 settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-<dt>ext<span class="classifier">scalars (left, right, bottom, top),</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<p>ext : scalars (left, right, bottom, top),
+The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-<dt>dpi<span class="classifier">integer, optional</span></dt><dd><p>Dot per inch. 
+<p>dpi : integer, optional
+Dot per inch. 
 For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
 For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-<dt>format<span class="classifier">string, optional</span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
+<p>format : string, optional
+Format to save the figure</p>
 <p>… and more, see matplotlib</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>table<span class="classifier">dataframe (Pandas)</span></dt><dd><p>The table contains all the features extracted from the spectrogram.
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>table</strong><span class="classifier">dataframe (Pandas)</span></dt><dd><p>The table contains all the features extracted from the spectrogram.
 Keys are {‘labelID’, ‘labelName, ‘cyear’, ‘cmonth’, ‘cday’, ‘chour’,
 ‘cmin’,’csecond’,’cfreq’,’shp0,’shp1’,…’shpn’}</p>
 </dd>
-<dt>params_shape: 2D numpy structured array</dt><dd><p>Parameters used to calculate 2D gabor kernels.  
+<dt><strong>params_shape: 2D numpy structured array</strong></dt><dd><p>Parameters used to calculate 2D gabor kernels.  
 params_shape has 5 fields (theta, freq, bandwidth, gamma, pyr_level)
 Each row corresponds to a shape (shp1, shp2…shpn)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

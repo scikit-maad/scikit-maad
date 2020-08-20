@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -195,66 +194,60 @@
 <h1>maad.sound.sound_func.preprocess_wrapper<a class="headerlink" href="#maad-sound-sound-func-preprocess-wrapper" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.sound.sound_func.preprocess_wrapper">
-<code class="sig-prename descclassname">maad.sound.sound_func.</code><code class="sig-name descname">preprocess_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/sound_func.html#preprocess_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.sound_func.preprocess_wrapper" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.sound.sound_func.</code><code class="sig-name descname">preprocess_wrapper</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/sound_func.html#preprocess_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.sound_func.preprocess_wrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper function to preprocess an audio recorder into a spectrogram</p>
-<dl>
-<dt>filename<span class="classifier">string </span></dt><dd><p>The name or path of the .wav file to load      
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>The name or path of the .wav file to load      
 if you want to extract the date of creation of the file, the filename 
-must have this postfix :</p>
-<blockquote>
-<div><p>XXXX_yyyymmdd_hhmmss.wav
+must have this postfix :
+XXXX_yyyymmdd_hhmmss.wav
 with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
 mm : minutes / ss : seconds</p>
-</div></blockquote>
 </dd>
-<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signals and the spectrograms if True</p>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signals and the spectrograms if True</p>
 </dd>
-<dt>savefig<span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
 is added to the root filename.</p>
 </dd>
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, optional. This parameter is used by the maad function as well</dt><dd><p>as the plt.plot and savefig functions.
+<dt><strong>**kwargs, optional. This parameter is used by the maad function as well</strong></dt><dd><p>as the plt.plot and savefig functions.
 All the input arguments required or optional in the signature functions
 can be passed.
 see the signature of each maad function to know the parameters 
-that can be passed as kwargs :</p>
-<blockquote>
-<div><dl class="simple">
-<dt>load(filename, channel=’left’, display=False, savefig=None, </dt><dd><p><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</p>
-</dd>
-<dt>select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, </dt><dd><p>savefig=None, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</p>
-</dd>
-<dt>spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, </dt><dd><p>db_range=60, db_gain=20, rescale=True, fcrop=None, 
-tcrop=None, display=False, savefig = None, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs):</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>… and more, see matplotlib</p>
-<dl class="simple">
-<dt>example<span class="classifier"></span></dt><dd><dl class="simple">
-<dt>preprocess_wrapper(‘audio.wav’, display=False, savefig=None, </dt><dd><p>tcrop=[0,30])</p>
+that can be passed as kwargs :
+load(filename, channel=’left’, display=False, savefig=None, 
+**kwargs)
+select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
+savefig=None, **kwargs):
+spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, 
+db_range=60, db_gain=20, rescale=True, fcrop=None, 
+tcrop=None, display=False, savefig = None, **kwargs):
+… and more, see matplotlib</p>
+<p>example : 
+preprocess_wrapper(‘audio.wav’, display=False, savefig=None, 
+tcrop=[0,30])</p>
 </dd>
 </dl>
 </dd>
-</dl>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Sxx</strong><span class="classifier">2d ndarray</span></dt><dd><p>Spectrogram of s equivalent to Audacity</p>
 </dd>
-</dl>
-<dl>
-<dt>Sxx<span class="classifier">2d ndarray</span></dt><dd><p>Spectrogram of s equivalent to Audacity</p>
+<dt><strong>fs</strong><span class="classifier">Scalar</span></dt><dd><p>Sampling frequency</p>
 </dd>
-<dt>fs<span class="classifier">Scalar</span></dt><dd><p>Sampling frequency</p>
-</dd>
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
-<dt>date<span class="classifier">object datetime</span></dt><dd><p>This object contains the date of creation of the file extracted from
+<dt><strong>date</strong><span class="classifier">object datetime</span></dt><dd><p>This object contains the date of creation of the file extracted from
 the filename postfix. 
-The filename must follow this format :</p>
-<blockquote>
-<div><p>XXXX_yyyymmdd_hhmmss.wav
+The filename must follow this format :
+XXXX_yyyymmdd_hhmmss.wav
 with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
 mm : minutes / ss : seconds</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

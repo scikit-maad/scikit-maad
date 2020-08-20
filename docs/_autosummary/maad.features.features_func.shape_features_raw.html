@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -206,27 +205,29 @@
 <dd><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions 
 using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw
 response of the spectrogram to the filter bank.</p>
-<blockquote>
-<div><dl class="simple">
-<dt>im: 2D array</dt><dd><p>Input image to process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>im: 2D array</strong></dt><dd><p>Input image to process</p>
 </dd>
-<dt>resolution: </dt><dd><p>Resolution of analysis, i.e. number of filters used. 
+<dt><strong>resolution:</strong></dt><dd><p>Resolution of analysis, i.e. number of filters used. 
 Three presets are provided, ‘low’, ‘mid’ and ‘high’, which control 
 the number of filters.</p>
 </dd>
-<dt>opt_shape: dictionary (optional)</dt><dd><p>options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
+<dt><strong>opt_shape: dictionary (optional)</strong></dt><dd><p>options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>shape_im: 1D array</dt><dd><p>Raw shape response of spectrogram to every filter of the filter bank</p>
 </dd>
 <dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the 
 shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</p>
 </dd>
 </dl>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

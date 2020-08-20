@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -208,32 +207,30 @@
 <dl class="py function">
 <dt id="maad.ecoacoustics.alpha_indices.acoustic_activity">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">acoustic_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xdB</span></em>, <em class="sig-param"><span class="n">dB_threshold</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#acoustic_activity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.acoustic_activity" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Acoustic Activity :</dt><dd><dl class="simple">
-<dt>for each frequency bin :</dt><dd><ul class="simple">
-<li><p>ACTfract : proportion (fraction) of points above the threshold</p></li>
-<li><p>ACTcount : number of points above the threshold</p></li>
-<li><p>ACTmean : mean value (in dB) of the portion of the signal above the threhold</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="simple">
-<dt>xdB<span class="classifier">ndarray of floats</span></dt><dd><p>1d : envelope in dB
+<dd><p>Acoustic Activity :</p>
+<p>for each frequency bin :
+- ACTfract : proportion (fraction) of points above the threshold 
+- ACTcount : number of points above the threshold
+- ACTmean : mean value (in dB) of the portion of the signal above the threhold</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>xdB</strong><span class="classifier">ndarray of floats</span></dt><dd><p>1d : envelope in dB
 2d : PSD spectrogram in dB
 It’s better to work with PSD or envelope without background variation
 as the process is based on threshold.</p>
 </dd>
-<dt>dt<span class="classifier">scalar</span></dt><dd><p>Time resolution</p>
+<dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution</p>
 </dd>
-<dt>dB_threshold<span class="classifier">scalar, optional, default is 6dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
+<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is 6dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
 if the length is &gt; rejectLength</p>
 </dd>
-<dt>rejectDuration<span class="classifier">scalar, optional, default is None</span></dt><dd><p>event shorter than rejectDuration are discarded</p>
+<dt><strong>rejectDuration</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>event shorter than rejectDuration are discarded</p>
 </dd>
 </dl>
-<dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>ACTfract :ndarray of scalars</dt><dd><p>proportion (fraction) of points above the threshold for each frequency bin</p>
 </dd>
 <dt>ACTcount: ndarray of scalars</dt><dd><p>number of points above the threshold for each frequency bin</p>
@@ -241,14 +238,8 @@ if the length is &gt; rejectLength</p>
 <dt>ACTmean: scalar</dt><dd><p>mean value (in dB) of the portion of the signal above the threhold</p>
 </dd>
 </dl>
-<p>Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-from natural recordings of the environment.
-Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
-<blockquote>
-<div><p>ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)
-EVNsp [Towsey] : ACTcount (number of point value above the theshold)</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

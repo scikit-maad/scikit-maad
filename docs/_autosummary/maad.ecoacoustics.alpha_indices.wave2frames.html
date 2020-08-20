@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -210,14 +209,20 @@
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">wave2frames</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wave</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#wave2frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.wave2frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
 length N</p>
-<dl class="simple">
-<dt>wave<span class="classifier">1d ndarray of floats (already divided by the number of bits)</span></dt><dd><p>Vector containing the sound waveform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>wave</strong><span class="classifier">1d ndarray of floats (already divided by the number of bits)</span></dt><dd><p>Vector containing the sound waveform</p>
 </dd>
-<dt>N<span class="classifier">int, optional, default is 512</span></dt><dd><p>Number of points per frame</p>
+<dt><strong>N</strong><span class="classifier">int, optional, default is 512</span></dt><dd><p>Number of points per frame</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>timeframes<span class="classifier">2d ndarray of floats</span></dt><dd><p>Matrix containing K frames (row) with N points (column), K*N &lt;= length (wave)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>timeframes</strong><span class="classifier">2d ndarray of floats</span></dt><dd><p>Matrix containing K frames (row) with N points (column), K*N &lt;= length (wave)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

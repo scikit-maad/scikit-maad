@@ -53,7 +53,7 @@ def index_bw (fn, bw):
 
 def running_mean(x, N, axis=0):
     """
-         moving average of x over a window N
+    moving average of x over a window N
     """    
     cumsum = np.cumsum(np.insert(x, 0, 0), axis) 
     return (cumsum[N:] - cumsum[:-N]) / N
@@ -62,7 +62,7 @@ def running_mean(x, N, axis=0):
 
 def shift_bit_length(x):
     """
-         find the closest power of 2 that is superior or equal to the number x
+    find the closest power of 2 that is superior or equal to the number x
     """
     return 1<<(x-1).bit_length()
 
@@ -70,8 +70,8 @@ def shift_bit_length(x):
        
 def rle(x):
     """
-        Run--Length encoding    
-        from rle function R
+    Run--Length encoding    
+    from rle function R
     """
     x = np.asarray(x)
     if x.ndim >1 : 
@@ -294,9 +294,9 @@ def get_unimode (X, mode ='ale',axis=1, verbose=False, display=False):
     mode : str, optional, default is 'ale'
         Select the mode to remove the noise
         Possible values for mode are :
-            - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
-            - 'median' : subtract the median value
-            - 'mean' : subtract the mean value (DC)
+        - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
+        - 'median' : subtract the median value
+        - 'mean' : subtract the mean value (DC)
     
     axis : integer, default is 1
         if matrix, estimate the mode for each row (axis=0) or each column (axis=1)
@@ -473,14 +473,19 @@ def plot1D(x, y, ax=None, **kwargs):
         axis.
             
     **kwargs, optional
+        
         figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
+        width, height in inches.  
+        
         facecolor : matplotlib color, optional, default: 'w' (white)
-            the background color.  
+        the background color.  
+        
         edgecolor : matplotlib color, optional, default: 'k' (black)
-            the border color. 
+        the border color. 
+        
         linecolor : matplotlib color, optional, default: 'k' (black)
-            the line color
+        the line color
+        
         The following color abbreviations are supported:
     
         ==========  ========
@@ -500,27 +505,33 @@ def plot1D(x, y, ax=None, **kwargs):
         (0.2,1,0.5). See matplotlib color 
         
         linewidth : scalar, optional, default: 0.5
-            width in pixels
-        figtitle: string, optional, default: 'Audiogram'
-            Title of the plot 
-        xlabel : string, optional, default : 'Time [s]'
-            label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
-        legend : string, optional, default : None
-            Legend for the plot
-        now : boolean, optional, default : True
-            if True, display now. Cannot display multiple plots. 
-            To display mutliple plots, set now=False until the last call for 
-            the last plot         
+        width in pixels
         
-        ... and more, see matplotlib
+        figtitle: string, optional, default: 'Audiogram'
+        Title of the plot 
+        
+        xlabel : string, optional, default : 'Time [s]'
+        label of the horizontal axis
+        
+        ylabel : string, optional, default : 'Amplitude [AU]'
+        label of the vertical axis
+        
+        legend : string, optional, default : None
+        Legend for the plot
+        
+        now : boolean, optional, default : True
+        if True, display now. Cannot display multiple plots. 
+        To display mutliple plots, set now=False until the last call for 
+        the last plot         
+        
+        ...and more, see matplotlib
+        
     Returns
     -------
-        fig : Figure
-            The Figure instance 
-        ax : Axis
-            The Axis instance
+    fig : Figure
+        The Figure instance 
+    ax : Axis
+        The Axis instance
     """  
 
     figsize=kwargs.pop('figsize', (4, 10))
@@ -579,39 +590,47 @@ def plot2D(im,ax=None,**kwargs):
         axis.
             
     **kwargs, optional
+        
         figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
+        width, height in inches.  
+        
         title : string, optional, default : 'Spectrogram'
-            title of the figure
+        title of the figure
+        
         xlabel : string, optional, default : 'Time [s]'
-            label of the horizontal axis
+        label of the horizontal axis
+        
         ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
+        label of the vertical axis
+        
         cmap : string or Colormap object, optional, default is 'gray'
-            See https://matplotlib.org/examples/color/colormaps_reference.html
-            in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
+        
+        See https://matplotlib.org/examples/color/colormaps_reference.html
+        in order to get all the  existing colormaps
+        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+        'viridis'...
         vmin, vmax : scalar, optional, default: None
-            `vmin` and `vmax` are used in conjunction with norm to normalize
-            luminance data.  Note if you pass a `norm` instance, your
-            settings for `vmin` and `vmax` will be ignored.
+        `vmin` and `vmax` are used in conjunction with norm to normalize
+        luminance data.  Note if you pass a `norm` instance, your
+        settings for `vmin` and `vmax` will be ignored.
+        
         ext : list of scalars [left, right, bottom, top], optional, default: None
-            The location, in data-coordinates, of the lower-left and
-            upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners. If `None`, the image is positioned such that
+        the pixel centers fall on zero-based (row, column) indices.
+        
         now : boolean, optional, default : True
-            if True, display now. Cannot display multiple images. 
-            To display mutliple images, set now=False until the last call for 
-            the last image      
+        if True, display now. Cannot display multiple images. 
+        To display mutliple images, set now=False until the last call for 
+        the last image      
             
         ... and more, see matplotlib
     Returns
     -------
-        fig : Figure
-            The Figure instance 
-        ax : Axis
-            The Axis instance
+    fig : Figure
+        The Figure instance 
+    ax : Axis
+        The Axis instance
     """ 
    
     # matplotlib parameters

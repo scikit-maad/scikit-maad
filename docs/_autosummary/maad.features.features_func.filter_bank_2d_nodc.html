@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -202,28 +201,34 @@
 <h1>maad.features.features_func.filter_bank_2d_nodc<a class="headerlink" href="#maad-features-features-func-filter-bank-2d-nodc" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.features.features_func.filter_bank_2d_nodc">
-<code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">filter_bank_2d_nodc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frequency</span></em>, <em class="sig-param"><span class="n">ntheta</span></em>, <em class="sig-param"><span class="n">bandwidth</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#filter_bank_2d_nodc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.filter_bank_2d_nodc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">filter_bank_2d_nodc</code><span class="sig-paren">(</span><em class="sig-param">frequency</em>, <em class="sig-param">ntheta</em>, <em class="sig-param">bandwidth=1</em>, <em class="sig-param">gamma=1</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#filter_bank_2d_nodc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.filter_bank_2d_nodc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a Gabor filter bank with no offset component</p>
-<dl class="simple">
-<dt>frequency: 1d ndarray of scalars</dt><dd><p>Spatial frequencies used to built the Gabor filters. Values should be
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>frequency: 1d ndarray of scalars</strong></dt><dd><p>Spatial frequencies used to built the Gabor filters. Values should be
 in [0;1]</p>
 </dd>
-<dt>ntheta: int</dt><dd><p>Number of angular steps between 0° to 90°</p>
+<dt><strong>ntheta: int</strong></dt><dd><p>Number of angular steps between 0° to 90°</p>
 </dd>
-<dt>bandwidth: scalar, optional, default is 1</dt><dd><p>This parameter modifies the frequency of the Gabor filter</p>
+<dt><strong>bandwidth: scalar, optional, default is 1</strong></dt><dd><p>This parameter modifies the frequency of the Gabor filter</p>
 </dd>
-<dt>gamma: scalar, optional, default is 1</dt><dd><p>This parameter change the Gaussian window that modulates the continuous
+<dt><strong>gamma: scalar, optional, default is 1</strong></dt><dd><p>This parameter change the Gaussian window that modulates the continuous
 sine.
 1 =&gt; same gaussian window in x and y direction (circle)
 &lt;1 =&gt; elongation of the filter size in the y direction (elipsoid)
 &gt;1 =&gt; reduction of the filter size in the y direction (elipsoid)</p>
 </dd>
 </dl>
-<dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>params: 2d structured array</dt><dd><p>Parameters used to calculate 2D gabor kernels. 
 Params array has 4 fields (theta, freq, bandwidth, gamma)</p>
 </dd>
 <dt>kernels: 2d ndarray of scalars</dt><dd><p>Gabor kernels</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

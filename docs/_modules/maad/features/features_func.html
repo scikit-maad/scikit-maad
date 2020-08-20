@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -162,11 +161,10 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd"> High level functions for multiresolution analysis of spectrograms</span>
-<span class="sd"> Code licensed under both GPL and BSD licenses</span>
-<span class="sd"> Authors:  Juan Sebastian ULLOA &lt;jseb.ulloa@gmail.com&gt;</span>
-<span class="sd">           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
-
+<span class="sd">High level functions for multiresolution analysis of spectrograms</span>
+<span class="sd">Code licensed under both GPL and BSD licenses</span>
+<span class="sd">Authors:  Juan Sebastian ULLOA &lt;jseb.ulloa@gmail.com&gt;</span>
+<span class="sd">Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># Load required modules</span>
@@ -215,6 +213,7 @@
 <span class="sd">    wavelength of the harmonic and to the standard deviation of a Gaussian</span>
 <span class="sd">    kernel. The bandwidth is also inversely proportional to the standard</span>
 <span class="sd">    deviation.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    frequency : float</span>
@@ -240,14 +239,17 @@
 <span class="sd">        deviations</span>
 <span class="sd">    offset : float, optional</span>
 <span class="sd">        Phase offset of harmonic function in radians.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    g_nodc : complex 2d array</span>
 <span class="sd">        A single gabor kernel (complex) with no DC offset</span>
+<span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] http://en.wikipedia.org/wiki/Gabor_filter</span>
 <span class="sd">    .. [2] http://mplab.ucsd.edu/tutorials/gabor.pdf</span>
+<span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from skimage.filters import gabor_kernel</span>
@@ -465,14 +467,14 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        im: 2D array</span>
-<span class="sd">            Input image to process </span>
-<span class="sd">        kernel: 2D array</span>
-<span class="sd">            Complex kernel (or filter)</span>
+<span class="sd">    im: 2D array</span>
+<span class="sd">        Input image to process </span>
+<span class="sd">    kernel: 2D array</span>
+<span class="sd">        Complex kernel (or filter)</span>
 <span class="sd">            </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_out: Modulus operand on filtered image</span>
+<span class="sd">    im_out: Modulus operand on filtered image</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>    
     
@@ -487,19 +489,19 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        im_in: list of 2D arrays</span>
-<span class="sd">            List of input images to process </span>
-<span class="sd">        kernels: list of 2D arrays</span>
-<span class="sd">            List of 2D wavelets to filter the images</span>
-<span class="sd">        npyr: int</span>
-<span class="sd">            Number of pyramids to compute</span>
-<span class="sd">        rescale: boolean</span>
-<span class="sd">            Indicates if the reduced images should be rescaled</span>
+<span class="sd">    im_in: list of 2D arrays</span>
+<span class="sd">        List of input images to process </span>
+<span class="sd">    kernels: list of 2D arrays</span>
+<span class="sd">        List of 2D wavelets to filter the images</span>
+<span class="sd">    npyr: int</span>
+<span class="sd">        Number of pyramids to compute</span>
+<span class="sd">    rescale: boolean</span>
+<span class="sd">        Indicates if the reduced images should be rescaled</span>
 <span class="sd">            </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_out: list of 2D arrays</span>
-<span class="sd">            List of images filtered by each 2D kernel</span>
+<span class="sd">    im_out: list of 2D arrays</span>
+<span class="sd">        List of images filtered by each 2D kernel</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
 
     <span class="c1"># Downscale image using gaussian pyramid</span>
@@ -604,22 +606,22 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        im: 2D array</span>
-<span class="sd">            Input image to process </span>
-<span class="sd">        im_blobs: 2D array, optional</span>
-<span class="sd">            Optional binary array with &#39;1&#39; on the region of interest and &#39;0&#39; otherwise</span>
-<span class="sd">        opt: dictionary</span>
-<span class="sd">            options for the filter bank (kbank_opt) and the number of scales (npyr)</span>
+<span class="sd">    im: 2D array</span>
+<span class="sd">        Input image to process </span>
+<span class="sd">    im_blobs: 2D array, optional</span>
+<span class="sd">        Optional binary array with &#39;1&#39; on the region of interest and &#39;0&#39; otherwise</span>
+<span class="sd">    opt: dictionary</span>
+<span class="sd">        options for the filter bank (kbank_opt) and the number of scales (npyr)</span>
 <span class="sd">            </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        shape: 1D array</span>
-<span class="sd">            Shape coeficients of each filter</span>
-<span class="sd">        params: 2D numpy structured array</span>
-<span class="sd">            Corresponding parameters of the 2D fileters used to calculate the </span>
-<span class="sd">            shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</span>
-<span class="sd">        bbox: </span>
-<span class="sd">            If im_blobs provided, corresponding bounding box</span>
+<span class="sd">    shape: 1D array</span>
+<span class="sd">        Shape coeficients of each filter</span>
+<span class="sd">    params: 2D numpy structured array</span>
+<span class="sd">        Corresponding parameters of the 2D fileters used to calculate the </span>
+<span class="sd">        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</span>
+<span class="sd">    bbox: </span>
+<span class="sd">        If im_blobs provided, corresponding bounding box</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="c1"># unpack settings</span>
     <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="n">opt_shape</span><span class="p">)</span>
@@ -685,17 +687,17 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        im: 2D array</span>
-<span class="sd">            Input image to process </span>
-<span class="sd">        im_blobs: 2D array, optional</span>
-<span class="sd">            Optional binary array with &#39;1&#39; on the region of interest and &#39;0&#39; otherwise</span>
-<span class="sd">        margin: 0 or 1</span>
-<span class="sd">            Margin of the centroid, frequency=1, time=0</span>
+<span class="sd">    im: 2D array</span>
+<span class="sd">        Input image to process </span>
+<span class="sd">    im_blobs: 2D array, optional</span>
+<span class="sd">        Optional binary array with &#39;1&#39; on the region of interest and &#39;0&#39; otherwise</span>
+<span class="sd">    margin: 0 or 1</span>
+<span class="sd">        Margin of the centroid, frequency=1, time=0</span>
 <span class="sd">            </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        centroid: 1D array</span>
-<span class="sd">            centroid of image. If im_blobs provided, centroid for each region of interest</span>
+<span class="sd">    centroid: 1D array</span>
+<span class="sd">        centroid of image. If im_blobs provided, centroid for each region of interest</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="n">centroid</span><span class="o">=</span><span class="p">[]</span>
@@ -795,12 +797,12 @@
 <span class="sd">    mode : string, optional, default is &#39;w&#39;</span>
 <span class="sd">        Python write mode. For example</span>
 <span class="sd">        &#39;w&#39;  Truncate file to zero length or create text file for writing.</span>
-<span class="sd">             The stream is positioned at the beginning of the file.</span>
+<span class="sd">        The stream is positioned at the beginning of the file.</span>
 
 <span class="sd">        &#39;a&#39;  Open for writing. The file is created if it does not exist. The</span>
-<span class="sd">             stream is positioned at the end of the file.  Subsequent writes</span>
-<span class="sd">             to the file will always end up at the then current end of file,</span>
-<span class="sd">             irrespective of any intervening fseek(3) or similar.</span>
+<span class="sd">        stream is positioned at the end of the file.  Subsequent writes</span>
+<span class="sd">        to the file will always end up at the then current end of file,</span>
+<span class="sd">        irrespective of any intervening fseek(3) or similar.</span>
 <span class="sd">        </span>
 <span class="sd">    shape_features : 2d nd array of scalars</span>
 <span class="sd">        Each column corresponds to a shape (linked to a kernel filter) </span>
@@ -859,34 +861,43 @@
 <span class="sd">        Root filename (with full path) is required to save the table. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers,</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, </span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, </span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, </span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, </span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top),</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib      </span>
 <span class="sd">    Returns</span>
@@ -943,13 +954,13 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        fname: string</span>
-<span class="sd">            suffix name to save the figure. Extension indicates the format </span>
-<span class="sd">            of the image</span>
+<span class="sd">    fname: string</span>
+<span class="sd">        suffix name to save the figure. Extension indicates the format </span>
+<span class="sd">        of the image</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        Nothing</span>
+<span class="sd">    Nothing</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figlist</span><span class="p">):</span>
@@ -963,16 +974,17 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        resolution: str</span>
-<span class="sd">            Chooses the opt_shape presets. </span>
-<span class="sd">            Supportes presets are: &#39;low&#39;, &#39;med&#39;, &#39;high&#39; and &#39;custom&#39;</span>
+<span class="sd">    resolution: str</span>
+<span class="sd">        Chooses the opt_shape presets. </span>
+<span class="sd">        Supportes presets are: &#39;low&#39;, &#39;med&#39;, &#39;high&#39; and &#39;custom&#39;</span>
 <span class="sd">        </span>
-<span class="sd">        opt_shape: dict</span>
-<span class="sd">            Key and values for shape settings.</span>
-<span class="sd">            Valid keys are: ntheta, bandwidth, frequency, gamma, npyr</span>
+<span class="sd">    opt_shape: dict</span>
+<span class="sd">        Key and values for shape settings.</span>
+<span class="sd">        Valid keys are: ntheta, bandwidth, frequency, gamma, npyr</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        opt_shape: dict</span>
+<span class="sd">    opt_shape: dict</span>
 <span class="sd">        A valid dictionary with shape settings</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Factory presets</span>
@@ -1029,12 +1041,13 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        shape: 1D array</span>
-<span class="sd">        params: structured array returned by maad.features_rois.shape_features</span>
-<span class="sd">        </span>
+<span class="sd">    shape: 1D array</span>
+<span class="sd">    </span>
+<span class="sd">    params: structured array returned by maad.features_rois.shape_features</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        plot</span>
+<span class="sd">    plot</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">unique_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
     <span class="c1"># compute shape of matrix</span>
@@ -1080,35 +1093,35 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        s: ndarray</span>
-<span class="sd">            Singal to be analysed</span>
-<span class="sd">        fs: int</span>
-<span class="sd">            Sampling frequency of the signal</span>
-<span class="sd">        rois_tf: pandas DataFrame</span>
-<span class="sd">            Time frequency limits for the analysis. Columns should have at</span>
-<span class="sd">            least min_t, max_t, min_f, max_f. Can be computed with multiple</span>
-<span class="sd">            detection methods, such as find_rois_cwt</span>
-<span class="sd">        opt_spec: dictionnary</span>
-<span class="sd">            Options for the spectrogram with keys, window lenght &#39;nperseg&#39; and,</span>
-<span class="sd">            window overlap in percentage &#39;overlap&#39;</span>
-<span class="sd">        opt_shape: dictionary</span>
-<span class="sd">            Options for the filter bank (kbank_opt) and the number of scales (npyr)</span>
-<span class="sd">        flims: list of 2 scalars</span>
-<span class="sd">            Minimum and maximum boundary frequency values in Hertz</span>
+<span class="sd">    s: ndarray</span>
+<span class="sd">        Singal to be analysed</span>
+<span class="sd">    fs: int</span>
+<span class="sd">        Sampling frequency of the signal</span>
+<span class="sd">    rois_tf: pandas DataFrame</span>
+<span class="sd">        Time frequency limits for the analysis. Columns should have at</span>
+<span class="sd">        least min_t, max_t, min_f, max_f. Can be computed with multiple</span>
+<span class="sd">        detection methods, such as find_rois_cwt</span>
+<span class="sd">    opt_spec: dictionnary</span>
+<span class="sd">        Options for the spectrogram with keys, window lenght &#39;nperseg&#39; and,</span>
+<span class="sd">        window overlap in percentage &#39;overlap&#39;</span>
+<span class="sd">    opt_shape: dictionary</span>
+<span class="sd">        Options for the filter bank (kbank_opt) and the number of scales (npyr)</span>
+<span class="sd">    flims: list of 2 scalars</span>
+<span class="sd">        Minimum and maximum boundary frequency values in Hertz</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        feature_rois: pandas Dataframe</span>
-<span class="sd">            A dataframe with each column corresponding to a feature</span>
+<span class="sd">    feature_rois: pandas Dataframe</span>
+<span class="sd">        A dataframe with each column corresponding to a feature</span>
 <span class="sd">    </span>
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
-<span class="sd">        s, fs = sound.load(&#39;spinetail.wav&#39;)        </span>
-<span class="sd">        rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)</span>
-<span class="sd">        opt_spec = {&#39;nperseg&#39;: 512, &#39;overlap&#39;: 0.5}</span>
-<span class="sd">        opt_shape = opt_shape_presets(&#39;med&#39;)</span>
-<span class="sd">        features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, </span>
-<span class="sd">                                              opt_shape, flims)</span>
+<span class="sd">    s, fs = sound.load(&#39;spinetail.wav&#39;)        </span>
+<span class="sd">    rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)</span>
+<span class="sd">    opt_spec = {&#39;nperseg&#39;: 512, &#39;overlap&#39;: 0.5}</span>
+<span class="sd">    opt_shape = opt_shape_presets(&#39;med&#39;)</span>
+<span class="sd">    features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, </span>
+<span class="sd">    opt_shape, flims)</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">im</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">opt_spec</span><span class="p">[</span><span class="s1">&#39;nperseg&#39;</span><span class="p">],</span> 
@@ -1146,22 +1159,22 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        im: 2D array</span>
-<span class="sd">            Input image to process </span>
-<span class="sd">        resolution: </span>
-<span class="sd">            Resolution of analysis, i.e. number of filters used. </span>
-<span class="sd">            Three presets are provided, &#39;low&#39;, &#39;mid&#39; and &#39;high&#39;, which control </span>
-<span class="sd">            the number of filters.</span>
-<span class="sd">        opt_shape: dictionary (optional)</span>
-<span class="sd">            options for the filter bank (kbank_opt) and the number of scales (npyr)</span>
+<span class="sd">    im: 2D array</span>
+<span class="sd">        Input image to process </span>
+<span class="sd">    resolution: </span>
+<span class="sd">        Resolution of analysis, i.e. number of filters used. </span>
+<span class="sd">        Three presets are provided, &#39;low&#39;, &#39;mid&#39; and &#39;high&#39;, which control </span>
+<span class="sd">        the number of filters.</span>
+<span class="sd">    opt_shape: dictionary (optional)</span>
+<span class="sd">        options for the filter bank (kbank_opt) and the number of scales (npyr)</span>
 <span class="sd">            </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        shape_im: 1D array</span>
-<span class="sd">            Raw shape response of spectrogram to every filter of the filter bank </span>
-<span class="sd">        params: 2D numpy structured array</span>
-<span class="sd">            Corresponding parameters of the 2D fileters used to calculate the </span>
-<span class="sd">            shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</span>
+<span class="sd">    shape_im: 1D array</span>
+<span class="sd">        Raw shape response of spectrogram to every filter of the filter bank </span>
+<span class="sd">    params: 2D numpy structured array</span>
+<span class="sd">        Corresponding parameters of the 2D fileters used to calculate the </span>
+<span class="sd">        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     
     <span class="c1"># unpack settings</span>

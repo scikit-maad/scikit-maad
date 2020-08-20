@@ -63,9 +63,9 @@ def date_from_filename (filename):
     ----------
     filename : string
         The filename must follow this format :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds
+        XXXX_yyyymmdd_hhmmss.wav
+        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+        mm : minutes / ss : seconds
             
     Returns
     -------
@@ -73,9 +73,9 @@ def date_from_filename (filename):
         This object contains the date of creation of the file extracted from
         the filename postfix. 
         The filename must follow this format :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds
+        XXXX_yyyymmdd_hhmmss.wav
+        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+        mm : minutes / ss : seconds
     """
     # date by default
     date = datetime(1900,1,1,0,0,0,0)

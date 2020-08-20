@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -195,14 +194,21 @@
 <code class="sig-prename descclassname">maad.util.parser_func.</code><code class="sig-name descname">read_audacity_annot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">audacity_filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/parser_func.html#read_audacity_annot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.parser_func.read_audacity_annot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe
 with the bounding box and the label of each region of interest (ROI)</p>
-<dl class="simple">
-<dt>audacity_filename<span class="classifier">String</span></dt><dd><p>Path to the audacity file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>audacity_filename</strong><span class="classifier">String</span></dt><dd><p>Path to the audacity file</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>tab_out<span class="classifier">Pandas Dataframe </span></dt><dd><p>Colormap type used by matplotlib</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>tab_out</strong><span class="classifier">Pandas Dataframe</span></dt><dd><p>Colormap type used by matplotlib</p>
 </dd>
 </dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
 <p><a class="reference external" href="https://manual.audacityteam.org/man/label_tracks.html">https://manual.audacityteam.org/man/label_tracks.html</a></p>
 </dd></dl>
 

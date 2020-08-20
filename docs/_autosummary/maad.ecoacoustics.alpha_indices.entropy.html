@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,15 +208,23 @@
 <dt id="maad.ecoacoustics.alpha_indices.entropy">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">entropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datain</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.entropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the entropy of a vector or matrix datain (i.e. waveform, spectrum…)</p>
-<dl class="simple">
-<dt>datain<span class="classifier">ndarray of floats</span></dt><dd><p>datain is a vector (1d) or a matrix (2d)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>datain</strong><span class="classifier">ndarray of floats</span></dt><dd><p>datain is a vector (1d) or a matrix (2d)</p>
 </dd>
-<dt>axis<span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the entropy is computed
+<dt><strong>axis</strong><span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the entropy is computed
 if datain is a vector, axis=0
 if datain is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</p>
 </dd>
 </dl>
-<p>H : float or ndarray of floats</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>H</strong><span class="classifier">float or ndarray of floats</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

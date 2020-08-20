@@ -2,8 +2,8 @@
 """ 
 Ecoacoustics functions for scikit-maad
 Collection of functions to calculate alpha indices
-
 """
+
 
 from .alpha_indices import (envelope, # should be in sounds
                             index_bw, # should be in utils
@@ -37,3 +37,5 @@ __all__ = ["envelope",
            "acousticEvenessIndex",
            "roughness",
            "surfaceRoughness"]
+
+

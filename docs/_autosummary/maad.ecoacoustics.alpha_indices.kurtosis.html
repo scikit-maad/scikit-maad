@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,19 +208,23 @@
 <dt id="maad.ecoacoustics.alpha_indices.kurtosis">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">kurtosis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#kurtosis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.kurtosis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcul the kurtosis (tailedness or curved or arching) of a signal x</p>
-<dl class="simple">
-<dt>x<span class="classifier">ndarray of floats </span></dt><dd><p>1d signal or 2d matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>1d signal or 2d matrix</p>
 </dd>
-<dt>axis<span class="classifier">integer, optional, default is 0</span></dt><dd><p>select the axis to compute the kurtosis</p>
+<dt><strong>axis</strong><span class="classifier">integer, optional, default is 0</span></dt><dd><p>select the axis to compute the kurtosis</p>
 </dd>
 </dl>
-<dl>
-<dt>ku<span class="classifier">float or ndarray of floats</span></dt><dd><p>kurtosis of x 
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ku</strong><span class="classifier">float or ndarray of floats</span></dt><dd><p>kurtosis of x 
 if x is a 1d vector =&gt; single value
-if x is a 2d matrix =&gt; array of values corresponding to the number of</p>
-<blockquote>
-<div><p>points in the other axis</p>
-</div></blockquote>
+if x is a 2d matrix =&gt; array of values corresponding to the number of
+points in the other axis</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

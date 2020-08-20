@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
 </ul>
@@ -160,8 +159,11 @@
             
   <h1>Source code for maad.rois.rois_2d</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="sd">&quot;&quot;&quot; Multiresolution Analysis of Acoustic Diversity</span>
-<span class="sd">    functions for processing ROIS &quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Multiresolution Analysis of Acoustic Diversity</span>
+<span class="sd">    </span>
+<span class="sd">functions for processing ROIS </span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">#</span>
 <span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
 <span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
@@ -192,18 +194,19 @@
 <span class="c1"># Import internal modules</span>
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">linear_scale</span><span class="p">,</span><span class="n">read_audacity_annot</span><span class="p">,</span><span class="n">rand_cmap</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">====== TO DO</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#====== TO DO</span>
+<span class="c1">#</span>
 <div class="viewcode-block" id="select_bandwidth"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_bandwidth.html#maad.rois.rois_2d.select_bandwidth">[docs]</a><span class="k">def</span> <span class="nf">select_bandwidth</span><span class="p">():</span>
     <span class="k">return</span></div>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">====== </span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#====== </span>
+<span class="c1">#</span>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">************* Load an image and convert it in gray level if needed  ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#************* Load an image and convert it in gray level if needed  ***********</span>
+<span class="c1">#****************************************************************************</span>
+
 <div class="viewcode-block" id="load"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.load.html#maad.rois.rois_2d.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">flipud</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load an image from a file or an URL</span>
@@ -225,32 +228,40 @@
 <span class="sd">    display : boolean, optional, default is False</span>
 <span class="sd">        if True, display the image</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
 <span class="sd">            Format to save the figure </span>
 <span class="sd">        </span>
@@ -273,7 +284,6 @@
 <span class="sd">        </span>
 <span class="sd">    df : scalar</span>
 <span class="sd">        Frequency resolution of the spectrogram (vertical y-axis)</span>
-<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span>
@@ -315,9 +325,9 @@
     
     <span class="k">return</span> <span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span></div>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">*************               noise_subtraction                       ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************               noise_subtraction                    ***********</span>
+<span class="c1">#****************************************************************************</span>
 <div class="viewcode-block" id="remove_background"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.remove_background.html#maad.rois.rois_2d.remove_background">[docs]</a><span class="k">def</span> <span class="nf">remove_background</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">gauss_win</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gauss_std</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
                       <span class="n">llambda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -372,36 +382,44 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
 <span class="sd">            Format to save the figure</span>
 <span class="sd">            </span>
@@ -553,44 +571,52 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_out: smothed or blurred image </span>
+<span class="sd">    im_out: smothed or blurred image </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
@@ -624,9 +650,10 @@
     
     <span class="k">return</span> <span class="n">im_out</span></div>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">*************                double_threshold                       ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                double_threshold                    ***********</span>
+<span class="c1">#****************************************************************************</span>
+
 <div class="viewcode-block" id="double_threshold_rel"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.double_threshold_rel.html#maad.rois.rois_2d.double_threshold_rel">[docs]</a><span class="k">def</span> <span class="nf">double_threshold_rel</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -665,49 +692,57 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_out: binary image </span>
+<span class="sd">    im_out: binary image </span>
 <span class="sd">    </span>
 <span class="sd">    References :</span>
 <span class="sd">    ------------</span>
-<span class="sd">            from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
-<span class="sd">        Adapted by S. Haupert Dec 12, 2017</span>
+<span class="sd">    from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
+<span class="sd">    Adapted by S. Haupert Dec 12, 2017</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="c1"># Compute the qth percentile of the data along the specified axis</span>
@@ -774,9 +809,9 @@
 
     <span class="k">return</span> <span class="n">im_out</span></div>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">*************                double_threshold                       ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                double_threshold                    ***********</span>
+<span class="c1">#****************************************************************************</span>
 <div class="viewcode-block" id="double_threshold_abs"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.double_threshold_abs.html#maad.rois.rois_2d.double_threshold_abs">[docs]</a><span class="k">def</span> <span class="nf">double_threshold_abs</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">bin_l</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -810,49 +845,57 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_out: binary image </span>
+<span class="sd">    im_out: binary image </span>
 <span class="sd">    </span>
 <span class="sd">    References :</span>
 <span class="sd">    ------------</span>
-<span class="sd">        from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
-<span class="sd">        Adapted by S. Haupert Dec 12, 2017</span>
+<span class="sd">    from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
+<span class="sd">    Adapted by S. Haupert Dec 12, 2017</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="c1"># binarisation </span>
@@ -929,24 +972,24 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by the maad functions as well</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad functions as well</span>
 <span class="sd">        as the plt.plot and savefig functions.</span>
 <span class="sd">        All the input arguments required or optional in the signature of the</span>
 <span class="sd">        functions above can be passed as kwargs :</span>
-<span class="sd">           double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, </span>
-<span class="sd">                                 savefig=None, **kwargs)</span>
-<span class="sd">           double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, </span>
-<span class="sd">                                  savefig=None, **kwargs)</span>
+<span class="sd">        double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, </span>
+<span class="sd">        savefig=None, \*\*kwargs)</span>
+<span class="sd">        double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, </span>
+<span class="sd">        savefig=None, \*\*kwargs)</span>
 <span class="sd">           </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 <span class="sd">        </span>
 <span class="sd">        example :</span>
 <span class="sd">        im_bin = create_mask(im, ext, bin_std=5, bin_per=0.5, mode=&#39;relative&#39;,</span>
-<span class="sd">                             display=True, savefig=None, dpi=300)    </span>
+<span class="sd">        display=True, savefig=None, dpi=300)    </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_bin: binary image </span>
+<span class="sd">    im_bin: binary image </span>
 <span class="sd">    &quot;&quot;&quot;</span>
        
     <span class="k">if</span> <span class="n">mode_bin</span> <span class="o">==</span> <span class="s1">&#39;relative&#39;</span><span class="p">:</span>
@@ -961,9 +1004,9 @@
     
     <span class="k">return</span> <span class="n">im_bin</span> </div>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">*************                 select_rois auto                      ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                 select_rois auto                   ***********</span>
+<span class="c1">#****************************************************************************</span>
 <div class="viewcode-block" id="select_rois_auto"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_rois_auto.html#maad.rois.rois_2d.select_rois_auto">[docs]</a><span class="k">def</span> <span class="nf">select_rois_auto</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_roi</span><span class="o">=</span><span class="kc">None</span> <span class="p">,</span><span class="n">max_roi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
                 <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -992,55 +1035,63 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_label: 2d ndarray</span>
-<span class="sd">            image with labels as values</span>
+<span class="sd">    im_label: 2d ndarray</span>
+<span class="sd">        image with labels as values</span>
 <span class="sd">            </span>
-<span class="sd">        rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
-<span class="sd">            Contain the bounding box of each ROI</span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contain the bounding box of each ROI</span>
 <span class="sd">            </span>
-<span class="sd">        rois_label : list of tuple (labelID, labelname)</span>
-<span class="sd">            Contain the label (LabelID=scalar,labelname=string) for each ROI</span>
-<span class="sd">            LabelID is a number from 1 to the number of ROI. The pixel value </span>
-<span class="sd">            of im_label correspond the labelID</span>
-<span class="sd">            Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
-<span class="sd">            by default.</span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contain the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># test if max_roi and min_roi are defined</span>
@@ -1142,38 +1193,46 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure</span>
+<span class="sd">        Format to save the figure</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 
@@ -1279,9 +1338,9 @@
       
     <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox_man</span><span class="p">,</span> <span class="n">rois_label_man</span> </div>
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">*************                   select ROIS wrapper                 ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                   select ROIS wrapper              ***********</span>
+<span class="c1">#****************************************************************************</span>
 <div class="viewcode-block" id="select_rois"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_rois.html#maad.rois.rois_2d.select_rois">[docs]</a><span class="k">def</span> <span class="nf">select_rois</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span><span class="n">ext</span><span class="p">,</span><span class="n">mode_roi</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper function</span>
@@ -1313,41 +1372,41 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by the maad functions as well</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad functions as well</span>
 <span class="sd">        as the plt.plot and savefig functions.</span>
 <span class="sd">        All the input arguments required or optional in the signature of the</span>
 <span class="sd">        functions above can be passed as kwargs :</span>
-<span class="sd">           select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,</span>
-<span class="sd">                             **kwargs)</span>
-<span class="sd">           select_rois_manually(im_bin,ext,filename,software,mask,display,</span>
-<span class="sd">                                 savefig,**kwargs</span>
+<span class="sd">        select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,</span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">        select_rois_manually(im_bin,ext,filename,software,mask,display,</span>
+<span class="sd">        savefig,**kwargs</span>
 <span class="sd">           </span>
 <span class="sd">        ... and more, see matplotlib   </span>
 <span class="sd">        </span>
 <span class="sd">        example :</span>
 <span class="sd">        im_rois, rois_bbox, rois_label =select_rois_auto(im_bin,ext,mode=&#39;auto&#39;,</span>
-<span class="sd">                                        min_roi=100,max_roi=1e6,</span>
-<span class="sd">                                        display=True,savefig=None,**kwargs) </span>
+<span class="sd">        min_roi=100,max_roi=1e6,</span>
+<span class="sd">        display=True,savefig=None,**kwargs) </span>
 <span class="sd">        </span>
 <span class="sd">        im_rois, rois_bbox, rois_label =select_rois_man(im_bin,ext,mode=&#39;manual&#39;,</span>
-<span class="sd">                                        filename=&#39;annotation.txt&#39;,</span>
-<span class="sd">                                        software=&#39;audacity,</span>
-<span class="sd">                                        display=True,savefig=None,**kwargs)  </span>
+<span class="sd">        filename=&#39;annotation.txt&#39;,</span>
+<span class="sd">        software=&#39;audacity,</span>
+<span class="sd">        display=True,savefig=None,**kwargs)  </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_rois: 2d ndarray</span>
-<span class="sd">            image with labels as values</span>
+<span class="sd">    im_rois: 2d ndarray</span>
+<span class="sd">        image with labels as values</span>
 <span class="sd">            </span>
-<span class="sd">        rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
-<span class="sd">            Contains the bounding box of each ROI</span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contains the bounding box of each ROI</span>
 <span class="sd">            </span>
-<span class="sd">        rois_label : list of tuple (labelID, labelname)</span>
-<span class="sd">            Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
-<span class="sd">            LabelID is a number from 1 to the number of ROI. The pixel value </span>
-<span class="sd">            of im_label correspond the labelID</span>
-<span class="sd">            Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
-<span class="sd">            by default.</span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
 
     <span class="k">if</span> <span class="n">mode_roi</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
@@ -1366,9 +1425,9 @@
     <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span></div>
 
 
-<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
-<span class="sd">*************                   display_rois                        ***********</span>
-<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                   display_rois                     ***********</span>
+<span class="c1">#****************************************************************************</span>
 <div class="viewcode-block" id="overlay_rois"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.overlay_rois.html#maad.rois.rois_2d.overlay_rois">[docs]</a><span class="k">def</span> <span class="nf">overlay_rois</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Overlay bounding box on the original spectrogram</span>
@@ -1397,46 +1456,54 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
 <span class="sd">        ****************************************************    </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_overlayrois.png&#39;</span>
-<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        Postfix of the figure filename</span>
 <span class="sd">        **************************************************** </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
-<span class="sd">            width, height in inches.  </span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
-<span class="sd">            title of the figure</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
 <span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
-<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
 <span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
-<span class="sd">            label of the vertical axis</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
 <span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
-<span class="sd">            in order to get all the  existing colormaps</span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
-<span class="sd">                      &#39;viridis&#39;...</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
 <span class="sd">        vmin, vmax : scalar, optional, default: None</span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
 <span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
-<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
-<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
-<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
 <span class="sd">        dpi : integer, optional, default is 96</span>
-<span class="sd">            Dot per inch. </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
 <span class="sd">        format : string, optional, default is &#39;png&#39;</span>
-<span class="sd">            Format to save the figure </span>
+<span class="sd">        Format to save the figure </span>
 <span class="sd">        </span>
 <span class="sd">        ... and more, see matplotlib </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        ax : axis object (see matplotlib)</span>
+<span class="sd">    ax : axis object (see matplotlib)</span>
 <span class="sd">        </span>
-<span class="sd">        fig : figure object (see matplotlib)</span>
+<span class="sd">    fig : figure object (see matplotlib)</span>
 <span class="sd">    &quot;&quot;&quot;</span>       
     
     <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
@@ -1528,63 +1595,63 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    **kwargs, optional. This parameter is used by the maad function as well</span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad function as well</span>
 <span class="sd">        as the plt.plot and savefig functions.</span>
 <span class="sd">        All the input arguments required or optional in the signature functions</span>
 <span class="sd">        can be passed.</span>
 <span class="sd">        </span>
 <span class="sd">        Specific parameters</span>
 <span class="sd">        </span>
-<span class="sd">             std_pre : scalar</span>
-<span class="sd">                 Standard deviation used for the first call of the smooth() </span>
-<span class="sd">                 function. It defines the std of the gaussian kernel</span>
+<span class="sd">        std_pre : scalar</span>
+<span class="sd">        Standard deviation used for the first call of the smooth() </span>
+<span class="sd">        function. It defines the std of the gaussian kernel</span>
 <span class="sd">                 </span>
-<span class="sd">             std_post : scalar</span>
-<span class="sd">                 Standard deviation used for the Second call of the smooth() </span>
-<span class="sd">                 function. It defines the std of the gaussian kernel</span>
+<span class="sd">        std_post : scalar</span>
+<span class="sd">        Standard deviation used for the Second call of the smooth() </span>
+<span class="sd">        function. It defines the std of the gaussian kernel</span>
 <span class="sd">               </span>
 <span class="sd">        See the signature of each maad function to know the other parameters </span>
 <span class="sd">        that can be passed as kwargs :</span>
-<span class="sd">            remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, </span>
-<span class="sd">                              beta2=1,llambda=1, display = False, savefig=None, </span>
-<span class="sd">                              **kwargs)</span>
+<span class="sd">        remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, </span>
+<span class="sd">        beta2=1,llambda=1, display = False, savefig=None, </span>
+<span class="sd">        \*\*kwargs)</span>
 <span class="sd">            </span>
-<span class="sd">            smooth (im, ext, std=1, display = False, savefig=None, **kwargs)</span>
+<span class="sd">        smooth (im, ext, std=1, display = False, savefig=None, \*\*kwargs)</span>
 <span class="sd">            </span>
-<span class="sd">            create_mask(im, ext, mode_bin =&#39;relative&#39;, display=False, savefig=None,</span>
-<span class="sd">                **kwargs)</span>
+<span class="sd">        create_mask(im, ext, mode_bin =&#39;relative&#39;, display=False, savefig=None,</span>
+<span class="sd">        \*\*kwargs)</span>
 <span class="sd">            </span>
-<span class="sd">            select_rois(im_bin,ext,mode_roi=&#39;auto&#39;,display=False,savefig=None,</span>
-<span class="sd">                        **kwargs)</span>
+<span class="sd">        select_rois(im_bin,ext,mode_roi=&#39;auto&#39;,display=False,savefig=None,</span>
+<span class="sd">        \*\*kwargs)</span>
 <span class="sd">            </span>
-<span class="sd">            overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,</span>
-<span class="sd">                          **kwargs)</span>
+<span class="sd">        overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,</span>
+<span class="sd">        \*\*kwargs)</span>
 <span class="sd">            </span>
 <span class="sd">        ... and more, see matplotlib  </span>
 <span class="sd">        </span>
 <span class="sd">        example : </span>
-<span class="sd">            find_rois_wrapper(im_ref, ext, display=True,</span>
-<span class="sd">                              std_pre = 2, std_post=1, </span>
-<span class="sd">                              llambda=1.1, gauss_win = round(1000/df),</span>
-<span class="sd">                              mode_bin=&#39;relative&#39;, bin_std=5, bin_per=0.5,</span>
-<span class="sd">                              mode_roi=&#39;auto&#39;)</span>
+<span class="sd">        find_rois_wrapper(im_ref, ext, display=True,</span>
+<span class="sd">        std_pre = 2, std_post=1, </span>
+<span class="sd">        llambda=1.1, gauss_win = round(1000/df),</span>
+<span class="sd">        mode_bin=&#39;relative&#39;, bin_std=5, bin_per=0.5,</span>
+<span class="sd">        mode_roi=&#39;auto&#39;)</span>
 <span class="sd">        </span>
 <span class="sd">        ... and more, see matplotlib </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        im_rois: 2d ndarray</span>
-<span class="sd">            image with labels as values</span>
+<span class="sd">    im_rois: 2d ndarray</span>
+<span class="sd">        image with labels as values</span>
 <span class="sd">            </span>
-<span class="sd">        rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
-<span class="sd">            Contains the bounding box of each ROI</span>
-<span class="sd">            </span>
-<span class="sd">        rois_label : list of tuple (labelID, labelname)</span>
-<span class="sd">            Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
-<span class="sd">            LabelID is a number from 1 to the number of ROI. The pixel value </span>
-<span class="sd">            of im_label correspond the labelID</span>
-<span class="sd">            Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
-<span class="sd">            by default.</span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contains the bounding box of each ROI</span>
+<span class="sd">        </span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>       
     
     

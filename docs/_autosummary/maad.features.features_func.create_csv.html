@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -205,11 +204,13 @@
 <code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">create_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape_features</span></em>, <em class="sig-param"><span class="n">centroid_features</span></em>, <em class="sig-param"><span class="n">label_features</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#create_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.create_csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a .csv file containing all the features (shapes, centroids and 
 labels)</p>
-<dl class="simple">
-<dt>shape_features<span class="classifier">2d nd array of scalars</span></dt><dd><p>Each column corresponds to a shape (linked to a kernel filter) 
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>shape_features</strong><span class="classifier">2d nd array of scalars</span></dt><dd><p>Each column corresponds to a shape (linked to a kernel filter) 
 Each row corresponds to a ROI</p>
 </dd>
-<dt>centroid_features: 2d nd array of scalars (centroid in freq and time)</dt><dd><p>Centroid of image. If labels provided, centroid for each ROI (rows)
+<dt><strong>centroid_features: 2d nd array of scalars (centroid in freq and time)</strong></dt><dd><p>Centroid of image. If labels provided, centroid for each ROI (rows)
 column 0 is ‘cyear’ 
 column 1 is ‘cmonth’ 
 column 2 is ‘chour’ 
@@ -217,16 +218,18 @@ column 3 is ‘cminute’
 column 4 is ‘csecond’ 
 column 5 is ‘cfreq’</p>
 </dd>
-</dl>
-<p>label_features: 2d nd array of integers and strings, optional, default is 
-None</p>
-<blockquote>
-<div><p>column 0 is ‘labelID’
+<dt><strong>label_features: 2d nd array of integers and strings, optional, default is</strong></dt><dd></dd>
+<dt><strong>None</strong></dt><dd><p>column 0 is ‘labelID’
 column 1 is ‘labelName’
 Each row corresponds to a ROI</p>
-</div></blockquote>
-<dl class="simple">
-<dt>table<span class="classifier">dataframe (Pandas)</span></dt><dd><p>The table contains all the features extracted from the spectrogram</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>table</strong><span class="classifier">dataframe (Pandas)</span></dt><dd><p>The table contains all the features extracted from the spectrogram</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

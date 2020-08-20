@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -193,35 +192,33 @@
 <code class="sig-prename descclassname">maad.features.features_1d.</code><code class="sig-name descname">psd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">256</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'welch'</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hanning'</span></em>, <em class="sig-param"><span class="n">nfft</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tlims</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_1d.html#psd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_1d.psd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimates power spectral density of 1D signal using Welch’s or periodogram methods. 
 Note: this is a wrapper function that uses functions from scipy.signal module</p>
-<blockquote>
-<div><dl class="simple">
-<dt>s: 1D array </dt><dd><p>Input signal to process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>s: 1D array</strong></dt><dd><p>Input signal to process</p>
 </dd>
-<dt>fs: float, optional</dt><dd><p>Sampling frequency of audio signal</p>
+<dt><strong>fs: float, optional</strong></dt><dd><p>Sampling frequency of audio signal</p>
 </dd>
-<dt>nperseg: int, optional</dt><dd><p>Lenght of segment for ‘welch’ method, default is 256</p>
+<dt><strong>nperseg: int, optional</strong></dt><dd><p>Lenght of segment for ‘welch’ method, default is 256</p>
 </dd>
-<dt>nfft: int, optional</dt><dd><p>Length of FFT for periodogram method. If None, length of signal will be used.
+<dt><strong>nfft: int, optional</strong></dt><dd><p>Length of FFT for periodogram method. If None, length of signal will be used.
 Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.</p>
 </dd>
-<dt>method: {‘welch’, ‘periodogram’}</dt><dd><p>Method used to estimate the power spectral density of the signal</p>
+<dt><strong>method: {‘welch’, ‘periodogram’}</strong></dt><dd><p>Method used to estimate the power spectral density of the signal</p>
 </dd>
-<dt>tlims: tuple of ints or floats</dt><dd><p>Temporal limits to compute the power spectral density in seconds (s)</p>
+<dt><strong>tlims: tuple of ints or floats</strong></dt><dd><p>Temporal limits to compute the power spectral density in seconds (s)</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>psd: pandas Series</dt><dd><p>Estimate of power spectral density</p>
 </dd>
 <dt>f_idx: pandas Series</dt><dd><p>Index of sample frequencies</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><p>s, fs = sound.load(‘spinetail.wav’)
-psd, f_idx = psd(s, fs, nperseg=512)</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

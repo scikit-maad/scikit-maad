@@ -38,9 +38,9 @@ class HDDC():
         """
         This function initialize the HDDA stucture
         
-        :param model: the model used.
+        param model: the model used.
         
-        :type mode: string
+        type mode: string
         
         - M1 = aijbiQidi
         
@@ -91,6 +91,8 @@ class HDDC():
         if model in ('M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8'):
             self.model = model  # Name of the model
         else:
+        #    print "Model parameter {} is not available".format(model)
+        #     Modif SH             
             print ("Model parameter %s is not available" % format(model))        
             exit()
         self.q = []           # Number of parameters of the full models
@@ -106,10 +108,17 @@ class HDDC():
         """
         Estimate the model parameters with the EM algorithm
 
-        :param array-like X: Shape (n_samples, n_features).
+        Parameters
+        ----------
+        X : array-like 
+            Shape (n_samples, n_features). 
+        
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        :returns: self
+        
+        Returns
+        -------        
+        self
         """
 
         # Initialization
@@ -372,10 +381,16 @@ class HDDC():
         """
         Compute the e-step of the algorithm
         
-        :param array-like X: Shape (n_samples, n_dimensions).
+        Parameters
+        ----------
+        X : array-like 
+            Shape (n_samples, n_dimensions).
+        
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        :returns:
+        
+        Returns
+        -------
         """
         # Get some parameters
         n = X.shape[0]
@@ -402,11 +417,18 @@ class HDDC():
         """
         Compute the per-sample log-likelihood of the given data X.
         
-        :param array-like X: Shape (n_samples, n_dimensions).
+        Parameters
+        ----------
+        X : array-like 
+            Shape (n_samples, n_dimensions).
+            
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        :returns: 
-            log_likelihood (float) - Log likelihood of the Gaussian mixture given X.
+        
+        Returns
+        ------- 
+        log_likelihood : float 
+            Log likelihood of the Gaussian mixture given X.
         """
 
         X = check_array(X, copy=False, order='C', dtype=sp.float64)
@@ -431,11 +453,17 @@ class HDDC():
         """
         Compute the negative weighted log probabilities for each sample.
         
-        :param array-like X: Shape (n_samples, n_features).
+        Parameters
+        ---------- 
+        X : array-like 
+            Shape (n_samples, n_features).
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        :returns:
-            log_prob (array) - shape (n_samples, n_clusters). Log probabilities of each data point in X.
+        
+        Returns
+        -------
+        log_prob : array 
+            Shape (n_samples, n_clusters). Log probabilities of each data point in X.
         """
         X = check_array(X, copy=False, order='C', dtype=sp.float64)
         nt, d = X.shape
@@ -459,14 +487,22 @@ class HDDC():
         return -K
 
     def predict(self, X):
-        """Predict the labels for the data samples in X using trained model.
-
-        :param array-like X: Shape (n_samples, n_features).
+        """
+        Predict the labels for the data samples in X using trained model.
+        
+        Parameters
+        ----------
+        X : array-like 
+            Shape (n_samples, n_features).
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
 
-        :returns: 
-            labels (array) - shape (n_samples,). Component labels.
+        Returns
+        ------- 
+        labels : array
+            shape (n_samples,). 
+            
+            Component labels.
         """
         X = check_array(X, copy=False, order='C', dtype=sp.float64)
         return self.score_samples(X).argmax(axis=1) + 1
@@ -476,12 +512,17 @@ class HDDC():
         Predict the membership probabilities for the data samples
         in X using trained model.
 
-        :param array-like X: Shape (n_samples, n_features).
+        Parameters
+        ---------- 
+        X : array-like 
+            Shape (n_samples, n_features).
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
 
-        :returns:
-            proba (array) - shape (n_samples, n_clusters)
+        Returns
+        -------
+        proba : array 
+            Shape (n_samples, n_clusters)
         """
         X = check_array(X, copy=False, order='C', dtype=sp.float64)
         K = self.score_samples(X)

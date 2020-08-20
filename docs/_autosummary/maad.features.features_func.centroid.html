@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -205,22 +204,24 @@
 <code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">centroid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">im_blobs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#centroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.centroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes intensity centroid of the 2D signal (usually time-frequency representation) 
 along a margin, frequency (0) or time (1).</p>
-<blockquote>
-<div><dl class="simple">
-<dt>im: 2D array</dt><dd><p>Input image to process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>im: 2D array</strong></dt><dd><p>Input image to process</p>
 </dd>
-<dt>im_blobs: 2D array, optional</dt><dd><p>Optional binary array with ‘1’ on the region of interest and ‘0’ otherwise</p>
+<dt><strong>im_blobs: 2D array, optional</strong></dt><dd><p>Optional binary array with ‘1’ on the region of interest and ‘0’ otherwise</p>
 </dd>
-<dt>margin: 0 or 1</dt><dd><p>Margin of the centroid, frequency=1, time=0</p>
+<dt><strong>margin: 0 or 1</strong></dt><dd><p>Margin of the centroid, frequency=1, time=0</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>centroid: 1D array</dt><dd><p>centroid of image. If im_blobs provided, centroid for each region of interest</p>
 </dd>
 </dl>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

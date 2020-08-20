@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -211,18 +210,23 @@
 <dt>Setup rectangular rois to a predifined format: </dt><dd><p>time-frequency or bounding box</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>rois<span class="classifier">pandas DataFrame</span></dt><dd><p>array must have a valid input format with column names
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>array must have a valid input format with column names
 - bounding box: min_y, min_x, max_y, max_x
 - time frequency: min_f, min_t, max_f, max_t</p>
 </dd>
-<dt>ts<span class="classifier">ndarray</span></dt><dd><p>vector with temporal indices, output from the spectrogram function (in seconds)</p>
+<dt><strong>ts</strong><span class="classifier">ndarray</span></dt><dd><p>vector with temporal indices, output from the spectrogram function (in seconds)</p>
 </dd>
-<dt>fs: ndarray</dt><dd><p>vector with frequencial indices, output from the spectrogram function (in Hz)</p>
+<dt><strong>fs: ndarray</strong></dt><dd><p>vector with frequencial indices, output from the spectrogram function (in Hz)</p>
 </dd>
-<dt>fmt: str</dt><dd><p>A string indicating the desired output format: ‘bbox’ or ‘tf’</p>
+<dt><strong>fmt: str</strong></dt><dd><p>A string indicating the desired output format: ‘bbox’ or ‘tf’</p>
 </dd>
-<dt>Returns</dt><dd><dl class="simple">
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>rois_bbox: ndarray</dt><dd><p>array with indices of ROIs matched on spectrogram</p>
 </dd>
 </dl>

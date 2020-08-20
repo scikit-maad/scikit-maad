@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,27 +208,31 @@
 <dt id="maad.ecoacoustics.alpha_indices.acousticEvenessIndex">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">acousticEvenessIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">fmax</span><span class="o">=</span><span class="default_value">20000</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">- 50</span></em>, <em class="sig-param"><span class="n">R_compatible</span><span class="o">=</span><span class="default_value">'soundecology'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#acousticEvenessIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.acousticEvenessIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acoustic Eveness Index : AEI</p>
-<dl class="simple">
-<dt>Sxx: ndarray of floats</dt><dd><p>2d : Spectrogram</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Sxx: ndarray of floats</strong></dt><dd><p>2d : Spectrogram</p>
 </dd>
-<dt>fn<span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
+<dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
 </dd>
-<dt>fmin<span class="classifier">scalar, optional, default is 0</span></dt><dd><p>Minimum frequency in Hz</p>
+<dt><strong>fmin</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><p>Minimum frequency in Hz</p>
 </dd>
-<dt>fmax<span class="classifier">scalar, optional, default is 20000</span></dt><dd><p>Maximum frequency in Hz</p>
+<dt><strong>fmax</strong><span class="classifier">scalar, optional, default is 20000</span></dt><dd><p>Maximum frequency in Hz</p>
 </dd>
-<dt>bin_step<span class="classifier">scalar, optional, default is 500</span></dt><dd><p>Frequency step in Hz</p>
+<dt><strong>bin_step</strong><span class="classifier">scalar, optional, default is 500</span></dt><dd><p>Frequency step in Hz</p>
 </dd>
-<dt>dB_threshold<span class="classifier">scalar, optional, default is -50</span></dt><dd><p>Threshold to compute the score (ie. the number of data &gt; threshold,
+<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is -50</span></dt><dd><p>Threshold to compute the score (ie. the number of data &gt; threshold,
 normalized by the length)</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>AEI<span class="classifier">scalar </span></dt><dd><p>Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>AEI</strong><span class="classifier">scalar</span></dt><dd><p>Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)</p>
 </dd>
 </dl>
-<p>Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
-A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

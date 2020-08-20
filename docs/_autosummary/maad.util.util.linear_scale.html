@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,28 +208,44 @@
 <code class="sig-prename descclassname">maad.util.util.</code><code class="sig-name descname">linear_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">minval</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">maxval</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/util.html#linear_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.util.linear_scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Program to scale the values of a matrix from a user specified minimum to 
 a user specified maximum</p>
-<dl class="simple">
-<dt>x<span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers</p>
 </dd>
-<dt>minval<span class="classifier">scalar, optional, default</span><span class="classifier">0</span></dt><dd><p>This minimum value is attributed to the minimum value of the array</p>
+<dt><strong>minval</strong><span class="classifier">scalar, optional, default</span></dt><dd><p>This minimum value is attributed to the minimum value of the array</p>
 </dd>
-<dt>maxval<span class="classifier">scalar, optional, default</span><span class="classifier">1</span></dt><dd><p>This maximum value is attributed to the maximum value of the array</p>
+<dt><strong>maxval</strong><span class="classifier">scalar, optional, default</span></dt><dd><p>This maximum value is attributed to the maximum value of the array</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>y<span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers</p>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers</p>
+</dd>
+</dl>
+<blockquote>
+<div></div></blockquote>
+<dl class="simple">
+<dt>Example</dt><dd></dd>
 </dl>
 <blockquote>
 <div><p>a = np.array([1,2,3,4,5]);
 a_out = scaledata(a,0,1);</p>
 </div></blockquote>
 <dl class="simple">
-<dt>Out: </dt><dd><p>array([0.  , 0.25, 0.5 , 0.75, 1.  ])</p>
+<dt>Out:</dt><dd><p>array([0.  , 0.25, 0.5 , 0.75, 1.  ])</p>
+</dd>
+<dt>References:</dt><dd></dd>
+</dl>
+<blockquote>
+<div></div></blockquote>
+<dl class="simple">
+<dt>Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</dt><dd></dd>
+<dt>Adapted by S. Haupert Dec 12, 2017 for Python</dt><dd></dd>
+</dl>
 </dd>
 </dl>
-<p>Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
-Adapted by S. Haupert Dec 12, 2017 for Python</p>
 </dd></dl>
 
 </div>

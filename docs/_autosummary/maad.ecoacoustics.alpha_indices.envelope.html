@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -212,10 +211,12 @@
 The sound is first divided into frames (2d) using the function 
 wave2timeframes(wave), then the max of each frame gives a good approximation
 of the envelope.</p>
-<dl class="simple">
-<dt>wave<span class="classifier">ndarray of floats </span></dt><dd><p>1d : sound waveform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>wave</strong><span class="classifier">ndarray of floats</span></dt><dd><p>1d : sound waveform</p>
 </dd>
-<dt>mode<span class="classifier">str, optional, default is “fast”</span></dt><dd><ul class="simple">
+<dt><strong>mode</strong><span class="classifier">str, optional, default is “fast”</span></dt><dd><ul class="simple">
 <li><dl class="simple">
 <dt>“fast”<span class="classifier">The sound is first divided into frames (2d) using the </span></dt><dd><p>function wave2timeframes(wave), then the max of each frame gives a 
 good approximation of the envelope.</p>
@@ -229,14 +230,17 @@ good approximation of the envelope.</p>
 </li>
 </ul>
 </dd>
-<dt>N<span class="classifier">integer, optional, default is 512</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
+<dt><strong>N</strong><span class="classifier">integer, optional, default is 512</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>env<span class="classifier">ndarray of floats</span></dt><dd><p>Envelope of the sound (1d)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>env</strong><span class="classifier">ndarray of floats</span></dt><dd><p>Envelope of the sound (1d)</p>
 </dd>
 </dl>
-<p>Fast calculation is inspired by the work of Towsey.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

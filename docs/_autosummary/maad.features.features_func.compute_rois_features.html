@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -205,41 +204,33 @@
 <code class="sig-prename descclassname">maad.features.features_func.</code><code class="sig-name descname">compute_rois_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">rois_tf</span></em>, <em class="sig-param"><span class="n">opt_spec</span></em>, <em class="sig-param"><span class="n">opt_shape</span></em>, <em class="sig-param"><span class="n">flims</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/features_func.html#compute_rois_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.features_func.compute_rois_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes shape and central frequency features from signal at specified
 time-frequency limits defined by regions of interest (ROIs)</p>
-<blockquote>
-<div><dl class="simple">
-<dt>s: ndarray</dt><dd><p>Singal to be analysed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>s: ndarray</strong></dt><dd><p>Singal to be analysed</p>
 </dd>
-<dt>fs: int</dt><dd><p>Sampling frequency of the signal</p>
+<dt><strong>fs: int</strong></dt><dd><p>Sampling frequency of the signal</p>
 </dd>
-<dt>rois_tf: pandas DataFrame</dt><dd><p>Time frequency limits for the analysis. Columns should have at
+<dt><strong>rois_tf: pandas DataFrame</strong></dt><dd><p>Time frequency limits for the analysis. Columns should have at
 least min_t, max_t, min_f, max_f. Can be computed with multiple
 detection methods, such as find_rois_cwt</p>
 </dd>
-<dt>opt_spec: dictionnary</dt><dd><p>Options for the spectrogram with keys, window lenght ‘nperseg’ and,
+<dt><strong>opt_spec: dictionnary</strong></dt><dd><p>Options for the spectrogram with keys, window lenght ‘nperseg’ and,
 window overlap in percentage ‘overlap’</p>
 </dd>
-<dt>opt_shape: dictionary</dt><dd><p>Options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
+<dt><strong>opt_shape: dictionary</strong></dt><dd><p>Options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
 </dd>
-<dt>flims: list of 2 scalars</dt><dd><p>Minimum and maximum boundary frequency values in Hertz</p>
+<dt><strong>flims: list of 2 scalars</strong></dt><dd><p>Minimum and maximum boundary frequency values in Hertz</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>feature_rois: pandas Dataframe</dt><dd><p>A dataframe with each column corresponding to a feature</p>
 </dd>
 </dl>
-</div></blockquote>
-<blockquote>
-<div><p>s, fs = sound.load(‘spinetail.wav’)        
-rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)
-opt_spec = {‘nperseg’: 512, ‘overlap’: 0.5}
-opt_shape = opt_shape_presets(‘med’)
-features_rois = compute_rois_features(s, fs, rois_tf, opt_spec,</p>
-<blockquote>
-<div><p>opt_shape, flims)</p>
-</div></blockquote>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

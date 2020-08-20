@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -194,24 +193,26 @@
 <dt id="maad.util.parser_func.date_from_filename">
 <code class="sig-prename descclassname">maad.util.parser_func.</code><code class="sig-name descname">date_from_filename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/parser_func.html#date_from_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.parser_func.date_from_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract date and time from the filename. Return a datetime object</p>
-<dl class="simple">
-<dt>filename<span class="classifier">string</span></dt><dd><dl class="simple">
-<dt>The filename must follow this format :</dt><dd><p>XXXX_yyyymmdd_hhmmss.wav
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>The filename must follow this format :
+XXXX_yyyymmdd_hhmmss.wav
 with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
 mm : minutes / ss : seconds</p>
 </dd>
 </dl>
 </dd>
-</dl>
-<dl>
-<dt>date<span class="classifier">object datetime</span></dt><dd><p>This object contains the date of creation of the file extracted from
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>date</strong><span class="classifier">object datetime</span></dt><dd><p>This object contains the date of creation of the file extracted from
 the filename postfix. 
-The filename must follow this format :</p>
-<blockquote>
-<div><p>XXXX_yyyymmdd_hhmmss.wav
+The filename must follow this format :
+XXXX_yyyymmdd_hhmmss.wav
 with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
 mm : minutes / ss : seconds</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

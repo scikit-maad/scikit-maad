@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -209,35 +208,34 @@
 <dt id="maad.ecoacoustics.alpha_indices.acousticComplexityIndex">
 <code class="sig-prename descclassname">maad.ecoacoustics.alpha_indices.</code><code class="sig-name descname">acousticComplexityIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">'global'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/ecoacoustics/alpha_indices.html#acousticComplexityIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.ecoacoustics.alpha_indices.acousticComplexityIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acoustic Complexity Index : ACI</p>
-<dl class="simple">
-<dt>Sxx<span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram (i.e matrix of spectrum)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram (i.e matrix of spectrum)</p>
 </dd>
-<dt>norm<span class="classifier">string, optional, default is ‘global’</span></dt><dd><p>Determine if the ACI is normalized by the sum on the whole frequencies
+<dt><strong>norm</strong><span class="classifier">string, optional, default is ‘global’</span></dt><dd><p>Determine if the ACI is normalized by the sum on the whole frequencies
 (‘global’ mode) or by the sum of frequency bin per frequency bin 
 (‘per_bin’)</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>ACI_xx<span class="classifier">2d ndarray of scalars</span></dt><dd><p>Acoustic Complexity Index of the spectrogram</p>
 </dd>
-<dt>ACI_per_bin<span class="classifier">1d ndarray of scalars</span></dt><dd><p>ACI value for each frequency bin
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ACI_xx</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Acoustic Complexity Index of the spectrogram</p>
+</dd>
+<dt><strong>ACI_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>ACI value for each frequency bin
 sum(ACI_xx,axis=1)</p>
 </dd>
-<dt>ACI_sum<span class="classifier">scalar</span></dt><dd><p>Sum of ACI value per frequency bin (Common definition)
+<dt><strong>ACI_sum</strong><span class="classifier">scalar</span></dt><dd><p>Sum of ACI value per frequency bin (Common definition)
 sum(ACI_per_bin)</p>
 </dd>
-</dl>
-<p>ACI_mean ; scalar</p>
-<blockquote>
-<div><p>!!! pas de sens car non independant de la résolution freq et temporelle
+<dt>ACI_mean ; scalar</dt><dd><p>!!! pas de sens car non independant de la résolution freq et temporelle
 !!! Seulement sum donne un résultat independant de N (pour la FFT)  
 !!! et donc de df et dt</p>
-</div></blockquote>
-<p>Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
-activity of an avian community: the Acoustic Complexity Index (ACI). 
-Ecological Indicators, 11, 868-873.</p>
-<p>Ported from the Seewave R package.</p>
-<p>!!!!! in Seewave, the result is the sum of the ACI per bin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

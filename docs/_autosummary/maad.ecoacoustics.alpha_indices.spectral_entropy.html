@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -212,21 +211,25 @@
 <ul class="simple">
 <li><p>kurtosis and skewness : KURT, SKEW</p></li>
 </ul>
-<dl class="simple">
-<dt>X<span class="classifier">ndarray of floats</span></dt><dd><p>Spectrum (1d) or Spectrogram (2d). 
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">ndarray of floats</span></dt><dd><p>Spectrum (1d) or Spectrogram (2d). 
 Better to use the PSD to be consistent with energy</p>
 </dd>
-<dt>fn<span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
+<dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
 </dd>
-<dt>frange<span class="classifier">tupple (fmin, fmax), optional, default is None</span></dt><dd><p>Frequency band used to compute the spectral entropy.
+<dt><strong>frange</strong><span class="classifier">tupple (fmin, fmax), optional, default is None</span></dt><dd><p>Frequency band used to compute the spectral entropy.
 For instance, one may want to compute the spectral entropy for the 
 biophony bandwidth</p>
 </dd>
-<dt>display<span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the different spectra (mean, variance, covariance, max…)</p>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the different spectra (mean, variance, covariance, max…)</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>EAS, ECU, ECV, EPS, KURT, SKEW<span class="classifier">scalars </span></dt><dd><p>EAS : Entropy of spectrum
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>EAS, ECU, ECV, EPS, KURT, SKEW</strong><span class="classifier">scalars</span></dt><dd><p>EAS : Entropy of spectrum
 ECU : Entropy of spectral variance (along the time axis for each frequency)
 ECV : Entropy of coefficient of variance (along the time axis for each frequency)
 EPS : Entropy of spectral maxima 
@@ -234,7 +237,8 @@ KURT : Kurtosis of spectral maxima
 SKEW : Skewness of spectral maxima</p>
 </dd>
 </dl>
-<p>Credit :</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

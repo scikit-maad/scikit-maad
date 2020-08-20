@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
- High level functions for signal characterization from 1D signals
- Code licensed under both GPL and BSD licenses
- Authors:  Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
-           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
+High level functions for signal characterization from 1D signals
+Code licensed under both GPL and BSD licenses
 
+Authors: Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
+
+Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 """
 
 from scipy.signal import periodogram, welch
@@ -19,29 +20,31 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     
     Parameters
     ----------
-        s: 1D array 
-            Input signal to process 
-        fs: float, optional
-            Sampling frequency of audio signal
-        nperseg: int, optional
-            Lenght of segment for 'welch' method, default is 256
-        nfft: int, optional
-            Length of FFT for periodogram method. If None, length of signal will be used.
-            Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.
-        method: {'welch', 'periodogram'}
-            Method used to estimate the power spectral density of the signal
-        tlims: tuple of ints or floats
-            Temporal limits to compute the power spectral density in seconds (s)
+    s: 1D array 
+        Input signal to process 
+    fs: float, optional
+        Sampling frequency of audio signal
+    nperseg: int, optional
+        Lenght of segment for 'welch' method, default is 256
+    nfft: int, optional
+        Length of FFT for periodogram method. If None, length of signal will be used.
+        Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.
+    method: {'welch', 'periodogram'}
+        Method used to estimate the power spectral density of the signal
+    tlims: tuple of ints or floats
+        Temporal limits to compute the power spectral density in seconds (s)
+    
     Returns
     -------
-        psd: pandas Series
-            Estimate of power spectral density
-        f_idx: pandas Series
-            Index of sample frequencies
+    psd: pandas Series
+        Estimate of power spectral density
+    f_idx: pandas Series
+        Index of sample frequencies
+    
     Example
     -------
-        s, fs = sound.load('spinetail.wav')
-        psd, f_idx = psd(s, fs, nperseg=512)
+    s, fs = sound.load('spinetail.wav')
+    psd, f_idx = psd(s, fs, nperseg=512)
     """
     
     if tlims is not None:

@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """ Created on Wed Oct 24 11:56:28 2018
-    Alpha indices used in ecoacoustics"""
+    Alpha indices used in ecoacoustics
+"""
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>        
 #
 # License: New BSD License
 
-"""****************************************************************************
-# -------------------       Load modules            ---------------------------
-****************************************************************************"""
+#***************************************************************************
+# -------------------       Load modules         ---------------------------
+#***************************************************************************
 
 #### Import external modules
 import numpy as np 
@@ -79,8 +81,9 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
     axis : integer, optional, default is 0
         Determine  along which axis the transformation is done.
         In case of matrix :
-            axis = 0 => transformation is done on column
-            axis = 1 => transformation is done on row 
+        axis = 0 => transformation is done on column
+        
+        axis = 1 => transformation is done on row 
     bin_min : scalar, optional, default is None
         This minimum value corresponds to the start of the first bin. 
         By default, the minimum value is the first value of an.
@@ -163,7 +166,7 @@ def skewness (x, axis=0):
         skewness of x 
         if x is a 1d vector => single value
         if x is a 2d matrix => array of values corresponding to the number of
-                               points in the other axis
+        points in the other axis
         
     """
     if isinstance(x, (np.ndarray)) == True:
@@ -186,8 +189,7 @@ def kurtosis (x, axis=0):
     Parameters
     ----------
     x : ndarray of floats 
-        1d signal or 2d matrix
-        
+        1d signal or 2d matrix       
     axis : integer, optional, default is 0
         select the axis to compute the kurtosis
                             
@@ -197,8 +199,7 @@ def kurtosis (x, axis=0):
         kurtosis of x 
         if x is a 1d vector => single value
         if x is a 2d matrix => array of values corresponding to the number of
-                               points in the other axis
-        
+        points in the other axis
     """
     if isinstance(x, (np.ndarray)) == True:
         Nf = x.shape[axis]
@@ -622,7 +623,7 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
         "shannon" : Shannon entropy is calculated on the vector of scores
         "simpson" : Simpson index is calculated on the vector of scores
         "invsimpson" : Inverse Simpson index is calculated on the vector 
-                        of scores
+        of scores
         
     Returns
     -------    
@@ -735,9 +736,9 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     return AEI
 
 #=============================================================================
-"""
-    Indices based on the entropy
-"""
+
+####    Indices based on the entropy
+
 def spectral_entropy (X, fn, frange=None, display=False) :
     """
     Spectral entropy : EAS, ECU, ECV, EPS, 
@@ -787,10 +788,10 @@ def spectral_entropy (X, fn, frange=None, display=False) :
     iBAND = index_bw(fn, frange)
 
     # TOWSEY & BUXTON : only on the bio band
-    """ EAS [TOWSEY] """
-    """ 
-        COMMENT : Result a bit different due to different Hilbert implementation
-    """
+    # EAS [TOWSEY] #
+     
+    ####  COMMENT : Result a bit different due to different Hilbert implementation
+    
     X_mean = mean(X[iBAND], axis=1)
     Hf = entropy(X_mean)
     EAS = 1 - Hf
@@ -838,9 +839,9 @@ def spectral_entropy (X, fn, frange=None, display=False) :
 
 
 #=============================================================================
-"""
-    Indices based on the energy
-"""
+
+####    Indices based on the energy
+
     
 def _energy_per_freqbin (PSDxx, fn, frange = (0, 20000), bin_step = 1000):
         
@@ -992,18 +993,20 @@ def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecolo
         
     return BI
     
-"""
-    Indices based on the acoustic event
+
+####    Indices based on the acoustic event  ####
     
-"""
+
 
 def acoustic_activity (xdB, dB_threshold, axis=1):
     """
     Acoustic Activity :
-        for each frequency bin :
-            - ACTfract : proportion (fraction) of points above the threshold 
-            - ACTcount : number of points above the threshold
-            - ACTmean : mean value (in dB) of the portion of the signal above the threhold
+    
+    for each frequency bin :
+    - ACTfract : proportion (fraction) of points above the threshold 
+    - ACTcount : number of points above the threshold
+    - ACTmean : mean value (in dB) of the portion of the signal above the threhold
+    
     Parameters
     ----------
     xdB : ndarray of floats
@@ -1038,8 +1041,8 @@ def acoustic_activity (xdB, dB_threshold, axis=1):
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
-        ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)
-        EVNsp [Towsey] : ACTcount (number of point value above the theshold)
+    ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)
+    EVNsp [Towsey] : ACTcount (number of point value above the theshold)
     """ 
     ACTfract, ACTcount = score(xdB, dB_threshold, axis=axis)
     ACTfract= ACTfract.tolist()

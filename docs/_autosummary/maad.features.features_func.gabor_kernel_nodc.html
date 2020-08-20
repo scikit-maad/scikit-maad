@@ -94,7 +94,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
@@ -210,48 +209,52 @@ Harmonic function consists of an imaginary sine function and a real
 cosine function. Spatial frequency is inversely proportional to the
 wavelength of the harmonic and to the standard deviation of a Gaussian
 kernel. The bandwidth is also inversely proportional to the standard
-deviation.
-Parameters
-———-
-frequency : float</p>
-<blockquote>
-<div><p>Spatial frequency of the harmonic function. Specified in pixels.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>theta<span class="classifier">float, optional</span></dt><dd><p>Orientation in radians. If 0, the harmonic is in the x-direction.</p>
+deviation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>frequency</strong><span class="classifier">float</span></dt><dd><p>Spatial frequency of the harmonic function. Specified in pixels.</p>
 </dd>
-<dt>bandwidth<span class="classifier">float, optional</span></dt><dd><p>The bandwidth captured by the filter. For fixed bandwidth, <cite>sigma_x</cite>
+<dt><strong>theta</strong><span class="classifier">float, optional</span></dt><dd><p>Orientation in radians. If 0, the harmonic is in the x-direction.</p>
+</dd>
+<dt><strong>bandwidth</strong><span class="classifier">float, optional</span></dt><dd><p>The bandwidth captured by the filter. For fixed bandwidth, <cite>sigma_x</cite>
 and <cite>sigma_y</cite> will decrease with increasing frequency. This value is
 ignored if <cite>sigma_x</cite> and <cite>sigma_y</cite> are set by the user.</p>
 </dd>
-<dt>gamma<span class="classifier">float, optional</span></dt><dd><p>gamma changes the aspect ratio (ellipsoidal) of the gabor filter. 
+<dt><strong>gamma</strong><span class="classifier">float, optional</span></dt><dd><p>gamma changes the aspect ratio (ellipsoidal) of the gabor filter. 
 By default, gamma=1 which means no aspect ratio (circle)
 if gamma&gt;1, the filter is larger (x-dir)
 if gamma&lt;1, the filter is higher (y-dir)
 This value is ignored if <cite>sigma_x</cite> and <cite>sigma_y</cite> are set by the user.</p>
 </dd>
-<dt>sigma_x, sigma_y<span class="classifier">float, optional</span></dt><dd><p>Standard deviation in x- and y-directions. These directions apply to
+<dt><strong>sigma_x, sigma_y</strong><span class="classifier">float, optional</span></dt><dd><p>Standard deviation in x- and y-directions. These directions apply to
 the kernel <em>before</em> rotation. If <cite>theta = pi/2</cite>, then the kernel is
 rotated 90 degrees so that <cite>sigma_x</cite> controls the <em>vertical</em> direction.</p>
 </dd>
-<dt>n_stds<span class="classifier">scalar, optional</span></dt><dd><p>The linear size of the kernel is n_stds (3 by default) standard
+<dt><strong>n_stds</strong><span class="classifier">scalar, optional</span></dt><dd><p>The linear size of the kernel is n_stds (3 by default) standard
 deviations</p>
 </dd>
-<dt>offset<span class="classifier">float, optional</span></dt><dd><p>Phase offset of harmonic function in radians.</p>
+<dt><strong>offset</strong><span class="classifier">float, optional</span></dt><dd><p>Phase offset of harmonic function in radians.</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>g_nodc<span class="classifier">complex 2d array</span></dt><dd><p>A single gabor kernel (complex) with no DC offset</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>g_nodc</strong><span class="classifier">complex 2d array</span></dt><dd><p>A single gabor kernel (complex) with no DC offset</p>
 </dd>
 </dl>
-<dl class="footnote brackets">
-<dt class="label" id="id1"><span class="brackets">1</span></dt>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r748e0a601cfd-1"><span class="brackets">1</span></dt>
 <dd><p><a class="reference external" href="http://en.wikipedia.org/wiki/Gabor_filter">http://en.wikipedia.org/wiki/Gabor_filter</a></p>
 </dd>
-<dt class="label" id="id2"><span class="brackets">2</span></dt>
+<dt class="label" id="r748e0a601cfd-2"><span class="brackets">2</span></dt>
 <dd><p><a class="reference external" href="http://mplab.ucsd.edu/tutorials/gabor.pdf">http://mplab.ucsd.edu/tutorials/gabor.pdf</a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">gabor_kernel</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>  
