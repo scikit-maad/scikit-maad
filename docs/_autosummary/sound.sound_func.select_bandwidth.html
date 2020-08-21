@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sound.sound_func.select_bandwidth &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sound.sound_func.spectrogram" href="sound.sound_func.spectrogram.html" />
+    <link rel="prev" title="sound.sound_func.preprocess_wrapper" href="sound.sound_func.preprocess_wrapper.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sound.sound_func.html">sound.sound_func</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.fir_filter.html">sound.sound_func.fir_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.iir_filter1d.html">sound.sound_func.iir_filter1d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.load.html">sound.sound_func.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.preprocess_wrapper.html">sound.sound_func.preprocess_wrapper</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound_func.select_bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram.html">sound.sound_func.spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram2.html">sound.sound_func.spectrogram2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogramPSD.html">sound.sound_func.spectrogramPSD</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Example.html">Example</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="sound.html">sound</a> &raquo;</li>
+        
+          <li><a href="sound.sound_func.html">sound.sound_func</a> &raquo;</li>
+        
+      <li>sound.sound_func.select_bandwidth</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/sound.sound_func.select_bandwidth.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sound-sound-func-select-bandwidth">
+<h1>sound.sound_func.select_bandwidth<a class="headerlink" href="#sound-sound-func-select-bandwidth" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="sound.sound_func.select_bandwidth">
+<code class="sig-prename descclassname">sound.sound_func.</code><code class="sig-name descname">select_bandwidth</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">fs</em>, <em class="sig-param">lfc=None</em>, <em class="sig-param">hfc=None</em>, <em class="sig-param">order=3</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound_func.html#select_bandwidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound_func.select_bandwidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>select a bandwidth of the signal</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>s</strong><span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the audiogram</p>
+</dd>
+<dt><strong>fs</strong><span class="classifier">int</span></dt><dd><p>The sampling frequency in Hz</p>
+</dd>
+<dt><strong>lfc</strong><span class="classifier">int, optional, default: None</span></dt><dd><p>Low frequency cut (Hz) in the range [0;fs/2]</p>
+</dd>
+<dt><strong>hfc</strong><span class="classifier">int, optional, default: None</span></dt><dd><p>High frequency cut (Hz) in the range [0;fs/2]
+if lfc and hfc are declared and lfc&lt;hfc, bandpass filter is performed</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">int, optional, default: 3</span></dt><dd><p>Order of the Butterworth filter.</p>
+</dd>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+</dd>
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+is added to the root filename.</p>
+</dd>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><p>savefilename : str, optional, default :’_filt_audiogram.png’
+Postfix of the figure filename
+<strong>************************************************</strong></p>
+<p>figsize : tuple of integers, optional, default: (4,10)
+width, height in inches.</p>
+<p>title : string, optional, default : ‘Spectrogram’
+title of the figure</p>
+<p>xlabel : string, optional, default : ‘Time [s]’
+label of the horizontal axis</p>
+<p>ylabel : string, optional, default : ‘Amplitude [AU]’
+label of the vertical axis</p>
+<p>cmap : string or Colormap object, optional, default is ‘gray’
+See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+in order to get all the  existing colormaps
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
+‘viridis’…</p>
+<p>vmin, vmax : scalar, optional, default: None
+<cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+luminance data.  Note if you pass a <cite>norm</cite> instance, your
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
+<dl class="simple">
+<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
+For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
+</dd>
+<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
+</dd>
+</dl>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>s_out</strong><span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the audiogram after being filtered</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sound.sound_func.spectrogram.html" class="btn btn-neutral float-right" title="sound.sound_func.spectrogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sound.sound_func.preprocess_wrapper.html" class="btn btn-neutral float-left" title="sound.sound_func.preprocess_wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

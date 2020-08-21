@@ -25,7 +25,7 @@ from scipy.stats import rankdata
 import matplotlib.pyplot as plt
 
 #### Importation from internal modules
-from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB
+#from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB
 
 # min value
 import sys

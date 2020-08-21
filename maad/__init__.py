@@ -31,9 +31,9 @@ ecoacoustics
 """
 
 from . import sound
-from . import rois
-from . import features
+#from . import rois
+#from . import features
 from . import cluster
 from . import util
-from . import ecoacoustics
+#from . import ecoacoustics
 #from . import spl

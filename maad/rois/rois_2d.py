@@ -32,7 +32,7 @@ import sys
 _MIN_ = sys.float_info.min
 
 # Import internal modules
-from ..util import plot1D, plot2D, linear_scale,read_audacity_annot,rand_cmap
+#from ..util import plot1D, plot2D, linear_scale,read_audacity_annot,rand_cmap
 
 #
 #====== TO DO

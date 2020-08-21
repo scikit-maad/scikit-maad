@@ -9,9 +9,9 @@ scikit-maad dependencies:
 - scikit-image >= 0.14
 
 
-pypi
-~~~~
-**scikit-maad** is hosted on PyPI. To install, run the following command in your Python environment:::
+**pypi**
+
+**scikit-maad** is hosted on PyPI. To install, run the following command in your Python environment: ::
 
     pip install scikit-maad
 
@@ -19,7 +19,7 @@ or::
 
     sudo pip install scikit-maad
 
-To install the latest version from source clone the master repository and from the top-level folder call:::
+To install the latest version from source clone the master repository and from the top-level folder call: ::
 
     python setup.py install
 

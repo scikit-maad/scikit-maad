@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-""" Multiresolution Analysis of Acoustic Diversity
-    functions for processing sound """
+""" 
+Multiresolution Analysis of Acoustic Diversity
+functions for processing sound 
+"""
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
@@ -15,7 +17,7 @@ import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
 from scipy.signal import butter, sosfilt, hann, stft, convolve, iirfilter, get_window
-from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
+#from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
 
 
 def load(filename, channel='left', detrend=True, verbose=False,

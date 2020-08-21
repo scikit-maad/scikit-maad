@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-""" Sound functions for scikit-maad
+""" 
+Sound functions for scikit-maad
 Load, filter and transform 1D audio signals
 
 """

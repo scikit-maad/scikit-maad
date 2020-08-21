@@ -54,9 +54,6 @@
           
 
           
-            
-            <img src="_static/logo_maad.png" class="logo" alt="Logo"/>
-          
           </a>
 
           
@@ -88,13 +85,23 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">Getting Started:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="_autosummary/maad.html">maad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/cluster.html">cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/rois.html">rois</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
 </ul>
 
             
@@ -162,15 +169,16 @@
             
   <div class="section" id="welcome-to-scikit-maad-s-documentation">
 <h1>Welcome to scikit-maad’s documentation!<a class="headerlink" href="#welcome-to-scikit-maad-s-documentation" title="Permalink to this headline">¶</a></h1>
-<img alt="_images/logo_maad.png" src="_images/logo_maad.png" />
-<p><strong>scikit-maad</strong> is a free, open-source and modular toolbox to <strong>analyze ecoacoustics datasets</strong> in Python 3. This package was designed to bring flexibility to (1) <strong>find regions of interest</strong>, and (2) to compute <strong>acoustic features</strong> in audio recordings. This workflow opens the possibility to use powerfull <strong>machine learning</strong> algorithms through <strong>scikit-learn</strong>, allowing to identify key patterns in all kind of soundscapes.</p>
+<p><strong>scikit-maad</strong> is a free, open-source and modular toolbox to <strong>analyze
+ecoacoustics datasets</strong> in Python 3. This package was designed to bring
+flexibility to (1) <strong>find regions of interest</strong>, and (2) to compute <strong>acoustic
+features</strong> in audio recordings. This workflow opens the possibility to use
+powerfull <strong>machine learning</strong> algorithms through <strong>scikit-learn</strong>,
+allowing to identify key patterns in all kind of soundscapes.</p>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Getting Started:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install.html#pypi">pypi</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#overview">Overview</a></li>
 </ul>
@@ -183,11 +191,32 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/maad.html#module-maad" title="maad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad</span></code></a></p></td>
-<td><p>Multiresolution Analysis of Acoustic Diversity Scikit (Toolbox for SciPy)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/ecoacoustics.html#module-ecoacoustics" title="ecoacoustics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecoacoustics</span></code></a></p></td>
+<td><p>ecoacoustics functions for scikit-maad Collection of functions to calculate alpha indices</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/cluster.html#module-cluster" title="cluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cluster</span></code></a></p></td>
+<td><p>cluster functions for scikit-maad Cluster regions of interest using High Dimensional Data Clsutering (HDDC).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/util.html#module-util" title="util"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util</span></code></a></p></td>
+<td><p>Utility functions for scikit-maad Collection of miscelaneous functions that help to simplify the framework</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/features.html#module-features" title="features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">features</span></code></a></p></td>
+<td><p>feature functions for scikit-maad Methods to compute multiple descriptors to characterize sounds</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/sound.html#module-sound" title="sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound</span></code></a></p></td>
+<td><p>Sound functions for scikit-maad Load, filter and transform 1D audio signals</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/rois.html#module-rois" title="rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rois</span></code></a></p></td>
+<td><p>rois functions for scikit-maad Collection of methods to find regions of interest in 1D and 2D signals.</p></td>
 </tr>
 </tbody>
 </table>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Example Gallery:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Example.html">Example</a></li>
+</ul>
+</div>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
