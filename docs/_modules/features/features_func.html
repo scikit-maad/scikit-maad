@@ -1121,13 +1121,13 @@
 <span class="sd">    feature_rois: pandas Dataframe</span>
 <span class="sd">        A dataframe with each column corresponding to a feature</span>
 <span class="sd">    </span>
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-<span class="sd">    s, fs = sound.load(&#39;spinetail.wav&#39;)        </span>
-<span class="sd">    rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)</span>
-<span class="sd">    opt_spec = {&#39;nperseg&#39;: 512, &#39;overlap&#39;: 0.5}</span>
-<span class="sd">    opt_shape = opt_shape_presets(&#39;med&#39;)</span>
-<span class="sd">    features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;spinetail.wav&#39;)        </span>
+<span class="sd">    &gt;&gt;&gt; rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)</span>
+<span class="sd">    &gt;&gt;&gt; opt_spec = {&#39;nperseg&#39;: 512, &#39;overlap&#39;: 0.5}</span>
+<span class="sd">    &gt;&gt;&gt; opt_shape = opt_shape_presets(&#39;med&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, </span>
 <span class="sd">    opt_shape, flims)</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>

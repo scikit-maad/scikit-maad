@@ -185,7 +185,7 @@
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span> 
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">butter</span><span class="p">,</span> <span class="n">sosfilt</span><span class="p">,</span> <span class="n">hann</span><span class="p">,</span> <span class="n">stft</span><span class="p">,</span> <span class="n">convolve</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">get_window</span>
 <span class="c1">#from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB</span>
-
+<span class="kn">from</span> <span class="nn">maad.util.util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">crop_image</span><span class="p">,</span> <span class="n">linear_scale</span><span class="p">,</span> <span class="n">linear2dB</span>
 
 <div class="viewcode-block" id="load"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.load.html#sound.sound_func.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
          <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
@@ -219,10 +219,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">           </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_audiogram.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">         </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
@@ -458,12 +458,10 @@
 <span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
-<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions   </span>
 <span class="sd">        </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
 <span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
@@ -634,10 +632,9 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">           </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
 <span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
@@ -846,10 +843,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">           </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -1074,10 +1071,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">            </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>

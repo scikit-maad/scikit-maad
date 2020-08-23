@@ -193,6 +193,9 @@
 
 <span class="c1">#### Importation from internal modules</span>
 <span class="c1">#from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB</span>
+<span class="c1">#import sys, os</span>
+<span class="c1">#sys.path.append(os.path.join(os.path.dirname(sys.path[0]),&#39;util&#39;))</span>
+<span class="kn">from</span> <span class="nn">maad.util.util</span> <span class="kn">import</span> <span class="n">rle</span><span class="p">,</span> <span class="n">index_bw</span><span class="p">,</span> <span class="n">linear_scale</span><span class="p">,</span> <span class="n">dB2linear</span><span class="p">,</span> <span class="n">linear2dB</span>
 
 <span class="c1"># min value</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -405,8 +408,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    y : float or ndarray of floats</span>
 
-<span class="sd">    Reference</span>
-<span class="sd">    ---------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Described in [Ramsay JO, Silverman BW (2005) Functional data analysis.]</span>
 <span class="sd">    Ported from SEEWAVE R Package</span>
 <span class="sd">    &quot;&quot;&quot;</span>      
@@ -511,8 +514,8 @@
 <span class="sd">    env : ndarray of floats</span>
 <span class="sd">        Envelope of the sound (1d) </span>
 <span class="sd">        </span>
-<span class="sd">    Reference</span>
-<span class="sd">    ---------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Fast calculation is inspired by the work of Towsey.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fast&#39;</span> <span class="p">:</span>
@@ -582,8 +585,8 @@
 <span class="sd">    G: scalar</span>
 <span class="sd">        Gini value</span>
 <span class="sd">        </span>
-<span class="sd">    Reference</span>
-<span class="sd">    ---------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Ported from ineq library in R</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -638,8 +641,8 @@
 <span class="sd">    AR : 1d ndarray of floats</span>
 <span class="sd">        Vector of acoustic richenss index</span>
 <span class="sd">        </span>
-<span class="sd">    Reference</span>
-<span class="sd">    ---------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Described in [Depraetere &amp; al. 2012]</span>
 <span class="sd">    Ported from SEEWAVE R package</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
@@ -685,8 +688,8 @@
 <span class="sd">        !!! Seulement sum donne un résultat independant de N (pour la FFT)  </span>
 <span class="sd">        !!! et donc de df et dt</span>
 <span class="sd">        </span>
-<span class="sd">    Reference</span>
-<span class="sd">    ---------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing </span>
 <span class="sd">    activity of an avian community: the Acoustic Complexity Index (ACI). </span>
 <span class="sd">    Ecological Indicators, 11, 868-873.</span>
@@ -798,8 +801,8 @@
 <span class="sd">        Acoustic Diversity Index of the spectrogram (ie. index of the vector </span>
 <span class="sd">        of scores)</span>
 <span class="sd">    </span>
-<span class="sd">    Reference</span>
-<span class="sd">    --------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. </span>
 <span class="sd">    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -871,8 +874,8 @@
 <span class="sd">    AEI : scalar </span>
 <span class="sd">        Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)</span>
 <span class="sd">        </span>
-<span class="sd">    Reference </span>
-<span class="sd">    ---------</span>
+<span class="sd">    References </span>
+<span class="sd">    ----------</span>
 <span class="sd">    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. </span>
 <span class="sd">    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -939,8 +942,8 @@
 <span class="sd">        KURT : Kurtosis of spectral maxima</span>
 <span class="sd">        SKEW : Skewness of spectral maxima</span>
 <span class="sd">        </span>
-<span class="sd">    Reference </span>
-<span class="sd">    ---------</span>
+<span class="sd">    References </span>
+<span class="sd">    ----------</span>
 <span class="sd">    Credit : </span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1048,8 +1051,8 @@
 <span class="sd">        if step is None, keep the original frequency resolution, otherwise,</span>
 <span class="sd">        the spectrogram is converted into new frequency bins</span>
 <span class="sd">        </span>
-<span class="sd">    Returns :</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    NDSI : scalar</span>
 <span class="sd">        (bioPh-antroPh)/(bioPh+antroPh)</span>
 <span class="sd">    ratioBA : scalar</span>
@@ -1059,8 +1062,8 @@
 <span class="sd">    bioPh : scalar</span>
 <span class="sd">        Acoustic energy in the biophonic bandwidth</span>
 <span class="sd">    </span>
-<span class="sd">    Reference :</span>
-<span class="sd">    -----------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. </span>
 <span class="sd">    The Remote Environmental Assessment Laboratory&#39;s Acoustic Library: An Archive </span>
 <span class="sd">    for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.</span>
@@ -1106,26 +1109,25 @@
 <span class="sd">    R_compatible : Boolean, optional, default is False</span>
 <span class="sd">        if True, the result is similar to the package SoundEcology in R but </span>
 <span class="sd">    </span>
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    BI : scalar</span>
 <span class="sd">        Bioacoustics Index</span>
 <span class="sd">    </span>
-<span class="sd">    Reference </span>
-<span class="sd">    ---------</span>
+<span class="sd">    References </span>
+<span class="sd">    ----------</span>
 <span class="sd">    Reference: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic </span>
 <span class="sd">    invasion resistance in Hawaii: bioacoustics, field surveys, and airborne </span>
 <span class="sd">    remote sensing. Ecological Applications 17: 2137-2144.</span>
 <span class="sd">    </span>
 <span class="sd">    Ported and modified from the soundecology R package.</span>
 <span class="sd">    </span>
-<span class="sd">    Erratum</span>
-<span class="sd">    -------</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----    </span>
 <span class="sd">    Soundecology compatible version</span>
-<span class="sd">        - average of dB value</span>
-<span class="sd">        - remove negative value in order to get positive values only</span>
-<span class="sd">        - dividing by the frequency resolution df instead of multiplication</span>
-<span class="sd">        ...</span>
+<span class="sd">    - average of dB value</span>
+<span class="sd">    - remove negative value in order to get positive values only</span>
+<span class="sd">    - dividing by the frequency resolution df instead of multiplication</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     
     <span class="c1"># select the indices corresponding to the frequency bins range</span>
@@ -1201,8 +1203,8 @@
 <span class="sd">    ACTmean: scalar</span>
 <span class="sd">        mean value (in dB) of the portion of the signal above the threhold</span>
 <span class="sd">        </span>
-<span class="sd">    Reference </span>
-<span class="sd">    ---------</span>
+<span class="sd">    References </span>
+<span class="sd">    ----------</span>
 <span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
 <span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
@@ -1249,8 +1251,8 @@
 <span class="sd">    EVNcount: scalar</span>
 <span class="sd">    EVN: ndarray of floats </span>
 
-<span class="sd">    Reference </span>
-<span class="sd">    ---------</span>
+<span class="sd">    References </span>
+<span class="sd">    ----------</span>
 <span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
 <span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>

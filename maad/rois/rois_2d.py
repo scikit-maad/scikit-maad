@@ -33,7 +33,8 @@ _MIN_ = sys.float_info.min
 
 # Import internal modules
 #from ..util import plot1D, plot2D, linear_scale,read_audacity_annot,rand_cmap
-
+from maad.util.util import plot1D, plot2D, linear_scale, rand_cmap
+from maad.util.parser_func import read_audacity_annot
 #
 #====== TO DO
 #
@@ -223,10 +224,10 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+            
         savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
         Postfix of the figure filename
-        **************************************************** 
+        
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -412,10 +413,10 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+            
         savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
         Postfix of the figure filename
-        **************************************************** 
+         
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -533,10 +534,10 @@ def double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefi
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+            
         savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
         Postfix of the figure filename
-        **************************************************** 
+         
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -579,8 +580,8 @@ def double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefi
     -------
     im_out: binary image 
     
-    References :
-    ------------
+    References
+    ----------
     from MATLAB: Threshold estimation (from Oliveira et al, 2015)
     Adapted by S. Haupert Dec 12, 2017
     """
@@ -686,10 +687,10 @@ def double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=N
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+          
         savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
         Postfix of the figure filename
-        **************************************************** 
+        
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -732,8 +733,8 @@ def double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=N
     -------
     im_out: binary image 
     
-    References :
-    ------------
+    References
+    ----------
     from MATLAB: Threshold estimation (from Oliveira et al, 2015)
     Adapted by S. Haupert Dec 12, 2017
     """
@@ -876,10 +877,10 @@ def select_rois_auto(im_bin, ext=None, min_roi=None ,max_roi=None, display=False
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+           
         savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
         Postfix of the figure filename
-        **************************************************** 
+        
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -1034,10 +1035,10 @@ def select_rois_man(im_bin, ext, filename, software='audacity', mask=True,
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+           
         savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
         Postfix of the figure filename
-        **************************************************** 
+         
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -1297,10 +1298,10 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+           
         savefilename : str, optional, default :'_spectro_overlayrois.png'
         Postfix of the figure filename
-        **************************************************** 
+        
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         

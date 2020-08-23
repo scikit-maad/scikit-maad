@@ -18,7 +18,7 @@ import scipy as sp
 from scipy.io import wavfile 
 from scipy.signal import butter, sosfilt, hann, stft, convolve, iirfilter, get_window
 #from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
-
+from maad.util.util import plot1D, plot2D, crop_image, linear_scale, linear2dB
 
 def load(filename, channel='left', detrend=True, verbose=False,
          display=False, savefig=None, **kwargs): 
@@ -52,10 +52,10 @@ def load(filename, channel='left', detrend=True, verbose=False,
         is added to the root filename.
         
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+           
         savefilename : str, optional, default :'_audiogram.png'
         Postfix of the figure filename
-        **************************************************** 
+         
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         title : string, optional, default : 'Spectrogram'
@@ -291,12 +291,10 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
         
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions   
         
         savefilename : str, optional, default :'_filt_audiogram.png'
         Postfix of the figure filename
-        **************************************************** 
         
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
@@ -467,10 +465,9 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+           
         savefilename : str, optional, default :'_filt_audiogram.png'
         Postfix of the figure filename
-        **************************************************** 
         
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
@@ -679,10 +676,10 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+           
         savefilename : str, optional, default :'_filt_audiogram.png'
         Postfix of the figure filename
-        **************************************************** 
+        
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         
@@ -907,10 +904,10 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
         is added to the root filename.
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
+            
         savefilename : str, optional, default :'_filt_audiogram.png'
         Postfix of the figure filename
-        **************************************************** 
+        
         figsize : tuple of integers, optional, default: (4,10)
         width, height in inches.  
         

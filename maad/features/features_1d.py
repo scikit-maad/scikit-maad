@@ -41,10 +41,10 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     f_idx: pandas Series
         Index of sample frequencies
     
-    Example
-    -------
-    s, fs = sound.load('spinetail.wav')
-    psd, f_idx = psd(s, fs, nperseg=512)
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')
+    >>> psd, f_idx = psd(s, fs, nperseg=512)
     """
     
     if tlims is not None:

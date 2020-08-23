@@ -180,15 +180,17 @@ def linear_scale(x, minval= 0.0, maxval=1.0):
     y : array-like
         numpy.array like with numbers  
         
-    -------
-    Example
-    -------
-        a = np.array([1,2,3,4,5]);
-        a_out = scaledata(a,0,1);
+    Examples
+    --------
+    a = np.array([1,2,3,4,5]);
+    
+    a_out = scaledata(a,0,1);
+    
     Out: 
-        array([0.  , 0.25, 0.5 , 0.75, 1.  ])
+    
+    array([0.  , 0.25, 0.5 , 0.75, 1.  ])
         
-    References:
+    References
     ----------
     Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
     Adapted by S. Haupert Dec 12, 2017 for Python
@@ -712,8 +714,8 @@ def rois_to_audacity(fname, onset, offset):
         offset: int, float array_like
             output of a detection method (e.g. find_rois_1d)
             
-        Return
-        ------
+        Returns
+        -------
         Returns a csv file
             
     """

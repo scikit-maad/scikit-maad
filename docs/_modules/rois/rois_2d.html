@@ -200,7 +200,8 @@
 
 <span class="c1"># Import internal modules</span>
 <span class="c1">#from ..util import plot1D, plot2D, linear_scale,read_audacity_annot,rand_cmap</span>
-
+<span class="kn">from</span> <span class="nn">maad.util.util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">linear_scale</span><span class="p">,</span> <span class="n">rand_cmap</span>
+<span class="kn">from</span> <span class="nn">maad.util.parser_func</span> <span class="kn">import</span> <span class="n">read_audacity_annot</span>
 <span class="c1">#</span>
 <span class="c1">#====== TO DO</span>
 <span class="c1">#</span>
@@ -390,10 +391,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">            </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -579,10 +580,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">            </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">         </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -700,10 +701,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">            </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">         </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -746,8 +747,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    im_out: binary image </span>
 <span class="sd">    </span>
-<span class="sd">    References :</span>
-<span class="sd">    ------------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
 <span class="sd">    Adapted by S. Haupert Dec 12, 2017</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -853,10 +854,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">          </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -899,8 +900,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    im_out: binary image </span>
 <span class="sd">    </span>
-<span class="sd">    References :</span>
-<span class="sd">    ------------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
 <span class="sd">    Adapted by S. Haupert Dec 12, 2017</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1043,10 +1044,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">           </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -1201,10 +1202,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">           </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">         </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>
@@ -1464,10 +1465,10 @@
 <span class="sd">        is added to the root filename.</span>
 <span class="sd">        </span>
 <span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
-<span class="sd">        ****************************************************    </span>
+<span class="sd">           </span>
 <span class="sd">        savefilename : str, optional, default :&#39;_spectro_overlayrois.png&#39;</span>
 <span class="sd">        Postfix of the figure filename</span>
-<span class="sd">        **************************************************** </span>
+<span class="sd">        </span>
 <span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
 <span class="sd">        width, height in inches.  </span>
 <span class="sd">        </span>

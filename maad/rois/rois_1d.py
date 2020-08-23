@@ -18,8 +18,8 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     """
     Filter 1D signal with a Kaiser-windowed filter
     
-    Parameters:
-    -----------
+    Parameters
+    ----------
     s : ndarray
         input 1D signal
     cutoff : ndarray
@@ -138,8 +138,8 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     rois : pandas DataFrame
         an object with temporal and frequencial limits of regions of interest            
     
-    Reference
-    ---------
+    References
+    ----------
     [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
     """
     # filter signal

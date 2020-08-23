@@ -954,13 +954,13 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     feature_rois: pandas Dataframe
         A dataframe with each column corresponding to a feature
     
-    Example
-    -------
-    s, fs = sound.load('spinetail.wav')        
-    rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)
-    opt_spec = {'nperseg': 512, 'overlap': 0.5}
-    opt_shape = opt_shape_presets('med')
-    features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, 
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')        
+    >>> rois_tf = find_rois_cwt(s, fs, flims=(3000, 8000), tlen=2, th=0.003)
+    >>> opt_spec = {'nperseg': 512, 'overlap': 0.5}
+    >>> opt_shape = opt_shape_presets('med')
+    >>> features_rois = compute_rois_features(s, fs, rois_tf, opt_spec, 
     opt_shape, flims)
         
     """

@@ -26,6 +26,9 @@ import matplotlib.pyplot as plt
 
 #### Importation from internal modules
 #from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB
+#import sys, os
+#sys.path.append(os.path.join(os.path.dirname(sys.path[0]),'util'))
+from maad.util.util import rle, index_bw, linear_scale, dB2linear, linear2dB
 
 # min value
 import sys
@@ -238,8 +241,8 @@ def roughness (x, norm=None, axis=0) :
     -------
     y : float or ndarray of floats
 
-    Reference
-    ---------
+    References
+    ----------
     Described in [Ramsay JO, Silverman BW (2005) Functional data analysis.]
     Ported from SEEWAVE R Package
     """      
@@ -344,8 +347,8 @@ def envelope (wave, mode='fast', N=512):
     env : ndarray of floats
         Envelope of the sound (1d) 
         
-    Reference
-    ---------
+    References
+    ----------
     Fast calculation is inspired by the work of Towsey.
     """
     if mode == 'fast' :
@@ -415,8 +418,8 @@ def gini(x, corr=False):
     G: scalar
         Gini value
         
-    Reference
-    ---------
+    References
+    ----------
     Ported from ineq library in R
     """
     if sum(x) == 0:
@@ -471,8 +474,8 @@ def acousticRichnessIndex (Ht_array, M_array):
     AR : 1d ndarray of floats
         Vector of acoustic richenss index
         
-    Reference
-    ---------
+    References
+    ----------
     Described in [Depraetere & al. 2012]
     Ported from SEEWAVE R package
     """    
@@ -518,8 +521,8 @@ def acousticComplexityIndex(Sxx, norm ='global'):
         !!! Seulement sum donne un résultat independant de N (pour la FFT)  
         !!! et donc de df et dt
         
-    Reference
-    ---------
+    References
+    ----------
     Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
     activity of an avian community: the Acoustic Complexity Index (ACI). 
     Ecological Indicators, 11, 868-873.
@@ -631,8 +634,8 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
         Acoustic Diversity Index of the spectrogram (ie. index of the vector 
         of scores)
     
-    Reference
-    --------
+    References
+    ----------
     Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
     A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
     """
@@ -704,8 +707,8 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     AEI : scalar 
         Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)
         
-    Reference 
-    ---------
+    References 
+    ----------
     Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
     A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
     """
@@ -772,8 +775,8 @@ def spectral_entropy (X, fn, frange=None, display=False) :
         KURT : Kurtosis of spectral maxima
         SKEW : Skewness of spectral maxima
         
-    Reference 
-    ---------
+    References 
+    ----------
     Credit : 
     
     """
@@ -881,8 +884,8 @@ def soundscapeIndex (Sxx,fn,frange_bioPh=(1000,10000),frange_antroPh=(0,1000),
         if step is None, keep the original frequency resolution, otherwise,
         the spectrogram is converted into new frequency bins
         
-    Returns :
-    ---------
+    Returns
+    -------
     NDSI : scalar
         (bioPh-antroPh)/(bioPh+antroPh)
     ratioBA : scalar
@@ -892,8 +895,8 @@ def soundscapeIndex (Sxx,fn,frange_bioPh=(1000,10000),frange_antroPh=(0,1000),
     bioPh : scalar
         Acoustic energy in the biophonic bandwidth
     
-    Reference :
-    -----------
+    References
+    ----------
     Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
     The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive 
     for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
@@ -939,26 +942,25 @@ def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecolo
     R_compatible : Boolean, optional, default is False
         if True, the result is similar to the package SoundEcology in R but 
     
-    Returns:
-    --------
+    Returns
+    -------
     BI : scalar
         Bioacoustics Index
     
-    Reference 
-    ---------
+    References 
+    ----------
     Reference: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
     invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
     remote sensing. Ecological Applications 17: 2137-2144.
     
     Ported and modified from the soundecology R package.
     
-    Erratum
-    -------
+    Notes
+    -----    
     Soundecology compatible version
-        - average of dB value
-        - remove negative value in order to get positive values only
-        - dividing by the frequency resolution df instead of multiplication
-        ...
+    - average of dB value
+    - remove negative value in order to get positive values only
+    - dividing by the frequency resolution df instead of multiplication
     """    
     
     # select the indices corresponding to the frequency bins range
@@ -1034,8 +1036,8 @@ def acoustic_activity (xdB, dB_threshold, axis=1):
     ACTmean: scalar
         mean value (in dB) of the portion of the signal above the threhold
         
-    Reference 
-    ---------
+    References 
+    ----------
     Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
     from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
@@ -1082,8 +1084,8 @@ def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     EVNcount: scalar
     EVN: ndarray of floats 
 
-    Reference 
-    ---------
+    References 
+    ----------
     Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
     from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
