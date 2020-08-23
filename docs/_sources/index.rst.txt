@@ -26,12 +26,14 @@ allowing to identify key patterns in all kind of soundscapes.
    :caption: Documentation:
    :recursive:
    
-   ecoacoustics
    cluster
-   util
+   ecoacoustics
    features
-   sound
    rois
+   sound
+   util
+   
+   
    
 .. toctree::
    :maxdepth: 2
