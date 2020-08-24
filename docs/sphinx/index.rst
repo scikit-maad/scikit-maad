@@ -46,7 +46,7 @@ developped and a stable release will be available by the end of 2019.
    
 .. toctree::
    :maxdepth: 2
-   :caption: Example Gallery:
+   :caption: Examples Gallery:
 
    _auto_examples/index
    
