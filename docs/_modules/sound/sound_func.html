@@ -327,6 +327,8 @@
 <div class="viewcode-block" id="iir_filter1d"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.iir_filter1d.html#sound.sound_func.iir_filter1d">[docs]</a><span class="k">def</span> <span class="nf">iir_filter1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fcut</span><span class="p">,</span> <span class="n">forder</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span><span class="s1">&#39;butter&#39;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
               <span class="n">rs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    x : array_like</span>
 <span class="sd">        1d vector of scalar to be filtered</span>
 <span class="sd">        </span>
@@ -347,11 +349,16 @@
 <span class="sd">        is &#39;butter&#39;</span>
 <span class="sd">        </span>
 <span class="sd">    The type of IIR filter to design:</span>
-<span class="sd">            Butterworth : &#39;butter&#39;</span>
-<span class="sd">            Chebyshev I : &#39;cheby1&#39;</span>
-<span class="sd">            Chebyshev II : &#39;cheby2&#39;</span>
-<span class="sd">            Cauer/elliptic: &#39;ellip&#39;</span>
-<span class="sd">            Bessel/Thomson: &#39;bessel&#39;</span>
+<span class="sd">    </span>
+<span class="sd">        Butterworth : &#39;butter&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Chebyshev I : &#39;cheby1&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Chebyshev II : &#39;cheby2&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Cauer/elliptic: &#39;ellip&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Bessel/Thomson: &#39;bessel&#39;</span>
 <span class="sd">            </span>
 <span class="sd">    rp : float, optional</span>
 <span class="sd">        For Chebyshev and elliptic filters, provides the maximum ripple in </span>
@@ -370,6 +377,8 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="fir_filter"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.fir_filter.html#sound.sound_func.fir_filter">[docs]</a><span class="k">def</span> <span class="nf">fir_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    x : array_like</span>
 <span class="sd">        1d vector or 2d matrix of scalars to be filtered</span>
 <span class="sd">   </span>

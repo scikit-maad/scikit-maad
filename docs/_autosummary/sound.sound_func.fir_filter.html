@@ -190,10 +190,12 @@
 <dl class="py function">
 <dt id="sound.sound_func.fir_filter">
 <code class="sig-prename descclassname">sound.sound_func.</code><code class="sig-name descname">fir_filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">kernel</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound_func.html#fir_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound_func.fir_filter" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>x<span class="classifier">array_like</span></dt><dd><p>1d vector or 2d matrix of scalars to be filtered</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>1d vector or 2d matrix of scalars to be filtered</p>
 </dd>
-<dt>kernel<span class="classifier">array_like or tuple</span></dt><dd><p>Pass directly the kernel (1d vector of scalars) 
+<dt><strong>kernel</strong><span class="classifier">array_like or tuple</span></dt><dd><p>Pass directly the kernel (1d vector of scalars) 
 Or pass the arguments in a tuple to create a kernel. Arguments are:</p>
 <ul class="simple">
 <li><p>window : string, float, or tuple. The type of window to create.</p></li>
@@ -208,15 +210,15 @@ Or pass the arguments in a tuple to create a kernel. Arguments are:</p>
 <li><p>(tukey, taper fraction)</p></li>
 </ul>
 </dd>
-<dt>Nx<span class="classifier">int</span></dt><dd><p>The number of samples in the window.</p>
+<dt><strong>Nx</strong><span class="classifier">int</span></dt><dd><p>The number of samples in the window.</p>
+</dd>
+<dt><strong>Examples:</strong></dt><dd></dd>
+<dt><strong>kernel = (‘boxcar’, 9)</strong></dt><dd></dd>
+<dt><strong>kernel = ((‘gaussian’, 0.5), 5)</strong></dt><dd></dd>
+<dt><strong>kernel = [1 3 5 7 5 3 1]</strong></dt><dd></dd>
+<dt><strong>axis</strong><span class="classifier">int</span></dt><dd><p>Determine along which axis is performed the filtering in case of 2d matrix</p>
 </dd>
 </dl>
-<p>Examples:
-kernel = (‘boxcar’, 9)
-kernel = ((‘gaussian’, 0.5), 5)
-kernel = [1 3 5 7 5 3 1]</p>
-<dl class="simple">
-<dt>axis<span class="classifier">int</span></dt><dd><p>Determine along which axis is performed the filtering in case of 2d matrix</p>
 </dd>
 </dl>
 </dd></dl>

@@ -203,17 +203,15 @@
 <code class="sig-prename descclassname">util.util.</code><code class="sig-name descname">dB2linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'amplitude'</span></em>, <em class="sig-param"><span class="n">db_gain</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/util.html#dB2linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.util.dB2linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform linear date into decibel scale within the dB range (db_range).
 A gain (db_gain) could be added at the end.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>data in dB to rescale in linear</p>
 </dd>
 <dt><strong>mode</strong><span class="classifier">str, default is ‘amplitude’</span></dt><dd><p>select ‘amplitude’ or ‘power’ to compute the corresponding dB</p>
 </dd>
-<dt><strong>db_gain</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><dl class="simple">
-<dt>Gain added to the results </dt><dd><p>–&gt; 20*log10(x) + db_gain</p>
-</dd>
-</dl>
+<dt><strong>db_gain</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><p>Gain added to the results</p>
+<p>–&gt; 20*log10(x) + db_gain</p>
 </dd>
 </dl>
 </dd>

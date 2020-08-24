@@ -388,6 +388,7 @@
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain added to the results </span>
 <span class="sd">        amplitude --&gt; 20*log10(x) + db_gain  </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : scalars</span>
@@ -433,7 +434,8 @@
 <span class="sd">        select &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain added to the results </span>
-<span class="sd">                --&gt; 20*log10(x) + db_gain</span>
+<span class="sd">        </span>
+<span class="sd">        --&gt; 20*log10(x) + db_gain</span>
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -769,7 +771,7 @@
 <span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
 <span class="sd">            label of the vertical axis</span>
 <span class="sd">        </span>
-<span class="sd">        -cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
 <span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
 <span class="sd">            in order to get all the  existing colormaps</span>
 <span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>

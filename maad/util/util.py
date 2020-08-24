@@ -221,6 +221,7 @@ def linear2dB (x, mode = 'amplitude', db_range=None, db_gain=0):
     db_gain : scalar, optional, default is 0
         Gain added to the results 
         amplitude --> 20*log10(x) + db_gain  
+    
     Returns
     -------
     y : scalars
@@ -266,7 +267,8 @@ def dB2linear (x, mode = 'amplitude',  db_gain=0):
         select 'amplitude' or 'power' to compute the corresponding dB
     db_gain : scalar, optional, default is 0
         Gain added to the results 
-                --> 20*log10(x) + db_gain
+        
+        --> 20*log10(x) + db_gain
                 
     Returns
     -------
@@ -602,7 +604,7 @@ def plot2D(im,ax=None,**kwargs):
         - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
         
-        -cmap : string or Colormap object, optional, default is 'gray'
+        - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 

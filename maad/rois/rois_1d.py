@@ -31,7 +31,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     bandpass : bool
         bandpass (True) or bandreject (False) filter, default is bandpass
     
-    Returns:
+    Returns
     -------
     s_filt : array 
         signal filtered

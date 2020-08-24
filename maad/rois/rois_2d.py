@@ -367,12 +367,13 @@ def median_equalizer (x):
     ----------
     x : 2D numpy array 
         Original spectrogram (or image)
+    
     Returns
     -------
     y : 1D numpy array 
         Ouput spectrogram (or image) without background noise
     
-    References:
+    References
     ----------
     .. [1] This function has been proposed first by Carol BEDOYA <carol.bedoya@pg.canterbury.ac.nz>
        Adapted by S. Haupert Oct 9, 2018 for Python

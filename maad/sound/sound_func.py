@@ -160,6 +160,8 @@ def load(filename, channel='left', detrend=True, verbose=False,
 def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None, 
               rs=None):
     """
+    Parameters
+    ----------
     x : array_like
         1d vector of scalar to be filtered
         
@@ -180,11 +182,16 @@ def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None
         is 'butter'
         
     The type of IIR filter to design:
-            Butterworth : 'butter'
-            Chebyshev I : 'cheby1'
-            Chebyshev II : 'cheby2'
-            Cauer/elliptic: 'ellip'
-            Bessel/Thomson: 'bessel'
+    
+        Butterworth : 'butter'
+        
+        Chebyshev I : 'cheby1'
+        
+        Chebyshev II : 'cheby2'
+        
+        Cauer/elliptic: 'ellip'
+        
+        Bessel/Thomson: 'bessel'
             
     rp : float, optional
         For Chebyshev and elliptic filters, provides the maximum ripple in 
@@ -203,6 +210,8 @@ def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None
 #=============================================================================
 def fir_filter(x, kernel, axis=0):
     """
+    Parameters
+    ----------
     x : array_like
         1d vector or 2d matrix of scalars to be filtered
    
