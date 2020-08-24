@@ -1,4 +1,4 @@
-This is my gallery
-==================
+scikit-MAAD examples gallery
+============================
 
-Below is a gallery of examples
+These scripts are examples of how to use scikit-MAAD package.

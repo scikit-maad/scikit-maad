@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-This script gives an example of how to use scikit-MAAD package
-==============================================================
+Wrapper - This script gives an example of how to use scikit-MAAD package
+========================================================================
 Created on Mon Aug  6 17:59:44 2018
 @author: haupert
 """

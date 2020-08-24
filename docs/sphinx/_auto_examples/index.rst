@@ -4,21 +4,20 @@
 
 .. _sphx_glr__auto_examples:
 
-This is my gallery
-==================
+scikit-MAAD examples gallery
+============================
 
-Below is a gallery of examples
-
+These scripts are examples of how to use scikit-MAAD package.
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This script gives an example of how to use scikit-MAAD package">
+    <div class="sphx-glr-thumbcontainer" tooltip="Wrapper - This script gives an example of how to use scikit-MAAD package">
 
 .. only:: html
 
  .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_wrapper_thumb.png
-     :alt: This script gives an example of how to use scikit-MAAD package
+     :alt: Wrapper - This script gives an example of how to use scikit-MAAD package
 
      :ref:`sphx_glr__auto_examples_maad_wrapper.py`
 
