@@ -186,10 +186,12 @@
 <dt id="rois.rois_1d.find_rois_cwt">
 <code class="sig-prename descclassname">rois.rois_1d.</code><code class="sig-name descname">find_rois_cwt</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">fs</em>, <em class="sig-param">flims</em>, <em class="sig-param">tlen</em>, <em class="sig-param">th=0</em>, <em class="sig-param">display=False</em>, <em class="sig-param">save_df=False</em>, <em class="sig-param">savefilename='rois.csv'</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_1d.html#find_rois_cwt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_1d.find_rois_cwt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find region of interest (ROIS) based on predetermined temporal length and frequency limits</p>
-<p>The general approach is based on continous wavelet transform following a three step process
-1. Filter the signal with a bandpass sinc filter
-2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]
-3. Binarize the signal applying a linear threshold</p>
+<p>The general approach is based on continous wavelet transform following a three step process</p>
+<ol class="arabic simple">
+<li><p>Filter the signal with a bandpass sinc filter</p></li>
+<li><p>Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]</p></li>
+<li><p>Binarize the signal applying a linear threshold</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -217,7 +219,11 @@
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>[1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long</p>
+<dl class="citation">
+<dt class="label" id="rf9cb33781d1e-1"><span class="brackets">1</span></dt>
+<dd><p>Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

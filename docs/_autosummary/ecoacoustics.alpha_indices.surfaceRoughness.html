@@ -202,9 +202,9 @@
 <dl class="py function">
 <dt id="ecoacoustics.alpha_indices.surfaceRoughness">
 <code class="sig-prename descclassname">ecoacoustics.alpha_indices.</code><code class="sig-name descname">surfaceRoughness</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">'global'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ecoacoustics/alpha_indices.html#surfaceRoughness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ecoacoustics.alpha_indices.surfaceRoughness" title="Permalink to this definition">¶</a></dt>
-<dd><p>Surface Roughness 
+<dd><p>Surface Roughness. 
 see wikipedia : <a class="reference external" href="https://en.wikipedia.org/wiki/Surface_roughness">https://en.wikipedia.org/wiki/Surface_roughness</a></p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram (i.e matrix of spectrum)</p>
@@ -216,18 +216,18 @@ see wikipedia : <a class="reference external" href="https://en.wikipedia.org/wik
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>Ra_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>Arithmetical mean deviation from the mean line (global or per frequency bin)
-=&gt; ROUGHNESS value for each frequency bin</p>
+<dd class="field-even"><dl>
+<dt><strong>Ra_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>Arithmetical mean deviation from the mean line (global or per frequency bin)</p>
+<p>=&gt; ROUGHNESS value for each frequency bin</p>
 </dd>
-<dt><strong>Ra</strong><span class="classifier">scalar</span></dt><dd><p>Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]
-=&gt; mean ROUGHNESS value over Sxx</p>
+<dt><strong>Ra</strong><span class="classifier">scalar</span></dt><dd><p>Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]</p>
+<p>=&gt; mean ROUGHNESS value over Sxx</p>
 </dd>
-<dt><strong>Rq_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>Root mean squared of deviation from the mean line (global or per frequency bin)
-=&gt; RMS ROUGHNESS value for each frequency bin</p>
+<dt><strong>Rq_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>Root mean squared of deviation from the mean line (global or per frequency bin)</p>
+<p>=&gt; RMS ROUGHNESS value for each frequency bin</p>
 </dd>
-<dt><strong>Rq</strong><span class="classifier">scalar</span></dt><dd><p>Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]
-=&gt; RMS ROUGHNESS value over Sxx</p>
+<dt><strong>Rq</strong><span class="classifier">scalar</span></dt><dd><p>Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]</p>
+<p>=&gt; RMS ROUGHNESS value over Sxx</p>
 </dd>
 </dl>
 </dd>

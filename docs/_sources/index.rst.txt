@@ -13,6 +13,17 @@ features** in audio recordings. This workflow opens the possibility to use
 powerfull **machine learning** algorithms through **scikit-learn**, 
 allowing to identify key patterns in all kind of soundscapes.
 
+
+About the authors
+~~~~~~~~~~~~~~~~~
+
+This work started in 2016 at the Museum National d'Histoire Naturelle (MNHN) 
+in Paris, France. It was initiated by **Juan Sebastian Ulloa**, supervised by 
+**Jérôme Sueur** and **Thierry Aubin** at the Muséum National d'Histoire Naturelle 
+and the Université Paris Saclay respectively. Python functions were added by 
+**Sylvain Haupert** and **Chloe Huetz** in 2018. New features are currently being 
+developped and a stable release will be available by the end of 2019.
+
 .. toctree::
    :maxdepth: 2
    :caption: Getting Started:

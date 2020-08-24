@@ -215,31 +215,29 @@ is added to the root filename.</p>
 All the input arguments required or optional in the signature functions
 can be passed.</p>
 <p>Specific parameters</p>
-<p>std_pre : scalar
-Standard deviation used for the first call of the smooth() 
+<ul class="simple">
+<li><dl class="simple">
+<dt>std_pre<span class="classifier">scalar</span></dt><dd><p>Standard deviation used for the first call of the smooth() 
 function. It defines the std of the gaussian kernel</p>
-<p>std_post : scalar
-Standard deviation used for the Second call of the smooth() 
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>std_post<span class="classifier">scalar</span></dt><dd><p>Standard deviation used for the Second call of the smooth() 
 function. It defines the std of the gaussian kernel</p>
+</dd>
+</dl>
+</li>
+</ul>
 <p>See the signature of each maad function to know the other parameters 
-that can be passed as kwargs :
-remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, 
-beta2=1,llambda=1, display = False, savefig=None, 
-**kwargs)</p>
-<p>smooth (im, ext, std=1, display = False, savefig=None, **kwargs)</p>
-<p>create_mask(im, ext, mode_bin =’relative’, display=False, savefig=None,
-**kwargs)</p>
-<p>select_rois(im_bin,ext,mode_roi=’auto’,display=False,savefig=None,
-**kwargs)</p>
-<p>overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,
-**kwargs)</p>
-<p>… and more, see matplotlib</p>
-<p>example : 
-find_rois_wrapper(im_ref, ext, display=True,
-std_pre = 2, std_post=1, 
-llambda=1.1, gauss_win = round(1000/df),
-mode_bin=’relative’, bin_std=5, bin_per=0.5,
-mode_roi=’auto’)</p>
+that can be passed as kwargs :</p>
+<ul class="simple">
+<li><p>remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,llambda=1, display = False, savefig=None,  **kwargs)</p></li>
+<li><p>smooth (im, ext, std=1, display = False, savefig=None, **kwargs)</p></li>
+<li><p>create_mask(im, ext, mode_bin =’relative’, display=False, savefig=None,**kwargs)</p></li>
+<li><p>select_rois(im_bin,ext,mode_roi=’auto’,display=False,savefig=None,**kwargs)</p></li>
+<li><p>overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,**kwargs)</p></li>
+</ul>
 <p>… and more, see matplotlib</p>
 </dd>
 </dl>
@@ -259,6 +257,13 @@ by default.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">find_rois_wrapper</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">std_pre</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">std_post</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">llambda</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">gauss_win</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">df</span><span class="p">),</span> 
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">mode_bin</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">mode_roi</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>    
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

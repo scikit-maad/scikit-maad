@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" Created on Wed Oct 24 11:56:28 2018
-    Alpha indices used in ecoacoustics
+"""  
+Alpha indices used in ecoacoustics
+
+Created on Wed Oct 24 11:56:28 2018
 """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
@@ -26,8 +28,6 @@ import matplotlib.pyplot as plt
 
 #### Importation from internal modules
 #from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB
-#import sys, os
-#sys.path.append(os.path.join(os.path.dirname(sys.path[0]),'util'))
 from maad.util.util import rle, index_bw, linear_scale, dB2linear, linear2dB
 
 # min value
@@ -167,7 +167,9 @@ def skewness (x, axis=0):
     -------    
     ku : float or ndarray of floats
         skewness of x 
+        
         if x is a 1d vector => single value
+        
         if x is a 2d matrix => array of values corresponding to the number of
         points in the other axis
         
@@ -200,7 +202,9 @@ def kurtosis (x, axis=0):
     -------    
     ku : float or ndarray of floats
         kurtosis of x 
+        
         if x is a 1d vector => single value
+        
         if x is a 2d matrix => array of values corresponding to the number of
         points in the other axis
     """
@@ -229,12 +233,15 @@ def roughness (x, norm=None, axis=0) :
         x is a vector (1d) or a matrix (2d)
         
     norm : boolean, optional. Default is None
-        'global' : normalize by the maximum value in the vector or matrix
-        'per_axis' : normalize by the maximum value found along each axis
+    
+        - 'global' : normalize by the maximum value in the vector or matrix
+        - 'per_axis' : normalize by the maximum value found along each axis
 
     axis : int, optional, default is 0
         select the axis where the second derivation is computed
+        
         if x is a vector, axis=0
+        
         if x is a 2d ndarray, axis=0 => rows, axis=1 => columns
                 
     Returns
@@ -277,13 +284,14 @@ def entropy (datain, axis=0):
 
     axis : int, optional, default is 0
         select the axis where the entropy is computed
+        
         if datain is a vector, axis=0
+        
         if datain is a 2d ndarray, axis=0 => rows, axis=1 => columns
                 
     Returns
     -------
     H : float or ndarray of floats
-
     """
     if isinstance(datain, (np.ndarray)) == True:
         if datain.ndim > axis:
@@ -516,10 +524,14 @@ def acousticComplexityIndex(Sxx, norm ='global'):
         sum(ACI_per_bin)
         
     ACI_mean ; scalar
-        
-        !!! pas de sens car non independant de la résolution freq et temporelle
-        !!! Seulement sum donne un résultat independant de N (pour la FFT)  
-        !!! et donc de df et dt
+    
+    Notes
+    -----    
+    !!! pas de sens car non independant de la résolution freq et temporelle
+    
+    !!! Seulement sum donne un résultat independant de N (pour la FFT)  
+    
+    !!! et donc de df et dt
         
     References
     ----------
@@ -545,7 +557,7 @@ def acousticComplexityIndex(Sxx, norm ='global'):
 def surfaceRoughness (Sxx, norm ='global'):
     
     """
-    Surface Roughness 
+    Surface Roughness. 
     see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness
     
     Parameters
@@ -562,18 +574,22 @@ def surfaceRoughness (Sxx, norm ='global'):
     -------        
     Ra_per_bin : 1d ndarray of scalars
         Arithmetical mean deviation from the mean line (global or per frequency bin)
+        
         => ROUGHNESS value for each frequency bin
         
     Ra : scalar
         Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]
+        
         => mean ROUGHNESS value over Sxx 
         
     Rq_per_bin : 1d ndarray of scalars
         Root mean squared of deviation from the mean line (global or per frequency bin)
+        
         => RMS ROUGHNESS value for each frequency bin
         
     Rq : scalar
         Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]
+        
         => RMS ROUGHNESS value over Sxx 
     """    
     if norm == 'per_bin':
@@ -623,10 +639,11 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
         normalized by the length)
         
     index : string, optional, default is "shannon"
-        "shannon" : Shannon entropy is calculated on the vector of scores
-        "simpson" : Simpson index is calculated on the vector of scores
-        "invsimpson" : Inverse Simpson index is calculated on the vector 
-        of scores
+        - "shannon" : Shannon entropy is calculated on the vector of scores
+        
+        - "simpson" : Simpson index is calculated on the vector of scores
+        
+        - "invsimpson" : Inverse Simpson index is calculated on the vector of scores
         
     Returns
     -------    
@@ -766,14 +783,19 @@ def spectral_entropy (X, fn, frange=None, display=False) :
         Display the different spectra (mean, variance, covariance, max...)
         
     Returns
-    -------    
-    EAS, ECU, ECV, EPS, KURT, SKEW : scalars 
-        EAS : Entropy of spectrum
-        ECU : Entropy of spectral variance (along the time axis for each frequency)
-        ECV : Entropy of coefficient of variance (along the time axis for each frequency)
-        EPS : Entropy of spectral maxima 
-        KURT : Kurtosis of spectral maxima
-        SKEW : Skewness of spectral maxima
+    -------     
+    EAS : scalar
+        Entropy of spectrum
+    ECU : scalar
+        Entropy of spectral variance (along the time axis for each frequency)
+    ECV : scalar
+        Entropy of coefficient of variance (along the time axis for each frequency)
+    EPS : scalar
+        Entropy of spectral maxima 
+    KURT : scalar
+        Kurtosis of spectral maxima
+    SKEW : scalar
+        Skewness of spectral maxima
         
     References 
     ----------
@@ -1057,9 +1079,9 @@ def acoustic_activity (xdB, dB_threshold, axis=1):
 def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     """
     Acoustic events :
-            - EVNsum : total events duration (s) 
-            - EVNmean : mean events duration (s)
-            - EVNcount : number of events per s
+        - EVNsum : total events duration (s) 
+        - EVNmean : mean events duration (s)
+        - EVNcount : number of events per s
     
     Parameters
     ----------

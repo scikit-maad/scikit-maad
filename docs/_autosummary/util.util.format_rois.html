@@ -201,16 +201,16 @@
 <dl class="py function">
 <dt id="util.util.format_rois">
 <code class="sig-prename descclassname">util.util.</code><code class="sig-name descname">format_rois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rois</span></em>, <em class="sig-param"><span class="n">ts</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/util.html#format_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.util.format_rois" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Setup rectangular rois to a predifined format: </dt><dd><p>time-frequency or bounding box</p>
-</dd>
-</dl>
+<dd><p>Setup rectangular rois to a predifined format: 
+time-frequency or bounding box</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>array must have a valid input format with column names
-- bounding box: min_y, min_x, max_y, max_x
-- time frequency: min_f, min_t, max_f, max_t</p>
+<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>array must have a valid input format with column names</p>
+<ul class="simple">
+<li><p>bounding box: min_y, min_x, max_y, max_x</p></li>
+<li><p>time frequency: min_f, min_t, max_f, max_t</p></li>
+</ul>
 </dd>
 <dt><strong>ts</strong><span class="classifier">ndarray</span></dt><dd><p>vector with temporal indices, output from the spectrogram function (in seconds)</p>
 </dd>

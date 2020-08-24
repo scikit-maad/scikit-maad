@@ -33,7 +33,8 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     
     Returns:
     -------
-    s_filt (array): signal filtered
+    s_filt : array 
+        signal filtered
     """
     width = (cutoff[1] - cutoff[0]) * transition_bw
     numtaps, beta = signal.kaiserord(atten, width/(0.5*fs))
@@ -45,7 +46,8 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
 
 
 def _corresp_onset_offset(onset, offset, tmin, tmax):
-    """ Check that each onsets have a corresponding offset 
+    """ 
+    Check that each onsets have a corresponding offset 
 
     Parameters
     ----------
@@ -112,8 +114,11 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     Find region of interest (ROIS) based on predetermined temporal length and frequency limits
     
     The general approach is based on continous wavelet transform following a three step process
+    
     1. Filter the signal with a bandpass sinc filter
+    
     2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]
+    
     3. Binarize the signal applying a linear threshold
         
     Parameters
@@ -140,7 +145,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     
     References
     ----------
-    [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
+    .. [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
     """
     # filter signal
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)

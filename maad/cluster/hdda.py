@@ -26,7 +26,7 @@ MIN = sp.finfo(sp.float64).min
 class HDDC():
     """
     This class implements the HDDA models proposed by Charles Bouveyron
-    and Stephane Girard
+    and Stephane Girard.
     Details about methods can be found here:
     https://doi.org/10.1016/j.csda.2007.02.009
     """

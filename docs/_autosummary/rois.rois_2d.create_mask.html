@@ -216,15 +216,12 @@ is added to the root filename.</p>
 </dd>
 <dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions.
 All the input arguments required or optional in the signature of the
-functions above can be passed as kwargs :
-double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, 
-savefig=None, **kwargs)
-double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, 
-savefig=None, **kwargs)</p>
+functions above can be passed as kwargs :</p>
+<ul class="simple">
+<li><p>double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None, **kwargs)</p></li>
+<li><p>double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefig=None, **kwargs)</p></li>
+</ul>
 <p>… and more, see matplotlib</p>
-<p>example :
-im_bin = create_mask(im, ext, bin_std=5, bin_per=0.5, mode=’relative’,
-display=True, savefig=None, dpi=300)</p>
 </dd>
 </dl>
 </dd>
@@ -234,6 +231,11 @@ display=True, savefig=None, dpi=300)</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im_bin</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

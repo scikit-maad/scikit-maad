@@ -205,17 +205,19 @@
 <dd><p>Computes the roughness (depends on the number of peaks and their amplitude)
 of a vector or matrix x (i.e. waveform, spectrogram…)   
 Roughness = sum(second_derivation(x)²)</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>x is a vector (1d) or a matrix (2d)</p>
 </dd>
-<dt><strong>norm</strong><span class="classifier">boolean, optional. Default is None</span></dt><dd><p>‘global’ : normalize by the maximum value in the vector or matrix
-‘per_axis’ : normalize by the maximum value found along each axis</p>
+<dt><strong>norm</strong><span class="classifier">boolean, optional. Default is None</span></dt><dd><ul class="simple">
+<li><p>‘global’ : normalize by the maximum value in the vector or matrix</p></li>
+<li><p>‘per_axis’ : normalize by the maximum value found along each axis</p></li>
+</ul>
 </dd>
-<dt><strong>axis</strong><span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the second derivation is computed
-if x is a vector, axis=0
-if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</p>
+<dt><strong>axis</strong><span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the second derivation is computed</p>
+<p>if x is a vector, axis=0</p>
+<p>if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</p>
 </dd>
 </dl>
 </dd>

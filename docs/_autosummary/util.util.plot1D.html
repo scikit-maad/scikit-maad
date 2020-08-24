@@ -212,14 +212,28 @@
 <dt><strong>ax</strong><span class="classifier">axis, optional, default is None</span></dt><dd><p>Draw the signal on this specific axis. Allow multiple plots on the same
 axis.</p>
 </dd>
-<dt><strong>**kwargs, optional</strong></dt><dd><p>figsize : tuple of integers, optional, default: (4,10)
-width, height in inches.</p>
-<p>facecolor : matplotlib color, optional, default: ‘w’ (white)
-the background color.</p>
-<p>edgecolor : matplotlib color, optional, default: ‘k’ (black)
-the border color.</p>
-<p>linecolor : matplotlib color, optional, default: ‘k’ (black)
-the line color</p>
+<dt><strong>**kwargs, optional</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>facecolor<span class="classifier">matplotlib color, optional, default: ‘w’ (white)</span></dt><dd><p>the background color.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>edgecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the border color.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>linecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the line color</p>
+</dd>
+</dl>
+</li>
+</ul>
 <p>The following color abbreviations are supported:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -260,20 +274,40 @@ the line color</p>
 </table>
 <p>In addition, you can specify colors in many ways, including RGB tuples 
 (0.2,1,0.5). See matplotlib color</p>
-<p>linewidth : scalar, optional, default: 0.5
-width in pixels</p>
-<p>figtitle: string, optional, default: ‘Audiogram’
-Title of the plot</p>
-<p>xlabel : string, optional, default : ‘Time [s]’
-label of the horizontal axis</p>
-<p>ylabel : string, optional, default : ‘Amplitude [AU]’
-label of the vertical axis</p>
-<p>legend : string, optional, default : None
-Legend for the plot</p>
-<p>now : boolean, optional, default : True
-if True, display now. Cannot display multiple plots. 
+<ul class="simple">
+<li><dl class="simple">
+<dt>linewidth<span class="classifier">scalar, optional, default: 0.5</span></dt><dd><p>width in pixels</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>figtitle: string, optional, default: ‘Audiogram’</dt><dd><p>Title of the plot</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>legend<span class="classifier">string, optional, default</span><span class="classifier">None</span></dt><dd><p>Legend for the plot</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>now<span class="classifier">boolean, optional, default</span><span class="classifier">True</span></dt><dd><p>if True, display now. Cannot display multiple plots. 
 To display mutliple plots, set now=False until the last call for 
 the last plot</p>
+</dd>
+</dl>
+</li>
+</ul>
 <p>…and more, see matplotlib</p>
 </dd>
 </dl>

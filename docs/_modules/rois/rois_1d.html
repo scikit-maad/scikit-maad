@@ -200,7 +200,8 @@
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
 <span class="sd">    -------</span>
-<span class="sd">    s_filt (array): signal filtered</span>
+<span class="sd">    s_filt : array </span>
+<span class="sd">        signal filtered</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">cutoff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cutoff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">transition_bw</span>
     <span class="n">numtaps</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">kaiserord</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">))</span>
@@ -212,7 +213,8 @@
 
 
 <span class="k">def</span> <span class="nf">_corresp_onset_offset</span><span class="p">(</span><span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Check that each onsets have a corresponding offset </span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Check that each onsets have a corresponding offset </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -279,8 +281,11 @@
 <span class="sd">    Find region of interest (ROIS) based on predetermined temporal length and frequency limits</span>
 <span class="sd">    </span>
 <span class="sd">    The general approach is based on continous wavelet transform following a three step process</span>
+<span class="sd">    </span>
 <span class="sd">    1. Filter the signal with a bandpass sinc filter</span>
+<span class="sd">    </span>
 <span class="sd">    2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]</span>
+<span class="sd">    </span>
 <span class="sd">    3. Binarize the signal applying a linear threshold</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
@@ -307,7 +312,7 @@
 <span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long</span>
+<span class="sd">    .. [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># filter signal</span>
     <span class="n">s_filt</span> <span class="o">=</span> <span class="n">sinc</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">flims</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">atten</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">transition_bw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>

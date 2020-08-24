@@ -168,8 +168,10 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot; Created on Wed Oct 24 11:56:28 2018</span>
-<span class="sd">    Alpha indices used in ecoacoustics</span>
+<span class="sd">&quot;&quot;&quot;  </span>
+<span class="sd">Alpha indices used in ecoacoustics</span>
+
+<span class="sd">Created on Wed Oct 24 11:56:28 2018</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">#</span>
 <span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
@@ -193,8 +195,6 @@
 
 <span class="c1">#### Importation from internal modules</span>
 <span class="c1">#from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB</span>
-<span class="c1">#import sys, os</span>
-<span class="c1">#sys.path.append(os.path.join(os.path.dirname(sys.path[0]),&#39;util&#39;))</span>
 <span class="kn">from</span> <span class="nn">maad.util.util</span> <span class="kn">import</span> <span class="n">rle</span><span class="p">,</span> <span class="n">index_bw</span><span class="p">,</span> <span class="n">linear_scale</span><span class="p">,</span> <span class="n">dB2linear</span><span class="p">,</span> <span class="n">linear2dB</span>
 
 <span class="c1"># min value</span>
@@ -334,7 +334,9 @@
 <span class="sd">    -------    </span>
 <span class="sd">    ku : float or ndarray of floats</span>
 <span class="sd">        skewness of x </span>
+<span class="sd">        </span>
 <span class="sd">        if x is a 1d vector =&gt; single value</span>
+<span class="sd">        </span>
 <span class="sd">        if x is a 2d matrix =&gt; array of values corresponding to the number of</span>
 <span class="sd">        points in the other axis</span>
 <span class="sd">        </span>
@@ -367,7 +369,9 @@
 <span class="sd">    -------    </span>
 <span class="sd">    ku : float or ndarray of floats</span>
 <span class="sd">        kurtosis of x </span>
+<span class="sd">        </span>
 <span class="sd">        if x is a 1d vector =&gt; single value</span>
+<span class="sd">        </span>
 <span class="sd">        if x is a 2d matrix =&gt; array of values corresponding to the number of</span>
 <span class="sd">        points in the other axis</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -396,12 +400,15 @@
 <span class="sd">        x is a vector (1d) or a matrix (2d)</span>
 <span class="sd">        </span>
 <span class="sd">    norm : boolean, optional. Default is None</span>
-<span class="sd">        &#39;global&#39; : normalize by the maximum value in the vector or matrix</span>
-<span class="sd">        &#39;per_axis&#39; : normalize by the maximum value found along each axis</span>
+<span class="sd">    </span>
+<span class="sd">        - &#39;global&#39; : normalize by the maximum value in the vector or matrix</span>
+<span class="sd">        - &#39;per_axis&#39; : normalize by the maximum value found along each axis</span>
 
 <span class="sd">    axis : int, optional, default is 0</span>
 <span class="sd">        select the axis where the second derivation is computed</span>
+<span class="sd">        </span>
 <span class="sd">        if x is a vector, axis=0</span>
+<span class="sd">        </span>
 <span class="sd">        if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</span>
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
@@ -444,13 +451,14 @@
 
 <span class="sd">    axis : int, optional, default is 0</span>
 <span class="sd">        select the axis where the entropy is computed</span>
+<span class="sd">        </span>
 <span class="sd">        if datain is a vector, axis=0</span>
+<span class="sd">        </span>
 <span class="sd">        if datain is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</span>
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    H : float or ndarray of floats</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">datain</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datain</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="n">axis</span><span class="p">:</span>
@@ -683,10 +691,14 @@
 <span class="sd">        sum(ACI_per_bin)</span>
 <span class="sd">        </span>
 <span class="sd">    ACI_mean ; scalar</span>
-<span class="sd">        </span>
-<span class="sd">        !!! pas de sens car non independant de la résolution freq et temporelle</span>
-<span class="sd">        !!! Seulement sum donne un résultat independant de N (pour la FFT)  </span>
-<span class="sd">        !!! et donc de df et dt</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----    </span>
+<span class="sd">    !!! pas de sens car non independant de la résolution freq et temporelle</span>
+<span class="sd">    </span>
+<span class="sd">    !!! Seulement sum donne un résultat independant de N (pour la FFT)  </span>
+<span class="sd">    </span>
+<span class="sd">    !!! et donc de df et dt</span>
 <span class="sd">        </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -712,7 +724,7 @@
 <div class="viewcode-block" id="surfaceRoughness"><a class="viewcode-back" href="../../_autosummary/ecoacoustics.alpha_indices.surfaceRoughness.html#ecoacoustics.alpha_indices.surfaceRoughness">[docs]</a><span class="k">def</span> <span class="nf">surfaceRoughness</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">norm</span> <span class="o">=</span><span class="s1">&#39;global&#39;</span><span class="p">):</span>
     
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Surface Roughness </span>
+<span class="sd">    Surface Roughness. </span>
 <span class="sd">    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -729,18 +741,22 @@
 <span class="sd">    -------        </span>
 <span class="sd">    Ra_per_bin : 1d ndarray of scalars</span>
 <span class="sd">        Arithmetical mean deviation from the mean line (global or per frequency bin)</span>
+<span class="sd">        </span>
 <span class="sd">        =&gt; ROUGHNESS value for each frequency bin</span>
 <span class="sd">        </span>
 <span class="sd">    Ra : scalar</span>
 <span class="sd">        Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]</span>
+<span class="sd">        </span>
 <span class="sd">        =&gt; mean ROUGHNESS value over Sxx </span>
 <span class="sd">        </span>
 <span class="sd">    Rq_per_bin : 1d ndarray of scalars</span>
 <span class="sd">        Root mean squared of deviation from the mean line (global or per frequency bin)</span>
+<span class="sd">        </span>
 <span class="sd">        =&gt; RMS ROUGHNESS value for each frequency bin</span>
 <span class="sd">        </span>
 <span class="sd">    Rq : scalar</span>
 <span class="sd">        Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]</span>
+<span class="sd">        </span>
 <span class="sd">        =&gt; RMS ROUGHNESS value over Sxx </span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="s1">&#39;per_bin&#39;</span><span class="p">:</span>
@@ -790,10 +806,11 @@
 <span class="sd">        normalized by the length)</span>
 <span class="sd">        </span>
 <span class="sd">    index : string, optional, default is &quot;shannon&quot;</span>
-<span class="sd">        &quot;shannon&quot; : Shannon entropy is calculated on the vector of scores</span>
-<span class="sd">        &quot;simpson&quot; : Simpson index is calculated on the vector of scores</span>
-<span class="sd">        &quot;invsimpson&quot; : Inverse Simpson index is calculated on the vector </span>
-<span class="sd">        of scores</span>
+<span class="sd">        - &quot;shannon&quot; : Shannon entropy is calculated on the vector of scores</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;simpson&quot; : Simpson index is calculated on the vector of scores</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;invsimpson&quot; : Inverse Simpson index is calculated on the vector of scores</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------    </span>
@@ -933,14 +950,19 @@
 <span class="sd">        Display the different spectra (mean, variance, covariance, max...)</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
-<span class="sd">    -------    </span>
-<span class="sd">    EAS, ECU, ECV, EPS, KURT, SKEW : scalars </span>
-<span class="sd">        EAS : Entropy of spectrum</span>
-<span class="sd">        ECU : Entropy of spectral variance (along the time axis for each frequency)</span>
-<span class="sd">        ECV : Entropy of coefficient of variance (along the time axis for each frequency)</span>
-<span class="sd">        EPS : Entropy of spectral maxima </span>
-<span class="sd">        KURT : Kurtosis of spectral maxima</span>
-<span class="sd">        SKEW : Skewness of spectral maxima</span>
+<span class="sd">    -------     </span>
+<span class="sd">    EAS : scalar</span>
+<span class="sd">        Entropy of spectrum</span>
+<span class="sd">    ECU : scalar</span>
+<span class="sd">        Entropy of spectral variance (along the time axis for each frequency)</span>
+<span class="sd">    ECV : scalar</span>
+<span class="sd">        Entropy of coefficient of variance (along the time axis for each frequency)</span>
+<span class="sd">    EPS : scalar</span>
+<span class="sd">        Entropy of spectral maxima </span>
+<span class="sd">    KURT : scalar</span>
+<span class="sd">        Kurtosis of spectral maxima</span>
+<span class="sd">    SKEW : scalar</span>
+<span class="sd">        Skewness of spectral maxima</span>
 <span class="sd">        </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
@@ -1224,9 +1246,9 @@
 <div class="viewcode-block" id="acoustic_events"><a class="viewcode-back" href="../../_autosummary/ecoacoustics.alpha_indices.acoustic_events.html#ecoacoustics.alpha_indices.acoustic_events">[docs]</a><span class="k">def</span> <span class="nf">acoustic_events</span><span class="p">(</span><span class="n">xdB</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">rejectDuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Acoustic events :</span>
-<span class="sd">            - EVNsum : total events duration (s) </span>
-<span class="sd">            - EVNmean : mean events duration (s)</span>
-<span class="sd">            - EVNcount : number of events per s</span>
+<span class="sd">        - EVNsum : total events duration (s) </span>
+<span class="sd">        - EVNmean : mean events duration (s)</span>
+<span class="sd">        - EVNcount : number of events per s</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

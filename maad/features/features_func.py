@@ -67,8 +67,11 @@ def gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     gamma : float, optional
         gamma changes the aspect ratio (ellipsoidal) of the gabor filter. 
         By default, gamma=1 which means no aspect ratio (circle)
+        
         if gamma>1, the filter is larger (x-dir)
+        
         if gamma<1, the filter is higher (y-dir)
+        
         This value is ignored if `sigma_x` and `sigma_y` are set by the user.
     sigma_x, sigma_y : float, optional
         Standard deviation in x- and y-directions. These directions apply to
@@ -156,11 +159,14 @@ def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
     gamma: scalar, optional, default is 1
         This parameter change the Gaussian window that modulates the continuous
         sine.
+        
         1 => same gaussian window in x and y direction (circle)
+        
         <1 => elongation of the filter size in the y direction (elipsoid)
+        
         >1 => reduction of the filter size in the y direction (elipsoid)
             
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
         figsize : tuple of integers, optional, default: (13,13)
             width, height in inches.  
         dpi : integer, optional
@@ -575,17 +581,18 @@ def create_csv(shape_features, centroid_features, label_features = None,
         
     centroid_features: 2d nd array of scalars (centroid in freq and time)
         Centroid of image. If labels provided, centroid for each ROI (rows)
-        column 0 is 'cyear' 
-        column 1 is 'cmonth' 
-        column 2 is 'chour' 
-        column 3 is 'cminute'
-        column 4 is 'csecond' 
-        column 5 is 'cfreq' 
+        - column 0 is 'cyear' 
+        - column 1 is 'cmonth' 
+        - column 2 is 'chour' 
+        - column 3 is 'cminute'
+        - column 4 is 'csecond' 
+        - column 5 is 'cfreq' 
         
     label_features: 2d nd array of integers and strings, optional, default is 
     None
-        column 0 is 'labelID'
-        column 1 is 'labelName'
+        - column 0 is 'labelID'
+        - column 1 is 'labelName'
+        
         Each row corresponds to a ROI
     
     Returns
@@ -650,17 +657,17 @@ def save_csv(filename, shape_features, centroid_features, label_features=None,
         
     centroid_features: 2d nd array of scalars (centroid in freq and time)
         Centroid of image. If labels provided, centroid for each ROI (rows)
-        column 0 is 'cyear' 
-        column 1 is 'cmonth' 
-        column 2 is 'chour' 
-        column 3 is 'cminute'
-        column 4 is 'csecond' 
-        column 5 is 'cfreq' 
+        - column 0 is 'cyear' 
+        - column 1 is 'cmonth' 
+        - column 2 is 'chour' 
+        - column 3 is 'cminute'
+        - column 4 is 'csecond' 
+        - column 5 is 'cfreq' 
         
     label_features: 2d nd array of integers and strings, optional, default is 
     None
-        column 0 is 'labelID'
-        column 1 is 'labelName'
+        - column 0 is 'labelID'
+        - column 1 is 'labelName'
    
     Returns
     -------
@@ -703,43 +710,44 @@ def get_features_wrapper(im, ext, display=False, savefig=None, save_csv=None,
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
         
-        figsize : tuple of integers,
-        width, height in inches.  
+        - figsize : tuple of integers,
+            width, height in inches.  
+            
+        - title : string, 
+            title of the figure
         
-        title : string, 
-        title of the figure
+        - xlabel : string, optional, 
+            label of the horizontal axis
         
-        xlabel : string, optional, 
-        label of the horizontal axis
+        - ylabel : string, optional, 
+            label of the vertical axis
         
-        ylabel : string, optional, 
-        label of the vertical axis
+        - cmap : string or Colormap object, 
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
         
-        cmap : string or Colormap object, 
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
+        - vmin, vmax : scalar
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
         
-        vmin, vmax : scalar
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
+        - ext : scalars (left, right, bottom, top),
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
         
-        ext : scalars (left, right, bottom, top),
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
+        - dpi : integer, optional
+            Dot per inch. 
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
         
-        dpi : integer, optional
-        Dot per inch. 
-        For printed version, choose high dpi (i.e. dpi=300) => slow
-        For screen version, choose low dpi (i.e. dpi=96) => fast
-        
-        format : string, optional
-        Format to save the figure
+        - format : string, optional
+            Format to save the figure
             
         ... and more, see matplotlib      
+    
     Returns
     -------
     table : dataframe (Pandas)

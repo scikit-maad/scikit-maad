@@ -210,37 +210,67 @@ if lfc and hfc are declared and lfc&lt;hfc, bandpass filter is performed</p>
 <dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
 is added to the root filename.</p>
 </dd>
-<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><p>savefilename : str, optional, default :’_filt_audiogram.png’
-Postfix of the figure filename</p>
-<p>figsize : tuple of integers, optional, default: (4,10)
-width, height in inches.</p>
-<p>title : string, optional, default : ‘Spectrogram’
-title of the figure</p>
-<p>xlabel : string, optional, default : ‘Time [s]’
-label of the horizontal axis</p>
-<p>ylabel : string, optional, default : ‘Amplitude [AU]’
-label of the vertical axis</p>
-<p>cmap : string or Colormap object, optional, default is ‘gray’
-See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>savefilename<span class="classifier">str, optional, default :’_filt_audiogram.png’</span></dt><dd><p>Postfix of the figure filename</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
 in order to get all the  existing colormaps
 examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
 ‘viridis’…</p>
-<p>vmin, vmax : scalar, optional, default: None
-<cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
 luminance data.  Note if you pass a <cite>norm</cite> instance, your
 settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-<dl class="simple">
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
 For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
 For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
 </dd>
 </dl>
+</li>
+</ul>
 <p>… and more, see matplotlib</p>
 </dd>
 </dl>

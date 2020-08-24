@@ -205,9 +205,9 @@ cosine function. Spatial frequency is inversely proportional to the
 wavelength of the harmonic and to the standard deviation of a Gaussian
 kernel. The bandwidth is also inversely proportional to the standard
 deviation.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>frequency</strong><span class="classifier">float</span></dt><dd><p>Spatial frequency of the harmonic function. Specified in pixels.</p>
 </dd>
 <dt><strong>theta</strong><span class="classifier">float, optional</span></dt><dd><p>Orientation in radians. If 0, the harmonic is in the x-direction.</p>
@@ -217,10 +217,10 @@ and <cite>sigma_y</cite> will decrease with increasing frequency. This value is
 ignored if <cite>sigma_x</cite> and <cite>sigma_y</cite> are set by the user.</p>
 </dd>
 <dt><strong>gamma</strong><span class="classifier">float, optional</span></dt><dd><p>gamma changes the aspect ratio (ellipsoidal) of the gabor filter. 
-By default, gamma=1 which means no aspect ratio (circle)
-if gamma&gt;1, the filter is larger (x-dir)
-if gamma&lt;1, the filter is higher (y-dir)
-This value is ignored if <cite>sigma_x</cite> and <cite>sigma_y</cite> are set by the user.</p>
+By default, gamma=1 which means no aspect ratio (circle)</p>
+<p>if gamma&gt;1, the filter is larger (x-dir)</p>
+<p>if gamma&lt;1, the filter is higher (y-dir)</p>
+<p>This value is ignored if <cite>sigma_x</cite> and <cite>sigma_y</cite> are set by the user.</p>
 </dd>
 <dt><strong>sigma_x, sigma_y</strong><span class="classifier">float, optional</span></dt><dd><p>Standard deviation in x- and y-directions. These directions apply to
 the kernel <em>before</em> rotation. If <cite>theta = pi/2</cite>, then the kernel is

@@ -29,10 +29,11 @@ def index_bw (fn, bw):
     """
     Select the index min and max coresponding to the selected frequency band
     
-    example :
-    fn = 44100
-    bw = (100,1000) #in Hz
-    X = X[index_bw(fn, bw)]
+    Examples
+    --------
+    >>> fn = 44100
+    >>> bw = (100,1000) #in Hz
+    >>> X = X[index_bw(fn, bw)]
     """
     # select the indices corresponding to the frequency bins range
     if bw is None :
@@ -182,12 +183,8 @@ def linear_scale(x, minval= 0.0, maxval=1.0):
         
     Examples
     --------
-    a = np.array([1,2,3,4,5]);
-    
-    a_out = scaledata(a,0,1);
-    
-    Out: 
-    
+    >>> a = np.array([1,2,3,4,5]);
+    >>> a_out = scaledata(a,0,1); 
     array([0.  , 0.25, 0.5 , 0.75, 1.  ])
         
     References
@@ -474,19 +471,19 @@ def plot1D(x, y, ax=None, **kwargs):
         Draw the signal on this specific axis. Allow multiple plots on the same
         axis.
             
-    **kwargs, optional
+    \*\*kwargs, optional
         
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
         
-        facecolor : matplotlib color, optional, default: 'w' (white)
-        the background color.  
+        - facecolor : matplotlib color, optional, default: 'w' (white)
+            the background color.  
         
-        edgecolor : matplotlib color, optional, default: 'k' (black)
-        the border color. 
+        - edgecolor : matplotlib color, optional, default: 'k' (black)
+            the border color. 
         
-        linecolor : matplotlib color, optional, default: 'k' (black)
-        the line color
+        - linecolor : matplotlib color, optional, default: 'k' (black)
+            the line color
         
         The following color abbreviations are supported:
     
@@ -506,25 +503,25 @@ def plot1D(x, y, ax=None, **kwargs):
         In addition, you can specify colors in many ways, including RGB tuples 
         (0.2,1,0.5). See matplotlib color 
         
-        linewidth : scalar, optional, default: 0.5
-        width in pixels
+        - linewidth : scalar, optional, default: 0.5
+            width in pixels
         
-        figtitle: string, optional, default: 'Audiogram'
-        Title of the plot 
+        - figtitle: string, optional, default: 'Audiogram'
+            Title of the plot 
         
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
         
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
         
-        legend : string, optional, default : None
-        Legend for the plot
+        - legend : string, optional, default : None
+            Legend for the plot
         
-        now : boolean, optional, default : True
-        if True, display now. Cannot display multiple plots. 
-        To display mutliple plots, set now=False until the last call for 
-        the last plot         
+        - now : boolean, optional, default : True
+            if True, display now. Cannot display multiple plots. 
+            To display mutliple plots, set now=False until the last call for 
+            the last plot         
         
         ...and more, see matplotlib
         
@@ -591,42 +588,43 @@ def plot2D(im,ax=None,**kwargs):
         Draw the image on this specific axis. Allow multiple plots on the same
         axis.
             
-    **kwargs, optional
+    \*\*kwargs, optional
         
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
         
-        title : string, optional, default : 'Spectrogram'
-        title of the figure
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
         
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
         
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
         
-        cmap : string or Colormap object, optional, default is 'gray'
+        -cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
         
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
-        vmin, vmax : scalar, optional, default: None
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
         
-        ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
         
-        now : boolean, optional, default : True
-        if True, display now. Cannot display multiple images. 
-        To display mutliple images, set now=False until the last call for 
-        the last image      
+        - now : boolean, optional, default : True
+            if True, display now. Cannot display multiple images. 
+            To display mutliple images, set now=False until the last call for 
+            the last image      
             
         ... and more, see matplotlib
+        
     Returns
     -------
     fig : Figure
@@ -676,48 +674,49 @@ def plot2D(im,ax=None,**kwargs):
     return ax, fig
 
 def nearest_idx(array,value):
-    """ Find nearest value on array and return index
+    """ 
+    Find nearest value on array and return index
     
-        Parameters
-        ----------
-        array: ndarray
-            array of values to search for nearest values
-        value: float
-            value to be searched in array
+    Parameters
+    ----------
+    array: ndarray
+        array of values to search for nearest values
+    value: float
+        value to be searched in array
             
-        Returns
-        -------
-        idx: int
-            index of nearest value on array
+    Returns
+    -------
+    idx: int
+        index of nearest value on array
         
-        Examples
-        --------
-        >>> x = np.array([1,2,3])
-        >>> ig.nearest_idx(x, 1.3)
-        [0]
-        >>> ig.nearest_idx(x, 1.6)
-        [1]
+    Examples
+    --------
+    >>> x = np.array([1,2,3])
+    >>> ig.nearest_idx(x, 1.3)
+    [0]
+    >>> ig.nearest_idx(x, 1.6)
+    [1]
     """
     idx = (np.abs(array-value)).argmin()
     return idx
 
 
 def rois_to_audacity(fname, onset, offset):
-    """ Write audio segmentation to file (Audacity format)
+    """ 
+    Write audio segmentation to file (Audacity format)
     
-        Parameters
-        ----------
-        fname: str
-            filename to save the segmentation
-        onset: int, float array_like
-            output of a detection method (e.g. find_rois_1d)
-        offset: int, float array_like
-            output of a detection method (e.g. find_rois_1d)
+    Parameters
+    ----------
+    fname: str
+        filename to save the segmentation
+    onset: int, float array_like
+        output of a detection method (e.g. find_rois_1d)
+    offset: int, float array_like
+        output of a detection method (e.g. find_rois_1d)
             
-        Returns
-        -------
-        Returns a csv file
-            
+    Returns
+    -------
+    Returns a csv file
     """
     if onset.size==0:
         print(fname, '< No detection found')
@@ -729,8 +728,8 @@ def rois_to_audacity(fname, onset, offset):
         rois_tf.to_csv(fname, index=False, header=False, sep='\t') 
 
 def rois_to_imblobs(im_blobs, rois_bbox):
-    """ Add rois to im_blobs 
-    
+    """ 
+    Add rois to im_blobs 
     """
     # roi to image blob
     for min_y, min_x, max_y, max_x in rois_bbox.values:
@@ -738,22 +737,22 @@ def rois_to_imblobs(im_blobs, rois_bbox):
     return im_blobs
 
 def normalize_2d(im, min_value, max_value):
-    """ Normalize 2d array between two values. 
+    """ 
+    Normalize 2d array between two values. 
         
-        Parameters
-        ----------
-        im: 2D ndarray
-            Bidimensinal array to be normalized
-        min_value: int, float
-            Minimum value in normalization
-        max_value: int, float
-            Maximum value in normalization
+    Parameters
+    ----------
+    im: 2D ndarray
+        Bidimensinal array to be normalized
+    min_value: int, float
+        Minimum value in normalization
+    max_value: int, float
+        Maximum value in normalization
         
-        Returns
-        -------
-        im_out: 2D ndarray
-            Array normalized between min and max values
-        
+    Returns
+    -------
+    im_out: 2D ndarray
+        Array normalized between min and max values
     """
     # avoid problems with inf and -inf values
     min_im = np.min(im.ravel()[im.ravel()!=-np.inf]) 
@@ -768,15 +767,19 @@ def normalize_2d(im, min_value, max_value):
 
 
 def format_rois(rois, ts, fs, fmt=None):
-    """ Setup rectangular rois to a predifined format: 
-        time-frequency or bounding box
+    """ 
+    Setup rectangular rois to a predifined format: 
+    time-frequency or bounding box
     
     Parameters
     ----------
     rois : pandas DataFrame
         array must have a valid input format with column names
+        
         - bounding box: min_y, min_x, max_y, max_x
+        
         - time frequency: min_f, min_t, max_f, max_t
+    
     ts : ndarray
         vector with temporal indices, output from the spectrogram function (in seconds)
     fs: ndarray
@@ -785,9 +788,9 @@ def format_rois(rois, ts, fs, fmt=None):
         A string indicating the desired output format: 'bbox' or 'tf'
         
     Returns
-        -------
-        rois_bbox: ndarray
-            array with indices of ROIs matched on spectrogram
+    -------
+    rois_bbox: ndarray
+        array with indices of ROIs matched on spectrogram
     """
     # Check format of the input data
     if type(rois) is not pd.core.frame.DataFrame and type(rois) is not pd.core.series.Series:

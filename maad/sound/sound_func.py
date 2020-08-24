@@ -53,36 +53,43 @@ def load(filename, channel='left', detrend=True, verbose=False,
         
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
            
-        savefilename : str, optional, default :'_audiogram.png'
-        Postfix of the figure filename
+        - savefilename : str, optional, default :'_audiogram.png'
+            Postfix of the figure filename
          
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
-        title of the figure
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
-        vmin, vmax : scalar, optional, default: None
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
-        ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
-        Dot per inch. 
-        For printed version, choose high dpi (i.e. dpi=300) => slow
-        For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
-        Format to save the figure
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
+        
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
+        
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
+        
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+            ext : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
+        
+        - dpi : integer, optional, default is 96
+            Dot per inch. 
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
+        
+        - format : string, optional, default is 'png'
+            Format to save the figure
             
         ... and more, see matplotlib     
         
@@ -201,24 +208,32 @@ def fir_filter(x, kernel, axis=0):
    
     kernel : array_like or tuple
         Pass directly the kernel (1d vector of scalars) 
-        Or pass the arguments in a tuple to create a kernel. Arguments are
-        window : string, float, or tuple
-        The type of window to create. 
-        - boxcar, triang, blackman, hamming, hann, bartlett, 
-        flattop,parzen, bohman, blackmanharris, nuttall, barthann, 
+        Or pass the arguments in a tuple to create a kernel. Arguments are:   
+        
+        - window : string, float, or tuple. The type of window to create. 
+        
+        - boxcar, triang, blackman, hamming, hann, bartlett, flattop,parzen, bohman, blackmanharris, nuttall, barthann, 
+        
         - (kaiser, beta), 
+        
         - (gaussian, standard deviation), 
+        
         - (general_gaussian, power, width), 
+        
         - (slepian, width), 
+        
         - (dpss, normalized half-bandwidth), 
+        
         - (chebwin, attenuation), 
+        
         - (exponential, decay scale), 
+        
         - (tukey, taper fraction)
     
     Nx : int
         The number of samples in the window.
                     
-    examples:
+    Examples:
     kernel = ('boxcar', 9)
     kernel = (('gaussian', 0.5), 5)
     kernel = [1 3 5 7 5 3 1] 
@@ -293,42 +308,43 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions   
         
-        savefilename : str, optional, default :'_filt_audiogram.png'
-        Postfix of the figure filename
+        - savefilename : str, optional, default :'_filt_audiogram.png'
+            Postfix of the figure filename
         
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
         
-        title : string, optional, default : 'Spectrogram'
-        title of the figure
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
         
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
         
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
         
-        cmap : string or Colormap object, optional, default is 'gray'
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
         
-        vmin, vmax : scalar, optional, default: None
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
         
-        ext : list of scalars [left, right, bottom, top], optional, default: None
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
         
-        dpi : integer, optional, default is 96
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        
+        - format : string, optional, default is 'png'
             Format to save the figure
         
         ... and more, see matplotlib     
@@ -439,6 +455,7 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         usage : 
         
         dt_df_res = [0.02, 20] means
+        
         time resolution dt = 0.02s / frequency resolution df = 20Hz
             
     db_range : int, optional, default is None
@@ -466,43 +483,43 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
            
-        savefilename : str, optional, default :'_filt_audiogram.png'
-        Postfix of the figure filename
+        - savefilename : str, optional, default :'_filt_audiogram.png'
+            Postfix of the figure filename
         
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
         
-        title : string, optional, default : 'Spectrogram'
-        title of the figure
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
         
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
         
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
         
-        cmap : string or Colormap object, optional, default is 'gray'
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
-        vmin, vmax : scalar, optional, default: None
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
+            vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
         
-        ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
         
-        dpi : integer, optional, default is 96
-        Dot per inch. 
-        For printed version, choose high dpi (i.e. dpi=300) => slow
-        For screen version, choose low dpi (i.e. dpi=96) => fast
+        - dpi : integer, optional, default is 96
+            Dot per inch. 
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
         
-        format : string, optional, default is 'png'
-        Format to save the figure
+        - format : string, optional, default is 'png'
+            Format to save the figure
         
         ... and more, see matplotlib  
   
@@ -677,43 +694,44 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
            
-        savefilename : str, optional, default :'_filt_audiogram.png'
-        Postfix of the figure filename
+        - savefilename : str, optional, default :'_filt_audiogram.png'
+            Postfix of the figure filename
         
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
         
-        title : string, optional, default : 'Spectrogram'
-        title of the figure
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
         
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
         
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
         
-        cmap : string or Colormap object, optional, default is 'gray'
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
-        vmin, vmax : scalar, optional, default: None
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
         
-        ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
         
-        dpi : integer, optional, default is 96
-        Dot per inch. 
-        For printed version, choose high dpi (i.e. dpi=300) => slow
-        For screen version, choose low dpi (i.e. dpi=96) => fast
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
         
-        format : string, optional, default is 'png'
-        Format to save the figure
+        - dpi : integer, optional, default is 96
+            Dot per inch. 
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
+        
+        - format : string, optional, default is 'png'
+            Format to save the figure
         
         ... and more, see matplotlib  
   
@@ -905,41 +923,42 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
         
     \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
             
-        savefilename : str, optional, default :'_filt_audiogram.png'
-        Postfix of the figure filename
+        - savefilename : str, optional, default :'_filt_audiogram.png'
+            Postfix of the figure filename
         
-        figsize : tuple of integers, optional, default: (4,10)
-        width, height in inches.  
+        - figsize : tuple of integers, optional, default: (4,10)
+            width, height in inches.  
         
-        title : string, optional, default : 'Spectrogram'
-        title of the figure
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
         
-        xlabel : string, optional, default : 'Time [s]'
-        label of the horizontal axis
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
         
-        ylabel : string, optional, default : 'Amplitude [AU]'
-        label of the vertical axis
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
         
-        cmap : string or Colormap object, optional, default is 'gray'
-        See https://matplotlib.org/examples/color/colormaps_reference.html
-        in order to get all the  existing colormaps
-        examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-        'viridis'...
-        vmin, vmax : scalar, optional, default: None
-        `vmin` and `vmax` are used in conjunction with norm to normalize
-        luminance data.  Note if you pass a `norm` instance, your
-        settings for `vmin` and `vmax` will be ignored.
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
         
-        ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
         
-        dpi : integer, optional, default is 96
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
+        
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        - format : string, optional, default is 'png'
             Format to save the figure
         
         ... and more, see matplotlib  

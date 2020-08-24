@@ -222,14 +222,14 @@ is added to the root filename.</p>
 </dd>
 <dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions.
 All the input arguments required or optional in the signature of the
-functions above can be passed as kwargs :
-select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,
-**kwargs)
-select_rois_manually(im_bin,ext,filename,software,mask,display,
-savefig,**kwargs</p>
+functions above can be passed as kwargs :</p>
+<ul class="simple">
+<li><p>select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,**kwargs)</p></li>
+<li><p>select_rois_manually(im_bin,ext,filename,software,mask,display,savefig,**kwargs</p></li>
+</ul>
 <p>… and more, see matplotlib</p>
-<p>example :
-im_rois, rois_bbox, rois_label =select_rois_auto(im_bin,ext,mode=’auto’,
+<p>example:</p>
+<p>im_rois, rois_bbox, rois_label =select_rois_auto(im_bin,ext,mode=’auto’,
 min_roi=100,max_roi=1e6,
 display=True,savefig=None,**kwargs)</p>
 <p>im_rois, rois_bbox, rois_label =select_rois_man(im_bin,ext,mode=’manual’,
