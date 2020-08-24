@@ -44,15 +44,12 @@ developped and a stable release will be available by the end of 2019.
    sound
    util
    
-   
-   
 .. toctree::
    :maxdepth: 2
    :caption: Example Gallery:
+
+   _auto_examples/index
    
-   Example
-
-
 Indices and tables
 ==================
 
