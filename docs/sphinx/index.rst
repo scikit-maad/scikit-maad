@@ -26,15 +26,15 @@ developped and a stable release will be available by the end of 2019.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting Started:
+   :caption: Getting Started
 
    install
-   tutorial
+   quickstart
    
 .. autosummary::
    :toctree: _autosummary
    :template: custom-module-template.rst
-   :caption: Documentation:
+   :caption: Documentation
    :recursive:
    
    cluster
@@ -46,7 +46,7 @@ developped and a stable release will be available by the end of 2019.
    
 .. toctree::
    :maxdepth: 2
-   :caption: Examples Gallery:
+   :caption: Examples Gallery
 
    _auto_examples/index
    

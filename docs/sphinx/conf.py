@@ -40,7 +40,7 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
 #    'sphinx.ext.napoleon',
     'numpydoc',  # docstring examples
     'sphinx.ext.autosectionlabel',
-    'sphinx_gallery.gen_gallery'
+    'sphinx_gallery.gen_gallery',
 ]
 
 
@@ -48,6 +48,8 @@ sphinx_gallery_conf = {
      'examples_dirs': '../../example_gallery',   # path to your example scripts
      'gallery_dirs': '_auto_examples',  # path to where to save gallery generated output
 }
+
+
 
 numpydoc_show_class_members = False
 
