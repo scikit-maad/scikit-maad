@@ -170,13 +170,9 @@
   <h1>Source code for features.features_1d</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">High level functions for signal characterization from 1D signals</span>
-<span class="sd">Code licensed under both GPL and BSD licenses</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Endemble of functions to compute acoustic descriptors from 1D signals</span>
 
-<span class="sd">Authors: Juan Sebastian ULLOA &lt;jseb.ulloa@gmail.com&gt;</span>
-
-<span class="sd">Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">periodogram</span><span class="p">,</span> <span class="n">welch</span>
@@ -186,7 +182,7 @@
 <div class="viewcode-block" id="psd"><a class="viewcode-back" href="../../_autosummary/features.features_1d.psd.html#features.features_1d.psd">[docs]</a><span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;welch&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Estimates power spectral density of 1D signal using Welch&#39;s or periodogram methods. </span>
-<span class="sd">    Note: this is a wrapper function that uses functions from scipy.signal module</span>
+<span class="sd">    .. note:: This is a wrapper that uses functions from scipy.signal module</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -203,6 +199,8 @@
 <span class="sd">        Method used to estimate the power spectral density of the signal</span>
 <span class="sd">    tlims: tuple of ints or floats</span>
 <span class="sd">        Temporal limits to compute the power spectral density in seconds (s)</span>
+<span class="sd">        If None, estimates for the complete signal will be computed.</span>
+<span class="sd">        Default is &#39;None&#39;</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -214,7 +212,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;spinetail.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; psd, f_idx = psd(s, fs, nperseg=512)</span>
+<span class="sd">    &gt;&gt;&gt; psd, f_idx = features.psd(s, fs, nperseg=512)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">if</span> <span class="n">tlims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -242,18 +240,23 @@
 
 <div class="viewcode-block" id="rms"><a class="viewcode-back" href="../../_autosummary/features.features_1d.rms.html#features.features_1d.rms">[docs]</a><span class="k">def</span> <span class="nf">rms</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the root-mean-square (RMS) of a signal</span>
+<span class="sd">    Computes the root-mean-square (RMS) level of an input signal</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    s : ndarray</span>
-<span class="sd">        1D audio signal</span>
+<span class="sd">    s : 1D array</span>
+<span class="sd">        Input signal to process</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    rms: float</span>
-<span class="sd">        Root mean square of signal</span>
-
+<span class="sd">        Root mean square of input signal</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rms = features.rms(s)</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 </pre></div>
