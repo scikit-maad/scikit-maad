@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-High level functions for signal characterization from 1D signals
-Code licensed under both GPL and BSD licenses
+""" 
+Endemble of functions to compute acoustic descriptors from 1D signals
 
-Authors: Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
-
-Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 """
 
 from scipy.signal import periodogram, welch
@@ -16,7 +12,7 @@ import numpy as np
 def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None):
     """ 
     Estimates power spectral density of 1D signal using Welch's or periodogram methods. 
-    Note: this is a wrapper function that uses functions from scipy.signal module
+    .. note:: This is a wrapper that uses functions from scipy.signal module
     
     Parameters
     ----------
@@ -33,6 +29,8 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         Method used to estimate the power spectral density of the signal
     tlims: tuple of ints or floats
         Temporal limits to compute the power spectral density in seconds (s)
+        If None, estimates for the complete signal will be computed.
+        Default is 'None'
     
     Returns
     -------
@@ -44,7 +42,7 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     Examples
     --------
     >>> s, fs = sound.load('spinetail.wav')
-    >>> psd, f_idx = psd(s, fs, nperseg=512)
+    >>> psd, f_idx = features.psd(s, fs, nperseg=512)
     """
     
     if tlims is not None:
@@ -72,17 +70,22 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
 
 def rms(s):
     """
-    Computes the root-mean-square (RMS) of a signal
+    Computes the root-mean-square (RMS) level of an input signal
 
     Parameters
     ----------
-    s : ndarray
-        1D audio signal
+    s : 1D array
+        Input signal to process
 
     Returns
     -------
     rms: float
-        Root mean square of signal
-
+        Root mean square of input signal
+    
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')
+    >>> rms = features.rms(s)
+    
     """
     return np.sqrt(np.mean(s**2))
