@@ -128,13 +128,13 @@ These scripts are examples of how to use scikit-MAAD package.
 
   .. container:: sphx-glr-download sphx-glr-download-python
 
-    :download:`Download all examples in Python source code: _auto_examples_python.zip <//home/juanfe/Escritorio/documentation/scikit-maad/docs/sphinx/_auto_examples/_auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: _auto_examples_python.zip <//Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/docs/sphinx/_auto_examples/_auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-    :download:`Download all examples in Jupyter notebooks: _auto_examples_jupyter.zip <//home/juanfe/Escritorio/documentation/scikit-maad/docs/sphinx/_auto_examples/_auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: _auto_examples_jupyter.zip <//Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/docs/sphinx/_auto_examples/_auto_examples_jupyter.zip>`
 
 
 .. only:: html

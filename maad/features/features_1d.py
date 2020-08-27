@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """ 
-Endemble of functions to compute acoustic descriptors from 1D signals
+Ensemble of functions to compute acoustic descriptors from 1D signals
 
 """
 
@@ -12,7 +12,6 @@ import numpy as np
 def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None):
     """ 
     Estimates power spectral density of 1D signal using Welch's or periodogram methods. 
-    .. note:: This is a wrapper that uses functions from scipy.signal module
     
     Parameters
     ----------
@@ -38,6 +37,10 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         Estimate of power spectral density
     f_idx: pandas Series
         Index of sample frequencies
+    
+    Notes
+    -----
+    This is a wrapper that uses functions from Scipy. In particular the scipy.signal module
     
     Examples
     --------

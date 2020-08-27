@@ -171,7 +171,7 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">Endemble of functions to compute acoustic descriptors from 1D signals</span>
+<span class="sd">Ensemble of functions to compute acoustic descriptors from 1D signals</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -182,7 +182,6 @@
 <div class="viewcode-block" id="psd"><a class="viewcode-back" href="../../_autosummary/features.features_1d.psd.html#features.features_1d.psd">[docs]</a><span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;welch&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Estimates power spectral density of 1D signal using Welch&#39;s or periodogram methods. </span>
-<span class="sd">    .. note:: This is a wrapper that uses functions from scipy.signal module</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -208,6 +207,10 @@
 <span class="sd">        Estimate of power spectral density</span>
 <span class="sd">    f_idx: pandas Series</span>
 <span class="sd">        Index of sample frequencies</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This is a wrapper that uses functions from Scipy. In particular the scipy.signal module</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
