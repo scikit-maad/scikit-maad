@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-High level functions for multiresolution analysis of spectrograms
-Code licensed under both GPL and BSD licenses
-Authors:  Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
-Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
+Ensemble of functions to compute acoustic descriptors from 2D spectrograms
+
 """
 
 # Load required modules
@@ -22,31 +20,11 @@ from skimage.filters import gaussian
 from maad.util import format_rois, rois_to_imblobs, normalize_2d
 
 
-def _sigma_prefactor(bandwidth):
-    """
-    Function from skimage. 
-    
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-
-    """
-
-    b = bandwidth
-    # See http://www.cs.rug.nl/~imaging/simplecell.html
-    return 1.0 / np.pi * np.sqrt(np.log(2) / 2.0) * \
-        (2.0 ** b + 1) / (2.0 ** b - 1)
-
-def gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
+def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
                       n_stds=3, offset=0):
     """
-    Return complex 2D Gabor filter kernel with no DC offset.
-    
-    This function is a modification of the gabor_kernel function of scikit-image
-    
+    Computes complex 2D Gabor filter kernel with no DC offset.
+        
     Gabor kernel is a Gaussian kernel modulated by a complex harmonic function.
     Harmonic function consists of an imaginary sine function and a real
     cosine function. Spatial frequency is inversely proportional to the
@@ -75,8 +53,8 @@ def gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
         This value is ignored if `sigma_x` and `sigma_y` are set by the user.
     sigma_x, sigma_y : float, optional
         Standard deviation in x- and y-directions. These directions apply to
-        the kernel *before* rotation. If `theta = pi/2`, then the kernel is
-        rotated 90 degrees so that `sigma_x` controls the *vertical* direction.   
+        the kernel before rotation. If `theta = pi/2`, then the kernel is
+        rotated 90 degrees so that `sigma_x` controls the vertical direction.   
     n_stds : scalar, optional
         The linear size of the kernel is n_stds (3 by default) standard
         deviations
@@ -86,28 +64,17 @@ def gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     Returns
     -------
     g_nodc : complex 2d array
-        A single gabor kernel (complex) with no DC offset
+        A complex gabor kernel with no DC offset
+    
+    Notes
+    -----
+    This function is a modification of the gabor_kernel function of scikit-image.
     
     References
     ----------
     .. [1] http://en.wikipedia.org/wiki/Gabor_filter
     .. [2] http://mplab.ucsd.edu/tutorials/gabor.pdf
     
-    Examples
-    --------
-    >>> from skimage.filters import gabor_kernel
-    >>> from skimage import io
-    >>> from matplotlib import pyplot as plt  # doctest: +SKIP
-    >>> gk = gabor_kernel(frequency=0.2)
-    >>> plt.figure()        # doctest: +SKIP
-    >>> io.imshow(gk.real)  # doctest: +SKIP
-    >>> io.show()           # doctest: +SKIP
-    >>> # more ripples (equivalent to increasing the size of the
-    >>> # Gaussian spread)
-    >>> gk = gabor_kernel(frequency=0.2, bandwidth=0.1)
-    >>> plt.figure()        # doctest: +SKIP
-    >>> io.imshow(gk.real)  # doctest: +SKIP
-    >>> io.show()           # doctest: +SKIP
     """
     
      # set gaussian parameters
@@ -197,7 +164,7 @@ def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
     w = []
     h = []
     for kernel in kernels:
-        ylen, xlen = kernel.shape
+        ylen, xlen = kernel[0].shape
         w.append(xlen)
         h.append(ylen)
         
@@ -230,7 +197,7 @@ def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
     
     for ii, kernel in enumerate(kernels):
         ax = plt.axes([(ii%n)*wmax + (wmax-w[ii])/2,(ii//n)*hmax + (hmax-h[ii])/2,w[ii],h[ii]])
-        ax.imshow(np.real(kernel),interpolation=interpolation, aspect =aspect, **kwargs)
+        ax.imshow(np.real(kernel[0]),interpolation=interpolation, aspect =aspect, **kwargs)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_ylabel(params_label[ii],fontsize=fontsize)
@@ -241,7 +208,7 @@ def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
     
 def _plot_filter_results(im_ref, im_list, kernels, params, m, n):
     """
-    Display the result after filtering
+    Display the resulting spectrograms after filtering with gabor filters
     
     Parameters
     ----------
@@ -255,8 +222,7 @@ def _plot_filter_results(im_ref, im_list, kernels, params, m, n):
         number of columns
     n: int
         number of rows
-    Returns
-    -------
+        
     Returns
     -------
     fig : Figure
@@ -306,7 +272,7 @@ def _plot_filter_results(im_ref, im_list, kernels, params, m, n):
     return ax, fig
 
 
-def filter_mag(im, kernel):
+def _filter_mag(im, kernel):
     """
     Normalizes the image and computes im and real part of filter response using 
     the complex kernel and the modulus operation
@@ -316,7 +282,7 @@ def filter_mag(im, kernel):
     im: 2D array
         Input image to process 
     kernel: 2D array
-        Complex kernel (or filter)
+        Complex kernel or filter
             
     Returns
     -------
@@ -329,46 +295,56 @@ def filter_mag(im, kernel):
                    ndi.convolve(im, np.imag(kernel), mode='reflect')**2)
     return im_out
 
-def filter_multires(im_in, kernels, npyr=4, rescale=True):
+def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     """
-    Computes 2D wavelet coefficients at multiple octaves/pyramids
+    Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid 
+    transformation to downscale the input spectrogram.
     
     Parameters
     ----------
-    im_in: list of 2D arrays
-        List of input images to process 
+    Sxx: list of 2D arrays
+        List of input spectrograms to filter
     kernels: list of 2D arrays
-        List of 2D wavelets to filter the images
-    npyr: int
-        Number of pyramids to compute
-    rescale: boolean
-        Indicates if the reduced images should be rescaled
+        List of 2D kernels or filters
+    npyr: int, optional
+        Number of pyramids to compute. Default is 4.
+    rescale: boolean, optional
+        Indicates if the reduced images should be rescaled. Default is True.
             
     Returns
     -------
-    im_out: list of 2D arrays
-        List of images filtered by each 2D kernel
+    Sxx_out: list of 2D arrays
+        List of spectrograms filtered by each 2D kernel
+    
+    Examples
+    --------
+    >>> from maad.sound import load, spectrogram
+    >>> from maad.features import filter_bank_2d_nodc, filter_multires
+    >>> s, fs = load('./data/spinetail.wav')
+    >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
+    >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2)
+    >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
     """    
 
     # Downscale image using gaussian pyramid
     if npyr<2:
         print('Warning: npyr should be int and larger than 2 for multiresolution')
-        im_pyr = tuple(transform.pyramid_gaussian(im_in, downscale=2, 
+        im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2, 
                                                   max_layer=1, multichannel=False)) 
     else:    
-        im_pyr = tuple(transform.pyramid_gaussian(im_in, downscale=2, 
+        im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2, 
                                                   max_layer=npyr-1, multichannel=False)) 
 
     # filter 2d array at multiple resolutions using gabor kernels
     im_filt=[]
     for im in im_pyr:  # for each pyramid
         for kernel, param in kernels:  # for each kernel
-            im_filt.append(filter_mag(im, kernel))  #  magnitude response of filter
+            im_filt.append(_filter_mag(im, kernel))  #  magnitude response of filter
     
     # Rescale image using gaussian pyramid
     if rescale:
-        dims_raw = im_in.shape
-        im_out=[]
+        dims_raw = Sxx.shape
+        Sxx_out=[]
         for im in im_filt:
             ratio = np.array(dims_raw)/np.array(im.shape)
             if ratio[0] > 1:
@@ -376,47 +352,52 @@ def filter_multires(im_in, kernels, npyr=4, rescale=True):
                                        multichannel=False, anti_aliasing=True)
             else:
                 pass
-            im_out.append(im)
+            Sxx_out.append(im)
     else:
         pass
 
-    return im_out
+    return Sxx_out
 
         
-
-
-def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
-                        savefig=None, **kwargs):
+def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, **kwargs):
     """
-    Build a Gabor filter bank with no offset component
+    Build an ensemble of complex 2D Gabor filters with no DC offset.
     
     Parameters
     ----------
     frequency: 1d ndarray of scalars
         Spatial frequencies used to built the Gabor filters. Values should be
-        in [0;1]
+        in the range [0;1]
     
     ntheta: int
         Number of angular steps between 0° to 90°
     
     bandwidth: scalar, optional, default is 1
-        This parameter modifies the frequency of the Gabor filter
+        Spatial-frequency bandwidth of the filter 
     
     gamma: scalar, optional, default is 1
-        This parameter change the Gaussian window that modulates the continuous
-        sine.
-        1 => same gaussian window in x and y direction (circle)
-        <1 => elongation of the filter size in the y direction (elipsoid)
-        >1 => reduction of the filter size in the y direction (elipsoid)
+        Gaussian window that modulates the continuous sine.
+        For ``gamma = 1``, the result is the same gaussian window in x and y direction (circle).
+        For ``gamma <1``, the result is an increased elongation of the filter size in the y direction (elipsoid).
+        For ``gamma >1``, the result is a reduction of the filter size in the y direction (elipsoid).
+    
+    display: bool
+        Display a visualization of the filter bank. Default is False.
 
     Returns
     -------
     params: 2d structured array
          Parameters used to calculate 2D gabor kernels. 
          Params array has 4 fields (theta, freq, bandwidth, gamma)
+         This can be useful to interpret the result of the filtering process.
             
     kernels: 2d ndarray of scalars
          Gabor kernels
+    
+    Examples
+    --------
+    >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), 
+                                              ntheta=4, gamma=2, display=True)
     """
     
     theta = np.arange(ntheta)
@@ -424,7 +405,7 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False,
     params=[i for i in it.product(theta,frequency)]
     kernels = []
     for param in params:
-        kernel = gabor_kernel_nodc(frequency=param[1],
+        kernel = _gabor_kernel_nodc(frequency=param[1],
                                    theta=param[0],
                                    bandwidth=bandwidth,
                                    gamma=gamma,
@@ -447,8 +428,7 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False,
 
 def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
     """
-    Computes shape of 2D signal (image or spectrogram) at multiple resolutions 
-    using 2D Gabor filters
+    Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters
     
     Parameters
     ----------
