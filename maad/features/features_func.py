@@ -396,8 +396,9 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
     
     Examples
     --------
-    >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), 
-                                              ntheta=4, gamma=2, display=True)
+    >>> from maad.features import filter_bank_2d_nodc
+    >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True)
+    
     """
     
     theta = np.arange(ntheta)
@@ -426,13 +427,13 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
     return params, kernels  
 
 
-def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
+def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
     """
     Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters
     
     Parameters
     ----------
-    im: 2D array
+    Sxx: 2D array
         Input image to process 
     im_blobs: 2D array, optional
         Optional binary array with '1' on the region of interest and '0' otherwise
@@ -448,6 +449,14 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
         shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
     bbox: 
         If im_blobs provided, corresponding bounding box
+    
+    Example
+    -------
+    >>> from maad.sound import load, spectrogram
+    >>> from maad.features import shape
+    >>> s, fs = load('./data/spinetail.wav')
+    >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
+    
     """    
     # unpack settings
     opt_shape = opt_shape_presets(resolution, opt_shape)
@@ -458,7 +467,7 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
                                           frequency=opt_shape['frequency'],
                                           gamma=opt_shape['gamma'])
     # filter images
-    im_rs = filter_multires(im, kernels, npyr, rescale=True) 
+    im_rs = filter_multires(Sxx, kernels, npyr, rescale=True) 
 
     # Get mean intensity
     shape = []
@@ -482,7 +491,6 @@ def shape_features(im, im_blobs=None, resolution='low', opt_shape=None):
     orient = orient.tolist()*npyr
     pyr_level = np.sort(np.arange(npyr).tolist()*len(params))+1
     freq = params[:,1].tolist()*npyr
-    #params_multires = np.vstack((np.asarray(orient), freq, pyr_level))
     nparams = len(params)*npyr
     params_multires = np.zeros(nparams, dtype={'names':('theta', 'freq', 'pyr_level','scale'),
                                                'formats':('f8', 'f8', 'f8','f8')})

@@ -1,4 +1,4 @@
-features.features\_func
+﻿features.features\_func
 =======================
 
 .. automodule:: features.features_func
@@ -19,9 +19,7 @@ features.features\_func
       compute_rois_features
       create_csv
       filter_bank_2d_nodc
-      filter_mag
       filter_multires
-      gabor_kernel_nodc
       get_features_wrapper
       opt_shape_presets
       plot_shape

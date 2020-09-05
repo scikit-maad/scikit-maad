@@ -18,9 +18,6 @@ rois
 features
     Compute descriptors to characterize sounds - :ref:`maad.features`
     
-cluster
-    Cluster regions of interest using High Dimensional Data Clsutering (HDDC) - :ref:`maad.cluster`
-
 util
     Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`
     
@@ -33,7 +30,6 @@ ecoacoustics
 from . import sound
 #from . import rois
 #from . import features
-from . import cluster
 from . import util
 #from . import ecoacoustics
 #from . import spl
