@@ -437,7 +437,7 @@ def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
         Input image to process 
     im_blobs: 2D array, optional
         Optional binary array with '1' on the region of interest and '0' otherwise
-    opt: dictionary
+    opt_shape: dictionary
         options for the filter bank (kbank_opt) and the number of scales (npyr)
             
     Returns
@@ -456,6 +456,7 @@ def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
     >>> from maad.features import shape
     >>> s, fs = load('./data/spinetail.wav')
     >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
+    >>> rois, params, shape = shape_features(Sxx, im_blobs=None, resolution='low')
     
     """    
     # unpack settings

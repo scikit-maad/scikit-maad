@@ -28,7 +28,7 @@ def read_audacity_annot (audacity_filename):
     Returns
     -------
     tab_out : Pandas Dataframe 
-        Colormap type used by matplotlib
+        Region of interest with time-frequency limits and manual annotation label
     
     References
     ----------
@@ -39,19 +39,19 @@ def read_audacity_annot (audacity_filename):
     
     # arrange data
     t_info = tab_in.loc[np.arange(0,len(tab_in),2),:]
-    t_info = t_info.rename(index=str, columns={0: 'tmin', 1: 'tmax', 2:'label'})
+    t_info = t_info.rename(index=str, columns={0: 'min_t', 1: 'max_t', 2:'label'})
     t_info = t_info.reset_index(drop=True)
     
     f_info = tab_in.loc[np.arange(1,len(tab_in)+1,2),:]
-    f_info = f_info.rename(index=str, columns={0: 'slash', 1: 'fmin', 2:'fmax'})
+    f_info = f_info.rename(index=str, columns={0: 'slash', 1: 'min_f', 2:'max_f'})
     f_info = f_info.reset_index(drop=True)
     
     # return dataframe
     tab_out = pd.concat([t_info['label'].astype('str'), 
-                         t_info['tmin'].astype('float32'), 
-                         f_info['fmin'].astype('float32'), 
-                         t_info['tmax'].astype('float32'), 
-                         f_info['fmax'].astype('float32')],  axis=1)
+                         t_info['min_t'].astype('float32'), 
+                         f_info['min_f'].astype('float32'), 
+                         t_info['max_t'].astype('float32'), 
+                         f_info['max_f'].astype('float32')],  axis=1)
 
     return tab_out
 
