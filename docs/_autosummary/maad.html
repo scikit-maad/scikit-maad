@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.cluster" href="maad.cluster.html" />
+    <link rel="prev" title="Tutorial" href="../tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">maad</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.cluster.html">maad.cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.ecoacoustics.html">maad.ecoacoustics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.features.html">maad.features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.rois.html">maad.rois</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.sound.html">maad.sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.util.html">maad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.version.html">maad.version</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>maad</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/maad.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-maad">
+<span id="maad"></span><h1>maad<a class="headerlink" href="#module-maad" title="Permalink to this headline">¶</a></h1>
+<p>Multiresolution Analysis of Acoustic Diversity Scikit (Toolbox for SciPy)</p>
+<p>scikit-maad is a modular toolbox to analyze ecoacoustics datasets in Python 3. 
+This package was designed to bring flexibility to find regions of interest,
+and to compute acoustic features in audio recordings. This workflow opens 
+the possibility to use powerfull machine learning algorithms through 
+scikit-learn, allowing to identify key patterns in all kind of soundscapes.</p>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>sound</dt><dd><p>Load and transform (e.g. stft) audio signals - <a class="reference internal" href="maad.sound.html#module-maad.sound"><span class="std std-ref">maad.sound</span></a></p>
+</dd>
+<dt>rois</dt><dd><p>Find regions of interest in 1D and 2D signals - <a class="reference internal" href="maad.rois.html#module-maad.rois"><span class="std std-ref">maad.rois</span></a></p>
+</dd>
+<dt>features</dt><dd><p>Compute descriptors to characterize sounds - <a class="reference internal" href="maad.features.html#module-maad.features"><span class="std std-ref">maad.features</span></a></p>
+</dd>
+<dt>cluster</dt><dd><p>Cluster regions of interest using High Dimensional Data Clsutering (HDDC) - <a class="reference internal" href="maad.cluster.html#module-maad.cluster"><span class="std std-ref">maad.cluster</span></a></p>
+</dd>
+<dt>util</dt><dd><p>Miscelaneous and useful set of tools used in the audio analysis framework - <a class="reference internal" href="maad.util.html#module-maad.util"><span class="std std-ref">maad.util</span></a></p>
+</dd>
+<dt>ecoacoustics</dt><dd><p>Miscelaneous and useful set of tools used to compute global indices for 
+ecoacoustics - <a class="reference internal" href="maad.ecoacoustics.html#module-maad.ecoacoustics"><span class="std std-ref">maad.ecoacoustics</span></a></p>
+</dd>
+</dl>
+</div>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="maad.cluster.html#module-maad.cluster" title="maad.cluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.cluster</span></code></a></p></td>
+<td><p>cluster functions for scikit-maad Cluster regions of interest using High Dimensional Data Clsutering (HDDC).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="maad.ecoacoustics.html#module-maad.ecoacoustics" title="maad.ecoacoustics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.ecoacoustics</span></code></a></p></td>
+<td><p>Ecoacoustics functions for scikit-maad Collection of functions to calculate alpha indices</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="maad.features.html#module-maad.features" title="maad.features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features</span></code></a></p></td>
+<td><p>feature functions for scikit-maad Methods to compute multiple descriptors to characterize sounds</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="maad.rois.html#module-maad.rois" title="maad.rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.rois</span></code></a></p></td>
+<td><p>rois functions for scikit-maad Collection of methods to find regions of interest in 1D and 2D signals.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="maad.sound.html#module-maad.sound" title="maad.sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.sound</span></code></a></p></td>
+<td><p>Sound functions for scikit-maad Load, filter and transform 1D audio signals</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="maad.util.html#module-maad.util" title="maad.util"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.util</span></code></a></p></td>
+<td><p>Utility functions for scikit-maad Collection of miscelaneous functions that help to simplify the framework</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="maad.version.html#module-maad.version" title="maad.version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.version</span></code></a></p></td>
+<td><p>version 0.1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.cluster.html" class="btn btn-neutral float-right" title="maad.cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../tutorial.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

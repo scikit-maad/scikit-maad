@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.rois.rois_2d.select_rois &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.rois.rois_2d.select_rois_auto" href="maad.rois.rois_2d.select_rois_auto.html" />
+    <link rel="prev" title="maad.rois.rois_2d.select_bandwidth" href="maad.rois.rois_2d.select_bandwidth.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.cluster.html">maad.cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.ecoacoustics.html">maad.ecoacoustics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.features.html">maad.features</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="maad.rois.html">maad.rois</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.rois.rois_1d.html">maad.rois.rois_1d</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="maad.rois.rois_2d.html">maad.rois.rois_2d</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.create_mask.html">maad.rois.rois_2d.create_mask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.double_threshold_abs.html">maad.rois.rois_2d.double_threshold_abs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.double_threshold_rel.html">maad.rois.rois_2d.double_threshold_rel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.find_rois_wrapper.html">maad.rois.rois_2d.find_rois_wrapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.load.html">maad.rois.rois_2d.load</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.median_equalizer.html">maad.rois.rois_2d.median_equalizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.overlay_rois.html">maad.rois.rois_2d.overlay_rois</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.remove_background.html">maad.rois.rois_2d.remove_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.select_bandwidth.html">maad.rois.rois_2d.select_bandwidth</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">maad.rois.rois_2d.select_rois</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.select_rois_auto.html">maad.rois.rois_2d.select_rois_auto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.select_rois_man.html">maad.rois.rois_2d.select_rois_man</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_2d.smooth.html">maad.rois.rois_2d.smooth</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maad.sound.html">maad.sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.util.html">maad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.version.html">maad.version</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="maad.html">maad</a> &raquo;</li>
+        
+          <li><a href="maad.rois.html">maad.rois</a> &raquo;</li>
+        
+          <li><a href="maad.rois.rois_2d.html">maad.rois.rois_2d</a> &raquo;</li>
+        
+      <li>maad.rois.rois_2d.select_rois</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/maad.rois.rois_2d.select_rois.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-rois-rois-2d-select-rois">
+<h1>maad.rois.rois_2d.select_rois<a class="headerlink" href="#maad-rois-rois-2d-select-rois" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.rois.rois_2d.select_rois">
+<code class="sig-prename descclassname">maad.rois.rois_2d.</code><code class="sig-name descname">select_rois</code><span class="sig-paren">(</span><em class="sig-param">im_bin</em>, <em class="sig-param">ext</em>, <em class="sig-param">mode_roi='auto'</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_2d.html#select_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.rois_2d.select_rois" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper function
+Select rois candidates automatically or manually (annotating file)
+The ouput image contains pixels with labels as values.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
+</dd>
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+<dt><strong>mode_roi</strong><span class="classifier">string in {‘auto’, ‘manual’}, optional, default is ‘auto’</span></dt><dd><p>if ‘auto’, an automatic selection of the ROIs is performed
+if ‘manual’, ROIs manually found using another software (i.e. Audacity) 
+are retrieved. If mask = True, a boolean AND operation is performed 
+between the manual ROIs (Rectangles) and the binary image, else no boolean
+operation is performed with the binary image and the output label image
+is directly the rectangles (bounding box)</p>
+</dd>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+</dd>
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+is added to the root filename.</p>
+</dd>
+<dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions.
+All the input arguments required or optional in the signature of the
+functions above can be passed as kwargs :
+select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,
+**kwargs)
+select_rois_manually(im_bin,ext,filename,software,mask,display,
+savefig,**kwargs</p>
+<p>… and more, see matplotlib</p>
+<p>example :
+im_rois, rois_bbox, rois_label =select_rois_auto(im_bin,ext,mode=’auto’,
+min_roi=100,max_roi=1e6,
+display=True,savefig=None,**kwargs)</p>
+<p>im_rois, rois_bbox, rois_label =select_rois_man(im_bin,ext,mode=’manual’,
+filename=’annotation.txt’,
+software=’audacity,
+display=True,savefig=None,**kwargs)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>im_rois: 2d ndarray</dt><dd><p>image with labels as values</p>
+</dd>
+<dt><strong>rois_bbox</strong><span class="classifier">list of tuple (min_y,min_x,max_y,max_x)</span></dt><dd><p>Contains the bounding box of each ROI</p>
+</dd>
+<dt><strong>rois_label</strong><span class="classifier">list of tuple (labelID, labelname)</span></dt><dd><p>Contains the label (LabelID=scalar,labelname=string) for each ROI
+LabelID is a number from 1 to the number of ROI. The pixel value 
+of im_label correspond the labelID
+Labname is a string. As the selection is auto, label is ‘unknown’
+by default.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.rois.rois_2d.select_rois_auto.html" class="btn btn-neutral float-right" title="maad.rois.rois_2d.select_rois_auto" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.rois.rois_2d.select_bandwidth.html" class="btn btn-neutral float-left" title="maad.rois.rois_2d.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

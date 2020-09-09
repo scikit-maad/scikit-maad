@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-""" Multiresolution Analysis of Acoustic Diversity
-    functions for processing sound """
+""" 
+Multiresolution Analysis of Acoustic Diversity
+functions for processing sound 
+"""
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
@@ -15,8 +17,8 @@ import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
 from scipy.signal import butter, sosfilt, hann, stft, convolve, iirfilter, get_window
-from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
-
+#from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
+from maad.util.util import plot1D, plot2D, crop_image, linear_scale, linear2dB
 
 def load(filename, channel='left', detrend=True, verbose=False,
          display=False, savefig=None, **kwargs): 
@@ -29,9 +31,9 @@ def load(filename, channel='left', detrend=True, verbose=False,
         The name or path of the .wav file to load      
         if you want to extract the date of creation of the file, the filename 
         must have this postfix :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds
+        XXXX_yyyymmdd_hhmmss.wav
+        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+        mm : minutes / ss : seconds
             
     channel : {'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
@@ -50,36 +52,43 @@ def load(filename, channel='left', detrend=True, verbose=False,
         is added to the root filename.
         
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
-        savefilename : str, optional, default :'_audiogram.png'
+           
+        - savefilename : str, optional, default :'_audiogram.png'
             Postfix of the figure filename
-        **************************************************** 
-        figsize : tuple of integers, optional, default: (4,10)
+         
+        - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
+        
+        - title : string, optional, default : 'Spectrogram'
             title of the figure
-        xlabel : string, optional, default : 'Time [s]'
+        
+        - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
+        
+        - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
-        vmin, vmax : scalar, optional, default: None
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : list of scalars [left, right, bottom, top], optional, default: None
+            ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
+        
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        
+        - format : string, optional, default is 'png'
             Format to save the figure
             
         ... and more, see matplotlib     
@@ -151,6 +160,8 @@ def load(filename, channel='left', detrend=True, verbose=False,
 def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None, 
               rs=None):
     """
+    Parameters
+    ----------
     x : array_like
         1d vector of scalar to be filtered
         
@@ -171,11 +182,16 @@ def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None
         is 'butter'
         
     The type of IIR filter to design:
-            Butterworth : 'butter'
-            Chebyshev I : 'cheby1'
-            Chebyshev II : 'cheby2'
-            Cauer/elliptic: 'ellip'
-            Bessel/Thomson: 'bessel'
+    
+        Butterworth : 'butter'
+        
+        Chebyshev I : 'cheby1'
+        
+        Chebyshev II : 'cheby2'
+        
+        Cauer/elliptic: 'ellip'
+        
+        Bessel/Thomson: 'bessel'
             
     rp : float, optional
         For Chebyshev and elliptic filters, provides the maximum ripple in 
@@ -194,31 +210,43 @@ def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None
 #=============================================================================
 def fir_filter(x, kernel, axis=0):
     """
+    Parameters
+    ----------
     x : array_like
         1d vector or 2d matrix of scalars to be filtered
    
     kernel : array_like or tuple
         Pass directly the kernel (1d vector of scalars) 
-        Or pass the arguments in a tuple to create a kernel. Arguments are
-                window : string, float, or tuple
-                    The type of window to create. 
-                - boxcar, triang, blackman, hamming, hann, bartlett, 
-                  flattop,parzen, bohman, blackmanharris, nuttall, barthann, 
-                - (kaiser, beta), 
-                - (gaussian, standard deviation), 
-                - (general_gaussian, power, width), 
-                - (slepian, width), 
-                - (dpss, normalized half-bandwidth), 
-                - (chebwin, attenuation), 
-                - (exponential, decay scale), 
-                - (tukey, taper fraction)
-                Nx : int
-                    The number of samples in the window.
+        Or pass the arguments in a tuple to create a kernel. Arguments are:   
+        
+        - window : string, float, or tuple. The type of window to create. 
+        
+        - boxcar, triang, blackman, hamming, hann, bartlett, flattop,parzen, bohman, blackmanharris, nuttall, barthann, 
+        
+        - (kaiser, beta), 
+        
+        - (gaussian, standard deviation), 
+        
+        - (general_gaussian, power, width), 
+        
+        - (slepian, width), 
+        
+        - (dpss, normalized half-bandwidth), 
+        
+        - (chebwin, attenuation), 
+        
+        - (exponential, decay scale), 
+        
+        - (tukey, taper fraction)
+    
+    Nx : int
+        The number of samples in the window.
                     
-        examples:
-            kernel = ('boxcar', 9)
-            kernel = (('gaussian', 0.5), 5)
-            kernel = [1 3 5 7 5 3 1] 
+    Examples:
+    kernel = ('boxcar', 9)
+    kernel = (('gaussian', 0.5), 5)
+    kernel = [1 3 5 7 5 3 1] 
+    
     axis : int
         Determine along which axis is performed the filtering in case of 2d matrix
     """
@@ -287,37 +315,45 @@ def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False,
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
         
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
-        savefilename : str, optional, default :'_filt_audiogram.png'
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions   
+        
+        - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
-        **************************************************** 
-        figsize : tuple of integers, optional, default: (4,10)
+        
+        - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
+        
+        - title : string, optional, default : 'Spectrogram'
             title of the figure
-        xlabel : string, optional, default : 'Time [s]'
+        
+        - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
+        
+        - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
-        vmin, vmax : scalar, optional, default: None
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : list of scalars [left, right, bottom, top], optional, default: None
+        
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
+        
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        
+        - format : string, optional, default is 'png'
             Format to save the figure
         
         ... and more, see matplotlib     
@@ -426,8 +462,10 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         **Priority to dt_df_res is provided**, 
         nperseg and overlap are not taken into account
         usage : 
-            dt_df_res = [0.02, 20] means
-            time resolution dt = 0.02s / frequency resolution df = 20Hz
+        
+        dt_df_res = [0.02, 20] means
+        
+        time resolution dt = 0.02s / frequency resolution df = 20Hz
             
     db_range : int, optional, default is None
         Final dB range of the spectrogram values.
@@ -452,37 +490,44 @@ def spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, db_range=None, 
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
         
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
-        savefilename : str, optional, default :'_filt_audiogram.png'
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
+           
+        - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
-        **************************************************** 
-        figsize : tuple of integers, optional, default: (4,10)
+        
+        - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
+        
+        - title : string, optional, default : 'Spectrogram'
             title of the figure
-        xlabel : string, optional, default : 'Time [s]'
+        
+        - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
+        
+        - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
-        vmin, vmax : scalar, optional, default: None
+            'viridis'...
+            vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : list of scalars [left, right, bottom, top], optional, default: None
+        
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
+        
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        
+        - format : string, optional, default is 'png'
             Format to save the figure
         
         ... and more, see matplotlib  
@@ -629,8 +674,9 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         **Priority to dt_df_res is provided**, 
         nperseg and overlap are not taken into account
         usage : 
-            dt_df_res = [0.02, 20] means
-            time resolution dt = 0.02s / frequency resolution df = 20Hz
+        
+        dt_df_res = [0.02, 20] means
+        time resolution dt = 0.02s / frequency resolution df = 20Hz
             
     detrend : boolean, optional, default is False
         if detrend is True, the DC value (ie. mean value of signal) is
@@ -638,8 +684,8 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
             
     mode : str, optional, default is 'amplitude'
         select the output values of spectrogram :
-            - 'amplitude' : Sxx = A
-            - 'psd'       : Sxx = A² (= Power Spectrum Density (PSD))
+        - 'amplitude' : Sxx = A
+        - 'psd'       : Sxx = A² (= Power Spectrum Density (PSD))
         
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
@@ -655,37 +701,45 @@ def spectrogram2(s, fs, nperseg=512, overlap=0, dt_df_res=None, detrend=False,
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
         
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
-        savefilename : str, optional, default :'_filt_audiogram.png'
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
+           
+        - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
-        **************************************************** 
-        figsize : tuple of integers, optional, default: (4,10)
+        
+        - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
+        
+        - title : string, optional, default : 'Spectrogram'
             title of the figure
-        xlabel : string, optional, default : 'Time [s]'
+        
+        - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
+        
+        - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
-        vmin, vmax : scalar, optional, default: None
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : list of scalars [left, right, bottom, top], optional, default: None
+        
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
+        
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        
+        - format : string, optional, default is 'png'
             Format to save the figure
         
         ... and more, see matplotlib  
@@ -876,37 +930,44 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
         
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
-        ****************************************************    
-        savefilename : str, optional, default :'_filt_audiogram.png'
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
+            
+        - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
-        **************************************************** 
-        figsize : tuple of integers, optional, default: (4,10)
+        
+        - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        title : string, optional, default : 'Spectrogram'
+        
+        - title : string, optional, default : 'Spectrogram'
             title of the figure
-        xlabel : string, optional, default : 'Time [s]'
+        
+        - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        ylabel : string, optional, default : 'Amplitude [AU]'
+        
+        - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-        cmap : string or Colormap object, optional, default is 'gray'
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-                      'viridis'...
-        vmin, vmax : scalar, optional, default: None
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        ext : list of scalars [left, right, bottom, top], optional, default: None
+        
+        - ext : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        dpi : integer, optional, default is 96
+        
+        - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        format : string, optional, default is 'png'
+        - format : string, optional, default is 'png'
             Format to save the figure
         
         ... and more, see matplotlib  
@@ -927,7 +988,6 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
         The location, in data-coordinates, of the lower-left and
         upper-right corners. If `None`, the image is positioned such that
         the pixel centers fall on zero-based (row, column) indices.
-        
     """
 
     # compute the number of frames
@@ -1017,9 +1077,9 @@ def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
         The name or path of the .wav file to load      
         if you want to extract the date of creation of the file, the filename 
         must have this postfix :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds    
+        XXXX_yyyymmdd_hhmmss.wav
+        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+        mm : minutes / ss : seconds    
             
     display : boolean, optional, default is False
         Display the signals and the spectrograms if True
@@ -1028,25 +1088,25 @@ def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
         
-    **kwargs, optional. This parameter is used by the maad function as well
+    \*\*kwargs, optional. This parameter is used by the maad function as well
         as the plt.plot and savefig functions.
         All the input arguments required or optional in the signature functions
         can be passed.
         see the signature of each maad function to know the parameters 
         that can be passed as kwargs :
-            load(filename, channel='left', display=False, savefig=None, 
-                 **kwargs)
-            select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
-                             savefig=None, **kwargs):
-            spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, 
-                        db_range=60, db_gain=20, rescale=True, fcrop=None, 
-                        tcrop=None, display=False, savefig = None, **kwargs):
+        load(filename, channel='left', display=False, savefig=None, 
+        \*\*kwargs)
+        select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
+        savefig=None, \*\*kwargs):
+        spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, 
+        db_range=60, db_gain=20, rescale=True, fcrop=None, 
+        tcrop=None, display=False, savefig = None, \*\*kwargs):
         ... and more, see matplotlib  
         
         example : 
-            preprocess_wrapper('audio.wav', display=False, savefig=None, 
-                               tcrop=[0,30])
-  
+        preprocess_wrapper('audio.wav', display=False, savefig=None, 
+        tcrop=[0,30])
+        
     Returns
     ------- 
     Sxx : 2d ndarray
@@ -1064,9 +1124,9 @@ def preprocess_wrapper(filename, display=False, savefig=None, **kwargs):
         This object contains the date of creation of the file extracted from
         the filename postfix. 
         The filename must follow this format :
-            XXXX_yyyymmdd_hhmmss.wav
-            with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-            mm : minutes / ss : seconds   
+        XXXX_yyyymmdd_hhmmss.wav
+        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+        mm : minutes / ss : seconds   
     """ 
 
     channel=kwargs.pop('channel','left')

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" SPL conversion functions for scikit-maad
+""" 
+SPL conversion functions for scikit-maad
 Collection of miscelaneous functions that help to convert wav and volt data
 to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)
 """   
@@ -112,7 +113,7 @@ def wav2SPL (wave, gain, bit=16, Vadc = sqrt(2), sensitivity=-35, dBref=94):
         Pressure sound level used for the calibration of the microphone 
         (usually 94dB, sometimes 114dB)
                 
-    ReturnsdBSP
+    Returns
     -------
     wave_SPL : 1d ndarray of floats
         Vector containing the sound waveform in SPL (Sound Pressure level : Pa)

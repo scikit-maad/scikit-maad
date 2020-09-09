@@ -1,0 +1,775 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.cluster.hdda &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../../../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.cluster.hdda</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.cluster.hdda</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Feb 15 2018</span>
+
+<span class="sd">@author: Mathieu Fauvel </span>
+<span class="sd">[Modified by S. Haupert to adapt the script to Python 3.xx]</span>
+<span class="sd">Source : https://github.com/mfauvel/HDDA</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg.blas</span> <span class="kn">import</span> <span class="n">dsyrk</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
+
+<span class="c1"># TODO: Define get_param and set_param function</span>
+<span class="c1"># TODO: Check the projection in predict -&gt; could be faster ...</span>
+<span class="c1"># TODO: add predict_proba function</span>
+
+<span class="c1"># Numerical precision - Some constant</span>
+<span class="n">EPS</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+<span class="n">MIN</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+
+
+<span class="c1"># HDDC</span>
+<div class="viewcode-block" id="HDDC"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC">[docs]</a><span class="k">class</span> <span class="nc">HDDC</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class implements the HDDA models proposed by Charles Bouveyron</span>
+<span class="sd">    and Stephane Girard</span>
+<span class="sd">    Details about methods can be found here:</span>
+<span class="sd">    https://doi.org/10.1016/j.csda.2007.02.009</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;kmeans&#39;</span><span class="p">,</span>
+                 <span class="n">itermax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                 <span class="n">population</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">check_empty</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function initialize the HDDA stucture</span>
+<span class="sd">        </span>
+<span class="sd">        param model: the model used.</span>
+<span class="sd">        </span>
+<span class="sd">        type mode: string</span>
+<span class="sd">        </span>
+<span class="sd">        - M1 = aijbiQidi</span>
+<span class="sd">        </span>
+<span class="sd">        - M2 = aijbiQid</span>
+<span class="sd">        </span>
+<span class="sd">        - M3 = aijbQidi</span>
+<span class="sd">        </span>
+<span class="sd">        - M4 = aijbQid</span>
+<span class="sd">        </span>
+<span class="sd">        - M5 = aibiQidi</span>
+<span class="sd">        </span>
+<span class="sd">        - M6 = aibiQid</span>
+<span class="sd">        </span>
+<span class="sd">        - M7 = aibQidi</span>
+<span class="sd">        </span>
+<span class="sd">        - M8 = aibQid</span>
+<span class="sd">        </span>
+<span class="sd">        - M9 = abiQidi &lt;--</span>
+<span class="sd">        </span>
+<span class="sd">        - M10 = abiQid</span>
+<span class="sd">        </span>
+<span class="sd">        - M11 = abQidi</span>
+<span class="sd">        </span>
+<span class="sd">        - m12 = abQid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Hyperparameters of the algorithm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">=</span> <span class="n">th</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">itermax</span> <span class="o">=</span> <span class="n">itermax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tol</span> <span class="o">=</span> <span class="n">tol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="o">=</span> <span class="n">population</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_empty</span> <span class="o">=</span> <span class="n">check_empty</span>  <span class="c1"># Check for empty classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C_</span> <span class="o">=</span> <span class="p">[</span><span class="n">C</span><span class="p">]</span>  <span class="c1"># List of clusters number w.r.t iterations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ni</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Number of samples of each class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Proportion of each class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Mean vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Signal subspace size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Eigenvalues of covariance matrices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Eigenvectors of covariance matrices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Trace of the covariance matrices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Eigenvalues of signal subspaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Values of the noise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logdet</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Pre-computation of the logdet</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span> <span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>  <span class="c1"># Name of the model</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="c1">#    print &quot;Model parameter {} is not available&quot;.format(model)</span>
+        <span class="c1">#     Modif SH             </span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Model parameter </span><span class="si">%s</span><span class="s2"> is not available&quot;</span> <span class="o">%</span> <span class="nb">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>        
+            <span class="n">exit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># Number of parameters of the full models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bic</span> <span class="o">=</span> <span class="p">[]</span>         <span class="c1"># bic values of the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aic</span> <span class="o">=</span> <span class="p">[]</span>         <span class="c1"># aic values of the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icl</span> <span class="o">=</span> <span class="p">[]</span>         <span class="c1"># icl values of the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">niter</span> <span class="o">=</span> <span class="kc">None</span>     <span class="c1"># Number of iterations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># Matrix to project samples when n&lt;d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dL</span> <span class="o">=</span> <span class="p">[]</span>          <span class="c1"># Common covariance matrix eigenvalues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># Membership matrix</span>
+
+<div class="viewcode-block" id="HDDC.fit"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimate the model parameters with the EM algorithm</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features). </span>
+<span class="sd">        </span>
+<span class="sd">            List of n_features-dimensional data points. Each row</span>
+<span class="sd">            corresponds to a single data point.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------        </span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialization</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="n">LL</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ITER</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="c1"># Compute constant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+        <span class="c1"># Set minimum clusters size</span>
+        <span class="c1"># Rule of dumbs for minimal size pi = 1 :</span>
+        <span class="c1"># one mean vector (d) + one eigenvalues/vectors (1 + d)</span>
+        <span class="c1"># + noise term (1) ~ 2(d+1)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of classes to high w.r.t the number of samples:&quot;</span>
+                  <span class="s2">&quot;C should be deacreased&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span> <span class="mi">2</span>
+
+        <span class="c1"># Initialization of the clustering</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s1">&#39;kmeans&#39;</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span>
+                               <span class="n">n_init</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">labels_</span>
+                <span class="n">label</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Label starts at one</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s1">&#39;user&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">!=</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The number of class does not&quot;</span>
+                          <span class="s2">&quot;match between self.C and y&quot;</span><span class="p">)</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">y</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization should be kmeans or random or user&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">-</span> <span class="mi">2</span>  <span class="c1"># Bad init values</span>
+
+            <span class="c1"># Convert label to membership</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">),</span> <span class="n">label</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Compute the whole covariance matrix and its eigenvalues if needed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="n">X_</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">sp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="c1"># Use dsyrk to take benefit of the product symmetric matrices</span>
+            <span class="c1"># X^{t}X or XX^{t}</span>
+            <span class="c1"># Transpose to put in fortran order</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+                <span class="n">W</span> <span class="o">=</span> <span class="n">dsyrk</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">X_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">trans</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">W</span> <span class="o">=</span> <span class="n">dsyrk</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">X_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">trans</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">X_</span>
+
+            <span class="c1"># Compute intrinsic dimension on the whole data set</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">eigvals_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="c1"># Chek for numerical errors</span>
+            <span class="n">L</span><span class="p">[</span><span class="n">L</span> <span class="o">&lt;</span> <span class="n">EPS</span><span class="p">]</span> <span class="o">=</span> <span class="n">EPS</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dL</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">L</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dL</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dL</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">W</span><span class="p">,</span> <span class="n">L</span>
+
+        <span class="c1"># Initialization of the parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_step</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_step</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">LL</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ll</span><span class="p">)</span>
+
+        <span class="c1"># Main while loop</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">ITER</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">itermax</span><span class="p">):</span>
+            <span class="c1"># M step</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">free</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">m_step</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+            <span class="c1"># E step</span>
+            <span class="n">ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_step</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+            <span class="n">LL</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ll</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">LL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">LL</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">LL</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tol</span><span class="p">)</span> <span class="ow">and</span> \
+               <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C_</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ITER</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Return the class membership and some parameters of the optimization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LL</span> <span class="o">=</span> <span class="n">LL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bic</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">LL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aic</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">LL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+        <span class="c1"># Add small constant to ICL to prevent numerical issues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bic</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">EPS</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">niter</span> <span class="o">=</span> <span class="n">ITER</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Remove temporary variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="HDDC.m_step"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.m_step">[docs]</a>    <span class="k">def</span> <span class="nf">m_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        M step of the algorithm</span>
+
+<span class="sd">        This function  computes the  empirical estimators of  the mean</span>
+<span class="sd">        vector,  the convariance  matrix  and the  proportion of  each</span>
+<span class="sd">        class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Learn the model for each class</span>
+        <span class="n">C_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span>
+        <span class="n">c_delete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">):</span>
+            <span class="n">ni</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="c1"># Check if empty</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_empty</span> <span class="ow">and</span> \
+               <span class="n">ni</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">:</span>
+                <span class="n">C_</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">c_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ni</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">X_</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">c</span><span class="p">])[:,</span> <span class="n">sp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+
+                <span class="c1"># Use dsyrk to take benefit of symmetric matrices</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+                    <span class="n">cov</span> <span class="o">=</span> <span class="n">dsyrk</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">X_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">trans</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cov</span> <span class="o">=</span> <span class="n">dsyrk</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">X_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">trans</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_</span><span class="p">)</span>
+                <span class="n">X_</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="c1"># Only the upper part of cov is initialize -&gt; dsyrk</span>
+                <span class="n">L</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="c1"># Chek for numerical errors</span>
+                <span class="n">L</span><span class="p">[</span><span class="n">L</span> <span class="o">&lt;</span> <span class="n">EPS</span><span class="p">]</span> <span class="o">=</span> <span class="n">EPS</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_empty</span> <span class="ow">and</span> <span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">L</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">EPS</span><span class="p">:</span>
+                    <span class="c1"># In that case all eigenvalues are equal</span>
+                    <span class="c1"># and this does not match the model</span>
+                    <span class="n">C_</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="n">c_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+                        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">L</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">Q</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cov</span><span class="o">.</span><span class="n">trace</span><span class="p">())</span>
+
+        <span class="c1"># Update T</span>
+        <span class="k">if</span> <span class="n">c_delete</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">c_delete</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Update the number of clusters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">C_</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C_</span>
+
+        <span class="c1"># Estimation of the signal subspace for specific size subspace models</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">,</span> <span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">):</span>
+                <span class="c1"># Scree test</span>
+                <span class="n">dL</span><span class="p">,</span> <span class="n">pi</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="n">c</span><span class="p">])),</span> <span class="mi">1</span>
+                <span class="n">dL</span> <span class="o">/=</span> <span class="n">dL</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="k">while</span> <span class="n">sp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dL</span><span class="p">[</span><span class="n">pi</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">):</span>
+                    <span class="n">pi</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pi</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pi</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="n">dL</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dL</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">sp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dL</span><span class="p">[</span><span class="n">p</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">):</span>
+                <span class="n">p</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">min_dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ni</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">))</span>
+            <span class="c1"># Check if (p &gt;= ni-1 or d-1) and p &gt; 0</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">min_dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">((</span><span class="n">min_dim</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">)]</span>
+            <span class="k">del</span> <span class="n">dL</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">idx</span>
+
+        <span class="c1"># Estim signal part</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">sL</span><span class="p">[:</span><span class="n">sPI</span><span class="p">]</span> <span class="k">for</span> <span class="n">sL</span><span class="p">,</span> <span class="n">sPI</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">sA</span><span class="p">[:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">sA</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">sA</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">]</span>
+
+        <span class="c1"># Estim noise term</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">):</span>
+            <span class="c1"># Noise free</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[(</span><span class="n">sT</span><span class="o">-</span><span class="n">sA</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">-</span><span class="n">sPI</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">sT</span><span class="p">,</span> <span class="n">sA</span><span class="p">,</span> <span class="n">sPI</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)]</span>
+            <span class="c1"># Check for very small value of b</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">EPS</span> <span class="k">else</span> <span class="n">EPS</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M3&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="c1"># Noise common</span>
+            <span class="n">denom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">-</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">sPR</span><span class="o">*</span><span class="n">sPI</span>
+                                     <span class="k">for</span> <span class="n">sPR</span><span class="p">,</span> <span class="n">sPI</span> <span class="ow">in</span>
+                                     <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)])</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">sPR</span><span class="o">*</span><span class="p">(</span><span class="n">sT</span><span class="o">-</span><span class="n">sA</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+                          <span class="k">for</span> <span class="n">sPR</span><span class="p">,</span> <span class="n">sT</span><span class="p">,</span> <span class="n">sA</span> <span class="ow">in</span>
+                          <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)])</span>
+
+            <span class="c1"># Check for very small values</span>
+            <span class="k">if</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="n">EPS</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">EPS</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">)]</span>
+            <span class="k">elif</span> <span class="n">denom</span> <span class="o">&lt;</span> <span class="n">EPS</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="n">EPS</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">num</span><span class="o">/</span><span class="n">denom</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">)]</span>
+
+        <span class="c1"># Compute remainings parameters</span>
+        <span class="c1"># Precompute logdet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logdet</span> <span class="o">=</span> <span class="p">[(</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sA</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">-</span><span class="n">sPI</span><span class="p">)</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sB</span><span class="p">))</span>
+                       <span class="k">for</span> <span class="n">sA</span><span class="p">,</span> <span class="n">sPI</span><span class="p">,</span> <span class="n">sB</span> <span class="ow">in</span>
+                       <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)]</span>
+
+        <span class="c1"># Update the Q matrices</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="p">[</span><span class="n">sQ</span><span class="p">[:,</span> <span class="p">:</span><span class="n">sPI</span><span class="p">]</span>
+                      <span class="k">for</span> <span class="n">sQ</span><span class="p">,</span> <span class="n">sPI</span> <span class="ow">in</span>
+                      <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sX</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sQ</span><span class="p">[:,</span> <span class="p">:</span><span class="n">sPI</span><span class="p">])</span><span class="o">/</span><span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sL</span><span class="p">[:</span><span class="n">sPI</span><span class="p">])</span>
+                      <span class="k">for</span> <span class="n">sX</span><span class="p">,</span> <span class="n">sQ</span><span class="p">,</span> <span class="n">sPI</span><span class="p">,</span> <span class="n">sL</span> <span class="ow">in</span>
+                      <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)]</span>
+
+        <span class="c1"># Compute the number of parameters of the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="n">sPI</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">-</span><span class="p">(</span><span class="n">sPI</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                                                   <span class="k">for</span> <span class="n">sPI</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+        <span class="c1"># Number of noise subspaces</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">,</span> <span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M2&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Size of signal subspaces</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M3&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;M7&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">+</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="HDDC.e_step"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.e_step">[docs]</a>    <span class="k">def</span> <span class="nf">e_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the e-step of the algorithm</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_dimensions).</span>
+<span class="sd">        </span>
+<span class="sd">            List of n_features-dimensional data points. Each row</span>
+<span class="sd">            corresponds to a single data point.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get some parameters</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Compute the membership function</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># Compute the Loglikelhood</span>
+        <span class="n">K</span> <span class="o">*=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">Km</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Km</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># logsumexp trick</span>
+        <span class="n">LL</span> <span class="o">=</span> <span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">K</span><span class="o">-</span><span class="n">Km</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="n">sp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span><span class="n">Km</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="c1"># Compute the posterior</span>
+        <span class="k">with</span> <span class="n">sp</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">over</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">K</span><span class="o">-</span><span class="n">K</span><span class="p">[:,</span> <span class="n">c</span><span class="p">][:,</span> <span class="n">sp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">LL</span></div>
+
+<div class="viewcode-block" id="HDDC.score"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the per-sample log-likelihood of the given data X.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_dimensions).</span>
+<span class="sd">            </span>
+<span class="sd">            List of n_features-dimensional data points. Each row</span>
+<span class="sd">            corresponds to a single data point.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        log_likelihood : float </span>
+<span class="sd">            Log likelihood of the Gaussian mixture given X.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="c1"># Get some parameters</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Compute the membership function</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># Compute the Loglikelhood</span>
+        <span class="n">K</span> <span class="o">*=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">Km</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Km</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Logsumexp trick</span>
+        <span class="n">LL</span> <span class="o">=</span> <span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">K</span><span class="o">-</span><span class="n">Km</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="n">sp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span><span class="n">Km</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">LL</span></div>
+
+<div class="viewcode-block" id="HDDC.score_samples"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.score_samples">[docs]</a>    <span class="k">def</span> <span class="nf">score_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the negative weighted log probabilities for each sample.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------- </span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features).</span>
+<span class="sd">            List of n_features-dimensional data points. Each row</span>
+<span class="sd">            corresponds to a single data point.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        log_prob : array </span>
+<span class="sd">            Shape (n_samples, n_clusters). Log probabilities of each data point in X.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">nt</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">))</span>
+
+        <span class="c1"># Start the prediction for each class</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">):</span>
+            <span class="c1"># Compute the constant term</span>
+            <span class="n">K</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logdet</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cst</span>
+
+            <span class="c1"># Remove the mean</span>
+            <span class="n">Xc</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+
+            <span class="c1"># Do the projection</span>
+            <span class="n">Px</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Xc</span><span class="p">,</span>
+                        <span class="n">sp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Px</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">/</span><span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
+            <span class="n">K</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">K</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">Xc</span> <span class="o">-</span> <span class="n">Px</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="o">-</span><span class="n">K</span></div>
+
+<div class="viewcode-block" id="HDDC.predict"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict the labels for the data samples in X using trained model.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features).</span>
+<span class="sd">            List of n_features-dimensional data points. Each row</span>
+<span class="sd">            corresponds to a single data point.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        labels : array</span>
+<span class="sd">            shape (n_samples,). </span>
+<span class="sd">            </span>
+<span class="sd">            Component labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="HDDC.predict_proba"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict the membership probabilities for the data samples</span>
+<span class="sd">        in X using trained model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------- </span>
+<span class="sd">        X : array-like </span>
+<span class="sd">            Shape (n_samples, n_features).</span>
+<span class="sd">            List of n_features-dimensional data points. Each row</span>
+<span class="sd">            corresponds to a single data point.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        proba : array </span>
+<span class="sd">            Shape (n_samples, n_clusters)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+
+        <span class="c1"># Compute the Loglikelhood</span>
+        <span class="n">K</span> <span class="o">*=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># Compute the posterior</span>
+        <span class="k">with</span> <span class="n">sp</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">over</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">):</span>
+                <span class="n">T</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">K</span><span class="o">-</span><span class="n">K</span><span class="p">[:,</span> <span class="n">c</span><span class="p">][:,</span> <span class="n">sp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">T</span></div>
+
+<div class="viewcode-block" id="HDDC.free"><a class="viewcode-back" href="../../../_autosummary/maad.cluster.hdda.HDDC.html#maad.cluster.hdda.HDDC.free">[docs]</a>    <span class="k">def</span> <span class="nf">free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This  function free some  parameters of the  model.</span>
+
+<span class="sd">        Use in the EM algorithm</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logdet</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ni</span> <span class="o">=</span> <span class="p">[]</span>          <span class="c1"># Number of samples of each class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># Proportion of each class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># Mean vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="p">[]</span>            <span class="c1"># Signal subspace size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="p">[]</span>           <span class="c1"># Eigenvalues of covariance matrices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

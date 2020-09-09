@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.rois.rois_1d.find_rois_cwt &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.rois.rois_1d.sinc" href="maad.rois.rois_1d.sinc.html" />
+    <link rel="prev" title="maad.rois.rois_1d" href="maad.rois.rois_1d.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maad.html">maad</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="maad.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.cluster.html">maad.cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.ecoacoustics.html">maad.ecoacoustics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.features.html">maad.features</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="maad.rois.html">maad.rois</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="maad.rois.rois_1d.html">maad.rois.rois_1d</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">maad.rois.rois_1d.find_rois_cwt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maad.rois.rois_1d.sinc.html">maad.rois.rois_1d.sinc</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="maad.rois.rois_2d.html">maad.rois.rois_2d</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maad.sound.html">maad.sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.util.html">maad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maad.version.html">maad.version</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="maad.html">maad</a> &raquo;</li>
+        
+          <li><a href="maad.rois.html">maad.rois</a> &raquo;</li>
+        
+          <li><a href="maad.rois.rois_1d.html">maad.rois.rois_1d</a> &raquo;</li>
+        
+      <li>maad.rois.rois_1d.find_rois_cwt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/maad.rois.rois_1d.find_rois_cwt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-rois-rois-1d-find-rois-cwt">
+<h1>maad.rois.rois_1d.find_rois_cwt<a class="headerlink" href="#maad-rois-rois-1d-find-rois-cwt" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.rois.rois_1d.find_rois_cwt">
+<code class="sig-prename descclassname">maad.rois.rois_1d.</code><code class="sig-name descname">find_rois_cwt</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">fs</em>, <em class="sig-param">flims</em>, <em class="sig-param">tlen</em>, <em class="sig-param">th=0</em>, <em class="sig-param">display=False</em>, <em class="sig-param">save_df=False</em>, <em class="sig-param">savefilename='rois.csv'</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_1d.html#find_rois_cwt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.rois_1d.find_rois_cwt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find region of interest (ROIS) based on predetermined temporal length and frequency limits</p>
+<p>The general approach is based on continous wavelet transform following a three step process
+1. Filter the signal with a bandpass sinc filter
+2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]
+3. Binarize the signal applying a linear threshold</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>s</strong><span class="classifier">ndarray</span></dt><dd><p>input signal</p>
+</dd>
+<dt><strong>flims</strong><span class="classifier">int</span></dt><dd><p>upper and lower frequencies (in Hz)</p>
+</dd>
+<dt><strong>tlen</strong><span class="classifier">int</span></dt><dd><p>temporal length of signal searched (in s)</p>
+</dd>
+<dt><strong>th</strong><span class="classifier">float, optional</span></dt><dd><p>threshold to binarize the output</p>
+</dd>
+<dt><strong>display: boolean, optional, default is False</strong></dt><dd><p>plot results if set to True, default is False</p>
+</dd>
+<dt><strong>save_df</strong><span class="classifier">boolean, optional</span></dt><dd><p>save results to csv file</p>
+</dd>
+<dt><strong>savefilename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the file to save the table as comma separatd values (csv)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>an object with temporal and frequencial limits of regions of interest</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.rois.rois_1d.sinc.html" class="btn btn-neutral float-right" title="maad.rois.rois_1d.sinc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.rois.rois_1d.html" class="btn btn-neutral float-left" title="maad.rois.rois_1d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

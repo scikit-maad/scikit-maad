@@ -1,0 +1,1775 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.rois.rois_2d &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../../../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.rois.rois_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.rois.rois_2d</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Multiresolution Analysis of Acoustic Diversity</span>
+<span class="sd">    </span>
+<span class="sd">functions for processing ROIS </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">morphology</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">iqr</span>
+
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">measure</span><span class="p">,</span> <span class="n">filters</span>
+<span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
+
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+<span class="c1"># Import internal modules</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">linear_scale</span><span class="p">,</span><span class="n">read_audacity_annot</span><span class="p">,</span><span class="n">rand_cmap</span>
+
+<span class="c1">#</span>
+<span class="c1">#====== TO DO</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="select_bandwidth"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_bandwidth.html#maad.rois.rois_2d.select_bandwidth">[docs]</a><span class="k">def</span> <span class="nf">select_bandwidth</span><span class="p">():</span>
+    <span class="k">return</span></div>
+<span class="c1">#</span>
+<span class="c1">#====== </span>
+<span class="c1">#</span>
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#************* Load an image and convert it in gray level if needed  ***********</span>
+<span class="c1">#****************************************************************************</span>
+
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.load.html#maad.rois.rois_2d.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">flipud</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load an image from a file or an URL</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------  </span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Image file name, e.g. ``test.jpg`` or URL.</span>
+<span class="sd">    </span>
+<span class="sd">    fs : scalar</span>
+<span class="sd">        Sampling frequency of the audiogram (in Hz)</span>
+<span class="sd">    </span>
+<span class="sd">    duration : scalar</span>
+<span class="sd">        Duration of the audiogram (in s)</span>
+<span class="sd">    </span>
+<span class="sd">    flipud : boolean, optional, default is True</span>
+<span class="sd">        Vertical flip of the matrix (image)</span>
+<span class="sd">    </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        if True, display the image</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure </span>
+<span class="sd">        </span>
+<span class="sd">        ... and more, see matplotlib </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im : ndarray</span>
+<span class="sd">        The different color bands/channels are stored in the</span>
+<span class="sd">        third dimension, such that a gray-image is MxN, an</span>
+<span class="sd">        RGB-image MxNx3 and an RGBA-image MxNx4.</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+<span class="sd">        </span>
+<span class="sd">    dt : scalar</span>
+<span class="sd">        Time resolution of the spectrogram (horizontal x-axis)</span>
+<span class="sd">        </span>
+<span class="sd">    df : scalar</span>
+<span class="sd">        Frequency resolution of the spectrogram (vertical y-axis)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;loading </span><span class="si">%s</span><span class="s2">...&quot;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span> 
+    
+    <span class="c1"># Load image</span>
+    <span class="n">im</span>  <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">as_gray</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># if 3D, convert into 2D</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+        
+    <span class="c1"># Rescale the image between 0 to 1</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">linear_scale</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+            
+    <span class="c1"># Get the resolution</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">duration</span><span class="o">/</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Extent</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="c1"># flip the image vertically</span>
+    <span class="k">if</span> <span class="n">flipud</span><span class="p">:</span> <span class="n">im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;loaded spectrogram&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span></div>
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************               noise_subtraction                    ***********</span>
+<span class="c1">#****************************************************************************</span>
+<div class="viewcode-block" id="remove_background"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.remove_background.html#maad.rois.rois_2d.remove_background">[docs]</a><span class="k">def</span> <span class="nf">remove_background</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">gauss_win</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gauss_std</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                      <span class="n">llambda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove the background noise using spectral subtraction</span>
+
+<span class="sd">    Based on the spectrum of the A posteriori noise profile.  </span>
+<span class="sd">    It computes an atenuation map in the time-frequency domain. </span>
+<span class="sd">    See [1] or [2] for more detail about the algorithm.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    [1] Steven F. Boll, &quot;Suppression of Acoustic Noise in Speech Using Spectral</span>
+<span class="sd">    Subtraction&quot;, IEEE Transactions on Signal Processing, 27(2),pp 113-120,</span>
+<span class="sd">    1979</span>
+
+<span class="sd">    [2] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean square </span>
+<span class="sd">    error short-time spectral amplitude estimator, IEEE. Transactions in</span>
+<span class="sd">    Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram </span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+<span class="sd">        </span>
+<span class="sd">    gauss_win=50 : int, optional, default: 50</span>
+<span class="sd">        Number of points in the gaussian window </span>
+<span class="sd">        </span>
+<span class="sd">    gauss_std = 25</span>
+<span class="sd">        The standard deviation, sigma used to create the gaussian window  </span>
+<span class="sd">        </span>
+<span class="sd">    beta1 : scaler, optional, default: 1      </span>
+<span class="sd">        beta1 has to be &gt;0</span>
+<span class="sd">        Should be close to 1</span>
+
+<span class="sd">    beta2: scaler, optional, default: 1       </span>
+<span class="sd">        beta2 has to be &gt;0 </span>
+<span class="sd">        better to not change</span>
+<span class="sd">    </span>
+<span class="sd">    llambda : int, optional, default: 1       </span>
+<span class="sd">        over-subtraction factor to compensate variation of noise amplitude.</span>
+<span class="sd">        Should be close to 1</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib    </span>
+<span class="sd">                      </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Sxx_out : 2d ndarray of scalar</span>
+<span class="sd">        Spectrogram after denoising           </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    
+    <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determine the profile of the stochastic background noise...&#39;</span><span class="p">)</span>
+    
+    <span class="n">Nf</span><span class="p">,</span> <span class="n">Nw</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span>
+          
+    <span class="c1"># noise spectrum extraction</span>
+    <span class="n">absS</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">im</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">mean_profile</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">absS</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># average spectrum (assumed to be ergodic)</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="c1">#fn = np.arange(ext[2], ext[3]+(ext[3]-ext[2])/(Nf-1), (ext[3]-ext[2])/(Nf-1))</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1D</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">mean_profile</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figtitle</span> <span class="o">=</span> <span class="s1">&#39;Noise profile&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [AU]&#39;</span><span class="p">,</span>
+                       <span class="n">linecolor</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>  
+    
+    <span class="c1"># White Top Hat (to remove non uniform background) = i - opening(i)</span>
+    <span class="n">selem</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">gauss_win</span><span class="p">,</span> <span class="n">gauss_std</span><span class="p">)</span>
+    <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">grey_opening</span><span class="p">(</span><span class="n">mean_profile</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">selem</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="c1">#fn = np.arange(ext[2], ext[3]+(ext[3]-ext[2])/(Nf-1), (ext[3]-ext[2])/(Nf-1))</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+        <span class="n">plot1D</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">noise_profile</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">figtitle</span> <span class="o">=</span> <span class="s1">&#39;Noise profile&#39;</span><span class="p">,</span> 
+               <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [AU]&#39;</span><span class="p">,</span> <span class="n">linecolor</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>  
+
+    <span class="c1"># Remove the artefact at the end of the spectrum (2 highest frequencies)</span>
+    <span class="n">noise_profile</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">mean_profile</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">noise_profile</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_profile</span> <span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="c1"># Create a matrix with the noise profile</span>
+    <span class="n">noise_spectro</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nw</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="n">noise_profile</span><span class="p">)</span>
+    <span class="n">noise_spectro</span><span class="o">=</span><span class="n">noise_spectro</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        
+    <span class="c1"># snr estimate a posteriori</span>
+    <span class="n">SNR_est</span><span class="o">=</span><span class="p">(</span><span class="n">absS</span><span class="o">/</span><span class="n">noise_spectro</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span>  
+    <span class="n">SNR_est</span><span class="o">=</span><span class="n">SNR_est</span><span class="o">*</span><span class="p">(</span><span class="n">SNR_est</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># keep only positive values</span>
+    
+    <span class="c1"># compute attenuation map</span>
+    <span class="c1"># if llambda, beta1 and beta 2 are equal to 1, it is (1 - noise_spectro)</span>
+    <span class="n">an_lk</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">llambda</span><span class="o">*</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">SNR_est</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="n">beta1</span><span class="p">))</span><span class="o">**</span><span class="n">beta2</span>
+    <span class="n">an_lk</span><span class="o">=</span><span class="n">an_lk</span><span class="o">*</span><span class="p">(</span><span class="n">an_lk</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># keep only positive values</span>
+    
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Remove the stochastic background noise...&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Apply the attenuation map to the STFT coefficients</span>
+    <span class="n">im_out</span><span class="o">=</span><span class="n">an_lk</span><span class="o">*</span><span class="n">im</span>
+    
+    <span class="c1"># if nan in the image, convert nan into 0</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">im_out</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+                
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Spectrogram without stationnary noise&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>            
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span> 
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectro_after_noise_subtraction&#39;</span><span class="p">)</span>  
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+            
+    <span class="k">return</span> <span class="n">im_out</span>  </div>
+
+<div class="viewcode-block" id="median_equalizer"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.median_equalizer.html#maad.rois.rois_2d.median_equalizer">[docs]</a><span class="k">def</span> <span class="nf">median_equalizer</span> <span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Median equalizer : remove background noise in a spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : 2D numpy array </span>
+<span class="sd">        Original spectrogram (or image)</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : 1D numpy array </span>
+<span class="sd">        Ouput spectrogram (or image) without background noise</span>
+<span class="sd">    </span>
+<span class="sd">    References:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    This function has been proposed first by Carol BEDOYA &lt;carol.bedoya@pg.canterbury.ac.nz&gt;</span>
+<span class="sd">    Adapted by S. Haupert Oct 9, 2018 for Python</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(((</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">y</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd">*************                      smooth                            ***********</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="smooth"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.smooth.html#maad.rois.rois_2d.smooth">[docs]</a><span class="k">def</span> <span class="nf">smooth</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Smooth (i.e. blurr) the image with a gaussian filter</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+<span class="sd">    </span>
+<span class="sd">    std : scalar, optional, default is 1</span>
+<span class="sd">        Standard deviation of the gaussian kernel used to smooth the image</span>
+<span class="sd">        The larger is the number, the smoother will be the image and the longer</span>
+<span class="sd">        it takes. Standard values should fall between 0.5 to 3</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">        Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_out: smothed or blurred image </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Smooth the image with a gaussian filter (std = </span><span class="si">%.1f</span><span class="s1">)&#39;</span> <span class="o">%</span><span class="n">std</span><span class="p">)</span>
+    
+    <span class="c1"># use scikit image (faster than scipy)</span>
+    <span class="n">im_out</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">std</span><span class="p">)</span>
+    
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Blurred spectrogram&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_blurr&#39;</span><span class="p">)</span>             
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   
+    
+    <span class="k">return</span> <span class="n">im_out</span></div>
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                double_threshold                    ***********</span>
+<span class="c1">#****************************************************************************</span>
+
+<div class="viewcode-block" id="double_threshold_rel"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.double_threshold_rel.html#maad.rois.rois_2d.double_threshold_rel">[docs]</a><span class="k">def</span> <span class="nf">double_threshold_rel</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Binarize an image based on a double relative threshold. </span>
+<span class="sd">    The values used for the thresholding depends on the values found in the </span>
+<span class="sd">    image. =&gt; relative threshold</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+
+<span class="sd">    bin_std : scalar, optional, default is 5</span>
+<span class="sd">        Set the first threshold. This threshold is not an absolute value but</span>
+<span class="sd">        depends on values that are similar to mean and std value of the image. </span>
+<span class="sd">        threshold1 = &quot;mean + &quot;std&quot; * bin_std   </span>
+<span class="sd">        Value higher than threshold1 are set to 1, they are the seeds for </span>
+<span class="sd">        the second step. The others are set to 0. </span>
+<span class="sd">        </span>
+<span class="sd">    bin_per: scalar, optional, defautl is 0.5</span>
+<span class="sd">        Set how much the second threshold is lower than the first</span>
+<span class="sd">        threshold value. From 0 to 1. ex: 0.1 = 10 %.</span>
+<span class="sd">        threshold2 = threshold1 (1-bin_per)  </span>
+<span class="sd">        Value higher than threshold2 and connected (directly or not) to the </span>
+<span class="sd">        seeds are set to 1, the other remains 0</span>
+
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">        Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_out: binary image </span>
+<span class="sd">    </span>
+<span class="sd">    References :</span>
+<span class="sd">    ------------</span>
+<span class="sd">    from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
+<span class="sd">    Adapted by S. Haupert Dec 12, 2017</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># Compute the qth percentile of the data along the specified axis</span>
+    <span class="n">val1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)],</span><span class="mi">75</span><span class="p">)</span>   <span class="c1"># value corresponding to the limit between the 75% lowest value and 25% largest value</span>
+    
+    <span class="c1"># The interquartile range (IQR) is the difference between the 75th and </span>
+    <span class="c1"># 25th percentile of the data. It is a measure of the dispersion similar </span>
+    <span class="c1"># to standard deviation or variance, but is much more robust against outliers</span>
+    <span class="n">val2</span> <span class="o">=</span> <span class="n">iqr</span><span class="p">(</span><span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)])</span><span class="o">*</span><span class="n">bin_std</span>
+    
+    <span class="c1"># Threshold : qth  percentile + sort of std</span>
+    <span class="n">h_th</span> <span class="o">=</span> <span class="n">val1</span> <span class="o">+</span> <span class="n">val2</span>
+    <span class="c1"># Low threshold limit</span>
+    <span class="n">l_th</span> <span class="o">=</span> <span class="p">(</span><span class="n">h_th</span><span class="o">-</span><span class="n">h_th</span><span class="o">*</span><span class="n">bin_per</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Double thresholding with values relative to the image...&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;**********************************************************&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;  high threshold value </span><span class="si">%.2f</span><span class="s1"> | low threshold value </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h_th</span><span class="p">,</span> <span class="n">l_th</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;**********************************************************&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># binarisation </span>
+    <span class="n">im_t1</span> <span class="o">=</span> <span class="n">im</span> <span class="o">&gt;</span> <span class="n">h_th</span>    <span class="c1"># mask1</span>
+    <span class="n">im_t2</span> <span class="o">=</span> <span class="n">im</span> <span class="o">&gt;</span> <span class="n">l_th</span>    <span class="c1"># mask2</span>
+    <span class="n">im_t3</span> <span class="o">=</span> <span class="n">im</span> <span class="o">*</span> <span class="n">im_t1</span>   <span class="c1"># selected parts of the image</span>
+    
+    <span class="c1">#find index of regions which meet the criteria</span>
+    <span class="n">conncomp_t2</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">im_t2</span><span class="p">)</span>    <span class="c1">#Find connected components in binary image</span>
+    <span class="n">rprops</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">conncomp_t2</span><span class="p">,</span><span class="n">im_t3</span><span class="p">)</span> 
+    
+    <span class="n">rprops_mean_intensity</span> <span class="o">=</span> <span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;mean_intensity&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">]</span>  
+    <span class="n">rprops_mean_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rprops_mean_intensity</span><span class="p">)</span>
+    
+    <span class="n">rprops_label</span> <span class="o">=</span> <span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">]</span> 
+    <span class="n">rprops_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rprops_label</span><span class="p">)</span>
+        
+    <span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rprops_mean_intensity</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">im_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">conncomp_t2</span><span class="p">,</span> <span class="n">rprops_label</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>    <span class="c1"># test if the indice is in the matrix of indices</span>
+    <span class="n">im_out</span> <span class="o">=</span><span class="n">im_out</span><span class="o">*</span><span class="mi">1</span>    <span class="c1">#  boolean to 0,1 conversion</span>
+                
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;binary image =&gt; MASK&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_binary&#39;</span><span class="p">)</span>             
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   
+
+    <span class="k">return</span> <span class="n">im_out</span></div>
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                double_threshold                    ***********</span>
+<span class="c1">#****************************************************************************</span>
+<div class="viewcode-block" id="double_threshold_abs"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.double_threshold_abs.html#maad.rois.rois_2d.double_threshold_abs">[docs]</a><span class="k">def</span> <span class="nf">double_threshold_abs</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">bin_l</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Binarize an image based on a double relative threshold. </span>
+<span class="sd">    The values used for the thresholding are independent of the values in the</span>
+<span class="sd">    image =&gt; absolute threshold</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+
+<span class="sd">    bin_h : scalar, optional, default is 5</span>
+<span class="sd">        Set the first threshold. Value higher than this value are set to 1, </span>
+<span class="sd">        the others are set to 0. They are the seeds for the second step</span>
+<span class="sd">        </span>
+<span class="sd">    bin_l: scalar, optional, defautl is 0.5</span>
+<span class="sd">        Set the second threshold. Value higher than this value and connected</span>
+<span class="sd">        to the seeds or to other pixels connected to the seeds are set to 1, </span>
+<span class="sd">        the other remains 0</span>
+
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">        Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_out: binary image </span>
+<span class="sd">    </span>
+<span class="sd">    References :</span>
+<span class="sd">    ------------</span>
+<span class="sd">    from MATLAB: Threshold estimation (from Oliveira et al, 2015)</span>
+<span class="sd">    Adapted by S. Haupert Dec 12, 2017</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># binarisation </span>
+    <span class="n">im_t1</span> <span class="o">=</span> <span class="n">im</span> <span class="o">&gt;</span> <span class="n">bin_h</span>  <span class="c1"># mask1</span>
+    <span class="n">im_t2</span> <span class="o">=</span> <span class="n">im</span> <span class="o">&gt;</span> <span class="n">bin_l</span>  <span class="c1"># mask2</span>
+    <span class="n">im_t3</span> <span class="o">=</span> <span class="n">im</span> <span class="o">*</span> <span class="n">im_t1</span>  <span class="c1"># selected parts of the image</span>
+    
+    <span class="c1">#find index of regions which meet the criteria</span>
+    <span class="n">conncomp_t2</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">im_t2</span><span class="p">)</span>    <span class="c1">#Find connected components in binary image</span>
+    <span class="n">rprops</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">conncomp_t2</span><span class="p">,</span><span class="n">im_t3</span><span class="p">)</span> 
+    
+    <span class="n">rprops_mean_intensity</span> <span class="o">=</span> <span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;mean_intensity&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">]</span>  
+    <span class="n">rprops_mean_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rprops_mean_intensity</span><span class="p">)</span>
+    
+    <span class="n">rprops_label</span> <span class="o">=</span> <span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">]</span> 
+    <span class="n">rprops_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rprops_label</span><span class="p">)</span>
+        
+    <span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rprops_mean_intensity</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">im_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">conncomp_t2</span><span class="p">,</span> <span class="n">rprops_label</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>    <span class="c1"># test if the indice is in the maxtrix of indices</span>
+    <span class="n">im_out</span> <span class="o">=</span><span class="n">im_out</span><span class="o">*</span><span class="mi">1</span>    <span class="c1">#  boolean to 0,1 conversion</span>
+                
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;binary image =&gt; MASK&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_binary&#39;</span><span class="p">)</span>             
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   
+
+    <span class="k">return</span> <span class="n">im_out</span></div>
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd">*************                   create_mask wrapper                 ***********</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="create_mask"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.create_mask.html#maad.rois.rois_2d.create_mask">[docs]</a><span class="k">def</span> <span class="nf">create_mask</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">mode_bin</span> <span class="o">=</span> <span class="s1">&#39;relative&#39;</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Binarize an image based on a double threshold. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+
+<span class="sd">    mode_bin : string in {&#39;relative&#39;, &#39;absolute&#39;}, optional, default is &#39;relative&#39;</span>
+<span class="sd">        if &#39;relative&#39;, a relative double threshold is performed</span>
+<span class="sd">        if &#39;absolute&#39;, an double threshold with absolute value is performed</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad functions as well</span>
+<span class="sd">        as the plt.plot and savefig functions.</span>
+<span class="sd">        All the input arguments required or optional in the signature of the</span>
+<span class="sd">        functions above can be passed as kwargs :</span>
+<span class="sd">        double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, </span>
+<span class="sd">        savefig=None, \*\*kwargs)</span>
+<span class="sd">        double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, </span>
+<span class="sd">        savefig=None, \*\*kwargs)</span>
+<span class="sd">           </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+<span class="sd">        </span>
+<span class="sd">        example :</span>
+<span class="sd">        im_bin = create_mask(im, ext, bin_std=5, bin_per=0.5, mode=&#39;relative&#39;,</span>
+<span class="sd">        display=True, savefig=None, dpi=300)    </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_bin: binary image </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+       
+    <span class="k">if</span> <span class="n">mode_bin</span> <span class="o">==</span> <span class="s1">&#39;relative&#39;</span><span class="p">:</span>
+        <span class="n">bin_std</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bin_std&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> 
+        <span class="n">bin_per</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bin_per&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> 
+        <span class="n">im_bin</span> <span class="o">=</span> <span class="n">double_threshold_rel</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_std</span><span class="p">,</span> <span class="n">bin_per</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">savefig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">mode_bin</span> <span class="o">==</span> <span class="s1">&#39;absolute&#39;</span><span class="p">:</span>
+        <span class="n">bin_h</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bin_h&#39;</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">)</span> 
+        <span class="n">bin_l</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bin_l&#39;</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span> 
+        <span class="n">im_bin</span> <span class="o">=</span> <span class="n">double_threshold_abs</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_h</span><span class="p">,</span> <span class="n">bin_l</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">savefig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   
+    
+    <span class="k">return</span> <span class="n">im_bin</span> </div>
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                 select_rois auto                   ***********</span>
+<span class="c1">#****************************************************************************</span>
+<div class="viewcode-block" id="select_rois_auto"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_rois_auto.html#maad.rois.rois_2d.select_rois_auto">[docs]</a><span class="k">def</span> <span class="nf">select_rois_auto</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_roi</span><span class="o">=</span><span class="kc">None</span> <span class="p">,</span><span class="n">max_roi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select rois candidates based on area of rois. min and max boundaries.</span>
+<span class="sd">    The ouput image contains pixels with label as value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">        </span>
+<span class="sd">    min_roi, max_roi : scalars, optional, default : None</span>
+<span class="sd">        Define the minimum and the maximum area possible for an ROI. If None, </span>
+<span class="sd">        the minimum ROI area is 1 pixel and the maximum ROI area is the area of </span>
+<span class="sd">        the image</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">        Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_label: 2d ndarray</span>
+<span class="sd">        image with labels as values</span>
+<span class="sd">            </span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contain the bounding box of each ROI</span>
+<span class="sd">            </span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contain the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># test if max_roi and min_roi are defined</span>
+    <span class="k">if</span> <span class="n">max_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="c1"># the maximum ROI is set to the aera of the image</span>
+        <span class="n">max_roi</span><span class="o">=</span><span class="n">im_bin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">im_bin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+    <span class="k">if</span> <span class="n">min_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># the min ROI area is set to 1 pixel</span>
+        <span class="n">min_roi</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Automatic ROIs selection in progress...&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;**********************************************************&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;  Min ROI area </span><span class="si">%d</span><span class="s1"> pix² | Max ROI area </span><span class="si">%d</span><span class="s1"> pix²&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">min_roi</span><span class="p">,</span> <span class="n">max_roi</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;**********************************************************&#39;</span><span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">im_bin</span><span class="p">)</span>    <span class="c1">#Find connected components in binary image</span>
+    <span class="n">rprops</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+    
+    <span class="n">rois_bbox</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rois_label</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">:</span>
+        
+        <span class="c1"># select the rois  depending on their size</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">roi</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;=</span> <span class="n">min_roi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">roi</span><span class="o">.</span><span class="n">area</span> <span class="o">&lt;=</span> <span class="n">max_roi</span><span class="p">):</span>
+            <span class="c1"># get the label</span>
+            <span class="n">rois_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roi</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+            <span class="c1"># get rectangle coordonates           </span>
+            <span class="n">rois_bbox</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="n">roi</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>    
+                
+    <span class="n">im_rois</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">rois_label</span><span class="p">)</span>    <span class="c1"># test if the indice is in the matrix of indices</span>
+    <span class="n">im_rois</span> <span class="o">=</span> <span class="n">im_rois</span><span class="o">*</span> <span class="n">labels</span>
+    
+    <span class="c1"># create a list with labelID and labelName (None in this case)</span>
+    <span class="n">rois_label</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">rois_label</span><span class="p">,[</span><span class="s1">&#39;unknown&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">rois_label</span><span class="p">)))</span>
+    
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Selected ROIs&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        
+        <span class="n">randcmap</span> <span class="o">=</span> <span class="n">rand_cmap</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rois_label</span><span class="p">))</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="n">randcmap</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_rois</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_selectrois&#39;</span><span class="p">)</span>                
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+ 
+    <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span>  </div>
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd">*************                 select_rois_manually                  ***********</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="select_rois_man"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_rois_man.html#maad.rois.rois_2d.select_rois_man">[docs]</a><span class="k">def</span> <span class="nf">select_rois_man</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">software</span><span class="o">=</span><span class="s1">&#39;audacity&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                         <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select rois candidates that were previously labelled (annotated) manually</span>
+<span class="sd">    The ouput image contains pixels with label as value.</span>
+<span class="sd">    Only annotation done with Audacity software is supported </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im_bin : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">        </span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename (full path) with the annotation done with Audacity</span>
+<span class="sd">        </span>
+<span class="sd">    software : string, optional, default is &#39;audacity&#39;</span>
+<span class="sd">        Give the name of the software used to export the annotations.</span>
+<span class="sd">    </span>
+<span class="sd">    mask : boolean</span>
+<span class="sd">        if True, the out image contains only ROI pixels that are in common</span>
+<span class="sd">        with the automatic process. Otherwise, labels are rectangle shape </span>
+<span class="sd">        corresponding to the bounding box selected manually in the annotation</span>
+<span class="sd">        software.</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">        Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_label: 2d ndarray</span>
+<span class="sd">       image with labels as values</span>
+<span class="sd">            </span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contain the bounding box of each ROI</span>
+<span class="sd">            </span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contain the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labelname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+ 
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>     
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Manual ROI selection requires an annotations filename&quot;</span><span class="p">)</span>
+        
+    <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Manual ROIs selection in progress...&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Annotating filename </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+
+    
+    <span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span> <span class="o">=</span> <span class="n">im_bin</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
+    
+    <span class="c1"># get the offset in x and y depending on the starting time and freq</span>
+    <span class="n">offset_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">t0</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">offset_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">f0</span><span class="p">)</span><span class="o">/</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> 
+
+    <span class="n">im_rois</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">im_bin</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> 
+    <span class="n">bbox</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rois_bbox</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rois_label</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">software</span><span class="o">==</span><span class="s1">&#39;audacity&#39;</span><span class="p">:</span>
+        <span class="n">tab_out</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        
+        <span class="n">ymin</span> <span class="o">=</span> <span class="p">(</span><span class="n">tab_out</span><span class="p">[</span><span class="s1">&#39;fmin&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="o">-</span><span class="n">offset_y</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="p">(</span><span class="n">tab_out</span><span class="p">[</span><span class="s1">&#39;tmin&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">dt</span><span class="o">-</span><span class="n">offset_x</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="p">(</span><span class="n">tab_out</span><span class="p">[</span><span class="s1">&#39;fmax&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="o">-</span><span class="n">offset_y</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="p">(</span><span class="n">tab_out</span><span class="p">[</span><span class="s1">&#39;tmax&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">dt</span><span class="o">-</span><span class="n">offset_x</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">zipped</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span><span class="n">xmin</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span><span class="n">xmax</span><span class="p">)</span>
+        
+        <span class="c1"># add current bbox to the list of bbox</span>
+        <span class="n">bbox</span><span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">zipped</span><span class="p">)</span> 
+
+    <span class="c1"># Construction of the ROIS image with the bbox and labels</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">labelID</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labelName</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ymin</span><span class="p">,</span><span class="n">xmin</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span><span class="n">xmax</span> <span class="ow">in</span> <span class="n">bbox</span><span class="p">:</span>
+        <span class="c1"># test if bbox limit is inside the rois image</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ymin</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">xmin</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">ymax</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">xmax</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">rois_bbox</span><span class="o">.</span><span class="n">extend</span><span class="p">([(</span><span class="n">ymin</span><span class="p">,</span><span class="n">xmin</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span><span class="n">xmax</span><span class="p">)])</span>
+            <span class="n">index</span><span class="o">=</span> <span class="n">index</span> <span class="o">+</span><span class="mi">1</span>
+            <span class="n">im_rois</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span><span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">labelName</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab_out</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][</span><span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">labelID</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+    <span class="n">rois_label</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">labelID</span><span class="p">,</span><span class="n">labelName</span><span class="p">))</span> 
+
+    <span class="n">rois_label_man</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rois_bbox_man</span><span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="p">:</span>
+        <span class="n">im_rois</span> <span class="o">=</span> <span class="p">(</span><span class="n">im_bin</span> <span class="o">*</span> <span class="n">im_rois</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="c1"># Select only rois_label that are present into im_rois</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">ID</span><span class="p">,</span> <span class="n">LABEL</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(</span><span class="n">rois_label</span><span class="p">):</span> 
+            <span class="k">if</span> <span class="n">ID</span> <span class="ow">in</span> <span class="n">im_rois</span><span class="p">:</span>
+                 <span class="n">rois_label_man</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rois_label</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                 <span class="n">rois_bbox_man</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rois_bbox</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rois_label_man</span> <span class="o">=</span> <span class="n">rois_label</span>
+        <span class="n">rois_bbox_man</span> <span class="o">=</span> <span class="n">rois_bbox</span>
+                
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Selected ROIs&#39;</span><span class="p">)</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        
+        <span class="n">randcmap</span> <span class="o">=</span> <span class="n">rand_cmap</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">rois_label_man</span><span class="p">)))</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="n">randcmap</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_rois</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_selectrois&#39;</span><span class="p">)</span>                
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+      
+    <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox_man</span><span class="p">,</span> <span class="n">rois_label_man</span> </div>
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                   select ROIS wrapper              ***********</span>
+<span class="c1">#****************************************************************************</span>
+<div class="viewcode-block" id="select_rois"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.select_rois.html#maad.rois.rois_2d.select_rois">[docs]</a><span class="k">def</span> <span class="nf">select_rois</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span><span class="n">ext</span><span class="p">,</span><span class="n">mode_roi</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper function</span>
+<span class="sd">    Select rois candidates automatically or manually (annotating file)</span>
+<span class="sd">    The ouput image contains pixels with labels as values.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+
+<span class="sd">    mode_roi : string in {&#39;auto&#39;, &#39;manual&#39;}, optional, default is &#39;auto&#39;</span>
+<span class="sd">        if &#39;auto&#39;, an automatic selection of the ROIs is performed</span>
+<span class="sd">        if &#39;manual&#39;, ROIs manually found using another software (i.e. Audacity) </span>
+<span class="sd">        are retrieved. If mask = True, a boolean AND operation is performed </span>
+<span class="sd">        between the manual ROIs (Rectangles) and the binary image, else no boolean</span>
+<span class="sd">        operation is performed with the binary image and the output label image</span>
+<span class="sd">        is directly the rectangles (bounding box)</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad functions as well</span>
+<span class="sd">        as the plt.plot and savefig functions.</span>
+<span class="sd">        All the input arguments required or optional in the signature of the</span>
+<span class="sd">        functions above can be passed as kwargs :</span>
+<span class="sd">        select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,</span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">        select_rois_manually(im_bin,ext,filename,software,mask,display,</span>
+<span class="sd">        savefig,**kwargs</span>
+<span class="sd">           </span>
+<span class="sd">        ... and more, see matplotlib   </span>
+<span class="sd">        </span>
+<span class="sd">        example :</span>
+<span class="sd">        im_rois, rois_bbox, rois_label =select_rois_auto(im_bin,ext,mode=&#39;auto&#39;,</span>
+<span class="sd">        min_roi=100,max_roi=1e6,</span>
+<span class="sd">        display=True,savefig=None,**kwargs) </span>
+<span class="sd">        </span>
+<span class="sd">        im_rois, rois_bbox, rois_label =select_rois_man(im_bin,ext,mode=&#39;manual&#39;,</span>
+<span class="sd">        filename=&#39;annotation.txt&#39;,</span>
+<span class="sd">        software=&#39;audacity,</span>
+<span class="sd">        display=True,savefig=None,**kwargs)  </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_rois: 2d ndarray</span>
+<span class="sd">        image with labels as values</span>
+<span class="sd">            </span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contains the bounding box of each ROI</span>
+<span class="sd">            </span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+
+    <span class="k">if</span> <span class="n">mode_roi</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+        <span class="n">min_roi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;min_roi&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
+        <span class="n">max_roi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;max_roi&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
+        <span class="n">im_rois</span><span class="p">,</span><span class="n">rois_bbox</span><span class="p">,</span><span class="n">rois_label</span><span class="o">=</span><span class="n">select_rois_auto</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span><span class="n">ext</span><span class="p">,</span><span class="n">min_roi</span><span class="p">,</span>
+                                         <span class="n">max_roi</span><span class="p">,</span><span class="n">display</span><span class="p">,</span><span class="n">savefig</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">mode_roi</span> <span class="o">==</span> <span class="s1">&#39;manual&#39;</span><span class="p">:</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
+        <span class="n">software</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;software&#39;</span><span class="p">,</span> <span class="s1">&#39;audacity&#39;</span><span class="p">)</span> 
+        <span class="n">mask</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mask&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> 
+        <span class="n">im_rois</span><span class="p">,</span><span class="n">rois_bbox</span><span class="p">,</span><span class="n">rois_label</span><span class="o">=</span><span class="n">select_rois_man</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span><span class="n">ext</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span>
+                                       <span class="n">software</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">display</span><span class="p">,</span><span class="n">savefig</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>    
+    
+    <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span></div>
+
+
+<span class="c1">#****************************************************************************</span>
+<span class="c1">#*************                   display_rois                     ***********</span>
+<span class="c1">#****************************************************************************</span>
+<div class="viewcode-block" id="overlay_rois"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.overlay_rois.html#maad.rois.rois_2d.overlay_rois">[docs]</a><span class="k">def</span> <span class="nf">overlay_rois</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overlay bounding box on the original spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im_ref : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contains the bounding box of each ROI</span>
+<span class="sd">        </span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname), optional, default is None</span>
+<span class="sd">        Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. After an automatic selection, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.  </span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        ****************************************************    </span>
+<span class="sd">        savefilename : str, optional, default :&#39;_spectro_overlayrois.png&#39;</span>
+<span class="sd">        Postfix of the figure filename</span>
+<span class="sd">        **************************************************** </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : scalars (left, right, bottom, top), optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        dpi : integer, optional, default is 96</span>
+<span class="sd">        Dot per inch. </span>
+<span class="sd">        For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">        For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">        Format to save the figure </span>
+<span class="sd">        </span>
+<span class="sd">        ... and more, see matplotlib </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ax : axis object (see matplotlib)</span>
+<span class="sd">        </span>
+<span class="sd">    fig : figure object (see matplotlib)</span>
+<span class="sd">    &quot;&quot;&quot;</span>       
+    
+    <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+    <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+    <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;ROIs Overlay&#39;</span><span class="p">)</span>
+    <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+    <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+    <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+    <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+        
+    <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                     <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                     <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Convert pixels into time and frequency values</span>
+    <span class="n">y_len</span><span class="p">,</span> <span class="n">x_len</span> <span class="o">=</span> <span class="n">im_ref</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+    <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span> 
+    <span class="n">x_scaling</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">x_len</span>
+    <span class="n">y_scaling</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="n">y_len</span>
+    
+    <span class="c1"># get the labelName</span>
+    <span class="k">if</span> <span class="n">rois_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">labelID</span><span class="p">,</span> <span class="n">labelName</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">rois_label</span><span class="p">)</span>
+        <span class="n">labelNames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">labelName</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">rois_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labelNames</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">for</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span> <span class="ow">in</span> <span class="n">rois_bbox</span><span class="p">:</span>
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">x0</span><span class="o">*</span><span class="n">x_scaling</span><span class="o">+</span><span class="n">xmin</span><span class="p">,</span> <span class="n">y0</span><span class="o">*</span><span class="n">y_scaling</span><span class="o">+</span><span class="n">ymin</span><span class="p">),</span> 
+                                      <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="n">x_scaling</span><span class="p">,</span> 
+                                      <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="n">y_scaling</span><span class="p">,</span>
+                                      <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  
+            <span class="c1"># draw the rectangle</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="c1"># Colormap</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">rand_cmap</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labelNames</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">first_color_black</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> 
+        <span class="n">cc</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span><span class="p">):</span>
+            <span class="n">cc</span> <span class="o">=</span> <span class="n">cc</span><span class="o">+</span><span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+            <span class="n">y0</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labelNames</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span> <span class="n">ii</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">x0</span><span class="o">*</span><span class="n">x_scaling</span><span class="o">+</span><span class="n">xmin</span><span class="p">,</span> <span class="n">y0</span><span class="o">*</span><span class="n">y_scaling</span><span class="o">+</span><span class="n">ymin</span><span class="p">),</span> 
+                                      <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="n">x_scaling</span><span class="p">,</span> 
+                                      <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="n">y_scaling</span><span class="p">,</span>
+                                      <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">(</span><span class="n">ii</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  
+            <span class="c1"># draw the rectangle</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    
+    <span class="c1"># SAVE FIGURE</span>
+    <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+        <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+        <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_overlayrois&#39;</span><span class="p">)</span>                
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+    
+    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span></div>
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd">*************                   find_rois_wrapper                   ***********</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="find_rois_wrapper"><a class="viewcode-back" href="../../../_autosummary/maad.rois.rois_2d.find_rois_wrapper.html#maad.rois.rois_2d.find_rois_wrapper">[docs]</a><span class="k">def</span> <span class="nf">find_rois_wrapper</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper function to find and select ROIs in a spectrogram (or image)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray of scalars</span>
+<span class="sd">        Spectrogram (or image) </span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.  </span>
+<span class="sd">            </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signals and the spectrograms if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by the maad function as well</span>
+<span class="sd">        as the plt.plot and savefig functions.</span>
+<span class="sd">        All the input arguments required or optional in the signature functions</span>
+<span class="sd">        can be passed.</span>
+<span class="sd">        </span>
+<span class="sd">        Specific parameters</span>
+<span class="sd">        </span>
+<span class="sd">        std_pre : scalar</span>
+<span class="sd">        Standard deviation used for the first call of the smooth() </span>
+<span class="sd">        function. It defines the std of the gaussian kernel</span>
+<span class="sd">                 </span>
+<span class="sd">        std_post : scalar</span>
+<span class="sd">        Standard deviation used for the Second call of the smooth() </span>
+<span class="sd">        function. It defines the std of the gaussian kernel</span>
+<span class="sd">               </span>
+<span class="sd">        See the signature of each maad function to know the other parameters </span>
+<span class="sd">        that can be passed as kwargs :</span>
+<span class="sd">        remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, </span>
+<span class="sd">        beta2=1,llambda=1, display = False, savefig=None, </span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">            </span>
+<span class="sd">        smooth (im, ext, std=1, display = False, savefig=None, \*\*kwargs)</span>
+<span class="sd">            </span>
+<span class="sd">        create_mask(im, ext, mode_bin =&#39;relative&#39;, display=False, savefig=None,</span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">            </span>
+<span class="sd">        select_rois(im_bin,ext,mode_roi=&#39;auto&#39;,display=False,savefig=None,</span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">            </span>
+<span class="sd">        overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,</span>
+<span class="sd">        \*\*kwargs)</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib  </span>
+<span class="sd">        </span>
+<span class="sd">        example : </span>
+<span class="sd">        find_rois_wrapper(im_ref, ext, display=True,</span>
+<span class="sd">        std_pre = 2, std_post=1, </span>
+<span class="sd">        llambda=1.1, gauss_win = round(1000/df),</span>
+<span class="sd">        mode_bin=&#39;relative&#39;, bin_std=5, bin_per=0.5,</span>
+<span class="sd">        mode_roi=&#39;auto&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">        ... and more, see matplotlib </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_rois: 2d ndarray</span>
+<span class="sd">        image with labels as values</span>
+<span class="sd">            </span>
+<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)</span>
+<span class="sd">        Contains the bounding box of each ROI</span>
+<span class="sd">        </span>
+<span class="sd">    rois_label : list of tuple (labelID, labelname)</span>
+<span class="sd">        Contains the label (LabelID=scalar,labelname=string) for each ROI</span>
+<span class="sd">        LabelID is a number from 1 to the number of ROI. The pixel value </span>
+<span class="sd">        of im_label correspond the labelID</span>
+<span class="sd">        Labname is a string. As the selection is auto, label is &#39;unknown&#39;</span>
+<span class="sd">        by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>       
+    
+    
+    <span class="c1"># Frequency and time resolution</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+   
+    <span class="c1"># keep a copy of the reference image</span>
+    <span class="n">im_ref</span><span class="o">=</span><span class="n">im</span>
+    
+    <span class="n">gauss_win</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gauss_win&#39;</span><span class="p">,</span><span class="nb">round</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">df</span><span class="p">))</span>
+    <span class="n">gauss_std</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gauss_std&#39;</span><span class="p">,</span><span class="nb">round</span><span class="p">(</span><span class="mi">500</span><span class="o">/</span><span class="n">df</span><span class="p">))</span>
+    <span class="n">beta1</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;beta1&#39;</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">beta2</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;beta2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">llambda</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;llambda&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
+    
+    <span class="n">std_pre</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;std_pre&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> 
+    <span class="n">std_post</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;std_post&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> 
+       
+    <span class="n">mode_bin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mode_bin&#39;</span><span class="p">,</span> <span class="s1">&#39;relative&#39;</span><span class="p">)</span> 
+    <span class="n">mode_roi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mode_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span> 
+        
+    <span class="n">min_roi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;min_roi&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">min_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">min_f</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="n">df</span><span class="p">)</span> <span class="c1"># 100Hz </span>
+        <span class="n">min_t</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mf">0.1</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span> <span class="c1"># 100ms </span>
+        <span class="n">min_roi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">min_f</span><span class="o">*</span><span class="n">min_t</span><span class="p">)</span> 
+        
+    <span class="n">max_roi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;max_roi&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">max_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>   
+        <span class="c1"># 1000Hz or vertical size of the image</span>
+        <span class="n">max_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">df</span><span class="p">),</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> 
+        <span class="c1"># horizontal size of the image or 1s</span>
+        <span class="n">max_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">dt</span><span class="p">)])</span>     
+        <span class="n">max_roi</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">max_f</span><span class="o">*</span><span class="n">max_t</span><span class="p">)</span>
+    
+    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;min_roi&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">min_roi</span> 
+    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;max_roi&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">max_roi</span>
+    
+    <span class="c1"># smooth</span>
+    <span class="k">if</span> <span class="n">std_pre</span><span class="o">&gt;</span><span class="mi">0</span> <span class="p">:</span>
+       <span class="n">im</span> <span class="o">=</span> <span class="n">smooth</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">std_pre</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span> 
+                              <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Noise subtraction</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">remove_background</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">gauss_win</span><span class="o">=</span><span class="n">gauss_win</span><span class="p">,</span> 
+                                    <span class="n">gauss_std</span><span class="o">=</span><span class="n">gauss_std</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="n">beta1</span><span class="p">,</span> 
+                                    <span class="n">beta2</span><span class="o">=</span><span class="n">beta2</span><span class="p">,</span> <span class="n">llambda</span><span class="o">=</span><span class="n">llambda</span><span class="p">,</span> 
+                                    <span class="n">display</span><span class="o">=</span> <span class="n">display</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="c1"># smooth</span>
+    <span class="k">if</span> <span class="n">std_post</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">smooth</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">std_post</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+                            <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="c1"># Binarization</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode_bin</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="c1"># Rois extraction</span>
+    <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span> <span class="o">=</span> <span class="n">select_rois</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">ext</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode_roi</span><span class="p">,</span>
+                                                  <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span> 
+                                                  <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span> <span class="n">overlay_rois</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">rois_label</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>
