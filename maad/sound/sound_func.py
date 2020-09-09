@@ -897,10 +897,6 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
         get_window to generate the window values, which are DFT-even by default. 
         See get_window for a list of windows and required parameters. 
         If window is array_like it will be used directly as the window and its length must be nperseg. 
-        
-    nperseg: int, optional
-        Length of each segment. Defaults to None, but if window is str or tuple, 
-        is set to 256, and if window is array_like, is set to the length of the window.
     
     noverlap : int, optional. Defaults to None.
         Number of points to overlap between segments. If None, noverlap = nperseg // 8. 
@@ -991,7 +987,7 @@ def spectrogramPSD (x, fs, window='hann', noverlap=None, nfft=None,
     """
 
     # compute the number of frames
-    K = len(x)*(nfft+noverlap)//nfft**2
+    K = len(x)//(nfft-noverlap)-1
  
     # compute spectrogram
     fn, tn, PSDxx = sp.signal.spectrogram(x, fs, window=window, 

@@ -16,13 +16,21 @@ Created on Wed Oct 24 11:56:28 2018
 # -------------------       Load modules         ---------------------------
 #***************************************************************************
 
-#### Import external modules
-import numpy as np 
-from numpy import sum, log,  min, max, abs, mean, sqrt, diff
+# Import external modules
 import numbers
-from scipy.signal import hilbert
+import math
+
+import numpy as np 
+from numpy import sum, log, log10, min, max, abs, mean, median, sqrt, diff
+
+import scipy as sp
+from scipy.signal import hilbert, hann, sosfilt, convolve, iirfilter, get_window, resample, tukey
 from scipy.ndimage.morphology import binary_erosion, binary_dilation
+from scipy.interpolate import interp1d 
 from scipy.stats import rankdata
+from scipy import ndimage as ndi
+
+from skimage import filters,transform, measure
 
 import matplotlib.pyplot as plt
 
@@ -107,7 +115,7 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
     
     # Test if the bin_step is larger than the resolution of an
     if bin_step < (an[1]-an[0]):
-        raise Exception('WARNING: bin step must be largero or equal than the actual resolution of x')
+        raise Exception('WARNING: bin step must be larger or equal than the actual resolution of x')
 
     # In case the limits of the bin are not set
     if bin_min == None:
@@ -1071,7 +1079,7 @@ def acoustic_activity (xdB, dB_threshold, axis=1):
     ACTfract, ACTcount = score(xdB, dB_threshold, axis=axis)
     ACTfract= ACTfract.tolist()
     ACTcount = ACTcount.tolist()
-    ACTmean = dB2linear(xdB[xdB>dB_threshold], mode='power')
+    ACTmean = linear2dB(mean(dB2linear(xdB[xdB>dB_threshold], mode='power')),mode='power')
     return ACTfract, ACTcount, ACTmean
        
 
@@ -1165,3 +1173,300 @@ def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     else: print("xdB must be a vector or a matrix")
     
     return EVNsum, EVNmean, EVNcount, EVN
+
+
+#========================================
+    
+#def roughnessAsACI (Sxx, norm ='global'):
+#def acousticGradientIndex(Sxx, dt, order=1, norm=None, n_pyr=1, display=False):
+#def raoQ (p, bins):
+#def hpss => harmonic vs percussion (voir librosa) librosa.decompose.hpss
+    
+#=============================================================================
+#       
+#   New ecoacoustics indices introduced by S. HAUPERT, 2020
+#   
+#============================================================================= 
+
+def raoQ (p, bins):
+    """
+        compute Rao's Quadratic entropy in 1d
+    """
+    
+    # be sure they are ndarray
+    p = np.asarray(p)
+    bins = np.asarray(bins)
+    
+    # Normalize p by the sum in order to get the sum of p = 1
+    p = p/sum(p)
+    
+    # take advantage of broadcasting, 
+    # Get the pairwise distance 
+    # Euclidian distance
+    d = abs(bins[..., np.newaxis] - bins[np.newaxis, ...])
+    # Keep only the upper triangle (symmetric)
+    #d = np.triu(d, 0)
+        
+    # compute the crossproduct of pixels value pi,pj
+    pipj = (p[..., np.newaxis] * p[np.newaxis, ...])
+    #pipj = np.triu(pipj, 0)
+    # Multiply by 2 to take into account the lower triangle (symmetric)
+    Q = sum(sum(pipj*d))/len(bins)**2
+    
+    return Q
+
+#=============================================================================
+
+def surfaceRoughness (Sxx, norm ='global'):
+    
+    """
+    Surface Roughness 
+    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness
+    
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        2d : Spectrogram (i.e matrix of spectrum)
+    
+    norm : string, optional, default is 'global'
+        Determine if the ROUGHNESS is normalized by the sum on the whole frequencies
+        ('global' mode) or by the sum of frequency bin per frequency bin 
+        ('per_bin')
+
+    Returns
+    -------        
+    Ra_per_bin : 1d ndarray of scalars
+        Arithmetical mean deviation from the mean line (global or per frequency bin)
+        => ROUGHNESS value for each frequency bin
+        
+    Ra : scalar
+        Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]
+        => mean ROUGHNESS value over Sxx 
+        
+    Rq_per_bin : 1d ndarray of scalars
+        Root mean squared of deviation from the mean line (global or per frequency bin)
+        => RMS ROUGHNESS value for each frequency bin
+        
+    Rq : scalar
+        Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]
+        => RMS ROUGHNESS value over Sxx 
+    """    
+    if norm == 'per_bin':
+        m = mean(Sxx, axis=1)
+        y = Sxx-m[..., np.newaxis]
+        
+    elif norm == 'global':
+        m = mean(Sxx)
+        y = Sxx-m
+
+    # Arithmetic mean deviation
+    Ra_per_bin = mean(abs(y), axis=1)
+    Ra = mean(Ra_per_bin)
+
+    Rq_per_bin = sqrt(mean(y**2, axis=1))
+    Rq = mean(Rq_per_bin) 
+    
+    return Ra_per_bin, Rq_per_bin, Ra, Rq
+
+#=============================================================================    
+
+
+def tfsdt (Sxx, display=False):
+    """
+        Time frequency derivation : tfsdt
+        
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        2d : Spectrogram (i.e matrix of spectrum)
+    
+    display : boolean, optional, default is False
+        Display the 1st and 2nd derivation of the spectrogram
+
+    Returns
+    -------    
+    tfsdt : 1d ndarray of scalars
+        Acoustic Gradient Index of the spectrogram
+       
+    Reference 
+    ---------
+        Proposed by Pierre Aumond, pierre.aumond@ifsttar.fr
+    """
+    # Derivation along the time axis, for each frequency bin
+    GRADdt_xx = diff(Sxx, n=1, axis=1)
+    # Derivation of the previously derivated matrix along the frequency axis 
+    GRADdf_xx = diff(GRADdt_xx, n=1, axis=0)
+    # calcul of the tfsdt : sum of the pseudo-gradient along time for each frequency bin
+    tfsdt =  sum(abs(GRADdf_xx), axis=1)/sum(abs(GRADdf_xx)) 
+    
+    if display==True :
+            fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
+            # set the paramteers of the figure
+            fig.set_facecolor('w')
+            fig.set_edgecolor('k')
+            fig.set_figheight(4)
+            fig.set_figwidth (13)
+                    
+            # display image
+            _im1 = ax1.imshow(linear2dB(GRADdt_xx), 
+                            interpolation='none', origin='lower', 
+                            cmap='gray')
+            plt.colorbar(_im1, ax=ax1)
+            
+            # set the parameters of the subplot
+            ax1.set_title('Derivation along time axis')
+            ax1.set_xlabel('Time [sec]')
+            ax1.set_ylabel('Frequency [Hz]')   
+            ax1.axis('tight') 
+            
+            # display image
+            _im2 = ax2.imshow(linear2dB(GRADdf_xx), 
+                            interpolation='none', origin='lower', 
+                            cmap='gray')
+            plt.colorbar(_im2, ax=ax2)
+       
+            # set the parameters of the subplot
+            ax2.set_title('Derivation along frequency axis')
+            ax2.set_xlabel('Time [sec]')
+            ax2.set_ylabel('Frequency [Hz]')
+            ax2.axis('tight') 
+         
+            fig.tight_layout()
+             
+            # Display the figure now
+            plt.show()
+    
+    return tfsdt
+
+#=============================================================================
+def acousticGradientIndex(Sxx, dt, order=1, norm=None, n_pyr=1, display=False):
+    """
+    Acoustic Gradient Index : AGI
+    
+    !!! Must be calculated on raw spectrogram (background noise must remain)
+    
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        2d : Spectrogram (i.e matrix of spectrum)
+    
+    dt : float
+        Time resolution in seconds. 
+    
+    norm : string, optional, default is 'per_bin'
+        Determine if the AGI is normalized by the global meaian value 
+        ('global' mode) or by the median value per frequency bin 
+        ('per_bin')
+        
+
+    Returns
+    -------    
+    AGI_xx : 2d ndarray of scalars
+        Acoustic Gradient Index of the spectrogram
+    
+    AGI_per_bin : 1d ndarray of scalars
+        AGI value for each frequency bin
+        sum(AGI_xx,axis=1)
+        
+    AGI_sum : scalar
+        Sum of AGI value per frequency bin (Common definition)
+        sum(AGI_per_bin)
+        
+    AGI_mean ; scalar
+        average AGI value per frequency bin (independant of the number of 
+        frequency bin)
+        mean(AGI_per_bin)
+           
+    """     
+    
+    AGI_xx_pyr = []
+    AGI_per_bin_pyr = []
+    AGI_mean_pyr = []
+    AGI_sum_pyr = []
+    dt_pyr = []
+    
+    for n in np.arange(0,n_pyr):  
+        
+#        # Show the Leq energy in order to control that the conservation of
+#        # energy is preserved
+#        PSDxx_mean = mean(Sxx**2,axis=1)
+#        leq = 10*log10(sum(PSDxx_mean)/(20e-6)**2)
+#        print(leq)
+        
+        # derivative (order = 1, 2, 3...)
+        AGI_xx = abs(diff(Sxx, order, axis=1)) / (dt**order )
+        
+        #print('PYRAMID: %d / median ATI: %f / size: %s' % (n, median(AGI_xx), AGI_xx.shape))
+        
+        if norm is not None :
+            # Normalize the derivative by the median derivative which should 
+            # correspond to the background (noise) derivative
+            if norm =='per_bin':
+                m = median(AGI_xx, axis=1)    
+                m[m==0] = _MIN_    # Avoid dividing by zero value
+                AGI_xx = AGI_xx/m[:,None]
+            elif norm == 'global':
+                m = median(AGI_xx) 
+                if m==0: m = _MIN_ 
+                AGI_xx = AGI_xx/m
+
+        # mean per bin 
+        AGI_per_bin = mean (AGI_xx,axis=1) 
+        # Mean global
+        AGI_mean = mean(AGI_per_bin) 
+        # Sum Global
+        AGI_sum = sum(AGI_per_bin)
+
+        # add to the lists
+        AGI_xx_pyr.append(AGI_xx)        
+        AGI_per_bin_pyr.append(AGI_per_bin)
+        AGI_mean_pyr.append(AGI_mean)
+        AGI_sum_pyr.append(AGI_sum)
+        dt_pyr.append(dt)
+
+        # build next pyramid level (gaussian filter then reduce)
+        # Sigma for gaussian filter. Default is 2 * downscale / 6.0 
+        # which corresponds to a filter mask twice the size of the scale factor 
+        # that covers more than 99% of the gaussian distribution.
+        # The total energy is kept
+        dt = dt*2 # the resolution decreases by 2 = x2
+        PSDxx = Sxx**2
+        # blur the image only on axis 1 (time axis)
+        PSDxx_blur = ndi.gaussian_filter1d(PSDxx,axis=1, sigma=2*2/6.0)
+        dim = tuple([PSDxx_blur.shape[0], math.ceil(PSDxx_blur.shape[1]/2)])
+        #  Reduce the size of the image by 2
+        PSDxx_reduced = transform.resize(PSDxx_blur,output_shape=dim, mode='reflect', anti_aliasing=True)      
+
+        # display full SPECTROGRAM in dB
+        if display==True :
+            
+            fig4, ax4 = plt.subplots()
+            # set the paramteers of the figure
+            fig4.set_facecolor('w')
+            fig4.set_edgecolor('k')
+            fig4.set_figheight(4)
+            fig4.set_figwidth (13)
+                    
+            # display image
+            _im = ax4.imshow(linear2dB(PSDxx_reduced), 
+                             interpolation='none', origin='lower', 
+                             vmin =20, vmax=70, cmap='gray')
+            plt.colorbar(_im, ax=ax4)
+     
+            # set the parameters of the subplot
+            ax4.set_title('Spectrogram')
+            ax4.set_xlabel('Time [sec]')
+            ax4.set_ylabel('Frequency [Hz]')
+            ax4.axis('tight') 
+         
+            fig4.tight_layout()
+             
+            # Display the figure now
+            plt.show()
+        
+        # back to amplitude
+        Sxx = sqrt(PSDxx_reduced)
+        
+    return AGI_xx_pyr , AGI_per_bin_pyr, AGI_mean_pyr, AGI_sum_pyr, dt_pyr
+
+
