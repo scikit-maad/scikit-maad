@@ -112,14 +112,14 @@ def date_from_filename (filename):
     
     return date
 
-def date_parser (datadir, dateformat ="SM4", verbose=False):
+def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     c_file = []
     c_date = []
     # find a file in subdirectories
     for root, subFolders, files in os.walk(datadir):
         for count, file in enumerate(files):
             if verbose: print(file)
-            if '.wav' in file or '.WAV' in file :
+            if extension.upper() in file or extension.lower() in file :
                 filename = os.path.join(root, file)
                 c_file.append(filename) 
                 if dateformat == "SM4":

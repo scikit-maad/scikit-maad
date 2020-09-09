@@ -6,11 +6,10 @@ Collection of functions to calculate alpha indices
 
 
 from .alpha_indices import (envelope, # should be in sounds
-                            index_bw, # should be in utils
                             intoBins, # should be in sounds
-                            skewness, # should be in utils
-                            kurtosis,  # should be in utils
                             entropy,
+                            skewness,
+                            kurtosis,
                             spectral_entropy,
                             acoustic_activity,
                             acoustic_events,
@@ -20,10 +19,12 @@ from .alpha_indices import (envelope, # should be in sounds
                             acousticDiversityIndex,
                             acousticEvenessIndex,
                             roughness,
-                            surfaceRoughness)
+                            surfaceRoughness,
+                            tfsdt,
+                            acousticGradientIndex,
+                            raoQ)
 
 __all__ = ["envelope",
-           "index_bw",
            "intoBins",
            "entropy",
            "skewness",
@@ -36,6 +37,9 @@ __all__ = ["envelope",
            "acousticDiversityIndex",
            "acousticEvenessIndex",
            "roughness",
-           "surfaceRoughness"]
+           "surfaceRoughness",
+           "tfsdt",
+           "acousticGradientIndex",
+           "raoQ"]
 
 

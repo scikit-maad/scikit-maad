@@ -474,8 +474,8 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
         title  =kwargs.pop('title','Blurred spectrogram')
         cmap   =kwargs.pop('cmap','gray') 
         figsize=kwargs.pop('figsize',(4, 13)) 
-        vmin=kwargs.pop('vmin',0) 
-        vmax=kwargs.pop('vmax',1) 
+        vmin=kwargs.pop('vmin',np.percentile(im_out,1))
+        vmax=kwargs.pop('vmax',np.percentile(im_out,99))
         
         _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title, 
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax,
@@ -513,7 +513,7 @@ def double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefi
         upper-right corners. If `None`, the image is positioned such that
         the pixel centers fall on zero-based (row, column) indices.  
 
-    bin_std : scalar, optional, default is 5
+    bin_std : scalar, optional, default is 3
         Set the first threshold. This threshold is not an absolute value but
         depends on values that are similar to mean and std value of the image. 
         threshold1 = "mean + "std" * bin_std   
@@ -672,11 +672,11 @@ def double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=N
         upper-right corners. If `None`, the image is positioned such that
         the pixel centers fall on zero-based (row, column) indices.  
 
-    bin_h : scalar, optional, default is 5
+    bin_h : scalar, optional, default is 0.7
         Set the first threshold. Value higher than this value are set to 1, 
         the others are set to 0. They are the seeds for the second step
         
-    bin_l: scalar, optional, defautl is 0.5
+    bin_l: scalar, optional, defautl is 0.2
         Set the second threshold. Value higher than this value and connected
         to the seeds or to other pixels connected to the seeds are set to 1, 
         the other remains 0
