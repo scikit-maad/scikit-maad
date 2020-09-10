@@ -6,19 +6,15 @@ Load, filter and transform 1D audio signals
 """
 
 from .sound_func import (load,
+                         envelope,
                          select_bandwidth,
                          iir_filter1d,
                          fir_filter,
-                         spectrogram,
-                         spectrogram2,
-                         spectrogramPSD,
-                         preprocess_wrapper)
+                         spectrogram)
 
-__all__ = ['load', 
+__all__ = ['load',
+           'envelope',
            'select_bandwidth',
            'iir_filter1d',
            'fir_filter',
-           'spectrogram',
-           'spectrogram2',
-           'spectrogramPSD',
-           'preprocess_wrapper']
+           'spectrogram']
