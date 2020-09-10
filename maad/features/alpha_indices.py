@@ -21,22 +21,17 @@ import numbers
 import math
 
 import numpy as np 
-from numpy import sum, log, log10, min, max, abs, mean, median, sqrt, diff
+from numpy import sum, log, min, max, abs, mean, median, sqrt, diff
 
-import scipy as sp
-from scipy.signal import hilbert, hann, sosfilt, convolve, iirfilter, get_window, resample, tukey
 from scipy.ndimage.morphology import binary_erosion, binary_dilation
-from scipy.interpolate import interp1d 
 from scipy.stats import rankdata
 from scipy import ndimage as ndi
-
-from skimage import filters,transform, measure
+from skimage import transform
 
 import matplotlib.pyplot as plt
 
 #### Importation from internal modules
-#from ..util import rle, index_bw, linear_scale, dB2linear, linear2dB
-from maad.util.util import rle, index_bw, linear_scale, dB2linear, linear2dB
+from maad.util import rle, index_bw, linear_scale, dB2linear, linear2dB
 
 # min value
 import sys
@@ -45,34 +40,6 @@ _MIN_ = sys.float_info.min
 # =============================================================================
 # List of functions
 # =============================================================================
-
- 
-#=============================================================================
-def wave2frames (wave, N=512):
-    """
-    Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
-    length N
-    
-    Parameters
-    ----------
-    wave : 1d ndarray of floats (already divided by the number of bits)
-        Vector containing the sound waveform 
-
-    N : int, optional, default is 512
-        Number of points per frame
-                
-    Returns
-    -------
-    timeframes : 2d ndarray of floats
-        Matrix containing K frames (row) with N points (column), K*N <= length (wave)
-    """
-    # transform wave into array
-    wave = np.asarray(wave)
-    # compute the number of frames
-    K = len(wave)//N
-    # Reshape the waveform (ie vector) into a serie of frames (ie 2D matrix)
-    timeframes = wave[0:K*N].reshape(-1,N).transpose()
-    return timeframes
 
 #=============================================================================
 def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
@@ -334,53 +301,6 @@ def entropy (datain, axis=0):
         H = None 
 
     return H
-
-#=============================================================================
-def envelope (wave, mode='fast', N=512):
-    """
-    Calcul the envelope of a sound (1d) 
-    The sound is first divided into frames (2d) using the function 
-    wave2timeframes(wave), then the max of each frame gives a good approximation
-    of the envelope.
-    
-    Parameters
-    ----------
-    wave : ndarray of floats 
-        1d : sound waveform
-        
-    mode : str, optional, default is "fast"
-        - "fast" : The sound is first divided into frames (2d) using the 
-            function wave2timeframes(wave), then the max of each frame gives a 
-            good approximation of the envelope.
-        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
-            The method is slow
-    
-    N : integer, optional, default is 512
-        Size of each frame. The largest, the highest is the approximation.
-                  
-    Returns
-    -------    
-    env : ndarray of floats
-        Envelope of the sound (1d) 
-        
-    References
-    ----------
-    Fast calculation is inspired by the work of Towsey.
-    """
-    if mode == 'fast' :
-        # Envelope : take the median (instead of max as Towsey) of each frame
-        # median gives more accurate result than max
-        frames = wave2frames(wave, N=N)
-        env = max(abs(frames),0) 
-    elif mode =='hilbert' :
-        # Compute the hilbert transform of the waveform and take the norm 
-        # (magnitude) 
-        env = np.abs(hilbert(wave))  
-    else:
-        print ("WARNING : choose a mode between 'fast' and 'hilbert'")
-        
-    return env
-
 
 #=============================================================================
 def score (x, threshold, axis=0):
