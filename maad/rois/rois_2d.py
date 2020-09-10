@@ -32,9 +32,7 @@ import sys
 _MIN_ = sys.float_info.min
 
 # Import internal modules
-#from ..util import plot1D, plot2D, linear_scale,read_audacity_annot,rand_cmap
-from maad.util.util import plot1D, plot2D, linear_scale, rand_cmap
-from maad.util.parser_func import read_audacity_annot
+from maad.util import read_audacity_annot, plot1D, plot2D, linear_scale, rand_cmap
 #
 #====== TO DO
 #
