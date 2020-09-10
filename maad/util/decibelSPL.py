@@ -27,7 +27,7 @@ from numpy import sum, log, log10, min, max, abs, mean, median, sqrt, diff
 ****************************************************************************"""
 
 ##### wav2volt
-def wav2volt (wave, bit=16, Vadc = sqrt(2)): 
+def wav2volt (wave, bit=16, Vadc=2): 
     """
     convert in Volt
     
@@ -39,8 +39,8 @@ def wav2volt (wave, bit=16, Vadc = sqrt(2)):
     bit : int, optional, default is 16
         Number of bits of the analog to digital converter (ADC)
         
-    Vadc : scalar, optional, default is 1Vrms = 1*sqrt(2)
-        Maximal voltage converted by the analog to digital convertor ADC 
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  
                 
     Returns
     -------
@@ -50,7 +50,7 @@ def wav2volt (wave, bit=16, Vadc = sqrt(2)):
     # be sure they are ndarray
     wave = np.asarray(wave)
     
-    volt = (wave/(2**(bit-1))) * Vadc
+    volt = (wave/(2**(bit))) * Vadc
     return volt
 
 ##### volt2SPL
@@ -88,7 +88,7 @@ def volt2SPL(volt, gain, sensitivity=-35, dBref=94):
     return (wave_SPL)
 
 #####  wav2SPL 
-def wav2SPL (wave, gain, bit=16, Vadc = sqrt(2), sensitivity=-35, dBref=94): 
+def wav2SPL (wave, gain, bit=16, Vadc = 2, sensitivity=-35, dBref=94): 
     """
     convert wave to instantaneous sound pressure level SPL
     
@@ -103,8 +103,8 @@ def wav2SPL (wave, gain, bit=16, Vadc = sqrt(2), sensitivity=-35, dBref=94):
     bit : int, optional, default is 16
         Number of bits of the analog to digital converter (ADC)  
         
-    Vadc : scalar, optional, default is 1Vrms = 1*sqrt(2)
-        Maximal voltage converted by the analog to digital convertor ADC       
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    
 
     sensitivity : float, optional, default is -35 (dB/V)
         Sensitivity of the microphone
@@ -143,7 +143,7 @@ def SPL2dBSPL (waveSPL, pRef=20e-6):
     return (wave_dBSPL)
 
 #####  wav2dBSPL
-def wav2dBSPL (wave, gain, Vadc = sqrt(2), bit=16, sensitivity=-35, dBref=94, pRef=20e-6): 
+def wav2dBSPL (wave, gain, Vadc=2, bit=16, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
     convert wave to instantaneous sound pressure level SPL in dB
     
@@ -158,8 +158,8 @@ def wav2dBSPL (wave, gain, Vadc = sqrt(2), bit=16, sensitivity=-35, dBref=94, pR
     bit : int, optional, default is 16
         Number of bits of the analog to digital converter (ADC)  
         
-    Vadc : scalar, optional, default is 1Vrms = 1*sqrt(2)
-        Maximal voltage converted by the analog to digital convertor ADC    
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC     
 
     sensitivity : float, optional, default is -35 (dB/V)
         Sensitivity of the microphone
@@ -182,7 +182,7 @@ def wav2dBSPL (wave, gain, Vadc = sqrt(2), bit=16, sensitivity=-35, dBref=94, pR
 
 
 # wav2Leq
-def wav2Leq (wave, f, gain, Vadc=sqrt(2), bit=16, dt=1, sensitivity=-35, dBref = 94): 
+def wav2Leq (wave, f, gain, Vadc=2, bit=16, dt=1, sensitivity=-35, dBref = 94): 
     """
     convert wave to Equivalent Continuous Sound level (Leq)
     
@@ -197,8 +197,8 @@ def wav2Leq (wave, f, gain, Vadc=sqrt(2), bit=16, dt=1, sensitivity=-35, dBref =
     gain : integer
         Total gain applied to the sound (preamplifer + amplifier)
         
-    Vadc : scalar, optional, default is 1Vrms = 1*sqrt(2)
-        Maximal voltage converted by the analog to digital convertor ADC 
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  
         
     bit : int, optional, default is 16
         Number of bits of the analog to digital converter (ADC)  
@@ -383,7 +383,7 @@ if __name__ == "__main__":
     #
     bit = 16
     #
-    Vadc = sqrt(2)
+    Vadc = 2
     
     # root directory of the files
     base_path = Path(__file__).parent
@@ -400,7 +400,7 @@ if __name__ == "__main__":
     print('Leq from volt', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq, mode="power")),mode="power"))
     
     # wav -> Leq
-    wav = volt*2**(bit-1)/Vadc
+    wav = volt*2**(bit)/Vadc
     wav_Leq2 = wav2Leq(wav, f=fs, dt=deltaT, sensitivity=S, gain=G, dBref = 94) 
     print('Leq from wav', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq2, mode="power")),mode="power"))
     
@@ -412,9 +412,10 @@ if __name__ == "__main__":
     print('Leq from PSD',PSD_Leq3 )
     
     # Power Density Spetrum : PSDxx
-    PSDxx,tn,fn,_ = maad.sound.spectrogramPSD (wav_SPL, fs=fs, window='boxcar', 
-                                               noverlap=0, nfft=NFFT, 
+    PSDxx,tn,fn,_ = maad.sound.spectrogram (wav_SPL, fs=fs, window='boxcar', 
+                                               noverlap=0, nperseg=NFFT, 
                                                fcrop=None, tcrop=None, 
+                                               mode='psd',
                                                verbose=False, display=False, 
                                                savefig = None)  
     PSD_mean = mean(PSDxx,axis=1)
@@ -423,4 +424,10 @@ if __name__ == "__main__":
     print('Leq from PSDxx spectrogram',PSD_Leq4 )
     print('The difference with previous Leq is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy ')
 
+    # energy from PSD_mean
+    energy  =sum(PSD_mean)
+    PSD_Leq5  = energy2dBSPL(energy)
+    print('Leq from energy',PSD_Leq5 )
+
  
+
