@@ -16,9 +16,8 @@ functions for processing sound
 import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
-from scipy.signal import hilbert,butter, sosfilt, hann, stft, convolve, iirfilter, get_window
-#from ..util import plot1D, plot2D, crop_image, linear_scale, linear2dB
-from maad.util.util import plot1D, plot2D, crop_image, linear_scale, linear2dB
+from scipy.signal import hilbert,butter, sosfilt, stft, convolve, iirfilter, get_window
+from maad.util import plot1D, plot2D, crop_image, linear2dB
 
 # =============================================================================
 # private functions
