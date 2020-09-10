@@ -19,17 +19,11 @@ features
     Compute descriptors to characterize sounds - :ref:`maad.features`
     
 util
-    Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`
-    
-ecoacoustics
-    Miscelaneous and useful set of tools used to compute global indices for 
-    ecoacoustics - :ref:`maad.ecoacoustics`
-    
+    Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`    
 """
 
 from . import sound
-#from . import rois
+from . import rois
 from . import features
 from . import util
-#from . import ecoacoustics
-#from . import spl
+
