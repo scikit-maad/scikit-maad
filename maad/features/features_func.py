@@ -324,6 +324,7 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2)
     >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
+    
     """    
 
     # Downscale image using gaussian pyramid
@@ -427,7 +428,7 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
     return params, kernels  
 
 
-def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
+def shape_features(Sxx, ts, fs, resolution='low', rois=None, opt_shape=None):
     """
     Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters
     
@@ -435,8 +436,17 @@ def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
     ----------
     Sxx: 2D array
         Input image to process 
-    im_blobs: 2D array, optional
-        Optional binary array with '1' on the region of interest and '0' otherwise
+    resolution: str
+        Specify resolution of shape descriptors. Can be: 'low', 'med', 'high'.
+        Default is 'low'. To specify custom resolution analysis, detailed  feature
+        bank settings should be provided through opt_shape.
+    rois: pandas DataFrame
+        Regions of interest where descriptors will be computed. Array must 
+        have a valid input format with column names: min_t min_f, max_t, max_f
+    ts: 1D array
+        Vector of time instants that can be used as x coordinates for the spectrogram
+    fs: 1D array
+        Vector of frequencies that can be used as y coordinates for the spectrogram
     opt_shape: dictionary
         options for the filter bank (kbank_opt) and the number of scales (npyr)
             
@@ -447,30 +457,60 @@ def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
     params: 2D numpy structured array
         Corresponding parameters of the 2D fileters used to calculate the 
         shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
-    bbox: 
-        If im_blobs provided, corresponding bounding box
+    
+    Note
+    ----
+    Overlapping regions of interest (ROIs) will be combined in the workflow. 
+    Identify and process separately these ROIs and then combine the output. 
+    Future versions of this function will facilitate the use of overlapping ROIs.
     
     Example
     -------
+
+    Get shape features from the whole spectrogram
+
     >>> from maad.sound import load, spectrogram
-    >>> from maad.features import shape
+    >>> from maad.features import shape_features
     >>> s, fs = load('./data/spinetail.wav')
     >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
-    >>> rois, params, shape = shape_features(Sxx, im_blobs=None, resolution='low')
+    >>> __, params, shape = shape_features(Sxx, rois=None, resolution='low')
+    
+    Or get shape features from specific regions of interest
+    
+    >>> 
+    >>> rois_bbox = format_rois(rois_tf, ts, f, fmt='bbox')
+    >>> rois, params, shape = shape_features(Sxx, rois_bbox, resolution='low')
     
     """    
+    # TODO: 
+    #    - CHECK INPUTS AND COMBINE ENTRY RESOLUTION AND OPT_SHAPE. 
+    #    - output of Rois has some incertitudes associated to the spectrogram
+    # check input data
+    if type(Sxx) is not np.ndarray and len(Sxx.shape) != 2:
+        raise TypeError('Sxx must be an numpy 2D array')  
+    
     # unpack settings
     opt_shape = opt_shape_presets(resolution, opt_shape)
     npyr = opt_shape['npyr']
+
+    # transform ROIs to im_blobs
+    if rois is not None:
+        if ~(pd.Series(['min_t', 'min_f', 'max_t', 'max_f']).isin(rois.columns).all()):
+            raise TypeError('Array must be a Pandas DataFrame with column names: min_t, min_f, max_t, max_f. Check example in documentation.')
+        rois_bbox = format_rois(rois, ts, fs, fmt='bbox')
+        im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), rois_bbox)
+    else:
+        im_blobs = None
+    
     # build filterbank
     params, kernels = filter_bank_2d_nodc(ntheta=opt_shape['ntheta'],
                                           bandwidth=opt_shape['bandwidth'],
                                           frequency=opt_shape['frequency'],
                                           gamma=opt_shape['gamma'])
-    # filter images
+    # filter spectrogram
     im_rs = filter_multires(Sxx, kernels, npyr, rescale=True) 
-
-    # Get mean intensity
+    
+    # get mean intensity for each ROI, if ROIs are provided
     shape = []
     if im_blobs is None:
         for im in im_rs:
@@ -512,7 +552,11 @@ def shape_features(Sxx, im_blobs=None, resolution='low', opt_shape=None):
     rois_bbox.max_y = rois_bbox.max_y - 1
     rois_bbox.max_x = rois_bbox.max_x - 1
     
-    return rois_bbox, params_multires, shape
+    # combine output
+    rois_out = format_rois(rois_bbox, ts, fs, fmt='tf')
+    shape = pd.concat([rois_out, shape], axis='columns')
+        
+    return shape, params_multires
 
 
 def centroid(im, im_blobs=None):
