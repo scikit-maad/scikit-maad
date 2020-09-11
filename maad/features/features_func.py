@@ -916,13 +916,13 @@ def opt_shape_presets(resolution, opt_shape=None):
     return opt_shape
 
 
-def plot_shape(shape_plt, params, display_values=False):
+def plot_shape(shape_plt, params, row=0, display_values=False):
     """
-    Plot shape features in 2D representation
+    Plot shape features in a bidimensional plot
     
     Parameters
     ----------
-    shape: 1D array
+    shape: 1D array, pd.Series or pd.DataFrame
     
     params: structured array returned by maad.features_rois.shape_features
     
@@ -936,10 +936,14 @@ def plot_shape(shape_plt, params, display_values=False):
     scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size
     # reshape feature vector
     idx = params.sort_values(['theta','pyr_level','scale']).index
+    
     if isinstance(shape_plt, pd.DataFrame):
-        shape_plt = np.reshape(shape_plt.iloc[0,idx].values, (dirs_size, scale_size))
+        shape_plt = np.reshape(shape_plt.iloc[row,idx].values, (dirs_size, scale_size))
     elif isinstance(shape_plt, np.ndarray):
         shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size))
+    elif isinstance(shape_plt, pd.Series):
+        shape_plt = np.reshape(shape_plt.values, (dirs_size, scale_size))
+    
     unique_scale = params.scale * 2**params.pyr_level[idx]
     # get textlab
     textlab = shape_plt
