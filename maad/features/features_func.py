@@ -74,6 +74,7 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     ----------
     .. [1] http://en.wikipedia.org/wiki/Gabor_filter
     .. [2] http://mplab.ucsd.edu/tutorials/gabor.pdf
+    .. [3] http://www.cs.rug.nl/~imaging/simplecell.html
     
     """
     
@@ -81,7 +82,7 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     b = bandwidth
     sigma_pref = 1.0 / np.pi * np.sqrt(np.log(2) / 2.0) * (2.0 ** b + 1) / (2.0 ** b - 1)
     sigma_y = sigma_pref / frequency
-    sigma_x = sigma_y/gamma
+    sigma_x = sigma_y / gamma
     # meshgrid
     x0 = np.ceil(max(np.abs(n_stds * sigma_x * np.cos(theta)),
                      np.abs(n_stds * sigma_y * np.sin(theta)), 1))
@@ -104,7 +105,7 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     return g_nodc
 
 
-def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
+def _plot_filter_bank(kernels, frequency, ntheta):
     """
     Display filter bank
     
@@ -120,33 +121,6 @@ def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
     ntheta: int
         Number of angular steps between 0° to 90°
     
-    bandwidth: scalar, optional, default is 1
-        This parameter modifies the frequency of the Gabor filter
-    
-    gamma: scalar, optional, default is 1
-        This parameter change the Gaussian window that modulates the continuous
-        sine.
-        
-        1 => same gaussian window in x and y direction (circle)
-        
-        <1 => elongation of the filter size in the y direction (elipsoid)
-        
-        >1 => reduction of the filter size in the y direction (elipsoid)
-            
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-        figsize : tuple of integers, optional, default: (13,13)
-            width, height in inches.  
-        dpi : integer, optional
-            Dot per inch. 
-            For printed version, choose high dpi (i.e. dpi=300) => slow
-            For screen version, choose low dpi (i.e. dpi=96) => fast
-        interpolation : string, optional, default is 'nearest'
-            Pixels interpolation
-        aspect : string, optional, default is 'auto'
-        fontsize : scalar, optional, default is 8/0.22*hmax*100/dpi)
-            size of the font use to print the parameters of each filter
-            
-        ... and more, see matplotlib        
     Returns
     -------
     fig : Figure
@@ -155,56 +129,31 @@ def _plot_filter_bank(kernels, frequency, ntheta, bandwidth, gamma, **kwargs):
         The Axis instance
     """
 
-    params = []
-    for theta in range(ntheta):
-        theta = theta/ntheta * np.pi
-        for freq in frequency:
-            params.append([freq, theta, bandwidth, gamma])
-
-    w = []
-    h = []
+    ntheta = ntheta
+    nfreq = len(frequency)
+    
+    # get maximum size
+    aux = list()
     for kernel in kernels:
-        ylen, xlen = kernel[0].shape
-        w.append(xlen)
-        h.append(ylen)
-        
-    plt.gray()
-    fig = plt.figure()
+        aux.append(max(kernel[0].shape))
+    max_size = np.max(aux)
     
-    dpi =kwargs.pop('dpi',fig.get_dpi())
-    figsize =kwargs.pop('figsize',(13,13))
-    interpolation =kwargs.pop('interpolation','nearest')
-    aspect =kwargs.pop('aspect','auto')
-    
-    
-    fig.set_figwidth(figsize[0])        
-    fig.set_figheight(figsize[1])
-    
-    w = np.asarray(w)/dpi
-    h = np.asarray(h)/dpi
-    wmax = np.max(w)*1.25
-    hmax = np.max(h)*1.05
-    
-    fontsize =kwargs.pop('fontsize',8/0.22*hmax*100/dpi) 
-
-    params_label = []
-    for param in params:
-        params_label.append('theta=%d f=%.2f \n bandwidth=%.1f \n gamma=%.1f' 
-                            % (param[1] * 180 / np.pi, param[0], param[2],
-                               param[3]))
-    
-    n = len(frequency)
-    
-    for ii, kernel in enumerate(kernels):
-        ax = plt.axes([(ii%n)*wmax + (wmax-w[ii])/2,(ii//n)*hmax + (hmax-h[ii])/2,w[ii],h[ii]])
-        ax.imshow(np.real(kernel[0]),interpolation=interpolation, aspect =aspect, **kwargs)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_ylabel(params_label[ii],fontsize=fontsize)
-        ax.axis('tight')
-    plt.show()
-    
+    # plot kernels
+    fig, ax = plt.subplots(nfreq, ntheta)
+    ax = ax.transpose()
+    ax = ax.ravel()
+    for idx, k in enumerate(kernels):
+        kernel = np.real(k[0])
+        ki, kj = kernel.shape
+        ci, cj = int(max_size/2 - ki/2), int(max_size/2 - kj/2)
+        canvas = np.zeros((max_size,max_size))
+        canvas[ci:ci+ki,cj:cj+kj] = canvas[ci:ci+ki,cj:cj+kj] + kernel
+        ax[idx].imshow(canvas)
+        ax[idx].axis('off')
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.02, hspace=0.02)
     return ax, fig
+
     
 def _plot_filter_results(im_ref, im_list, kernels, params, m, n):
     """
@@ -360,7 +309,7 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     return Sxx_out
 
         
-def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, **kwargs):
+def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, **kwargs):
     """
     Build an ensemble of complex 2D Gabor filters with no DC offset.
     
@@ -374,7 +323,8 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
         Number of angular steps between 0° to 90°
     
     bandwidth: scalar, optional, default is 1
-        Spatial-frequency bandwidth of the filter 
+        Spatial-frequency bandwidth of the filter. This parameters affect
+        the frequency.
     
     gamma: scalar, optional, default is 1
         Gaussian window that modulates the continuous sine.
@@ -392,14 +342,20 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
          Params array has 4 fields (theta, freq, bandwidth, gamma)
          This can be useful to interpret the result of the filtering process.
             
-    kernels: 2d ndarray of scalars
-         Gabor kernels
+    kernels: 2d ndarray of complex values
+         Complex Gabor kernels
     
     Examples
     --------
     >>> from maad.features import filter_bank_2d_nodc
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True)
-    
+
+    It is possible to load presets to build the filter bank using the function opt_shape_presets
+
+    >>> from maad.features import filter_bank_2d_nodc, opt_shape_presets
+    >>> opt = opt_shape_presets(resolution='med')
+    >>> params, kernels = filter_bank_2d_nodc(opt['frequency'], opt['ntheta'], opt['bandwidth'], opt['gamma'], display=True)
+
     """
     
     theta = np.arange(ntheta)
@@ -416,19 +372,12 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=1, display=False, 
         kernels.append((kernel, param))
             
     if display: 
-        _, fig = _plot_filter_bank(kernels, frequency, ntheta, bandwidth, 
-                                   gamma, **kwargs)
-        if savefig is not None : 
-            dpi   =kwargs.pop('dpi',96)
-            format=kwargs.pop('format','png')               
-            filename = savefig+'_filter_bank2D.'+format
-            fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format,
-                        **kwargs) 
+        _, fig = _plot_filter_bank(kernels, frequency, ntheta)
             
     return params, kernels  
 
 
-def shape_features(Sxx, ts, fs, resolution='low', rois=None, opt_shape=None):
+def shape_features(Sxx, ts, fs, resolution='low', rois=None):
     """
     Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters
     
@@ -436,10 +385,11 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None, opt_shape=None):
     ----------
     Sxx: 2D array
         Input image to process 
-    resolution: str
+    resolution: str or dict
         Specify resolution of shape descriptors. Can be: 'low', 'med', 'high'.
-        Default is 'low'. To specify custom resolution analysis, detailed  feature
-        bank settings should be provided through opt_shape.
+        Default is 'low'. Alternatively, custom resolution can be provided 
+        using a dictionary with options to define the filter bank. Valid keys 
+        are: ntheta, bandwidth, frequency, gamma, npyr
     rois: pandas DataFrame
         Regions of interest where descriptors will be computed. Array must 
         have a valid input format with column names: min_t min_f, max_t, max_f
@@ -483,14 +433,19 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None, opt_shape=None):
     
     """    
     # TODO: 
-    #    - CHECK INPUTS AND COMBINE ENTRY RESOLUTION AND OPT_SHAPE. 
     #    - output of Rois has some incertitudes associated to the spectrogram
-    # check input data
+
+    # Check input data and unpack settings
     if type(Sxx) is not np.ndarray and len(Sxx.shape) != 2:
         raise TypeError('Sxx must be an numpy 2D array')  
     
-    # unpack settings
-    opt_shape = opt_shape_presets(resolution, opt_shape)
+    if type(resolution) is str:
+        opt_shape = opt_shape_presets(resolution)
+    elif type(resolution) is dict:
+        opt_shape = opt_shape_presets(resolution='custom', opt_shape=resolution)
+    else:
+        raise TypeError('Resolution must be string or a dictionary. See function documentation.')
+        
     npyr = opt_shape['npyr']
 
     # transform ROIs to im_blobs
@@ -910,56 +865,66 @@ def opt_shape_presets(resolution, opt_shape=None):
             opt_shape = opt_shape_low
    
     else:
-       print('Resolution should be: low, med or high. Setting resolution to low')
+       raise TypeError("Resolution should be: 'low', 'med' or 'high'")
        opt_shape = opt_shape_low
 
     return opt_shape
 
 
-def plot_shape(shape_plt, params, row=0, display_values=False):
+def plot_shape(shape, params, row=0, display_values=False):
     """
     Plot shape features in a bidimensional plot
     
     Parameters
     ----------
     shape: 1D array, pd.Series or pd.DataFrame
+        Shape features computed with shape_features function.
     
-    params: structured array returned by maad.features_rois.shape_features
+    params: pd.DataFrame
+        Pandas dataframe returned by maad.features_rois.shape_features
+    
+    row: int
+        Observation to be visualized
+    
+    display_values: bool
+        Set to True to display the coefficient values. Default is False.
     
     Returns
     -------
-    plot
+    ax: matplotlib.axes
+        Axes of the figure
     """
-    unique_theta = np.unique(params.theta)
+
     # compute shape of matrix
-    dirs_size = unique_theta.size
+    dirs_size = params.theta.unique().shape[0]
     scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size
     # reshape feature vector
     idx = params.sort_values(['theta','pyr_level','scale']).index
     
-    if isinstance(shape_plt, pd.DataFrame):
+    if isinstance(shape, pd.DataFrame):
+        shape_plt = shape.iloc[:,shape.columns.str.startswith('shp')]
         shape_plt = np.reshape(shape_plt.iloc[row,idx].values, (dirs_size, scale_size))
+    elif isinstance(shape_plt, pd.Series):
+        shape_plt = shape.iloc[shape.index.str.startswith('shp')]
+        shape_plt = np.reshape(shape_plt.values, (dirs_size, scale_size))
     elif isinstance(shape_plt, np.ndarray):
         shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size))
-    elif isinstance(shape_plt, pd.Series):
-        shape_plt = np.reshape(shape_plt.values, (dirs_size, scale_size))
+
     
-    unique_scale = params.scale * 2**params.pyr_level[idx]
+    unique_scale = params.scale[idx] * 2**params.pyr_level[idx]
     # get textlab
     textlab = shape_plt
     textlab = np.round(textlab,2)
     
     # plot figure
-    fig = plt.figure(figsize=(12,8))
+    fig = plt.figure(figsize=(8,6))
     ax = fig.add_subplot(111)
     ax.imshow(shape_plt, aspect='auto', origin='lower', interpolation='None', cmap='viridis')
     if display_values:    
         for (j,i),label in np.ndenumerate(textlab):
             ax.text(i,j,label,ha='center',va='center')
-    else:
-        pass
         
-    yticklab = unique_theta
+    yticklab = params.theta.unique()
     xticklab = np.reshape(unique_scale.values, 
                           (dirs_size, scale_size))
     ax.set_xticks(np.arange(scale_size))
@@ -969,6 +934,8 @@ def plot_shape(shape_plt, params, row=0, display_values=False):
     ax.set_xlabel('Scale')
     ax.set_ylabel('Theta')
     plt.show()
+    
+    return ax
 
 
 def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
