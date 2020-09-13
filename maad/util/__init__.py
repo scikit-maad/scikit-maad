@@ -21,8 +21,8 @@ from .visualization import (rand_cmap,
                    plot1D,
                    plot2D)
 
-from .math import (running_mean,
-                   get_unimode)
+from .math_func import (running_mean,
+               		get_unimode)
 
 from .parser import (read_audacity_annot,
                      date_from_filename,
