@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.miscellaneous.dB2linear &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="util.miscellaneous.format_rois" href="util.miscellaneous.format_rois.html" />
+    <link rel="prev" title="util.miscellaneous" href="util.miscellaneous.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">util.miscellaneous.dB2linear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.format_rois.html">util.miscellaneous.format_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.index_bw.html">util.miscellaneous.index_bw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear2dB.html">util.miscellaneous.linear2dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear_scale.html">util.miscellaneous.linear_scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.nearest_idx.html">util.miscellaneous.nearest_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.normalize_2d.html">util.miscellaneous.normalize_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rle.html">util.miscellaneous.rle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rois_to_audacity.html">util.miscellaneous.rois_to_audacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rois_to_imblobs.html">util.miscellaneous.rois_to_imblobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.shift_bit_length.html">util.miscellaneous.shift_bit_length</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="util.html">util</a> &raquo;</li>
+        
+          <li><a href="util.miscellaneous.html">util.miscellaneous</a> &raquo;</li>
+        
+      <li>util.miscellaneous.dB2linear</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/util.miscellaneous.dB2linear.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="util-miscellaneous-db2linear">
+<h1>util.miscellaneous.dB2linear<a class="headerlink" href="#util-miscellaneous-db2linear" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="util.miscellaneous.dB2linear">
+<code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">dB2linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'power'</span></em>, <em class="sig-param"><span class="n">db_gain</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#dB2linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.dB2linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform linear date into decibel scale within the dB range (db_range).
+A gain (db_gain) could be added at the end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>data in dB to rescale in linear</p>
+</dd>
+<dt><strong>mode</strong><span class="classifier">str, default is ‘power’</span></dt><dd><p>select ‘amplitude’ or ‘power’ to compute the corresponding dB</p>
+</dd>
+<dt><strong>db_gain</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><p>Gain that was added to the result 
+–&gt; 20*log10(x) + db_gain</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">scalars</span></dt><dd><p>output in amplitude or power unit</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="util.miscellaneous.format_rois.html" class="btn btn-neutral float-right" title="util.miscellaneous.format_rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="util.miscellaneous.html" class="btn btn-neutral float-left" title="util.miscellaneous" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

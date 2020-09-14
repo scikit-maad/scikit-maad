@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sound.sound_func.select_bandwidth" href="sound.sound_func.select_bandwidth.html" />
-    <link rel="prev" title="sound.sound_func.load" href="sound.sound_func.load.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,25 +93,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="sound.sound_func.html">sound.sound_func</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.fir_filter.html">sound.sound_func.fir_filter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.iir_filter1d.html">sound.sound_func.iir_filter1d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.load.html">sound.sound_func.load</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound_func.preprocess_wrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.select_bandwidth.html">sound.sound_func.select_bandwidth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram.html">sound.sound_func.spectrogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram2.html">sound.sound_func.spectrogram2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogramPSD.html">sound.sound_func.spectrogramPSD</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
@@ -165,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="sound.html">sound</a> &raquo;</li>
-        
-          <li><a href="sound.sound_func.html">sound.sound_func</a> &raquo;</li>
-        
       <li>sound.sound_func.preprocess_wrapper</li>
     
     
@@ -190,66 +170,6 @@
             
   <div class="section" id="sound-sound-func-preprocess-wrapper">
 <h1>sound.sound_func.preprocess_wrapper<a class="headerlink" href="#sound-sound-func-preprocess-wrapper" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="sound.sound_func.preprocess_wrapper">
-<code class="sig-prename descclassname">sound.sound_func.</code><code class="sig-name descname">preprocess_wrapper</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound_func.html#preprocess_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound_func.preprocess_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper function to preprocess an audio recorder into a spectrogram</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>The name or path of the .wav file to load      
-if you want to extract the date of creation of the file, the filename 
-must have this postfix :
-XXXX_yyyymmdd_hhmmss.wav
-with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-mm : minutes / ss : seconds</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signals and the spectrograms if True</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by the maad function as well</strong></dt><dd><p>as the plt.plot and savefig functions.
-All the input arguments required or optional in the signature functions
-can be passed.
-see the signature of each maad function to know the parameters 
-that can be passed as kwargs :
-load(filename, channel=’left’, display=False, savefig=None, 
-**kwargs)
-select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
-savefig=None, **kwargs):
-spectrogram(s, fs, nperseg=512, overlap=0.5, dt_df_res=None, 
-db_range=60, db_gain=20, rescale=True, fcrop=None, 
-tcrop=None, display=False, savefig = None, **kwargs):
-… and more, see matplotlib</p>
-<p>example : 
-preprocess_wrapper(‘audio.wav’, display=False, savefig=None, 
-tcrop=[0,30])</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>Sxx</strong><span class="classifier">2d ndarray</span></dt><dd><p>Spectrogram of s equivalent to Audacity</p>
-</dd>
-<dt><strong>fs</strong><span class="classifier">Scalar</span></dt><dd><p>Sampling frequency</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-<dt><strong>date</strong><span class="classifier">object datetime</span></dt><dd><p>This object contains the date of creation of the file extracted from
-the filename postfix. 
-The filename must follow this format :
-XXXX_yyyymmdd_hhmmss.wav
-with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-mm : minutes / ss : seconds</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -257,15 +177,6 @@ mm : minutes / ss : seconds</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="sound.sound_func.select_bandwidth.html" class="btn btn-neutral float-right" title="sound.sound_func.select_bandwidth" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="sound.sound_func.load.html" class="btn btn-neutral float-left" title="sound.sound_func.load" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

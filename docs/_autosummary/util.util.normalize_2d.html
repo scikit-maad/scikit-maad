@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.util.plot1D" href="util.util.plot1D.html" />
-    <link rel="prev" title="util.util.nearest_idx" href="util.util.nearest_idx.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,37 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="util.parser_func.html">util.parser_func</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="util.util.html">util.util</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="util.util.crop_image.html">util.util.crop_image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.dB2linear.html">util.util.dB2linear</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.format_rois.html">util.util.format_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.get_unimode.html">util.util.get_unimode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.index_bw.html">util.util.index_bw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.linear2dB.html">util.util.linear2dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.linear_scale.html">util.util.linear_scale</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.nearest_idx.html">util.util.nearest_idx</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">util.util.normalize_2d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.plot1D.html">util.util.plot1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.plot2D.html">util.util.plot2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rand_cmap.html">util.util.rand_cmap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rle.html">util.util.rle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rois_to_audacity.html">util.util.rois_to_audacity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rois_to_imblobs.html">util.util.rois_to_imblobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.running_mean.html">util.util.running_mean</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.shift_bit_length.html">util.util.shift_bit_length</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.wav2dBSPL.html">util.wav2dBSPL</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
@@ -176,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
-          <li><a href="util.util.html">util.util</a> &raquo;</li>
-        
       <li>util.util.normalize_2d</li>
     
     
@@ -201,30 +170,6 @@
             
   <div class="section" id="util-util-normalize-2d">
 <h1>util.util.normalize_2d<a class="headerlink" href="#util-util-normalize-2d" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="util.util.normalize_2d">
-<code class="sig-prename descclassname">util.util.</code><code class="sig-name descname">normalize_2d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">min_value</span></em>, <em class="sig-param"><span class="n">max_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/util.html#normalize_2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.util.normalize_2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalize 2d array between two values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>im: 2D ndarray</strong></dt><dd><p>Bidimensinal array to be normalized</p>
-</dd>
-<dt><strong>min_value: int, float</strong></dt><dd><p>Minimum value in normalization</p>
-</dd>
-<dt><strong>max_value: int, float</strong></dt><dd><p>Maximum value in normalization</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>im_out: 2D ndarray</dt><dd><p>Array normalized between min and max values</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -232,15 +177,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.util.plot1D.html" class="btn btn-neutral float-right" title="util.util.plot1D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.util.nearest_idx.html" class="btn btn-neutral float-left" title="util.util.nearest_idx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

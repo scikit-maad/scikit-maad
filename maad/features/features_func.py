@@ -244,6 +244,41 @@ def _filter_mag(im, kernel):
                    ndi.convolve(im, np.imag(kernel), mode='reflect')**2)
     return im_out
 
+def _params_to_df(params_filter_bank, npyr):
+    """
+    Organises parameters used in multiresolution analysis into a dataframe
+    
+    Parameters
+    ----------
+    params_filter_bank: numpy array
+        Output of parameters from function filter_bank_2d_nodc
+    npyr: int
+        Number of pyramids used in multiresolution analysis
+            
+    Returns
+    -------
+    params_multires: pandas DataFrame
+        Ordered parameters for each shape feature used
+    """    
+
+    params = np.asarray(params_filter_bank)
+    orient = params[:,0] * 180 / np.pi
+    orient = orient.tolist() * npyr
+    pyr_level = np.sort(np.arange(npyr).tolist()*len(params))+1
+    freq = params[:,1].tolist() * npyr
+    nparams = len(params) * npyr
+    params_multires = np.zeros(nparams, dtype={'names':('theta', 'freq', 'pyr_level','scale'),
+                                               'formats':('f8', 'f8', 'f8','f8')})
+    params_multires['theta'] = orient
+    params_multires['freq'] = freq
+    params_multires['scale'] = 1 / np.asarray(freq)
+    params_multires['pyr_level'] = pyr_level
+    params_multires = pd.DataFrame(params_multires)
+
+    return params_multires
+
+
+
 def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     """
     Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid 
@@ -324,7 +359,8 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
     
     bandwidth: scalar, optional, default is 1
         Spatial-frequency bandwidth of the filter. This parameters affect
-        the frequency.
+        the resolution of the filters. Lower bandwidth result in sharper
+        in filters with more details.
     
     gamma: scalar, optional, default is 1
         Gaussian window that modulates the continuous sine.
@@ -347,14 +383,18 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
     
     Examples
     --------
-    >>> from maad.features import filter_bank_2d_nodc
-    >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True)
 
-    It is possible to load presets to build the filter bank using the function opt_shape_presets
+    It is possible to load presets to build the filter bank using predefined 
+    parameters with the function maad.features.opt_shape_presets
 
     >>> from maad.features import filter_bank_2d_nodc, opt_shape_presets
     >>> opt = opt_shape_presets(resolution='med')
     >>> params, kernels = filter_bank_2d_nodc(opt['frequency'], opt['ntheta'], opt['bandwidth'], opt['gamma'], display=True)
+
+    Alternatively, custom parameters can be provided to define the filter bank
+
+    >>> from maad.features import filter_bank_2d_nodc
+    >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True)
 
     """
     
@@ -408,28 +448,29 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
         Corresponding parameters of the 2D fileters used to calculate the 
         shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
     
-    Note
-    ----
+    Notes
+    -----
     Overlapping regions of interest (ROIs) will be combined in the workflow. 
     Identify and process separately these ROIs and then combine the output. 
     Future versions of this function will facilitate the use of overlapping ROIs.
     
-    Example
-    -------
+    Examples
+    --------
 
     Get shape features from the whole spectrogram
 
     >>> from maad.sound import load, spectrogram
     >>> from maad.features import shape_features
+    >>> import numpy as np
     >>> s, fs = load('./data/spinetail.wav')
     >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
-    >>> __, params, shape = shape_features(Sxx, rois=None, resolution='low')
+    >>> shape, params = shape_features(np.log10(Sxx), resolution='med')
     
     Or get shape features from specific regions of interest
     
-    >>> 
-    >>> rois_bbox = format_rois(rois_tf, ts, f, fmt='bbox')
-    >>> rois, params, shape = shape_features(Sxx, rois_bbox, resolution='low')
+    >>> rois_tf = read_audacity_annot('./data/spinetail.txt')
+    >>> rois = rois_tf.loc[rois_tf.label=='CRER',]  
+    >>> shape, params = shape_features(np.log10(Sxx), resolution='med', rois=rois)
     
     """    
     # TODO: 
@@ -465,7 +506,8 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
     # filter spectrogram
     im_rs = filter_multires(Sxx, kernels, npyr, rescale=True) 
     
-    # get mean intensity for each ROI, if ROIs are provided
+    # If ROIs are provided get mean intensity for each ROI, 
+    # else compute mean intensity for the whole spectrogram
     shape = []
     if im_blobs is None:
         for im in im_rs:
@@ -482,19 +524,7 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
         shape = list(map(list, zip(*shape)))  # transpose shape
     
     # organise parameters
-    params = np.asarray(params)
-    orient = params[:,0]*180/np.pi
-    orient = orient.tolist()*npyr
-    pyr_level = np.sort(np.arange(npyr).tolist()*len(params))+1
-    freq = params[:,1].tolist()*npyr
-    nparams = len(params)*npyr
-    params_multires = np.zeros(nparams, dtype={'names':('theta', 'freq', 'pyr_level','scale'),
-                                               'formats':('f8', 'f8', 'f8','f8')})
-    params_multires['theta'] = orient
-    params_multires['freq'] = freq
-    params_multires['scale'] = 1/np.asarray(freq)
-    params_multires['pyr_level'] = pyr_level
-    params_multires = pd.DataFrame(params_multires)
+    params_multires = _params_to_df(params, npyr)
     
     # format shape into dataframe
     cols=['shp_' + str(idx).zfill(3) for idx in range(1,len(shape[0])+1)]
@@ -806,37 +836,51 @@ def save_figlist(fname, figlist):
 
 def opt_shape_presets(resolution, opt_shape=None):
     """ 
-    Set values for multiresolution analysis using presets or custom parameters
+    Set parameters for multiresolution analysis using presets or custom parameters
     
     Parameters
     ----------
     resolution: str
-        Chooses the opt_shape presets. 
-        Supportes presets are: 'low', 'med', 'high' and 'custom'
+        Select resolution of analysis using presets. 
+        Supported presets are: 'low', 'med', and 'high'.
+        Select 'custom' to select user-defined parameters using a dictionary.
         
     opt_shape: dict
         Key and values for shape settings.
-        Valid keys are: ntheta, bandwidth, frequency, gamma, npyr
+        Valid keys are: 'ntheta', 'bandwidth', 'frequency', 'gamma', 'npyr'
     
     Returns
     -------
     opt_shape: dict
         A valid dictionary with shape settings
+        
+    Examples
+    --------
+    
+    Get parameters using predefined presets
+    
+    >>> from maad.features import opt_shape_presets
+    >>> opt = opt_shape_presets('med')
+        
+    Get parameters to analyse at high shape resolution
+    
+    >>> from maad.features import opt_shape_presets
+    >>> opt = opt_shape_presets('high')
     """
     # Factory presets
     opt_shape_low = dict(ntheta=2, 
-                         bandwidth=1, 
-                         frequency=(2**-1, 2**-2), 
+                         bandwidth=0.8, 
+                         frequency=(0.35, 0.5), 
                          gamma=2, 
                          npyr = 4)
     opt_shape_med =  dict(ntheta=4, 
-                          bandwidth=1, 
-                          frequency=(2**-1, 2**-2), 
+                          bandwidth=0.8, 
+                          frequency=(0.35, 0.5), 
                           gamma=2, 
                           npyr = 6)
     opt_shape_high =  dict(ntheta=8, 
-                           bandwidth=1, 
-                           frequency=(2**-0.5, 2**-1, 2**-1.5, 2**-2), 
+                           bandwidth=0.8, 
+                           frequency=(0.35, 0.5), 
                            gamma=2, 
                            npyr = 6)
     
@@ -893,6 +937,17 @@ def plot_shape(shape, params, row=0, display_values=False):
     -------
     ax: matplotlib.axes
         Axes of the figure
+        
+    Examples
+    --------
+    >>> from maad.sound import load, spectrogram
+    >>> from maad.features import shape_features, plot_shape
+    >>> import numpy as np
+    >>> s, fs = load('./data/spinetail.wav')
+    >>> Sxx, ts, f, ext = spectrogram(s, fs)
+    >>> shape, params = shape_features(np.log10(Sxx), ts, f, resolution='high')
+    >>> plot_shape(shape, params)
+
     """
 
     # compute shape of matrix
@@ -904,10 +959,10 @@ def plot_shape(shape, params, row=0, display_values=False):
     if isinstance(shape, pd.DataFrame):
         shape_plt = shape.iloc[:,shape.columns.str.startswith('shp')]
         shape_plt = np.reshape(shape_plt.iloc[row,idx].values, (dirs_size, scale_size))
-    elif isinstance(shape_plt, pd.Series):
+    elif isinstance(shape, pd.Series):
         shape_plt = shape.iloc[shape.index.str.startswith('shp')]
-        shape_plt = np.reshape(shape_plt.values, (dirs_size, scale_size))
-    elif isinstance(shape_plt, np.ndarray):
+        shape_plt = np.reshape(shape_plt.iloc[idx].values, (dirs_size, scale_size))
+    elif isinstance(shape, np.ndarray):
         shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size))
 
     
@@ -924,11 +979,11 @@ def plot_shape(shape, params, row=0, display_values=False):
         for (j,i),label in np.ndenumerate(textlab):
             ax.text(i,j,label,ha='center',va='center')
         
-    yticklab = params.theta.unique()
+    yticklab = np.round(params.theta.unique(),1)
     xticklab = np.reshape(unique_scale.values, 
                           (dirs_size, scale_size))
     ax.set_xticks(np.arange(scale_size))
-    ax.set_xticklabels(np.round(xticklab,2)[0,:])
+    ax.set_xticklabels(np.round(xticklab,1)[0,:])
     ax.set_yticks(np.arange(dirs_size))
     ax.set_yticklabels(yticklab)
     ax.set_xlabel('Scale')

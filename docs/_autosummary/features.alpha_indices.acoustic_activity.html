@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>features.alpha_indices.acoustic_activity &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="features.alpha_indices.acoustic_events" href="features.alpha_indices.acoustic_events.html" />
+    <link rel="prev" title="features.alpha_indices.acousticRichnessIndex" href="features.alpha_indices.acousticRichnessIndex.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="features.html">features</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.acousticComplexityIndex.html">features.alpha_indices.acousticComplexityIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.acousticDiversityIndex.html">features.alpha_indices.acousticDiversityIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.acousticEvenessIndex.html">features.alpha_indices.acousticEvenessIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.acousticGradientIndex.html">features.alpha_indices.acousticGradientIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.acousticRichnessIndex.html">features.alpha_indices.acousticRichnessIndex</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">features.alpha_indices.acoustic_activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.acoustic_events.html">features.alpha_indices.acoustic_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.bioacousticsIndex.html">features.alpha_indices.bioacousticsIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.entropy.html">features.alpha_indices.entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.gini.html">features.alpha_indices.gini</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.intoBins.html">features.alpha_indices.intoBins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.kurtosis.html">features.alpha_indices.kurtosis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.raoQ.html">features.alpha_indices.raoQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.roughness.html">features.alpha_indices.roughness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.score.html">features.alpha_indices.score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.shannonEntropy.html">features.alpha_indices.shannonEntropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.skewness.html">features.alpha_indices.skewness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.soundscapeIndex.html">features.alpha_indices.soundscapeIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.spectral_entropy.html">features.alpha_indices.spectral_entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.surfaceRoughness.html">features.alpha_indices.surfaceRoughness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.alpha_indices.tfsdt.html">features.alpha_indices.tfsdt</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.features_func.html">features.features_func</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="features.html">features</a> &raquo;</li>
+        
+          <li><a href="features.alpha_indices.html">features.alpha_indices</a> &raquo;</li>
+        
+      <li>features.alpha_indices.acoustic_activity</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/features.alpha_indices.acoustic_activity.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="features-alpha-indices-acoustic-activity">
+<h1>features.alpha_indices.acoustic_activity<a class="headerlink" href="#features-alpha-indices-acoustic-activity" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="features.alpha_indices.acoustic_activity">
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acoustic_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xdB</span></em>, <em class="sig-param"><span class="n">dB_threshold</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acoustic_activity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acoustic_activity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acoustic Activity :</p>
+<p>for each frequency bin :
+- ACTfract : proportion (fraction) of points above the threshold 
+- ACTcount : number of points above the threshold
+- ACTmean : mean value (in dB) of the portion of the signal above the threhold</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>xdB</strong><span class="classifier">ndarray of floats</span></dt><dd><p>1d : envelope in dB
+2d : PSD spectrogram in dB
+It’s better to work with PSD or envelope without background variation
+as the process is based on threshold.</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution</p>
+</dd>
+<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is 6dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
+if the length is &gt; rejectLength</p>
+</dd>
+<dt><strong>rejectDuration</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>event shorter than rejectDuration are discarded</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>ACTfract :ndarray of scalars</dt><dd><p>proportion (fraction) of points above the threshold for each frequency bin</p>
+</dd>
+<dt>ACTcount: ndarray of scalars</dt><dd><p>number of points above the threshold for each frequency bin</p>
+</dd>
+<dt>ACTmean: scalar</dt><dd><p>mean value (in dB) of the portion of the signal above the threhold</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
+from natural recordings of the environment.
+Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+<p>ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)
+EVNsp [Towsey] : ACTcount (number of point value above the theshold)</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="features.alpha_indices.acoustic_events.html" class="btn btn-neutral float-right" title="features.alpha_indices.acoustic_events" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="features.alpha_indices.acousticRichnessIndex.html" class="btn btn-neutral float-left" title="features.alpha_indices.acousticRichnessIndex" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

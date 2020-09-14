@@ -1,4 +1,4 @@
-﻿features.features\_func
+features.features\_func
 =======================
 
 .. automodule:: features.features_func

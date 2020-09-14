@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.parser_func" href="util.parser_func.html" />
-    <link rel="prev" title="sound.sound_func.spectrogramPSD" href="sound.sound_func.spectrogramPSD.html" /> 
+    <link rel="next" title="util.decibelSPL" href="util.decibelSPL.html" />
+    <link rel="prev" title="sound.sound_func.spectrogram" href="sound.sound_func.spectrogram.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,15 +96,16 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">util</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="util.parser_func.html">util.parser_func</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.util.html">util.util</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.wav2dBSPL.html">util.wav2dBSPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -179,21 +180,27 @@
   <div class="section" id="module-util">
 <span id="util"></span><h1>util<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h1>
 <p>Utility functions for scikit-maad
-Collection of miscelaneous functions that help to simplify the framework</p>
+Collection of miscellaneous functions that help to simplify the framework</p>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.parser_func.html#module-util.parser_func" title="util.parser_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.parser_func</span></code></a></p></td>
-<td><p>Utilitary functions to parse or read files</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.html#module-util.decibelSPL" title="util.decibelSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.decibelSPL</span></code></a></p></td>
+<td><p>SPL conversion functions for scikit-maad Collection of miscelaneous functions that help to convert wav and volt data to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.html#module-util.util" title="util.util"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.util</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.math_func.html#module-util.math_func" title="util.math_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.math_func</span></code></a></p></td>
 <td><p>Utilitary functions for scikit-MAAD</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.wav2dBSPL.html#module-util.wav2dBSPL" title="util.wav2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.wav2dBSPL</span></code></a>(wave, gain[, Vadc, bit, …])</p></td>
-<td><p>convert wave to instantaneous sound pressure level SPL in dB</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.html#module-util.miscellaneous" title="util.miscellaneous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.miscellaneous</span></code></a></p></td>
+<td><p>Utilitary functions for scikit-MAAD</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="util.parser.html#module-util.parser" title="util.parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.parser</span></code></a></p></td>
+<td><p>Utilitary functions to parse or read files</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.visualization.html#module-util.visualization" title="util.visualization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.visualization</span></code></a></p></td>
+<td><p>Utilitary functions for scikit-MAAD</p></td>
 </tr>
 </tbody>
 </table>
@@ -207,10 +214,10 @@ Collection of miscelaneous functions that help to simplify the framework</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.parser_func.html" class="btn btn-neutral float-right" title="util.parser_func" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.decibelSPL.html" class="btn btn-neutral float-right" title="util.decibelSPL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sound.sound_func.spectrogramPSD.html" class="btn btn-neutral float-left" title="sound.sound_func.spectrogramPSD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sound.sound_func.spectrogram.html" class="btn btn-neutral float-left" title="sound.sound_func.spectrogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

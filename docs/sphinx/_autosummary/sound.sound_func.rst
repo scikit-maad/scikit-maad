@@ -1,4 +1,4 @@
-sound.sound\_func
+﻿sound.sound\_func
 =================
 
 .. automodule:: sound.sound_func
@@ -15,14 +15,12 @@ sound.sound\_func
       :toctree:
       :nosignatures:
    
+      envelope
       fir_filter
       iir_filter1d
       load
-      preprocess_wrapper
       select_bandwidth
       spectrogram
-      spectrogram2
-      spectrogramPSD
    
    
 

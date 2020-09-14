@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util" href="util.html" />
-    <link rel="prev" title="sound.sound_func.spectrogram2" href="sound.sound_func.spectrogram2.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,25 +93,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="sound.sound_func.html">sound.sound_func</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.fir_filter.html">sound.sound_func.fir_filter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.iir_filter1d.html">sound.sound_func.iir_filter1d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.load.html">sound.sound_func.load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.preprocess_wrapper.html">sound.sound_func.preprocess_wrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.select_bandwidth.html">sound.sound_func.select_bandwidth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram.html">sound.sound_func.spectrogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram2.html">sound.sound_func.spectrogram2</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound_func.spectrogramPSD</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
@@ -165,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="sound.html">sound</a> &raquo;</li>
-        
-          <li><a href="sound.sound_func.html">sound.sound_func</a> &raquo;</li>
-        
       <li>sound.sound_func.spectrogramPSD</li>
     
     
@@ -190,130 +170,6 @@
             
   <div class="section" id="sound-sound-func-spectrogrampsd">
 <h1>sound.sound_func.spectrogramPSD<a class="headerlink" href="#sound-sound-func-spectrogrampsd" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="sound.sound_func.spectrogramPSD">
-<code class="sig-prename descclassname">sound.sound_func.</code><code class="sig-name descname">spectrogramPSD</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">fs</em>, <em class="sig-param">window='hann'</em>, <em class="sig-param">noverlap=None</em>, <em class="sig-param">nfft=None</em>, <em class="sig-param">fcrop=None</em>, <em class="sig-param">tcrop=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound_func.html#spectrogramPSD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound_func.spectrogramPSD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a sound waveform into a Power Spectrum Densiy (PSD) Spectrogram</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>x</strong><span class="classifier">1d ndarray</span></dt><dd><p>Vector containing the sound waveform</p>
-</dd>
-<dt><strong>fs</strong><span class="classifier">int</span></dt><dd><p>The sampling frequency in Hz</p>
-</dd>
-<dt><strong>window</strong><span class="classifier">str or tuple or array_like, optional, default to ‘hann’</span></dt><dd><p>Desired window to use. If window is a string or tuple, it is passed to 
-get_window to generate the window values, which are DFT-even by default. 
-See get_window for a list of windows and required parameters. 
-If window is array_like it will be used directly as the window and its length must be nperseg.</p>
-</dd>
-<dt><strong>nperseg: int, optional</strong></dt><dd><p>Length of each segment. Defaults to None, but if window is str or tuple, 
-is set to 256, and if window is array_like, is set to the length of the window.</p>
-</dd>
-<dt><strong>noverlap</strong><span class="classifier">int, optional. Defaults to None.</span></dt><dd><p>Number of points to overlap between segments. If None, noverlap = nperseg // 8.</p>
-</dd>
-<dt><strong>nfft</strong><span class="classifier">int, optional. Defaults to None.</span></dt><dd><p>Length of the FFT used, if a zero padded FFT is desired. 
-If None, the FFT length is nperseg. 
-For fast calculation, it’s better to use a number that is a power 2. 
-This parameter sets the resolution in frequency as the spectrogram will
-contains N/2 frequency bins between 0Hz-(fs/2)Hz, with a resolution
-df = fs/N
-It sets also the time slot (dt) of each frequency frames : dt = N/fs
-The higher is the number, the lower is the resolution in time (dt) 
-but better is the resolution in frequency (df).</p>
-</dd>
-<dt><strong>fcrop, tcrop</strong><span class="classifier">list of 2 scalars [min, max], optional, default is None</span></dt><dd><p>fcrop corresponds to the min and max boundary frequency values
-tcrop corresponds to the min and max boundary time values</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages into the consol or terminal if verbose is True</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>savefilename<span class="classifier">str, optional, default :’_filt_audiogram.png’</span></dt><dd><p>Postfix of the figure filename</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
-in order to get all the  existing colormaps
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
-‘viridis’…</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
-luminance data.  Note if you pass a <cite>norm</cite> instance, your
-settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
-For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
-For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>… and more, see matplotlib</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>PSDxx</strong><span class="classifier">2d ndarray of floats</span></dt><dd><p>Spectrogram : Matrix containing K frames with N/2 frequency bins, 
-K*N &lt;= length (wave)</p>
-</dd>
-<dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution of the spectrogram (horizontal x-axis)</p>
-</dd>
-<dt><strong>df</strong><span class="classifier">scalar</span></dt><dd><p>Frequency resolution of the spectrogram (vertical y-axis)</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -321,15 +177,6 @@ the pixel centers fall on zero-based (row, column) indices.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.html" class="btn btn-neutral float-right" title="util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="sound.sound_func.spectrogram2.html" class="btn btn-neutral float-left" title="sound.sound_func.spectrogram2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

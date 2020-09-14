@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sound.sound_func.preprocess_wrapper" href="sound.sound_func.preprocess_wrapper.html" />
+    <link rel="next" title="sound.sound_func.select_bandwidth" href="sound.sound_func.select_bandwidth.html" />
     <link rel="prev" title="sound.sound_func.iir_filter1d" href="sound.sound_func.iir_filter1d.html" /> 
 </head>
 
@@ -96,20 +96,17 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="sound.sound_func.html">sound.sound_func</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.envelope.html">sound.sound_func.envelope</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound_func.fir_filter.html">sound.sound_func.fir_filter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound_func.iir_filter1d.html">sound.sound_func.iir_filter1d</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound_func.load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.preprocess_wrapper.html">sound.sound_func.preprocess_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound_func.select_bandwidth.html">sound.sound_func.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram.html">sound.sound_func.spectrogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogram2.html">sound.sound_func.spectrogram2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound_func.spectrogramPSD.html">sound.sound_func.spectrogramPSD</a></li>
 </ul>
 </li>
 </ul>
@@ -286,6 +283,10 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;../data/guyana_tropical_forest.wav&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;LEFT&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -298,7 +299,7 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sound.sound_func.preprocess_wrapper.html" class="btn btn-neutral float-right" title="sound.sound_func.preprocess_wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sound.sound_func.select_bandwidth.html" class="btn btn-neutral float-right" title="sound.sound_func.select_bandwidth" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="sound.sound_func.iir_filter1d.html" class="btn btn-neutral float-left" title="sound.sound_func.iir_filter1d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

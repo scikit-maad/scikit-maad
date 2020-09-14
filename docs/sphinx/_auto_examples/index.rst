@@ -12,6 +12,27 @@ These scripts are examples of how to use scikit-MAAD package.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Using wavelets to characterize the time-frequency shape of sounds">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_using_shape_features_thumb.png
+     :alt: Using wavelets to characterize the time-frequency shape of sounds
+
+     :ref:`sphx_glr__auto_examples_using_shape_features.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/using_shape_features
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Wrapper - This script gives an example of how to use scikit-MAAD package">
 
 .. only:: html

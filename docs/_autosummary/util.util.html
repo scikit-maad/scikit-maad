@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.util.crop_image" href="util.util.crop_image.html" />
-    <link rel="prev" title="util.parser_func.read_audacity_annot" href="util.parser_func.read_audacity_annot.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,37 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="util.parser_func.html">util.parser_func</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">util.util</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="util.util.crop_image.html">util.util.crop_image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.dB2linear.html">util.util.dB2linear</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.format_rois.html">util.util.format_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.get_unimode.html">util.util.get_unimode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.index_bw.html">util.util.index_bw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.linear2dB.html">util.util.linear2dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.linear_scale.html">util.util.linear_scale</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.nearest_idx.html">util.util.nearest_idx</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.normalize_2d.html">util.util.normalize_2d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.plot1D.html">util.util.plot1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.plot2D.html">util.util.plot2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rand_cmap.html">util.util.rand_cmap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rle.html">util.util.rle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rois_to_audacity.html">util.util.rois_to_audacity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.rois_to_imblobs.html">util.util.rois_to_imblobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.running_mean.html">util.util.running_mean</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.util.shift_bit_length.html">util.util.shift_bit_length</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.wav2dBSPL.html">util.wav2dBSPL</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
@@ -176,8 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
       <li>util.util</li>
     
     
@@ -197,69 +168,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-util.util">
-<span id="util-util"></span><h1>util.util<a class="headerlink" href="#module-util.util" title="Permalink to this headline">¶</a></h1>
-<p>Utilitary functions for scikit-MAAD</p>
-<p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.crop_image.html#util.util.crop_image" title="util.util.crop_image"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crop_image</span></code></a></p></td>
-<td><p>Crop a spectrogram (or an image) in time (horizontal X axis) and frequency (vertical y axis)</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.dB2linear.html#util.util.dB2linear" title="util.util.dB2linear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dB2linear</span></code></a></p></td>
-<td><p>Transform linear date into decibel scale within the dB range (db_range).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.format_rois.html#util.util.format_rois" title="util.util.format_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_rois</span></code></a></p></td>
-<td><p>Setup rectangular rois to a predifined format:  time-frequency or bounding box</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.get_unimode.html#util.util.get_unimode" title="util.util.get_unimode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_unimode</span></code></a></p></td>
-<td><p>determine the statistical mode or modal value which is  the most common number in the dataset</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.index_bw.html#util.util.index_bw" title="util.util.index_bw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_bw</span></code></a></p></td>
-<td><p>Select the index min and max coresponding to the selected frequency band</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.linear2dB.html#util.util.linear2dB" title="util.util.linear2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear2dB</span></code></a></p></td>
-<td><p>Transform linear date into decibel scale within the dB range (db_range).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.linear_scale.html#util.util.linear_scale" title="util.util.linear_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_scale</span></code></a></p></td>
-<td><p>Program to scale the values of a matrix from a user specified minimum to  a user specified maximum</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.nearest_idx.html#util.util.nearest_idx" title="util.util.nearest_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest_idx</span></code></a></p></td>
-<td><p>Find nearest value on array and return index</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.normalize_2d.html#util.util.normalize_2d" title="util.util.normalize_2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_2d</span></code></a></p></td>
-<td><p>Normalize 2d array between two values.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.plot1D.html#util.util.plot1D" title="util.util.plot1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot1D</span></code></a></p></td>
-<td><p>plot a signal s</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.plot2D.html#util.util.plot2D" title="util.util.plot2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot2D</span></code></a></p></td>
-<td><p>display an image (spectrogram, 2D binary mask, ROIS…)</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.rand_cmap.html#util.util.rand_cmap" title="util.util.rand_cmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rand_cmap</span></code></a></p></td>
-<td><p>Creates a random colormap to be used together with matplotlib.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.rle.html#util.util.rle" title="util.util.rle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rle</span></code></a></p></td>
-<td><p>Run–Length encoding     from rle function R</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.rois_to_audacity.html#util.util.rois_to_audacity" title="util.util.rois_to_audacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rois_to_audacity</span></code></a></p></td>
-<td><p>Write audio segmentation to file (Audacity format)</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.rois_to_imblobs.html#util.util.rois_to_imblobs" title="util.util.rois_to_imblobs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rois_to_imblobs</span></code></a></p></td>
-<td><p>Add rois to im_blobs</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.util.running_mean.html#util.util.running_mean" title="util.util.running_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">running_mean</span></code></a></p></td>
-<td><p>moving average of x over a window N</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.util.shift_bit_length.html#util.util.shift_bit_length" title="util.util.shift_bit_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shift_bit_length</span></code></a></p></td>
-<td><p>find the closest power of 2 that is superior or equal to the number x</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="util-util">
+<h1>util.util<a class="headerlink" href="#util-util" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -267,15 +177,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.util.crop_image.html" class="btn btn-neutral float-right" title="util.util.crop_image" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.parser_func.read_audacity_annot.html" class="btn btn-neutral float-left" title="util.parser_func.read_audacity_annot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

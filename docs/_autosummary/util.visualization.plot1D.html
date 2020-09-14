@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.visualization.plot1D &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="util.visualization.plot2D" href="util.visualization.plot2D.html" />
+    <link rel="prev" title="util.visualization.crop_image" href="util.visualization.crop_image.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="util.visualization.html">util.visualization</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="util.visualization.crop_image.html">util.visualization.crop_image</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">util.visualization.plot1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.visualization.plot2D.html">util.visualization.plot2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.visualization.rand_cmap.html">util.visualization.rand_cmap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="util.html">util</a> &raquo;</li>
+        
+          <li><a href="util.visualization.html">util.visualization</a> &raquo;</li>
+        
+      <li>util.visualization.plot1D</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/util.visualization.plot1D.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="util-visualization-plot1d">
+<h1>util.visualization.plot1D<a class="headerlink" href="#util-visualization-plot1d" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="util.visualization.plot1D">
+<code class="sig-prename descclassname">util.visualization.</code><code class="sig-name descname">plot1D</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/visualization.html#plot1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.visualization.plot1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot a signal s</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>x</strong><span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the abscissa values (horizontal axis)</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">1d ndarray of scalar</span></dt><dd><p>Vector containing the ordinate values (vertical axis)</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">axis, optional, default is None</span></dt><dd><p>Draw the signal on this specific axis. Allow multiple plots on the same
+axis.</p>
+</dd>
+<dt><strong>**kwargs, optional</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>facecolor<span class="classifier">matplotlib color, optional, default: ‘w’ (white)</span></dt><dd><p>the background color.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>edgecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the border color.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>linecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the line color</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The following color abbreviations are supported:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 56%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>character</p></th>
+<th class="head"><p>color</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘b’</p></td>
+<td><p>blue</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘g’</p></td>
+<td><p>green</p></td>
+</tr>
+<tr class="row-even"><td><p>‘r’</p></td>
+<td><p>red</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘c’</p></td>
+<td><p>cyan</p></td>
+</tr>
+<tr class="row-even"><td><p>‘m’</p></td>
+<td><p>magenta</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘y’</p></td>
+<td><p>yellow</p></td>
+</tr>
+<tr class="row-even"><td><p>‘k’</p></td>
+<td><p>black</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘w’</p></td>
+<td><p>white</p></td>
+</tr>
+</tbody>
+</table>
+<p>In addition, you can specify colors in many ways, including RGB tuples 
+(0.2,1,0.5). See matplotlib color</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>linewidth<span class="classifier">scalar, optional, default: 0.5</span></dt><dd><p>width in pixels</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>figtitle: string, optional, default: ‘Audiogram’</dt><dd><p>Title of the plot</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>legend<span class="classifier">string, optional, default</span><span class="classifier">None</span></dt><dd><p>Legend for the plot</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>now<span class="classifier">boolean, optional, default</span><span class="classifier">True</span></dt><dd><p>if True, display now. Cannot display multiple plots. 
+To display mutliple plots, set now=False until the last call for 
+the last plot</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>…and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fig</strong><span class="classifier">Figure</span></dt><dd><p>The Figure instance</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">Axis</span></dt><dd><p>The Axis instance</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="util.visualization.plot2D.html" class="btn btn-neutral float-right" title="util.visualization.plot2D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="util.visualization.crop_image.html" class="btn btn-neutral float-left" title="util.visualization.crop_image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

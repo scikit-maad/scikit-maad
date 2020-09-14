@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.parser_func.date_parser" href="util.parser_func.date_parser.html" />
-    <link rel="prev" title="util.parser_func" href="util.parser_func.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,23 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="util.parser_func.html">util.parser_func</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">util.parser_func.date_from_filename</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.parser_func.date_parser.html">util.parser_func.date_parser</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.parser_func.read_audacity_annot.html">util.parser_func.read_audacity_annot</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.util.html">util.util</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.wav2dBSPL.html">util.wav2dBSPL</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
@@ -162,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
-          <li><a href="util.parser_func.html">util.parser_func</a> &raquo;</li>
-        
       <li>util.parser_func.date_from_filename</li>
     
     
@@ -187,34 +170,6 @@
             
   <div class="section" id="util-parser-func-date-from-filename">
 <h1>util.parser_func.date_from_filename<a class="headerlink" href="#util-parser-func-date-from-filename" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="util.parser_func.date_from_filename">
-<code class="sig-prename descclassname">util.parser_func.</code><code class="sig-name descname">date_from_filename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/parser_func.html#date_from_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.parser_func.date_from_filename" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract date and time from the filename. Return a datetime object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>The filename must follow this format :
-XXXX_yyyymmdd_hhmmss.wav
-with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-mm : minutes / ss : seconds</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>date</strong><span class="classifier">object datetime</span></dt><dd><p>This object contains the date of creation of the file extracted from
-the filename postfix. 
-The filename must follow this format :
-XXXX_yyyymmdd_hhmmss.wav
-with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-mm : minutes / ss : seconds</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -222,15 +177,6 @@ mm : minutes / ss : seconds</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.parser_func.date_parser.html" class="btn btn-neutral float-right" title="util.parser_func.date_parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.parser_func.html" class="btn btn-neutral float-left" title="util.parser_func" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

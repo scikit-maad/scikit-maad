@@ -26,7 +26,9 @@
    :template: custom-module-template.rst
    :recursive:
 
-   util.parser_func
-   util.util
-   util.wav2dBSPL
+   util.decibelSPL
+   util.math_func
+   util.miscellaneous
+   util.parser
+   util.visualization
 

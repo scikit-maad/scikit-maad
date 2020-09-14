@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.miscellaneous &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>util.miscellaneous</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for util.miscellaneous</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; Utilitary functions for scikit-MAAD &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">diff</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.index_bw.html#util.miscellaneous.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select the index min and max coresponding to the selected frequency band</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; fn = 44100</span>
+<span class="sd">    &gt;&gt;&gt; bw = (100,1000) #in Hz</span>
+<span class="sd">    &gt;&gt;&gt; X = X[index_bw(fn, bw)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># select the indices corresponding to the frequency bins range</span>
+    <span class="k">if</span> <span class="n">bw</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="c1"># index = np.arange(0,len(fn),1)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">)))</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="p">:</span>
+        <span class="c1">#index = (fn&gt;=bw[0]) *(fn&lt;=bw[1])</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="o">&gt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span> <span class="o">*</span><span class="p">(</span><span class="n">fn</span><span class="o">&lt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span> <span class="p">:</span> 
+        <span class="c1"># index =  (abs(fn-bw)).argmin()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
+        <span class="n">index</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">index</span></div>
+
+
+
+<span class="c1">#=============================================================================</span>
+       
+<div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.rle.html#util.miscellaneous.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run--Length encoding    </span>
+<span class="sd">    from rle function R</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span><span class="mi">1</span> <span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x must be a vector&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">states</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">diff</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">values</span></div>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear_scale.html#util.miscellaneous.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Program to scale the values of a matrix from a user specified minimum to </span>
+<span class="sd">    a user specified maximum</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        numpy.array like with numbers</span>
+<span class="sd">    minval : scalar, optional, default : 0</span>
+<span class="sd">        This minimum value is attributed to the minimum value of the array </span>
+<span class="sd">    maxval : scalar, optional, default : 1</span>
+<span class="sd">        This maximum value is attributed to the maximum value of the array         </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : array-like</span>
+<span class="sd">        numpy.array like with numbers  </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5]);</span>
+<span class="sd">    &gt;&gt;&gt; a_out = scaledata(a,0,1); </span>
+<span class="sd">    array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
+<span class="sd">        </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</span>
+<span class="sd">    Adapted by S. Haupert Dec 12, 2017 for Python</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if x is a list, convert x into ndarray </span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">();</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">*</span><span class="p">(</span><span class="n">maxval</span><span class="o">-</span><span class="n">minval</span><span class="p">);</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">minval</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">y</span></div>
+
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="linear2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear2dB.html#util.miscellaneous.linear2dB">[docs]</a><span class="k">def</span> <span class="nf">linear2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;power&#39;</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform linear date into decibel scale within the dB range (db_range).</span>
+<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        data to rescale in dB  </span>
+<span class="sd">    mode : str, default is &#39;power&#39;</span>
+<span class="sd">        select the type of data : &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
+<span class="sd">    db_range : scalar, optional, default : None</span>
+<span class="sd">        if db_range is a number, anything lower than -db_range is set to </span>
+<span class="sd">        -db_range and anything larger than 0 is set to 0</span>
+<span class="sd">    db_gain : scalar, optional, default is 0</span>
+<span class="sd">        Gain added to the results </span>
+<span class="sd">        amplitude --&gt; 20*log10(x) + db_gain  </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalars</span>
+<span class="sd">        amplitude--&gt; 20*log10(x) + db_gain  </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>            
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of datain</span>
+    
+    <span class="c1"># Avoid zero value for log10  </span>
+    <span class="c1"># if it&#39;s a scalar</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>  
+    <span class="k">else</span> <span class="p">:</span>     
+        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10 </span>
+
+    <span class="c1"># conversion in dB  </span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log </span>
+    
+    <span class="k">if</span> <span class="n">db_gain</span> <span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
+    
+    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="c1"># set anything above db_range as 0</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  
+        <span class="c1"># set anything less than -db_range as -db_range</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>  
+        
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="dB2linear"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2linear.html#util.miscellaneous.dB2linear">[docs]</a><span class="k">def</span> <span class="nf">dB2linear</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;power&#39;</span><span class="p">,</span>  <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform linear date into decibel scale within the dB range (db_range).</span>
+<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        data in dB to rescale in linear </span>
+<span class="sd">    mode : str, default is &#39;power&#39;</span>
+<span class="sd">        select &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
+<span class="sd">    db_gain : scalar, optional, default is 0</span>
+<span class="sd">        Gain that was added to the result </span>
+<span class="sd">        --&gt; 20*log10(x) + db_gain</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalars</span>
+<span class="sd">        output in amplitude or power unit</span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="rois_to_audacity"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.rois_to_audacity.html#util.miscellaneous.rois_to_audacity">[docs]</a><span class="k">def</span> <span class="nf">rois_to_audacity</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Write audio segmentation to file (Audacity format)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname: str</span>
+<span class="sd">        filename to save the segmentation</span>
+<span class="sd">    onset: int, float array_like</span>
+<span class="sd">        output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">    offset: int, float array_like</span>
+<span class="sd">        output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Returns a csv file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">onset</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;&lt; No detection found&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">onset</span><span class="p">))</span>
+        <span class="n">rois_tf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;t_begin&#39;</span><span class="p">:</span><span class="n">onset</span><span class="p">,</span> <span class="s1">&#39;t_end&#39;</span><span class="p">:</span><span class="n">offset</span><span class="p">,</span> <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span><span class="n">label</span><span class="p">})</span>
+        <span class="n">rois_tf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span> </div>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="rois_to_imblobs"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.rois_to_imblobs.html#util.miscellaneous.rois_to_imblobs">[docs]</a><span class="k">def</span> <span class="nf">rois_to_imblobs</span><span class="p">(</span><span class="n">im_blobs</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Add rois to im_blobs </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># roi to image blob</span>
+    <span class="k">for</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span> <span class="ow">in</span> <span class="n">rois_bbox</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">im_blobs</span><span class="p">[</span><span class="n">min_y</span><span class="p">:</span><span class="n">max_y</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_x</span><span class="p">:</span><span class="n">max_x</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">im_blobs</span></div>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.shift_bit_length.html#util.miscellaneous.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    find the closest power of 2 that is superior or equal to the number x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+
+<span class="c1">#=============================================================================</span>
+    
+<div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.nearest_idx.html#util.miscellaneous.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Find nearest value on array and return index</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array: ndarray</span>
+<span class="sd">        array of values to search for nearest values</span>
+<span class="sd">    value: float</span>
+<span class="sd">        value to be searched in array</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    idx: int</span>
+<span class="sd">        index of nearest value on array</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; x = np.array([1,2,3])</span>
+<span class="sd">    &gt;&gt;&gt; ig.nearest_idx(x, 1.3)</span>
+<span class="sd">    [0]</span>
+<span class="sd">    &gt;&gt;&gt; ig.nearest_idx(x, 1.6)</span>
+<span class="sd">    [1]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">idx</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="normalize_2d"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.normalize_2d.html#util.miscellaneous.normalize_2d">[docs]</a><span class="k">def</span> <span class="nf">normalize_2d</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Normalize 2d array between two values. </span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im: 2D ndarray</span>
+<span class="sd">        Bidimensinal array to be normalized</span>
+<span class="sd">    min_value: int, float</span>
+<span class="sd">        Minimum value in normalization</span>
+<span class="sd">    max_value: int, float</span>
+<span class="sd">        Maximum value in normalization</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im_out: 2D ndarray</span>
+<span class="sd">        Array normalized between min and max values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># avoid problems with inf and -inf values</span>
+    <span class="n">min_im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+    <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">==</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">min_im</span>
+    <span class="n">max_im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+    <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">max_im</span>
+
+    <span class="c1"># normalize between min max</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="p">(</span><span class="n">im</span> <span class="o">-</span> <span class="n">min_im</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_im</span> <span class="o">-</span> <span class="n">min_im</span><span class="p">)</span>
+    <span class="n">im_out</span> <span class="o">=</span> <span class="n">im</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_value</span> <span class="o">-</span> <span class="n">min_value</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_value</span>
+    <span class="k">return</span> <span class="n">im_out</span></div>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="format_rois"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.format_rois.html#util.miscellaneous.format_rois">[docs]</a><span class="k">def</span> <span class="nf">format_rois</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Setup rectangular rois to a predifined format: </span>
+<span class="sd">    time-frequency or bounding box</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rois : pandas DataFrame</span>
+<span class="sd">        array must have a valid input format with column names</span>
+<span class="sd">        </span>
+<span class="sd">        - bounding box: min_y, min_x, max_y, max_x</span>
+<span class="sd">        </span>
+<span class="sd">        - time frequency: min_f, min_t, max_f, max_t</span>
+<span class="sd">    </span>
+<span class="sd">    ts : ndarray</span>
+<span class="sd">        vector with temporal indices, output from the spectrogram function (in seconds)</span>
+<span class="sd">    fs: ndarray</span>
+<span class="sd">        vector with frequencial indices, output from the spectrogram function (in Hz)</span>
+<span class="sd">    fmt: str</span>
+<span class="sd">        A string indicating the desired output format: &#39;bbox&#39; or &#39;tf&#39;</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rois_bbox: ndarray</span>
+<span class="sd">        array with indices of ROIs matched on spectrogram</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check format of the input data</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame or Series.&#39;</span><span class="p">)</span>    
+
+    <span class="k">elif</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;bbox&#39;</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Format must be either fmt=</span><span class="se">\&#39;</span><span class="s1">bbox</span><span class="se">\&#39;</span><span class="s1"> or fmt=</span><span class="se">\&#39;</span><span class="s1">tf</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Compute new format</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;bbox&#39;</span><span class="p">:</span>
+        <span class="n">min_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">min_f</span><span class="p">)</span>
+        <span class="n">min_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">min_t</span><span class="p">)</span>
+        <span class="n">max_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">max_f</span><span class="p">)</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">max_t</span><span class="p">)</span>
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;min_y&#39;</span><span class="p">:</span> <span class="n">min_y</span><span class="p">,</span> <span class="s1">&#39;min_x&#39;</span><span class="p">:</span> <span class="n">min_x</span><span class="p">,</span> 
+                              <span class="s1">&#39;max_y&#39;</span><span class="p">:</span> <span class="n">max_y</span><span class="p">,</span> <span class="s1">&#39;max_x&#39;</span><span class="p">:</span> <span class="n">max_x</span><span class="p">})</span>
+        
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;min_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span> 
+                              <span class="s1">&#39;min_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                              <span class="s1">&#39;max_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                              <span class="s1">&#39;max_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]})</span>
+            
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;bbox&#39;</span><span class="p">:</span>
+        <span class="n">rois_bbox</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>            
+            <span class="n">min_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_f&#39;</span><span class="p">])</span>
+            <span class="n">min_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_t&#39;</span><span class="p">])</span>
+            <span class="n">max_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_f&#39;</span><span class="p">])</span>
+            <span class="n">max_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_t&#39;</span><span class="p">])</span>
+            <span class="n">rois_bbox</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">))</span>
+        
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rois_bbox</span><span class="p">,</span> 
+                                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">,</span><span class="s1">&#39;min_x&#39;</span><span class="p">,</span><span class="s1">&#39;max_y&#39;</span><span class="p">,</span><span class="s1">&#39;max_x&#39;</span><span class="p">])</span>
+    
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;min_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span> 
+                                 <span class="s1">&#39;min_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                                 <span class="s1">&#39;max_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                                 <span class="s1">&#39;max_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]})</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois type or format not understood, please check docstring.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rois_out</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

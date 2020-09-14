@@ -648,35 +648,48 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     This function take care of the energy concervation which is crucial when working in with sound pressure level (dB SPL)
         
     Examples
-    -------
+    --------
     >>> s,fs = maad.sound.load(filename="../data/guyana_tropical_forest.wav", channel='LEFT', detrend=True, verbose=False)
-    Energy of signal s
-    >>>E1 = sum(s**2)
-    >>>linear2dB(E1, mode='power')
+    
+    Compute energy of signal s
+    
+    >>> E1 = sum(s**2)
+    >>> linear2dB(E1, mode='power')
+    
     Compute the spectrogram with 'psd' output (if N<4096, the energy is lost)
-    >>>N = 4096
-    >>>Pxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window='hann', nperseg=N, noverlap=N//2, 
-                                     fcrop=None, tcrop=None, 
-                                     mode = 'psd',
-                                     verbose=False, display=True, 
-                                     savefig = None)   
-    mean power
-    >>>mean_power = mean(Pxx, axis = 1)
+    
+    >>> N = 4096
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window='hann', nperseg=N, noverlap=N//2, 
+    ...                                       fcrop=None, tcrop=None, 
+    ...                                       mode = 'psd',
+    ...                                       verbose=False, display=True, 
+    ...                                       savefig = None)   
+    
+    Compute mean power os spectrogram
+    
+    >>> mean_power = mean(Pxx, axis = 1)
+    
     energy => power x time
-    >>>E2 = sum(mean_power*len(s)) 
-    >>>linear2dB(E2, mode='power')
+    
+    >>> E2 = sum(mean_power*len(s)) 
+    >>> linear2dB(E2, mode='power')
 
     Compute the spectrogram with 'amplitude' output
-    >>>Sxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window='hann', nperseg=N, noverlap=N//20, 
-                                     fcrop=None, tcrop=None, 
-                                     mode = 'amplitude',
-                                     verbose=False, display=True, 
-                                     savefig = None)   
+    
+    >>> Sxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window='hann', nperseg=N, noverlap=N//20, 
+    ...                                       fcrop=None, tcrop=None, 
+    ...                                       mode = 'amplitude',
+    ...                                       verbose=False, display=True, 
+    ...                                       savefig = None)   
+    
     For energy conservation => convert Sxx (amplitude) into power before doing the average.
-    >>>mean_power = mean(Sxx**2, axis = 1)
+    
+    >>> mean_power = mean(Sxx**2, axis = 1)
+    
     energy => power x time
-    >>>E3 = sum(mean_power*len(s)) 
-    >>>linear2dB(E3, mode='power')
+    
+    >>> E3 = sum(mean_power*len(s)) 
+    >>> linear2dB(E3, mode='power')
     """
 
     # Test if noverlap is None. By default, noverlap is half the length of the fft

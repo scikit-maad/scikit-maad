@@ -96,18 +96,16 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cluster.html">cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="features.html">features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">features.features_func</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.centroid.html">features.features_func.centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.compute_rois_features.html">features.features_func.compute_rois_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.create_csv.html">features.features_func.create_csv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.filter_bank_2d_nodc.html">features.features_func.filter_bank_2d_nodc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_func.filter_mag.html">features.features_func.filter_mag</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.filter_multires.html">features.features_func.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_func.gabor_kernel_nodc.html">features.features_func.gabor_kernel_nodc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.get_features_wrapper.html">features.features_func.get_features_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.opt_shape_presets.html">features.features_func.opt_shape_presets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_func.plot_shape.html">features.features_func.plot_shape</a></li>
@@ -195,10 +193,7 @@
             
   <div class="section" id="module-features.features_func">
 <span id="features-features-func"></span><h1>features.features_func<a class="headerlink" href="#module-features.features_func" title="Permalink to this headline">¶</a></h1>
-<p>High level functions for multiresolution analysis of spectrograms
-Code licensed under both GPL and BSD licenses
-Authors:  Juan Sebastian ULLOA &lt;<a class="reference external" href="mailto:jseb&#46;ulloa&#37;&#52;&#48;gmail&#46;com">jseb<span>&#46;</span>ulloa<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;
-Sylvain HAUPERT &lt;<a class="reference external" href="mailto:sylvain&#46;haupert&#37;&#52;&#48;mnhn&#46;fr">sylvain<span>&#46;</span>haupert<span>&#64;</span>mnhn<span>&#46;</span>fr</a>&gt;</p>
+<p>Ensemble of functions to compute acoustic descriptors from 2D spectrograms</p>
 <p class="rubric">Functions</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -216,25 +211,19 @@ Sylvain HAUPERT &lt;<a class="reference external" href="mailto:sylvain&#46;haupe
 <td><p>Create a .csv file containing all the features (shapes, centroids and  labels)</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="features.features_func.filter_bank_2d_nodc.html#features.features_func.filter_bank_2d_nodc" title="features.features_func.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_bank_2d_nodc</span></code></a></p></td>
-<td><p>Build a Gabor filter bank with no offset component</p></td>
+<td><p>Build an ensemble of complex 2D Gabor filters with no DC offset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_func.filter_mag.html#features.features_func.filter_mag" title="features.features_func.filter_mag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_mag</span></code></a></p></td>
-<td><p>Normalizes the image and computes im and real part of filter response using  the complex kernel and the modulus operation</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_func.filter_multires.html#features.features_func.filter_multires" title="features.features_func.filter_multires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_multires</span></code></a></p></td>
-<td><p>Computes 2D wavelet coefficients at multiple octaves/pyramids</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_func.gabor_kernel_nodc.html#features.features_func.gabor_kernel_nodc" title="features.features_func.gabor_kernel_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gabor_kernel_nodc</span></code></a></p></td>
-<td><p>Return complex 2D Gabor filter kernel with no DC offset.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_func.filter_multires.html#features.features_func.filter_multires" title="features.features_func.filter_multires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_multires</span></code></a></p></td>
+<td><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid  transformation to downscale the input spectrogram.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="features.features_func.get_features_wrapper.html#features.features_func.get_features_wrapper" title="features.features_func.get_features_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_features_wrapper</span></code></a></p></td>
 <td><p>Computes shape of 2D signal (image or spectrogram) at multiple resolutions  using 2D Gabor filters</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="features.features_func.opt_shape_presets.html#features.features_func.opt_shape_presets" title="features.features_func.opt_shape_presets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opt_shape_presets</span></code></a></p></td>
-<td><p>Set values for multiresolution analysis using presets or custom parameters</p></td>
+<td><p>Set parameters for multiresolution analysis using presets or custom parameters</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="features.features_func.plot_shape.html#features.features_func.plot_shape" title="features.features_func.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a></p></td>
-<td><p>Plot shape features in 2D representation</p></td>
+<td><p>Plot shape features in a bidimensional plot</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="features.features_func.save_csv.html#features.features_func.save_csv" title="features.features_func.save_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_csv</span></code></a></p></td>
 <td><p>Create and save a .csv file containing all the features (shapes, centroids  and labels)</p></td>
@@ -243,7 +232,7 @@ Sylvain HAUPERT &lt;<a class="reference external" href="mailto:sylvain&#46;haupe
 <td><p>Save a list of figures to file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="features.features_func.shape_features.html#features.features_func.shape_features" title="features.features_func.shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features</span></code></a></p></td>
-<td><p>Computes shape of 2D signal (image or spectrogram) at multiple resolutions  using 2D Gabor filters</p></td>
+<td><p>Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="features.features_func.shape_features_raw.html#features.features_func.shape_features_raw" title="features.features_func.shape_features_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features_raw</span></code></a></p></td>
 <td><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  using 2D Gabor filters.</p></td>
