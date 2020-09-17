@@ -134,7 +134,9 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
                 
     ####### SORTED BY DATE
     # create a Pandas dataframe with date as index
-    df = pd.DataFrame({'file':c_file},index=c_date)
+    df = pd.DataFrame({'file':c_file, 'Date':c_date})
+    # define Date as index
+    df.set_index('Date', inplace=True)
     # sort dataframe by date
     df = df.sort_index(axis=0)
     return df
