@@ -417,7 +417,7 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
     return params, kernels  
 
 
-def shape_features(Sxx, ts, fs, resolution='low', rois=None):
+def shape_features(Sxx, resolution='low', rois=None, dt=None, df=None):
     """
     Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters
     
@@ -433,9 +433,9 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
     rois: pandas DataFrame
         Regions of interest where descriptors will be computed. Array must 
         have a valid input format with column names: min_t min_f, max_t, max_f
-    ts: 1D array
+    dt: 1D array
         Vector of time instants that can be used as x coordinates for the spectrogram
-    fs: 1D array
+    df: 1D array
         Vector of frequencies that can be used as y coordinates for the spectrogram
     opt_shape: dictionary
         options for the filter bank (kbank_opt) and the number of scales (npyr)
@@ -457,20 +457,22 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
     Examples
     --------
 
-    Get shape features from the whole spectrogram
+    Get shape features from the whole power spectrogram
 
     >>> from maad.sound import load, spectrogram
     >>> from maad.features import shape_features
-    >>> import numpy as np
+    >>> from maad.util import linear2dB
     >>> s, fs = load('./data/spinetail.wav')
-    >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=120, display=True)
-    >>> shape, params = shape_features(np.log10(Sxx), resolution='med')
+    >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=100, display=True)
+    >>> Sxx_db = linear2dB(Sxx, db_range=100)
+    >>> shape, params = shape_features(Sxx_db, resolution='med')
     
     Or get shape features from specific regions of interest
     
+    >>> from maad.util import read_audacity_annot
     >>> rois_tf = read_audacity_annot('./data/spinetail.txt')
     >>> rois = rois_tf.loc[rois_tf.label=='CRER',]  
-    >>> shape, params = shape_features(np.log10(Sxx), resolution='med', rois=rois)
+    >>> shape, params = shape_features(Sxx_db, resolution='med', rois=rois, dt=dt, df=df)
     
     """    
     # TODO: 
@@ -493,7 +495,7 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
     if rois is not None:
         if ~(pd.Series(['min_t', 'min_f', 'max_t', 'max_f']).isin(rois.columns).all()):
             raise TypeError('Array must be a Pandas DataFrame with column names: min_t, min_f, max_t, max_f. Check example in documentation.')
-        rois_bbox = format_rois(rois, ts, fs, fmt='bbox')
+        rois_bbox = format_rois(rois, dt, df, fmt='bbox')
         im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), rois_bbox)
     else:
         im_blobs = None
@@ -530,16 +532,17 @@ def shape_features(Sxx, ts, fs, resolution='low', rois=None):
     cols=['shp_' + str(idx).zfill(3) for idx in range(1,len(shape[0])+1)]
     shape = pd.DataFrame(data=np.asarray(shape),columns=cols)
     
-    # format rois into dataframe
-    rois_bbox = pd.DataFrame(rois_bbox, columns=['min_y','min_x',
-                                                 'max_y','max_x'])
-    # compensate half-open interval of bbox from skimage
-    rois_bbox.max_y = rois_bbox.max_y - 1
-    rois_bbox.max_x = rois_bbox.max_x - 1
-    
-    # combine output
-    rois_out = format_rois(rois_bbox, ts, fs, fmt='tf')
-    shape = pd.concat([rois_out, shape], axis='columns')
+    if rois is not None:
+        # format rois into dataframe
+        rois_bbox = pd.DataFrame(rois_bbox, columns=['min_y','min_x',
+                                                     'max_y','max_x'])
+        # compensate half-open interval of bbox from skimage
+        rois_bbox.max_y = rois_bbox.max_y - 1
+        rois_bbox.max_x = rois_bbox.max_x - 1
+        
+        # combine output
+        rois_out = format_rois(rois_bbox, dt, df, fmt='tf')
+        shape = pd.concat([rois_out, shape], axis='columns')
         
     return shape, params_multires
 
