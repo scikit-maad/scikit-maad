@@ -363,7 +363,7 @@ def dBSPL2energy (e_dB, pRef = 20e-6):
         
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
     
     Energy in time domain (s²)
     
@@ -404,6 +404,8 @@ def PSD2Leq (PSD, pRef = 20e-6):
         
     Examples
     --------
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> s = maad.util.wav2SPL(wave=w, gain=42)
     >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
     >>> Leq = maad.util.PSD2Leq(PSD=S^2)
