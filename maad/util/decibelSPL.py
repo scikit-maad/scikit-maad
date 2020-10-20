@@ -20,24 +20,23 @@ to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)
 # Import external modules
 
 import numpy as np 
-from numpy import sum, log, log10, min, max, abs, mean, median, sqrt, diff
+from numpy import sum, log10, abs, mean, sqrt
 
 """****************************************************************************
 # -------------------       Functions               ---------------------------
 ****************************************************************************"""
 
 ##### wav2volt
-def wav2volt (wave, bit=16, Vadc=2): 
+def wav2volt (wave, Vadc=2): 
     """
     convert in Volt
     
     Parameters
     ----------
-    wave : 1d ndarray of integers (directly from the wav file)
+    wave : 1d ndarray of floats 
+        wave should already be normalized between -1 to 1 (depending on the number of bits)
+        take the output of the function sound.load of maad module
         Vector containing the raw sound waveform 
-
-    bit : int, optional, default is 16
-        Number of bits of the analog to digital converter (ADC)
         
     Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
         Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  
@@ -46,11 +45,16 @@ def wav2volt (wave, bit=16, Vadc=2):
     -------
     volt : 1d ndarray of floats
         Vector containing the sound waveform in volt
+            
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> v = util.wav2volt(wave=w, Vadc=2)
     """
     # be sure they are ndarray
     wave = np.asarray(wave)
     
-    volt = (wave/(2**(bit))) * Vadc
+    volt =wave * Vadc
     return volt
 
 ##### volt2SPL
@@ -77,6 +81,12 @@ def volt2SPL(volt, gain, sensitivity=-35, dBref=94):
     -------
     wave_SPL : 1d ndarray of floats
         Vector containing the sound waveform in SPL (Sound Pressure level : Pa)
+        
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> v = util.wav2volt(wave=w)
+    >>> s = util.volt2SPL(volt=v, gain=42)        
     """
     # be sure they are ndarray
     volt = np.asarray(volt)
@@ -88,7 +98,7 @@ def volt2SPL(volt, gain, sensitivity=-35, dBref=94):
     return (wave_SPL)
 
 #####  wav2SPL 
-def wav2SPL (wave, gain, bit=16, Vadc = 2, sensitivity=-35, dBref=94): 
+def wav2SPL (wave, gain, Vadc = 2, sensitivity=-35, dBref=94): 
     """
     convert wave to instantaneous sound pressure level SPL
     
@@ -99,9 +109,6 @@ def wav2SPL (wave, gain, bit=16, Vadc = 2, sensitivity=-35, dBref=94):
         
     gain : integer
         Total gain applied to the sound (preamplifer + amplifier)
-        
-    bit : int, optional, default is 16
-        Number of bits of the analog to digital converter (ADC)  
         
     Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
         Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    
@@ -117,8 +124,13 @@ def wav2SPL (wave, gain, bit=16, Vadc = 2, sensitivity=-35, dBref=94):
     -------
     wave_SPL : 1d ndarray of floats
         Vector containing the sound waveform in SPL (Sound Pressure level : Pa)
+        
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> s = util.wav2SPL(wave=w, gain=42)
     """
-    wave_SPL = volt2SPL(wav2volt(wave, bit, Vadc), sensitivity, gain, dBref) 
+    wave_SPL = volt2SPL(wav2volt(wave, Vadc), sensitivity, gain, dBref) 
     return (wave_SPL)
 
 #####  SPL2dBSPL
@@ -138,12 +150,18 @@ def SPL2dBSPL (waveSPL, pRef=20e-6):
     -------
     wave_dBSPL : 1d ndarray of floats
         Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)
+        
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> s = util.wav2SPL(wave=w, gain=42)
+    >>> s_dB = util.SPL2dBSPL(waveSPL=s)        
     """    
     wave_dBSPL = energy2dBSPL(waveSPL**2, pRef)
     return (wave_dBSPL)
 
 #####  wav2dBSPL
-def wav2dBSPL (wave, gain, Vadc=2, bit=16, sensitivity=-35, dBref=94, pRef=20e-6): 
+def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
     convert wave to instantaneous sound pressure level SPL in dB
     
@@ -154,9 +172,6 @@ def wav2dBSPL (wave, gain, Vadc=2, bit=16, sensitivity=-35, dBref=94, pRef=20e-6
         
     gain : integer
         Total gain applied to the sound (preamplifer + amplifier)
-        
-    bit : int, optional, default is 16
-        Number of bits of the analog to digital converter (ADC)  
         
     Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
         Maximal voltage (peak to peak) converted by the analog to digital convertor ADC     
@@ -174,15 +189,18 @@ def wav2dBSPL (wave, gain, Vadc=2, bit=16, sensitivity=-35, dBref=94, pRef=20e-6
     -------
     wave_dBSPL : 1d ndarray of floats
         Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)
+
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> s_dB = util.wav2dBSPL (wave=w, gain=42)   
     """        
-    wave_SPL   = wav2SPL(wave, bit, Vadc, sensitivity, gain, dBref) 
+    wave_SPL   = wav2SPL(wave, Vadc, sensitivity, gain, dBref) 
     wave_dBSPL = energy2dBSPL(wave_SPL**2, pRef)
     return (wave_dBSPL)
 
-
-
 # wav2Leq
-def wav2Leq (wave, f, gain, Vadc=2, bit=16, dt=1, sensitivity=-35, dBref = 94): 
+def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94): 
     """
     convert wave to Equivalent Continuous Sound level (Leq)
     
@@ -200,9 +218,6 @@ def wav2Leq (wave, f, gain, Vadc=2, bit=16, dt=1, sensitivity=-35, dBref = 94):
     Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
         Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  
         
-    bit : int, optional, default is 16
-        Number of bits of the analog to digital converter (ADC)  
-        
     dt : float, optional, default is 1 (second)
         Integration step to compute the Leq (Equivalent Continuous Sound level)
 
@@ -217,10 +232,15 @@ def wav2Leq (wave, f, gain, Vadc=2, bit=16, dt=1, sensitivity=-35, dBref = 94):
     -------
     sig_Leq : float
         Equivalent Continuous Sound level (Leq)
+        
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> leq_dB = util.wav2Leq (wave=w, f=fs, gain=42)  
     """    
      
     # convert in Volt
-    volt = wav2volt(wave, bit, Vadc)
+    volt = wav2volt(wave, Vadc)
     ##### volt amplitude to Leq 
     # wav to RMS
     dN = int(np.floor(dt*f)) # RMS period in number of points
@@ -247,9 +267,6 @@ def wavSPL2Leq (wave_SPL, f, dt=1, pRef = 20e-6):
         
     f : integer
         Sampling frequency in Hz
-
-    bit : int, optional, default is 16
-        Number of bits of the analog to digital converter (ADC)  
         
     dt : float, optional, default is 1 (second)
         Integration step to compute the Leq (Equivalent Continuous Sound level)
@@ -260,6 +277,12 @@ def wavSPL2Leq (wave_SPL, f, dt=1, pRef = 20e-6):
     -------
     sig_Leq : float
         Equivalent Continuous Sound level (Leq)
+        
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> s = util.wav2SPL(wave=w, gain=42)
+    >>> leq_dB = util.wavSPL2Leq (wave_SPL=s, f=fs)
     """     
     # be sure they are ndarray
     wave_SPL = np.asarray(wave_SPL)
@@ -293,8 +316,24 @@ def energy2dBSPL(energy_SPL, pRef = 20e-6):
            
     Returns
     -------
-    PSD_dBSPL : 1d ndarray of floats
+    energy_dBSPL : 1d ndarray of floats
          Vector containing the energy signal in dB SPL
+         
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    
+    Energy in time domain (s²)
+    
+    >>> s = util.wav2SPL(wave=w, gain=42)
+    >>> s_dB = util.energy2dBSPL(energy_SPL=s^2)
+    
+    Energy in frequency domain (S²)
+
+    >>> from numpy import fft
+    >>> S = abs(fft.fft(s)/len(s))
+    >>> S_dB = util.energy2dBSPL(energy_SPL=S^2)
+    
     """      
     # be sure they are ndarray
     energy_SPL = np.asarray(energy_SPL)
@@ -306,59 +345,82 @@ def energy2dBSPL(energy_SPL, pRef = 20e-6):
 
 
 #####  dBSPL2energy
-def dBSPL2energy (energy_dBSPL, pRef = 20e-6):
+def dBSPL2energy (e_dB, pRef = 20e-6):
     """
     convert energy in dB SPL (e.g. PSD) into energy in SPL²
     
     Parameters
     ----------
-    PSD_dBSPL : 1d ndarray of floats
+    e_dB : 1d ndarray of floats
          Vector containing the energy in dB SPL
 
     pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
            
     Returns
     -------
-    PSD_SPL : 1d ndarray of floats
+    e : 1d ndarray of floats
         Vector containing the energy in SPL²
+        
+    Examples
+    --------
+    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    
+    Energy in time domain (s²)
+    
+    >>> s = util.wav2SPL(wave=w, gain=42)
+    >>> s_dB = util.energy2dBSPL(energy_SPL=s^2)
+    >>> e = dBSPL2energy(energy_dBSPL=s_dB)
+    
+    Energy in frequency domain (S²)
+
+    >>> from numpy import fft
+    >>> S = abs(fft.fft(s)/len(s))
+    >>> S_dB = util.energy2dBSPL(energy_SPL=S^2)
+    >>> E = dBSPL2energy(energy_dBSPL=S_dB)
     """  
     # be sure they are ndarray
-    energy_dBSPL = np.asarray(energy_dBSPL)
+    e_dB = np.asarray(e_dB)
     
     # SPL to energy (pressure^2) (=> Leq (Equivalent Continuous Sound level)
-    energy_SPL = 10**(energy_dBSPL/10)*pRef**2
-    return(energy_SPL)
+    e = 10**(e_dB/10)*pRef**2
+    return(e)
 
-def PSD2Leq (PSD_SPL, pRef = 20e-6):
+def PSD2Leq (PSD, pRef = 20e-6):
     """
     convert Power spectral density (PSD) in SPL² into 
     Equivalent Continuous Sound level (Leq)
     
     Parameters
     ----------
-    PSD_SPL : 1d ndarray of floats
+    PSD : 1d ndarray of floats
         Vector containing the Power spectral density (PSD) already in SPL²
 
     pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
            
     Returns
     -------
-    PSD_Leq : float
+    Leq : float
         Equivalent Continuous Sound level (Leq)
+        
+    Examples
+    --------
+    >>> from numpy import fft
+    >>> S = abs(fft.fft(s)/len(s))
+    >>> Leq = PSD2Leq(PSD=S^2)
     """  
     # be sure they are ndarray
-    PSD_SPL = np.asarray(PSD_SPL)
+    PSD = np.asarray(PSD)
     
     # Energy (pressure^2) to Leq (=> Leq (Equivalent Continuous Sound level) 
     # if the sum is performed on the whole PSD)
-    PSD_Leq = 10*log10(sum(PSD_SPL)/pRef**2)
-    return(PSD_Leq)
+    Leq = 10*log10(sum(PSD)/pRef**2)
+    return(Leq)
    
 ########### TEST
 ## Test the current operating system
 if __name__ == "__main__":
     # ############## Import MAAD module
-    from pathlib import Path # in order to be wind/linux/MacOS compatible
+    from pathlib import Path # in order to be Windows/Linux/MacOS compatible
     import os
     
     # change the path to the current path where the script is located
@@ -366,31 +428,28 @@ if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath('__file__'))
     os.chdir(dir_path)
     
-    maad_path = Path(dir_path).parents[0]
+    # data directory 
+    datadir = (Path(dir_path).parents[1] / "data/").resolve()
+    filename = datadir/"jura_cold_forest_jour.wav"
+    
+    # Go to the root directory where is the module maad and import maad
+    maad_path = Path(dir_path).parents[1]
     os.sys.path.append(maad_path.as_posix())
     import maad
     
-    # Sensbility microphone (for SM4 it is -35dBV)
-    S = -35 #dBV
-    # Amplification gain
-    G = 42 # total amplification gain : preamplifier gain = 26dB and gain = 16dB
-    # Reference pressure (in the air : 20µPa)
-    P_REF = 20e-6
-    # Leq integration time dt in s
-    deltaT = 1
-    #
-    NFFT = 512
-    #
-    bit = 16
-    #
-    Vadc = 2
+    ####### Variables
+    S = -35     #  Sensbility microphone (for SM4 it is -35dBV)
+    G = 42      # total amplification gain : preamplifier gain = 26dB and gain = 16dB
+    P_REF = 20e-6   # Reference pressure (in the air : 20µPa)
+    deltaT = 1  # Leq integration time dt in s
+    NFFT = 512  # length of the fft
+    Vadc = 2    # Maximal voltage (peak to peak) converted by the analog to digital convertor ADC (i.e : +/- 1V peak to peak => Vadc=2V)
     
-    # root directory of the files
-    base_path = Path(__file__).parent
-    datadir = (base_path / "../../data/").resolve()
-    filename = datadir/"jura_cold_forest_jour.wav"
-    
+    # Load the sound
     volt,fs = maad.sound.load(filename=filename, channel='right', detrend=False, verbose=False)
+    
+    print('-------------------------------------------------------------------------')
+    print('Leq calculation directly from the sound file (in time or frequency domain')
     
     # convert sounds (wave) into SPL and subtract DC offset
     volt = volt - mean(volt)
@@ -400,34 +459,38 @@ if __name__ == "__main__":
     print('Leq from volt', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq, mode="power")),mode="power"))
     
     # wav -> Leq
-    wav = volt*2**(bit)/Vadc
+    wav = volt/Vadc
     wav_Leq2 = wav2Leq(wav, f=fs, dt=deltaT, sensitivity=S, gain=G, dBref = 94) 
     print('Leq from wav', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq2, mode="power")),mode="power"))
     
-    # Power Density Spetrum : PSDxx
+    # Power Density Spectrum : PSD
     from numpy import fft
     PSD = abs(fft.fft(wav_SPL)/len(wav_SPL))**2
     # average Leq from PSD
     PSD_Leq3  = PSD2Leq(PSD)
     print('Leq from PSD',PSD_Leq3 )
     
-    # Power Density Spetrum : PSDxx
-    PSDxx,tn,fn,_ = maad.sound.spectrogram (wav_SPL, fs=fs, window='boxcar', 
-                                               noverlap=0, nperseg=NFFT, 
-                                               fcrop=None, tcrop=None, 
-                                               mode='psd',
-                                               verbose=False, display=False, 
-                                               savefig = None)  
+    ########################################################################
+    # Leq from spectrogram PSDxx : 
+    print('-------------------------------------------------------------------------')
+    print('Leq calculation from Spectrogram (time-frequency representation of a sound ')
+    
+    # Power Density Spectrogram : PSDxx
+    PSDxx,tn,fn,_ = maad.sound.spectrogram (wav_SPL, fs=fs, nperseg=NFFT, 
+                                            mode='psd')  
     PSD_mean = mean(PSDxx,axis=1)
     # average Leq from PSD
     PSD_Leq4  = PSD2Leq(PSD_mean)
     print('Leq from PSDxx spectrogram',PSD_Leq4 )
-    print('The difference with previous Leq is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy ')
 
     # energy from PSD_mean
     energy  =sum(PSD_mean)
     PSD_Leq5  = energy2dBSPL(energy)
     print('Leq from energy',PSD_Leq5 )
+    
+    print('')
+    print('> The difference with previous Leq calculation is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy.')
+    print('> By increasing the NFFT length (i.e. NFFT=4096), Leq value converges towards previous Leq values') 
 
  
 
