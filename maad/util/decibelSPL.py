@@ -45,6 +45,11 @@ def wav2volt (wave, Vadc=2):
     -------
     volt : 1d ndarray of floats
         Vector containing the sound waveform in volt
+        
+    See Also
+    --------
+    volt2SPL, wav2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, wavSPL2Leq, energy2dBSPL, 
+    PSD2Leq, dBSPL2energy
             
     Examples
     --------
@@ -82,6 +87,11 @@ def volt2SPL(volt, gain, sensitivity=-35, dBref=94):
     wave_SPL : 1d ndarray of floats
         Vector containing the sound waveform in SPL (Sound Pressure level : Pa)
         
+    See Also
+    --------    
+    wav2volt, wav2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, wavSPL2Leq, energy2dBSPL, 
+    PSD2Leq, dBSPL2energy    
+    
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -125,6 +135,11 @@ def wav2SPL (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
     wave_SPL : 1d ndarray of floats
         Vector containing the sound waveform in SPL (Sound Pressure level : Pa)
         
+    See Also
+    --------   
+    wav2volt, volt2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, wavSPL2Leq, energy2dBSPL, 
+    PSD2Leq, dBSPL2energy
+    
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -151,6 +166,11 @@ def SPL2dBSPL (waveSPL, pRef=20e-6):
     wave_dBSPL : 1d ndarray of floats
         Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)
         
+    See Also
+    --------         
+    wav2volt, volt2SPL, wav2SPL, wav2dBSPL, wav2Leq, wavSPL2Leq, energy2dBSPL, 
+    PSD2Leq, dBSPL2energy
+     
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -189,6 +209,11 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     -------
     wave_dBSPL : 1d ndarray of floats
         Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)
+        
+    See Also
+    --------        
+    wav2volt, volt2SPL, wav2SPL, SPL2dBSPL, wav2Leq, wavSPL2Leq, energy2dBSPL, 
+    PSD2Leq, dBSPL2energy
 
     Examples
     --------
@@ -232,6 +257,11 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     -------
     sig_Leq : float
         Equivalent Continuous Sound level (Leq)
+       
+    See Also
+    --------    
+    wav2volt, volt2SPL, wav2SPL, SPL2dBSPL, wav2dBSPL, wavSPL2Leq,energy2dBSPL, 
+    PSD2Leq, dBSPL2energy        
         
     Examples
     --------
@@ -278,6 +308,11 @@ def wavSPL2Leq (wave_SPL, f, dt=1, pRef = 20e-6):
     sig_Leq : float
         Equivalent Continuous Sound level (Leq)
         
+    See Also
+    -------- 
+    wav2volt, volt2SPL, wav2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, energy2dBSPL, 
+    PSD2Leq, dBSPL2energy
+        
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -318,7 +353,12 @@ def energy2dBSPL(energy_SPL, pRef = 20e-6):
     -------
     energy_dBSPL : 1d ndarray of floats
          Vector containing the energy signal in dB SPL
-         
+        
+    See Also
+    --------         
+    wav2volt, volt2SPL, wav2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, wavSPL2Leq, 
+    PSD2Leq, dBSPL2energy
+    
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -361,6 +401,10 @@ def dBSPL2energy (e_dB, pRef = 20e-6):
     e : 1d ndarray of floats
         Vector containing the energy in SPL²
         
+    See Also
+    --------        
+    wav2volt, volt2SPL, wav2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, wavSPL2Leq, energy2dBSPL, PSD2Leq
+    
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -397,6 +441,11 @@ def PSD2Leq (PSD, pRef = 20e-6):
 
     pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
            
+    See Also
+    --------      
+    wav2volt, volt2SPL, wav2SPL, SPL2dBSPL, wav2dBSPL, wav2Leq, wavSPL2Leq, 
+    energy2dBSPL, dBSPL2energy
+    
     Returns
     -------
     Leq : float
