@@ -48,8 +48,8 @@ def wav2volt (wave, Vadc=2):
             
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> v = util.wav2volt(wave=w, Vadc=2)
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> v = maad.util.wav2volt(wave=w, Vadc=2)
     """
     # be sure they are ndarray
     wave = np.asarray(wave)
@@ -84,9 +84,9 @@ def volt2SPL(volt, gain, sensitivity=-35, dBref=94):
         
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> v = util.wav2volt(wave=w)
-    >>> s = util.volt2SPL(volt=v, gain=42)        
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> v = maad.util.wav2volt(wave=w)
+    >>> s = maad.util.volt2SPL(volt=v, gain=42)        
     """
     # be sure they are ndarray
     volt = np.asarray(volt)
@@ -127,8 +127,8 @@ def wav2SPL (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
         
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> s = util.wav2SPL(wave=w, gain=42)
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> s = maad.util.wav2SPL(wave=w, gain=42)
     """
     wave_SPL = volt2SPL(wav2volt(wave, Vadc), sensitivity, gain, dBref) 
     return (wave_SPL)
@@ -153,9 +153,9 @@ def SPL2dBSPL (waveSPL, pRef=20e-6):
         
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> s = util.wav2SPL(wave=w, gain=42)
-    >>> s_dB = util.SPL2dBSPL(waveSPL=s)        
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> s = maad.util.wav2SPL(wave=w, gain=42)
+    >>> s_dB = maad.util.SPL2dBSPL(waveSPL=s)        
     """    
     wave_dBSPL = energy2dBSPL(waveSPL**2, pRef)
     return (wave_dBSPL)
@@ -192,8 +192,8 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> s_dB = util.wav2dBSPL (wave=w, gain=42)   
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> s_dB = maad.util.wav2dBSPL (wave=w, gain=42)   
     """        
     wave_SPL   = wav2SPL(wave, Vadc, sensitivity, gain, dBref) 
     wave_dBSPL = energy2dBSPL(wave_SPL**2, pRef)
@@ -235,8 +235,8 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
         
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> leq_dB = util.wav2Leq (wave=w, f=fs, gain=42)  
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> leq_dB = maad.util.wav2Leq (wave=w, f=fs, gain=42)  
     """    
      
     # convert in Volt
@@ -280,9 +280,9 @@ def wavSPL2Leq (wave_SPL, f, dt=1, pRef = 20e-6):
         
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
-    >>> s = util.wav2SPL(wave=w, gain=42)
-    >>> leq_dB = util.wavSPL2Leq (wave_SPL=s, f=fs)
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> s = maad.util.wav2SPL(wave=w, gain=42)
+    >>> leq_dB = maad.util.wavSPL2Leq (wave_SPL=s, f=fs)
     """     
     # be sure they are ndarray
     wave_SPL = np.asarray(wave_SPL)
@@ -321,18 +321,18 @@ def energy2dBSPL(energy_SPL, pRef = 20e-6):
          
     Examples
     --------
-    >>> w, fs = sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
     
     Energy in time domain (s²)
     
-    >>> s = util.wav2SPL(wave=w, gain=42)
-    >>> s_dB = util.energy2dBSPL(energy_SPL=s^2)
+    >>> s = maad.util.wav2SPL(wave=w, gain=42)
+    >>> s_dB = maad.util.energy2dBSPL(energy_SPL=s^2)
     
     Energy in frequency domain (S²)
 
-    >>> from numpy import fft
+    >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
-    >>> S_dB = util.energy2dBSPL(energy_SPL=S^2)
+    >>> S_dB = maad.util.energy2dBSPL(energy_SPL=S^2)
     
     """      
     # be sure they are ndarray
@@ -367,16 +367,16 @@ def dBSPL2energy (e_dB, pRef = 20e-6):
     
     Energy in time domain (s²)
     
-    >>> s = util.wav2SPL(wave=w, gain=42)
-    >>> s_dB = util.energy2dBSPL(energy_SPL=s^2)
-    >>> e = dBSPL2energy(energy_dBSPL=s_dB)
+    >>> s = maad.util.wav2SPL(wave=w, gain=42)
+    >>> s_dB = maad.util.energy2dBSPL(energy_SPL=s^2)
+    >>> e = maad.util.dBSPL2energy(energy_dBSPL=s_dB)
     
     Energy in frequency domain (S²)
 
-    >>> from numpy import fft
+    >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
-    >>> S_dB = util.energy2dBSPL(energy_SPL=S^2)
-    >>> E = dBSPL2energy(energy_dBSPL=S_dB)
+    >>> S_dB = maad.util.energy2dBSPL(energy_SPL=S^2)
+    >>> E = maad.util.dBSPL2energy(energy_dBSPL=S_dB)
     """  
     # be sure they are ndarray
     e_dB = np.asarray(e_dB)
@@ -404,9 +404,9 @@ def PSD2Leq (PSD, pRef = 20e-6):
         
     Examples
     --------
-    >>> from numpy import fft
+    >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
-    >>> Leq = PSD2Leq(PSD=S^2)
+    >>> Leq = maad.util.PSD2Leq(PSD=S^2)
     """  
     # be sure they are ndarray
     PSD = np.asarray(PSD)
