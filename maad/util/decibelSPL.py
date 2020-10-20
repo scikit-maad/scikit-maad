@@ -366,13 +366,13 @@ def energy2dBSPL(energy_SPL, pRef = 20e-6):
     Energy in time domain (s²)
     
     >>> s = maad.util.wav2SPL(wave=w, gain=42)
-    >>> s_dB = maad.util.energy2dBSPL(energy_SPL=s^2)
+    >>> s_dB = maad.util.energy2dBSPL(energy_SPL=s**2)
     
     Energy in frequency domain (S²)
 
     >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
-    >>> S_dB = maad.util.energy2dBSPL(energy_SPL=S^2)
+    >>> S_dB = maad.util.energy2dBSPL(energy_SPL=S**2)
     
     """      
     # be sure they are ndarray
@@ -412,14 +412,14 @@ def dBSPL2energy (e_dB, pRef = 20e-6):
     Energy in time domain (s²)
     
     >>> s = maad.util.wav2SPL(wave=w, gain=42)
-    >>> s_dB = maad.util.energy2dBSPL(energy_SPL=s^2)
+    >>> s_dB = maad.util.energy2dBSPL(energy_SPL=s**2)
     >>> e = maad.util.dBSPL2energy(energy_dBSPL=s_dB)
     
     Energy in frequency domain (S²)
 
     >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
-    >>> S_dB = maad.util.energy2dBSPL(energy_SPL=S^2)
+    >>> S_dB = maad.util.energy2dBSPL(energy_SPL=S**2)
     >>> E = maad.util.dBSPL2energy(energy_dBSPL=S_dB)
     """  
     # be sure they are ndarray
@@ -457,7 +457,7 @@ def PSD2Leq (PSD, pRef = 20e-6):
     >>> s = maad.util.wav2SPL(wave=w, gain=42)
     >>> from numpy import fft, abs
     >>> S = abs(fft.fft(s)/len(s))
-    >>> Leq = maad.util.PSD2Leq(PSD=S^2)
+    >>> Leq = maad.util.PSD2Leq(PSD=S**2)
     """  
     # be sure they are ndarray
     PSD = np.asarray(PSD)
