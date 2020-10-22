@@ -59,7 +59,7 @@ def running_mean(x, N, mode="nearest"):
     Returns
     -------
     x_mean : 1d ndarray of scalars
-        Vector
+        Vector with the same dimensions than the original variable x
         
     Examples
     --------
@@ -78,7 +78,7 @@ def get_unimode (X, mode ='mean', axis=1, N=7, N_bins=100, verbose=False):
     
     Parameters
     ----------
-    X :  1d or 2d ndarray of scalar
+    X :  1d or 2d ndarray of scalars
         Vector or matrix 
                 
     mode : str, optional, default is 'mean'

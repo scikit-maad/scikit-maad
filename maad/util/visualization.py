@@ -97,6 +97,23 @@ def plot1D(x, y, ax=None, **kwargs):
         The Figure instance 
     ax : Axis
         The Axis instance
+        
+    Examples
+    --------
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> p = maad.util.wav2pressure (w, gain=42)
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
+    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
+       
+    Plot the spectrum at t = 7s
+    
+    >>> index = maad.util.nearest_idx(tn,7)
+    >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
+                      'xlabel':'Frequency [Hz]',
+                      'ylabel':'Power [dB]',
+                      }
+    
+    >>> fig, ax = maad.util.plot1D(fn, Lxx[:,index], **fig_kwargs)
     """  
 
     figsize=kwargs.pop('figsize', (4, 10))
@@ -199,6 +216,23 @@ def plot2D(im,ax=None,**kwargs):
         The Figure instance 
     ax : Axis
         The Axis instance
+        
+    Examples
+    --------
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> p = maad.util.wav2pressure (w, gain=42)
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
+    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': max(Lxx),
+                      'vmin':min(Lxx),
+                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                      'figsize':(10,13),
+                      'title':'Power spectrogram density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
+        
     """ 
    
     # matplotlib parameters
@@ -264,7 +298,6 @@ def rand_cmap(nlabels, type='bright', first_color_black=True, last_color_black=F
     random_colormap : Colormap 
         Colormap type used by matplotlib
 
-    
     References
     ----------
     adapted from https://github.com/delestro/rand_cmap author : delestro    
@@ -341,6 +374,31 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
         image cropped
     tn, fn, 1d ndarray
         new time and frequency vectors
+        
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> p = maad.util.wav2pressure (w, gain=42)
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
+    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': max(Lxx),
+                      'vmin':0,
+                      'figsize':(10,13),
+                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                      'title':'Power spectrogram density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
+    
+    >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,6000), tcrop=(0,30))
+   >>> fig_kwargs = {'vmax': max(Lxx),
+                      'vmin':0,
+                      'figsize':(10*len(fn_crop)/len(fn),13*len(tn_crop)/len(tn)),
+                      'extent':(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),
+                      'title':'Crop of the power spectrogram density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> fig, ax = maad.util.plot2D(Lxx_crop,**fig_kwargs)  
     """
     
     if tcrop is not None : 

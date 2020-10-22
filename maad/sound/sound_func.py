@@ -145,7 +145,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     fs, s = wavfile.read(filename)
     if verbose :print("Sampling frequency: %dHz" % fs)
     
-    # Normalize the signal between -1 to 1 depending on the type
+    # Normalize the signal between -1 to 1 depending on the type (number of bits)
     if s.dtype == np.int32:
         bit = 32
         s = s/2**(bit-1)

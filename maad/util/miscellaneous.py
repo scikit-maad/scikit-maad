@@ -23,13 +23,49 @@ _MIN_ = sys.float_info.min
 
 def index_bw (fn, bw):
     """
-    Select the index min and max coresponding to the selected frequency band
+    Select all the index coresponding to the selected frequency band
+    
+    Parameters
+    ----------
+    fn :  1d ndarray of scalars
+        Vector of frequencies
+        
+    bw : single value or tupple of two values
+        if single value : frequency to select
+        if tupple of two values : min frequency and max frequency to select
+        
+    Returns
+    -------
+    index : 1d ndarray of scalars
+        Vector of booleans corresponding to the selected frequency(-ies)
     
     Examples
     --------
-    >>> fn = 44100
-    >>> bw = (100,1000) #in Hz
-    >>> X = X[index_bw(fn, bw)]
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
+    >>> PSDxxdB = maad.util.linear2dB (PSDxx) # convert into dB
+    >>> bw = (2000,6000) #in Hz
+    >>> fig_kwargs = {'vmax': max(PSDxxdB),
+                      'vmin':min(PSDxxdB),
+                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                      'figsize':(10,13),
+                      'title':'Power Spectrum Density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> maad.util.plot2D(PSDxxdB,**fig_kwargs)
+    >>> PSDxxdB_crop = PSDxxdB[index_bw(fn, bw)]
+    >>> fn_crop = fn[index_bw(fn, bw)]
+    >>> fig_kwargs = {'vmax': max(PSDxxdB),
+                      'vmin':min(PSDxxdB),
+                      'extent':(tn[0], tn[-1], fn_crop[0], fn_crop[-1]),
+                      'figsize':(10*len(fn_crop)/len(fn),13),
+                      'title':'Power Spectrum Density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> maad.util.plot2D(PSDxxdB_crop,**fig_kwargs)
+    
     """
     # select the indices corresponding to the frequency bins range
     if bw is None :
@@ -52,7 +88,7 @@ def index_bw (fn, bw):
        
 def rle(x):
     """
-    Run--Length encoding    
+    Run-Length encoding    
     from rle function R
     """
     x = np.asarray(x)
@@ -89,13 +125,13 @@ def linear_scale(x, minval= 0.0, maxval=1.0):
         
     Examples
     --------
-    >>> a = np.array([1,2,3,4,5]);
-    >>> a_out = scaledata(a,0,1); 
-    array([0.  , 0.25, 0.5 , 0.75, 1.  ])
+    >>> a = np.array([1,2,3,4,5])
+    >>> linear_scale(a, 0, 1)
+        array([0.  , 0.25, 0.5 , 0.75, 1.  ])
         
     References
     ----------
-    Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
+    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
     Adapted by S. Haupert Dec 12, 2017 for Python
     """
 
@@ -132,9 +168,17 @@ def linear2dB (x, mode = 'power', db_range=None, db_gain=0):
     -------
     y : scalars
         amplitude--> 20*log10(x) + db_gain  
-
+        
+    Examples
+    --------
+    >>> a = np.array([1,2,3,4,5])
+    >>> linear2dB(a**2, mode='power')
+        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
+    >>> linear2dB(a, mode='amplitude')
+        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
+        
     """            
-    x = abs(x)   # take the absolute value of datain
+    x = abs(x)   # take the absolute value of x
     
     # Avoid zero value for log10  
     # if it's a scalar
@@ -179,6 +223,15 @@ def dB2linear (x, mode = 'power',  db_gain=0):
     -------
     y : scalars
         output in amplitude or power unit
+        
+    Examples
+    --------
+    >>> a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
+    >>> dB2linear(a, mode='power')
+        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])
+    >>> dB2linear(a, mode='amplitude')
+        array([1., 2., 3., 4., 5.])
+        
     """  
     if mode == 'amplitude' :
         y = 10**((x- db_gain)/20) 
@@ -229,8 +282,23 @@ def rois_to_imblobs(im_blobs, rois_bbox):
 def shift_bit_length(x):
     """
     find the closest power of 2 that is superior or equal to the number x
+    
+    Parameters
+    ----------
+    x : scalar
+    
+    Returns
+    -------
+    y : scalar
+        the closest power of 2 that is superior or equal to the number x
+    
+    Examples
+    --------
+    >>> shift_bit_length(1000)
+        1024
     """
-    return 1<<(x-1).bit_length()
+    y = 1<<(x-1).bit_length()
+    return y
 
 #=============================================================================
     
@@ -253,11 +321,14 @@ def nearest_idx(array,value):
     Examples
     --------
     >>> x = np.array([1,2,3])
-    >>> ig.nearest_idx(x, 1.3)
-    [0]
-    >>> ig.nearest_idx(x, 1.6)
-    [1]
+    >>> nearest_idx(x, 1.3)
+        0
+    >>> nearest_idx(x, 1.6)
+        1
     """
+    # be sure it's ndarray
+    array = np.asarray(array)
+    
     idx = (np.abs(array-value)).argmin()
     return idx
 
@@ -280,6 +351,9 @@ def normalize_2d(im, min_value, max_value):
     im_out: 2D ndarray
         Array normalized between min and max values
     """
+    # be sure it's ndarray
+    im = np.asarray(im)    
+        
     # avoid problems with inf and -inf values
     min_im = np.min(im.ravel()[im.ravel()!=-np.inf]) 
     im[np.where(im == -np.inf)] = min_im
