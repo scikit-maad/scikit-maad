@@ -16,8 +16,8 @@ functions for processing sound
 import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
-from scipy.signal import hilbert,butter, sosfiltfilt, convolve, iirfilter, get_window
-from maad.util import plot1D, plot2D, crop_image, linear2dB
+from scipy.signal import hilbert, sosfiltfilt, convolve, iirfilter, get_window
+from maad.util import plot1D, plot2D, crop_image, power2dBSPL, pressure2dBSPL
 
 # =============================================================================
 # private functions
@@ -194,7 +194,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     return s_out, fs
 
 #=============================================================================
-def envelope (s, mode='fast', N=32):
+def envelope (s, mode='fast', N=512):
     """
     Calcul the envelope of a sound waveform (1d)
     
@@ -529,6 +529,9 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
             
         - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
+            
+        - pRef : scalar, optional, default is 20e-6
+            Set the Pressure reference value which is s20e-6 Pa in air
         
         - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
@@ -585,7 +588,8 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     
     Notes
     -----
-    This function take care of the energy concervation which is crucial when working in with sound pressure level (dB SPL)
+    This function take care of the energy conservation which is crucial 
+    when working in with sound pressure level (dB SPL)
         
     Examples
     --------
@@ -713,24 +717,21 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     # Display
     if display : 
         
-        #### convert into dB if db_range is not none
-        db_range =kwargs.pop('db_range',90)
-        if db_range is not None : 
-            if mode=='psd':  
-                Sxx_disp = linear2dB(Sxx_out, db_range=db_range, mode='power')
-            if mode=='amplitude': 
-                Sxx_disp = linear2dB(Sxx_out, db_range=db_range, mode='amplitude')
-            if mode=='complex': 
-                Sxx_disp = linear2dB(abs(Sxx_out), db_range=db_range, mode='amplitude') 
-        else:
-            Sxx_disp = Sxx_out
+        #### convert into dB SPL
+        pRef =kwargs.pop('pRef',20e-6)
+        if mode=='psd':  
+            Sxx_disp = power2dBSPL(Sxx_out,pRef)
+        if mode=='amplitude': 
+            Sxx_disp = pressure2dBSPL(Sxx_out,pRef)
+        if mode=='complex': 
+            Sxx_disp = pressure2dBSPL(Sxx_out,pRef)
 
         ylabel =kwargs.pop('ylabel','Frequency [Hz]')
         xlabel =kwargs.pop('xlabel','Time [sec]') 
         title  =kwargs.pop('title','Spectrogram')
         cmap   =kwargs.pop('cmap','gray') 
         figsize=kwargs.pop('figsize',(4, 13)) 
-        vmin=kwargs.pop('vmin',Sxx_disp.min()) 
+        vmin=kwargs.pop('vmin',0) 
         vmax=kwargs.pop('vmax',Sxx_disp.max()) 
         
         _, fig = plot2D (Sxx_disp, extent=ext, figsize=figsize,title=title, 
