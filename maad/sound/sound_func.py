@@ -16,7 +16,7 @@ functions for processing sound
 import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
-from scipy.signal import hilbert,butter, sosfilt, stft, convolve, iirfilter, get_window
+from scipy.signal import hilbert,butter, sosfiltfilt, convolve, iirfilter, get_window
 from maad.util import plot1D, plot2D, crop_image, linear2dB
 
 # =============================================================================
@@ -134,7 +134,10 @@ def load(filename, channel='left', detrend=True, verbose=False,
         
     Examples
     --------
-    >>> s, fs = maad.sound.load(filename="../data/guyana_tropical_forest.wav", channel='LEFT', detrend=True, verbose=False)
+    >>> s, fs = maad.sound.load("guyana_tropical_forest.wav", channel='LEFT', detrend=True, verbose=False)
+    >>> import numpy as np
+    >>> tn = np.arange(0,len(s))/fs
+    >>> maad.util.plot1D(tn,s)
     """
     if verbose :
         print(72 * '_' )
@@ -191,17 +194,14 @@ def load(filename, channel='left', detrend=True, verbose=False,
     return s_out, fs
 
 #=============================================================================
-def envelope (s, mode='fast', N=512):
+def envelope (s, mode='fast', N=32):
     """
-    Calcul the envelope of a sound (1d) 
-    The sound is first divided into frames (2d) using the function 
-    wave2timeframes(s), then the max of each frame gives a good approximation
-    of the envelope.
+    Calcul the envelope of a sound waveform (1d)
     
     Parameters
     ----------
-    s : ndarray of floats 
-        1d : sound waveform
+    s : 1d ndarray of floats 
+        Vector containing sound waveform
         
     mode : str, optional, default is "fast"
         - "fast" : The sound is first divided into frames (2d) using the 
@@ -210,13 +210,13 @@ def envelope (s, mode='fast', N=512):
         - "Hilbert" : estimation of the envelope from the Hilbert transform. 
             The method is slow
     
-    N : integer, optional, default is 512
+    N : integer, optional, default is 32
         Size of each frame. The largest, the highest is the approximation.
                   
     Returns
     -------    
-    env : ndarray of floats
-        Envelope of the sound (1d) 
+    env : 1d ndarray of floats
+        Envelope of the sound
         
     References
     ----------
@@ -224,11 +224,11 @@ def envelope (s, mode='fast', N=512):
     
     Examples
     --------
-    >>> s,fs = maad.sound.load(filename="../data/guyana_tropical_forest.wav", channel='LEFT', detrend=True, verbose=False)
-    >>> env_fast = maad.sound.envelope(s, mode='fast', N=512)
+    >>> s,fs = maad.sound.load("guyana_tropical_forest.wav")
+    >>> env_fast = maad.sound.envelope(s, mode='fast', N=32)
     >>> env_fast
-    array([0.0859375 , 0.09140015, 0.08306885, ..., 0.03884888, 0.06614685,
-       0.04876709])
+    array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,
+       0.26074219])
     
     >>> env_hilbert = maad.sound.envelope(s, mode='hilbert')
     >>> env_hilbert
@@ -243,7 +243,7 @@ def envelope (s, mode='fast', N=512):
     plot 0.1 of the envelope and 0.1s of the abs(s)
     import matplotlib.pyplot as plt
     fig1, ax1 = plt.subplots()
-    ax1.plot(t[t<0.1], abs(wave[t<0.1]), label='abs(s)')
+    ax1.plot(t[t<0.1], abs(s[t<0.1]), label='abs(s)')
     ax1.plot(t[t<0.1], env_hilbert[t<0.1], label='env(s) - hilbert option')
     ax1.plot(t_env_fast[t_env_fast<0.1], env_fast[t_env_fast<0.1], label='env(s) - fast option')
     ax1.set_xlabel('Time [sec]')
@@ -263,13 +263,15 @@ def envelope (s, mode='fast', N=512):
     return env
 
 #=============================================================================
-def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None, 
-              rs=None):
+def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass', 
+                     rp=None, rs=None):
     """
+    Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter
+        
     Parameters
     ----------
     x : array_like
-        1d vector of scalar to be filtered
+        1d vector of scalars to be filtered
         
     fs : scalar
         sampling frequency   
@@ -307,15 +309,56 @@ def iir_filter1d(x, fs, fcut, forder, fname ='butter', ftype='bandpass', rp=None
         For Chebyshev and elliptic filters, provides the minimum attenuation 
         in the stop band. (dB)           
             
+    Returns
+    -------
+    y : array_like
+        The filtered output with the same shape and phase as x
+        
+    See Also
+    --------
+    fir_filter1d
+    
+    Examples
+    --------
+    
+    Load and display the spectrogram of a sound waveform
+    
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> p = maad.util.wav2pressure (w, gain=42)
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
+    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': max(Lxx),
+                      'vmin':0,
+                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                      'figsize':(4,13),
+                      'title':'Power spectrogram density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)
+    
+    Filter the waveform : keep the bandwidth between 6-10kHz
+    
+    >>> p_filtered = maad.sound.select_bandwidth(p,fs,fcut=[6000,10000], forder=5, fname ='butter', ftype='bandwith')
+    >>> Pxx_filtered,tn,fn,_ = maad.sound.spectrogram(p_filtered,fs)
+    >>> Lxx_filtered = maad.util.power2dBSPL(Pxx_filtered) # convert into dB SPL
+    >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
+    
     """
     sos = iirfilter(N=forder, Wn=np.asarray(fcut)/(fs/2), btype=ftype,ftype=fname, rp=rp, 
                      rs=rs, output='sos')
-    y = sosfilt(sos, x)
+    # use sosfiltfilt insteasd of sosfilt to keep the phase of y matches x
+    y = sosfiltfilt(sos, x)
     return y
  
 #=============================================================================
 def fir_filter(x, kernel, axis=0):
     """
+    
+    1d Finite impulse filter
+    => Digital filter based on convolution of 1d kernel over a vector 
+    or along an axis of a matrix
+    
     Parameters
     ----------
     x : array_like
@@ -324,37 +367,68 @@ def fir_filter(x, kernel, axis=0):
     kernel : array_like or tuple
         Pass directly the kernel (1d vector of scalars) 
         Or pass the arguments in a tuple to create a kernel. Arguments are:   
-        
         - window : string, float, or tuple. The type of window to create. 
+                boxcar, triang, blackman, hamming, hann, bartlett, flattop,
+                parzen, bohman, blackmanharris, nuttall, barthann, 
+                - (kaiser, beta), 
+                - (gaussian, standard deviation), 
+                - (general_gaussian, power, width), 
+                - (slepian, width), 
+                - (dpss, normalized half-bandwidth), 
+                - (chebwin, attenuation), 
+                - (exponential, decay scale), 
+                - (tukey, taper fraction)
+        - N : length of the kernel
+              
+        Examples:
+        kernel = ('boxcar', 9)
+        kernel = (('gaussian', 0.5), 5)
+        kernel = [1 3 5 7 5 3 1] 
         
-        - boxcar, triang, blackman, hamming, hann, bartlett, flattop,parzen, bohman, blackmanharris, nuttall, barthann, 
-        
-        - (kaiser, beta), 
-        
-        - (gaussian, standard deviation), 
-        
-        - (general_gaussian, power, width), 
-        
-        - (slepian, width), 
-        
-        - (dpss, normalized half-bandwidth), 
-        
-        - (chebwin, attenuation), 
-        
-        - (exponential, decay scale), 
-        
-        - (tukey, taper fraction)
-    
-    Nx : int
-        The number of samples in the window.
-                    
-    Examples:
-    kernel = ('boxcar', 9)
-    kernel = (('gaussian', 0.5), 5)
-    kernel = [1 3 5 7 5 3 1] 
-    
     axis : int
         Determine along which axis is performed the filtering in case of 2d matrix
+        axis = 0 : vertical
+        axis = 1 : horizontal
+    
+    Returns :
+    --------
+    y : array_like
+        The filtered output with the same shape and phase as x
+        
+    See Also
+    --------
+    select_bandwidth
+    
+    Examples
+    --------  
+    
+    Load and display the spectrogram of a sound waveform
+    
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> p = maad.util.wav2pressure (w, gain=42)
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
+    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': max(Lxx),
+                      'vmin':0,
+                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                      'figsize':(4,13),
+                      'title':'Power spectrogram density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)
+    
+    Smooth the waveform (lowpass)
+    
+    >>> p_filtered = maad.sound.fir_filter(p, kernel=(('gaussian', 2), 5))
+    >>> Pxx_filtered,tn,fn,_ = maad.sound.spectrogram(p_filtered,fs)
+    >>> Lxx_filtered = maad.util.power2dBSPL(Pxx_filtered) # convert into dB SPL
+    >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
+    
+    Smooth the spectrogram, frequency by frequency (blurr)
+    >>> Lxx_blurr = maad.sound.fir_filter(Lxx, kernel=(('gaussian', 1), 5), axis=1)
+    >>> fig, ax = maad.util.plot2D(Lxx_blurr,**fig_kwargs)
+    
     """
     if isinstance(kernel,tuple) :
         if len(kernel) ==1 :
@@ -388,139 +462,6 @@ def fir_filter(x, kernel, axis=0):
         if axis ==1 :y = y.transpose()
 
     return y
-
-
-
-def select_bandwidth(s,fs, lfc=None, hfc=None, order=3, display=False, 
-                     savefig=None, **kwargs):
-    """
-    select a bandwidth of the signal
-    
-    Parameters
-    ----------
-    s :  1d ndarray of integer
-        Vector containing the audiogram     
-        
-    fs : int
-        The sampling frequency in Hz
-        
-    lfc : int, optional, default: None
-        Low frequency cut (Hz) in the range [0;fs/2]   
-        
-    hfc : int, optional, default: None
-        High frequency cut (Hz) in the range [0;fs/2]
-        if lfc and hfc are declared and lfc<hfc, bandpass filter is performed
-        
-    order : int, optional, default: 3
-        Order of the Butterworth filter. 
-        
-    display : boolean, optional, default is False
-        Display the signal if True
-        
-    savefig : string, optional, default is None
-        Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.
-        
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions   
-        
-        - savefilename : str, optional, default :'_filt_audiogram.png'
-            Postfix of the figure filename
-        
-        - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
-        
-        - title : string, optional, default : 'Spectrogram'
-            title of the figure
-        
-        - xlabel : string, optional, default : 'Time [s]'
-            label of the horizontal axis
-        
-        - ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
-        
-        - cmap : string or Colormap object, optional, default is 'gray'
-            See https://matplotlib.org/examples/color/colormaps_reference.html
-            in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-            'viridis'...
-        
-        - vmin, vmax : scalar, optional, default: None
-            `vmin` and `vmax` are used in conjunction with norm to normalize
-            luminance data.  Note if you pass a `norm` instance, your
-            settings for `vmin` and `vmax` will be ignored.
-        
-        - ext : list of scalars [left, right, bottom, top], optional, default: None
-            The location, in data-coordinates, of the lower-left and
-            upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.
-        
-        - dpi : integer, optional, default is 96
-            Dot per inch. 
-            For printed version, choose high dpi (i.e. dpi=300) => slow
-            For screen version, choose low dpi (i.e. dpi=96) => fast
-        
-        - format : string, optional, default is 'png'
-            Format to save the figure
-        
-        ... and more, see matplotlib     
-          
-    Returns
-    -------
-    s_out : 1d ndarray of integer
-        Vector containing the audiogram after being filtered           
-    """    
-
-
-    if lfc is None:
-        lfc = 0
-    if hfc is None:
-        hfc = fs/2         
-    
-    if lfc!=0 and hfc!=fs/2:
-        # bandpass filter the signal
-        Wn = [lfc/fs*2, hfc/fs*2]
-        sos = butter(order, Wn, analog=False, btype='bandpass', output='sos')
-        s_out = sosfilt(sos, s) 
-    elif lfc==0 and hfc!=fs/2 :     
-        # lowpass filter the signal
-        Wn = hfc/fs*2
-        sos = butter(order, Wn, analog=False, btype='lowpass', output='sos')
-        s_out = sosfilt(sos, s)    
-    elif lfc!=0 and hfc==fs/2 :  
-        # highpass filter the signal
-        Wn = lfc/fs*2
-        sos = butter(order, Wn, analog=False, btype='highpass', output='sos')
-        s_out = sosfilt(sos, s)       
-    else:
-        # do nothing
-        s_out = s
-        
-    if display : 
-        figtitle =kwargs.pop('figtitle','Audiogram')
-        ylabel =kwargs.pop('ylabel','Amplitude [AU]')
-        xlabel =kwargs.pop('xlabel','Time [sec]') 
-        figtitle  =kwargs.pop('figtitle','Audiogram')
-        linecolor  =kwargs.pop('linecolor','r')
-        # Time vector
-        tn = np.arange(s.size)/fs   
-        # plot Original sound
-        ax1, fig = plot1D(tn, s, figtitle = figtitle, linecolor = 'k' , legend='orignal sound',
-                          xlabel=xlabel, ylabel=ylabel, now=False, **kwargs) 
-        # plot filtered sound
-        ax2, fig = plot1D(tn, s_out, ax = ax1, figtitle = figtitle, linecolor = linecolor,
-               legend='filtered sound',xlabel=xlabel, ylabel=ylabel, **kwargs)
-        # SAVE FIGURE
-        if savefig is not None : 
-            dpi=kwargs.pop('dpi', 96) 
-            bbox_inches=kwargs.pop('bbox_inches', 'tight') 
-            format=kwargs.pop('format','png')
-            savefilename=kwargs.pop('savefilename', '_filt_audiogram')  
-            filename = savefig+savefilename+'.'+format
-            print('\n''save figure : %s' %filename)
-            fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
-                        format=format, **kwargs)  
-    
-    return s_out
 
 
 def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None, 
@@ -628,7 +569,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
               
     Returns
     -------
-    PSDxx : 2d ndarray of floats
+    Pxx : 2d ndarray of floats
         Spectrogram : Matrix containing K frames with N/2 frequency bins, 
         K*N <= length (wave)
         
@@ -640,8 +581,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         
     ext : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.
+        upper-right corners. 
     
     Notes
     -----
@@ -649,21 +589,31 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         
     Examples
     --------
-    >>> s,fs = maad.sound.load(filename="../data/guyana_tropical_forest.wav", channel='LEFT', detrend=True, verbose=False)
+    >>> s,fs = maad.sound.load("guyana_tropical_forest.wav")
     
     Compute energy of signal s
     
     >>> E1 = sum(s**2)
-    >>> linear2dB(E1, mode='power')
+    >>> maad.util.linear2dB(E1, mode='power')
+    44.861029507805256
     
     Compute the spectrogram with 'psd' output (if N<4096, the energy is lost)
     
     >>> N = 4096
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window='hann', nperseg=N, noverlap=N//2, 
-    ...                                       fcrop=None, tcrop=None, 
-    ...                                       mode = 'psd',
-    ...                                       verbose=False, display=True, 
-    ...                                       savefig = None)   
+    >>> Pxx,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = 'psd')   
+    
+    Display Power Spectrogram
+    
+    >>> PxxdB = maad.util.linear2dB(Pxx, mode='power') # convert into dB
+    >>> fig_kwargs = {'vmax': max(PxxdB),
+                      'vmin':-70,
+                      'extent':ext,
+                      'figsize':(4,13),
+                      'title':'Power spectrogram density (PSD)',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+    fig, ax = maad.util.plot2D(PxxdB,**fig_kwargs)     
     
     Compute mean power os spectrogram
     
@@ -672,15 +622,12 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     energy => power x time
     
     >>> E2 = sum(mean_power*len(s)) 
-    >>> linear2dB(E2, mode='power')
+    >>> maad.util.linear2dB(E2, mode='power')
+    44.93083283875093
 
     Compute the spectrogram with 'amplitude' output
     
-    >>> Sxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window='hann', nperseg=N, noverlap=N//20, 
-    ...                                       fcrop=None, tcrop=None, 
-    ...                                       mode = 'amplitude',
-    ...                                       verbose=False, display=True, 
-    ...                                       savefig = None)   
+    >>> Sxx,tn,fn,_ = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode='amplitude')  
     
     For energy conservation => convert Sxx (amplitude) into power before doing the average.
     
@@ -689,7 +636,9 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     energy => power x time
     
     >>> E3 = sum(mean_power*len(s)) 
-    >>> linear2dB(E3, mode='power')
+    >>>  maad.util.linear2dB(E3, mode='power')
+    44.93083283875093
+    
     """
 
     # Test if noverlap is None. By default, noverlap is half the length of the fft

@@ -224,9 +224,9 @@ def plot2D(im,ax=None,**kwargs):
     >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
     >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
     >>> fig_kwargs = {'vmax': max(Lxx),
-                      'vmin':min(Lxx),
+                      'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                      'figsize':(10,13),
+                      'figsize':(4,13),
                       'title':'Power spectrogram density (PSD)',
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
