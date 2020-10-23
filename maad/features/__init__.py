@@ -4,7 +4,7 @@ Methods to compute multiple descriptors to characterize sounds
 
 """
 
-from .features_func import (filter_multires,
+from .features_2d import (filter_multires,
                             filter_bank_2d_nodc,
                             shape_features,
                             shape_features_raw,
@@ -58,6 +58,7 @@ __all__ = ['filter_multires',
            "acoustic_events",
            "acousticComplexityIndex",
            "soundscapeIndex",
+           'bioacousticsIndex',
            "acousticDiversityIndex",
            "acousticEvenessIndex",
            "roughness",
