@@ -96,13 +96,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math.html">util.math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.parser.html">util.parser</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.parser.date_from_filename.html">util.parser.date_from_filename</a></li>
@@ -191,7 +190,32 @@
 <dl class="py function">
 <dt id="util.parser.date_parser">
 <code class="sig-prename descclassname">util.parser.</code><code class="sig-name descname">date_parser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datadir</span></em>, <em class="sig-param"><span class="n">dateformat</span><span class="o">=</span><span class="default_value">'SM4'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">'.wav'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/parser.html#date_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.parser.date_parser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Parse all filenames contained in a directory and its subdirectories 
+Keep only filenames corresponding to extension
+Filenames must follow :
+- SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
+- or POSIX format (for audiomoth)  
+The result is a panda dataframe with ‘Date’ as index and ‘File’ (with full path as column)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd></dd>
+<dt><strong>The filename must follow this format :</strong></dt><dd></dd>
+<dt><strong>XXXX_yyyymmdd_hhmmss.wav</strong></dt><dd></dd>
+<dt><strong>with yyyy</strong><span class="classifier">year / mm</span></dt><dd></dd>
+<dt><strong>mm</strong><span class="classifier">minutes / ss</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>df</strong><span class="classifier">Pandas dataframe</span></dt><dd><p>This dataframe has one column
+- ‘file’ =&gt; full path + filename
+and a index ‘Date’ with the type Datetime</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

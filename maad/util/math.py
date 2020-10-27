@@ -113,7 +113,7 @@ def get_unimode (X, mode ='mean', axis=1, N=7, N_bins=100, verbose=False):
     IEEE Trans. ASSP, ASSP-29 (1981), pp. 777-785
     
     Examples
-    -------
+    --------
     
     This function is interesting to obtain the background noise (BGN) profile (e.g. frequency bin
     by frequency bin) of a spectrogram

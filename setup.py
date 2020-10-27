@@ -27,7 +27,7 @@ setup(
       name = 'scikit-maad',
       version = '0.1.5.1',
       #packages = find_namespace_packages(include=['maad.*']),
-      packages = find_packages(),
+      packages = find_packages(),z
       author = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
       author_email = 'jseb.ulloa@gmail.com, sylvain.haupert@mnhn.fr',
       maintainer = 'Juan Sebastian ULLOA and Sylvain HAUPERT',

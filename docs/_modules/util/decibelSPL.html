@@ -94,7 +94,6 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
@@ -189,48 +188,55 @@
 <span class="c1"># Import external modules</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">sqrt</span>
 
 <span class="sd">&quot;&quot;&quot;****************************************************************************</span>
 <span class="sd"># -------------------       Functions               ---------------------------</span>
 <span class="sd">****************************************************************************&quot;&quot;&quot;</span>
 
 <span class="c1">##### wav2volt</span>
-<div class="viewcode-block" id="wav2volt"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2volt.html#util.decibelSPL.wav2volt">[docs]</a><span class="k">def</span> <span class="nf">wav2volt</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">bit</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> 
+<div class="viewcode-block" id="wav2volt"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2volt.html#util.decibelSPL.wav2volt">[docs]</a><span class="k">def</span> <span class="nf">wav2volt</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    convert in Volt</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wave : 1d ndarray of integers (directly from the wav file)</span>
-<span class="sd">        Vector containing the raw sound waveform </span>
-
-<span class="sd">    bit : int, optional, default is 16</span>
-<span class="sd">        Number of bits of the analog to digital converter (ADC)</span>
+<span class="sd">    wave : ndarray-like or scalar </span>
+<span class="sd">        wave should already be normalized between -1 to 1 (depending on the number of bits)</span>
+<span class="sd">        take the output of the function sound.load of maad module</span>
+<span class="sd">        ndarray-like or scalar containing the raw sound waveform </span>
 <span class="sd">        </span>
 <span class="sd">    Vadc : scalar, optional, default is 2Vpp (=&gt;+/-1V)</span>
 <span class="sd">        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  </span>
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    volt : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the sound waveform in volt</span>
+<span class="sd">    volt : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound waveform in volt</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.wav2volt(wave=w, Vadc=2)</span>
+<span class="sd">        array([ 0.02155849,  0.02570888,  0.02583096, ..., -0.0082877 ,</span>
+<span class="sd">       -0.00438145, -0.00755528])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># be sure they are ndarray</span>
+    <span class="c1"># force to be ndarray</span>
     <span class="n">wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span>
     
-    <span class="n">volt</span> <span class="o">=</span> <span class="p">(</span><span class="n">wave</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="p">)))</span> <span class="o">*</span> <span class="n">Vadc</span>
+    <span class="n">volt</span> <span class="o">=</span><span class="n">wave</span> <span class="o">*</span> <span class="n">Vadc</span>
     <span class="k">return</span> <span class="n">volt</span></div>
 
-<span class="c1">##### volt2SPL</span>
-<div class="viewcode-block" id="volt2SPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.volt2SPL.html#util.decibelSPL.volt2SPL">[docs]</a><span class="k">def</span> <span class="nf">volt2SPL</span><span class="p">(</span><span class="n">volt</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">):</span>  
+<span class="c1">##### volt2pressure</span>
+<div class="viewcode-block" id="volt2pressure"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.volt2pressure.html#util.decibelSPL.volt2pressure">[docs]</a><span class="k">def</span> <span class="nf">volt2pressure</span><span class="p">(</span><span class="n">volt</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">):</span>  
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert volt amplitude to instantaneous sound pressure level SPL</span>
+<span class="sd">    convert volt to instantaneous sound pressure (p [Pa])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    volt : 1d ndarray of integers floats</span>
-<span class="sd">        Vector containing the sound waveform in volt</span>
+<span class="sd">    volt : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound waveform in volt</span>
 <span class="sd">        </span>
 <span class="sd">    gain : integer</span>
 <span class="sd">        Total gain applied to the sound (preamplifer + amplifier)</span>
@@ -244,33 +250,48 @@
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    wave_SPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the sound waveform in SPL (Sound Pressure level : Pa)</span>
+<span class="sd">    p : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound waveform in pressure (Pa)</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; v = maad.util.wav2volt(wave=w)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.volt2pressure(volt=v, gain=42) </span>
+<span class="sd">        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,</span>
+<span class="sd">       -0.00195712, -0.00337482])      </span>
+<span class="sd">    </span>
+<span class="sd">    Same result with the function wav2pressure</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.wav2pressure(wave=w, gain=42)</span>
+<span class="sd">        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,</span>
+<span class="sd">       -0.00195712, -0.00337482])</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># be sure they are ndarray</span>
+    <span class="c1"># force to be ndarray</span>
     <span class="n">volt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">volt</span><span class="p">)</span>
     
     <span class="c1"># wav to instantaneous sound pressure level (SPL)</span>
     <span class="c1"># coefficient to convert Volt into pressure (Pa)</span>
-    <span class="n">Volt2Pa</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">sensitivity</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
-    <span class="n">wave_SPL</span> <span class="o">=</span> <span class="n">volt</span> <span class="o">*</span> <span class="n">Volt2Pa</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">gain</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">wave_SPL</span><span class="p">)</span></div>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">sensitivity</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
+    <span class="n">p</span> <span class="o">=</span> <span class="n">volt</span> <span class="o">*</span> <span class="n">coeff</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">gain</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
-<span class="c1">#####  wav2SPL </span>
-<div class="viewcode-block" id="wav2SPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2SPL.html#util.decibelSPL.wav2SPL">[docs]</a><span class="k">def</span> <span class="nf">wav2SPL</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">bit</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">Vadc</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">):</span> 
+<span class="c1">#####  wav2pressure </span>
+<div class="viewcode-block" id="wav2pressure"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2pressure.html#util.decibelSPL.wav2pressure">[docs]</a><span class="k">def</span> <span class="nf">wav2pressure</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert wave to instantaneous sound pressure level SPL</span>
+<span class="sd">    convert wave to instantaneous sound pressure (p [Pa])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wave : 1d ndarray of integers (directly from the wav file)</span>
-<span class="sd">        Vector containing the raw sound waveform </span>
+<span class="sd">    wave : ndarray-like or scalar </span>
+<span class="sd">        wave should already be normalized between -1 to 1 (depending on the number of bits)</span>
+<span class="sd">        take the output of the function sound.load of maad module</span>
+<span class="sd">        ndarray-like or scalar containing the raw sound waveform </span>
 <span class="sd">        </span>
 <span class="sd">    gain : integer</span>
 <span class="sd">        Total gain applied to the sound (preamplifer + amplifier)</span>
-<span class="sd">        </span>
-<span class="sd">    bit : int, optional, default is 16</span>
-<span class="sd">        Number of bits of the analog to digital converter (ADC)  </span>
 <span class="sd">        </span>
 <span class="sd">    Vadc : scalar, optional, default is 2Vpp (=&gt;+/-1V)</span>
 <span class="sd">        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    </span>
@@ -284,48 +305,213 @@
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    wave_SPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the sound waveform in SPL (Sound Pressure level : Pa)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">wave_SPL</span> <span class="o">=</span> <span class="n">volt2SPL</span><span class="p">(</span><span class="n">wav2volt</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">bit</span><span class="p">,</span> <span class="n">Vadc</span><span class="p">),</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">dBref</span><span class="p">)</span> 
-    <span class="k">return</span> <span class="p">(</span><span class="n">wave_SPL</span><span class="p">)</span></div>
+<span class="sd">    p : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound waveform in pressure (Pa)</span>
+<span class="sd">        </span>
 
-<span class="c1">#####  SPL2dBSPL</span>
-<div class="viewcode-block" id="SPL2dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.SPL2dBSPL.html#util.decibelSPL.SPL2dBSPL">[docs]</a><span class="k">def</span> <span class="nf">SPL2dBSPL</span> <span class="p">(</span><span class="n">waveSPL</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.wav2pressure(wave=w, gain=42)</span>
+<span class="sd">        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,</span>
+<span class="sd">       -0.00195712, -0.00337482])</span>
+<span class="sd">    </span>
+<span class="sd">    Same result with 2 functions</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; v = maad.util.wav2volt(wave=w)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.volt2pressure(volt=v, gain=42) </span>
+<span class="sd">        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,</span>
+<span class="sd">       -0.00195712, -0.00337482]) </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span>
+
+    <span class="n">v</span> <span class="o">=</span> <span class="n">wav2volt</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">Vadc</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">volt2pressure</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">dBref</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
+
+<span class="c1">#####  pressure2dBSPL</span>
+<div class="viewcode-block" id="pressure2dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.pressure2dBSPL.html#util.decibelSPL.pressure2dBSPL">[docs]</a><span class="k">def</span> <span class="nf">pressure2dBSPL</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert instantaneous sound pressure level SPL to </span>
-<span class="sd">    instantaneous sound pressure level SPL in dB</span>
+<span class="sd">    convert sound pressure (p [Pa]) to sound pressure level (L [dB])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wave : 1d ndarray of integers or scalar</span>
-<span class="sd">        Vector or scalar containing the SPL value (!! amplitude not energy !!)</span>
+<span class="sd">    p : ndarray-like or scalar</span>
+<span class="sd">        Array or scalar containing the sound pressure in Pa </span>
 <span class="sd">                </span>
-<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)</span>
+<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)</span>
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    wave_dBSPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
-    <span class="n">wave_dBSPL</span> <span class="o">=</span> <span class="n">energy2dBSPL</span><span class="p">(</span><span class="n">waveSPL</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">pRef</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">wave_dBSPL</span><span class="p">)</span></div>
+<span class="sd">    L : ndarray-like or scalar</span>
+<span class="sd">        Array or scalar containing the sound pressure level (L [dB])</span>
+<span class="sd">        </span>
 
-<span class="c1">#####  wav2dBSPL</span>
-<div class="viewcode-block" id="wav2dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2dBSPL.html#util.decibelSPL.wav2dBSPL">[docs]</a><span class="k">def</span> <span class="nf">wav2dBSPL</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bit</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(wave=w, gain=42)</span>
+<span class="sd">    </span>
+<span class="sd">    Get instantaneous sound pressure level (L)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.pressure2dBSPL(abs(p))</span>
+<span class="sd">        array([53.65176859, 55.18106489, 55.22220942, ..., 45.3480775 ,</span>
+<span class="sd">        39.81175156, 44.54440589])</span>
+<span class="sd">    </span>
+<span class="sd">    Get equivalent sound pressure level (Leq) from the RMS of the pressure signal</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; p_rms = maad.features.rms(p)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.pressure2dBSPL(p_rms)  </span>
+<span class="sd">        54.53489077674256      </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    
+    <span class="c1"># Take the log of the ratio pressure/pRef</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">p</span><span class="o">/</span><span class="n">pRef</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="p">(</span><span class="n">L</span><span class="p">)</span></div>
+
+<span class="c1">#####  dBSPL2pressure</span>
+<div class="viewcode-block" id="dBSPL2pressure"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.dBSPL2pressure.html#util.decibelSPL.dBSPL2pressure">[docs]</a><span class="k">def</span> <span class="nf">dBSPL2pressure</span> <span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert wave to instantaneous sound pressure level SPL in dB</span>
+<span class="sd">    convert sound pressure level (L [dB]) to sound pressure (p [Pa])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wave : 1d ndarray of integers (directly from the wav file)</span>
-<span class="sd">        Vector containing the raw sound waveform </span>
+<span class="sd">    L : ndarray-like or scalar</span>
+<span class="sd">        Array or scalar containing the sound pressure level (L [dB])</span>
+<span class="sd">                </span>
+<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    p : ndarray-like or scalar</span>
+<span class="sd">        Array or scalar containing the sound pressure in Pa </span>
+<span class="sd">        </span>
+<span class="sd"> </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(wave=w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; p_rms = maad.features.rms(p)</span>
+<span class="sd">    &gt;&gt;&gt; print(p_rms)</span>
+<span class="sd">        0.010660425378341332</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.pressure2dBSPL(p_rms)  </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.dBSPL2pressure(L)</span>
+<span class="sd">        0.010660425378341332 </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    
+    <span class="c1"># dB SPL to pressure</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">L</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span><span class="o">*</span><span class="n">pRef</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
+
+<span class="c1">#####  power2dBSPL</span>
+<div class="viewcode-block" id="power2dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.power2dBSPL.html#util.decibelSPL.power2dBSPL">[docs]</a><span class="k">def</span> <span class="nf">power2dBSPL</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    convert sound pressure power (P [Pa²]) to sound pressure level (L [dB])</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    P : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound pressure power (P [Pa²])</span>
+<span class="sd">                </span>
+<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound pressure level (L [dB])</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(wave=w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram (p, fs, nperseg=1024, mode=&#39;psd&#39;)  </span>
+<span class="sd">    &gt;&gt;&gt; P = mean(Pxx, axis=1)</span>
+<span class="sd">    </span>
+<span class="sd">    Get instantaneous sound pressure level (L)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.power2dBSPL(P)    </span>
+<span class="sd">    array([41.56456034, 45.44257539, 43.17154534, 41.50665519, 38.08392914,</span>
+<span class="sd">           34.52770543, 32.57142163, 31.68137318, 30.32861314, 28.46111069,</span>
+<span class="sd">           27.88530431, 27.48595098, 26.96673216, 25.88241843, 24.93524547,</span>
+<span class="sd">           ...</span>
+<span class="sd">           -5.24972979, -5.38796789, -5.42812278, -5.47003443, -5.47740917,</span>
+<span class="sd">           -5.67015921, -5.68214822])</span>
+<span class="sd">    </span>
+<span class="sd">    Get equivalent sound pressure level (Leq)</span>
+<span class="sd">        </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dBSPL(L)</span>
+<span class="sd">        54.53489077674256</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">P</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    
+    <span class="c1"># Take the log of the ratio power/pRef²</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="p">(</span><span class="n">L</span><span class="p">)</span></div>
+
+<span class="c1">#####  dBSPL2power</span>
+<div class="viewcode-block" id="dBSPL2power"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.dBSPL2power.html#util.decibelSPL.dBSPL2power">[docs]</a><span class="k">def</span> <span class="nf">dBSPL2power</span> <span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    convert sound pressure level (L [dB])to sound pressure power (P [Pa²]) </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    L : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound pressure level (L [dB])</span>
+<span class="sd">                </span>
+<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    P : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the pressure in Pa (!! amplitude not energy !!)</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.wav2dBSPL(wave=w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; P = maad.util.dBSPL2power(L) </span>
+
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=4096, mode=&#39;amplitude&#39;)   </span>
+<span class="sd">    &gt;&gt;&gt; Lxx = maad.util.wav2dBSPL(wave=Sxx, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Pxx = maad.util.dBSPL2power(Lxx) </span>
+<span class="sd">    </span>
+<span class="sd">    Parceval&#39;s theorem of energy conservation</span>
+<span class="sd">    </span>
+<span class="sd">    Energy in time domain from power P</span>
+<span class="sd">    &gt;&gt;&gt; sum(P)</span>
+<span class="sd">    Energy in frequency domain from power spectrogram Pxx</span>
+<span class="sd">    &gt;&gt;&gt; sum(Pxx/Pxx.shape[1]*len(w))</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    
+    <span class="c1"># dB SPL to power (pressure²)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">L</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">P</span><span class="p">)</span></div>
+
+<span class="c1">#####  wav2dBSPL</span>
+<div class="viewcode-block" id="wav2dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2dBSPL.html#util.decibelSPL.wav2dBSPL">[docs]</a><span class="k">def</span> <span class="nf">wav2dBSPL</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    convert wave to instantaneous sound pressure level (L [dB SPL])</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wave : ndarray-like or scalar </span>
+<span class="sd">        wave should already be normalized between -1 to 1 (depending on the number of bits)</span>
+<span class="sd">        take the output of the function sound.load of maad module</span>
+<span class="sd">        ndarray-like or scalar containing the raw sound waveform </span>
 <span class="sd">        </span>
 <span class="sd">    gain : integer</span>
 <span class="sd">        Total gain applied to the sound (preamplifer + amplifier)</span>
-<span class="sd">        </span>
-<span class="sd">    bit : int, optional, default is 16</span>
-<span class="sd">        Number of bits of the analog to digital converter (ADC)  </span>
 <span class="sd">        </span>
 <span class="sd">    Vadc : scalar, optional, default is 2Vpp (=&gt;+/-1V)</span>
 <span class="sd">        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC     </span>
@@ -341,24 +527,173 @@
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    wave_dBSPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the sound waveform in dB SPL (Sound Pressure level in dB)</span>
-<span class="sd">    &quot;&quot;&quot;</span>        
-    <span class="n">wave_SPL</span>   <span class="o">=</span> <span class="n">wav2SPL</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">bit</span><span class="p">,</span> <span class="n">Vadc</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">dBref</span><span class="p">)</span> 
-    <span class="n">wave_dBSPL</span> <span class="o">=</span> <span class="n">energy2dBSPL</span><span class="p">(</span><span class="n">wave_SPL</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">pRef</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">wave_dBSPL</span><span class="p">)</span></div>
+<span class="sd">    L : ndarray-like or scalar</span>
+<span class="sd">        ndarray-like or scalar containing the sound waveform in dB SPL (Sound Pressure level in dB)</span>
+<span class="sd">        </span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.wav2dBSPL(wave=w, gain=42)</span>
+<span class="sd">    </span>
+<span class="sd">    Get equivalent sound pressure level (Leq)</span>
+<span class="sd">        </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dBSPL(L)</span>
+<span class="sd">        54.53489077674256</span>
 
+<span class="sd">    &quot;&quot;&quot;</span>       
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span>
+    
+    <span class="n">p</span> <span class="o">=</span> <span class="n">wav2pressure</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">dBref</span><span class="p">)</span>
+    <span class="n">p_abs</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">pressure2dBSPL</span><span class="p">(</span><span class="n">p_abs</span><span class="p">,</span> <span class="n">pRef</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">L</span><span class="p">)</span></div>
 
-<span class="c1"># wav2Leq</span>
-<div class="viewcode-block" id="wav2Leq"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2Leq.html#util.decibelSPL.wav2Leq">[docs]</a><span class="k">def</span> <span class="nf">wav2Leq</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bit</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">):</span> 
+<span class="c1">##### add_dBSPL</span>
+<div class="viewcode-block" id="add_dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.add_dBSPL.html#util.decibelSPL.add_dBSPL">[docs]</a><span class="k">def</span> <span class="nf">add_dBSPL</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert wave to Equivalent Continuous Sound level (Leq)</span>
+<span class="sd">    add Sound Pressure Level (L [dB  SPL])</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *argv : ndarray-like of floats</span>
+<span class="sd">        Arrays containing the sound waveform in dB SPL (Sound Pressure level in dB)</span>
+<span class="sd">                </span>
+<span class="sd">    axis : integer, optional, default is 0</span>
+<span class="sd">        if addition of multiple arrays, select the axis on which the sum is done</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L_sum : ndarray-like of floats</span>
+<span class="sd">        Array containing the sum of the Sound Pressure Level L in [dB SPL]</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Example with an audio file</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; PSDxx,tn,fn,_ = maad.sound.spectrogram(p,fs)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.energy2dBSPL(PSDxx)</span>
+<span class="sd">    &gt;&gt;&gt; L_sum = maad.util.add_dBSPL(L, axis=2)  </span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Spectrum (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, L_sum.transpose(), **fig_kwargs)</span>
+
+<span class="sd">    Example with single values</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = 90 # 90dB</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dBSPL(L1,L1)</span>
+<span class="sd">        93.01029995663981</span>
+<span class="sd">        </span>
+<span class="sd">    Example with arrays</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dBSPL(L1,L1)</span>
+<span class="sd">        array([90.45322979, 90.45322979])</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dBSPL(L1,L1, axis=0)</span>
+<span class="sd">        array([93.01029996, 83.01029996, 73.01029996])</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    
+    <span class="c1"># Verify the adequation between axis number and number of dimensions of L</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="c1"># dB SPL to energy as sum has to be done with energy</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">dBSPL2pressure</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>   
+    <span class="n">e_sum</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    
+    <span class="c1"># energy=&gt;pressure to dB SPL</span>
+    <span class="n">L_sum</span> <span class="o">=</span> <span class="n">pressure2dBSPL</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e_sum</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">L_sum</span><span class="p">)</span></div>
+
+<span class="c1">##### mean_dBSPL</span>
+<div class="viewcode-block" id="mean_dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.mean_dBSPL.html#util.decibelSPL.mean_dBSPL">[docs]</a><span class="k">def</span> <span class="nf">mean_dBSPL</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the average of Sound Pressure Level (L [dB  SPL])</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *argv : ndarray-like of floats</span>
+<span class="sd">        Arrays containing the sound waveform in dB SPL (Sound Pressure level in dB)</span>
+<span class="sd">                </span>
+<span class="sd">    axis : integer, optional, default is 0</span>
+<span class="sd">        if addition of multiple arrays, select the axis on which the sum is done</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L_mean : ndarray-like of floats</span>
+<span class="sd">        Array containing the mean of the Sound Pressure Level L in [dB SPL]</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Example with an audio file</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(Pxx)</span>
+<span class="sd">    &gt;&gt;&gt; L_mean = maad.util.mean_dBSPL(L, axis=2)  </span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Power spectrum (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, L_mean.transpose(), **fig_kwargs)</span>
+
+<span class="sd">    Example with single values</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = 90 # 90dB</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dBSPL(L1,L1)</span>
+<span class="sd">        93.01029995663981</span>
+<span class="sd">        </span>
+<span class="sd">    Example with arrays</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dBSPL(L1,L1)</span>
+<span class="sd">        array([85.68201724, 85.68201724])</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dBSPL(L1,L1, axis=0)  </span>
+<span class="sd">        array([90., 80., 70.]) </span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    
+    <span class="c1"># Verify the adequation between axis number and number of dimensions of L</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="c1"># dB SPL to energy as sum has to be done with energy</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">dBSPL2pressure</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>   
+    <span class="n">e_sum</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    
+    <span class="c1"># energy=&gt;pressure to dB SPL</span>
+    <span class="n">L_mean</span> <span class="o">=</span> <span class="n">pressure2dBSPL</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e_sum</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">L_mean</span><span class="p">)</span></div>
+
+
+<span class="c1">################################## Leq ########################################</span>
+<span class="c1"># wav2Leq</span>
+<div class="viewcode-block" id="wav2Leq"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wav2Leq.html#util.decibelSPL.wav2Leq">[docs]</a><span class="k">def</span> <span class="nf">wav2Leq</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wave : 1d ndarray of integers (directly from the wav file)</span>
-<span class="sd">        Vector containing the raw sound waveform </span>
+<span class="sd">    wave : ndarray-like or scalar </span>
+<span class="sd">        wave should already be normalized between -1 to 1 (depending on the number of bits)</span>
+<span class="sd">        take the output of the function sound.load of maad module</span>
+<span class="sd">        ndarray-like or scalar containing the raw sound waveform </span>
 <span class="sd">        </span>
 <span class="sd">    f : integer</span>
 <span class="sd">        Sampling frequency in Hz</span>
@@ -368,9 +703,6 @@
 <span class="sd">        </span>
 <span class="sd">    Vadc : scalar, optional, default is 2Vpp (=&gt;+/-1V)</span>
 <span class="sd">        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  </span>
-<span class="sd">        </span>
-<span class="sd">    bit : int, optional, default is 16</span>
-<span class="sd">        Number of bits of the analog to digital converter (ADC)  </span>
 <span class="sd">        </span>
 <span class="sd">    dt : float, optional, default is 1 (second)</span>
 <span class="sd">        Integration step to compute the Leq (Equivalent Continuous Sound level)</span>
@@ -384,12 +716,22 @@
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    sig_Leq : float</span>
-<span class="sd">        Equivalent Continuous Sound level (Leq)</span>
+<span class="sd">    Leq : float</span>
+<span class="sd">        Equivalent Continuous Sound pressure level (Leq [dB SPL])</span>
+<span class="sd">       </span>
+<span class="sd"> </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Leq = maad.util.wav2Leq (w, fs, gain=42)  </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dBSPL(Leq)</span>
+<span class="sd">        array([54.57548258])</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
-     
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span>
+    
     <span class="c1"># convert in Volt</span>
-    <span class="n">volt</span> <span class="o">=</span> <span class="n">wav2volt</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">bit</span><span class="p">,</span> <span class="n">Vadc</span><span class="p">)</span>
+    <span class="n">volt</span> <span class="o">=</span> <span class="n">wav2volt</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">Vadc</span><span class="p">)</span>
     <span class="c1">##### volt amplitude to Leq </span>
     <span class="c1"># wav to RMS</span>
     <span class="n">dN</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">dt</span><span class="o">*</span><span class="n">f</span><span class="p">))</span> <span class="c1"># RMS period in number of points</span>
@@ -401,24 +743,21 @@
     <span class="c1"># RMS</span>
     <span class="n">volt_RMS</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">volt_2D</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
     <span class="c1"># RMS to Leq (Equivalent Continuous Sound level)</span>
-    <span class="n">sig_Leq</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">volt_RMS</span><span class="p">)</span> <span class="o">-</span> <span class="n">sensitivity</span> <span class="o">+</span> <span class="n">dBref</span> <span class="o">-</span> <span class="n">gain</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">sig_Leq</span><span class="p">)</span></div>
+    <span class="n">Leq</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">volt_RMS</span><span class="p">)</span> <span class="o">-</span> <span class="n">sensitivity</span> <span class="o">+</span> <span class="n">dBref</span> <span class="o">-</span> <span class="n">gain</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Leq</span><span class="p">)</span></div>
 
-<span class="c1">#####  wavSPL2Leq</span>
-<div class="viewcode-block" id="wavSPL2Leq"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.wavSPL2Leq.html#util.decibelSPL.wavSPL2Leq">[docs]</a><span class="k">def</span> <span class="nf">wavSPL2Leq</span> <span class="p">(</span><span class="n">wave_SPL</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span> 
+<span class="c1">#####  pressure2Leq</span>
+<div class="viewcode-block" id="pressure2Leq"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.pressure2Leq.html#util.decibelSPL.pressure2Leq">[docs]</a><span class="k">def</span> <span class="nf">pressure2Leq</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert wave SPL to Equivalent Continuous Sound level (Leq)</span>
+<span class="sd">    convert pressure (p [Pa]) to Equivalent Continuous Sound Pressure level (Leq [dB SPL])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wave : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the sound waveform in SPL (Sound Pressure level : Pa) </span>
+<span class="sd">    p : ndarray-like</span>
+<span class="sd">        Array containing the sound pressure in Pa </span>
 <span class="sd">        </span>
 <span class="sd">    f : integer</span>
 <span class="sd">        Sampling frequency in Hz</span>
-
-<span class="sd">    bit : int, optional, default is 16</span>
-<span class="sd">        Number of bits of the analog to digital converter (ADC)  </span>
 <span class="sd">        </span>
 <span class="sd">    dt : float, optional, default is 1 (second)</span>
 <span class="sd">        Integration step to compute the Leq (Equivalent Continuous Sound level)</span>
@@ -427,107 +766,76 @@
 <span class="sd">           </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    sig_Leq : float</span>
-<span class="sd">        Equivalent Continuous Sound level (Leq)</span>
+<span class="sd">    Leq : float</span>
+<span class="sd">        Equivalent Continuous Sound pressure level (Leq [dB SPL])</span>
+<span class="sd">        </span>
+<span class="sd">  </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(wave=w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Leq = maad.util.pressure2Leq (p, f=fs)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dBSPL(Leq)</span>
+<span class="sd">        array([54.57548258])</span>
 <span class="sd">    &quot;&quot;&quot;</span>     
     <span class="c1"># be sure they are ndarray</span>
-    <span class="n">wave_SPL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wave_SPL</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     
     <span class="c1">##### wav SPLto Leq </span>
     <span class="c1"># wav to RMS</span>
     <span class="n">dN</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">dt</span><span class="o">*</span><span class="n">f</span><span class="p">))</span> <span class="c1"># RMS period in number of points</span>
-    <span class="n">N_RMS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wave_SPL</span><span class="p">)</span><span class="o">/</span><span class="n">dN</span><span class="p">))</span> <span class="c1"># number of RMS periods</span>
+    <span class="n">N_RMS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="n">dN</span><span class="p">))</span> <span class="c1"># number of RMS periods</span>
     <span class="c1"># reduction of volt vector length</span>
-    <span class="n">wave_SPL_1D</span> <span class="o">=</span> <span class="n">wave_SPL</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">dN</span><span class="o">*</span><span class="n">N_RMS</span><span class="p">]</span>
+    <span class="n">p_1D</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">dN</span><span class="o">*</span><span class="n">N_RMS</span><span class="p">]</span>
     <span class="c1"># reshape into 2D (the duration of each row is dt)</span>
-    <span class="n">wave_SPL_2D</span> <span class="o">=</span> <span class="n">wave_SPL_1D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_RMS</span><span class="p">,</span><span class="n">dN</span><span class="p">)</span>
+    <span class="n">p_2D</span> <span class="o">=</span> <span class="n">p_1D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_RMS</span><span class="p">,</span><span class="n">dN</span><span class="p">)</span>
     <span class="c1"># RMS</span>
-    <span class="n">wave_SPL_RMS</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">wave_SPL_2D</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="c1"># Test the current operating system</span>
+    <span class="n">p_RMS</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">p_2D</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="c1"># Test the current operating system</span>
     <span class="c1"># RMS to Leq (Equivalent Continuous Sound level)</span>
-    <span class="n">sig_Leq</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">wave_SPL_RMS</span><span class="o">/</span><span class="n">pRef</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">sig_Leq</span><span class="p">)</span></div>
+    <span class="n">Leq</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">p_RMS</span><span class="o">/</span><span class="n">pRef</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Leq</span><span class="p">)</span></div>
 
-<span class="c1">#####  energy2dBSPL</span>
-<div class="viewcode-block" id="energy2dBSPL"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.energy2dBSPL.html#util.decibelSPL.energy2dBSPL">[docs]</a><span class="k">def</span> <span class="nf">energy2dBSPL</span><span class="p">(</span><span class="n">energy_SPL</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span> 
+<span class="c1">#####  PSD2Leq</span>
+<div class="viewcode-block" id="PSD2Leq"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.PSD2Leq.html#util.decibelSPL.PSD2Leq">[docs]</a><span class="k">def</span> <span class="nf">PSD2Leq</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert energy signal (e.g. Power spectral density (PSD) or wav²) </span>
-<span class="sd">    already in SPL² into dB SPL</span>
+<span class="sd">    convert Power spectral density (PSD in [Pa²]) into </span>
+<span class="sd">    Equivalent Continuous Sound pressure level (Leq [dB SPL])</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    energy_SPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the energy signal in SPL²</span>
+<span class="sd">    P : ndarray-like</span>
+<span class="sd">        ndarray-like containing the Power spectral density (PSD) already in Pa²</span>
 
 <span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)</span>
 <span class="sd">           </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    PSD_dBSPL : 1d ndarray of floats</span>
-<span class="sd">         Vector containing the energy signal in dB SPL</span>
-<span class="sd">    &quot;&quot;&quot;</span>      
-    <span class="c1"># be sure they are ndarray</span>
-    <span class="n">energy_SPL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">energy_SPL</span><span class="p">)</span>
-        
-    <span class="c1"># Take the log of the ratio ENERGY/pRef</span>
-    <span class="n">energy_dBSPL</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">energy_SPL</span><span class="o">/</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="p">(</span><span class="n">energy_dBSPL</span><span class="p">)</span></div>
-
-
-<span class="c1">#####  dBSPL2energy</span>
-<div class="viewcode-block" id="dBSPL2energy"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.dBSPL2energy.html#util.decibelSPL.dBSPL2energy">[docs]</a><span class="k">def</span> <span class="nf">dBSPL2energy</span> <span class="p">(</span><span class="n">energy_dBSPL</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert energy in dB SPL (e.g. PSD) into energy in SPL²</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    PSD_dBSPL : 1d ndarray of floats</span>
-<span class="sd">         Vector containing the energy in dB SPL</span>
-
-<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)</span>
-<span class="sd">           </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    PSD_SPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the energy in SPL²</span>
+<span class="sd">    Leq : float</span>
+<span class="sd">        Equivalent Continuous Sound pressure level (Leq [dB SPL])</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure(w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; from numpy import fft, abs</span>
+<span class="sd">    &gt;&gt;&gt; S = abs(fft.fft(p)/len(p))</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.PSD2Leq(P=S**2)</span>
+<span class="sd">        54.53489077674256</span>
 <span class="sd">    &quot;&quot;&quot;</span>  
     <span class="c1"># be sure they are ndarray</span>
-    <span class="n">energy_dBSPL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">energy_dBSPL</span><span class="p">)</span>
-    
-    <span class="c1"># SPL to energy (pressure^2) (=&gt; Leq (Equivalent Continuous Sound level)</span>
-    <span class="n">energy_SPL</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">energy_dBSPL</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">energy_SPL</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="PSD2Leq"><a class="viewcode-back" href="../../_autosummary/util.decibelSPL.PSD2Leq.html#util.decibelSPL.PSD2Leq">[docs]</a><span class="k">def</span> <span class="nf">PSD2Leq</span> <span class="p">(</span><span class="n">PSD_SPL</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    convert Power spectral density (PSD) in SPL² into </span>
-<span class="sd">    Equivalent Continuous Sound level (Leq)</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    PSD_SPL : 1d ndarray of floats</span>
-<span class="sd">        Vector containing the Power spectral density (PSD) already in SPL²</span>
-
-<span class="sd">    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)</span>
-<span class="sd">           </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    PSD_Leq : float</span>
-<span class="sd">        Equivalent Continuous Sound level (Leq)</span>
-<span class="sd">    &quot;&quot;&quot;</span>  
-    <span class="c1"># be sure they are ndarray</span>
-    <span class="n">PSD_SPL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">PSD_SPL</span><span class="p">)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     
     <span class="c1"># Energy (pressure^2) to Leq (=&gt; Leq (Equivalent Continuous Sound level) </span>
     <span class="c1"># if the sum is performed on the whole PSD)</span>
-    <span class="n">PSD_Leq</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">PSD_SPL</span><span class="p">)</span><span class="o">/</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">PSD_Leq</span><span class="p">)</span></div>
+    <span class="n">Leq</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="p">)</span><span class="o">/</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Leq</span><span class="p">)</span></div>
    
-<span class="c1">########### TEST</span>
+<span class="c1">################################ TEST ########################################</span>
+    
 <span class="c1">## Test the current operating system</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># ############## Import MAAD module</span>
-    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span> <span class="c1"># in order to be wind/linux/MacOS compatible</span>
+    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span> <span class="c1"># in order to be Windows/Linux/MacOS compatible</span>
     <span class="kn">import</span> <span class="nn">os</span>
     
     <span class="c1"># change the path to the current path where the script is located</span>
@@ -535,71 +843,75 @@
     <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="s1">&#39;__file__&#39;</span><span class="p">))</span>
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
     
-    <span class="n">maad_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># data directory </span>
+    <span class="n">datadir</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="s2">&quot;data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">datadir</span><span class="o">/</span><span class="s2">&quot;jura_cold_forest_jour.wav&quot;</span>
+    
+    <span class="c1"># Go to the root directory where is the module maad and import maad</span>
+    <span class="n">maad_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">os</span><span class="o">.</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">maad_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
     <span class="kn">import</span> <span class="nn">maad</span>
     
-    <span class="c1"># Sensbility microphone (for SM4 it is -35dBV)</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="o">-</span><span class="mi">35</span> <span class="c1">#dBV</span>
-    <span class="c1"># Amplification gain</span>
-    <span class="n">G</span> <span class="o">=</span> <span class="mi">42</span> <span class="c1"># total amplification gain : preamplifier gain = 26dB and gain = 16dB</span>
-    <span class="c1"># Reference pressure (in the air : 20µPa)</span>
-    <span class="n">P_REF</span> <span class="o">=</span> <span class="mf">20e-6</span>
-    <span class="c1"># Leq integration time dt in s</span>
-    <span class="n">deltaT</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="c1">#</span>
-    <span class="n">NFFT</span> <span class="o">=</span> <span class="mi">512</span>
-    <span class="c1">#</span>
-    <span class="n">bit</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="c1">#</span>
-    <span class="n">Vadc</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1">####### Variables</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="o">-</span><span class="mi">35</span>     <span class="c1">#  Sensbility microphone (for SM4 it is -35dBV)</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="mi">42</span>      <span class="c1"># total amplification gain : preamplifier gain = 26dB and gain = 16dB</span>
+    <span class="n">P_REF</span> <span class="o">=</span> <span class="mf">20e-6</span>   <span class="c1"># Reference pressure (in the air : 20µPa)</span>
+    <span class="n">deltaT</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Leq integration time dt in s</span>
+    <span class="n">NFFT</span> <span class="o">=</span> <span class="mi">1024</span>  <span class="c1"># length of the fft</span>
+    <span class="n">VADC</span> <span class="o">=</span> <span class="mi">2</span>    <span class="c1"># Maximal voltage (peak to peak) converted by the analog to digital convertor ADC (i.e : +/- 1V peak to peak =&gt; Vadc=2V)</span>
     
-    <span class="c1"># root directory of the files</span>
-    <span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
-    <span class="n">datadir</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_path</span> <span class="o">/</span> <span class="s2">&quot;../../data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">datadir</span><span class="o">/</span><span class="s2">&quot;jura_cold_forest_jour.wav&quot;</span>
+    <span class="c1"># Load the sound</span>
+    <span class="n">wav</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     
-    <span class="n">volt</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------------&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq calculation directly from the sound file (in time or frequency domain&#39;</span><span class="p">)</span>
     
     <span class="c1"># convert sounds (wave) into SPL and subtract DC offset</span>
-    <span class="n">volt</span> <span class="o">=</span> <span class="n">volt</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">volt</span><span class="p">)</span>
-    <span class="c1"># wav -&gt; SPL -&gt; Leq</span>
-    <span class="n">wav_SPL</span> <span class="o">=</span> <span class="n">volt2SPL</span><span class="p">(</span><span class="n">volt</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">)</span>
-    <span class="n">wav_Leq</span> <span class="o">=</span> <span class="n">wavSPL2Leq</span><span class="p">(</span><span class="n">wav_SPL</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from volt&#39;</span><span class="p">,</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2linear</span><span class="p">(</span><span class="n">wav_Leq</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">)),</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">))</span>
+    <span class="n">wav</span> <span class="o">=</span> <span class="n">wav</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">wav</span><span class="p">)</span>
+    <span class="c1"># wav -&gt; pressure -&gt; Leq</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">wav2pressure</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="n">VADC</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">)</span>
+    <span class="n">Leq</span> <span class="o">=</span> <span class="n">pressure2Leq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from volt&#39;</span><span class="p">,</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2linear</span><span class="p">(</span><span class="n">Leq</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">)),</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">))</span>
     
     <span class="c1"># wav -&gt; Leq</span>
-    <span class="n">wav</span> <span class="o">=</span> <span class="n">volt</span><span class="o">*</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span><span class="o">/</span><span class="n">Vadc</span>
-    <span class="n">wav_Leq2</span> <span class="o">=</span> <span class="n">wav2Leq</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">)</span> 
+    <span class="n">wav_Leq2</span> <span class="o">=</span> <span class="n">wav2Leq</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="n">VADC</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">)</span> 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from wav&#39;</span><span class="p">,</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2linear</span><span class="p">(</span><span class="n">wav_Leq2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">)),</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">))</span>
-    
-    <span class="c1"># Power Density Spetrum : PSDxx</span>
+        
+    <span class="c1"># Power Density Spectrum : PSD</span>
+    <span class="c1"># with p</span>
     <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">fft</span>
-    <span class="n">PSD</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">wav_SPL</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">wav_SPL</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
     <span class="c1"># average Leq from PSD</span>
-    <span class="n">PSD_Leq3</span>  <span class="o">=</span> <span class="n">PSD2Leq</span><span class="p">(</span><span class="n">PSD</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from PSD&#39;</span><span class="p">,</span><span class="n">PSD_Leq3</span> <span class="p">)</span>
+    <span class="n">P_Leq3</span>  <span class="o">=</span> <span class="n">PSD2Leq</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from PSD&#39;</span><span class="p">,</span><span class="n">P_Leq3</span><span class="p">)</span>
+       
+    <span class="c1">########################################################################</span>
+    <span class="c1"># Leq from spectrogram PSDxx : </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------------&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq calculation from Spectrogram (time-frequency representation of a sound &#39;</span><span class="p">)</span>
     
-    <span class="c1"># Power Density Spetrum : PSDxx</span>
-    <span class="n">PSDxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">wav_SPL</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;boxcar&#39;</span><span class="p">,</span> 
-                                               <span class="n">noverlap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">NFFT</span><span class="p">,</span> 
-                                               <span class="n">fcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
-                                               <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">,</span>
-                                               <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
-                                               <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>  
-    <span class="n">PSD_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">PSDxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="c1"># average Leq from PSD</span>
-    <span class="n">PSD_Leq4</span>  <span class="o">=</span> <span class="n">PSD2Leq</span><span class="p">(</span><span class="n">PSD_mean</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from PSDxx spectrogram&#39;</span><span class="p">,</span><span class="n">PSD_Leq4</span> <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The difference with previous Leq is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy &#39;</span><span class="p">)</span>
+    <span class="c1"># Power Density Spectrogram : PSDxx</span>
+    <span class="c1"># with p</span>
+    <span class="n">Pxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">NFFT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">)</span>  
+    <span class="c1"># Pxx to P</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Pxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># average Leq from P</span>
+    <span class="n">P_Leq5</span>  <span class="o">=</span> <span class="n">PSD2Leq</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from Pxx spectrogram&#39;</span><span class="p">,</span><span class="n">P_Leq5</span><span class="p">)</span>
 
-    <span class="c1"># energy from PSD_mean</span>
-    <span class="n">energy</span>  <span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">PSD_mean</span><span class="p">)</span>
-    <span class="n">PSD_Leq5</span>  <span class="o">=</span> <span class="n">energy2dBSPL</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from energy&#39;</span><span class="p">,</span><span class="n">PSD_Leq5</span> <span class="p">)</span>
-
+    <span class="c1"># total energy from PSD_mean</span>
+    <span class="n">energy</span>  <span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="n">P_Leq6</span>  <span class="o">=</span> <span class="n">pressure2dBSPL</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from Pxx energy&#39;</span><span class="p">,</span><span class="n">P_Leq6</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt; The difference with previous Leq calculation is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy.&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt; By increasing the NFFT length (i.e. NFFT=4096), Leq value converges towards previous Leq values&#39;</span><span class="p">)</span> 
  
 
+
+    
+    
 </pre></div>
 
            </div>

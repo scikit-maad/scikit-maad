@@ -899,7 +899,7 @@ def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecolo
     
     References 
     ----------
-    Reference: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
+    References: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
     invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
     remote sensing. Ecological Applications 17: 2137-2144.
     
@@ -1208,9 +1208,9 @@ def tfsdt (Sxx, display=False):
     tfsdt : 1d ndarray of scalars
         Acoustic Gradient Index of the spectrogram
        
-    Reference 
-    ---------
-        Proposed by Pierre Aumond, pierre.aumond@ifsttar.fr
+    References 
+    ----------
+    Proposed by Pierre Aumond, pierre.aumond@ifsttar.fr
     """
     # Derivation along the time axis, for each frequency bin
     GRADdt_xx = diff(Sxx, n=1, axis=1)

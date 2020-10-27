@@ -27,7 +27,7 @@
    :recursive:
 
    util.decibelSPL
-   util.math_func
+   util.math
    util.miscellaneous
    util.parser
    util.visualization

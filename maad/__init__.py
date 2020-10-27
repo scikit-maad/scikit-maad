@@ -9,21 +9,22 @@ scikit-learn, allowing to identify key patterns in all kind of soundscapes.
 
 Subpackages
 -----------
-sound
-    Load and transform (e.g. stft) audio signals - :ref:`maad.sound`
+
+features
+    Compute descriptors to characterize sounds - :ref:`maad.features`
 
 rois
     Find regions of interest in 1D and 2D signals - :ref:`maad.rois`
 
-features
-    Compute descriptors to characterize sounds - :ref:`maad.features`
+sound
+    Load and transform (e.g. stft) audio signals - :ref:`maad.sound`
     
 util
     Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`    
 """
 
-from . import sound
-from . import rois
 from . import features
+from . import rois
+from . import sound
 from . import util
 

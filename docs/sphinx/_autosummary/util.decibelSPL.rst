@@ -16,15 +16,18 @@ util.decibelSPL
       :nosignatures:
    
       PSD2Leq
-      SPL2dBSPL
-      dBSPL2energy
-      energy2dBSPL
-      volt2SPL
+      add_dBSPL
+      dBSPL2power
+      dBSPL2pressure
+      mean_dBSPL
+      power2dBSPL
+      pressure2Leq
+      pressure2dBSPL
+      volt2pressure
       wav2Leq
-      wav2SPL
       wav2dBSPL
+      wav2pressure
       wav2volt
-      wavSPL2Leq
    
    
 

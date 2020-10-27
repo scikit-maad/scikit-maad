@@ -46,11 +46,7 @@ def wav2volt (wave, Vadc=2):
     volt : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in volt
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-            
+
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -89,10 +85,6 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
     p : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in pressure (Pa)
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq   
 
     Examples
     --------
@@ -148,11 +140,7 @@ def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
     p : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in pressure (Pa)
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq 
-    
+
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -192,10 +180,6 @@ def pressure2dBSPL (p, pRef=20e-6):
     L : ndarray-like or scalar
         Array or scalar containing the sound pressure level (L [dB])
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
 
     Examples
     --------
@@ -238,11 +222,7 @@ def dBSPL2pressure (L, pRef=20e-6):
     p : ndarray-like or scalar
         Array or scalar containing the sound pressure in Pa 
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-     
+ 
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -278,11 +258,7 @@ def power2dBSPL (P, pRef=20e-6):
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound pressure level (L [dB])
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-     
+
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -329,11 +305,7 @@ def dBSPL2power (L, pRef=20e-6):
     P : ndarray-like or scalar
         ndarray-like or scalar containing the pressure in Pa (!! amplitude not energy !!)
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-     
+
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -390,10 +362,6 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in dB SPL (Sound Pressure level in dB)
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
 
     Examples
     --------
@@ -432,11 +400,7 @@ def add_dBSPL(*argv, axis=1):
     L_sum : ndarray-like of floats
         Array containing the sum of the Sound Pressure Level L in [dB SPL]
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-     
+
     Examples
     --------
     
@@ -501,11 +465,7 @@ def mean_dBSPL(*argv, axis=1):
     L_mean : ndarray-like of floats
         Array containing the mean of the Sound Pressure Level L in [dB SPL]
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq         
-     
+
     Examples
     --------
     
@@ -591,11 +551,7 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     Leq : float
         Equivalent Continuous Sound pressure level (Leq [dB SPL])
        
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-        
+ 
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -645,11 +601,7 @@ def pressure2Leq (p, f, dt=1, pRef = 20e-6):
     Leq : float
         Equivalent Continuous Sound pressure level (Leq [dB SPL])
         
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq
-        
+  
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -688,11 +640,6 @@ def PSD2Leq (P, pRef = 20e-6):
 
     pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
            
-    See Also
-    --------
-    wav2volt, volt2pressure,wav2pressure,pressure2dBSPL,dBSPL2pressure,power2dBSPL,
-    dBSPL2power,mean_dBSPL,add_dBSPL,wav2dBSPL,wav2Leq,pressure2Leq,PSD2Leq     
-    
     Returns
     -------
     Leq : float

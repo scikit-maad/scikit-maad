@@ -361,9 +361,11 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
     ----------
     im : 2d ndarray
         image to be cropped
+    
     tn, fn : 1d ndarray
         tn is the time vector. fn is the frequency vector. They are required 
         in order to know the correspondance between pixels and (time,frequency)
+    
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
         tcrop corresponds to the min and max boundary time values
@@ -372,6 +374,7 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
     -------
     im : 2d ndarray
         image cropped
+        
     tn, fn, 1d ndarray
         new time and frequency vectors
         
@@ -390,7 +393,7 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
     >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
     
     >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,6000), tcrop=(0,30))
-   >>> fig_kwargs = {'vmax': max(Lxx),
+    >>> fig_kwargs = {'vmax': max(Lxx),
                       'vmin':0,
                       'figsize':(10*len(fn_crop)/len(fn),13*len(tn_crop)/len(tn)),
                       'extent':(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),

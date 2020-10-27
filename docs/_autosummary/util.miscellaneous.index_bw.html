@@ -96,13 +96,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math.html">util.math</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2linear.html">util.miscellaneous.dB2linear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.format_rois.html">util.miscellaneous.format_rois</a></li>
@@ -199,11 +198,49 @@
 <dl class="py function">
 <dt id="util.miscellaneous.index_bw">
 <code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">index_bw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">bw</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#index_bw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.index_bw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select the index min and max coresponding to the selected frequency band</p>
+<dd><p>Select all the index coresponding to the selected frequency band</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fn</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>Vector of frequencies</p>
+</dd>
+<dt><strong>bw</strong><span class="classifier">single value or tupple of two values</span></dt><dd><p>if single value : frequency to select
+if tupple of two values : min frequency and max frequency to select</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>Vector of booleans corresponding to the selected frequency(-ies)</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="mi">44100</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bw</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span> <span class="c1">#in Hz</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PSDxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span><span class="n">noverlap</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PSDxxdB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span> <span class="p">(</span><span class="n">PSDxx</span><span class="p">)</span> <span class="c1"># convert into dB</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bw</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="mi">6000</span><span class="p">)</span> <span class="c1">#in Hz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">PSDxxdB</span><span class="p">),</span>
+<span class="go">                  &#39;vmin&#39;:min(PSDxxdB),</span>
+<span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="go">                  &#39;figsize&#39;:(10,13),</span>
+<span class="go">                  &#39;title&#39;:&#39;Power Spectrum Density (PSD)&#39;,</span>
+<span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="go">                  }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">PSDxxdB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PSDxxdB_crop</span> <span class="o">=</span> <span class="n">PSDxxdB</span><span class="p">[</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fn_crop</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">PSDxxdB</span><span class="p">),</span>
+<span class="go">                  &#39;vmin&#39;:min(PSDxxdB),</span>
+<span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn_crop[0], fn_crop[-1]),</span>
+<span class="go">                  &#39;figsize&#39;:(10*len(fn_crop)/len(fn),13),</span>
+<span class="go">                  &#39;title&#39;:&#39;Power Spectrum Density (PSD)&#39;,</span>
+<span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="go">                  }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">PSDxxdB_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

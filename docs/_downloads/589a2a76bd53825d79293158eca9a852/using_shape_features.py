@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Using wavelets to characterize the time-frequency shape of sounds
+=================================================================
+
+@author:
 
 """
 from maad.sound import load, spectrogram

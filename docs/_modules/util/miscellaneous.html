@@ -94,7 +94,6 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
@@ -192,13 +191,49 @@
 
 <div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.index_bw.html#util.miscellaneous.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Select the index min and max coresponding to the selected frequency band</span>
+<span class="sd">    Select all the index coresponding to the selected frequency band</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fn :  1d ndarray of scalars</span>
+<span class="sd">        Vector of frequencies</span>
+<span class="sd">        </span>
+<span class="sd">    bw : single value or tupple of two values</span>
+<span class="sd">        if single value : frequency to select</span>
+<span class="sd">        if tupple of two values : min frequency and max frequency to select</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    index : 1d ndarray of scalars</span>
+<span class="sd">        Vector of booleans corresponding to the selected frequency(-ies)</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; fn = 44100</span>
-<span class="sd">    &gt;&gt;&gt; bw = (100,1000) #in Hz</span>
-<span class="sd">    &gt;&gt;&gt; X = X[index_bw(fn, bw)]</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs,window=&#39;hanning&#39;,noverlap=512, nFFT=1024)</span>
+<span class="sd">    &gt;&gt;&gt; PSDxxdB = maad.util.linear2dB (PSDxx) # convert into dB</span>
+<span class="sd">    &gt;&gt;&gt; bw = (2000,6000) #in Hz</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(PSDxxdB),</span>
+<span class="sd">                      &#39;vmin&#39;:min(PSDxxdB),</span>
+<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="sd">                      &#39;figsize&#39;:(10,13),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power Spectrum Density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(PSDxxdB,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; PSDxxdB_crop = PSDxxdB[index_bw(fn, bw)]</span>
+<span class="sd">    &gt;&gt;&gt; fn_crop = fn[index_bw(fn, bw)]</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(PSDxxdB),</span>
+<span class="sd">                      &#39;vmin&#39;:min(PSDxxdB),</span>
+<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn_crop[0], fn_crop[-1]),</span>
+<span class="sd">                      &#39;figsize&#39;:(10*len(fn_crop)/len(fn),13),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power Spectrum Density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(PSDxxdB_crop,**fig_kwargs)</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># select the indices corresponding to the frequency bins range</span>
     <span class="k">if</span> <span class="n">bw</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
@@ -221,7 +256,7 @@
        
 <div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.rle.html#util.miscellaneous.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run--Length encoding    </span>
+<span class="sd">    Run-Length encoding    </span>
 <span class="sd">    from rle function R</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -258,13 +293,13 @@
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5]);</span>
-<span class="sd">    &gt;&gt;&gt; a_out = scaledata(a,0,1); </span>
-<span class="sd">    array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
+<span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
+<span class="sd">    &gt;&gt;&gt; linear_scale(a, 0, 1)</span>
+<span class="sd">        array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
 <span class="sd">        </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</span>
+<span class="sd">    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</span>
 <span class="sd">    Adapted by S. Haupert Dec 12, 2017 for Python</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -301,9 +336,17 @@
 <span class="sd">    -------</span>
 <span class="sd">    y : scalars</span>
 <span class="sd">        amplitude--&gt; 20*log10(x) + db_gain  </span>
-
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
+<span class="sd">    &gt;&gt;&gt; linear2dB(a**2, mode=&#39;power&#39;)</span>
+<span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
+<span class="sd">    &gt;&gt;&gt; linear2dB(a, mode=&#39;amplitude&#39;)</span>
+<span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>            
-    <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of datain</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of x</span>
     
     <span class="c1"># Avoid zero value for log10  </span>
     <span class="c1"># if it&#39;s a scalar</span>
@@ -348,6 +391,15 @@
 <span class="sd">    -------</span>
 <span class="sd">    y : scalars</span>
 <span class="sd">        output in amplitude or power unit</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
+<span class="sd">    &gt;&gt;&gt; dB2linear(a, mode=&#39;power&#39;)</span>
+<span class="sd">        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])</span>
+<span class="sd">    &gt;&gt;&gt; dB2linear(a, mode=&#39;amplitude&#39;)</span>
+<span class="sd">        array([1., 2., 3., 4., 5.])</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>  
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
@@ -398,8 +450,23 @@
 <div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.shift_bit_length.html#util.miscellaneous.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    find the closest power of 2 that is superior or equal to the number x</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : scalar</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalar</span>
+<span class="sd">        the closest power of 2 that is superior or equal to the number x</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; shift_bit_length(1000)</span>
+<span class="sd">        1024</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">y</span></div>
 
 <span class="c1">#=============================================================================</span>
     
@@ -422,11 +489,14 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; x = np.array([1,2,3])</span>
-<span class="sd">    &gt;&gt;&gt; ig.nearest_idx(x, 1.3)</span>
-<span class="sd">    [0]</span>
-<span class="sd">    &gt;&gt;&gt; ig.nearest_idx(x, 1.6)</span>
-<span class="sd">    [1]</span>
+<span class="sd">    &gt;&gt;&gt; nearest_idx(x, 1.3)</span>
+<span class="sd">        0</span>
+<span class="sd">    &gt;&gt;&gt; nearest_idx(x, 1.6)</span>
+<span class="sd">        1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># be sure it&#39;s ndarray</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+    
     <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">idx</span></div>
 
@@ -449,6 +519,9 @@
 <span class="sd">    im_out: 2D ndarray</span>
 <span class="sd">        Array normalized between min and max values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># be sure it&#39;s ndarray</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>    
+        
     <span class="c1"># avoid problems with inf and -inf values</span>
     <span class="n">min_im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
     <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">==</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">min_im</span>

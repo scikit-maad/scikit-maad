@@ -10,6 +10,9 @@
 
 
 Using wavelets to characterize the time-frequency shape of sounds
+=================================================================
+
+@author:
 
 
 .. code-block:: default

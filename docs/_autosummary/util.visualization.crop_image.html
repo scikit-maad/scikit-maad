@@ -96,13 +96,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math.html">util.math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.visualization.html">util.visualization</a><ul class="current">
@@ -194,7 +193,7 @@
 <code class="sig-prename descclassname">util.visualization.</code><code class="sig-name descname">crop_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tcrop</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/visualization.html#crop_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.visualization.crop_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Crop a spectrogram (or an image) in time (horizontal X axis) and frequency
 (vertical y axis)</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>im</strong><span class="classifier">2d ndarray</span></dt><dd><p>image to be cropped</p>
@@ -214,6 +213,54 @@ tcrop corresponds to the min and max boundary time values</p>
 <dt>tn, fn, 1d ndarray</dt><dd><p>new time and frequency vectors</p>
 </dd>
 </dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2pressure</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Pxx</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">Lxx</span><span class="p">),</span>
+<span class="go">    &#39;vmin&#39;:0,</span>
+<span class="go">    &#39;figsize&#39;:(10,13),</span>
+<span class="go">    &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="go">    &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="go">    &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="go">    &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="go">    }</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Lxx</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx_crop</span><span class="p">,</span> <span class="n">tn_crop</span><span class="p">,</span> <span class="n">fn_crop</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">crop_image</span><span class="p">(</span><span class="n">Lxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="mi">6000</span><span class="p">),</span> <span class="n">tcrop</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">))</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">Lxx</span><span class="p">),</span>
+<span class="go">    &#39;vmin&#39;:0,</span>
+<span class="go">    &#39;figsize&#39;:(10*len(fn_crop)/len(fn),13*len(tn_crop)/len(tn)),</span>
+<span class="go">    &#39;extent&#39;:(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),</span>
+<span class="go">    &#39;title&#39;:&#39;Crop of the power spectrogram density (PSD)&#39;,</span>
+<span class="go">    &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="go">    &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="go">    }</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Lxx_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="go">    ..</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd></dl>

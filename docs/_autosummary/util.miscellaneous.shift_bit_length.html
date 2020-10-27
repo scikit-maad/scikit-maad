@@ -96,13 +96,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math.html">util.math</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2linear.html">util.miscellaneous.dB2linear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.format_rois.html">util.miscellaneous.format_rois</a></li>
@@ -200,6 +199,24 @@
 <dt id="util.miscellaneous.shift_bit_length">
 <code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">shift_bit_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#shift_bit_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.shift_bit_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>find the closest power of 2 that is superior or equal to the number x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">scalar</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">scalar</span></dt><dd><p>the closest power of 2 that is superior or equal to the number x</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shift_bit_length</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">    1024</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

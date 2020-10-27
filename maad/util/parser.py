@@ -63,10 +63,10 @@ def date_from_filename (filename):
     Parameters
     ----------
     filename : string
-        The filename must follow this format :
-        XXXX_yyyymmdd_hhmmss.wav
-        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-        mm : minutes / ss : seconds
+    The filename must follow this format :
+    XXXX_yyyymmdd_hhmmss.wav
+    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+    mm : minutes / ss : seconds
             
     Returns
     -------
@@ -113,23 +113,23 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     Parse all filenames contained in a directory and its subdirectories 
     Keep only filenames corresponding to extension
     Filenames must follow :
-                - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
-                - or POSIX format (for audiomoth)  
+    - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
+    - or POSIX format (for audiomoth)  
     The result is a panda dataframe with 'Date' as index and 'File' (with full path as column) 
     
     Parameters
     ----------
     filename : string
-        The filename must follow this format :
-        XXXX_yyyymmdd_hhmmss.wav
-        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-        mm : minutes / ss : seconds
+    The filename must follow this format :
+    XXXX_yyyymmdd_hhmmss.wav
+    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+    mm : minutes / ss : seconds
             
     Returns
     -------
     df : Pandas dataframe
         This dataframe has one column
-            - 'file' => full path + filename
+        - 'file' => full path + filename
         and a index 'Date' with the type Datetime
     """
     

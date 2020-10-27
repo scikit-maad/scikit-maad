@@ -94,7 +94,6 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
@@ -266,6 +265,23 @@
 <span class="sd">        The Figure instance </span>
 <span class="sd">    ax : Axis</span>
 <span class="sd">        The Axis instance</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure (w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL</span>
+<span class="sd">       </span>
+<span class="sd">    Plot the spectrum at t = 7s</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; index = maad.util.nearest_idx(tn,7)</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Spectrum (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, Lxx[:,index], **fig_kwargs)</span>
 <span class="sd">    &quot;&quot;&quot;</span>  
 
     <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
@@ -368,6 +384,23 @@
 <span class="sd">        The Figure instance </span>
 <span class="sd">    ax : Axis</span>
 <span class="sd">        The Axis instance</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure (w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(Lxx),</span>
+<span class="sd">                      &#39;vmin&#39;:0,</span>
+<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="sd">                      &#39;figsize&#39;:(4,13),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      </span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span> 
    
     <span class="c1"># matplotlib parameters</span>
@@ -433,7 +466,6 @@
 <span class="sd">    random_colormap : Colormap </span>
 <span class="sd">        Colormap type used by matplotlib</span>
 
-<span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    adapted from https://github.com/delestro/rand_cmap author : delestro    </span>
@@ -497,9 +529,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    im : 2d ndarray</span>
 <span class="sd">        image to be cropped</span>
+<span class="sd">    </span>
 <span class="sd">    tn, fn : 1d ndarray</span>
 <span class="sd">        tn is the time vector. fn is the frequency vector. They are required </span>
 <span class="sd">        in order to know the correspondance between pixels and (time,frequency)</span>
+<span class="sd">    </span>
 <span class="sd">    fcrop, tcrop : list of 2 scalars [min, max], optional, default is None</span>
 <span class="sd">        fcrop corresponds to the min and max boundary frequency values</span>
 <span class="sd">        tcrop corresponds to the min and max boundary time values</span>
@@ -508,8 +542,34 @@
 <span class="sd">    -------</span>
 <span class="sd">    im : 2d ndarray</span>
 <span class="sd">        image cropped</span>
+<span class="sd">        </span>
 <span class="sd">    tn, fn, 1d ndarray</span>
 <span class="sd">        new time and frequency vectors</span>
+<span class="sd">        </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; p = maad.util.wav2pressure (w, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(Lxx),</span>
+<span class="sd">                      &#39;vmin&#39;:0,</span>
+<span class="sd">                      &#39;figsize&#39;:(10,13),</span>
+<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      </span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,6000), tcrop=(0,30))</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(Lxx),</span>
+<span class="sd">                      &#39;vmin&#39;:0,</span>
+<span class="sd">                      &#39;figsize&#39;:(10*len(fn_crop)/len(fn),13*len(tn_crop)/len(tn)),</span>
+<span class="sd">                      &#39;extent&#39;:(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Crop of the power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx_crop,**fig_kwargs)  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">if</span> <span class="n">tcrop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 

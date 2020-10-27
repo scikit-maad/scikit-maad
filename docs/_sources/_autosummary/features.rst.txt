@@ -28,5 +28,5 @@
 
    features.alpha_indices
    features.features_1d
-   features.features_func
+   features.features_2d
 

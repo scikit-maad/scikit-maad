@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.decibelSPL.SPL2dBSPL" href="util.decibelSPL.SPL2dBSPL.html" />
+    <link rel="next" title="util.decibelSPL.add_dBSPL" href="util.decibelSPL.add_dBSPL.html" />
     <link rel="prev" title="util.decibelSPL" href="util.decibelSPL.html" /> 
 </head>
 
@@ -96,25 +96,27 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ecoacoustics.html">ecoacoustics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.decibelSPL.PSD2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.SPL2dBSPL.html">util.decibelSPL.SPL2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2energy.html">util.decibelSPL.dBSPL2energy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.energy2dBSPL.html">util.decibelSPL.energy2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.volt2SPL.html">util.decibelSPL.volt2SPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.add_dBSPL.html">util.decibelSPL.add_dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2power.html">util.decibelSPL.dBSPL2power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2pressure.html">util.decibelSPL.dBSPL2pressure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.mean_dBSPL.html">util.decibelSPL.mean_dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.power2dBSPL.html">util.decibelSPL.power2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2Leq.html">util.decibelSPL.pressure2Leq</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2dBSPL.html">util.decibelSPL.pressure2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.volt2pressure.html">util.decibelSPL.volt2pressure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2Leq.html">util.decibelSPL.wav2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2SPL.html">util.decibelSPL.wav2SPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2dBSPL.html">util.decibelSPL.wav2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2pressure.html">util.decibelSPL.wav2pressure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2volt.html">util.decibelSPL.wav2volt</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wavSPL2Leq.html">util.decibelSPL.wavSPL2Leq</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_func.html">util.math_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.math.html">util.math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
@@ -197,24 +199,33 @@
 <h1>util.decibelSPL.PSD2Leq<a class="headerlink" href="#util-decibelspl-psd2leq" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="util.decibelSPL.PSD2Leq">
-<code class="sig-prename descclassname">util.decibelSPL.</code><code class="sig-name descname">PSD2Leq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">PSD_SPL</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/decibelSPL.html#PSD2Leq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.decibelSPL.PSD2Leq" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert Power spectral density (PSD) in SPL² into 
-Equivalent Continuous Sound level (Leq)</p>
+<code class="sig-prename descclassname">util.decibelSPL.</code><code class="sig-name descname">PSD2Leq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/decibelSPL.html#PSD2Leq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.decibelSPL.PSD2Leq" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert Power spectral density (PSD in [Pa²]) into 
+Equivalent Continuous Sound pressure level (Leq [dB SPL])</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>PSD_SPL</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Vector containing the Power spectral density (PSD) already in SPL²</p>
+<dt><strong>P</strong><span class="classifier">ndarray-like</span></dt><dd><p>ndarray-like containing the Power spectral density (PSD) already in Pa²</p>
 </dd>
 <dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air</span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>PSD_Leq</strong><span class="classifier">float</span></dt><dd><p>Equivalent Continuous Sound level (Leq)</p>
+<dt><strong>Leq</strong><span class="classifier">float</span></dt><dd><p>Equivalent Continuous Sound pressure level (Leq [dB SPL])</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2pressure</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">fft</span><span class="p">,</span> <span class="nb">abs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">PSD2Leq</span><span class="p">(</span><span class="n">P</span><span class="o">=</span><span class="n">S</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">    54.53489077674256</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -227,7 +238,7 @@ Equivalent Continuous Sound level (Leq)</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.decibelSPL.SPL2dBSPL.html" class="btn btn-neutral float-right" title="util.decibelSPL.SPL2dBSPL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.decibelSPL.add_dBSPL.html" class="btn btn-neutral float-right" title="util.decibelSPL.add_dBSPL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="util.decibelSPL.html" class="btn btn-neutral float-left" title="util.decibelSPL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

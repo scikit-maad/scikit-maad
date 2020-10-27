@@ -37,8 +37,6 @@ developped and a stable release will be available by the end of 2019.
    :caption: Documentation
    :recursive:
    
-   cluster
-   ecoacoustics
    features
    rois
    sound

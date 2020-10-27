@@ -17,7 +17,7 @@ import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
 from scipy.signal import hilbert, sosfiltfilt, convolve, iirfilter, get_window
-from maad.util import plot1D, plot2D, crop_image, power2dBSPL, pressure2dBSPL
+#from maad.util import plot1D, plot2D, crop_image, power2dBSPL, pressure2dBSPL 
 
 # =============================================================================
 # private functions
@@ -368,16 +368,17 @@ def fir_filter(x, kernel, axis=0):
         Pass directly the kernel (1d vector of scalars) 
         Or pass the arguments in a tuple to create a kernel. Arguments are:   
         - window : string, float, or tuple. The type of window to create. 
-                boxcar, triang, blackman, hamming, hann, bartlett, flattop,
-                parzen, bohman, blackmanharris, nuttall, barthann, 
-                - (kaiser, beta), 
-                - (gaussian, standard deviation), 
-                - (general_gaussian, power, width), 
-                - (slepian, width), 
-                - (dpss, normalized half-bandwidth), 
-                - (chebwin, attenuation), 
-                - (exponential, decay scale), 
-                - (tukey, taper fraction)
+        boxcar, triang, blackman, hamming, hann, bartlett, flattop,
+        parzen, bohman, blackmanharris, nuttall, barthann, 
+        
+        - (kaiser, beta), 
+        - (gaussian, standard deviation), 
+        - (general_gaussian, power, width), 
+        - (slepian, width), 
+        - (dpss, normalized half-bandwidth), 
+        - (chebwin, attenuation), 
+        - (exponential, decay scale), 
+        - (tukey, taper fraction)
         - N : length of the kernel
               
         Examples:
@@ -473,9 +474,9 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     """
     Convert a sound waveform into a spectrogram 
     the output is : 
-        - power (mode='psd')
-        - amplitude (mode = 'amplitude') => sqrt(power)
-        - complex with real and imaginary parts (mode = 'complex')
+    - power (mode='psd')
+    - amplitude (mode = 'amplitude') => sqrt(power)
+    - complex with real and imaginary parts (mode = 'complex')
     
     Parameters
     ----------
@@ -749,10 +750,4 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
                         format=format, **kwargs)     
 
     return Sxx_out, tn, fn, ext   
-
-
-
-
-
-
 
