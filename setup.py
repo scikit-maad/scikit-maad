@@ -25,7 +25,7 @@ class CleanCommand(Command):
 
 setup(
       name = 'scikit-maad',
-      version = '0.1.5.1',
+      version = '0.1.5.2',
       #packages = find_namespace_packages(include=['maad.*']),
       packages = find_packages(),
       author = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
