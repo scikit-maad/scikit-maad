@@ -23,6 +23,11 @@ cluster
 
 util
     Miscelaneous and useful set of tools used in the audio analysis framework
+    
+ecoacoustics
+    Miscelaneous and useful set of tools used to compute global indices for 
+    ecoacoustics
+    
 """
 
 from . import sound
@@ -30,3 +35,5 @@ from . import rois
 from . import features
 from . import cluster
 from . import util
+from . import ecoacoustics
+#from . import spl

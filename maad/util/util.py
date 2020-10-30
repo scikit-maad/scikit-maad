@@ -11,12 +11,78 @@
 # =============================================================================
 # Import external modules
 import numpy as np 
+from numpy import log10, diff, mean, median
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import colorsys
-from datetime import datetime
 import pandas as pd
+import numbers
 
+# min value
+import sys
+_MIN_ = sys.float_info.min
+
+
+#=============================================================================
+
+def index_bw (fn, bw):
+    """
+    Select the index min and max coresponding to the selected frequency band
+    
+    example :
+    fn = 44100
+    bw = (100,1000) #in Hz
+    X = X[index_bw(fn, bw)]
+    """
+    # select the indices corresponding to the frequency bins range
+    if bw is None :
+        # index = np.arange(0,len(fn),1)
+        index = (np.ones(len(fn)))
+        index = [bool(x) for x in index]
+    elif isinstance(bw, tuple) :
+        #index = (fn>=bw[0]) *(fn<=bw[1])
+        index = (fn>=fn[(abs(fn-bw[0])).argmin()]) *(fn<=fn[(abs(fn-bw[1])).argmin()])
+    elif isinstance(bw, numbers.Number) : 
+        # index =  (abs(fn-bw)).argmin()
+        index = np.zeros(len(fn))
+        index[(abs(fn-bw)).argmin()] = 1
+        index = [bool(x) for x in index]
+    return index
+
+#=============================================================================
+
+def running_mean(x, N, axis=0):
+    """
+         moving average of x over a window N
+    """    
+    cumsum = np.cumsum(np.insert(x, 0, 0), axis) 
+    return (cumsum[N:] - cumsum[:-N]) / N
+
+#=============================================================================
+
+def shift_bit_length(x):
+    """
+         find the closest power of 2 that is superior or equal to the number x
+    """
+    return 1<<(x-1).bit_length()
+
+#=============================================================================
+       
+def rle(x):
+    """
+        Run--Length encoding    
+        from rle function R
+    """
+    x = np.asarray(x)
+    if x.ndim >1 : 
+        print("x must be a vector")
+    else:
+        n = len(x)
+        states = x[1:] != x[:-1]
+        i = np.r_[np.where(states)[0], n-1]
+        lengths = np.r_[i[0], diff(i)]
+        values = x[i]
+    return lengths, values
 
 def rand_cmap(nlabels, type='bright', first_color_black=True, last_color_black=False, verbose=False):
     """
@@ -95,14 +161,14 @@ def rand_cmap(nlabels, type='bright', first_color_black=True, last_color_black=F
     return random_colormap
 
 
-
-def linear_scale(datain, minval= 0.0, maxval=1.0):
+def linear_scale(x, minval= 0.0, maxval=1.0):
     """ 
-    Program to scale the values of a matrix from a user specified minimum to a user specified maximum
+    Program to scale the values of a matrix from a user specified minimum to 
+    a user specified maximum
     
     Parameters
     ----------
-    datain : array-like
+    x : array-like
         numpy.array like with numbers
     minval : scalar, optional, default : 0
         This minimum value is attributed to the minimum value of the array 
@@ -111,7 +177,7 @@ def linear_scale(datain, minval= 0.0, maxval=1.0):
         
     Returns
     -------
-    dataout : array-like
+    y : array-like
         numpy.array like with numbers  
         
     -------
@@ -128,46 +194,229 @@ def linear_scale(datain, minval= 0.0, maxval=1.0):
     Adapted by S. Haupert Dec 12, 2017 for Python
     """
 
-    dataout = datain - datain.min();
-    dataout = (dataout/dataout.max())*(maxval-minval);
-    dataout = dataout + minval;
-    return dataout
+    # if x is a list, convert x into ndarray 
+    if isinstance(x, list):
+        x = np.asarray(x)
+        
+    y = x - x.min();
+    y = (y/y.max())*(maxval-minval);
+    y = y + minval;
+    return y
 
-def db_scale (datain, db_range=None, db_gain=None):
+
+#=============================================================================
+def linear2dB (x, mode = 'amplitude', db_range=None, db_gain=0):
     """
     Transform linear date into decibel scale within the dB range (db_range).
     A gain (db_gain) could be added at the end.    
     
     Parameters
     ----------
-    datain : array-like
-        data to rescale in dB 
+    x : array-like
+        data to rescale in dB  
+    mode : str, default is 'amplitude'
+        select 'amplitude' or 'power' to compute the corresponding dB
     db_range : scalar, optional, default : None
         if db_range is a number, anything lower than -db_range is set to 
         -db_range and anything larger than 0 is set to 0
-    db_gain : scalar, optional, default is None
+    db_gain : scalar, optional, default is 0
         Gain added to the results 
-                --> 20*log10(a) + db_gain
+        amplitude --> 20*log10(x) + db_gain  
+    Returns
+    -------
+    y : scalars
+        amplitude--> 20*log10(x) + db_gain  
+
+    """            
+    x = abs(x)   # take the absolute value of datain
+    
+    # Avoid zero value for log10  
+    # if it's a scalar
+    if hasattr(x, "__len__") == False:
+        if x ==0: x = _MIN_  
+    else :     
+        x[x ==0] = _MIN_  # Avoid zero value for log10 
+
+    # conversion in dB  
+    if mode == 'amplitude' :
+        y = 20*log10(x)   # take log
+    elif mode == 'power':
+        y = 10*log10(x)   # take log 
+    
+    if db_gain : y = y + db_gain    # Add gain if needed
+    
+    if db_range is not None :
+        # set anything above db_range as 0
+        y[y > 0] = 0  
+        # set anything less than -db_range as -db_range
+        y[y < -(db_range)] = -db_range  
+        
+    return y
+
+#=============================================================================
+def dB2linear (x, mode = 'amplitude',  db_gain=0):
+    """
+    Transform linear date into decibel scale within the dB range (db_range).
+    A gain (db_gain) could be added at the end.    
+    
+    Parameters
+    ----------
+    x : array-like
+        data in dB to rescale in linear 
+    mode : str, default is 'amplitude'
+        select 'amplitude' or 'power' to compute the corresponding dB
+    db_gain : scalar, optional, default is 0
+        Gain added to the results 
+                --> 20*log10(x) + db_gain
                 
     Returns
     -------
-    dataout : scalars
-        --> 20*log10(datain) + db_gain 
+    y : scalars
+        --> 10^(x/20 - db_gain) 
+    """  
+    if mode == 'amplitude' :
+        y = 10**((x- db_gain)/20) 
+    elif mode == 'power':
+        y = 10**((x- db_gain)/10) 
+    return y
+
+#=============================================================================
+def get_unimode (X, mode ='ale',axis=1, verbose=False, display=False):
     """
+    determine the statistical mode or modal value which is 
+    the most common number in the dataset
     
+    Parameters
+    ----------
+    X :  1d or 2d ndarray of scalar
+        Vector or matrix 
+                
+    mode : str, optional, default is 'ale'
+        Select the mode to remove the noise
+        Possible values for mode are :
+            - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
+            - 'median' : subtract the median value
+            - 'mean' : subtract the mean value (DC)
     
-    datain = abs(datain)            # take the absolute value of datain
-    datain[datain ==0] = 1e-32      # Avoid zero value for log10          
-    dataout = 20*np.log10(datain)   # take log
-    if db_gain : dataout = dataout + db_gain    # Add gain if needed
-    
-    if db_range is not None :
-        # set anything less than the db_range as 
-        #dataout[dataout < 0] = 0 
-        dataout[dataout > 0] = 0  
-        dataout[dataout < -(db_range)] = -db_range  
+    axis : integer, default is 1
+        if matrix, estimate the mode for each row (axis=0) or each column (axis=1)
+            
+    verbose : boolean, optional, default is False
+        print messages into the consol or terminal if verbose is True
         
-    return dataout
+    display : boolean, optional, default is False
+        Display the signal if True
+              
+    Returns
+    -------
+    unimode_value : float
+        The most common number in the dataset
+    """         
+    if X.ndim ==2: 
+        if axis == 0:
+            X = X.transpose()
+            axis = 1
+    elif X.ndim ==1: 
+        axis = 0
+        
+    if mode=='ale':
+                
+        if X.ndim ==2:
+            unimode_value = []
+            for i, x in enumerate(X):  
+                # Min and Max of the envelope (without taking into account nan)
+                x_min = np.nanmin(x)
+                x_max = np.nanmax(x)
+                # Compute a 50-bin histogram ranging between Min and Max values
+                hist, bin_edges = np.histogram(x, bins=50, range=(x_min, x_max))
+                
+                # smooth the histogram
+#                kernel = ('boxcar', 7)
+#                hist = fir_filter(hist,kernel, axis=axis)
+#                print(hist)
+#                print(len(hist))
+#                hist = running_mean(hist,N=7, axis=0) 
+                   
+                if display:
+                    # Plot only the first histogram
+                    plt.figure()
+                    plt.plot(bin_edges[0:-1],hist)
+                    
+                # find the maximum of the peak with quadratic interpolation
+                # don't take into account the first 4 bins.
+                imax = np.argmax(hist[4::]) + 4
+
+#                # Check the boundary
+#                if (imax <= 4 ) :
+#                    bin_edges_interp = bin_edges
+#                    hist_interp = 4
+#                elif (imax >= (len(hist)-2)) :
+#                    bin_edges_interp = bin_edges
+#                    hist_interp = len(hist)-2
+#                else :
+#                    f = interp1d(bin_edges[imax-2:imax+2], hist[imax-2:imax+2], kind='quadratic')
+#                    bin_edges_interp = np.arange(bin_edges[imax-1], bin_edges[imax+1], 0.01)
+#                    hist_interp = f(bin_edges_interp)   # use interpolation function returned by `interp1d`
+#                    if display:
+#                        plt.plot(bin_edges_interp,hist_interp)
+#                                        
+#                # assuming an additive noise model : noise_bckg is the max of the histogram
+#                # as it is an histogram, the value is 
+#                unimode_value.append(bin_edges_interp[np.argmax(hist_interp)])
+                
+                unimode_value.append(bin_edges[imax])
+                
+        
+            # transpose the vector
+            unimode_value = np.asarray(unimode_value)
+            unimode_value = unimode_value.transpose()
+        else:
+            x = X
+            # Min and Max of the envelope (without taking into account nan)
+            x_min = np.nanmin(x)
+            x_max = np.nanmax(x)
+            
+            # Compute a 50-bin histogram ranging between Min and Max values
+            hist, bin_edges = np.histogram(x, bins=50, range=(x_min, x_max))
+            
+            # smooth the histogram
+#            kernel = ('boxcar', 7)
+#            hist = fir_filter(hist,kernel, axis=axis)
+#            hist = running_mean(hist,N=7, axis=axis) 
+            
+            if display:
+                #n, bins, patches = plt.hist(x=s, bins=20, color='#0504aa', alpha=0.7, rwidth=0.85)
+                plt.figure()
+                plt.plot(bin_edges[0:-1],hist)
+                         
+            # find the maximum of the peak with quadratic interpolation
+            imax = np.argmax(hist)
+            
+            # Check the boundary
+#            if (imax <= 5) or (imax >= len(hist)-5):
+#                bin_edges_interp = bin_edges
+#                hist_interp = imax
+#            else :
+#                f = interp1d(bin_edges[imax-2:imax+2], hist[imax-2:imax+2], kind='quadratic')
+#                bin_edges_interp = np.arange(bin_edges[imax-1], bin_edges[imax+1], 0.01)
+#                hist_interp = f(bin_edges_interp)   # use interpolation function returned by `interp1d`
+#            
+#            if display:
+#                plt.plot(bin_edges_interp,hist_interp)
+            
+            # assuming an additive noise model : noise_bckg is the max of the histogram
+            # as it is an histogram, the value is 
+#            unimode_value = bin_edges_interp[np.argmax(hist_interp)]
+            unimode_value = bin_edges[imax]
+
+    elif mode=='median':
+        unimode_value = median(X, axis=axis)
+        
+    elif mode=='mean':
+        unimode_value = mean(X, axis=axis)
+        
+    return unimode_value
+
 
 def crop_image (im, tn, fn, fcrop=None, tcrop=None):
     """
@@ -468,12 +717,33 @@ def rois_to_imblobs(im_blobs, rois_bbox):
     return im_blobs
 
 def normalize_2d(im, min_value, max_value):
-    """ Normalize 2d array between two values
-    To check
+    """ Normalize 2d array between two values. 
+        
+        Parameters
+        ----------
+        im: 2D ndarray
+            Bidimensinal array to be normalized
+        min_value: int, float
+            Minimum value in normalization
+        max_value: int, float
+            Maximum value in normalization
+        
+        Returns
+        -------
+        im_out: 2D ndarray
+            Array normalized between min and max values
+        
     """
-    im = (im - np.min(im))/(np.max(im)-np.min(im))
-    im = im * (max_value - min_value) + min_value
-    return im
+    # avoid problems with inf and -inf values
+    min_im = np.min(im.ravel()[im.ravel()!=-np.inf]) 
+    im[np.where(im == -np.inf)] = min_im
+    max_im = np.max(im.ravel()[im.ravel()!=np.inf]) 
+    im[np.where(im == np.inf)] = max_im
+
+    # normalize between min max
+    im = (im - min_im) / (max_im - min_im)
+    im_out = im * (max_value - min_value) + min_value
+    return im_out
 
 
 def format_rois(rois, ts, fs, fmt=None):

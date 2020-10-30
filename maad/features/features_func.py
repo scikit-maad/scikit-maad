@@ -19,6 +19,7 @@ from skimage.io import imsave
 from skimage import transform, measure
 from scipy import ndimage
 from maad import sound
+from skimage.filters import gaussian
 from maad.util import format_rois, rois_to_imblobs, normalize_2d
 
 
@@ -951,8 +952,8 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     """
     im, dt, df, ext = sound.spectrogram(s, fs, nperseg=opt_spec['nperseg'], 
                                         overlap=opt_spec['overlap'], fcrop=flims, 
-                                        rescale=False, db_range=100)
-    
+                                        rescale=False, db_range=opt_spec['db_range'])
+
     # format rois to bbox
     ts = np.arange(ext[0], ext[1], dt)
     f = np.arange(ext[2],ext[3]+df,df)
@@ -963,6 +964,7 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     
     # get features: shape, center frequency
     im = normalize_2d(im, 0, 1)
+    #im = gaussian(im) # smooth image
     bbox, params, shape = shape_features(im, im_blobs, resolution='custom', 
                                          opt_shape=opt_shape)
     _, cent = centroid(im, im_blobs)
@@ -974,3 +976,68 @@ def compute_rois_features(s, fs, rois_tf, opt_spec, opt_shape, flims):
     # combine into a single df
     rois_features = pd.concat([rois_out, shape, cent.frequency], axis=1)
     return rois_features
+
+def shape_features_raw(im, resolution='low', opt_shape=None):
+    """
+    Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions 
+    using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw
+    response of the spectrogram to the filter bank.
+    
+    Parameters
+    ----------
+        im: 2D array
+            Input image to process 
+        resolution: 
+            Resolution of analysis, i.e. number of filters used. 
+            Three presets are provided, 'low', 'mid' and 'high', which control 
+            the number of filters.
+        opt_shape: dictionary (optional)
+            options for the filter bank (kbank_opt) and the number of scales (npyr)
+            
+    Returns
+    -------
+        shape_im: 1D array
+            Raw shape response of spectrogram to every filter of the filter bank 
+        params: 2D numpy structured array
+            Corresponding parameters of the 2D fileters used to calculate the 
+            shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
+    """    
+    
+    # unpack settings
+    opt_shape = opt_shape_presets(resolution, opt_shape)
+    npyr = opt_shape['npyr']
+    # build filterbank
+    params, kernels = filter_bank_2d_nodc(ntheta=opt_shape['ntheta'],
+                                          bandwidth=opt_shape['bandwidth'],
+                                          frequency=opt_shape['frequency'],
+                                          gamma=opt_shape['gamma'])
+    # filter images
+    im_rs = filter_multires(im, kernels, npyr, rescale=True) 
+
+    # Get response of spectrogram to every filter of the filter bank
+    shape_im = dict()
+    for j, imx in enumerate(im_rs):
+        shape_im[j] = imx.ravel()
+    shape_im = pd.DataFrame(shape_im)
+    
+    # organise parameters
+    params = np.asarray(params)
+    orient = params[:,0]*180/np.pi
+    orient = orient.tolist()*npyr
+    pyr_level = np.sort(np.arange(npyr).tolist()*len(params))+1
+    freq = params[:,1].tolist()*npyr
+    nparams = len(params)*npyr
+    params_multires = np.zeros(nparams, dtype={'names':('theta', 'freq', 'pyr_level','scale'),
+                                               'formats':('f8', 'f8', 'f8','f8')})
+    params_multires['theta'] = orient
+    params_multires['freq'] = freq
+    params_multires['scale'] = 1/np.asarray(freq)
+    params_multires['pyr_level'] = pyr_level
+    params_multires = pd.DataFrame(params_multires)
+    
+    # format shape into dataframe
+    cols=['shp_' + str(idx).zfill(3) for idx in range(1,shape_im.shape[1]+1)]
+    shape_im = pd.DataFrame(data=np.asarray(shape_im),columns=cols)
+        
+    return params_multires, shape_im
+

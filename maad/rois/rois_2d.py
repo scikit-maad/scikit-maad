@@ -11,22 +11,29 @@
 # Load the modules
 # =============================================================================
 # Import external modules
+import matplotlib.patches as mpatches
+
 import numpy as np 
+
 from math import ceil
+
 from scipy import signal
 from scipy.ndimage import morphology
 from scipy.stats import iqr
+
 from skimage import measure, filters
 from skimage.io import imread
 
-import matplotlib.patches as mpatches
+# min value
+import sys
+_MIN_ = sys.float_info.min
+
+# Import internal modules
 from ..util import plot1D, plot2D, linear_scale,read_audacity_annot,rand_cmap
 
 """
 ====== TO DO
 """
-
-
 def select_bandwidth():
     return
 """
@@ -796,7 +803,7 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
 """****************************************************************************
 *************                 select_rois auto                      ***********
 ****************************************************************************"""
-def select_rois_auto(im_bin, ext, min_roi=None ,max_roi=None, display=False, 
+def select_rois_auto(im_bin, ext=None, min_roi=None ,max_roi=None, display=False, 
                 savefig = None, **kwargs):
     """
     Select rois candidates based on area of rois. min and max boundaries.
