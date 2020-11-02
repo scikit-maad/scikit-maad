@@ -733,10 +733,9 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         if mode=='complex': 
             Sxx_disp = linear2dB(Sxx_out,mode='amplitude', db_range=db_range)
             
-        vmin=kwargs.pop('vmin',-100) 
+        vmin=kwargs.pop('vmin',-db_range) 
         vmax=kwargs.pop('vmax',Sxx_disp.max()) 
 
-        
         _, fig = plot2D (Sxx_disp, extent=ext, figsize=figsize,title=title, 
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax,
                          cmap=cmap, **kwargs)
