@@ -186,6 +186,18 @@ def plot2D(im,ax=None,**kwargs):
         
         - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
+            
+        - xticks : tuple of ndarrays, optional, default : none
+            * ticks : array_like => A list of positions at which ticks should 
+            be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place 
+            at the given locs.
+            
+        - yticks : tuple of ndarrays, optional, default : none
+            * ticks : array_like => A list of positions at which ticks should 
+            be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place 
+            at the given locs.
         
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
@@ -240,6 +252,8 @@ def plot2D(im,ax=None,**kwargs):
     title=kwargs.pop('title', 'Spectrogram')
     ylabel=kwargs.pop('ylabel', 'Frequency [Hz]')
     xlabel=kwargs.pop('xlabel', 'Time [sec]')  
+    xticks = kwargs.pop('xticks', None) 
+    yticks = kwargs.pop('yticks', None)
     cmap=kwargs.pop('cmap', 'gray') 
     vmin=kwargs.pop('vmin', None) 
     vmax=kwargs.pop('vmax', None)    
@@ -266,6 +280,12 @@ def plot2D(im,ax=None,**kwargs):
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    if xticks is not None :  
+        ax.set_xticks(ticks =xticks[0])
+        ax.set_xticklabels(labels=xticks[1])
+    if yticks is not None :  
+        ax.set_yticks(ticks =yticks[0])
+        ax.set_yticklabels(labels=yticks[1])
     ax.axis('tight') 
 
     fig.tight_layout()

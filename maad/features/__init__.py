@@ -32,7 +32,7 @@ from .alpha_indices import (intoBins, # should be in sounds
                             acousticEvenessIndex,
                             roughness,
                             surfaceRoughness,
-                            tfsdt,
+                            tfsd,
                             acousticGradientIndex,
                             raoQ)
 
@@ -63,6 +63,6 @@ __all__ = ['filter_multires',
            "acousticEvenessIndex",
            "roughness",
            "surfaceRoughness",
-           "tfsdt",
+           "tfsd",
            "acousticGradientIndex",
            "raoQ"]

@@ -31,7 +31,7 @@ from skimage import transform
 import matplotlib.pyplot as plt
 
 #### Importation from internal modules
-from maad.util import rle, index_bw, linear_scale, dB2linear, linear2dB
+from maad.util import rle, index_bw, linear_scale, dB2linear, linear2dB, plot2D
 
 # min value
 import sys
@@ -124,6 +124,7 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
             plt.bar(bins,mean(xbin,axis=1), bin_step*0.75, alpha=0.5, align='edge')
     
     return xbin, bins
+
 
 #=============================================================================
 def skewness (x, axis=0):
@@ -482,61 +483,6 @@ def acousticComplexityIndex(Sxx, norm ='global'):
     
     return ACI_xx, ACI_per_bin, ACI_sum, 
 
-def surfaceRoughness (Sxx, norm ='global'):
-    
-    """
-    Surface Roughness. 
-    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness
-    
-    Parameters
-    ----------
-    Sxx : ndarray of floats
-        2d : Spectrogram (i.e matrix of spectrum)
-    
-    norm : string, optional, default is 'global'
-        Determine if the ROUGHNESS is normalized by the sum on the whole frequencies
-        ('global' mode) or by the sum of frequency bin per frequency bin 
-        ('per_bin')
-
-    Returns
-    -------        
-    Ra_per_bin : 1d ndarray of scalars
-        Arithmetical mean deviation from the mean line (global or per frequency bin)
-        
-        => ROUGHNESS value for each frequency bin
-        
-    Ra : scalar
-        Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]
-        
-        => mean ROUGHNESS value over Sxx 
-        
-    Rq_per_bin : 1d ndarray of scalars
-        Root mean squared of deviation from the mean line (global or per frequency bin)
-        
-        => RMS ROUGHNESS value for each frequency bin
-        
-    Rq : scalar
-        Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]
-        
-        => RMS ROUGHNESS value over Sxx 
-    """    
-    if norm == 'per_bin':
-        m = mean(Sxx, axis=1)
-        y = Sxx-m[..., np.newaxis]
-        
-    elif norm == 'global':
-        m = mean(Sxx)
-        y = Sxx-m
-
-    # Arithmetic mean deviation
-    Ra_per_bin = mean(abs(y), axis=1)
-    Ra = mean(Ra_per_bin)
-
-    Rq_per_bin = sqrt(mean(y**2, axis=1))
-    Rq = mean(Rq_per_bin) 
-    
-    return Ra_per_bin, Rq_per_bin, Ra, Rq
-
 
 #=============================================================================
 def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000, 
@@ -687,7 +633,7 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
 
 ####    Indices based on the entropy
 
-def spectral_entropy (X, fn, frange=None, display=False) :
+def spectral_entropy (X, fn, flim=None, display=False) :
     """
     Spectral entropy : EAS, ECU, ECV, EPS, 
     
@@ -702,7 +648,7 @@ def spectral_entropy (X, fn, frange=None, display=False) :
     fn : 1d ndarray of floats
         frequency vector
     
-    frange : tupple (fmin, fmax), optional, default is None
+    flim : tupple (fmin, fmax), optional, default is None
         Frequency band used to compute the spectral entropy.
         For instance, one may want to compute the spectral entropy for the 
         biophony bandwidth
@@ -731,14 +677,14 @@ def spectral_entropy (X, fn, frange=None, display=False) :
     
     """
     
-    if isinstance(frange, numbers.Number) :
-        print ("WARNING: frange must be a tupple (fmin, fmax) or None")
+    if isinstance(flim, numbers.Number) :
+        print ("WARNING: flim must be a tupple (fmin, fmax) or None")
         return
     
-    if frange is None : frange=(fn.min(),fn.max())
+    if flim is None : flim=(fn.min(),fn.max())
     
     # select the indices corresponding to the frequency range
-    iBAND = index_bw(fn, frange)
+    iBAND = index_bw(fn, flim)
 
     # TOWSEY & BUXTON : only on the bio band
     # EAS [TOWSEY] #
@@ -767,7 +713,7 @@ def spectral_entropy (X, fn, frange=None, display=False) :
     Nbins = sum(iBAND==True)    
     imax_X = np.argmax(X[iBAND],axis=0) + ioffset
     imax_X = fn[imax_X]
-    max_X_bin, bin_edges = np.histogram(imax_X, bins=Nbins, range=frange)
+    max_X_bin, bin_edges = np.histogram(imax_X, bins=Nbins, range=flim)
     max_X_bin = max_X_bin/sum(max_X_bin)
     Hf_fmax = entropy(max_X_bin)
     EPS = 1 - Hf_fmax    
@@ -796,14 +742,14 @@ def spectral_entropy (X, fn, frange=None, display=False) :
 ####    Indices based on the energy
 
     
-def _energy_per_freqbin (PSDxx, fn, frange = (0, 20000), bin_step = 1000):
+def _energy_per_freqbin (PSDxx, fn, flim = (0, 20000), bin_step = 1000):
         
     #Convert into bins
     PSDxx_bins, bins = intoBins(PSDxx, fn, bin_min=0, bin_max=fn[-1], 
                               bin_step=bin_step, axis=0)   
     
     # select the indices corresponding to the frequency bins range
-    indf = index_bw (bins, frange) 
+    indf = index_bw (bins, flim) 
 
     # select the frequency bins and take the min
     energy = sum(PSDxx_bins[indf, ])
@@ -811,7 +757,7 @@ def _energy_per_freqbin (PSDxx, fn, frange = (0, 20000), bin_step = 1000):
     return energy
 
 #=============================================================================
-def soundscapeIndex (Sxx,fn,frange_bioPh=(1000,10000),frange_antroPh=(0,1000), 
+def soundscapeIndex (Sxx,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
                      step=None):
     """
     soundscapeIndex
@@ -824,10 +770,10 @@ def soundscapeIndex (Sxx,fn,frange_bioPh=(1000,10000),frange_antroPh=(0,1000),
     fn : vector
         frequency vector 
         
-    frange_bioPh : tupple (fmin, fmax), optional, default is (1000,10000)
+    flim_bioPh : tupple (fmin, fmax), optional, default is (1000,10000)
         Frequency band of the biophony
     
-    frange_antroPh: tupple (fmin, fmax), optional, default is (0,1000)
+    flim_antroPh: tupple (fmin, fmax), optional, default is (0,1000)
         Frequency band of the anthropophony
     
     step: optional, default is None
@@ -863,9 +809,9 @@ def soundscapeIndex (Sxx,fn,frange_bioPh=(1000,10000),frange_antroPh=(0,1000),
     PSDxx = Sxx**2
 
     # Energy in BIOBAND
-    bioPh = _energy_per_freqbin(PSDxx, fn, frange=frange_bioPh, bin_step=step)
+    bioPh = _energy_per_freqbin(PSDxx, fn, flim=flim_bioPh, bin_step=step)
     # Energy in ANTHROPOBAND
-    antroPh = _energy_per_freqbin(PSDxx, fn, frange=frange_antroPh, bin_step=step)
+    antroPh = _energy_per_freqbin(PSDxx, fn, flim=flim_antroPh, bin_step=step)
     
     # NDSI and ratioBA indices 
     NDSI = (bioPh-antroPh)/(bioPh+antroPh)
@@ -874,7 +820,7 @@ def soundscapeIndex (Sxx,fn,frange_bioPh=(1000,10000),frange_antroPh=(0,1000),
     return NDSI, ratioBA, antroPh, bioPh
 
 #=============================================================================
-def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecology'):
+def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible = True):
     """
     Bioacoustics Index
     
@@ -886,11 +832,11 @@ def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecolo
     fn : vector
         frequency vector 
     
-    frange : tupple (fmin, fmax), optional, default is (2000, 15000)
+    flim : tupple (fmin, fmax), optional, default is (2000, 15000)
         Frequency band used to compute the bioacoustic index.
         
     R_compatible : Boolean, optional, default is False
-        if True, the result is similar to the package SoundEcology in R but 
+        if True, the result is similar to the package SoundEcology in R 
     
     Returns
     -------
@@ -914,13 +860,13 @@ def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecolo
     """    
     
     # select the indices corresponding to the frequency bins range
-    indf = index_bw(fn,frange)
+    indf = index_bw(fn,flim)
     
     # frequency resolution. 
     df = fn[1] - fn[0]
     
     # ======= As soundecology
-    if R_compatible == 'soundecology' :
+    if R_compatible == True :
         # Mean Sxx normalized by the max
         meanSxx = mean(Sxx/max(Sxx), axis=1)
         # Convert into dB
@@ -936,7 +882,7 @@ def bioacousticsIndex (Sxx, fn, frange=(2000, 15000), R_compatible = 'soundecolo
     else:
         # normalize by the max of the spectrogram
         # better to average the PSD for energy conservation
-        PSDxx_norm = (Sxx/max(Sxx))**2
+        PSDxx_norm = (Sxx**2/max(Sxx**2))
         meanPSDxx_norm = mean(PSDxx_norm, axis=1)
 
         # Compute the area
@@ -1190,10 +1136,86 @@ def surfaceRoughness (Sxx, norm ='global'):
 
 #=============================================================================    
 
+#=============================================================================
+def intoOctave (x, fn, thirdOctave=True, display=False):
+        
+    # define the third octave or octave frequency vector in Hz.
+    if thirdOctave :
+        bin_octave = np.array([16,20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000]) # third octave band.
+    else:
+        bin_octave = np.array([16,31.5,63,125,250,500,1000,2000,4000,8000,16000]) # octave
 
-def tfsdt (Sxx, display=False):
+    # Bins limit
+    bin_octave_low = bin_octave/(2**0.1666666)
+    bin_octave_up = bin_octave*(2**0.1666666)
+       
+    # select the indices corresponding to the frequency bins range
+    x_octave = []
+    for ii in np.arange(len(bin_octave)):
+        ind = (fn>=bin_octave_low[ii])  * (fn<=bin_octave_up[ii])
+        x_octave.append(sum(x[ind,], axis=0))
+    
+    x_octave = np.asarray(x_octave)
+            
+    if display :
+        x_octave_dB = linear2dB(x_octave)
+        fig_kwargs = {'vmax': max(x_octave_dB),
+                      'vmin': -90,
+                      'extent':(0, x_octave_dB.shape[1]-1, -0.5, len(bin_octave)-0.5),
+                      'figsize':(4,13),
+                      'yticks' : (np.arange(len(bin_octave)), bin_octave),
+                      'title':'Power Spectrogram',
+                      'xlabel':'Time [sec]',
+                      'ylabel':'Frequency [Hz]',
+                      }
+        plot2D(x_octave_dB,**fig_kwargs)
+
+    return x_octave, bin_octave
+
+#def tfsdt (Sxx, f , flim = (2000,6000), nbwindows = 1) :
+#
+#  # Warning, this index was initially developed to work from a third octave spectrogram with a time sampling of 125 ms.
+#  
+#  toctave = np.array([16,20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000]) # third octave band. 
+#  toctavemin = toctave/(2**0.1666666)
+#  toctavemax = toctave*(2**0.1666666)
+#  imin = (abs(toctave-flim[0])).argmin()
+#  imax = (abs(toctave-flim[1])).argmin()
+#  
+#  bin = 1
+##  spectoct[bin,]=sum(Sxx[indices]))
+#
+#    
+#    # third-octave band values between [100 Hz, 8kHz] from narrow band frequency values.
+#    bin = 1
+#    for (j in seq(4, 23)) {
+#      indices = which(freq>toctavemin[j] & freq <toctavemax[j] )
+#      L=0
+#      spectoct[bin,]=10*log10(colSums(10^(z1[indices,]/10)))
+#      bin =bin +1
+#    }
+#    
+#    spectoctdf <- (diff(spectoct)) 
+#    spectoctdft <- (diff(t(spectoctdf)))
+#    spectoctdft<-t(spectoctdft)
+#    
+#    imin <- imin - 4 # remove the three first third octave band [50-100 Hz[
+#    imax <- imax - 4 # remove the three first third octave band [50-100 Hz[
+#    
+#    tfsd <- 0
+#    for (ind in seq(imin, imax)) {
+#      tfsd =  sum(abs(spectoctdft[ind,])) + tfsd  
+#      }
+#    tfsds[jj] <- tfsd/sum(abs(spectoctdft))
+#    rm(spectoct)
+#  }
+#  
+#  return(na.omit(as.vector(tfsds)))
+
+
+def tfsd (Sxx, fn, flim=(2000,6000), thirdOctave = None, display=False):
     """
-        Time frequency derivation : tfsdt
+        Time frequency derivation : tfsd
         
     Parameters
     ----------
@@ -1205,19 +1227,45 @@ def tfsdt (Sxx, display=False):
 
     Returns
     -------    
-    tfsdt : 1d ndarray of scalars
+    tfsd : 1d ndarray of scalars
         Acoustic Gradient Index of the spectrogram
+        
+    Notes
+    -----
+    The higher the TFSD varies between 0 and 1, 
+    the greater the temporal presence of avian or human vocalizations.  
+    With the default configuration, a TFSD > 0.3 indicates a very important 
+    presence time of the vocalizations in the signal. 
+    The TFSD is always greater than 0.
        
     References 
     ----------
-    Proposed by Pierre Aumond, pierre.aumond@ifsttar.fr
+    [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). 
+    Modeling soundscape pleasantness using perceptual assessments and acoustic measurements 
+    along paths in urban context. Acta Acustica united with Acustica,
+    [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). 
+    Estimation of the perceived time of presence of sources in urban acoustic environments 
+    using deep learning techniques. Acta Acustica united with Acustica, 
     """
+    # convert into 1/3 octave
+    if thirdOctave is not None : 
+        x, f = intoOctave(Sxx, fn, thirdOctave=thirdOctave, display=display)
+    else :
+        x = Sxx
+        f = fn
+
     # Derivation along the time axis, for each frequency bin
-    GRADdt_xx = diff(Sxx, n=1, axis=1)
+    GRADdt_xx = diff(x, n=1, axis=1)
     # Derivation of the previously derivated matrix along the frequency axis 
     GRADdf_xx = diff(GRADdt_xx, n=1, axis=0)
-    # calcul of the tfsdt : sum of the pseudo-gradient along time for each frequency bin
-    tfsdt =  sum(abs(GRADdf_xx), axis=1)/sum(abs(GRADdf_xx)) 
+
+    # select the bandwidth
+    GRADdf_xx_select = GRADdf_xx[index_bw(f[0:-1],bw=flim),]
+    
+    # calcul of the tfsdt : sum of the pseudo-gradient in the frequency bandwidth
+    # which is normalized by the total sum of the pseudo-gradient
+    tfsd =  sum(abs(GRADdf_xx_select))/sum(abs(GRADdf_xx)) 
+    tfsd_per_bin =  sum(abs(GRADdf_xx_select),axis=1)/sum(abs(GRADdf_xx)) 
     
     if display==True :
             fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
@@ -1229,8 +1277,9 @@ def tfsdt (Sxx, display=False):
                     
             # display image
             _im1 = ax1.imshow(linear2dB(GRADdt_xx), 
-                            interpolation='none', origin='lower', 
-                            cmap='gray')
+                              vmax = max(linear2dB(GRADdt_xx)), vmin = -70,
+                              interpolation='none', origin='lower', 
+                              cmap='gray')
             plt.colorbar(_im1, ax=ax1)
             
             # set the parameters of the subplot
@@ -1241,8 +1290,9 @@ def tfsdt (Sxx, display=False):
             
             # display image
             _im2 = ax2.imshow(linear2dB(GRADdf_xx), 
-                            interpolation='none', origin='lower', 
-                            cmap='gray')
+                              vmax = max(linear2dB(GRADdf_xx)), vmin = -70,
+                              interpolation='none', origin='lower', 
+                              cmap='gray')
             plt.colorbar(_im2, ax=ax2)
        
             # set the parameters of the subplot
@@ -1256,7 +1306,7 @@ def tfsdt (Sxx, display=False):
             # Display the figure now
             plt.show()
     
-    return tfsdt
+    return tfsd, tfsd_per_bin
 
 #=============================================================================
 def acousticGradientIndex(Sxx, dt, order=1, norm=None, n_pyr=1, display=False):
