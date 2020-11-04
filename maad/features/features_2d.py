@@ -1065,12 +1065,12 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     """
     Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions 
     using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw
-    response of the spectrogram to the filter bank.
+    response of the spectrogram to each filter of the filter bank.
     
     Parameters
     ----------
-    im: 2D array
-        Input image to process 
+    Sxx: 2D array
+        Spectrogram to be analysed
     resolution: 
         Resolution of analysis, i.e. number of filters used. 
         Three presets are provided, 'low', 'mid' and 'high', which control 
@@ -1080,9 +1080,11 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
             
     Returns
     -------
-    shape_im: 1D array
-        Raw shape response of spectrogram to every filter of the filter bank 
-    params: 2D numpy structured array
+    shape_raw: list
+        Raw shape response of spectrogram to every filter of the filter bank.
+        Every element of the list is the response to one of the filters. Detail 
+        of each filter are available in the param DataFrame returned.
+    params: pandas DataFrame
         Corresponding parameters of the 2D fileters used to calculate the 
         shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
     """    
@@ -1096,13 +1098,7 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
                                           frequency=opt_shape['frequency'],
                                           gamma=opt_shape['gamma'])
     # filter images
-    im_rs = filter_multires(im, kernels, npyr, rescale=True) 
-
-    # Get response of spectrogram to every filter of the filter bank
-    shape_im = dict()
-    for j, imx in enumerate(im_rs):
-        shape_im[j] = imx.ravel()
-    shape_im = pd.DataFrame(shape_im)
+    shape_raw = filter_multires(im, kernels, npyr, rescale=True) 
     
     # organise parameters
     params = np.asarray(params)
@@ -1119,9 +1115,5 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     params_multires['pyr_level'] = pyr_level
     params_multires = pd.DataFrame(params_multires)
     
-    # format shape into dataframe
-    cols=['shp_' + str(idx).zfill(3) for idx in range(1,shape_im.shape[1]+1)]
-    shape_im = pd.DataFrame(data=np.asarray(shape_im),columns=cols)
-        
-    return params_multires, shape_im
+    return params_multires, shape_raw
 
