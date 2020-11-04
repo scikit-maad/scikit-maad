@@ -5,26 +5,24 @@ Collection of miscellaneous functions that help to simplify the framework
 """
 
 from .miscellaneous import (index_bw,
-                   shift_bit_length,
-                   rle,
-                   linear_scale,
-                   linear2dB,
-                   dB2linear,
-                   nearest_idx,
-                   rois_to_audacity,
-                   rois_to_imblobs,
-                   format_rois,
-                   normalize_2d)
+                           shift_bit_length,
+                           rle,
+                           linear_scale,
+                           linear2dB,
+                           dB2linear,
+                           nearest_idx,
+                           get_df_single_row)
 
 from .visualization import (rand_cmap,
-                   crop_image,
-                   plot1D,
-                   plot2D)
+                           crop_image,
+                           plot1D,
+                           plot2D)
 
 from .math_tools import (running_mean,
-               		get_unimode)
+                         get_unimode)
 
 from .parser import (read_audacity_annot,
+                     write_audacity_annot,
                      date_from_filename,
                      date_parser)
 
@@ -51,10 +49,7 @@ __all__ = [
            'linear2dB',
            'dB2linear',
            'nearest_idx',
-           'rois_to_audacity',
-           'rois_to_imblobs',
-           'format_rois',
-           'normalize_2d',
+           'get_df_single_row',
            #  visualization      
            'rand_cmap',
            'crop_image',
@@ -65,6 +60,7 @@ __all__ = [
            'get_unimode',
            # parser
            'read_audacity_annot',
+           'write_audacity_annot',
            'date_from_filename',
            'date_parser',
            # decibelSPL        

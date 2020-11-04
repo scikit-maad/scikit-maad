@@ -18,8 +18,6 @@ import matplotlib.patches as mpatches
 
 import numpy as np 
 
-from math import ceil
-
 from scipy import signal
 from scipy.ndimage import morphology
 from scipy.stats import iqr
@@ -27,12 +25,15 @@ from scipy.stats import iqr
 from skimage import measure, filters
 from skimage.io import imread
 
+import pandas as pd
+
 # min value
 import sys
 _MIN_ = sys.float_info.min
 
 # Import internal modules
-from maad.util import read_audacity_annot, plot1D, plot2D, linear_scale, rand_cmap
+from maad.util import plot1D, plot2D, linear_scale, rand_cmap, nearest_idx
+
 #
 #====== TO DO
 #
@@ -494,7 +495,7 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
 #*************                double_threshold                    ***********
 #****************************************************************************
 
-def double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefig=None,
+def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefig=None,
                      **kwargs):
     """
     Binarize an image based on a double relative threshold. 
@@ -652,7 +653,7 @@ def double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefi
 #****************************************************************************
 #*************                double_threshold                    ***********
 #****************************************************************************
-def double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None,
+def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None,
                      **kwargs):
     """
     Binarize an image based on a double relative threshold. 
@@ -837,19 +838,19 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
     if mode_bin == 'relative':
         bin_std=kwargs.pop('bin_std', 3) 
         bin_per=kwargs.pop('bin_per', 0.5) 
-        im_bin = double_threshold_rel(im, ext, bin_std, bin_per, display, savefig, **kwargs)
+        im_bin = _double_threshold_rel(im, ext, bin_std, bin_per, display, savefig, **kwargs)
         
     elif mode_bin == 'absolute':
         bin_h=kwargs.pop('bin_h', 0.7) 
         bin_l=kwargs.pop('bin_l', 0.3) 
-        im_bin = double_threshold_abs(im, ext, bin_h, bin_l, display, savefig, **kwargs)   
+        im_bin = _double_threshold_abs(im, ext, bin_h, bin_l, display, savefig, **kwargs)   
     
     return im_bin 
 
 #****************************************************************************
-#*************                 select_rois auto                   ***********
+#*************                 select_rois                   ***********
 #****************************************************************************
-def select_rois_auto(im_bin, ext=None, min_roi=None ,max_roi=None, display=False, 
+def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False, 
                 savefig = None, **kwargs):
     """
     Select rois candidates based on area of rois. min and max boundaries.
@@ -972,6 +973,17 @@ def select_rois_auto(im_bin, ext=None, min_roi=None ,max_roi=None, display=False
     # create a list with labelID and labelName (None in this case)
     rois_label = list(zip(rois_label,['unknown']*len(rois_label)))
     
+    # create a dataframe rois containing the coordonates and the label
+    rois = np.concatenate((np.asarray(rois_label), np.asarray(rois_bbox)), axis=1)
+    rois = pd.DataFrame(rois, columns = ['labelID', 'label', 'min_y','min_x','max_y', 'max_x'])
+    # drop labelID
+    rois = rois.drop(columns=['labelID'])
+    # force type to integer
+    rois = rois.astype({'label': str,'min_y':int,'min_x':int,'max_y':int, 'max_x':int})
+    # compensate half-open interval of bbox from skimage
+    rois.max_y -= 1
+    rois.max_x -= 1
+
     # Display
     if display : 
         ylabel =kwargs.pop('ylabel','Frequency [Hz]')
@@ -994,284 +1006,12 @@ def select_rois_auto(im_bin, ext=None, min_roi=None ,max_roi=None, display=False
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format,
                         **kwargs) 
  
-    return im_rois, rois_bbox, rois_label  
-
-"""****************************************************************************
-*************                 select_rois_manually                  ***********
-****************************************************************************"""
-def select_rois_man(im_bin, ext, filename, software='audacity', mask=True, 
-                         display=False, savefig = None, **kwargs):
-    """
-    Select rois candidates that were previously labelled (annotated) manually
-    The ouput image contains pixels with label as value.
-    Only annotation done with Audacity software is supported 
-
-    Parameters
-    ----------
-    im_bin : 2d ndarray of scalars
-        Spectrogram (or image)
-        
-    ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices. 
-        
-    filename : string
-        Filename (full path) with the annotation done with Audacity
-        
-    software : string, optional, default is 'audacity'
-        Give the name of the software used to export the annotations.
-    
-    mask : boolean
-        if True, the out image contains only ROI pixels that are in common
-        with the automatic process. Otherwise, labels are rectangle shape 
-        corresponding to the bounding box selected manually in the annotation
-        software.
-        
-    display : boolean, optional, default is False
-        Display the signal if True
-        
-    savefig : string, optional, default is None
-        Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.
-        
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-           
-        - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
-            Postfix of the figure filename
-         
-        - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
-        
-        - title : string, optional, default : 'Spectrogram'
-            title of the figure
-        
-        - xlabel : string, optional, default : 'Time [s]'
-            label of the horizontal axis
-        
-        - ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
-        
-        - cmap : string or Colormap object, optional, default is 'gray'
-            See https://matplotlib.org/examples/color/colormaps_reference.html
-            in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-            'viridis'...
-        
-        - vmin, vmax : scalar, optional, default: None
-            `vmin` and `vmax` are used in conjunction with norm to normalize
-            luminance data.  Note if you pass a `norm` instance, your
-            settings for `vmin` and `vmax` will be ignored.
-        
-        - ext : scalars (left, right, bottom, top), optional, default: None
-            The location, in data-coordinates, of the lower-left and
-            upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.
-        
-        - dpi : integer, optional, default is 96
-            Dot per inch. 
-            For printed version, choose high dpi (i.e. dpi=300) => slow
-            For screen version, choose low dpi (i.e. dpi=96) => fast
-        
-        - format : string, optional, default is 'png'
-            Format to save the figure
-            
-        ... and more, see matplotlib   
-
-    Returns
-    -------
-    im_label: 2d ndarray
-       image with labels as values
-            
-    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
-        Contain the bounding box of each ROI
-            
-    rois_label : list of tuple (labelID, labelname)
-        Contain the label (LabelID=scalar,labelname=string) for each ROI
-        LabelID is a number from 1 to the number of ROI. The pixel value 
-        of im_label correspond the labelID
-        Labelname is a string. As the selection is auto, label is 'unknown'
-        by default.
-    """
- 
-    if filename is None:     
-        raise Exception("Manual ROI selection requires an annotations filename")
-        
-    print(72 * '_')
-    print('Manual ROIs selection in progress...')
-    print ('Annotating filename %s' % filename)
-
-    
-    Nf, Nt = im_bin.shape
-    df = (ext[3]-ext[2])/(Nf-1)
-    dt = (ext[1]-ext[0])/(Nt-1)
-    t0 = ext[0]
-    f0 = ext[2] 
-    
-    # get the offset in x and y depending on the starting time and freq
-    offset_x = np.round((t0)/dt).astype(int)
-    offset_y = np.round((f0)/df).astype(int) 
-
-    im_rois = np.zeros(im_bin.shape).astype(int) 
-    bbox = []
-    rois_bbox = []
-    rois_label = []
-    if software=='audacity':
-        tab_out = read_audacity_annot(filename)
-        
-        ymin = (tab_out['fmin']/df-offset_y).astype(int)
-        xmin = (tab_out['tmin']/dt-offset_x).astype(int)
-        ymax = (tab_out['fmax']/df-offset_y).astype(int)
-        xmax = (tab_out['tmax']/dt-offset_x).astype(int)
-        zipped = zip(ymin,xmin,ymax,xmax)
-        
-        # add current bbox to the list of bbox
-        bbox= list(zipped) 
-
-    # Construction of the ROIS image with the bbox and labels
-    index = 0
-    labelID = []
-    labelName = []
-    for ymin,xmin,ymax,xmax in bbox:
-        # test if bbox limit is inside the rois image
-        if (ymin>0 and xmin>0 and ymax>0 and xmax>0) :
-            rois_bbox.extend([(ymin,xmin,ymax,xmax)])
-            index= index +1
-            im_rois[ymin:ymax,xmin:xmax] = index
-            labelName.append(tab_out['label'][index-1])
-            labelID.append(index)
-        
-    rois_label = list(zip(labelID,labelName)) 
-
-    rois_label_man = []
-    rois_bbox_man= []
-    if mask:
-        im_rois = (im_bin * im_rois).astype(int)
-        # Select only rois_label that are present into im_rois
-        for index, (ID, LABEL) in enumerate (rois_label): 
-            if ID in im_rois:
-                 rois_label_man.append(rois_label[index])
-                 rois_bbox_man.append(rois_bbox[index])
-    else:
-        rois_label_man = rois_label
-        rois_bbox_man = rois_bbox
-                
-    # Display
-    if display : 
-        ylabel =kwargs.pop('ylabel','Frequency [Hz]')
-        xlabel =kwargs.pop('xlabel','Time [sec]') 
-        title  =kwargs.pop('title','Selected ROIs')
-        figsize=kwargs.pop('figsize',(4, 13)) 
-        
-        randcmap = rand_cmap(len(np.unique(rois_label_man)))
-        cmap   =kwargs.pop('cmap',randcmap) 
-        
-        _, fig = plot2D (im_rois, extent=ext, figsize=figsize,title=title, 
-                         ylabel = ylabel, xlabel = xlabel,
-                         cmap=cmap, **kwargs)
-        # SAVE FIGURE
-        if savefig is not None : 
-            dpi   =kwargs.pop('dpi',96)
-            format=kwargs.pop('format','png') 
-            filename=kwargs.pop('filename','_spectro_selectrois')                
-            filename = savefig+filename+'.'+format
-            fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format,
-                        **kwargs) 
-      
-    return im_rois, rois_bbox_man, rois_label_man 
+    return im_rois, rois
 
 #****************************************************************************
-#*************                   select ROIS wrapper              ***********
+#*************                   overlay_rois                     ***********
 #****************************************************************************
-def select_rois(im_bin,ext,mode_roi='auto',display=False,savefig=None,**kwargs):
-    """
-    Wrapper function
-    Select rois candidates automatically or manually (annotating file)
-    The ouput image contains pixels with labels as values.
-    
-    Parameters
-    ----------
-    im : 2d ndarray of scalars
-        Spectrogram (or image)
-        
-    ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.  
-
-    mode_roi : string in {'auto', 'manual'}, optional, default is 'auto'
-        if 'auto', an automatic selection of the ROIs is performed
-        if 'manual', ROIs manually found using another software (i.e. Audacity) 
-        are retrieved. If mask = True, a boolean AND operation is performed 
-        between the manual ROIs (Rectangles) and the binary image, else no boolean
-        operation is performed with the binary image and the output label image
-        is directly the rectangles (bounding box)
-        
-    display : boolean, optional, default is False
-        Display the signal if True
-        
-    savefig : string, optional, default is None
-        Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.
-        
-    \*\*kwargs, optional. This parameter is used by the maad functions as well
-        as the plt.plot and savefig functions.
-        All the input arguments required or optional in the signature of the
-        functions above can be passed as kwargs :
-        
-        - select_rois_auto(im_bin,ext,min_roi,max_roi,display,savefig,\*\*kwargs)
-        
-        - select_rois_manually(im_bin,ext,filename,software,mask,display,savefig,**kwargs
-           
-        ... and more, see matplotlib   
-        
-        example:
-            
-        im_rois, rois_bbox, rois_label =select_rois_auto(im_bin,ext,mode='auto',
-        min_roi=100,max_roi=1e6,
-        display=True,savefig=None,**kwargs) 
-        
-        im_rois, rois_bbox, rois_label =select_rois_man(im_bin,ext,mode='manual',
-        filename='annotation.txt',
-        software='audacity,
-        display=True,savefig=None,**kwargs)  
-
-    Returns
-    -------
-    im_rois: 2d ndarray
-        image with labels as values
-            
-    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
-        Contains the bounding box of each ROI
-            
-    rois_label : list of tuple (labelID, labelname)
-        Contains the label (LabelID=scalar,labelname=string) for each ROI
-        LabelID is a number from 1 to the number of ROI. The pixel value 
-        of im_label correspond the labelID
-        Labname is a string. As the selection is auto, label is 'unknown'
-        by default.
-    """    
-
-    if mode_roi == 'auto':
-        min_roi=kwargs.pop('min_roi', None) 
-        max_roi=kwargs.pop('max_roi', None) 
-        im_rois,rois_bbox,rois_label=select_rois_auto(im_bin,ext,min_roi,
-                                         max_roi,display,savefig,**kwargs)
-        
-    elif mode_roi == 'manual':
-        filename=kwargs.pop('filename', None) 
-        software=kwargs.pop('software', 'audacity') 
-        mask=kwargs.pop('mask', True) 
-        im_rois,rois_bbox,rois_label=select_rois_man(im_bin,ext,filename,
-                                       software,mask,display,savefig,**kwargs)    
-    
-    return im_rois, rois_bbox, rois_label
-
-
-#****************************************************************************
-#*************                   display_rois                     ***********
-#****************************************************************************
-def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwargs):
+def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
     """
     Overlay bounding box on the original spectrogram
     
@@ -1287,13 +1027,7 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
 
     rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
         Contains the bounding box of each ROI
-        
-    rois_label : list of tuple (labelID, labelname), optional, default is None
-        Contains the label (LabelID=scalar,labelname=string) for each ROI
-        LabelID is a number from 1 to the number of ROI. The pixel value 
-        of im_label correspond the labelID
-        Labname is a string. After an automatic selection, label is 'unknown'
-        by default.  
+
         
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
@@ -1349,6 +1083,12 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
     fig : figure object (see matplotlib)
     """       
     
+    # Check format of the input data
+    if type(rois) is not pd.core.frame.DataFrame:
+        raise TypeError('Rois must be of type pandas DataFrame.')   
+    if not(('min_y' and 'min_x' and 'max_y' and 'max_x') in rois):
+        raise TypeError('Array must be a Pandas DataFrame with column names: min_y, min_x, max_y, max_x. Check example in documentation.')    
+    
     ylabel =kwargs.pop('ylabel','Frequency [Hz]')
     xlabel =kwargs.pop('xlabel','Time [sec]') 
     title  =kwargs.pop('title','ROIs Overlay')
@@ -1368,32 +1108,39 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
     x_scaling = (xmax-xmin) / x_len
     y_scaling = (ymax-ymin) / y_len
     
-    # get the labelName
-    if rois_label is not None:
-        labelID, labelName = zip(*rois_label)
-        labelNames = np.unique(np.array(labelName))
-    
-    if (rois_label is None) or (len(labelNames)==1) :
-        for y0, x0, y1, x1 in rois_bbox:
+    # test if rois has a label column    
+    if 'label' in rois :
+        # select the label column
+        rois_label = rois.label.values
+        uniqueLabels = np.unique(np.array(rois_label))
+    else: 
+        uniqueLabels = []
+                
+    # if only one label or no label in rois
+    if (len(uniqueLabels)<=1) :
+        for index, row in rois.iterrows():
+            y0 = row['min_y']
+            x0 = row['min_x']
+            y1 = row['max_y']
+            x1 = row['max_x']
             rect = mpatches.Rectangle((x0*x_scaling+xmin, y0*y_scaling+ymin), 
                                       (x1-x0)*x_scaling, 
                                       (y1-y0)*y_scaling,
                                       fill=False, edgecolor='yellow', linewidth=1)  
             # draw the rectangle
-            ax.add_patch(rect)
+            ax.add_patch(rect)                
     else :
         # Colormap
-        color = rand_cmap(len(labelNames)+1,first_color_black=False) 
+        color = rand_cmap(len(uniqueLabels)+1,first_color_black=False) 
         cc = 0
-        for bbox, label in zip(rois_bbox, rois_label):
+        for index, row in rois.iterrows():
             cc = cc+1
-            print(cc)
-            y0 = bbox[0]
-            x0 = bbox[1]
-            y1 = bbox[2]
-            x1 = bbox[3]
-            for index, name in enumerate(labelNames):
-                if label[1] in name: ii = index
+            y0 = row['min_y']
+            x0 = row['min_x']
+            y1 = row['max_y']
+            x1 = row['max_x']
+            for index, name in enumerate(uniqueLabels):
+                if row['label'] in name: ii = index
             rect = mpatches.Rectangle((x0*x_scaling+xmin, y0*y_scaling+ymin), 
                                       (x1-x0)*x_scaling, 
                                       (y1-y0)*y_scaling,
@@ -1414,145 +1161,252 @@ def overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None, **kwarg
     
     return ax, fig
 
-"""****************************************************************************
-*************                   find_rois_wrapper                   ***********
-****************************************************************************"""
-def find_rois_wrapper(im, ext, display=False, savefig=None, **kwargs):
+#****************************************************************************
+#*************                   rois_to_imblobs                     ***********
+#****************************************************************************
+
+def rois_to_imblobs(im_blobs, rois):
+    """ 
+    Add 1 corresponding to rois to im_blobs which is an empty matrix
+
+    Parameters
+    ----------
+    im_blobs : ndarray
+        matrix full of zeros with the size to the image where the rois come from
+    
+    rois : DataFrame
+        rois must have the columns names:((min_y, min_x, max_y, max_x) which
+        correspond to the bounding box coordinates
+    
+    Returns
+    -------
+    im_blobs : ndarray
+        matrix with 1 corresponding to the rois and 0 elsewhere
+
     """
-    Wrapper function to find and select ROIs in a spectrogram (or image)
+    # Check format of the input data
+    if type(rois) is not pd.core.frame.DataFrame :
+        raise TypeError('Rois must be of type pandas DataFrame')  
+        
+    if not(('min_y' and 'min_x' and 'max_y' and 'max_x')  in rois)  :
+            raise TypeError('Array must be a Pandas DataFrame with column names:((min_y, min_x, max_y, max_x). Check example in documentation.')  
+    
+    # select the columns
+    rois_bbox = rois[['min_y', 'min_x', 'max_y', 'max_x']]
+    # roi to image blob
+    for min_y, min_x, max_y, max_x in rois_bbox.values:
+        im_blobs[int(min_y):int(max_y+1), int(min_x):int(max_x+1)] = 1
+    
+    im_blobs = im_blobs.astype(int)
+    
+    return im_blobs
+
+
+def format_rois(rois, tn, fn):
+    """ 
+    Setup rectangular rois to a predifined format: 
+    time-frequency or bounding box
     
     Parameters
     ----------
-    im : 2d ndarray of scalars
-        Spectrogram (or image) 
+    rois : pandas DataFrame
+        array must have a valid input format with column names
         
-    ext : list of scalars [left, right, bottom, top], optional, default: None
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. If `None`, the image is positioned such that
-        the pixel centers fall on zero-based (row, column) indices.  
-            
-    display : boolean, optional, default is False
-        Display the signals and the spectrograms if True
+        - bounding box: min_y, min_x, max_y, max_x
         
-    savefig : string, optional, default is None
-        Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.
+        - time frequency: min_f, min_t, max_f, max_t
+    
+    tn : ndarray
+        vector with temporal indices, output from the spectrogram function (in seconds)
+    fn: ndarray
+        vector with frequencial indices, output from the spectrogram function (in Hz)
+    fmt: str
+        A string indicating the desired output format: 'bbox' or 'tf'
         
-    \*\*kwargs, optional. This parameter is used by the maad function as well
-        as the plt.plot and savefig functions.
-        All the input arguments required or optional in the signature functions
-        can be passed.
-        
-        Specific parameters
-        
-        - std_pre : scalar
-            Standard deviation used for the first call of the smooth() 
-            function. It defines the std of the gaussian kernel
-                 
-        - std_post : scalar
-            Standard deviation used for the Second call of the smooth() 
-            function. It defines the std of the gaussian kernel
-               
-        See the signature of each maad function to know the other parameters 
-        that can be passed as kwargs :
-          
-        - remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,llambda=1, display = False, savefig=None,  \*\*kwargs)
-            
-        - smooth (im, ext, std=1, display = False, savefig=None, \*\*kwargs)
-            
-        - create_mask(im, ext, mode_bin ='relative', display=False, savefig=None,\*\*kwargs)
-            
-        - select_rois(im_bin,ext,mode_roi='auto',display=False,savefig=None,\*\*kwargs)
-            
-        - overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,\*\*kwargs)
-            
-        ... and more, see matplotlib  
-        
-
     Returns
     -------
-    im_rois: 2d ndarray
-        image with labels as values
+    rois_bbox: ndarray
+        array with indices of ROIs matched on spectrogram
+    """
+    # Check format of the input data
+    if type(rois) is not pd.core.frame.DataFrame :
+        raise TypeError('Rois must be of type pandas DataFrame')  
+        
+    if not(('min_y' and 'min_x' and 'max_y' and 'max_x')  in rois) and not(('min_f' and 'min_t' and 'max_f' and 'max_t') in rois) :
+            raise TypeError('Array must be a Pandas DataFrame with column names:(min_t, min_f, max_t, max_f) or ( min_y, min_x, max_y, max_x). Check example in documentation.')  
+    
+    # Test if all the columns already exist
+    if (('min_y' and 'min_x' and 'max_y' and 'max_x')  in rois) and (('min_f' and 'min_t' and 'max_f' and 'max_t') in rois) :
+        rois_out = rois
+        return rois_out
+    
+    if ('min_t' and 'min_f' and 'max_t' and 'max_f') in rois :
+        rois_bbox = []
+        for idx in rois.index:            
+            min_y = nearest_idx(fn, rois.loc[idx, 'min_f'])
+            min_x = nearest_idx(tn, rois.loc[idx, 'min_t'])
+            max_y = nearest_idx(fn, rois.loc[idx, 'max_f'])
+            max_x = nearest_idx(tn, rois.loc[idx, 'max_t'])
+            rois_bbox.append((min_y, min_x, max_y, max_x))
             
-    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
-        Contains the bounding box of each ROI
+        rois_out = pd.DataFrame(rois_bbox, 
+                                columns=['min_y','min_x','max_y','max_x'], index=rois.index)
+                        
+    if ('min_y' and 'min_x' and 'max_y' and 'max_x') in rois :  
+        rois_bbox = []
+        for _,row in rois.iterrows():            
+            min_f = fn[round(row.min_y)]
+            min_t = tn[round(row.min_x)]
+            max_f = fn[round(row.max_y)]
+            max_t = tn[round(row.max_x)]
+            rois_bbox.append((min_f, min_t, max_f, max_t))
+            
+        rois_out = pd.DataFrame(rois_bbox, 
+                                columns=['min_f','min_t','max_f','max_t'], index=rois.index)
+    
+    rois_out = rois.join(rois_out) 
         
-    rois_label : list of tuple (labelID, labelname)
-        Contains the label (LabelID=scalar,labelname=string) for each ROI
-        LabelID is a number from 1 to the number of ROI. The pixel value 
-        of im_label correspond the labelID
-        Labname is a string. As the selection is auto, label is 'unknown'
-        by default.
-        
-    Examples
-    --------
-    >>> find_rois_wrapper(im_ref, ext, display=True, std_pre = 2, std_post=1, 
-    >>>                   llambda=1.1, gauss_win = round(1000/df), 
-    >>>                   mode_bin='relative', bin_std=5, bin_per=0.5,
-    >>>                   mode_roi='auto')    
-    """       
-    
-    
-    # Frequency and time resolution
-    df = (ext[3]-ext[2])/(im.shape[0]-1)
-    dt = (ext[1]-ext[0])/(im.shape[1]-1)
-   
-    # keep a copy of the reference image
-    im_ref=im
-    
-    gauss_win=kwargs.pop('gauss_win',round(1000/df))
-    gauss_std=kwargs.pop('gauss_std',round(500/df))
-    beta1=kwargs.pop('beta1', 0.8)
-    beta2=kwargs.pop('beta2', 1)
-    llambda=kwargs.pop('llambda', 1)  
-    
-    std_pre=kwargs.pop('std_pre', 2) 
-    std_post=kwargs.pop('std_post', 1) 
-       
-    mode_bin=kwargs.pop('mode_bin', 'relative') 
-    mode_roi=kwargs.pop('mode_roi', 'auto') 
-        
-    min_roi=kwargs.pop('min_roi', None)
-    if min_roi is None:
-        min_f = ceil(100/df) # 100Hz 
-        min_t = ceil(0.1/dt) # 100ms 
-        min_roi=np.min(min_f*min_t) 
-        
-    max_roi=kwargs.pop('max_roi', None) 
-    if max_roi is None:   
-        # 1000Hz or vertical size of the image
-        max_f = np.asarray([round(1000/df), im.shape[0]]) 
-        # horizontal size of the image or 1s
-        max_t = np.asarray([im.shape[1], round(1/dt)])     
-        max_roi =  np.max(max_f*max_t)
-    
-    kwargs['min_roi']=min_roi 
-    kwargs['max_roi']=max_roi
-    
-    # smooth
-    if std_pre>0 :
-       im = smooth(im, ext, std=std_pre, display=display, 
-                              savefig=savefig,**kwargs)
+    return rois_out
 
-    # Noise subtraction
-    im = remove_background(im, ext, gauss_win=gauss_win, 
-                                    gauss_std=gauss_std, beta1=beta1, 
-                                    beta2=beta2, llambda=llambda, 
-                                    display= display, savefig=savefig, **kwargs)
-    
-    # smooth
-    if std_post>0:
-        im = smooth(im, ext, std=std_post, display=display,
-                            savefig=savefig,**kwargs)
-    
-    # Binarization
-    im = create_mask(im, ext, mode=mode_bin, display=display, savefig=savefig, **kwargs)
-    
-    # Rois extraction
-    im_rois, rois_bbox, rois_label = select_rois(im,ext,mode=mode_roi,
-                                                  display=display, 
-                                                  savefig=savefig, **kwargs)
-    
-    if display: overlay_rois(im_ref, ext, rois_bbox, savefig=savefig, **kwargs)
-
-    return im_rois, rois_bbox, rois_label
+#"""****************************************************************************
+#*************                   find_rois_wrapper                   ***********
+#****************************************************************************"""
+#def find_rois_wrapper(im, ext, display=False, savefig=None, **kwargs):
+#    """
+#    Wrapper function to find and select ROIs in a spectrogram (or image)
+#    
+#    Parameters
+#    ----------
+#    im : 2d ndarray of scalars
+#        Spectrogram (or image) 
+#        
+#    ext : list of scalars [left, right, bottom, top], optional, default: None
+#        The location, in data-coordinates, of the lower-left and
+#        upper-right corners. If `None`, the image is positioned such that
+#        the pixel centers fall on zero-based (row, column) indices.  
+#            
+#    display : boolean, optional, default is False
+#        Display the signals and the spectrograms if True
+#        
+#    savefig : string, optional, default is None
+#        Root filename (with full path) is required to save the figures. Postfix
+#        is added to the root filename.
+#        
+#    \*\*kwargs, optional. This parameter is used by the maad function as well
+#        as the plt.plot and savefig functions.
+#        All the input arguments required or optional in the signature functions
+#        can be passed.
+#        
+#        Specific parameters
+#        
+#        - std_pre : scalar
+#            Standard deviation used for the first call of the smooth() 
+#            function. It defines the std of the gaussian kernel
+#                 
+#        - std_post : scalar
+#            Standard deviation used for the Second call of the smooth() 
+#            function. It defines the std of the gaussian kernel
+#               
+#        See the signature of each maad function to know the other parameters 
+#        that can be passed as kwargs :
+#          
+#        - remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,llambda=1, display = False, savefig=None,  \*\*kwargs)
+#            
+#        - smooth (im, ext, std=1, display = False, savefig=None, \*\*kwargs)
+#            
+#        - create_mask(im, ext, mode_bin ='relative', display=False, savefig=None,\*\*kwargs)
+#            
+#        - select_rois(im_bin,ext,mode_roi='auto',display=False,savefig=None,\*\*kwargs)
+#            
+#        - overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,\*\*kwargs)
+#            
+#        ... and more, see matplotlib  
+#        
+#
+#    Returns
+#    -------
+#    im_rois: 2d ndarray
+#        image with labels as values
+#            
+#    rois_bbox : list of tuple (min_y,min_x,max_y,max_x)
+#        Contains the bounding box of each ROI
+#        
+#    rois_label : list of tuple (labelID, labelname)
+#        Contains the label (LabelID=scalar,labelname=string) for each ROI
+#        LabelID is a number from 1 to the number of ROI. The pixel value 
+#        of im_label correspond the labelID
+#        Labname is a string. As the selection is auto, label is 'unknown'
+#        by default.
+#        
+#    Examples
+#    --------
+#    >>> find_rois_wrapper(im_ref, ext, display=True, std_pre = 2, std_post=1, 
+#    >>>                   llambda=1.1, gauss_win = round(1000/df), 
+#    >>>                   mode_bin='relative', bin_std=5, bin_per=0.5,
+#    >>>                   mode_roi='auto')    
+#    """       
+#    
+#    
+#    # Frequency and time resolution
+#    df = (ext[3]-ext[2])/(im.shape[0]-1)
+#    dt = (ext[1]-ext[0])/(im.shape[1]-1)
+#   
+#    # keep a copy of the reference image
+#    im_ref=im
+#    
+#    gauss_win=kwargs.pop('gauss_win',round(1000/df))
+#    gauss_std=kwargs.pop('gauss_std',round(500/df))
+#    beta1=kwargs.pop('beta1', 0.8)
+#    beta2=kwargs.pop('beta2', 1)
+#    llambda=kwargs.pop('llambda', 1)  
+#    
+#    std_pre=kwargs.pop('std_pre', 2) 
+#    std_post=kwargs.pop('std_post', 1) 
+#       
+#    mode_bin=kwargs.pop('mode_bin', 'relative') 
+#    mode_roi=kwargs.pop('mode_roi', 'auto') 
+#        
+#    min_roi=kwargs.pop('min_roi', None)
+#    if min_roi is None:
+#        min_f = ceil(100/df) # 100Hz 
+#        min_t = ceil(0.1/dt) # 100ms 
+#        min_roi=np.min(min_f*min_t) 
+#        
+#    max_roi=kwargs.pop('max_roi', None) 
+#    if max_roi is None:   
+#        # 1000Hz or vertical size of the image
+#        max_f = np.asarray([round(1000/df), im.shape[0]]) 
+#        # horizontal size of the image or 1s
+#        max_t = np.asarray([im.shape[1], round(1/dt)])     
+#        max_roi =  np.max(max_f*max_t)
+#    
+#    kwargs['min_roi']=min_roi 
+#    kwargs['max_roi']=max_roi
+#    
+#    # smooth
+#    if std_pre>0 :
+#       im = smooth(im, ext, std=std_pre, display=display, 
+#                              savefig=savefig,**kwargs)
+#
+#    # Noise subtraction
+#    im = remove_background(im, ext, gauss_win=gauss_win, 
+#                                    gauss_std=gauss_std, beta1=beta1, 
+#                                    beta2=beta2, llambda=llambda, 
+#                                    display= display, savefig=savefig, **kwargs)
+#    
+#    # smooth
+#    if std_post>0:
+#        im = smooth(im, ext, std=std_post, display=display,
+#                            savefig=savefig,**kwargs)
+#    
+#    # Binarization
+#    im = create_mask(im, ext, mode=mode_bin, display=display, savefig=savefig, **kwargs)
+#    
+#    # Rois extraction
+#    im_rois, rois_bbox, rois_label = select_rois(im,ext,mode=mode_roi,
+#                                                  display=display, 
+#                                                  savefig=savefig, **kwargs)
+#    
+#    if display: overlay_rois(im_ref, ext, rois_bbox, savefig=savefig, **kwargs)
+#
+#    return im_rois, rois_bbox, rois_label
