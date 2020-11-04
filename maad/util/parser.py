@@ -56,6 +56,35 @@ def read_audacity_annot (audacity_filename):
 
     return tab_out
 
+#=============================================================================
+def write_audacity_annot(fname, onset, offset):
+    """ 
+    Write audio segmentation to file (Audacity format)
+    
+    Parameters
+    ----------
+    fname: str
+        filename to save the segmentation
+    onset: int, float array_like
+        output of a detection method (e.g. find_rois_1d)
+    offset: int, float array_like
+        output of a detection method (e.g. find_rois_1d)
+            
+    Returns
+    -------
+    Returns a csv file
+    """
+    if onset.size==0:
+        print(fname, '< No detection found')
+        df = pd.DataFrame(data=None)
+        df.to_csv(fname, sep=',',header=False, index=False)
+    else:
+        label = range(len(onset))
+        rois_tf = pd.DataFrame({'t_begin':onset, 't_end':offset, 'xlabel':label})
+        rois_tf.to_csv(fname, index=False, header=False, sep='\t') 
+
+#=============================================================================
+
 def date_from_filename (filename):
     """
     Extract date and time from the filename. Return a datetime object

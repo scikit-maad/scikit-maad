@@ -139,6 +139,13 @@ def linear_scale(x, minval= 0.0, maxval=1.0):
     if isinstance(x, list):
         x = np.asarray(x)
         
+    # avoid problems with inf and -inf values
+    x_min = np.min(x.ravel()[x.ravel()!=-np.inf]) 
+    x[np.where(x == -np.inf)] = x_min
+    x_max = np.max(x.ravel()[x.ravel()!=np.inf]) 
+    x[np.where(x == np.inf)] = x_max        
+     
+    # do the normalization
     y = x - x.min();
     y = (y/y.max())*(maxval-minval);
     y = y + minval;
@@ -240,44 +247,6 @@ def dB2linear (x, mode = 'power',  db_gain=0):
     return y
 
 #=============================================================================
-def rois_to_audacity(fname, onset, offset):
-    """ 
-    Write audio segmentation to file (Audacity format)
-    
-    Parameters
-    ----------
-    fname: str
-        filename to save the segmentation
-    onset: int, float array_like
-        output of a detection method (e.g. find_rois_1d)
-    offset: int, float array_like
-        output of a detection method (e.g. find_rois_1d)
-            
-    Returns
-    -------
-    Returns a csv file
-    """
-    if onset.size==0:
-        print(fname, '< No detection found')
-        df = pd.DataFrame(data=None)
-        df.to_csv(fname, sep=',',header=False, index=False)
-    else:
-        label = range(len(onset))
-        rois_tf = pd.DataFrame({'t_begin':onset, 't_end':offset, 'xlabel':label})
-        rois_tf.to_csv(fname, index=False, header=False, sep='\t') 
-
-#=============================================================================
-
-def rois_to_imblobs(im_blobs, rois_bbox):
-    """ 
-    Add rois to im_blobs 
-    """
-    # roi to image blob
-    for min_y, min_x, max_y, max_x in rois_bbox.values:
-        im_blobs[min_y:max_y+1, min_x:max_x+1]=1
-    return im_blobs
-
-#=============================================================================
 
 def shift_bit_length(x):
     """
@@ -333,106 +302,86 @@ def nearest_idx(array,value):
     return idx
 
 #=============================================================================
-def normalize_2d(im, min_value, max_value):
-    """ 
-    Normalize 2d array between two values. 
-        
-    Parameters
-    ----------
-    im: 2D ndarray
-        Bidimensinal array to be normalized
-    min_value: int, float
-        Minimum value in normalization
-    max_value: int, float
-        Maximum value in normalization
-        
-    Returns
-    -------
-    im_out: 2D ndarray
-        Array normalized between min and max values
+
+def get_df_single_row (df, index, mode='iloc'):
     """
-    # be sure it's ndarray
-    im = np.asarray(im)    
-        
-    # avoid problems with inf and -inf values
-    min_im = np.min(im.ravel()[im.ravel()!=-np.inf]) 
-    im[np.where(im == -np.inf)] = min_im
-    max_im = np.max(im.ravel()[im.ravel()!=np.inf]) 
-    im[np.where(im == np.inf)] = max_im
-
-    # normalize between min max
-    im = (im - min_im) / (max_im - min_im)
-    im_out = im * (max_value - min_value) + min_value
-    return im_out
-
-#=============================================================================
-
-def format_rois(rois, ts, fs, fmt=None):
-    """ 
-    Setup rectangular rois to a predifined format: 
-    time-frequency or bounding box
+    Extract a single row from a dataframe keeping the DataFrame type (instead of becoming a Series)
     
     Parameters
     ----------
-    rois : pandas DataFrame
-        array must have a valid input format with column names
-        
-        - bounding box: min_y, min_x, max_y, max_x
-        
-        - time frequency: min_f, min_t, max_f, max_t
+    df : pandas DataFrame
+        DataFrame with one or more rows
     
-    ts : ndarray
-        vector with temporal indices, output from the spectrogram function (in seconds)
-    fs: ndarray
-        vector with frequencial indices, output from the spectrogram function (in Hz)
-    fmt: str
-        A string indicating the desired output format: 'bbox' or 'tf'
-        
+    index : interger (in case of 'iloc') or index (in case of loc)
+        index could be the row number or the row index depending on the mode
+    
+    mode : string, optional, default is 'iloc'
+        choose between row number ('iloc') or row index ('loc')
+        (see Pandas documentation for the difference)
     Returns
     -------
-    rois_bbox: ndarray
-        array with indices of ROIs matched on spectrogram
-    """
-    # Check format of the input data
-    if type(rois) is not pd.core.frame.DataFrame and type(rois) is not pd.core.series.Series:
-        raise TypeError('Rois must be of type pandas DataFrame or Series.')    
-
-    elif fmt is not 'bbox' and fmt is not 'tf':
-        raise TypeError('Format must be either fmt=\'bbox\' or fmt=\'tf\'.')
-
-    # Compute new format
-    elif type(rois) is pd.core.series.Series and fmt is 'bbox':
-        min_y = nearest_idx(fs, rois.min_f)
-        min_x = nearest_idx(ts, rois.min_t)
-        max_y = nearest_idx(fs, rois.max_f)
-        max_x = nearest_idx(ts, rois.max_t)
-        rois_out = pd.Series({'min_y': min_y, 'min_x': min_x, 
-                              'max_y': max_y, 'max_x': max_x})
-        
-    elif type(rois) is pd.core.series.Series and fmt is 'tf':
-        rois_out = pd.Series({'min_f': fs[rois.min_y.astype(int)], 
-                              'min_t': ts[rois.min_x.astype(int)],
-                              'max_f': fs[rois.max_y.astype(int)],
-                              'max_t': ts[rois.max_x.astype(int)]})
-            
-    elif type(rois) is pd.core.frame.DataFrame and fmt is 'bbox':
-        rois_bbox = []
-        for idx in rois.index:            
-            min_y = nearest_idx(fs, rois.loc[idx, 'min_f'])
-            min_x = nearest_idx(ts, rois.loc[idx, 'min_t'])
-            max_y = nearest_idx(fs, rois.loc[idx, 'max_f'])
-            max_x = nearest_idx(ts, rois.loc[idx, 'max_t'])
-            rois_bbox.append((min_y, min_x, max_y, max_x))
-        
-        rois_out = pd.DataFrame(rois_bbox, 
-                                columns=['min_y','min_x','max_y','max_x'])
+    df_out : pandas DataFrame
+        Single row DataFrame
     
-    elif type(rois) is pd.core.frame.DataFrame and fmt is 'tf':
-        rois_out = pd.DataFrame({'min_f': fs[rois.min_y.astype(int)], 
-                                 'min_t': ts[rois.min_x.astype(int)],
-                                 'max_f': fs[rois.max_y.astype(int)],
-                                 'max_t': ts[rois.max_x.astype(int)]})
+    Examples
+    --------
+    >>>import pandas as pd
+    >>>from maad.util import get_df_single_row
+    >>>species = [ ('bird', 8, 'Yes' ,'NYC') ,
+                  ('insect', 4, 'No','NYC' ) ,
+                  ('mammal', 2, 'No','NYC' ) ,
+                  ('frog', 3, 'Yes',"LA" ) ]
+    
+    >>>df = pd.DataFrame(species, 
+                          columns = ['category',
+                                     'abundance',
+                                     'presence',
+                                     'location']) 
+    >>>print(df)
+          category  abundance presence location
+        0     bird          8      Yes      NYC
+        1   insect          4       No      NYC
+        2   mammal          2       No      NYC
+        3     frog          3      Yes       LA
+    >>> df.loc[0]
+        category     bird
+        abundance       8
+        presence      Yes
+        location      NYC
+        Name: 0, dtype: object
+    >>> get_df_single_row (df, index=0, mode='iloc')
+          category abundance presence location
+        0     bird         8      Yes      NYC
+        
+     Now with index   
+        
+    >>>df_modified=df.set_index("category")
+    >>>print(df_modified)
+                    abundance presence location
+        category                             
+        bird              8      Yes      NYC
+        insect            4       No      NYC
+        mammal            2       No      NYC
+        frog              3      Yes       LA 
+    >>> df_modified.loc['insect']  
+        abundance      4
+        presence      No
+        location     NYC
+        Name: insect, dtype: object
+    >>> get_df_single_row (df_modified, index='insect', mode='loc')
+               abundance presence location
+        insect         4       No      NYC
+    >>> get_df_single_row (df_modified, index=1, mode='iloc')    
+               abundance presence location
+        insect         4       No      NYC
+    """
 
-    else:
-        raise TypeError('Rois type or format not understood, please check docstring.')
-    return rois_out
+    if mode == 'iloc' :
+        df_out = pd.DataFrame(df.iloc[index]).T
+    elif mode == 'loc' :
+        df_out = pd.DataFrame(df.loc[index]).T
+    else :
+        raise TypeError ('mode must be iloc or loc, default is iloc')
+    
+    return df_out
+    
