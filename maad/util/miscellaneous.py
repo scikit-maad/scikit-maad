@@ -462,5 +462,30 @@ def format_features(df, tn, fn):
         df = df.join(pd.DataFrame(df_centroid, 
                                       columns=['centroid_y','centroid_x'], 
                                       index=df.index))     
+     
+    #=============
+    elif ('duration_x' and 'bandwidth_y' and 'area_xy') in df and not (('duration_t' and 'bandwidth_f' and 'area_tf') in df): 
+        df_area = []
+        for _,row in df.iterrows():            
+            bandwidth_f = row.bandwidth_y * (fn[1]-fn[0])
+            duration_t = row.duration_x * (tn[1]-tn[0])
+            area_tf = row.area_xy * (fn[1]-fn[0]) * (tn[1]-tn[0])
+            df_area.append((duration_t, bandwidth_f, area_tf))
+            
+        df = df.join(pd.DataFrame(df_area, 
+                                  columns=['duration_t','bandwidth_f', 'area_tf'], 
+                                  index=df.index)) 
         
+    elif ('duration_t' and 'bandwidth_f' and 'area_tf') in df and not (('duration_x' and 'bandwidth_y' and 'area_xy') in df) : 
+        df_area = []
+        for idx in df.index:            
+            bandwidth_y = round(df.loc[idx, 'bandwidth_f']) / ((fn[1]-fn[0]))
+            duration_x = round(df.loc[idx, 'duration_t']) / (tn[1]-tn[0])
+            area_xy = round(df.loc[idx, 'area_xy'] / ((fn[1]-fn[0]) * (tn[1]-tn[0])))
+            df_area.append((bandwidth_y, duration_x, area_xy))
+            
+        df = df.join(pd.DataFrame(df_area, 
+                                  columns=['duration_x','bandwidth_y','area_xy'], 
+                                  index=df.index))  
+                
     return df

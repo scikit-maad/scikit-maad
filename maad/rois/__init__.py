@@ -6,6 +6,7 @@ Collection of methods to find regions of interest in 1D and 2D signals.
 
 from .rois_2d import (load,
                      remove_background,
+                     median_equalizer,
                      select_bandwidth,
                      smooth,
                      create_mask,
@@ -20,6 +21,7 @@ from .rois_1d import (sinc,
 
 __all__ = ['load', 
            'remove_background', 
+           'median_equalizer',
            'select_bandwidth',
            'smooth',
            'create_mask',

@@ -998,8 +998,12 @@ def rois_features (Sxx, rois, im_rois=None):
     ##### bandwith in number of pixels
     bandwith = (rois.max_y -rois.min_y)
                 
-    area = pd.DataFrame({'duration_pix':duration, 'bandwith_pix':bandwith, 'area_pix': area}) 
+    area =  pd.DataFrame({'duration_x':duration, 'bandwidth_y':bandwith, 'area_xy': area}) 
+    
+    # concat rois and centroid dataframes
+    rois = rois.join(pd.DataFrame(area, index=rois.index))   
 
+    return rois
 
 #****************************************************************************
 #*************                 compute_all_features               ***********
