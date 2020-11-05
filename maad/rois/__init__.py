@@ -11,8 +11,7 @@ from .rois_2d import (load,
                      create_mask,
                      select_rois,
                      overlay_rois,
-                     rois_to_imblobs,
-                     format_rois)
+                     rois_to_imblobs)
 
 from .rois_1d import (sinc,
                       _corresp_onset_offset,
@@ -27,7 +26,6 @@ __all__ = ['load',
            'select_rois',
            'overlay_rois',
            'rois_to_imblobs',
-           'format_rois',
            'sinc',
            '_corresp_onset_offset',
            '_energy_windowed',

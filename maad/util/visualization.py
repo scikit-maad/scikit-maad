@@ -13,6 +13,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+from skimage.io import imsave 
 import colorsys
 
 # min value
@@ -436,3 +437,24 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
         fn = fn[np.where(indf>0)]
     
     return im, tn, fn
+
+#=============================================================================
+def save_figlist(fname, figlist):
+    """
+    Save a list of figures to file.
+    
+    Parameters
+    ----------
+    fname: string
+        suffix name to save the figure. Extension indicates the format 
+        of the image
+
+    Returns
+    -------
+    Nothing
+        
+    """
+    for i, fig in enumerate(figlist):
+        fname_save='%d_%s' % (i, fname)
+        imsave(fname_save,fig)
+

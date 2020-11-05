@@ -5,16 +5,15 @@ Methods to compute multiple descriptors to characterize sounds
 """
 
 from .features_2d import (filter_multires,
-                            filter_bank_2d_nodc,
-                            shape_features,
-                            shape_features_raw,
-                            centroid,
-                            save_csv,
-                            create_csv,
-                            get_features_wrapper,
-                            opt_shape_presets,
-                            compute_rois_features,
-                            plot_shape)
+                          filter_bank_2d_nodc,
+                          opt_shape_presets,
+                          shape_features,
+                          shape_features_raw,
+                          plot_shape,
+                          centroid_features,
+                          overlay_centroid,
+                          rois_features,
+                          compute_all_features)
 
 from .features_1d import psd, rms
 
@@ -36,19 +35,22 @@ from .alpha_indices import (intoBins, # should be in sounds
                             acousticGradientIndex,
                             raoQ)
 
-__all__ = ['filter_multires', 
+__all__ = [
+           # features_2d
+           'filter_multires', 
            'filter_bank_2d_nodc',
+           'opt_shape_presets',
            'shape_features',
            'shape_features_raw',
-           'centroid',
-           'save_csv',
-           'create_csv',
-           'get_features_wrapper',
-           'opt_shape_presets',
-           'compute_rois_features',
+           'plot_shape',
+           'centroid_features',
+           'overlay_centroid',
+           'rois_features',
+           'compute_all_features',
+           # features_1d
            'psd',
            'rms',
-           'plot_shape',
+           # alpha_indices
            "intoBins",
            "entropy",
            "skewness",

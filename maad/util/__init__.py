@@ -11,10 +11,12 @@ from .miscellaneous import (index_bw,
                            linear2dB,
                            dB2linear,
                            nearest_idx,
-                           get_df_single_row)
+                           get_df_single_row,
+                           format_features)
 
 from .visualization import (rand_cmap,
                            crop_image,
+                           save_figlist,
                            plot1D,
                            plot2D)
 
@@ -50,9 +52,11 @@ __all__ = [
            'dB2linear',
            'nearest_idx',
            'get_df_single_row',
+           'format_features',
            #  visualization      
            'rand_cmap',
            'crop_image',
+           'save_figlist',
            'plot1D',
            'plot2D',
            # math       

@@ -1061,11 +1061,6 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
         
-        - ext : scalars (left, right, bottom, top), optional, default: None
-            The location, in data-coordinates, of the lower-left and
-            upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.
-        
         - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
@@ -1096,10 +1091,13 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
     figsize=kwargs.pop('figsize',(4, 13)) 
     vmin=kwargs.pop('vmin',0) 
     vmax=kwargs.pop('vmax',1) 
+    ax =kwargs.pop('ax',None) 
+    fig=kwargs.pop('fig',None) 
         
-    ax, fig = plot2D (im_ref,extent=ext,now=False, figsize=figsize,title=title, 
-                     ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax, 
-                     cmap=cmap, **kwargs)
+    if (ax is None) and (fig is None):
+        ax, fig = plot2D (im_ref,extent=ext,now=False, figsize=figsize,title=title, 
+                         ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax, 
+                         cmap=cmap, **kwargs)
 
     # Convert pixels into time and frequency values
     y_len, x_len = im_ref.shape
@@ -1202,71 +1200,6 @@ def rois_to_imblobs(im_blobs, rois):
     return im_blobs
 
 
-def format_rois(rois, tn, fn):
-    """ 
-    Setup rectangular rois to a predifined format: 
-    time-frequency or bounding box
-    
-    Parameters
-    ----------
-    rois : pandas DataFrame
-        array must have a valid input format with column names
-        
-        - bounding box: min_y, min_x, max_y, max_x
-        
-        - time frequency: min_f, min_t, max_f, max_t
-    
-    tn : ndarray
-        vector with temporal indices, output from the spectrogram function (in seconds)
-    fn: ndarray
-        vector with frequencial indices, output from the spectrogram function (in Hz)
-    fmt: str
-        A string indicating the desired output format: 'bbox' or 'tf'
-        
-    Returns
-    -------
-    rois_bbox: ndarray
-        array with indices of ROIs matched on spectrogram
-    """
-    # Check format of the input data
-    if type(rois) is not pd.core.frame.DataFrame :
-        raise TypeError('Rois must be of type pandas DataFrame')  
-        
-    if not(('min_y' and 'min_x' and 'max_y' and 'max_x')  in rois) and not(('min_f' and 'min_t' and 'max_f' and 'max_t') in rois) :
-            raise TypeError('Array must be a Pandas DataFrame with column names:(min_t, min_f, max_t, max_f) or ( min_y, min_x, max_y, max_x). Check example in documentation.')  
-    
-    # Test if all the columns already exist
-    if (('min_y' and 'min_x' and 'max_y' and 'max_x')  in rois) and (('min_f' and 'min_t' and 'max_f' and 'max_t') in rois) :
-        rois_out = rois
-        return rois_out
-    
-    if ('min_t' and 'min_f' and 'max_t' and 'max_f') in rois :
-        rois_bbox = []
-        for idx in rois.index:            
-            min_y = nearest_idx(fn, rois.loc[idx, 'min_f'])
-            min_x = nearest_idx(tn, rois.loc[idx, 'min_t'])
-            max_y = nearest_idx(fn, rois.loc[idx, 'max_f'])
-            max_x = nearest_idx(tn, rois.loc[idx, 'max_t'])
-            rois_bbox.append((min_y, min_x, max_y, max_x))
-            
-        rois_out = pd.DataFrame(rois_bbox, 
-                                columns=['min_y','min_x','max_y','max_x'], index=rois.index)
-                        
-    if ('min_y' and 'min_x' and 'max_y' and 'max_x') in rois :  
-        rois_bbox = []
-        for _,row in rois.iterrows():            
-            min_f = fn[round(row.min_y)]
-            min_t = tn[round(row.min_x)]
-            max_f = fn[round(row.max_y)]
-            max_t = tn[round(row.max_x)]
-            rois_bbox.append((min_f, min_t, max_f, max_t))
-            
-        rois_out = pd.DataFrame(rois_bbox, 
-                                columns=['min_f','min_t','max_f','max_t'], index=rois.index)
-    
-    rois_out = rois.join(rois_out) 
-        
-    return rois_out
 
 #"""****************************************************************************
 #*************                   find_rois_wrapper                   ***********

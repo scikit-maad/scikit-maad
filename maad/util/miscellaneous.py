@@ -385,3 +385,82 @@ def get_df_single_row (df, index, mode='iloc'):
     
     return df_out
     
+
+def format_features(df, tn, fn):
+    """ 
+    Setup rectangular df to a predifined format: 
+    time-frequency or bounding box
+    
+    Parameters
+    ----------
+    df : pandas DataFrame
+        array must have a valid input format with column names
+        
+        - bounding box: min_y, min_x, max_y, max_x
+        - time frequency: min_f, min_t, max_f, max_t
+        - centroid tf : centroid_f, centroid_t
+        - centroid pixels : centroid_y, centroid_x
+    
+    tn : ndarray
+        vector with temporal indices, output from the spectrogram function (in seconds)
+    fn: ndarray
+        vector with frequencial indices, output from the spectrogram function (in Hz)
+
+    Returns
+    -------
+    df: ndarray
+        array with indices of ROIs matched on spectrogram
+    """
+    # Check format of the input data
+    if type(df) is not pd.core.frame.DataFrame :
+        raise TypeError('Rois must be of type pandas DataFrame')  
+
+    if ('min_t' and 'min_f' and 'max_t' and 'max_f') in df and not (('min_y' and 'min_x' and 'max_y' and 'max_x') in df):
+        df_bbox = []
+        for idx in df.index:            
+            min_y = nearest_idx(fn, df.loc[idx, 'min_f'])
+            min_x = nearest_idx(tn, df.loc[idx, 'min_t'])
+            max_y = nearest_idx(fn, df.loc[idx, 'max_f'])
+            max_x = nearest_idx(tn, df.loc[idx, 'max_t'])
+            df_bbox.append((min_y, min_x, max_y, max_x))
+            
+        df = df.join(pd.DataFrame(df_bbox, 
+                                  columns=['min_y','min_x','max_y','max_x'], 
+                                  index=df.index))
+                        
+    elif ('min_y' and 'min_x' and 'max_y' and 'max_x') in df and not (('min_t' and 'min_f' and 'max_t' and 'max_f') in df): 
+        df_bbox = []
+        for _,row in df.iterrows():            
+            min_f = fn[int(round(row.min_y))]
+            min_t = tn[int(round(row.min_x))]
+            max_f = fn[int(round(row.max_y))]
+            max_t = tn[int(round(row.max_x))]
+            df_bbox.append((min_f, min_t, max_f, max_t))
+            
+        df = df.join(pd.DataFrame(df_bbox, 
+                                  columns=['min_f','min_t','max_f','max_t'], 
+                                  index=df.index))
+    
+    elif ('centroid_y' and 'centroid_x') in df and not (('centroid_f' and 'centroid_t') in df): 
+        df_centroid = []
+        for _,row in df.iterrows():            
+            centroid_f = fn[int(round(row.centroid_y))]
+            centroid_t = tn[int(round(row.centroid_x))]
+            df_centroid.append((centroid_f, centroid_t))
+            
+        df = df.join(pd.DataFrame(df_centroid, 
+                                      columns=['centroid_f','centroid_t'], 
+                                      index=df.index)) 
+        
+    elif ('centroid_f' and 'centroid_t') in df and not (('centroid_y' and 'centroid_x') in df) : 
+        df_centroid = []
+        for idx in df.index:            
+            centroid_y = nearest_idx(fn, df.loc[idx, 'centroid_f'])
+            centroid_x = nearest_idx(tn, df.loc[idx, 'centroid_t'])
+            df_centroid.append((centroid_y, centroid_x))
+            
+        df = df.join(pd.DataFrame(df_centroid, 
+                                      columns=['centroid_y','centroid_x'], 
+                                      index=df.index))     
+        
+    return df
