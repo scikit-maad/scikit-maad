@@ -416,6 +416,10 @@ def format_features(df, tn, fn):
         raise TypeError('Rois must be of type pandas DataFrame')  
 
     if ('min_t' and 'min_f' and 'max_t' and 'max_f') in df and not (('min_y' and 'min_x' and 'max_y' and 'max_x') in df):
+        
+#        select frequencies and times in fn and tn
+        df = df[(df.min_t >= tn.min()) & (df.max_t <= tn.max()) & (df.min_f >= fn.min()) & (df.max_f <= fn.max())]
+        
         df_bbox = []
         for idx in df.index:            
             min_y = nearest_idx(fn, df.loc[idx, 'min_f'])
@@ -423,7 +427,7 @@ def format_features(df, tn, fn):
             max_y = nearest_idx(fn, df.loc[idx, 'max_f'])
             max_x = nearest_idx(tn, df.loc[idx, 'max_t'])
             df_bbox.append((min_y, min_x, max_y, max_x))
-            
+        
         df = df.join(pd.DataFrame(df_bbox, 
                                   columns=['min_y','min_x','max_y','max_x'], 
                                   index=df.index))

@@ -12,7 +12,6 @@ from .features_2d import (filter_multires,
                           plot_shape,
                           centroid_features,
                           overlay_centroid,
-                          rois_features,
                           compute_all_features)
 
 from .features_1d import psd, rms
@@ -45,7 +44,6 @@ __all__ = [
            'plot_shape',
            'centroid_features',
            'overlay_centroid',
-           'rois_features',
            'compute_all_features',
            # features_1d
            'psd',
