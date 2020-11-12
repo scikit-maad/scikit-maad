@@ -712,10 +712,10 @@ def shape_features(Sxx, resolution='low', rois=None):
      
     # format shape into dataframe 
     cols=['shp_' + str(idx).zfill(3) for idx in range(1,len(shape[0])+1)] 
-    shape = pd.DataFrame(data=np.asarray(shape),columns=cols) 
+    shape = pd.DataFrame(data=np.asarray(shape),columns=cols, index=rois.index) 
      
     if rois is not None:        
-        shape = pd.concat([rois, shape], axis='columns') 
+        shape = rois.join(pd.DataFrame(shape, index=rois.index))  
          
     return shape, params_multires 
  
@@ -857,12 +857,10 @@ def centroid_features(Sxx, rois=None, im_rois=None):
         centroid['bandwidth_y'] = Sxx.shape[0]
     else: 
         if im_rois is not None : 
-            # real area 
-            for labelID in rois.labelID : 
-                area.append(sum(im_rois ==int(labelID))) 
-            # real centroid
+            # real centroid and area
             rprops = measure.regionprops(im_rois, intensity_image=Sxx)
             centroid = [roi.weighted_centroid for roi in rprops]
+            area = [roi.area for roi in rprops]
         else:
             # rectangular area (overestimation) 
             area = (rois.max_y -rois.min_y) * (rois.max_x -rois.min_x)  
@@ -870,15 +868,17 @@ def centroid_features(Sxx, rois=None, im_rois=None):
             for _, row in rois.iterrows() : 
                 row = pd.DataFrame(row).T 
                 im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), row)     
-                rprops = measure.regionprops(im_blobs, intensity_image=Sxx) 
+                rprops = measure.regionprops(im_blobs, intensity_image=Sxx)
                 centroid.append(rprops.pop().weighted_centroid) 
-     
+
         centroid = pd.DataFrame(centroid, columns=['centroid_y', 'centroid_x'], index=rois.index)
         
         ##### duration in number of pixels 
         centroid['duration_x'] = (rois.max_x -rois.min_x)  
         ##### bandwidth in number of pixels 
         centroid['bandwidth_y'] = (rois.max_y -rois.min_y) 
+        ##### bandwidth in number of pixels 
+        centroid['area_xy'] = (rois.max_y * rois.min_y)         
      
         # concat rois and centroid dataframes 
         centroid = rois.join(pd.DataFrame(centroid, index=rois.index))  
@@ -999,9 +999,8 @@ def overlay_centroid (im_ref, ext, centroid, savefig=None, **kwargs):
 #**************************************************************************** 
 #*************                 compute_all_features               *********** 
 #****************************************************************************      
-def compute_all_features(s, fs, rois, resolution='med',  
-                          opt_spec={'nperseg': 1024, 'overlap': 0.5, 'flims': None},  
-                          display=False): 
+def compute_all_features(s, fs, rois, resolution='low',  
+                          display=False, **kwargs): 
     """ 
     Computes shape and central frequency features from signal at specified 
     time-frequency limits defined by regions of interest (ROIs) 
@@ -1028,7 +1027,44 @@ def compute_all_features(s, fs, rois, resolution='med',
         values in Hertz 
     display: boolean, optional, default is False 
         Flag. If display is True, plot results 
-     
+        
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+            
+        - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
+            Postfix of the figure filename 
+         
+        - figsize : tuple of integers, optional, default: (4,10) 
+            width, height in inches.   
+         
+        - title : string, optional, default : 'Spectrogram' 
+            title of the figure 
+         
+        - xlabel : string, optional, default : 'Time [s]' 
+            label of the horizontal axis 
+         
+        - ylabel : string, optional, default : 'Amplitude [AU]' 
+            label of the vertical axis 
+         
+        - cmap : string or Colormap object, optional, default is 'gray' 
+            See https://matplotlib.org/examples/color/colormaps_reference.html 
+            in order to get all the  existing colormaps 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
+            'viridis'... 
+         
+        - vmin, vmax : scalar, optional, default: None 
+            `vmin` and `vmax` are used in conjunction with norm to normalize 
+            luminance data.  Note if you pass a `norm` instance, your 
+            settings for `vmin` and `vmax` will be ignored. 
+                 
+        - dpi : integer, optional, default is 96 
+            Dot per inch.  
+            For printed version, choose high dpi (i.e. dpi=300) => slow 
+            For screen version, choose low dpi (i.e. dpi=96) => fast 
+         
+        - format : string, optional, default is 'png' 
+            Format to save the figure  
+         
+        ... and more, see matplotlib  
     Returns 
     ------- 
     feature_rois: pandas Dataframe 
@@ -1037,155 +1073,95 @@ def compute_all_features(s, fs, rois, resolution='med',
     Examples 
     -------- 
     >>> from maad.util import read_audacity_annot 
-    >>> from maad.sound import load, spectrogram 
-    >>> from maad.rois import find_rois_cwt 
-    >>> from maad.features import compute_rois_features, shape_features 
+    >>> from maad.sound import load 
+    >>> from maad.features import compute_all_features 
     >>> s, fs = load('./data/spinetail.wav')         
     >>> rois = read_audacity_annot('./data/spinetail.txt')  ## annotations using Audacity 
-    >>> opt_spec = {'nperseg': 512, 'overlap': 0.5, 'flims': (1000,15000)} 
-    >>> features_rois = compute_rois_features(s, fs, rois, resolution='med', opt_spec=opt_spec, display=True) 
- 
-         
+    >>> features = compute_all_features(s, fs, rois, resolution='low',display=True) 
+    >>> features
+        label      min_t     ...       duration_x  bandwidth_y
+        0     SP   0.101385     ...              0.0          0.0
+        1   CRER   0.506924     ...              0.0          0.0
+        2     SP   1.203945     ...              0.0          0.0
+        3     SP   2.724718     ...              0.0          0.0
+        4   CRER   5.221319     ...              0.0          0.0
+        5     SP   6.260514     ...              0.0          0.0
+        6     SP   7.946037     ...              0.0          0.0
+        7     SP   8.896519     ...              0.0          0.0
+        8     SP   9.973733     ...              0.0          0.0
+        9   CRER  11.329756     ...              0.0          0.0
+        10    SP  11.773314     ...              0.0          0.0
+        ....
+    >>> np.asarray(list(features)).T
+        array(['label', 'min_t', 'min_f', 'max_t', 'max_f', 'min_y', 'min_x',
+       'max_y', 'max_x', 'shp_001', 'shp_002', 'shp_003', 'shp_004',
+       'shp_005', 'shp_006', 'shp_007', 'shp_008', 'shp_009', 'shp_010',
+       'shp_011', 'shp_012', 'shp_013', 'shp_014', 'shp_015', 'shp_016',
+       'centroid_y', 'centroid_x', 'duration_x', 'bandwidth_y',
+       'centroid_f', 'centroid_t'], dtype='<U11')
     """    
-    if opt_spec is not None : 
-        Sxx, tn, fn, ext = spectrogram(s, fs, nperseg=opt_spec['nperseg'],  
-                                            overlap=opt_spec['overlap'], fcrop=opt_spec['flims'],  
-                                            rescale=False) 
-    else : 
-        Sxx, tn, fn, ext = spectrogram(s, fs)       
- 
+   
+    # Spectro computing
+    N=1024
+    window  = kwargs.pop('window','hann')
+    nperseg = kwargs.pop('nperseg',N) 
+    overlap = kwargs.pop('overlap',N//2)  
+    mode    = kwargs.pop('mode', 'psd')   
+    fcrop   = kwargs.pop('fcrop',None) 
+    tcrop   = kwargs.pop('tcrop',None)
+    verbose = kwargs.pop('verbose',False) 
+    # Spectro display
+    ax      = kwargs.pop('ax',None)  
+    fig     = kwargs.pop('fig',None)  
+    vmin   = kwargs.pop('vmin',-120) 
+    vmax   = kwargs.pop('vmax',-20)
+    
+    Sxx, tn, fn, ext = spectrogram(s, fs, window, nperseg, overlap, fcrop,
+                                   tcrop, mode, verbose, display=False, **kwargs) 
+    
+    # dB scale
+    Sxx = 10*np.log10(Sxx)
+     
     # format rois to bbox 
     rois = format_features(rois, tn, fn) 
-         
-    if display : 
-        Sxx = np.log10(Sxx) 
-        overlay_rois(Sxx, ext, rois, vmin=-12, vmax=0) 
-         
-    # get features: shape, center frequency 
-    Sxx = linear_scale(Sxx, 0, 1) 
-     
-    # smooth Spectrogram 
-    # Sxx = gaussian(Sxx) 
+    
+    # if rois becomes empty aveter format_features
+    if rois.empty :
+        print ('rois is empty')
+        features = rois
+        return features
+    else:
+        print('number of rois : %d' % len(rois))
      
     # Compute shape features and centroid features 
-    shape, params = shape_features(Sxx, rois=rois, resolution=resolution) 
-    centroid = centroid_features(Sxx, rois=rois) 
+    shape, params = shape_features(Sxx, resolution, rois) 
+    shape = format_features(shape, tn, fn)
+    if verbose : 
+        print('Dataframe with shapes features')
+        print(shape)
         
+    centroid = centroid_features(Sxx, rois) 
+    centroid = format_features(centroid, tn, fn)
+    if verbose : 
+        print('Dataframe with centroids features')
+        print(centroid)
+    
+    if display :
+        # view bbox
+        ax, fig = overlay_rois(Sxx, ext, rois, vmin=vmin, vmax=vmax, **kwargs)
+        # view centroids
+        overlay_centroid(Sxx, ext, centroid, savefig=None, 
+                         fig=fig, ax=ax, **kwargs)
+        # plot shape
+        plot_shape(shape.mean(), params)
+    
     # combine into a single df without columns duplication
-    rois_features = pd.concat([rois, shape, centroid], axis=0, sort=False).fillna(0)
+    features = pd.concat([rois, shape, centroid], axis=1, sort=False)
+    features = features.loc[:,~features.columns.duplicated()]
+    
+    if verbose : 
+        print('list of features')
+        print(list(features))
      
-    return rois_features 
+    return features 
  
-#def get_features_wrapper(im, ext, display=False, savefig=None, save_csv=None,  
-#                         **kwargs): 
-#    """ 
-#    Computes shape of 2D signal (image or spectrogram) at multiple resolutions  
-#    using 2D Gabor filters 
-#     
-#    Parameters 
-#    ---------- 
-#    im: 2D array 
-#        Input image to process (spectrogram) 
-# 
-#    ext : list of scalars [left, right, bottom, top], optional, default: None 
-#        The location, in data-coordinates, of the lower-left and 
-#        upper-right corners. If `None`, the image is positioned such that 
-#        the pixel centers fall on zero-based (row, column) indices.  
-#         
-#    display : boolean, optional, default is False 
-#        Display the signal if True 
-#         
-#    savefig : string, optional, default is None 
-#        Root filename (with full path) is required to save the figures. Postfix 
-#        is added to the root filename. 
-#         
-#    save_csv : string, optional, default is None 
-#        Root filename (with full path) is required to save the table. Postfix 
-#        is added to the root filename. 
-#         
-#    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
-#         
-#        - figsize : tuple of integers, 
-#            width, height in inches.   
-#             
-#        - title : string,  
-#            title of the figure 
-#         
-#        - xlabel : string, optional,  
-#            label of the horizontal axis 
-#         
-#        - ylabel : string, optional,  
-#            label of the vertical axis 
-#         
-#        - cmap : string or Colormap object,  
-#            See https://matplotlib.org/examples/color/colormaps_reference.html 
-#            in order to get all the  existing colormaps 
-#            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
-#            'viridis'... 
-#         
-#        - vmin, vmax : scalar 
-#            `vmin` and `vmax` are used in conjunction with norm to normalize 
-#            luminance data.  Note if you pass a `norm` instance, your 
-#            settings for `vmin` and `vmax` will be ignored. 
-#         
-#        - ext : scalars (left, right, bottom, top), 
-#            The location, in data-coordinates, of the lower-left and 
-#            upper-right corners. If `None`, the image is positioned such that 
-#            the pixel centers fall on zero-based (row, column) indices. 
-#         
-#        - dpi : integer, optional 
-#            Dot per inch.  
-#            For printed version, choose high dpi (i.e. dpi=300) => slow 
-#            For screen version, choose low dpi (i.e. dpi=96) => fast 
-#         
-#        - format : string, optional 
-#            Format to save the figure 
-#             
-#        ... and more, see matplotlib       
-#     
-#    Returns 
-#    ------- 
-#    table : dataframe (Pandas) 
-#        The table contains all the features extracted from the spectrogram. 
-#        Keys are {'labelID', 'labelName, 'cyear', 'cmonth', 'cday', 'chour', 
-#        'cmin','csecond','cfreq','shp0,'shp1',...'shpn'} 
-#         
-#    params_shape: 2D numpy structured array 
-#        Parameters used to calculate 2D gabor kernels.   
-#        params_shape has 5 fields (theta, freq, bandwidth, gamma, pyr_level) 
-#        Each row corresponds to a shape (shp1, shp2...shpn) 
-#    """    
-#        
-#    freq=kwargs.pop('freq',(0.75, 0.5)) 
-#    ntheta=kwargs.pop('ntheta',2) 
-#    bandwidth=kwargs.pop('bandwidth', 1) 
-#    gamma=kwargs.pop('gamma', 1) 
-#    npyr=kwargs.pop('npyr', 3)   
-#    date=kwargs.pop('date', None)  
-#    im_rois=kwargs.pop('im_rois', None)   
-#    label_features=kwargs.pop('label_features', None)  
-#        
-#    params, kernels = filter_bank_2d_nodc(frequency=freq, ntheta=ntheta,  
-#                                          bandwidth=bandwidth,gamma=gamma,  
-#                                          display=display, savefig=savefig) 
-#     
-#    # multiresolution image filtering (Gaussian pyramids) 
-#    im_filtlist = filter_multires(im, ext, kernels, params, npyr=npyr,  
-#                                  display=display, savefig=savefig) 
-#     
-#    # Extract shape features for each roi 
-#    params_shape, shape = shape_features(im_filtlist=im_filtlist,  
-#                                          params = params,  
-#                                          im_rois=im_rois) 
-#    # Extract centroids features for each roi 
-#    centroid = centroid_features(im=im, ext=ext, date=date, im_rois=im_rois) 
-#     
-#    if save_csv : 
-#        table = save_csv(save_csv+'.csv',  
-#                         shape, centroid, label_features, 
-#                         display=display) 
-#    else: 
-#        table = create_csv(shape, centroid, label_features, 
-#                           display=display) 
-#     
-#    return table, params_shape 
