@@ -660,10 +660,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
                                               mode='complex',
                                               detrend='constant', 
                                               scaling='density', axis=-1)          
-   
-    if verbose :
-        print ('spectrogram dimension Nx=%d Ny=%d' % (Sxx_complex.shape[0], Sxx_complex.shape[1]))
-        
+           
     # Mutliply by the frequency resolution step (fs/nperseg) to get the power
     # so multiply by the sqrt((fs/nperseg)) to get the amplitude
     # Also multiply by sqrt(2) in order to compensate that only the postive frequencies are kept
@@ -694,6 +691,9 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     # instead of nperseg/2 + 1 
     Sxx_out = Sxx_out[:-1,:]
     fn = fn[:-1]
+    
+    if verbose :
+        print ('spectrogram dimension Nx=%d Ny=%d' % (Sxx_complex.shape[0], Sxx_complex.shape[1]))
     
     # Crop the image in order to analyzed only a portion of it
     if (fcrop or tcrop) is not None:
