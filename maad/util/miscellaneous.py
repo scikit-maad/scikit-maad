@@ -417,7 +417,7 @@ def format_features(df, tn, fn):
 
     if ('min_t' and 'min_f' and 'max_t' and 'max_f') in df and not (('min_y' and 'min_x' and 'max_y' and 'max_x') in df):
         
-#        select frequencies and times in fn and tn
+        # select frequencies and times in fn and tn
         df = df[(df.min_t >= tn.min()) & (df.max_t <= tn.max()) & (df.min_f >= fn.min()) & (df.max_f <= fn.max())]
         
         df_bbox = []
@@ -426,26 +426,34 @@ def format_features(df, tn, fn):
             min_x = nearest_idx(tn, df.loc[idx, 'min_t'])
             max_y = nearest_idx(fn, df.loc[idx, 'max_f'])
             max_x = nearest_idx(tn, df.loc[idx, 'max_t'])
-            df_bbox.append((min_y, min_x, max_y, max_x))
+            # test if max > min, if not, drop row form df
+            if (min_y<=max_y) and (min_x<=max_x) :
+                df_bbox.append((min_y, min_x, max_y, max_x))
+            else: 
+                df = df.drop(idx)
         
         df = df.join(pd.DataFrame(df_bbox, 
                                   columns=['min_y','min_x','max_y','max_x'], 
                                   index=df.index))
                         
-    elif ('min_y' and 'min_x' and 'max_y' and 'max_x') in df and not (('min_t' and 'min_f' and 'max_t' and 'max_f') in df): 
+    if ('min_y' and 'min_x' and 'max_y' and 'max_x') in df and not (('min_t' and 'min_f' and 'max_t' and 'max_f') in df): 
         df_bbox = []
         for _,row in df.iterrows():            
             min_f = fn[int(round(row.min_y))]
             min_t = tn[int(round(row.min_x))]
             max_f = fn[int(round(row.max_y))]
             max_t = tn[int(round(row.max_x))]
-            df_bbox.append((min_f, min_t, max_f, max_t))
-            
+            # test if max > min, if not, drop row form df
+            if (min_f<=max_f) and (min_t<=max_t) :
+                df_bbox.append((min_f, min_t, max_f, max_t))
+            else: 
+                df = df.drop(row.name)
+
         df = df.join(pd.DataFrame(df_bbox, 
                                   columns=['min_f','min_t','max_f','max_t'], 
                                   index=df.index))
     
-    elif ('centroid_y' and 'centroid_x') in df and not (('centroid_f' and 'centroid_t') in df): 
+    if ('centroid_y' and 'centroid_x') in df and not (('centroid_f' and 'centroid_t') in df): 
         df_centroid = []
         for _,row in df.iterrows():            
             centroid_f = fn[int(round(row.centroid_y))]
@@ -456,7 +464,7 @@ def format_features(df, tn, fn):
                                       columns=['centroid_f','centroid_t'], 
                                       index=df.index)) 
         
-    elif ('centroid_f' and 'centroid_t') in df and not (('centroid_y' and 'centroid_x') in df) : 
+    if ('centroid_f' and 'centroid_t') in df and not (('centroid_y' and 'centroid_x') in df) : 
         df_centroid = []
         for idx in df.index:            
             centroid_y = nearest_idx(fn, df.loc[idx, 'centroid_f'])
@@ -468,7 +476,7 @@ def format_features(df, tn, fn):
                                       index=df.index))     
      
     #=============
-    elif ('duration_x' and 'bandwidth_y' and 'area_xy') in df and not (('duration_t' and 'bandwidth_f' and 'area_tf') in df): 
+    if ('duration_x' and 'bandwidth_y' and 'area_xy') in df and not (('duration_t' and 'bandwidth_f' and 'area_tf') in df): 
         df_area = []
         for _,row in df.iterrows():            
             bandwidth_f = row.bandwidth_y * (fn[1]-fn[0])
@@ -480,7 +488,7 @@ def format_features(df, tn, fn):
                                   columns=['duration_t','bandwidth_f', 'area_tf'], 
                                   index=df.index)) 
         
-    elif ('duration_t' and 'bandwidth_f' and 'area_tf') in df and not (('duration_x' and 'bandwidth_y' and 'area_xy') in df) : 
+    if ('duration_t' and 'bandwidth_f' and 'area_tf') in df and not (('duration_x' and 'bandwidth_y' and 'area_xy') in df) : 
         df_area = []
         for idx in df.index:            
             bandwidth_y = round(df.loc[idx, 'bandwidth_f']) / ((fn[1]-fn[0]))
