@@ -22,6 +22,10 @@ to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)
 import numpy as np 
 from numpy import sum, log10, abs, mean, sqrt
 
+# min value
+import sys
+_MIN_ = sys.float_info.min
+
 """****************************************************************************
 # -------------------       Functions               ---------------------------
 ****************************************************************************"""
@@ -201,6 +205,9 @@ def pressure2dBSPL (p, pRef=20e-6):
     # force to be ndarray
     p = np.asarray(p)
     
+    # if p ==0 set to MIN
+    p[p==0] = _MIN_
+    
     # Take the log of the ratio pressure/pRef
     L = 20*log10(p/pRef) 
     return (L)
@@ -283,6 +290,9 @@ def power2dBSPL (P, pRef=20e-6):
     """    
     # force to be ndarray
     P= np.asarray(P)
+    
+    # if p ==0 set to MIN
+    P[P==0] = _MIN_
     
     # Take the log of the ratio power/pRef²
     L = 10*log10(P/pRef**2) 
@@ -574,6 +584,8 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     volt_2D = volt_1D.reshape(N_RMS,dN)
     # RMS
     volt_RMS = sqrt(mean(volt_2D**2,axis=1))
+    # if volt_RMS ==0 set to MIN
+    volt_RMS[volt_RMS==0] = _MIN_
     # RMS to Leq (Equivalent Continuous Sound level)
     Leq = 20*log10(volt_RMS) - sensitivity + dBref - gain
     return(Leq)
@@ -623,6 +635,8 @@ def pressure2Leq (p, f, dt=1, pRef = 20e-6):
     p_2D = p_1D.reshape(N_RMS,dN)
     # RMS
     p_RMS = sqrt(mean(p_2D**2,axis=1))# Test the current operating system
+    # if p_RMS ==0 set to MIN
+    p_RMS[p_RMS==0] = _MIN_
     # RMS to Leq (Equivalent Continuous Sound level)
     Leq = 20*log10(p_RMS/pRef)
     return (Leq)
@@ -656,6 +670,9 @@ def PSD2Leq (P, pRef = 20e-6):
     """  
     # be sure they are ndarray
     P = np.asarray(P)
+    
+    # if P ==0 set to MIN
+    P[P==0] = _MIN_
     
     # Energy (pressure^2) to Leq (=> Leq (Equivalent Continuous Sound level) 
     # if the sum is performed on the whole PSD)
