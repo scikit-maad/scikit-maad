@@ -20,7 +20,9 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     fs: float, optional
         Sampling frequency of audio signal
     nperseg: int, optional
-        Lenght of segment for 'welch' method, default is 256
+        Length of segment for 'welch' method, default is 256
+    window : string, default is 'hanning
+        Name of the window used for the short fourier transform.
     nfft: int, optional
         Length of FFT for periodogram method. If None, length of signal will be used.
         Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.
