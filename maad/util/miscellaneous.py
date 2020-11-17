@@ -14,6 +14,7 @@ import numpy as np
 from numpy import log10, diff
 import pandas as pd
 import numbers
+import warnings
 
 # min value
 import sys
@@ -417,8 +418,14 @@ def format_features(df, tn, fn):
 
     if ('min_t' and 'min_f' and 'max_t' and 'max_f') in df and not (('min_y' and 'min_x' and 'max_y' and 'max_x') in df):
         
-        # select frequencies and times in fn and tn
-        df = df[(df.min_t >= tn.min()) & (df.max_t <= tn.max()) & (df.min_f >= fn.min()) & (df.max_f <= fn.max())]
+        # Check that time and frequency limits are inside tn and fn limits
+        # df = df[(df.min_t >= tn.min()) & (df.max_t <= tn.max()) & (df.min_f >= fn.min()) & (df.max_f <= fn.max())]
+        if (df.min_t < tn.min()).any() | (df.max_t > tn.max()).any() | (df.min_f < fn.min()).any() | (df.max_f > fn.max()).any():
+            warnings.warn('ROIs boundaries are outside time or frecuency signal limits. Clipping ROIS to valid boundaries.')
+            df.loc[df.min_t < tn.min(),'min_t'] = tn.min()
+            df.loc[df.max_t > tn.max(),'max_t'] = tn.max()
+            df.loc[df.min_f < fn.min(),'min_f'] = fn.min()
+            df.loc[df.max_f > fn.max(),'max_f'] = fn.max()
         
         df_bbox = []
         for idx in df.index:            
