@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="features.features_2d.opt_shape_presets" href="features.features_2d.opt_shape_presets.html" />
-    <link rel="prev" title="features.features_2d.filter_multires" href="features.features_2d.filter_multires.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,34 +93,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="features.html">features</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
-<li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="features.features_2d.html">features.features_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid.html">features.features_2d.centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_rois_features.html">features.features_2d.compute_rois_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.create_csv.html">features.features_2d.create_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html">features.features_2d.filter_bank_2d_nodc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_multires.html">features.features_2d.filter_multires</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">features.features_2d.get_features_wrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.opt_shape_presets.html">features.features_2d.opt_shape_presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.plot_shape.html">features.features_2d.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_csv.html">features.features_2d.save_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_figlist.html">features.features_2d.save_figlist</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features.html">features.features_2d.shape_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features_raw.html">features.features_2d.shape_features_raw</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -169,10 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="features.html">features</a> &raquo;</li>
-        
-          <li><a href="features.features_2d.html">features.features_2d</a> &raquo;</li>
-        
       <li>features.features_2d.get_features_wrapper</li>
     
     
@@ -194,103 +169,6 @@
             
   <div class="section" id="features-features-2d-get-features-wrapper">
 <h1>features.features_2d.get_features_wrapper<a class="headerlink" href="#features-features-2d-get-features-wrapper" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.features_2d.get_features_wrapper">
-<code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">get_features_wrapper</code><span class="sig-paren">(</span><em class="sig-param">im</em>, <em class="sig-param">ext</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">save_csv=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#get_features_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.get_features_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes shape of 2D signal (image or spectrogram) at multiple resolutions 
-using 2D Gabor filters</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>im: 2D array</strong></dt><dd><p>Input image to process (spectrogram)</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
-is added to the root filename.</p>
-</dd>
-<dt><strong>save_csv</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the table. Postfix
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers,</span></dt><dd><p>width, height in inches.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>title<span class="classifier">string, </span></dt><dd><p>title of the figure</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>xlabel<span class="classifier">string, optional, </span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, </span></dt><dd><p>label of the vertical axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>cmap<span class="classifier">string or Colormap object, </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
-in order to get all the  existing colormaps
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
-‘viridis’…</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>vmin, vmax<span class="classifier">scalar</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
-luminance data.  Note if you pass a <cite>norm</cite> instance, your
-settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ext<span class="classifier">scalars (left, right, bottom, top),</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>dpi<span class="classifier">integer, optional</span></dt><dd><p>Dot per inch. 
-For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
-For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>format<span class="classifier">string, optional</span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>… and more, see matplotlib</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>table</strong><span class="classifier">dataframe (Pandas)</span></dt><dd><p>The table contains all the features extracted from the spectrogram.
-Keys are {‘labelID’, ‘labelName, ‘cyear’, ‘cmonth’, ‘cday’, ‘chour’,
-‘cmin’,’csecond’,’cfreq’,’shp0,’shp1’,…’shpn’}</p>
-</dd>
-<dt>params_shape: 2D numpy structured array</dt><dd><p>Parameters used to calculate 2D gabor kernels.  
-params_shape has 5 fields (theta, freq, bandwidth, gamma, pyr_level)
-Each row corresponds to a shape (shp1, shp2…shpn)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -298,15 +176,6 @@ Each row corresponds to a shape (shp1, shp2…shpn)</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="features.features_2d.opt_shape_presets.html" class="btn btn-neutral float-right" title="features.features_2d.opt_shape_presets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="features.features_2d.filter_multires.html" class="btn btn-neutral float-left" title="features.features_2d.filter_multires" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

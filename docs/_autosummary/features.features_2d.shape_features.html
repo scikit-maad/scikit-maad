@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="features.features_2d.shape_features_raw" href="features.features_2d.shape_features_raw.html" />
-    <link rel="prev" title="features.features_2d.save_figlist" href="features.features_2d.save_figlist.html" /> 
+    <link rel="prev" title="features.features_2d.plot_shape" href="features.features_2d.plot_shape.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,16 +100,13 @@
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="features.features_2d.html">features.features_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid.html">features.features_2d.centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_rois_features.html">features.features_2d.compute_rois_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.create_csv.html">features.features_2d.create_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid_features.html">features.features_2d.centroid_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_all_features.html">features.features_2d.compute_all_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html">features.features_2d.filter_bank_2d_nodc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_multires.html">features.features_2d.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.get_features_wrapper.html">features.features_2d.get_features_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.opt_shape_presets.html">features.features_2d.opt_shape_presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.overlay_centroid.html">features.features_2d.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.plot_shape.html">features.features_2d.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_csv.html">features.features_2d.save_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_figlist.html">features.features_2d.save_figlist</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">features.features_2d.shape_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features_raw.html">features.features_2d.shape_features_raw</a></li>
 </ul>
@@ -122,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -196,59 +193,55 @@
 <h1>features.features_2d.shape_features<a class="headerlink" href="#features-features-2d-shape-features" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.features_2d.shape_features">
-<code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">shape_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">rois</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#shape_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.shape_features" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">shape_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">rois</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#shape_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.shape_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Sxx: 2D array</strong></dt><dd><p>Input image to process</p>
 </dd>
-<dt><strong>resolution: str or dict</strong></dt><dd><p>Specify resolution of shape descriptors. Can be: ‘low’, ‘med’, ‘high’.
-Default is ‘low’. Alternatively, custom resolution can be provided 
-using a dictionary with options to define the filter bank. Valid keys 
+<dt><strong>resolution: str or dict</strong></dt><dd><p>Specify resolution of shape descriptors. Can be: ‘low’, ‘med’, ‘high’. 
+Default is ‘low’. Alternatively, custom resolution can be provided  
+using a dictionary with options to define the filter bank. Valid keys  
 are: ntheta, bandwidth, frequency, gamma, npyr</p>
 </dd>
-<dt><strong>rois: pandas DataFrame</strong></dt><dd><p>Regions of interest where descriptors will be computed. Array must 
-have a valid input format with column names: min_t min_f, max_t, max_f</p>
-</dd>
-<dt><strong>dt: 1D array</strong></dt><dd><p>Vector of time instants that can be used as x coordinates for the spectrogram</p>
-</dd>
-<dt><strong>df: 1D array</strong></dt><dd><p>Vector of frequencies that can be used as y coordinates for the spectrogram</p>
-</dd>
-<dt><strong>opt_shape: dictionary</strong></dt><dd><p>options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
+<dt><strong>rois: pandas DataFrame</strong></dt><dd><p>Regions of interest where descriptors will be computed. Array must  
+have a valid input format with column names: min_t min_f, max_t, max_f 
+Do format_features(rois,tn,fn) before using shape_features to be sure that 
+the format of the DataFrame is correct</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>shape: 1D array</dt><dd><p>Shape coeficients of each filter</p>
+<dt>shape: pandas DataFrame</dt><dd><p>merge between rois and shapes descriptors</p>
 </dd>
-<dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the 
+<dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the  
 shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Overlapping regions of interest (ROIs) will be combined in the workflow. 
-Identify and process separately these ROIs and then combine the output. 
-Future versions of this function will facilitate the use of overlapping ROIs.</p>
 <p class="rubric">Examples</p>
 <p>Get shape features from the whole power spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">shape_features</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear2dB</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">shape_features</span><span class="p">,</span> <span class="n">plot_shape</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">format_features</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear2dB</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 
 </pre></div>
 </div>
 <p>Or get shape features from specific regions of interest</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">read_audacity_annot</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rois_tf</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.txt&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">rois_tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rois_tf</span><span class="o">.</span><span class="n">label</span><span class="o">==</span><span class="s1">&#39;CRER&#39;</span><span class="p">,]</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">audacity_to_rois</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">audacity_to_rois</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.txt&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">label</span><span class="o">==</span><span class="s1">&#39;CRER&#39;</span><span class="p">,]</span>   
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 
 </pre></div>
 </div>
 </dd></dl>
@@ -266,7 +259,7 @@ Future versions of this function will facilitate the use of overlapping ROIs.</p
         <a href="features.features_2d.shape_features_raw.html" class="btn btn-neutral float-right" title="features.features_2d.shape_features_raw" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="features.features_2d.save_figlist.html" class="btn btn-neutral float-left" title="features.features_2d.save_figlist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="features.features_2d.plot_shape.html" class="btn btn-neutral float-left" title="features.features_2d.plot_shape" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

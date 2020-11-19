@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="features.features_2d.centroid" href="features.features_2d.centroid.html" />
+    <link rel="next" title="features.features_2d.centroid_features" href="features.features_2d.centroid_features.html" />
     <link rel="prev" title="features.features_1d.rms" href="features.features_1d.rms.html" /> 
 </head>
 
@@ -100,16 +100,13 @@
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">features.features_2d</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid.html">features.features_2d.centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_rois_features.html">features.features_2d.compute_rois_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.create_csv.html">features.features_2d.create_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid_features.html">features.features_2d.centroid_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_all_features.html">features.features_2d.compute_all_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html">features.features_2d.filter_bank_2d_nodc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_multires.html">features.features_2d.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.get_features_wrapper.html">features.features_2d.get_features_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.opt_shape_presets.html">features.features_2d.opt_shape_presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.overlay_centroid.html">features.features_2d.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.plot_shape.html">features.features_2d.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_csv.html">features.features_2d.save_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_figlist.html">features.features_2d.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features.html">features.features_2d.shape_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features_raw.html">features.features_2d.shape_features_raw</a></li>
 </ul>
@@ -122,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -200,41 +197,32 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.centroid.html#features.features_2d.centroid" title="features.features_2d.centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">centroid</span></code></a></p></td>
-<td><p>Computes intensity centroid of the 2D signal (usually time-frequency representation)  along a margin, frequency (0) or time (1).</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.centroid_features.html#features.features_2d.centroid_features" title="features.features_2d.centroid_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">centroid_features</span></code></a></p></td>
+<td><p>Computes intensity centroid of a spectrogram.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.compute_rois_features.html#features.features_2d.compute_rois_features" title="features.features_2d.compute_rois_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_rois_features</span></code></a></p></td>
-<td><p>Computes shape and central frequency features from signal at specified time-frequency limits defined by regions of interest (ROIs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.compute_all_features.html#features.features_2d.compute_all_features" title="features.features_2d.compute_all_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_all_features</span></code></a></p></td>
+<td><p>Computes shape and central frequency features from signal at specified  time-frequency limits defined by regions of interest (ROIs)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.create_csv.html#features.features_2d.create_csv" title="features.features_2d.create_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_csv</span></code></a></p></td>
-<td><p>Create a .csv file containing all the features (shapes, centroids and  labels)</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html#features.features_2d.filter_bank_2d_nodc" title="features.features_2d.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_bank_2d_nodc</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html#features.features_2d.filter_bank_2d_nodc" title="features.features_2d.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_bank_2d_nodc</span></code></a></p></td>
 <td><p>Build an ensemble of complex 2D Gabor filters with no DC offset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.filter_multires.html#features.features_2d.filter_multires" title="features.features_2d.filter_multires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_multires</span></code></a></p></td>
-<td><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid  transformation to downscale the input spectrogram.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.get_features_wrapper.html#features.features_2d.get_features_wrapper" title="features.features_2d.get_features_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_features_wrapper</span></code></a></p></td>
-<td><p>Computes shape of 2D signal (image or spectrogram) at multiple resolutions  using 2D Gabor filters</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.filter_multires.html#features.features_2d.filter_multires" title="features.features_2d.filter_multires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_multires</span></code></a></p></td>
+<td><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid   transformation to downscale the input spectrogram.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.opt_shape_presets.html#features.features_2d.opt_shape_presets" title="features.features_2d.opt_shape_presets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opt_shape_presets</span></code></a></p></td>
 <td><p>Set parameters for multiresolution analysis using presets or custom parameters</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.plot_shape.html#features.features_2d.plot_shape" title="features.features_2d.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.overlay_centroid.html#features.features_2d.overlay_centroid" title="features.features_2d.overlay_centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></a></p></td>
+<td><p>Overlay centroids on the original spectrogram</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.plot_shape.html#features.features_2d.plot_shape" title="features.features_2d.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a></p></td>
 <td><p>Plot shape features in a bidimensional plot</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.save_csv.html#features.features_2d.save_csv" title="features.features_2d.save_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_csv</span></code></a></p></td>
-<td><p>Create and save a .csv file containing all the features (shapes, centroids  and labels)</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.save_figlist.html#features.features_2d.save_figlist" title="features.features_2d.save_figlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_figlist</span></code></a></p></td>
-<td><p>Save a list of figures to file.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.shape_features.html#features.features_2d.shape_features" title="features.features_2d.shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.shape_features.html#features.features_2d.shape_features" title="features.features_2d.shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features</span></code></a></p></td>
 <td><p>Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_2d.shape_features_raw.html#features.features_2d.shape_features_raw" title="features.features_2d.shape_features_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features_raw</span></code></a></p></td>
-<td><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  using 2D Gabor filters.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_2d.shape_features_raw.html#features.features_2d.shape_features_raw" title="features.features_2d.shape_features_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features_raw</span></code></a></p></td>
+<td><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions   using 2D Gabor filters.</p></td>
 </tr>
 </tbody>
 </table>
@@ -248,7 +236,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="features.features_2d.centroid.html" class="btn btn-neutral float-right" title="features.features_2d.centroid" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="features.features_2d.centroid_features.html" class="btn btn-neutral float-right" title="features.features_2d.centroid_features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="features.features_1d.rms.html" class="btn btn-neutral float-left" title="features.features_1d.rms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

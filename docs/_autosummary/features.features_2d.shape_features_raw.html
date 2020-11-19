@@ -100,16 +100,13 @@
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="features.features_2d.html">features.features_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid.html">features.features_2d.centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_rois_features.html">features.features_2d.compute_rois_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.create_csv.html">features.features_2d.create_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid_features.html">features.features_2d.centroid_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_all_features.html">features.features_2d.compute_all_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html">features.features_2d.filter_bank_2d_nodc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_multires.html">features.features_2d.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.get_features_wrapper.html">features.features_2d.get_features_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.opt_shape_presets.html">features.features_2d.opt_shape_presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.overlay_centroid.html">features.features_2d.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.plot_shape.html">features.features_2d.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_csv.html">features.features_2d.save_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_figlist.html">features.features_2d.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features.html">features.features_2d.shape_features</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">features.features_2d.shape_features_raw</a></li>
 </ul>
@@ -122,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -197,16 +194,16 @@
 <dl class="py function">
 <dt id="features.features_2d.shape_features_raw">
 <code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">shape_features_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">opt_shape</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#shape_features_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.shape_features_raw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions 
-using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw
-response of the spectrogram to the filter bank.</p>
+<dd><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  
+using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw 
+response of the spectrogram to each filter of the filter bank.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>im: 2D array</strong></dt><dd><p>Input image to process</p>
+<dt><strong>Sxx: 2D array</strong></dt><dd><p>Spectrogram to be analysed</p>
 </dd>
-<dt><strong>resolution:</strong></dt><dd><p>Resolution of analysis, i.e. number of filters used. 
-Three presets are provided, ‘low’, ‘mid’ and ‘high’, which control 
+<dt><strong>resolution:</strong></dt><dd><p>Resolution of analysis, i.e. number of filters used.  
+Three presets are provided, ‘low’, ‘mid’ and ‘high’, which control  
 the number of filters.</p>
 </dd>
 <dt><strong>opt_shape: dictionary (optional)</strong></dt><dd><p>options for the filter bank (kbank_opt) and the number of scales (npyr)</p>
@@ -215,9 +212,11 @@ the number of filters.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>shape_im: 1D array</dt><dd><p>Raw shape response of spectrogram to every filter of the filter bank</p>
+<dt>shape_raw: list</dt><dd><p>Raw shape response of spectrogram to every filter of the filter bank. 
+Every element of the list is the response to one of the filters. Detail  
+of each filter are available in the param DataFrame returned.</p>
 </dd>
-<dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the 
+<dt>params: pandas DataFrame</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the  
 shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</p>
 </dd>
 </dl>

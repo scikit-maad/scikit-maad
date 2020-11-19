@@ -101,7 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -181,6 +181,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imsave</span> 
 <span class="kn">import</span> <span class="nn">colorsys</span>
 
 <span class="c1"># min value</span>
@@ -354,6 +355,18 @@
 <span class="sd">        </span>
 <span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
 <span class="sd">            label of the vertical axis</span>
+<span class="sd">            </span>
+<span class="sd">        - xticks : tuple of ndarrays, optional, default : none</span>
+<span class="sd">            * ticks : array_like =&gt; A list of positions at which ticks should </span>
+<span class="sd">            be placed. You can pass an empty list to disable yticks.</span>
+<span class="sd">            * labels : array_like, optional =&gt;  A list of explicit labels to place </span>
+<span class="sd">            at the given locs.</span>
+<span class="sd">            </span>
+<span class="sd">        - yticks : tuple of ndarrays, optional, default : none</span>
+<span class="sd">            * ticks : array_like =&gt; A list of positions at which ticks should </span>
+<span class="sd">            be placed. You can pass an empty list to disable yticks.</span>
+<span class="sd">            * labels : array_like, optional =&gt;  A list of explicit labels to place </span>
+<span class="sd">            at the given locs.</span>
 <span class="sd">        </span>
 <span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
 <span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
@@ -408,6 +421,8 @@
     <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectrogram&#39;</span><span class="p">)</span>
     <span class="n">ylabel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
     <span class="n">xlabel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+    <span class="n">xticks</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xticks&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
+    <span class="n">yticks</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;yticks&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">cmap</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
     <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
     <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>    
@@ -434,6 +449,12 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">=</span><span class="n">xticks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">xticks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">yticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">=</span><span class="n">yticks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">yticks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
 
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -584,6 +605,27 @@
         <span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">indf</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
     
     <span class="k">return</span> <span class="n">im</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="save_figlist"><a class="viewcode-back" href="../../_autosummary/util.visualization.save_figlist.html#util.visualization.save_figlist">[docs]</a><span class="k">def</span> <span class="nf">save_figlist</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">figlist</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a list of figures to file.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname: string</span>
+<span class="sd">        suffix name to save the figure. Extension indicates the format </span>
+<span class="sd">        of the image</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figlist</span><span class="p">):</span>
+        <span class="n">fname_save</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">imsave</span><span class="p">(</span><span class="n">fname_save</span><span class="p">,</span><span class="n">fig</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>

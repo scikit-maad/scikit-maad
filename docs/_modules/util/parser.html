@@ -101,7 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -223,6 +223,35 @@
                          <span class="n">f_info</span><span class="p">[</span><span class="s1">&#39;max_f&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)],</span>  <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">tab_out</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="write_audacity_annot"><a class="viewcode-back" href="../../_autosummary/util.parser.write_audacity_annot.html#util.parser.write_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">write_audacity_annot</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Write audio segmentation to file (Audacity format)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname: str</span>
+<span class="sd">        filename to save the segmentation</span>
+<span class="sd">    onset: int, float array_like</span>
+<span class="sd">        output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">    offset: int, float array_like</span>
+<span class="sd">        output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Returns a csv file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">onset</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;&lt; No detection found&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">onset</span><span class="p">))</span>
+        <span class="n">rois_tf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;t_begin&#39;</span><span class="p">:</span><span class="n">onset</span><span class="p">,</span> <span class="s1">&#39;t_end&#39;</span><span class="p">:</span><span class="n">offset</span><span class="p">,</span> <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span><span class="n">label</span><span class="p">})</span>
+        <span class="n">rois_tf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span> </div>
+
+<span class="c1">#=============================================================================</span>
 
 <div class="viewcode-block" id="date_from_filename"><a class="viewcode-back" href="../../_autosummary/util.parser.date_from_filename.html#util.parser.date_from_filename">[docs]</a><span class="k">def</span> <span class="nf">date_from_filename</span> <span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

@@ -101,7 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -189,6 +189,10 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">sqrt</span>
+
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
 
 <span class="sd">&quot;&quot;&quot;****************************************************************************</span>
 <span class="sd"># -------------------       Functions               ---------------------------</span>
@@ -369,6 +373,9 @@
     <span class="c1"># force to be ndarray</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     
+    <span class="c1"># if p ==0 set to MIN</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">p</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
+    
     <span class="c1"># Take the log of the ratio pressure/pRef</span>
     <span class="n">L</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">p</span><span class="o">/</span><span class="n">pRef</span><span class="p">)</span> 
     <span class="k">return</span> <span class="p">(</span><span class="n">L</span><span class="p">)</span></div>
@@ -451,6 +458,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="c1"># force to be ndarray</span>
     <span class="n">P</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    
+    <span class="c1"># if p ==0 set to MIN</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">P</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
     
     <span class="c1"># Take the log of the ratio power/pRef²</span>
     <span class="n">L</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="n">pRef</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
@@ -742,6 +752,8 @@
     <span class="n">volt_2D</span> <span class="o">=</span> <span class="n">volt_1D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_RMS</span><span class="p">,</span><span class="n">dN</span><span class="p">)</span>
     <span class="c1"># RMS</span>
     <span class="n">volt_RMS</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">volt_2D</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># if volt_RMS ==0 set to MIN</span>
+    <span class="n">volt_RMS</span><span class="p">[</span><span class="n">volt_RMS</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
     <span class="c1"># RMS to Leq (Equivalent Continuous Sound level)</span>
     <span class="n">Leq</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">volt_RMS</span><span class="p">)</span> <span class="o">-</span> <span class="n">sensitivity</span> <span class="o">+</span> <span class="n">dBref</span> <span class="o">-</span> <span class="n">gain</span>
     <span class="k">return</span><span class="p">(</span><span class="n">Leq</span><span class="p">)</span></div>
@@ -791,6 +803,8 @@
     <span class="n">p_2D</span> <span class="o">=</span> <span class="n">p_1D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_RMS</span><span class="p">,</span><span class="n">dN</span><span class="p">)</span>
     <span class="c1"># RMS</span>
     <span class="n">p_RMS</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">p_2D</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="c1"># Test the current operating system</span>
+    <span class="c1"># if p_RMS ==0 set to MIN</span>
+    <span class="n">p_RMS</span><span class="p">[</span><span class="n">p_RMS</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
     <span class="c1"># RMS to Leq (Equivalent Continuous Sound level)</span>
     <span class="n">Leq</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">p_RMS</span><span class="o">/</span><span class="n">pRef</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">Leq</span><span class="p">)</span></div>
@@ -824,6 +838,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>  
     <span class="c1"># be sure they are ndarray</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    
+    <span class="c1"># if P ==0 set to MIN</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">P</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
     
     <span class="c1"># Energy (pressure^2) to Leq (=&gt; Leq (Equivalent Continuous Sound level) </span>
     <span class="c1"># if the sum is performed on the whole PSD)</span>

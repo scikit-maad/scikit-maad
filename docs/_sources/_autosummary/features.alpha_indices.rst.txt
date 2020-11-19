@@ -1,4 +1,4 @@
-features.alpha\_indices
+﻿features.alpha\_indices
 =======================
 
 .. automodule:: features.alpha_indices
@@ -26,6 +26,7 @@ features.alpha\_indices
       entropy
       gini
       intoBins
+      intoOctave
       kurtosis
       raoQ
       roughness
@@ -35,7 +36,7 @@ features.alpha\_indices
       soundscapeIndex
       spectral_entropy
       surfaceRoughness
-      tfsdt
+      tfsd
    
    
 

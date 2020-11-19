@@ -1,4 +1,5 @@
-scikit-maad examples gallery
-============================
+Examples gallery
+=======================
 
-These scripts are examples of how to use scikit-MAAD package.
+This gallery is intended to illustrate how to use some of the soundscape analyses 
+that can be performed with scikit-maad.

@@ -101,17 +101,13 @@
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">rois.rois_2d</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.create_mask.html">rois.rois_2d.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_abs.html">rois.rois_2d.double_threshold_abs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_rel.html">rois.rois_2d.double_threshold_rel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.find_rois_wrapper.html">rois.rois_2d.find_rois_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.load.html">rois.rois_2d.load</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_auto.html">rois.rois_2d.select_rois_auto</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_man.html">rois.rois_2d.select_rois_man</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -122,7 +118,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -204,38 +200,26 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.create_mask.html#rois.rois_2d.create_mask" title="rois.rois_2d.create_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mask</span></code></a></p></td>
 <td><p>Binarize an image based on a double threshold.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.double_threshold_abs.html#rois.rois_2d.double_threshold_abs" title="rois.rois_2d.double_threshold_abs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">double_threshold_abs</span></code></a></p></td>
-<td><p>Binarize an image based on a double relative threshold.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.double_threshold_rel.html#rois.rois_2d.double_threshold_rel" title="rois.rois_2d.double_threshold_rel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">double_threshold_rel</span></code></a></p></td>
-<td><p>Binarize an image based on a double relative threshold.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.find_rois_wrapper.html#rois.rois_2d.find_rois_wrapper" title="rois.rois_2d.find_rois_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_rois_wrapper</span></code></a></p></td>
-<td><p>Wrapper function to find and select ROIs in a spectrogram (or image)</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.load.html#rois.rois_2d.load" title="rois.rois_2d.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.load.html#rois.rois_2d.load" title="rois.rois_2d.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a></p></td>
 <td><p>Load an image from a file or an URL</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.median_equalizer.html#rois.rois_2d.median_equalizer" title="rois.rois_2d.median_equalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">median_equalizer</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.median_equalizer.html#rois.rois_2d.median_equalizer" title="rois.rois_2d.median_equalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">median_equalizer</span></code></a></p></td>
 <td><p>Median equalizer : remove background noise in a spectrogram</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.overlay_rois.html#rois.rois_2d.overlay_rois" title="rois.rois_2d.overlay_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_rois</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.overlay_rois.html#rois.rois_2d.overlay_rois" title="rois.rois_2d.overlay_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_rois</span></code></a></p></td>
 <td><p>Overlay bounding box on the original spectrogram</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.remove_background.html#rois.rois_2d.remove_background" title="rois.rois_2d.remove_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.remove_background.html#rois.rois_2d.remove_background" title="rois.rois_2d.remove_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background</span></code></a></p></td>
 <td><p>Remove the background noise using spectral subtraction</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html#rois.rois_2d.rois_to_imblobs" title="rois.rois_2d.rois_to_imblobs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rois_to_imblobs</span></code></a></p></td>
+<td><p>Add 1 corresponding to rois to im_blobs which is an empty matrix</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.select_bandwidth.html#rois.rois_2d.select_bandwidth" title="rois.rois_2d.select_bandwidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_bandwidth</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.select_rois.html#rois.rois_2d.select_rois" title="rois.rois_2d.select_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_rois</span></code></a></p></td>
-<td><p>Wrapper function Select rois candidates automatically or manually (annotating file) The ouput image contains pixels with labels as values.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.select_rois_auto.html#rois.rois_2d.select_rois_auto" title="rois.rois_2d.select_rois_auto"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_rois_auto</span></code></a></p></td>
 <td><p>Select rois candidates based on area of rois.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.select_rois_man.html#rois.rois_2d.select_rois_man" title="rois.rois_2d.select_rois_man"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_rois_man</span></code></a></p></td>
-<td><p>Select rois candidates that were previously labelled (annotated) manually The ouput image contains pixels with label as value.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.smooth.html#rois.rois_2d.smooth" title="rois.rois_2d.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a></p></td>
 <td><p>Smooth (i.e.</p></td>

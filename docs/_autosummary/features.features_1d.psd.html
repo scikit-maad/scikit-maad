@@ -112,7 +112,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -195,7 +195,9 @@
 </dd>
 <dt><strong>fs: float, optional</strong></dt><dd><p>Sampling frequency of audio signal</p>
 </dd>
-<dt><strong>nperseg: int, optional</strong></dt><dd><p>Lenght of segment for ‘welch’ method, default is 256</p>
+<dt><strong>nperseg: int, optional</strong></dt><dd><p>Length of segment for ‘welch’ method, default is 256</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">string, default is ‘hanning</span></dt><dd><p>Name of the window used for the short fourier transform.</p>
 </dd>
 <dt><strong>nfft: int, optional</strong></dt><dd><p>Length of FFT for periodogram method. If None, length of signal will be used.
 Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.</p>

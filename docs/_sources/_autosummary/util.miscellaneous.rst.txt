@@ -16,15 +16,13 @@ util.miscellaneous
       :nosignatures:
    
       dB2linear
-      format_rois
+      format_features
+      get_df_single_row
       index_bw
       linear2dB
       linear_scale
       nearest_idx
-      normalize_2d
       rle
-      rois_to_audacity
-      rois_to_imblobs
       shift_bit_length
    
    

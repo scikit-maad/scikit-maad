@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="features.features_2d.get_features_wrapper" href="features.features_2d.get_features_wrapper.html" />
+    <link rel="next" title="features.features_2d.opt_shape_presets" href="features.features_2d.opt_shape_presets.html" />
     <link rel="prev" title="features.features_2d.filter_bank_2d_nodc" href="features.features_2d.filter_bank_2d_nodc.html" /> 
 </head>
 
@@ -100,16 +100,13 @@
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="features.features_2d.html">features.features_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid.html">features.features_2d.centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_rois_features.html">features.features_2d.compute_rois_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.create_csv.html">features.features_2d.create_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid_features.html">features.features_2d.centroid_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_all_features.html">features.features_2d.compute_all_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_bank_2d_nodc.html">features.features_2d.filter_bank_2d_nodc</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">features.features_2d.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.get_features_wrapper.html">features.features_2d.get_features_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.opt_shape_presets.html">features.features_2d.opt_shape_presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.overlay_centroid.html">features.features_2d.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.plot_shape.html">features.features_2d.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_csv.html">features.features_2d.save_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_figlist.html">features.features_2d.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features.html">features.features_2d.shape_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features_raw.html">features.features_2d.shape_features_raw</a></li>
 </ul>
@@ -122,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -197,7 +194,7 @@
 <dl class="py function">
 <dt id="features.features_2d.filter_multires">
 <code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">filter_multires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">kernels</span></em>, <em class="sig-param"><span class="n">npyr</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">rescale</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#filter_multires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.filter_multires" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid 
+<dd><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid  
 transformation to downscale the input spectrogram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -220,12 +217,12 @@ transformation to downscale the input spectrogram.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span><span class="p">,</span> <span class="n">filter_multires</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span> <span class="n">ntheta</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span><span class="p">,</span> <span class="n">filter_multires</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span> <span class="n">ntheta</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
 </pre></div>
 </div>
 </dd></dl>
@@ -240,7 +237,7 @@ transformation to downscale the input spectrogram.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="features.features_2d.get_features_wrapper.html" class="btn btn-neutral float-right" title="features.features_2d.get_features_wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="features.features_2d.opt_shape_presets.html" class="btn btn-neutral float-right" title="features.features_2d.opt_shape_presets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="features.features_2d.filter_bank_2d_nodc.html" class="btn btn-neutral float-left" title="features.features_2d.filter_bank_2d_nodc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

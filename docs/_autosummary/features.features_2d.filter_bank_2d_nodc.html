@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="features.features_2d.filter_multires" href="features.features_2d.filter_multires.html" />
-    <link rel="prev" title="features.features_2d.create_csv" href="features.features_2d.create_csv.html" /> 
+    <link rel="prev" title="features.features_2d.compute_all_features" href="features.features_2d.compute_all_features.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,16 +100,13 @@
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="features.features_2d.html">features.features_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid.html">features.features_2d.centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_rois_features.html">features.features_2d.compute_rois_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.create_csv.html">features.features_2d.create_csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.centroid_features.html">features.features_2d.centroid_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.compute_all_features.html">features.features_2d.compute_all_features</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">features.features_2d.filter_bank_2d_nodc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.filter_multires.html">features.features_2d.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.get_features_wrapper.html">features.features_2d.get_features_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.opt_shape_presets.html">features.features_2d.opt_shape_presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_2d.overlay_centroid.html">features.features_2d.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.plot_shape.html">features.features_2d.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_csv.html">features.features_2d.save_csv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="features.features_2d.save_figlist.html">features.features_2d.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features.html">features.features_2d.shape_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_2d.shape_features_raw.html">features.features_2d.shape_features_raw</a></li>
 </ul>
@@ -122,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -196,23 +193,23 @@
 <h1>features.features_2d.filter_bank_2d_nodc<a class="headerlink" href="#features-features-2d-filter-bank-2d-nodc" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.features_2d.filter_bank_2d_nodc">
-<code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">filter_bank_2d_nodc</code><span class="sig-paren">(</span><em class="sig-param">frequency</em>, <em class="sig-param">ntheta</em>, <em class="sig-param">bandwidth=1</em>, <em class="sig-param">gamma=2</em>, <em class="sig-param">display=False</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#filter_bank_2d_nodc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.filter_bank_2d_nodc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">filter_bank_2d_nodc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frequency</span></em>, <em class="sig-param"><span class="n">ntheta</span></em>, <em class="sig-param"><span class="n">bandwidth</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#filter_bank_2d_nodc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.filter_bank_2d_nodc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an ensemble of complex 2D Gabor filters with no DC offset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>frequency: 1d ndarray of scalars</strong></dt><dd><p>Spatial frequencies used to built the Gabor filters. Values should be
+<dt><strong>frequency: 1d ndarray of scalars</strong></dt><dd><p>Spatial frequencies used to built the Gabor filters. Values should be 
 in the range [0;1]</p>
 </dd>
 <dt><strong>ntheta: int</strong></dt><dd><p>Number of angular steps between 0° to 90°</p>
 </dd>
-<dt><strong>bandwidth: scalar, optional, default is 1</strong></dt><dd><p>Spatial-frequency bandwidth of the filter. This parameters affect
-the resolution of the filters. Lower bandwidth result in sharper
+<dt><strong>bandwidth: scalar, optional, default is 1</strong></dt><dd><p>Spatial-frequency bandwidth of the filter. This parameters affect 
+the resolution of the filters. Lower bandwidth result in sharper 
 in filters with more details.</p>
 </dd>
-<dt><strong>gamma: scalar, optional, default is 1</strong></dt><dd><p>Gaussian window that modulates the continuous sine.
-For <code class="docutils literal notranslate"><span class="pre">gamma</span> <span class="pre">=</span> <span class="pre">1</span></code>, the result is the same gaussian window in x and y direction (circle).
-For <code class="docutils literal notranslate"><span class="pre">gamma</span> <span class="pre">&lt;1</span></code>, the result is an increased elongation of the filter size in the y direction (elipsoid).
+<dt><strong>gamma: scalar, optional, default is 1</strong></dt><dd><p>Gaussian window that modulates the continuous sine. 
+For <code class="docutils literal notranslate"><span class="pre">gamma</span> <span class="pre">=</span> <span class="pre">1</span></code>, the result is the same gaussian window in x and y direction (circle). 
+For <code class="docutils literal notranslate"><span class="pre">gamma</span> <span class="pre">&lt;1</span></code>, the result is an increased elongation of the filter size in the y direction (elipsoid). 
 For <code class="docutils literal notranslate"><span class="pre">gamma</span> <span class="pre">&gt;1</span></code>, the result is a reduction of the filter size in the y direction (elipsoid).</p>
 </dd>
 <dt><strong>display: bool</strong></dt><dd><p>Display a visualization of the filter bank. Default is False.</p>
@@ -221,8 +218,8 @@ For <code class="docutils literal notranslate"><span class="pre">gamma</span> <s
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>params: 2d structured array</dt><dd><p>Parameters used to calculate 2D gabor kernels. 
-Params array has 4 fields (theta, freq, bandwidth, gamma)
+<dt>params: 2d structured array</dt><dd><p>Parameters used to calculate 2D gabor kernels.  
+Params array has 4 fields (theta, freq, bandwidth, gamma) 
 This can be useful to interpret the result of the filtering process.</p>
 </dd>
 <dt>kernels: 2d ndarray of complex values</dt><dd><p>Complex Gabor kernels</p>
@@ -231,16 +228,16 @@ This can be useful to interpret the result of the filtering process.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>It is possible to load presets to build the filter bank using predefined 
+<p>It is possible to load presets to build the filter bank using predefined  
 parameters with the function maad.features.opt_shape_presets</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span><span class="p">,</span> <span class="n">opt_shape_presets</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">opt</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">opt</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="s1">&#39;ntheta&#39;</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">],</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span><span class="p">,</span> <span class="n">opt_shape_presets</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">opt</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="s1">&#39;ntheta&#39;</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">],</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
 </pre></div>
 </div>
 <p>Alternatively, custom parameters can be provided to define the filter bank</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span> <span class="n">ntheta</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span> <span class="n">ntheta</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
 </pre></div>
 </div>
 </dd></dl>
@@ -258,7 +255,7 @@ parameters with the function maad.features.opt_shape_presets</p>
         <a href="features.features_2d.filter_multires.html" class="btn btn-neutral float-right" title="features.features_2d.filter_multires" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="features.features_2d.create_csv.html" class="btn btn-neutral float-left" title="features.features_2d.create_csv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="features.features_2d.compute_all_features.html" class="btn btn-neutral float-left" title="features.features_2d.compute_all_features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -4,10 +4,11 @@
 
 .. _sphx_glr__auto_examples:
 
-scikit-maad examples gallery
-============================
+Examples gallery
+=======================
 
-These scripts are examples of how to use scikit-MAAD package.
+This gallery is intended to illustrate how to use some of the soundscape analyses 
+that can be performed with scikit-maad.
 
 
 .. raw:: html
@@ -38,7 +39,7 @@ These scripts are examples of how to use scikit-MAAD package.
 .. only:: html
 
  .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_nmf_and_false_color_spectrogram_thumb.png
-     :alt: Source separation and false-colour spectrograms
+     :alt: Signal decomposition and false-color spectrograms
 
      :ref:`sphx_glr__auto_examples_plot_nmf_and_false_color_spectrogram.py`
 

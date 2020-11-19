@@ -19,6 +19,7 @@ util.visualization
       plot1D
       plot2D
       rand_cmap
+      save_figlist
    
    
 

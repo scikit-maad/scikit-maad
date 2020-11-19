@@ -43,10 +43,13 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
     'sphinx_gallery.gen_gallery',
 ]
 
-
+# -- Example Gallery --
 sphinx_gallery_conf = {
      'examples_dirs': '../../example_gallery',   # path to your example scripts
      'gallery_dirs': '_auto_examples',  # path to where to save gallery generated output
+     'default_thumb_file': '../_images/logo_maad_small.png',
+     'capture_repr': ('_repr_html_'),
+     'ignore_repr_types': r'matplotlib[text, axes]',
 }
 
 

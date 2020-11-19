@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.math.running_mean" href="util.math.running_mean.html" />
-    <link rel="prev" title="util.math" href="util.math.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,26 +93,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="util.math.html">util.math</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">util.math.get_unimode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.math.running_mean.html">util.math.running_mean</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -161,10 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
-          <li><a href="util.math.html">util.math</a> &raquo;</li>
-        
       <li>util.math.get_unimode</li>
     
     
@@ -186,71 +169,6 @@
             
   <div class="section" id="util-math-get-unimode">
 <h1>util.math.get_unimode<a class="headerlink" href="#util-math-get-unimode" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="util.math.get_unimode">
-<code class="sig-prename descclassname">util.math.</code><code class="sig-name descname">get_unimode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">7</span></em>, <em class="sig-param"><span class="n">N_bins</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/math.html#get_unimode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.math.get_unimode" title="Permalink to this definition">¶</a></dt>
-<dd><p>determine the statistical mode or modal value which is 
-the most common number in the dataset</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>X</strong><span class="classifier">1d or 2d ndarray of scalars</span></dt><dd><p>Vector or matrix</p>
-</dd>
-<dt><strong>mode</strong><span class="classifier">str, optional, default is ‘mean’</span></dt><dd><p>Select the mode to remove the noise
-Possible values for mode are :
-- ‘ale’ : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]
-- ‘median’ : subtract the median value
-- ‘mean’ : subtract the mean value (DC)</p>
-</dd>
-<dt><strong>axis</strong><span class="classifier">integer, default is 1</span></dt><dd><p>if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</p>
-</dd>
-<dt><strong>N</strong><span class="classifier">int (only for mode = “ale”)</span></dt><dd><p>length of window to compute the running mean of the histogram</p>
-</dd>
-<dt><strong>N_bins</strong><span class="classifier">int (only for mode = “ale”)</span></dt><dd><p>number of bins to compute the histogram</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages into the consol or terminal if verbose is True</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>unimode_value</strong><span class="classifier">float</span></dt><dd><p>The most common number in the dataset</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>ale : Adaptative Level Equalization algorithm from Lamel et al., 1981 :
-L.F. Lamel, L.R. Rabiner, A.E. Rosenberg, J.G. Wilpon
-An improved endpoint detector for isolated word recognition
-IEEE Trans. ASSP, ASSP-29 (1981), pp. 777-785</p>
-<p class="rubric">Examples</p>
-<p>This function is interesting to obtain the background noise (BGN) profile (e.g. frequency bin
-by frequency bin) of a spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PSDxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span><span class="n">noverlap</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PSDxx_dB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">energy2dBSPL</span><span class="p">(</span><span class="n">PSDxx</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">BGN_med</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_unimode</span> <span class="p">(</span><span class="n">PSDxx_dB</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-<span class="go">                                           verbose=False, display=False)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">energy2dBSPL</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">PSDxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">BGN_med</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Extract the background noise from mean</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BGN_mean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_unimode</span> <span class="p">(</span><span class="n">PSDxx_dB</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-<span class="go">                                           verbose=False, display=False)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">BGN_mean</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Extract the background noise from ale (i.e. unimode)</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BGN_ale</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_unimode</span> <span class="p">(</span><span class="n">PSDxx_dB</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;ale&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-<span class="go">                                           verbose=False, display=False)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">BGN_ale</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -258,15 +176,6 @@ by frequency bin) of a spectrogram</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.math.running_mean.html" class="btn btn-neutral float-right" title="util.math.running_mean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.math.html" class="btn btn-neutral float-left" title="util.math" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
