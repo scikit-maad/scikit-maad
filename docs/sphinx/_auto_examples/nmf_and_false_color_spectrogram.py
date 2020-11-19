@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Source separation and False-colour spectrograms
+Source separation and false-colour spectrograms
 ===============================================
 
 Soundscapes result from a combination of multiple signals that are mixed-down
@@ -71,6 +71,7 @@ for idx, ax in enumerate(axes):
     ax.set_axis_off()
     ax.set_title('Basis ' + str(idx+1))
 
+plt.show()
 #%% 
 # The first basis spectrogram shows fine and rapid modulations that the signal
 # has. Both signals have these features and hence both are delineated in this
@@ -83,4 +84,4 @@ for idx, ax in enumerate(axes):
 fig, ax = plt.subplots(2,1)
 ax[0].imshow(Sxx_db, origin='lower', aspect='auto', interpolation='bilinear', cmap='gray')
 ax[1].imshow(plt_data, origin='lower', aspect='auto', interpolation='bilinear')
-
+plt.show()
