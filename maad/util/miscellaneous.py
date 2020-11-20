@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """ Utilitary functions for scikit-MAAD """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
@@ -10,8 +11,9 @@
 # Load the modules
 # =============================================================================
 # Import external modules
+import matplotlib.pyplot as plt
 import numpy as np 
-from numpy import log10, diff
+from numpy import log10, diff, mean
 import pandas as pd
 import numbers
 import warnings
@@ -83,7 +85,89 @@ def index_bw (fn, bw):
         index = [bool(x) for x in index]
     return index
 
+#=============================================================================
+def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
+    """ 
+    Transform a vector or a matrix into bins 
+    
+    Parameters
+    ----------
+    x : array-like
+        1D or 2D array.
+    an :1d ndarray of floats 
+        Vector containing the positions of each value. 
+        In case of 2D matrix, this vector corresponds to the horizontal (row)
+        or vertical (columns) units
+    bin_step : scalar
+        Determine the width of each bin.
+    axis : integer, optional, default is 0
+        Determine  along which axis the transformation is done.
+        In case of matrix :
+        axis = 0 => transformation is done on column
+        
+        axis = 1 => transformation is done on row 
+    bin_min : scalar, optional, default is None
+        This minimum value corresponds to the start of the first bin. 
+        By default, the minimum value is the first value of an.
+    bin_max : scalar, optional, default is None
+        This maximum value corresponds to end of the last bin. 
+        By default, the maximum value is the last value of an.   
+    display : boolean, optional, defualt is False
+        Display the result of the tranformation : an histogram
+        In case of matrix, the mean histogram is shown.
+        
+    Returns
+    -------
+    xbins :  array-like
+        1D or 2D array which correspond to the data after being transformed into bins
+    bin : 1d ndarray of floats 
+        Vector containing the positions of each bin
+    """    
+    
+    # Test if the bin_step is larger than the resolution of an
+    if bin_step < (an[1]-an[0]):
+        raise Exception('WARNING: bin step must be larger or equal than the actual resolution of x')
 
+    # In case the limits of the bin are not set
+    if bin_min == None:
+        bin_min = an[0]
+    if bin_max == None :
+        bin_max = an[-1]
+    
+    # Creation of the bins
+    bins = np.arange(bin_min,bin_max+bin_step,bin_step)
+    
+    # select the indices corresponding to the frequency bins range
+    b0 = bins[0]
+    xbin = []
+    s = []
+    for index, b in enumerate(bins[1:]):
+        indices = (an>=b0)*(an<b) 
+        s.append(sum(indices))
+        if axis==0:
+            xbin.append(mean(x[indices,:],axis=axis))
+        elif axis==1:
+            xbin.append(mean(x[:,indices],axis=axis))
+        b0 = b
+      
+    xbin = np.asarray(xbin) * mean(s)
+    bins = bins[0:-1]
+    
+    # Display
+    if display:
+        plt.figure()
+        # if xbin is a vector
+        if xbin.ndim ==1:
+            plt.plot(an,x)
+            plt.bar(bins,xbin, bin_step*0.75, alpha=0.5, align='edge')
+        else:
+            # if xbin is a matrix
+            if axis==0 : axis=1
+            elif axis==1 : axis=0
+            plt.plot(an,mean(x,axis=axis))
+            plt.bar(bins,mean(xbin,axis=1), bin_step*0.75, alpha=0.5, align='edge')
+    
+    return xbin, bins
 
 #=============================================================================
        
@@ -154,17 +238,15 @@ def linear_scale(x, minval= 0.0, maxval=1.0):
 
 
 #=============================================================================
-def linear2dB (x, mode = 'power', db_range=None, db_gain=0):
+def amplitude2dB (x, db_range=None, db_gain=0):
     """
-    Transform linear date into decibel scale within the dB range (db_range).
+    Transform amplitude data (signal, scalar) into decibel scale within the dB range (db_range).
     A gain (db_gain) could be added at the end.    
     
     Parameters
     ----------
-    x : array-like
+    x : array-like or scalar
         data to rescale in dB  
-    mode : str, default is 'power'
-        select the type of data : 'amplitude' or 'power' to compute the corresponding dB
     db_range : scalar, optional, default : None
         if db_range is a number, anything lower than -db_range is set to 
         -db_range and anything larger than 0 is set to 0
@@ -175,14 +257,12 @@ def linear2dB (x, mode = 'power', db_range=None, db_gain=0):
     Returns
     -------
     y : scalars
-        amplitude--> 20*log10(x) + db_gain  
+        y = 20*log10(x) + db_gain  
         
     Examples
     --------
     >>> a = np.array([1,2,3,4,5])
-    >>> linear2dB(a**2, mode='power')
-        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
-    >>> linear2dB(a, mode='amplitude')
+    >>> amplitude2dB(a, mode='amplitude')
         array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
         
     """            
@@ -196,10 +276,58 @@ def linear2dB (x, mode = 'power', db_range=None, db_gain=0):
         x[x ==0] = _MIN_  # Avoid zero value for log10 
 
     # conversion in dB  
-    if mode == 'amplitude' :
-        y = 20*log10(x)   # take log
-    elif mode == 'power':
-        y = 10*log10(x)   # take log 
+    y = 20*log10(x)   # take log
+
+    if db_gain : y = y + db_gain    # Add gain if needed
+    
+    if db_range is not None :
+        # set anything above db_range as 0
+        y[y > 0] = 0  
+        # set anything less than -db_range as -db_range
+        y[y < -(db_range)] = -db_range  
+        
+    return y
+
+#=============================================================================
+def power2dB (x, db_range=None, db_gain=0):
+    """
+    Transform power (amplitude²) signal or scalar into decibel scale within the dB range (db_range).
+    A gain (db_gain) could be added at the end.    
+    
+    Parameters
+    ----------
+    x : array-like
+        data to rescale in dB  
+    db_range : scalar, optional, default : None
+        if db_range is a number, anything lower than -db_range is set to 
+        -db_range and anything larger than 0 is set to 0
+    db_gain : scalar, optional, default is 0
+        Gain added to the results 
+        amplitude --> 20*log10(x) + db_gain  
+    
+    Returns
+    -------
+    y : scalars
+        y = 10*log10(x) + db_gain  
+        
+    Examples
+    --------
+    >>> a = np.array([1,2,3,4,5])
+    >>> power2dB(a**2, mode='power')
+        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
+        
+    """            
+    x = abs(x)   # take the absolute value of x
+    
+    # Avoid zero value for log10  
+    # if it's a scalar
+    if hasattr(x, "__len__") == False:
+        if x ==0: x = _MIN_  
+    else :     
+        x[x ==0] = _MIN_  # Avoid zero value for log10 
+
+    # conversion in dB  
+    y = 10*log10(x)   # take log 
     
     if db_gain : y = y + db_gain    # Add gain if needed
     
@@ -212,17 +340,15 @@ def linear2dB (x, mode = 'power', db_range=None, db_gain=0):
     return y
 
 #=============================================================================
-def dB2linear (x, mode = 'power',  db_gain=0):
+def dB2amplitude (x, db_gain=0):
     """
-    Transform linear date into decibel scale within the dB range (db_range).
+    Transform data in dB scale into amplitude
     A gain (db_gain) could be added at the end.    
     
     Parameters
     ----------
     x : array-like
-        data in dB to rescale in linear 
-    mode : str, default is 'power'
-        select 'amplitude' or 'power' to compute the corresponding dB
+        data in dB to rescale in amplitude 
     db_gain : scalar, optional, default is 0
         Gain that was added to the result 
         --> 20*log10(x) + db_gain
@@ -230,22 +356,198 @@ def dB2linear (x, mode = 'power',  db_gain=0):
     Returns
     -------
     y : scalars
-        output in amplitude or power unit
+        output in amplitude unit
         
     Examples
     --------
     >>> a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
-    >>> dB2linear(a, mode='power')
-        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])
-    >>> dB2linear(a, mode='amplitude')
+    >>> dB2amplitude(a)
         array([1., 2., 3., 4., 5.])
         
     """  
-    if mode == 'amplitude' :
-        y = 10**((x- db_gain)/20) 
-    elif mode == 'power':
-        y = 10**((x- db_gain)/10) 
+    y = 10**((x- db_gain)/20) 
+
     return y
+
+#=============================================================================
+def dB2power (x, db_gain=0):
+    """
+    Transform data in dB scale into power (amplitude²)
+    A gain (db_gain) could be added at the end.    
+    
+    Parameters
+    ----------
+    x : array-like
+        data in dB to rescale in power 
+    db_gain : scalar, optional, default is 0
+        Gain that was added to the result 
+        --> 10*log10(x) + db_gain
+                
+    Returns
+    -------
+    y : scalars
+        output in power unit
+        
+    Examples
+    --------
+    >>> a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
+    >>> dB2power(a)
+        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        
+    """  
+    y = 10**((x- db_gain)/10) 
+     
+    return y
+
+#=============================================================================
+def add_dB(*argv, axis=0): 
+    """
+    add dB values 
+        
+    Parameters
+    ----------
+    *argv : ndarray-like of floats
+        Arrays containing the sound waveform in dB 
+                
+    axis : integer, optional, default is 0
+        if addition of multiple arrays, select the axis on which the sum is done
+                
+    Returns
+    -------
+    e_sum : ndarray-like of floats
+        Array containing the sum of the dB values
+        
+    Examples
+    --------
+    
+    Example with an audio file
+    
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> L = maad.util.power2dBSPL(PSDxx,gain=42)
+    >>> L_sum = maad.util.add_dB(L, axis=2)  
+    >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
+                      'xlabel':'Frequency [Hz]',
+                      'ylabel':'Power [dB]',
+                      }
+    >>> fig, ax = maad.util.plot1D(fn, L_sum.transpose(), **fig_kwargs)
+
+    Example with single values
+    
+    >>> L1 = 90 # 90dB
+    >>> maad.util.add_dB(L1,L1)
+        93.01029995663981
+        
+    Example with arrays
+    
+    >>> L1 = [90,80,70]
+    >>> maad.util.add_dB(L1,L1,axis=1)
+        array([90.45322979, 90.45322979])
+    >>> maad.util.add_dB(L1,L1,axis=0)
+        array([93.01029996, 83.01029996, 73.01029996])
+    """    
+    # force to be ndarray
+    L = np.asarray(argv)
+    
+    # test if the 1st dim is = 1 (in case argv is a single 2d array) in order to remove this dimension
+    if L.shape[0] == 1 :
+        L = L[0,]
+   
+    # Verify the adequation between axis number and number of dimensions of L
+    if axis >= L.ndim:
+        axis= L.ndim -1
+    
+    # dB to energy as sum has to be done with energy
+    e = dB2power(L)
+    e_sum = e.sum(axis)
+    
+    
+    # test if 2 dimensions but length on 1 dimension is 1
+    if e_sum.ndim == 2 :
+        if (e_sum.shape[0] ==1) or (e_sum.shape[1] ==1) : 
+            e_sum = np.ndarray.flatten(e_sum)
+    
+    # energy=>pressure to dB
+    L_sum = power2dB(e_sum)
+        
+    return L_sum
+
+#=============================================================================
+def mean_dB(*argv, axis=0): 
+    """
+    Compute the average of dB values
+        
+    Parameters
+    ----------
+    *argv : ndarray-like of floats
+        Arrays containing the sound waveform in dB
+                
+    axis : integer, optional, default is 0
+        if addition of multiple arrays, select the axis on which the sum is done
+                
+    Returns
+    -------
+    e_mean : ndarray-like of floats
+        Array containing the mean of the dB values
+        
+    Examples
+    --------
+    
+    Example with an audio file
+    
+    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> L = maad.util.power2dBSPL(PSDxx,gain=42)
+    >>> L_mean = maad.util.mean_dB(L, axis=2)  
+    >>> fig_kwargs = {'figtitle':'Power spectrum (PSD)',
+                      'xlabel':'Frequency [Hz]',
+                      'ylabel':'Power [dB]',
+                      }
+    >>> fig, ax = maad.util.plot1D(fn, L_mean.transpose(), **fig_kwargs)
+
+    Example with single values
+    
+    >>> L1 = 90 # 90dB
+    >>> L2 = 96 # 96dB
+    >>> maad.util.mean_dB(L1,L2)
+        93.96292
+        
+    Example with arrays
+    
+    >>> L1 = [90,80,70]
+    >>> maad.util.mean_dB(L1,L1)
+        array([85.68201724, 85.68201724])
+    >>> maad.util.mean_dB(L1,L1, axis=0)  
+        array([90., 80., 70.]) 
+        
+    """    
+    # force to be ndarray
+    L = np.asarray(argv)
+    
+    # test if the 1st dim is = 1 (in case argv is a single 2d array) in order to remove this dimension
+    if L.shape[0] == 1 :
+        L = L[0,]
+    
+    # Verify the adequation between axis number and number of dimensions of L
+    if axis >= L.ndim:
+        axis= L.ndim -1
+    
+    # dB to energy as sum has to be done with energy
+    e = dB2power(L)
+    e_mean = e.mean(axis)
+    
+    # energy (power) => dB
+    e_mean = power2dB(e_mean)
+    
+    # test if 2 dimensions but length on 1 dimension is 1
+    if e_mean.ndim == 2 :
+        if (e_mean.shape[0] ==1) or (e_mean.shape[1] ==1) : 
+            e_mean = np.ndarray.flatten(e_mean)
+    
+    # test if it's a single value
+    if e_mean.size == 1 : 
+        e_mean = float(e_mean)
+    
+    return e_mean
 
 #=============================================================================
 
