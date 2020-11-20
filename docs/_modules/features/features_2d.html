@@ -776,7 +776,7 @@
 <span class="c1">#****************************************************************************  </span>
 <div class="viewcode-block" id="shape_features"><a class="viewcode-back" href="../../_autosummary/features.features_2d.shape_features.html#features.features_2d.shape_features">[docs]</a><span class="k">def</span> <span class="nf">shape_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters.</span>
+<span class="sd">    Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -796,7 +796,7 @@
 <span class="sd">    Returns </span>
 <span class="sd">    ------- </span>
 <span class="sd">    shape: pandas DataFrame </span>
-<span class="sd">        Shape coeficients for each region of interest  </span>
+<span class="sd">        Shape coefficient for each region of interest</span>
 <span class="sd">    params: 2D numpy structured array </span>
 <span class="sd">        Corresponding parameters of the 2D fileters used to compute the  </span>
 <span class="sd">        shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale) </span>
@@ -834,8 +834,8 @@
 <span class="sd">    &gt;&gt;&gt; rois = format_features(rois, tn, fn) </span>
 <span class="sd">    &gt;&gt;&gt; shape, params = shape_features(Sxx_db, resolution=&#39;med&#39;, rois=rois)</span>
 <span class="sd">    </span>
-<span class="sd">    The shape coeficients can be visualized using ``plot_shape``. Note that these</span>
-<span class="sd">    coeficients disciminate between the two vocalization types found in the</span>
+<span class="sd">    The shape coefficient can be visualized using ``plot_shape``. Note that these</span>
+<span class="sd">    coefficient allow to disciminate between the two vocalization types found in the</span>
 <span class="sd">    audio file.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; shape_crer, shape_sp = shape.groupby(&#39;label&#39;)</span>
@@ -903,8 +903,9 @@
 <div class="viewcode-block" id="shape_features_raw"><a class="viewcode-back" href="../../_autosummary/features.features_2d.shape_features_raw.html#features.features_2d.shape_features_raw">[docs]</a><span class="k">def</span> <span class="nf">shape_features_raw</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">opt_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  </span>
-<span class="sd">    using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw </span>
-<span class="sd">    response of the spectrogram to each filter of the filter bank. </span>
+<span class="sd">    using 2D Gabor filters. Contrary to ``shape_features``, this function </span>
+<span class="sd">    delivers the raw response of the spectrogram to each filter of the filter </span>
+<span class="sd">    bank. </span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -922,10 +923,31 @@
 <span class="sd">    shape_raw: list </span>
 <span class="sd">        Raw shape response of spectrogram to every filter of the filter bank. </span>
 <span class="sd">        Every element of the list is the response to one of the filters. Detail  </span>
-<span class="sd">        of each filter are available in the param DataFrame returned. </span>
+<span class="sd">        of each filter are available in the ``params`` DataFrame returned. </span>
 <span class="sd">    params: pandas DataFrame </span>
-<span class="sd">        Corresponding parameters of the 2D fileters used to calculate the  </span>
-<span class="sd">        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale) </span>
+<span class="sd">        Corresponding parameters of the 2D fileters used to compute the  </span>
+<span class="sd">        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    maad.features.shape_features, maad.features.opt_shape_presets, </span>
+<span class="sd">    maad.features.filter_bank_2d_nodc, maad.features.plot_shape</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    This function can be used to have access to spectrograms filtered by a 2D</span>
+<span class="sd">    Gabor filter bank.</span>
+
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features_raw</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db = linear2dB(Sxx, db_range=80)</span>
+<span class="sd">    &gt;&gt;&gt; shape_raw, params = shape_features_raw(Sxx_db, resolution=&#39;low&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[13], **{&#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1])})</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[14], **{&#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1])})</span>
 <span class="sd">    &quot;&quot;&quot;</span>     
      
     <span class="c1"># unpack settings </span>
@@ -940,79 +962,68 @@
     <span class="n">shape_raw</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
      
     <span class="c1"># organise parameters </span>
-    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> 
-    <span class="n">orient</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> 
-    <span class="n">orient</span> <span class="o">=</span> <span class="n">orient</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="o">*</span><span class="n">npyr</span> 
-    <span class="n">pyr_level</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npyr</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span> 
-    <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="o">*</span><span class="n">npyr</span> 
-    <span class="n">nparams</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">*</span><span class="n">npyr</span> 
-    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nparams</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;names&#39;</span><span class="p">:(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="s1">&#39;freq&#39;</span><span class="p">,</span> <span class="s1">&#39;pyr_level&#39;</span><span class="p">,</span><span class="s1">&#39;scale&#39;</span><span class="p">),</span> 
-                                               <span class="s1">&#39;formats&#39;</span><span class="p">:(</span><span class="s1">&#39;f8&#39;</span><span class="p">,</span> <span class="s1">&#39;f8&#39;</span><span class="p">,</span> <span class="s1">&#39;f8&#39;</span><span class="p">,</span><span class="s1">&#39;f8&#39;</span><span class="p">)})</span> 
-    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orient</span> 
-    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span> 
-    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span> 
-    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;pyr_level&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pyr_level</span> 
-    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">params_multires</span><span class="p">)</span> 
+    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">_params_to_df</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">npyr</span><span class="p">)</span> 
      
-    <span class="k">return</span> <span class="n">params_multires</span><span class="p">,</span> <span class="n">shape_raw</span> </div>
+    <span class="k">return</span> <span class="n">shape_raw</span><span class="p">,</span> <span class="n">params_multires</span></div>
  
 <span class="c1">#**************************************************************************** </span>
 <span class="c1">#*************                   centroid_features                *********** </span>
 <span class="c1">#****************************************************************************  </span>
 <div class="viewcode-block" id="centroid_features"><a class="viewcode-back" href="../../_autosummary/features.features_2d.centroid_features.html#features.features_2d.centroid_features">[docs]</a><span class="k">def</span> <span class="nf">centroid_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">im_rois</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Computes intensity centroid of a spectrogram. </span>
-<span class="sd">    If rois is given, the centroid is computed for each region of interest (ROI) </span>
-<span class="sd">     </span>
+<span class="sd">    Computes intensity centroid of a spectrogram. If regions of interest </span>
+<span class="sd">    ``rois`` are provided, the centroid is computed for each region.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
 <span class="sd">    Sxx :  2D array </span>
 <span class="sd">        Spectrogram </span>
 <span class="sd">    rois: pandas DataFrame </span>
 <span class="sd">        Regions of interest where descriptors will be computed. Array must  </span>
-<span class="sd">        have a valid input format with column names: min_t min_f, max_t, max_f </span>
-<span class="sd">        Do format_features(rois,tn,fn) before using shape_features to be sure that </span>
-<span class="sd">        the format of the DataFrame is correct </span>
+<span class="sd">        have a valid input format with column names: ``min_t``, ``min_f``, </span>
+<span class="sd">        ``max_t``, and ``max_f``. Use the function ``maad.util.format_features``</span>
+<span class="sd">        before using centroid_features to format of the ``rois`` DataFrame </span>
+<span class="sd">        correctly.</span>
 <span class="sd">             </span>
 <span class="sd">    Returns </span>
 <span class="sd">    ------- </span>
 <span class="sd">    centroid: pandas DataFrame </span>
-<span class="sd">        merge between rois and centroid descriptors </span>
+<span class="sd">        Centroid of each region of interest.</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    maad.features.shape_features, maad.util.overlay_rois, </span>
+<span class="sd">    maad.util.format_features</span>
 <span class="sd"> </span>
-<span class="sd">    Example </span>
-<span class="sd">    -------- </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd"> </span>
 <span class="sd">    Get centroid from the whole power spectrogram </span>
 <span class="sd"> </span>
-<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
-<span class="sd">    &gt;&gt;&gt; from maad.rois import create_mask, select_rois, overlay_rois, format_features </span>
-<span class="sd">    &gt;&gt;&gt; from maad.features import centroid_features </span>
-<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB, linear_scale </span>
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram</span>
+<span class="sd">    &gt;&gt;&gt; from maad.rois import overlay_rois</span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import centroid_features</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB, format_features</span>
 <span class="sd">     </span>
 <span class="sd">    Load audio and compute spectrogram </span>
 <span class="sd">     </span>
 <span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = spectrogram (s, fs, db_range=100, display=True) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx = 10*log10(Sxx) </span>
-<span class="sd"> </span>
-<span class="sd">    Create a mask, find rois and overlay rois on the spectrogram </span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx = linear2dB(Sxx, db_range=80)</span>
 <span class="sd">     </span>
-<span class="sd">    &gt;&gt;&gt; X = linear_scale(Sxx) </span>
-<span class="sd">    &gt;&gt;&gt; im_mask = create_mask(im=X, ext=ext,  </span>
-<span class="sd">                              mode_bin = &#39;relative&#39;, bin_std=1.5, bin_per=0.1, </span>
-<span class="sd">                              display=False) </span>
-<span class="sd"> </span>
-<span class="sd">    &gt;&gt;&gt; im_rois, rois = select_rois(im_mask,min_roi=200, max_roi=im_mask.shape[1]*5,  </span>
-<span class="sd">                                    ext=ext, display= True) </span>
-<span class="sd"> </span>
+<span class="sd">    Load annotations and plot</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; rois = format_features(rois, tn, fn) </span>
-<span class="sd">    &gt;&gt;&gt; ax, fig = plot2D (Sxx, extent=ext, now=False,vmin=-120,vmax=20) </span>
-<span class="sd">    &gt;&gt;&gt; ax, fig = overlay_rois(Sxx, ext, rois, vmin=-120, vmax=20, ax=ax, fig=fig) </span>
-<span class="sd">     </span>
-<span class="sd">    Compute the centroid of each rois </span>
+<span class="sd">    &gt;&gt;&gt; ax, fig = plot2D (Sxx, extent=ext)</span>
+<span class="sd">    &gt;&gt;&gt; ax, fig = overlay_rois(Sxx, ext, rois, ax=ax, fig=fig)</span>
+<span class="sd">    </span>
+<span class="sd">    Compute the centroid of each rois and format to get results in the </span>
+<span class="sd">    temporal and spectral domain.</span>
 <span class="sd">     </span>
 <span class="sd">    &gt;&gt;&gt; centroid = centroid_features(Sxx, rois) </span>
-<span class="sd">    &gt;&gt;&gt; ax, fig = overlay_centroid(Sxx, ext, centroid, savefig=None, vmin=-120, vmax=20, fig=fig, ax=ax) </span>
+<span class="sd">    &gt;&gt;&gt; centroid = format_features(centroid, tn, fn)</span>
 <span class="sd">    &quot;&quot;&quot;</span>     
      
     <span class="c1"># Check input data </span>
@@ -1242,7 +1253,8 @@
 <span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
 <span class="sd">            Format to save the figure  </span>
 <span class="sd">         </span>
-<span class="sd">        ... and more, see matplotlib  </span>
+<span class="sd">        ... and more, see matplotlib</span>
+<span class="sd">        </span>
 <span class="sd">    Returns </span>
 <span class="sd">    ------- </span>
 <span class="sd">    feature_rois: pandas Dataframe </span>
@@ -1253,8 +1265,8 @@
 <span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot </span>
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import compute_all_features </span>
-<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)         </span>
-<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;)  ## annotations using Audacity </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; features = compute_all_features(s, fs, rois, resolution=&#39;low&#39;,display=True) </span>
 <span class="sd">    &gt;&gt;&gt; features</span>
 <span class="sd">        label      min_t     ...       duration_x  bandwidth_y</span>

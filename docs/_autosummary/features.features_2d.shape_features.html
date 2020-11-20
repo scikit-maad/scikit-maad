@@ -194,7 +194,7 @@
 <dl class="py function">
 <dt id="features.features_2d.shape_features">
 <code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">shape_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">rois</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#shape_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.shape_features" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters.</p>
+<dd><p>Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -214,7 +214,7 @@ the format of the rois DataFrame is correct.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>shape: pandas DataFrame</dt><dd><p>Shape coeficients for each region of interest</p>
+<dt>shape: pandas DataFrame</dt><dd><p>Shape coefficient for each region of interest</p>
 </dd>
 <dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to compute the  
 shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale)</p>
@@ -253,8 +253,8 @@ shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The shape coeficients can be visualized using <code class="docutils literal notranslate"><span class="pre">plot_shape</span></code>. Note that these
-coeficients disciminate between the two vocalization types found in the
+<p>The shape coefficient can be visualized using <code class="docutils literal notranslate"><span class="pre">plot_shape</span></code>. Note that these
+coefficient allow to disciminate between the two vocalization types found in the
 audio file.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shape_crer</span><span class="p">,</span> <span class="n">shape_sp</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape_crer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 

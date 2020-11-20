@@ -104,7 +104,7 @@ elementary basis spectrograms.
 .. code-block:: default
 
 
-    params, shape_im = features.shape_features_raw(Sxx_db, resolution='low')
+    shape_im, params = features.shape_features_raw(Sxx_db, resolution='low')
 
     # Format the output as an array for decomposition
     X = np.array(shape_im).reshape([len(shape_im), Sxx_db.size]).transpose()
@@ -194,7 +194,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.478 seconds)
+   **Total running time of the script:** ( 0 minutes  2.191 seconds)
 
 
 .. _sphx_glr_download__auto_examples_plot_nmf_and_false_color_spectrogram.py:

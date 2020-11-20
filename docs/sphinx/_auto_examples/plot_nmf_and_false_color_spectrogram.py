@@ -47,7 +47,7 @@ plot2D(Sxx_db, **{'figsize':(4,10),'extent':(tn[0], tn[-1], fn[0], fn[-1])})
 # raw output can be fed to the NMF algorithm to decompose the spectrogram into
 # elementary basis spectrograms.
 
-params, shape_im = features.shape_features_raw(Sxx_db, resolution='low')
+shape_im, params = features.shape_features_raw(Sxx_db, resolution='low')
 
 # Format the output as an array for decomposition
 X = np.array(shape_im).reshape([len(shape_im), Sxx_db.size]).transpose()
