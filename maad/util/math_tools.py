@@ -13,12 +13,12 @@
 import numpy as np 
 from numpy import mean, median
 from scipy.ndimage.filters import uniform_filter1d # for fast running mean
-import matplotlib.pyplot as plt
+
+from maad.util import linear_scale
 
 # min value
 import sys
 _MIN_ = sys.float_info.min
-
 
 #=============================================================================
 def running_mean(x, N, mode="nearest"):
@@ -71,7 +71,7 @@ def running_mean(x, N, mode="nearest"):
     return x_mean
 
 #=============================================================================
-def get_unimode (X, mode ='mean', axis=1, N=7, N_bins=100, verbose=False):
+def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
     """
     determine the statistical mode or modal value which is 
     the most common number in the dataset
@@ -81,7 +81,7 @@ def get_unimode (X, mode ='mean', axis=1, N=7, N_bins=100, verbose=False):
     X :  1d or 2d ndarray of scalars
         Vector or matrix 
                 
-    mode : str, optional, default is 'mean'
+    mode : str, optional, default is 'median'
         Select the mode to remove the noise
         Possible values for mode are :
         - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
@@ -197,5 +197,56 @@ def get_unimode (X, mode ='mean', axis=1, N=7, N_bins=100, verbose=False):
         
     return unimode_value
 
+#=============================================================================
+def entropy (x, axis=0):
+    """
+    Computes the entropy of a vector or matrix x (i.e. waveform, spectrum...)    
+    
+    Parameters
+    ----------
+    x : ndarray of floats
+        x is a vector (1d) or a matrix (2d)
 
+    axis : int, optional, default is 0
+        select the axis where the entropy is computed
+        if x is a vector, axis=0
+        if x is a 2d ndarray, axis=0 => rows, axis=1 => columns
+                
+    Returns
+    -------
+    H : float or ndarray of floats
+        entropy of x
+    """
+    if isinstance(x, (np.ndarray)) == True:
+        if x.ndim > axis:
+            if x.shape[axis] == 0: 
+                print ("WARNING: x is empty") 
+                H = None 
+            elif x.shape[axis] == 1:
+                H = 0 # null entropy
+            elif x.all() == 0:
+                H = 0 # null entropy
+            else:
+                # if datain contains negative values -> rescale the signal between 
+                # between posSitive values (for example (0,1))
+                if np.min(x)<0:
+                    x = linear_scale(x,minval=0,maxval=1)
+                # length of datain along axis
+                n = x.shape[axis]
+                # Tranform the signal into a Probability mass function (pmf)
+                # Sum(pmf) = 1
+                if axis == 0 :
+                    pmf = x/np.sum(x,axis)
+                elif axis == 1 :                     
+                    pmf = (x.transpose()/np.sum(x,axis)).transpose()
+                pmf[pmf==0] = _MIN_
+                #normalized by the length : H=>[0,1]
+                H = -np.sum(pmf*np.log(pmf),axis)/np.log(n)
+        else:
+            print ("WARNING :axis is greater than the dimension of the array")    
+            H = None 
+    else:
+        print ("WARNING: x must be ndarray")   
+        H = None 
 
+    return H
