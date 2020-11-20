@@ -17,35 +17,37 @@ import numpy as np
 import scipy as sp 
 from scipy.io import wavfile 
 from scipy.signal import hilbert, sosfiltfilt, convolve, iirfilter, get_window
-from maad.util import plot1D, plot2D, crop_image, linear2dB 
+from maad.util import (plot1D, plot2D, crop_image, power2dB, amplitude2dB, 
+                       mean_dB, get_unimode, running_mean) 
+from maad.rois import remove_background_along_axis
 
 # =============================================================================
 # private functions
 # =============================================================================
-def _wave2frames (s, N=512):
+def _wave2frames (s, Nt=512):
     """
     Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
-    length N
+    length Nt
     
     Parameters
     ----------
     s : 1d ndarray of floats (already divided by the number of bits)
         Vector containing the sound waveform 
 
-    N : int, optional, default is 512
+    Nt : int, optional, default is 512
         Number of points per frame
                 
     Returns
     -------
     timeframes : 2d ndarray of floats
-        Matrix containing K frames (row) with N points (column), K*N <= length (s)
+        Matrix containing K frames (row) with Nt points (column), K*N <= length (s)
     """
     # transform wave into array
     s = np.asarray(s)
     # compute the number of frames
-    K = len(s)//N
+    K = len(s)//Nt
     # Reshape the waveform (ie vector) into a serie of frames (ie 2D matrix)
-    timeframes = s[0:K*N].reshape(-1,N).transpose()
+    timeframes = s[0:K*Nt].reshape(-1,Nt).transpose()
     return timeframes
 
 # =============================================================================
@@ -194,7 +196,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     return s_out, fs
 
 #=============================================================================
-def envelope (s, mode='fast', N=512):
+def envelope (s, mode='fast', Nt=32):
     """
     Calcul the envelope of a sound waveform (1d)
     
@@ -210,7 +212,7 @@ def envelope (s, mode='fast', N=512):
         - "Hilbert" : estimation of the envelope from the Hilbert transform. 
             The method is slow
     
-    N : integer, optional, default is 32
+    Nt : integer, optional, default is 32
         Size of each frame. The largest, the highest is the approximation.
                   
     Returns
@@ -225,7 +227,7 @@ def envelope (s, mode='fast', N=512):
     Examples
     --------
     >>> s,fs = maad.sound.load("guyana_tropical_forest.wav")
-    >>> env_fast = maad.sound.envelope(s, mode='fast', N=32)
+    >>> env_fast = maad.sound.envelope(s, mode='fast', Nt=32)
     >>> env_fast
     array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,
        0.26074219])
@@ -241,17 +243,18 @@ def envelope (s, mode='fast', N=512):
     >>> t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)
     
     plot 0.1 of the envelope and 0.1s of the abs(s)
-    import matplotlib.pyplot as plt
-    fig1, ax1 = plt.subplots()
-    ax1.plot(t[t<0.1], abs(s[t<0.1]), label='abs(s)')
-    ax1.plot(t[t<0.1], env_hilbert[t<0.1], label='env(s) - hilbert option')
-    ax1.plot(t_env_fast[t_env_fast<0.1], env_fast[t_env_fast<0.1], label='env(s) - fast option')
-    ax1.set_xlabel('Time [sec]')
-    ax1.legend()
+    
+    >>> import matplotlib.pyplot as plt
+    >>> fig1, ax1 = plt.subplots()
+    >>> ax1.plot(t[t<0.1], abs(s[t<0.1]), label='abs(s)')
+    >>> ax1.plot(t[t<0.1], env_hilbert[t<0.1], label='env(s) - hilbert option')
+    >>> ax1.plot(t_env_fast[t_env_fast<0.1], env_fast[t_env_fast<0.1], label='env(s) - fast option')
+    >>> ax1.set_xlabel('Time [sec]')
+    >>> ax1.legend()
     """
     if mode == 'fast' :
         # Envelope : take the max (see M. Towsey) of each frame
-        frames = _wave2frames(s, N=N)
+        frames = _wave2frames(s, Nt)
         env = np.max(abs(frames),0) 
     elif mode =='hilbert' :
         # Compute the hilbert transform of the waveform and take the norm 
@@ -263,7 +266,195 @@ def envelope (s, mode='fast', N=512):
     return env
 
 #=============================================================================
-def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass', 
+def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
+    """
+    Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave
+    spectrum (1d) or Spectrogram (2d)
+    Better to work with PSD (amplitude²) for energy conservation
+
+    Parameters
+    ----------
+    X : ndarray of floats
+        Linear spectrum (1d) or Spectrogram (2d). 
+        Work with PSD to be consistent with energy concervation
+    fn : 1d ndarray of floats
+        Frequency vector of the linear spectrum/spectrogram
+    thirdOctave : Boolean, default is True
+        choose between Octave or thirdOctave frequency resolution
+    display : boolean, default is False
+        Display the octave spectrum/spectrogram
+    Returns
+    -------
+    X_octave : ndarray of floats
+        Octave or 1/3 octave Spectrum (1d) or Spectrogram (2d)
+    bin_octave : vector of floats
+        New frequency vector (octave or 1/3 octave frequency repartition)
+    """
+
+    # define the third octave or octave frequency vector in Hz.
+    if thirdOctave :
+        bin_octave = np.array([16,20,25,31.5,40,50,63,80,100,125,160,200,250,315,
+                               400,500,630,800,1000,1250,1600,2000,2500,3150,4000,
+                               5000,6300,8000,10000,12500,16000,20000]) # third octave band.
+    else:
+        bin_octave = np.array([16,31.5,63,125,250,500,1000,2000,4000,8000,16000]) # octave
+
+    
+    # get the corresponding octave from fn
+    bin_octave = bin_octave[(bin_octave>=np.min(fn)) & (bin_octave<=np.max(fn))]
+    
+    print(len(bin_octave))
+    
+    # Bins limit
+    bin_octave_low = bin_octave/(2**0.1666666)
+    bin_octave_up = bin_octave*(2**0.1666666)
+       
+    # select the indices corresponding to the frequency bins range
+    X_octave = []
+    for ii in np.arange(len(bin_octave)):
+        ind = (fn>=bin_octave_low[ii])  & (fn<=bin_octave_up[ii])
+        X_octave.append(np.sum(X[ind,], axis=0))
+    
+    X_octave = np.asarray(X_octave)
+            
+    if display :
+        X_octave_dB = power2dB(X_octave)
+        if np.ndim(X_octave_dB) == 2 :
+            ext = kwargs.pop('ext',None)
+            if ext is not None : 
+                xlabel = 'Time [sec]'
+            else: 
+                xlabel = 'pseudoTime [points]'
+            
+            fig_kwargs = {'vmax': kwargs.pop('vmax',np.max(X_octave_dB)),
+                          'vmin': kwargs.pop('vmin',np.min(X_octave_dB)),
+                          'extent':kwargs.pop('ext',None),
+                          'figsize':kwargs.pop('figsize',(4,13)),
+                          'yticks' : (np.arange(len(bin_octave)), bin_octave),
+                          'title':'Octave Spectrogram',
+                          'xlabel': xlabel,
+                          'ylabel':'Frequency [Hz]',
+                          }
+            plot2D(X_octave_dB,**fig_kwargs)
+        elif np.ndim(X_octave_dB) == 1 :
+            
+            fig_kwargs = {
+                          'title':'Octave Spectrum',
+                          'xlabel': kwargs.pop('xlabel','Frequency [Hz]'),
+                          'ylabel': kwargs.pop('ylabel','Amplitude [dB]'),
+                          }
+            plot1D(bin_octave, X_octave_dB,**fig_kwargs)
+
+    return X_octave, bin_octave
+
+#=============================================================================
+def audio_SNR (s, mode ='fast', Nt=512) :
+    """
+    Computes the signal to noise ratio (SNR) of an audio signal in the time domain
+
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process
+    mode : str, optional, default is "fast"
+        Select the mode to compute the envelope of the audio waveform
+        - "fast" : The sound is first divided into frames (2d) using the 
+            function _wave2timeframes(s), then the max of each frame gives a 
+            good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+            The method is slow
+    Nt : integer, optional, default is 512
+        Size of each frame. The largest, the highest is the approximation.
+    
+    Returns
+    -------
+    ENRt : float
+        Total energy in dB computed in the time domain
+    BGNt : float
+        Estimation of the background energy (dB) computed in the time domain
+    SNRt: float
+        Signal to noise ratio (dB) computed in the time domain 
+        SNRt = ENRt - BGNt
+
+    References
+    -----
+    This is inspire by "ref QUT" [Towsey]
+
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('guyana_tropical_forest.wav')
+    >>> _,_,snr = maad.sound.audio_SNR(s)
+    >>> snr
+    1.5744987447774665
+
+    """
+    # Envelope
+    env = envelope(s, mode=mode, Nt=Nt)
+    # linear to power dB
+    envdB = power2dB(env**2)
+    # total energy estimation. 
+    ENRt = mean_dB(envdB, axis=1)
+    # Background noise estimation
+    BGNt = get_unimode (envdB, mode ='median')
+    # Signal to Noise ratio estimation
+    SNRt = ENRt - BGNt
+
+    return ENRt, BGNt, SNRt
+
+#=============================================================================
+def spectral_SNR (Sxx_power) :
+    """
+    Computes the signal to noise ratio (SNR) of an audio from its spectrogram
+    in the time-frequency domain
+
+    Parameters
+    ----------
+    Sxx_power : 2D array
+        Power spectrogram density [Matrix] to process.
+        
+    Returns
+    -------
+    ENRt : float
+        Total energy in dB computed in the time domain
+    BGNt : float
+        Estimation of the background energy (dB) computed in the time domain
+    SNRt: float
+        Signal to noise ratio (dB) computed in the time domain 
+        SNRt = ENRt - BGNt
+
+    References
+    -----
+    This is inspire by "ref QUT" [Towsey]
+
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('guyana_tropical_forest.wav')
+    >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
+    >>> _, _, _, snr = maad.sound.spectral_SNR(Sxx_power)
+    >>> snr
+    4.111567933859188
+    
+    """
+    # average Pxx along time axis
+    S_power_mean = avg_power_spectro(Sxx_power)
+    # compute total energy in dB
+    ENRf = power2dB(sum(S_power_mean))
+    # Extract the noise profile (BGNf_per_bin) from the spectrogram Sxx_power
+    _, noise_profile = remove_background_along_axis(Sxx_power, mode='median',axis=1) 
+    # smooth the profile by removing spurious thin peaks (less than 5 pixels wide)
+    noise_profile = running_mean(noise_profile,N=5)
+    # noise_profile (energy) into dB
+    BGNf_per_bin= power2dB(noise_profile)
+    # compute noise/background energy in dB
+    BGNf = power2dB(sum(noise_profile))
+    # compute signal to noise ratio
+    SNRf = ENRf - BGNf 
+
+    return ENRf, BGNf, BGNf_per_bin, SNRf
+
+
+#=============================================================================
+def select_bandwidth (s, fs, fcut, forder, fname ='butter', ftype='bandpass', 
                      rp=None, rs=None):
     """
     Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter
@@ -311,8 +502,8 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
             
     Returns
     -------
-    y : array_like
-        The filtered output with the same shape and phase as x
+    s_out : array_like
+        The filtered output with the same shape and phase as s
         
     See Also
     --------
@@ -324,32 +515,31 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
     Load and display the spectrogram of a sound waveform
     
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure (w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
-    >>> fig_kwargs = {'vmax': max(Lxx),
-                      'vmin':0,
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB 
+    >>> fig_kwargs = {'vmax': max(Sxx_dB),
+                      'vmin':-90,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'figsize':(4,13),
                       'title':'Power spectrogram density (PSD)',
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)
+    >>> fig1, ax1 = maad.util.plot2D(Sxx_dB, **fig_kwargs)
     
     Filter the waveform : keep the bandwidth between 6-10kHz
     
-    >>> p_filtered = maad.sound.select_bandwidth(p,fs,fcut=[6000,10000], forder=5, fname ='butter', ftype='bandwith')
-    >>> Pxx_filtered,tn,fn,_ = maad.sound.spectrogram(p_filtered,fs)
-    >>> Lxx_filtered = maad.util.power2dBSPL(Pxx_filtered) # convert into dB SPL
-    >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
+    >>> w_filtered = maad.sound.select_bandwidth(w,fs,fcut=(6000,10000), forder=5, fname ='butter', ftype='bandpass')
+    >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
+    >>> Sxx_dB_filtered = maad.util.power2dB(Sxx_power_filtered) # convert into dB 
+    >>> maad.util.plot2D(Sxx_dB_filtered, **fig_kwargs)
     
     """
     sos = iirfilter(N=forder, Wn=np.asarray(fcut)/(fs/2), btype=ftype,ftype=fname, rp=rp, 
                      rs=rs, output='sos')
-    # use sosfiltfilt insteasd of sosfilt to keep the phase of y matches x
-    y = sosfiltfilt(sos, x)
-    return y
+    # use sosfiltfilt insteasd of sosfilt to keep the phase of y matches s
+    s_out = sosfiltfilt(sos, s)
+    return s_out
  
 #=============================================================================
 def fir_filter(x, kernel, axis=0):
@@ -574,15 +764,17 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
               
     Returns
     -------
-    Pxx : 2d ndarray of floats
+    Sxx : 2d ndarray of floats
         Spectrogram : Matrix containing K frames with N/2 frequency bins, 
         K*N <= length (wave)
+        Sxx unit is power => Sxx_power if mode is 'psd'
+        Sxx unit is amplitude => Sxx_ampli if mode is 'amplitude' or 'complex'
         
-    dt : scalar
-        Time resolution of the spectrogram (horizontal x-axis)
+    tn : 1d ndarray of floats
+        time vector (horizontal x-axis)
         
-    df : scalar
-        Frequency resolution of the spectrogram (vertical y-axis)
+    fn : 1d ndarray of floats
+        Frequency vector (vertical y-axis)
         
     ext : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and
@@ -600,18 +792,18 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     Compute energy of signal s
     
     >>> E1 = sum(s**2)
-    >>> maad.util.linear2dB(E1, mode='power')
+    >>> maad.util.power2dB(E1)
     44.861029507805256
     
     Compute the spectrogram with 'psd' output (if N<4096, the energy is lost)
     
     >>> N = 4096
-    >>> Pxx,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = 'psd')   
+    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = 'psd')   
     
     Display Power Spectrogram
     
-    >>> PxxdB = maad.util.linear2dB(Pxx, mode='power') # convert into dB
-    >>> fig_kwargs = {'vmax': max(PxxdB),
+    >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
+    >>> fig_kwargs = {'vmax': max(Sxx_dB),
                       'vmin':-70,
                       'extent':ext,
                       'figsize':(4,13),
@@ -619,30 +811,30 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    fig, ax = maad.util.plot2D(PxxdB,**fig_kwargs)     
+    fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     
     
-    Compute mean power os spectrogram
+    Compute mean power spectrogram
     
-    >>> mean_power = mean(Pxx, axis = 1)
+    >>> S_power_mean = mean(Sxx_power, axis = 1)
     
     energy => power x time
     
-    >>> E2 = sum(mean_power*len(s)) 
-    >>> maad.util.linear2dB(E2, mode='power')
+    >>> E2 = sum(S_power_mean*len(s)) 
+    >>> maad.util.power2dB(E2)
     44.93083283875093
 
     Compute the spectrogram with 'amplitude' output
     
-    >>> Sxx,tn,fn,_ = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode='amplitude')  
+    >>> Sxx_ampli,tn,fn,_ = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode='amplitude')  
     
-    For energy conservation => convert Sxx (amplitude) into power before doing the average.
+    For energy conservation => convert Sxx_ampli (amplitude) into power before doing the average.
     
-    >>> mean_power = mean(Sxx**2, axis = 1)
+    >>> S_power_mean = mean(Sxx_ampli**2, axis = 1)
     
     energy => power x time
     
-    >>> E3 = sum(mean_power*len(s)) 
-    >>>  maad.util.linear2dB(E3, mode='power')
+    >>> E3 = sum(S_power_mean*len(s)) 
+    >>>  maad.util.power2dB(E3)
     44.93083283875093
     
     """
@@ -727,11 +919,11 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         
         #### convert into dB 
         if mode=='psd':  
-            Sxx_disp = linear2dB(Sxx_out,mode='power', db_range=db_range)
+            Sxx_disp = power2dB(Sxx_out, db_range=db_range)
         if mode=='amplitude': 
-            Sxx_disp = linear2dB(Sxx_out,mode='amplitude', db_range=db_range)
+            Sxx_disp = amplitude2dB(Sxx_out,db_range=db_range)
         if mode=='complex': 
-            Sxx_disp = linear2dB(Sxx_out,mode='amplitude', db_range=db_range)
+            Sxx_disp = amplitude2dB(Sxx_out,db_range=db_range)
             
         vmin=kwargs.pop('vmin',-db_range) 
         vmax=kwargs.pop('vmax',Sxx_disp.max()) 
@@ -752,3 +944,52 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
 
     return Sxx_out, tn, fn, ext   
 
+#=============================================================================
+def avg_power_spectro (Sxx_power) :
+    """
+    Computes the average of a power spectrogram along the time axis
+    
+    Parameters
+    ----------
+    Sxx_power : 2d ndarray of floats
+        Power spectrogram [Matrix]
+
+    Returns
+    -------
+    S_power_mean : 1d ndarray of floats
+        Power spectrum [Vector]
+        
+    See Also
+    --------
+    avg_amplitude_spectro
+    
+    """
+    S_power_mean = np.mean(Sxx_power, axis=1)
+
+    return S_power_mean
+
+#=============================================================================
+def avg_amplitude_spectro (Sxx_ampli) :
+    """
+    Computes the average of an amplitude spectrogram along the time axis
+    
+    Parameters
+    ----------
+    Sxx_ampli : 2d ndarray of floats
+        Amplitude spectrogram [Matrix]
+        
+    Returns
+    -------
+    S_ampli_mean : 1d ndarray of floats
+        Amplitude spectrum [Vector]
+        
+    See Also
+    --------
+    avg_power_spectro
+    
+    """
+    
+    # average the amplitude spectrogram taking the PSD for energy conservation
+    S_ampli_mean = np.sqrt(np.mean(Sxx_ampli**2, axis=1))
+
+    return S_ampli_mean
