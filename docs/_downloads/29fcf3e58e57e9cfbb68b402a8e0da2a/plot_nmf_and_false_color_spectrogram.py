@@ -9,14 +9,14 @@ Soundscapes result from a combination of multiple signals that are mixed-down
 into a single time-series. Unmixing these signals can be regarded as an 
 important preprocessing step for further analyses of individual components.
 Here, we will combine the robust characterization capabilities of 
-the bidimensional wavelets with an advanced signal decomposition tool, the 
-non-negative-matrix factorization (NMF). NMF is a widely used tool to analyse
+the bidimensional wavelets [1] with an advanced signal decomposition tool, the 
+non-negative-matrix factorization (NMF)[2]. NMF is a widely used tool to analyse
 high-dimensional that automatically extracts sparse and meaningfull components
 of non-negative matrices. Audio spectrograms are in essence sparse and 
 non-negative matrices, and hence well suited to be decomposed with NMF. This 
 decomposition can be further used to generate false-color spectrograms to 
 rapidly identify patterns in soundscapes and increase the interpretability of 
-the signal. This example shows how to use the scikit-maad package to easily 
+the signal [3]. This example shows how to use the scikit-maad package to easily 
 decompose audio signals and visualize false-colour spectrograms.
 
 Dependencies: To execute this example you will need to have instaled the 
@@ -92,3 +92,10 @@ ax[0].set_title('Spectrogram')
 ax[1].imshow(plt_data, origin='lower', aspect='auto', interpolation='bilinear')
 ax[1].set_axis_off()
 ax[1].set_title('False-color spectrogram')
+
+#%% 
+# References
+# -----------
+# 1. Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
+# 2. Lee, D., & Sueng, S. (1999). Learning the parts of objects by non-negative matrix factorization. Nature, 401, 788–791. https://doi.org/10.1038/44565
+# 3. Towsey, M., Znidersic, E., Broken-Brow, J., Indraswari, K., Watson, D. M., Phillips, Y., Truskinger, A., & Roe, P. (2018). Long-duration, false-colour spectrograms for detecting species in large audio data-sets. Journal of Ecoacoustics, 2(1), 1–1. https://doi.org/10.22261/JEA.IUSWUI

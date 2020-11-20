@@ -194,7 +194,7 @@
 <dl class="py function">
 <dt id="features.features_2d.shape_features">
 <code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">shape_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">rois</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#shape_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.shape_features" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters</p>
+<dd><p>Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -203,45 +203,62 @@
 <dt><strong>resolution: str or dict</strong></dt><dd><p>Specify resolution of shape descriptors. Can be: ‘low’, ‘med’, ‘high’. 
 Default is ‘low’. Alternatively, custom resolution can be provided  
 using a dictionary with options to define the filter bank. Valid keys  
-are: ntheta, bandwidth, frequency, gamma, npyr</p>
+are: ntheta, bandwidth, frequency, gamma, npyr.</p>
 </dd>
 <dt><strong>rois: pandas DataFrame</strong></dt><dd><p>Regions of interest where descriptors will be computed. Array must  
-have a valid input format with column names: min_t min_f, max_t, max_f 
-Do format_features(rois,tn,fn) before using shape_features to be sure that 
-the format of the DataFrame is correct</p>
+have a valid input format with column names: min_t min_f, max_t, max_f. 
+Use format_features(rois,tn,fn) before using shape_features to be sure that 
+the format of the rois DataFrame is correct.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>shape: pandas DataFrame</dt><dd><p>merge between rois and shapes descriptors</p>
+<dt>shape: pandas DataFrame</dt><dd><p>Shape coeficients for each region of interest</p>
 </dd>
-<dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to calculate the  
-shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</p>
-</dd>
-</dl>
+<dt>params: 2D numpy structured array</dt><dd><p>Corresponding parameters of the 2D fileters used to compute the  
+shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale)</p>
 </dd>
 </dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.opt_shape_presets</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.filter_bank_2d_nodc</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.plot_shape</span></code></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<ol class="arabic simple">
+<li><p>Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., &amp; Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. <a class="reference external" href="https://doi.org/10.1016/j.ecolind.2018.03.026">https://doi.org/10.1016/j.ecolind.2018.03.026</a></p></li>
+<li><p>Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. <a class="reference external" href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007">http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</a></p></li>
+<li><p>Mallat, S. (2008). A Wavelet Tour of Signal Processing: The Sparse Way. Academic Press.</p></li>
+</ol>
 <p class="rubric">Examples</p>
 <p>Get shape features from the whole power spectrogram</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">shape_features</span><span class="p">,</span> <span class="n">plot_shape</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">format_features</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear2dB</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">linear2dB</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 
 </pre></div>
 </div>
 <p>Or get shape features from specific regions of interest</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">audacity_to_rois</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">audacity_to_rois</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.txt&#39;</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">read_audacity_annot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.txt&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">label</span><span class="o">==</span><span class="s1">&#39;CRER&#39;</span><span class="p">,]</span>   
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The shape coeficients can be visualized using <code class="docutils literal notranslate"><span class="pre">plot_shape</span></code>. Note that these
+coeficients disciminate between the two vocalization types found in the
+audio file.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shape_crer</span><span class="p">,</span> <span class="n">shape_sp</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape_crer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape_sp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span> 
 </pre></div>
 </div>
 </dd></dl>

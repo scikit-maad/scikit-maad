@@ -105,7 +105,10 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Signal decomposition and false-color spectrograms</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Signal decomposition and false-color spectrograms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="maad_wrapper.html">Wrapper - This script gives an example of how to use scikit-MAAD package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="maad_batch.html">Batch - This script gives an example of how to use scikit-MAAD package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="maad_details_auto.html">Details Auto - This script gives an example of how to use scikit-MAAD package</a></li>
@@ -191,14 +194,14 @@
 into a single time-series. Unmixing these signals can be regarded as an
 important preprocessing step for further analyses of individual components.
 Here, we will combine the robust characterization capabilities of
-the bidimensional wavelets with an advanced signal decomposition tool, the
-non-negative-matrix factorization (NMF). NMF is a widely used tool to analyse
+the bidimensional wavelets [1] with an advanced signal decomposition tool, the
+non-negative-matrix factorization (NMF)[2]. NMF is a widely used tool to analyse
 high-dimensional that automatically extracts sparse and meaningfull components
 of non-negative matrices. Audio spectrograms are in essence sparse and
 non-negative matrices, and hence well suited to be decomposed with NMF. This
 decomposition can be further used to generate false-color spectrograms to
 rapidly identify patterns in soundscapes and increase the interpretability of
-the signal. This example shows how to use the scikit-maad package to easily
+the signal [3]. This example shows how to use the scikit-maad package to easily
 decompose audio signals and visualize false-colour spectrograms.</p>
 <p>Dependencies: To execute this example you will need to have instaled the
 scikit-image and scikit-learn Python packages.</p>
@@ -289,7 +292,14 @@ where it can be easily distinguished the different sound sources by color.</p>
 </pre></div>
 </div>
 <img alt="Spectrogram, False-color spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_nmf_and_false_color_spectrogram_003.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.790 seconds)</p>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. <a class="reference external" href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007">http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</a></p></li>
+<li><p>Lee, D., &amp; Sueng, S. (1999). Learning the parts of objects by non-negative matrix factorization. Nature, 401, 788–791. <a class="reference external" href="https://doi.org/10.1038/44565">https://doi.org/10.1038/44565</a></p></li>
+<li><p>Towsey, M., Znidersic, E., Broken-Brow, J., Indraswari, K., Watson, D. M., Phillips, Y., Truskinger, A., &amp; Roe, P. (2018). Long-duration, false-colour spectrograms for detecting species in large audio data-sets. Journal of Ecoacoustics, 2(1), 1–1. <a class="reference external" href="https://doi.org/10.22261/JEA.IUSWUI">https://doi.org/10.22261/JEA.IUSWUI</a></p></li>
+</ol>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.478 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-nmf-and-false-color-spectrogram-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/29fcf3e58e57e9cfbb68b402a8e0da2a/plot_nmf_and_false_color_spectrogram.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nmf_and_false_color_spectrogram.py</span></code></a></p>
@@ -299,6 +309,7 @@ where it can be easily distinguished the different sound sources by color.</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
 </div>
 
 

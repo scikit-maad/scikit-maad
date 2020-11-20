@@ -776,7 +776,7 @@
 <span class="c1">#****************************************************************************  </span>
 <div class="viewcode-block" id="shape_features"><a class="viewcode-back" href="../../_autosummary/features.features_2d.shape_features.html#features.features_2d.shape_features">[docs]</a><span class="k">def</span> <span class="nf">shape_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters </span>
+<span class="sd">    Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -786,21 +786,33 @@
 <span class="sd">        Specify resolution of shape descriptors. Can be: &#39;low&#39;, &#39;med&#39;, &#39;high&#39;. </span>
 <span class="sd">        Default is &#39;low&#39;. Alternatively, custom resolution can be provided  </span>
 <span class="sd">        using a dictionary with options to define the filter bank. Valid keys  </span>
-<span class="sd">        are: ntheta, bandwidth, frequency, gamma, npyr </span>
+<span class="sd">        are: ntheta, bandwidth, frequency, gamma, npyr.</span>
 <span class="sd">    rois: pandas DataFrame </span>
 <span class="sd">        Regions of interest where descriptors will be computed. Array must  </span>
-<span class="sd">        have a valid input format with column names: min_t min_f, max_t, max_f </span>
-<span class="sd">        Do format_features(rois,tn,fn) before using shape_features to be sure that </span>
-<span class="sd">        the format of the DataFrame is correct </span>
+<span class="sd">        have a valid input format with column names: min_t min_f, max_t, max_f. </span>
+<span class="sd">        Use format_features(rois,tn,fn) before using shape_features to be sure that </span>
+<span class="sd">        the format of the rois DataFrame is correct.</span>
 <span class="sd">             </span>
 <span class="sd">    Returns </span>
 <span class="sd">    ------- </span>
 <span class="sd">    shape: pandas DataFrame </span>
-<span class="sd">        merge between rois and shapes descriptors </span>
+<span class="sd">        Shape coeficients for each region of interest  </span>
 <span class="sd">    params: 2D numpy structured array </span>
-<span class="sd">        Corresponding parameters of the 2D fileters used to calculate the  </span>
-<span class="sd">        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale) </span>
+<span class="sd">        Corresponding parameters of the 2D fileters used to compute the  </span>
+<span class="sd">        shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale) </span>
 <span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.features.plot_shape</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    1. Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., &amp; Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026</span>
+<span class="sd">    2. Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</span>
+<span class="sd">    3. Mallat, S. (2008). A Wavelet Tour of Signal Processing: The Sparse Way. Academic Press.</span>
+<span class="sd">    </span>
 <span class="sd">    Examples </span>
 <span class="sd">    -------- </span>
 <span class="sd"> </span>
@@ -808,27 +820,32 @@
 <span class="sd"> </span>
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import shape_features, plot_shape </span>
-<span class="sd">    &gt;&gt;&gt; from maad.rois import format_features </span>
-<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB </span>
-<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import format_features, linear2dB</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_db = linear2dB(Sxx, db_range=100) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db = linear2dB(Sxx, db_range=100)</span>
 <span class="sd">    &gt;&gt;&gt; shape, params = shape_features(Sxx_db, resolution=&#39;med&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape.mean(), params) </span>
 <span class="sd">     </span>
 <span class="sd">    Or get shape features from specific regions of interest </span>
 <span class="sd">     </span>
-<span class="sd">    &gt;&gt;&gt; from maad.util import audacity_to_rois </span>
-<span class="sd">    &gt;&gt;&gt; rois = audacity_to_rois(&#39;./data/spinetail.txt&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; rois = format_features(rois, tn, fn) </span>
-<span class="sd">    &gt;&gt;&gt; rois = rois.loc[rois.label==&#39;CRER&#39;,]   </span>
-<span class="sd">    &gt;&gt;&gt; shape, params = shape_features(Sxx_db, resolution=&#39;med&#39;, rois=rois) </span>
-<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape.mean(), params) </span>
+<span class="sd">    &gt;&gt;&gt; shape, params = shape_features(Sxx_db, resolution=&#39;med&#39;, rois=rois)</span>
+<span class="sd">    </span>
+<span class="sd">    The shape coeficients can be visualized using ``plot_shape``. Note that these</span>
+<span class="sd">    coeficients disciminate between the two vocalization types found in the</span>
+<span class="sd">    audio file.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; shape_crer, shape_sp = shape.groupby(&#39;label&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape_crer[1].mean(), params) </span>
+<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape_sp[1].mean(), params) </span>
 <span class="sd">    &quot;&quot;&quot;</span>     
  
     <span class="c1"># Check input data and unpack settings </span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span> 
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Sxx must be an numpy 2D array&#39;</span><span class="p">)</span>   
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Sxx must be a numpy 2D array&#39;</span><span class="p">)</span>   
      
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span> 
         <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span> 
@@ -837,16 +854,8 @@
     <span class="k">else</span><span class="p">:</span> 
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Resolution must be string or a dictionary. See function documentation.&#39;</span><span class="p">)</span> 
          
-    <span class="n">npyr</span> <span class="o">=</span> <span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;npyr&#39;</span><span class="p">]</span> 
- 
-    <span class="c1"># transform ROIs to im_blobs </span>
-    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
-        <span class="k">if</span> <span class="ow">not</span><span class="p">((</span><span class="s1">&#39;min_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">rois</span><span class="p">):</span> 
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Array must be a Pandas DataFrame with column names: min_t, min_f, max_t, max_f. Check example in documentation.&#39;</span><span class="p">)</span> 
-        <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">rois_to_imblobs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">rois</span><span class="p">)</span> 
-    <span class="k">else</span><span class="p">:</span> 
-        <span class="n">im_blobs</span> <span class="o">=</span> <span class="kc">None</span> 
-     
+    <span class="n">npyr</span> <span class="o">=</span> <span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;npyr&#39;</span><span class="p">]</span>
+      
     <span class="c1"># build filterbank </span>
     <span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;ntheta&#39;</span><span class="p">],</span> 
                                           <span class="n">bandwidth</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">],</span> 
@@ -855,13 +864,13 @@
     <span class="c1"># filter spectrogram </span>
     <span class="n">im_rs</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
      
-    <span class="c1"># If ROIs are provided get mean intensity for each ROI,  </span>
+    <span class="c1"># If rois are provided get mean intensity for each ROI,  </span>
     <span class="c1"># else compute mean intensity for the whole spectrogram </span>
-    <span class="k">if</span> <span class="n">im_blobs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
         <span class="n">shape</span> <span class="o">=</span> <span class="p">[]</span> 
         <span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">im_rs</span><span class="p">:</span> 
             <span class="n">shape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">im</span><span class="p">))</span> 
-        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">]</span>  <span class="c1"># for dataframe formating below </span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">]</span>  <span class="c1"># for dataframe formating below</span>
     <span class="k">else</span><span class="p">:</span> 
         <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rois</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">im_rs</span><span class="p">)))</span> 
         <span class="n">index_pyr</span> <span class="o">=</span> <span class="mi">0</span> 
@@ -869,7 +878,7 @@
             <span class="n">index_row</span> <span class="o">=</span> <span class="mi">0</span> 
             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">:</span> 
                 <span class="n">row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> 
-                <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">rois_to_imblobs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">row</span><span class="p">)</span>     
+                <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">rois_to_imblobs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">row</span><span class="p">)</span>
                 <span class="n">roi_mean</span> <span class="o">=</span> <span class="p">(</span><span class="n">im</span> <span class="o">*</span> <span class="n">im_blobs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">im_blobs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> 
                 <span class="n">shape</span><span class="p">[</span><span class="n">index_row</span><span class="p">,</span><span class="n">index_pyr</span><span class="p">]</span><span class="o">=</span> <span class="n">roi_mean</span> 
                 <span class="n">index_row</span> <span class="o">=</span> <span class="n">index_row</span> <span class="o">+</span> <span class="mi">1</span> 
@@ -880,10 +889,11 @@
      
     <span class="c1"># format shape into dataframe </span>
     <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;shp_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> 
-    <span class="n">shape</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> 
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span> 
      
-    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>        
-        <span class="n">shape</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>  
+    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">shape</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
          
     <span class="k">return</span> <span class="n">shape</span><span class="p">,</span> <span class="n">params_multires</span> </div>
  
