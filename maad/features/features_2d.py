@@ -608,7 +608,7 @@ def plot_shape(shape, params, row=0, display_values=False):
 #****************************************************************************  
 def shape_features(Sxx, resolution='low', rois=None): 
     """ 
-    Computes time-frequency shape descriptors at multiple resolutions using 2D Gabor filters 
+    Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.
      
     Parameters 
     ---------- 
@@ -618,21 +618,33 @@ def shape_features(Sxx, resolution='low', rois=None):
         Specify resolution of shape descriptors. Can be: 'low', 'med', 'high'. 
         Default is 'low'. Alternatively, custom resolution can be provided  
         using a dictionary with options to define the filter bank. Valid keys  
-        are: ntheta, bandwidth, frequency, gamma, npyr 
+        are: ntheta, bandwidth, frequency, gamma, npyr.
     rois: pandas DataFrame 
         Regions of interest where descriptors will be computed. Array must  
-        have a valid input format with column names: min_t min_f, max_t, max_f 
-        Do format_features(rois,tn,fn) before using shape_features to be sure that 
-        the format of the DataFrame is correct 
+        have a valid input format with column names: min_t min_f, max_t, max_f. 
+        Use format_features(rois,tn,fn) before using shape_features to be sure that 
+        the format of the rois DataFrame is correct.
              
     Returns 
     ------- 
     shape: pandas DataFrame 
-        merge between rois and shapes descriptors 
+        Shape coefficient for each region of interest
     params: 2D numpy structured array 
-        Corresponding parameters of the 2D fileters used to calculate the  
-        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale) 
+        Corresponding parameters of the 2D fileters used to compute the  
+        shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale) 
         
+    See Also
+    --------
+    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.features.plot_shape
+    
+    
+    References
+    ----------
+    
+    1. Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026
+    2. Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
+    3. Mallat, S. (2008). A Wavelet Tour of Signal Processing: The Sparse Way. Academic Press.
+    
     Examples 
     -------- 
  
@@ -640,27 +652,32 @@ def shape_features(Sxx, resolution='low', rois=None):
  
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features, plot_shape 
-    >>> from maad.rois import format_features 
-    >>> from maad.util import linear2dB 
-    >>> s, fs = load('./data/spinetail.wav') 
+    >>> from maad.util import format_features, linear2dB
+    >>> s, fs = load('./data/spinetail.wav')
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True) 
-    >>> Sxx_db = linear2dB(Sxx, db_range=100) 
+    >>> Sxx_db = linear2dB(Sxx, db_range=100)
     >>> shape, params = shape_features(Sxx_db, resolution='med') 
     >>> ax = plot_shape(shape.mean(), params) 
      
     Or get shape features from specific regions of interest 
      
-    >>> from maad.util import audacity_to_rois 
-    >>> rois = audacity_to_rois('./data/spinetail.txt') 
+    >>> from maad.util import read_audacity_annot
+    >>> rois = read_audacity_annot('./data/spinetail.txt') 
     >>> rois = format_features(rois, tn, fn) 
-    >>> rois = rois.loc[rois.label=='CRER',]   
-    >>> shape, params = shape_features(Sxx_db, resolution='med', rois=rois) 
-    >>> ax = plot_shape(shape.mean(), params) 
+    >>> shape, params = shape_features(Sxx_db, resolution='med', rois=rois)
+    
+    The shape coefficient can be visualized using ``plot_shape``. Note that these
+    coefficient allow to disciminate between the two vocalization types found in the
+    audio file.
+    
+    >>> shape_crer, shape_sp = shape.groupby('label')
+    >>> ax = plot_shape(shape_crer[1].mean(), params) 
+    >>> ax = plot_shape(shape_sp[1].mean(), params) 
     """     
  
     # Check input data and unpack settings 
     if type(Sxx) is not np.ndarray and len(Sxx.shape) != 2: 
-        raise TypeError('Sxx must be an numpy 2D array')   
+        raise TypeError('Sxx must be a numpy 2D array')   
      
     if type(resolution) is str: 
         opt_shape = opt_shape_presets(resolution) 
@@ -669,16 +686,8 @@ def shape_features(Sxx, resolution='low', rois=None):
     else: 
         raise TypeError('Resolution must be string or a dictionary. See function documentation.') 
          
-    npyr = opt_shape['npyr'] 
- 
-    # transform ROIs to im_blobs 
-    if rois is not None: 
-        if not(('min_t' and 'min_f' and 'max_t' and 'max_f') in rois): 
-            raise TypeError('Array must be a Pandas DataFrame with column names: min_t, min_f, max_t, max_f. Check example in documentation.') 
-        im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), rois) 
-    else: 
-        im_blobs = None 
-     
+    npyr = opt_shape['npyr']
+      
     # build filterbank 
     params, kernels = filter_bank_2d_nodc(ntheta=opt_shape['ntheta'], 
                                           bandwidth=opt_shape['bandwidth'], 
@@ -687,13 +696,13 @@ def shape_features(Sxx, resolution='low', rois=None):
     # filter spectrogram 
     im_rs = filter_multires(Sxx, kernels, npyr, rescale=True)  
      
-    # If ROIs are provided get mean intensity for each ROI,  
+    # If rois are provided get mean intensity for each ROI,  
     # else compute mean intensity for the whole spectrogram 
-    if im_blobs is None: 
+    if rois is None: 
         shape = [] 
         for im in im_rs: 
             shape.append(np.mean(im)) 
-        shape = [shape]  # for dataframe formating below 
+        shape = [shape]  # for dataframe formating below
     else: 
         shape = np.zeros(shape=(len(rois),len(im_rs))) 
         index_pyr = 0 
@@ -701,7 +710,7 @@ def shape_features(Sxx, resolution='low', rois=None):
             index_row = 0 
             for _, row in rois.iterrows() : 
                 row = pd.DataFrame(row).T 
-                im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), row)     
+                im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), row)
                 roi_mean = (im * im_blobs).sum() / im_blobs.sum() 
                 shape[index_row,index_pyr]= roi_mean 
                 index_row = index_row + 1 
@@ -712,10 +721,11 @@ def shape_features(Sxx, resolution='low', rois=None):
      
     # format shape into dataframe 
     cols=['shp_' + str(idx).zfill(3) for idx in range(1,len(shape[0])+1)] 
-    shape = pd.DataFrame(data=np.asarray(shape),columns=cols, index=rois.index) 
+    shape = pd.DataFrame(data=np.asarray(shape),columns=cols) 
      
-    if rois is not None:        
-        shape = rois.join(pd.DataFrame(shape, index=rois.index))  
+    if rois is not None:
+        shape.index = rois.index
+        shape = rois.join(shape)
          
     return shape, params_multires 
  
@@ -725,8 +735,9 @@ def shape_features(Sxx, resolution='low', rois=None):
 def shape_features_raw(im, resolution='low', opt_shape=None): 
     """ 
     Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  
-    using 2D Gabor filters. Contrary to shape_feature, this function delivers the raw 
-    response of the spectrogram to each filter of the filter bank. 
+    using 2D Gabor filters. Contrary to ``shape_features``, this function 
+    delivers the raw response of the spectrogram to each filter of the filter 
+    bank. 
      
     Parameters 
     ---------- 
@@ -744,10 +755,31 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     shape_raw: list 
         Raw shape response of spectrogram to every filter of the filter bank. 
         Every element of the list is the response to one of the filters. Detail  
-        of each filter are available in the param DataFrame returned. 
+        of each filter are available in the ``params`` DataFrame returned. 
     params: pandas DataFrame 
-        Corresponding parameters of the 2D fileters used to calculate the  
-        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale) 
+        Corresponding parameters of the 2D fileters used to compute the  
+        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)
+    
+    See also
+    --------
+    maad.features.shape_features, maad.features.opt_shape_presets, 
+    maad.features.filter_bank_2d_nodc, maad.features.plot_shape
+    
+    Examples
+    --------
+    
+    This function can be used to have access to spectrograms filtered by a 2D
+    Gabor filter bank.
+
+    >>> from maad.sound import load, spectrogram 
+    >>> from maad.features import shape_features_raw
+    >>> from maad.util import linear2dB
+    >>> s, fs = load('./data/spinetail.wav')
+    >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) 
+    >>> Sxx_db = linear2dB(Sxx, db_range=80)
+    >>> shape_raw, params = shape_features_raw(Sxx_db, resolution='low')
+    >>> plot2D(shape_raw[13], **{'extent':(tn[0], tn[-1], fn[0], fn[-1])})
+    >>> plot2D(shape_raw[14], **{'extent':(tn[0], tn[-1], fn[0], fn[-1])})
     """     
      
     # unpack settings 
@@ -762,79 +794,68 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     shape_raw = filter_multires(im, kernels, npyr, rescale=True)  
      
     # organise parameters 
-    params = np.asarray(params) 
-    orient = params[:,0]*180/np.pi 
-    orient = orient.tolist()*npyr 
-    pyr_level = np.sort(np.arange(npyr).tolist()*len(params))+1 
-    freq = params[:,1].tolist()*npyr 
-    nparams = len(params)*npyr 
-    params_multires = np.zeros(nparams, dtype={'names':('theta', 'freq', 'pyr_level','scale'), 
-                                               'formats':('f8', 'f8', 'f8','f8')}) 
-    params_multires['theta'] = orient 
-    params_multires['freq'] = freq 
-    params_multires['scale'] = 1/np.asarray(freq) 
-    params_multires['pyr_level'] = pyr_level 
-    params_multires = pd.DataFrame(params_multires) 
+    params_multires = _params_to_df(params, npyr) 
      
-    return params_multires, shape_raw 
+    return shape_raw, params_multires
  
 #**************************************************************************** 
 #*************                   centroid_features                *********** 
 #****************************************************************************  
 def centroid_features(Sxx, rois=None, im_rois=None): 
     """ 
-    Computes intensity centroid of a spectrogram. 
-    If rois is given, the centroid is computed for each region of interest (ROI) 
-     
+    Computes intensity centroid of a spectrogram. If regions of interest 
+    ``rois`` are provided, the centroid is computed for each region.
+    
     Parameters 
     ---------- 
     Sxx :  2D array 
         Spectrogram 
     rois: pandas DataFrame 
         Regions of interest where descriptors will be computed. Array must  
-        have a valid input format with column names: min_t min_f, max_t, max_f 
-        Do format_features(rois,tn,fn) before using shape_features to be sure that 
-        the format of the DataFrame is correct 
+        have a valid input format with column names: ``min_t``, ``min_f``, 
+        ``max_t``, and ``max_f``. Use the function ``maad.util.format_features``
+        before using centroid_features to format of the ``rois`` DataFrame 
+        correctly.
              
     Returns 
     ------- 
     centroid: pandas DataFrame 
-        merge between rois and centroid descriptors 
+        Centroid of each region of interest.
+        
+    See Also
+    --------
+    maad.features.shape_features, maad.util.overlay_rois, 
+    maad.util.format_features
  
-    Example 
-    -------- 
+    Examples
+    --------
  
     Get centroid from the whole power spectrogram 
  
-    >>> from maad.sound import load, spectrogram 
-    >>> from maad.rois import create_mask, select_rois, overlay_rois, format_features 
-    >>> from maad.features import centroid_features 
-    >>> from maad.util import linear2dB, linear_scale 
+    >>> from maad.sound import load, spectrogram
+    >>> from maad.rois import overlay_rois
+    >>> from maad.features import centroid_features
+    >>> from maad.util import linear2dB, format_features
      
     Load audio and compute spectrogram 
      
     >>> s, fs = load('./data/spinetail.wav') 
-    >>> Sxx,tn,fn,ext = spectrogram (s, fs, db_range=100, display=True) 
-    >>> Sxx = 10*log10(Sxx) 
- 
-    Create a mask, find rois and overlay rois on the spectrogram 
+    >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) 
+    >>> Sxx = linear2dB(Sxx, db_range=80)
      
-    >>> X = linear_scale(Sxx) 
-    >>> im_mask = create_mask(im=X, ext=ext,  
-                              mode_bin = 'relative', bin_std=1.5, bin_per=0.1, 
-                              display=False) 
- 
-    >>> im_rois, rois = select_rois(im_mask,min_roi=200, max_roi=im_mask.shape[1]*5,  
-                                    ext=ext, display= True) 
- 
+    Load annotations and plot
+    
+    >>> from maad.util import read_audacity_annot
+    >>> rois = read_audacity_annot('./data/spinetail.txt') 
     >>> rois = format_features(rois, tn, fn) 
-    >>> ax, fig = plot2D (Sxx, extent=ext, now=False,vmin=-120,vmax=20) 
-    >>> ax, fig = overlay_rois(Sxx, ext, rois, vmin=-120, vmax=20, ax=ax, fig=fig) 
-     
-    Compute the centroid of each rois 
+    >>> ax, fig = plot2D (Sxx, extent=ext)
+    >>> ax, fig = overlay_rois(Sxx, ext, rois, ax=ax, fig=fig)
+    
+    Compute the centroid of each rois and format to get results in the 
+    temporal and spectral domain.
      
     >>> centroid = centroid_features(Sxx, rois) 
-    >>> ax, fig = overlay_centroid(Sxx, ext, centroid, savefig=None, vmin=-120, vmax=20, fig=fig, ax=ax) 
+    >>> centroid = format_features(centroid, tn, fn)
     """     
      
     # Check input data 
@@ -1064,7 +1085,8 @@ def compute_all_features(s, fs, rois, resolution='low',
         - format : string, optional, default is 'png' 
             Format to save the figure  
          
-        ... and more, see matplotlib  
+        ... and more, see matplotlib
+        
     Returns 
     ------- 
     feature_rois: pandas Dataframe 
@@ -1075,8 +1097,8 @@ def compute_all_features(s, fs, rois, resolution='low',
     >>> from maad.util import read_audacity_annot 
     >>> from maad.sound import load 
     >>> from maad.features import compute_all_features 
-    >>> s, fs = load('./data/spinetail.wav')         
-    >>> rois = read_audacity_annot('./data/spinetail.txt')  ## annotations using Audacity 
+    >>> s, fs = load('./data/spinetail.wav')
+    >>> rois = read_audacity_annot('./data/spinetail.txt')
     >>> features = compute_all_features(s, fs, rois, resolution='low',display=True) 
     >>> features
         label      min_t     ...       duration_x  bandwidth_y

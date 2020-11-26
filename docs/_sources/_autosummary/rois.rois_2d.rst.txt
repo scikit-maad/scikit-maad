@@ -1,4 +1,4 @@
-rois.rois\_2d
+﻿rois.rois\_2d
 =============
 
 .. automodule:: rois.rois_2d
@@ -16,17 +16,13 @@ rois.rois\_2d
       :nosignatures:
    
       create_mask
-      double_threshold_abs
-      double_threshold_rel
-      find_rois_wrapper
       load
       median_equalizer
       overlay_rois
       remove_background
+      rois_to_imblobs
       select_bandwidth
       select_rois
-      select_rois_auto
-      select_rois_man
       smooth
    
    

@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois.rois_2d.double_threshold_abs" href="rois.rois_2d.double_threshold_abs.html" />
+    <link rel="next" title="rois.rois_2d.load" href="rois.rois_2d.load.html" />
     <link rel="prev" title="rois.rois_2d" href="rois.rois_2d.html" /> 
 </head>
 
@@ -101,17 +101,13 @@
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_abs.html">rois.rois_2d.double_threshold_abs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_rel.html">rois.rois_2d.double_threshold_rel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.find_rois_wrapper.html">rois.rois_2d.find_rois_wrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.load.html">rois.rois_2d.load</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_auto.html">rois.rois_2d.select_rois_auto</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_man.html">rois.rois_2d.select_rois_man</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -122,7 +118,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -196,27 +192,27 @@
 <h1>rois.rois_2d.create_mask<a class="headerlink" href="#rois-rois-2d-create-mask" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.create_mask">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param">im</em>, <em class="sig-param">ext</em>, <em class="sig-param">mode_bin='relative'</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.create_mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">mode_bin</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.create_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binarize an image based on a double threshold.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
 </dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+upper-right corners. If <cite>None</cite>, the image is positioned such that 
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
-<dt><strong>mode_bin</strong><span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘relative’, a relative double threshold is performed
+<dt><strong>mode_bin</strong><span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘relative’, a relative double threshold is performed 
 if ‘absolute’, an double threshold with absolute value is performed</p>
 </dd>
 <dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix 
 is added to the root filename.</p>
 </dd>
-<dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions.
-All the input arguments required or optional in the signature of the
+<dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions. 
+All the input arguments required or optional in the signature of the 
 functions above can be passed as kwargs :</p>
 <ul class="simple">
 <li><p>double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None, **kwargs)</p></li>
@@ -233,8 +229,8 @@ functions above can be passed as kwargs :</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im_bin</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                     <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im_bin</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> 
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span> 
 </pre></div>
 </div>
 </dd></dl>
@@ -249,7 +245,7 @@ functions above can be passed as kwargs :</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rois.rois_2d.double_threshold_abs.html" class="btn btn-neutral float-right" title="rois.rois_2d.double_threshold_abs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rois.rois_2d.load.html" class="btn btn-neutral float-right" title="rois.rois_2d.load" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="rois.rois_2d.html" class="btn btn-neutral float-left" title="rois.rois_2d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -61,7 +61,6 @@ CHANNEL = 'left'
 MODE_ENV = 'fast'  # 'fast' #'hilbert'
 
 Nt = 512     # frame size (in points)
-
 N  = 1024           # fft size (in points)
 NOVLP = N//2        # N//2
 WIN = 'hanning'     #'boxcar' hanning'

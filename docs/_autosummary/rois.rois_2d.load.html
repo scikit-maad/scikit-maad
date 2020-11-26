@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="rois.rois_2d.median_equalizer" href="rois.rois_2d.median_equalizer.html" />
-    <link rel="prev" title="rois.rois_2d.find_rois_wrapper" href="rois.rois_2d.find_rois_wrapper.html" /> 
+    <link rel="prev" title="rois.rois_2d.create_mask" href="rois.rois_2d.create_mask.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,17 +101,13 @@
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.create_mask.html">rois.rois_2d.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_abs.html">rois.rois_2d.double_threshold_abs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_rel.html">rois.rois_2d.double_threshold_rel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.find_rois_wrapper.html">rois.rois_2d.find_rois_wrapper</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.load</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_auto.html">rois.rois_2d.select_rois_auto</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_man.html">rois.rois_2d.select_rois_man</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -122,7 +118,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -196,7 +192,7 @@
 <h1>rois.rois_2d.load<a class="headerlink" href="#rois-rois-2d-load" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.load">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">fs</em>, <em class="sig-param">duration</em>, <em class="sig-param">flipud=True</em>, <em class="sig-param">display=False</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">flipud</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load an image from a file or an URL</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -213,56 +209,56 @@
 </dd>
 <dt><strong>**kwargs, optional. This parameter is used by plt.plot</strong></dt><dd><ul class="simple">
 <li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’ </span></dt><dd><p>title of the figure</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’ </span></dt><dd><p>label of the horizontal axis</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’ </span></dt><dd><p>label of the vertical axis</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
-in order to get all the  existing colormaps
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’ </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a> 
+in order to get all the  existing colormaps 
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,  
 ‘viridis’…</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
-luminance data.  Note if you pass a <cite>norm</cite> instance, your
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None </span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize 
+luminance data.  Note if you pass a <cite>norm</cite> instance, your 
 settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ext<span class="classifier">scalars (left, right, bottom, top), optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
+<dt>ext<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+upper-right corners. If <cite>None</cite>, the image is positioned such that 
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
-For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
+<dt>dpi<span class="classifier">integer, optional, default is 96 </span></dt><dd><p>Dot per inch.  
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow 
 For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
+<dt>format<span class="classifier">string, optional, default is ‘png’ </span></dt><dd><p>Format to save the figure</p>
 </dd>
 </dl>
 </li>
@@ -273,12 +269,12 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>im</strong><span class="classifier">ndarray</span></dt><dd><p>The different color bands/channels are stored in the
-third dimension, such that a gray-image is MxN, an
+<dt><strong>im</strong><span class="classifier">ndarray</span></dt><dd><p>The different color bands/channels are stored in the 
+third dimension, such that a gray-image is MxN, an 
 RGB-image MxNx3 and an RGBA-image MxNx4.</p>
 </dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
+<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+upper-right corners. If <cite>None</cite>, the image is positioned such that 
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
 <dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution of the spectrogram (horizontal x-axis)</p>
@@ -303,7 +299,7 @@ the pixel centers fall on zero-based (row, column) indices.</p>
         <a href="rois.rois_2d.median_equalizer.html" class="btn btn-neutral float-right" title="rois.rois_2d.median_equalizer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="rois.rois_2d.find_rois_wrapper.html" class="btn btn-neutral float-left" title="rois.rois_2d.find_rois_wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="rois.rois_2d.create_mask.html" class="btn btn-neutral float-left" title="rois.rois_2d.create_mask" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

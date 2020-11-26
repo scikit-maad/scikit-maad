@@ -113,7 +113,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -187,7 +187,7 @@
 <h1>sound.sound.spectrogram<a class="headerlink" href="#sound-sound-spectrogram" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="sound.sound.spectrogram">
-<code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">fs</em>, <em class="sig-param">window='hann'</em>, <em class="sig-param">nperseg=1024</em>, <em class="sig-param">noverlap=None</em>, <em class="sig-param">fcrop=None</em>, <em class="sig-param">tcrop=None</em>, <em class="sig-param">mode='psd'</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#spectrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.spectrogram" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hann'</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">noverlap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'psd'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#spectrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.spectrogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a sound waveform into a spectrogram 
 the output is : 
 - power (mode=’psd’)
@@ -239,7 +239,8 @@ is added to the root filename.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>pRef<span class="classifier">scalar, optional, default is 20e-6</span></dt><dd><p>Set the Pressure reference value which is s20e-6 Pa in air</p>
+<dt>db_range<span class="classifier">scalar, optional, default</span><span class="classifier">100</span></dt><dd><p>if db_range is a number, anything lower than -db_range is set to 
+-db_range and anything larger than 0 is set to 0</p>
 </dd>
 </dl>
 </li>

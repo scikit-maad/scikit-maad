@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.miscellaneous.index_bw" href="util.miscellaneous.index_bw.html" />
-    <link rel="prev" title="util.miscellaneous.dB2linear" href="util.miscellaneous.dB2linear.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,35 +93,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.math.html">util.math</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2linear.html">util.miscellaneous.dB2linear</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">util.miscellaneous.format_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.index_bw.html">util.miscellaneous.index_bw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear2dB.html">util.miscellaneous.linear2dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear_scale.html">util.miscellaneous.linear_scale</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.nearest_idx.html">util.miscellaneous.nearest_idx</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.normalize_2d.html">util.miscellaneous.normalize_2d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rle.html">util.miscellaneous.rle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rois_to_audacity.html">util.miscellaneous.rois_to_audacity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rois_to_imblobs.html">util.miscellaneous.rois_to_imblobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.shift_bit_length.html">util.miscellaneous.shift_bit_length</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -170,10 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
-          <li><a href="util.miscellaneous.html">util.miscellaneous</a> &raquo;</li>
-        
       <li>util.miscellaneous.format_rois</li>
     
     
@@ -195,37 +169,6 @@
             
   <div class="section" id="util-miscellaneous-format-rois">
 <h1>util.miscellaneous.format_rois<a class="headerlink" href="#util-miscellaneous-format-rois" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="util.miscellaneous.format_rois">
-<code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">format_rois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rois</span></em>, <em class="sig-param"><span class="n">ts</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#format_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.format_rois" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup rectangular rois to a predifined format: 
-time-frequency or bounding box</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>array must have a valid input format with column names</p>
-<ul class="simple">
-<li><p>bounding box: min_y, min_x, max_y, max_x</p></li>
-<li><p>time frequency: min_f, min_t, max_f, max_t</p></li>
-</ul>
-</dd>
-<dt><strong>ts</strong><span class="classifier">ndarray</span></dt><dd><p>vector with temporal indices, output from the spectrogram function (in seconds)</p>
-</dd>
-<dt><strong>fs: ndarray</strong></dt><dd><p>vector with frequencial indices, output from the spectrogram function (in Hz)</p>
-</dd>
-<dt><strong>fmt: str</strong></dt><dd><p>A string indicating the desired output format: ‘bbox’ or ‘tf’</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>rois_bbox: ndarray</dt><dd><p>array with indices of ROIs matched on spectrogram</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -233,15 +176,6 @@ time-frequency or bounding box</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.miscellaneous.index_bw.html" class="btn btn-neutral float-right" title="util.miscellaneous.index_bw" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.miscellaneous.dB2linear.html" class="btn btn-neutral float-left" title="util.miscellaneous.dB2linear" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

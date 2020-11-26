@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois.rois_2d.load" href="rois.rois_2d.load.html" />
-    <link rel="prev" title="rois.rois_2d.double_threshold_rel" href="rois.rois_2d.double_threshold_rel.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,34 +93,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.create_mask.html">rois.rois_2d.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_abs.html">rois.rois_2d.double_threshold_abs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.double_threshold_rel.html">rois.rois_2d.double_threshold_rel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.find_rois_wrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.load.html">rois.rois_2d.load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_auto.html">rois.rois_2d.select_rois_auto</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois_man.html">rois.rois_2d.select_rois_man</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
 
             
@@ -169,10 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="rois.html">rois</a> &raquo;</li>
-        
-          <li><a href="rois.rois_2d.html">rois.rois_2d</a> &raquo;</li>
-        
       <li>rois.rois_2d.find_rois_wrapper</li>
     
     
@@ -194,79 +169,6 @@
             
   <div class="section" id="rois-rois-2d-find-rois-wrapper">
 <h1>rois.rois_2d.find_rois_wrapper<a class="headerlink" href="#rois-rois-2d-find-rois-wrapper" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="rois.rois_2d.find_rois_wrapper">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">find_rois_wrapper</code><span class="sig-paren">(</span><em class="sig-param">im</em>, <em class="sig-param">ext</em>, <em class="sig-param">display=False</em>, <em class="sig-param">savefig=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#find_rois_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.find_rois_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper function to find and select ROIs in a spectrogram (or image)</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners. If <cite>None</cite>, the image is positioned such that
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signals and the spectrograms if True</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by the maad function as well</strong></dt><dd><p>as the plt.plot and savefig functions.
-All the input arguments required or optional in the signature functions
-can be passed.</p>
-<p>Specific parameters</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>std_pre<span class="classifier">scalar</span></dt><dd><p>Standard deviation used for the first call of the smooth() 
-function. It defines the std of the gaussian kernel</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>std_post<span class="classifier">scalar</span></dt><dd><p>Standard deviation used for the Second call of the smooth() 
-function. It defines the std of the gaussian kernel</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>See the signature of each maad function to know the other parameters 
-that can be passed as kwargs :</p>
-<ul class="simple">
-<li><p>remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,llambda=1, display = False, savefig=None,  **kwargs)</p></li>
-<li><p>smooth (im, ext, std=1, display = False, savefig=None, **kwargs)</p></li>
-<li><p>create_mask(im, ext, mode_bin =’relative’, display=False, savefig=None,**kwargs)</p></li>
-<li><p>select_rois(im_bin,ext,mode_roi=’auto’,display=False,savefig=None,**kwargs)</p></li>
-<li><p>overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,**kwargs)</p></li>
-</ul>
-<p>… and more, see matplotlib</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>im_rois: 2d ndarray</dt><dd><p>image with labels as values</p>
-</dd>
-<dt><strong>rois_bbox</strong><span class="classifier">list of tuple (min_y,min_x,max_y,max_x)</span></dt><dd><p>Contains the bounding box of each ROI</p>
-</dd>
-<dt><strong>rois_label</strong><span class="classifier">list of tuple (labelID, labelname)</span></dt><dd><p>Contains the label (LabelID=scalar,labelname=string) for each ROI
-LabelID is a number from 1 to the number of ROI. The pixel value 
-of im_label correspond the labelID
-Labname is a string. As the selection is auto, label is ‘unknown’
-by default.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">find_rois_wrapper</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">std_pre</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">std_post</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">llambda</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">gauss_win</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">df</span><span class="p">),</span> 
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">mode_bin</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">mode_roi</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>    
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -274,15 +176,6 @@ by default.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="rois.rois_2d.load.html" class="btn btn-neutral float-right" title="rois.rois_2d.load" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="rois.rois_2d.double_threshold_rel.html" class="btn btn-neutral float-left" title="rois.rois_2d.double_threshold_rel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
