@@ -9,6 +9,11 @@ from scipy.signal import periodogram, welch
 import pandas as pd
 import numpy as np
 
+#### Importation from internal modules
+from maad.sound import envelope
+from maad.util import wav2pressure, mean_dB, pressure2Leq, wav2Leq, get_unimode
+
+#=============================================================================
 def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None):
     """ 
     Estimates power spectral density of 1D signal using Welch's or periodogram methods. 
@@ -73,6 +78,7 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     f_idx = pd.Series(f_idx, index=index_names)
     return psd_s, f_idx
 
+#=============================================================================
 def rms(s):
     """
     Computes the root-mean-square (RMS) level of an input signal
@@ -94,3 +100,127 @@ def rms(s):
     
     """
     return np.sqrt(np.mean(s**2))
+
+#=============================================================================
+def skewness (x, axis=None):
+    """
+    Calcul the skewness (asymetry) of a signal x
+    
+    Parameters
+    ----------
+    x : ndarray of floats 
+        1d signal or 2d matrix
+        
+    axis : integer, optional, default is None
+        select the axis to compute the kurtosis
+        The default is to compute the mean of the flattened array.
+                            
+    Returns
+    -------    
+    ku : float or ndarray of floats
+        skewness of x 
+        
+        if x is a 1d vector => single value
+        
+        if x is a 2d matrix => array of values corresponding to the number of
+        points in the other axis
+        
+    """
+    if isinstance(x, (np.ndarray)) == True:
+        if axis is None:
+            # flatten the array
+            Nf = len(np.ndarray.flatten((x)))
+        else:
+            Nf = x.shape[axis]
+        mean_x =  np.mean(x, axis=axis)
+        std_x = np.std(x, axis=axis)
+        z = x - mean_x[..., np.newaxis]
+        sk = (np.sum(z**3, axis=axis)/(Nf-1))/std_x**3
+    else:
+        print ("WARNING: type of x must be ndarray") 
+        sk = None
+
+    # test if ku is an array with a single value
+    if (isinstance(sk, (np.ndarray)) == True) and (len(sk) == 1):
+        sk = float(sk)
+
+    return sk
+
+#=============================================================================
+def kurtosis (x, axis=None):
+    """
+    Calcul the kurtosis (tailedness or curved or arching) of a signal x
+    
+    Parameters
+    ----------
+    x : ndarray of floats 
+        1d signal or 2d matrix       
+    axis : integer, optional, default is None
+        select the axis to compute the kurtosis
+        The default is to compute the mean of the flattened array.
+                            
+    Returns
+    -------    
+    ku : float or ndarray of floats
+        kurtosis of x 
+        
+        if x is a 1d vector => single value
+        
+        if x is a 2d matrix => array of values corresponding to the number of
+        points in the other axis
+    """
+    if isinstance(x, (np.ndarray)) == True:
+        if axis is None:
+            # flatten the array
+            Nf = len(np.ndarray.flatten((x)))
+        else:
+            Nf = x.shape[axis]
+        mean_x =  np.mean(x, axis=axis)
+        std_x = np.std(x, axis=axis)
+        z = x - mean_x[..., np.newaxis]
+        ku = (np.sum(z**4, axis=axis)/(Nf-1))/std_x**4
+    else:
+        print ("WARNING: type of x must be ndarray") 
+        ku = None
+        
+    # test if ku is an array with a single value
+    if (isinstance(ku, (np.ndarray)) == True) and (len(ku) == 1):
+        ku = float(ku)
+       
+    return ku
+
+#=============================================================================
+def zero_crossing_rate(s, fs):
+    """
+    Compute the Zero Crossing Rate of an audio signal.
+    
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process (wav)
+    fs : float
+        Sampling frequency of the audio (Hz)
+
+    Returns
+    ------- 
+    zcr : float   
+        number of zero crossing /s
+
+    Note
+    ----
+    From wikipedia :
+    The zero-crossing rate is the rate of sign-changes along a signal, i.e., 
+    the rate at which the signal changes from positive to zero to negative or 
+    from negative to zero to positive.[1] This feature has been used heavily 
+    in both speech recognition and music information retrieval, 
+    being a key feature to classify percussive sounds
+    
+    """
+    zero_crosses = np.nonzero(np.diff(s > 0))[0]
+    duration = len(s) / fs
+    zcr = 1/duration * len(zero_crosses)
+    
+    return zcr
+
+
+    
