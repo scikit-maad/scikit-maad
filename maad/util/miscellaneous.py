@@ -123,6 +123,8 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
     bin : 1d ndarray of floats 
         Vector containing the positions of each bin
     """    
+    # force x to be an ndarray
+    x = np.asarray(x)
     
     # Test if the bin_step is larger than the resolution of an
     if bin_step < (an[1]-an[0]):
@@ -144,6 +146,8 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
     for index, b in enumerate(bins[1:]):
         indices = (an>=b0)*(an<b) 
         s.append(sum(indices))
+        if (axis is None) or (x.ndim==1) :
+            xbin.append(mean(x[indices]))
         if axis==0:
             xbin.append(mean(x[indices,:],axis=axis))
         elif axis==1:
