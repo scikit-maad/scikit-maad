@@ -303,8 +303,6 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
     # get the corresponding octave from fn
     bin_octave = bin_octave[(bin_octave>=np.min(fn)) & (bin_octave<=np.max(fn))]
     
-    print(len(bin_octave))
-    
     # Bins limit
     bin_octave_low = bin_octave/(2**0.1666666)
     bin_octave_up = bin_octave*(2**0.1666666)
