@@ -18,20 +18,23 @@ Created on Wed Oct 24 11:56:28 2018
 
 # Import external modules
 import numbers
-import math
 
 import numpy as np 
-from numpy import sum, log, min, max, abs, mean, median, sqrt, diff
+from numpy import sum, log, min, max, abs, mean, median, sqrt, diff, var
 
 from scipy.ndimage.morphology import binary_erosion, binary_dilation
 from scipy.stats import rankdata
-from scipy import ndimage as ndi
-from skimage import transform
+from scipy.signal import find_peaks
 
 import matplotlib.pyplot as plt
 
 #### Importation from internal modules
-from maad.util import rle, index_bw, linear_scale, dB2linear, linear2dB, plot2D
+from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB, 
+                       format_features, intoBins, entropy, wav2Leq, PSD2Leq, 
+                       power2dBSPL, linear_scale, plot1D, plot2D)
+from maad.features import skewness, kurtosis, centroid_features 
+from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro
+from maad.rois import smooth, select_rois, create_mask, overlay_rois
 
 # min value
 import sys
@@ -41,862 +44,8 @@ _MIN_ = sys.float_info.min
 # List of functions
 # =============================================================================
 
-#=============================================================================
-def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
-    """ 
-    Transform a vector or a matrix into bins 
-    
-    Parameters
-    ----------
-    x : array-like
-        1D or 2D array.
-    an :1d ndarray of floats 
-        Vector containing the positions of each value. 
-        In case of 2D matrix, this vector corresponds to the horizontal (row)
-        or vertical (columns) units
-    bin_step : scalar
-        Determine the width of each bin.
-    axis : integer, optional, default is 0
-        Determine  along which axis the transformation is done.
-        In case of matrix :
-        axis = 0 => transformation is done on column
-        
-        axis = 1 => transformation is done on row 
-    bin_min : scalar, optional, default is None
-        This minimum value corresponds to the start of the first bin. 
-        By default, the minimum value is the first value of an.
-    bin_max : scalar, optional, default is None
-        This maximum value corresponds to end of the last bin. 
-        By default, the maximum value is the last value of an.   
-    display : boolean, optional, defualt is False
-        Display the result of the tranformation : an histogram
-        In case of matrix, the mean histogram is shown.
-        
-    Returns
-    -------
-    xbins :  array-like
-        1D or 2D array which correspond to the data after being transformed into bins
-    bin : 1d ndarray of floats 
-        Vector containing the positions of each bin
-    """    
-    
-    # Test if the bin_step is larger than the resolution of an
-    if bin_step < (an[1]-an[0]):
-        raise Exception('WARNING: bin step must be larger or equal than the actual resolution of x')
 
-    # In case the limits of the bin are not set
-    if bin_min == None:
-        bin_min = an[0]
-    if bin_max == None :
-        bin_max = an[-1]
-    
-    # Creation of the bins
-    bins = np.arange(bin_min,bin_max+bin_step,bin_step)
-    
-    # select the indices corresponding to the frequency bins range
-    b0 = bins[0]
-    xbin = []
-    s = []
-    for index, b in enumerate(bins[1:]):
-        indices = (an>=b0)*(an<b) 
-        s.append(sum(indices))
-        if axis==0:
-            xbin.append(mean(x[indices,:],axis=axis))
-        elif axis==1:
-            xbin.append(mean(x[:,indices],axis=axis))
-        b0 = b
-      
-    xbin = np.asarray(xbin) * mean(s)
-    bins = bins[0:-1]
-    
-    # Display
-    if display:
-        plt.figure()
-        # if xbin is a vector
-        if xbin.ndim ==1:
-            plt.plot(an,x)
-            plt.bar(bins,xbin, bin_step*0.75, alpha=0.5, align='edge')
-        else:
-            # if xbin is a matrix
-            if axis==0 : axis=1
-            elif axis==1 : axis=0
-            plt.plot(an,mean(x,axis=axis))
-            plt.bar(bins,mean(xbin,axis=1), bin_step*0.75, alpha=0.5, align='edge')
-    
-    return xbin, bins
-
-
-#=============================================================================
-def skewness (x, axis=0):
-    """
-    Calcul the skewness (asymetry) of a signal x
-    
-    Parameters
-    ----------
-    x : ndarray of floats 
-        1d signal or 2d matrix
-        
-    axis : integer, optional, default is 0
-        select the axis to compute the kurtosis
-                            
-    Returns
-    -------    
-    ku : float or ndarray of floats
-        skewness of x 
-        
-        if x is a 1d vector => single value
-        
-        if x is a 2d matrix => array of values corresponding to the number of
-        points in the other axis
-        
-    """
-    if isinstance(x, (np.ndarray)) == True:
-        Nf = x.shape[axis]
-        mean_x =  mean(x, axis=axis)
-        std_x = np.std(x, axis=axis)
-        z = x - mean_x
-        sk = (sum(z**3)/(Nf-1))/std_x**3
-    else:
-        print ("WARNING: type of x must be ndarray") 
-        sk = None
-       
-    return sk
-
-#=============================================================================
-def kurtosis (x, axis=0):
-    """
-    Calcul the kurtosis (tailedness or curved or arching) of a signal x
-    
-    Parameters
-    ----------
-    x : ndarray of floats 
-        1d signal or 2d matrix       
-    axis : integer, optional, default is 0
-        select the axis to compute the kurtosis
-                            
-    Returns
-    -------    
-    ku : float or ndarray of floats
-        kurtosis of x 
-        
-        if x is a 1d vector => single value
-        
-        if x is a 2d matrix => array of values corresponding to the number of
-        points in the other axis
-    """
-    if isinstance(x, (np.ndarray)) == True:
-        Nf = x.shape[axis]
-        mean_x =  mean(x, axis=axis)
-        std_x = np.std(x, axis=axis)
-        z = x - mean_x
-        ku = (sum(z**4)/(Nf-1))/std_x**4
-    else:
-        print ("WARNING: type of x must be ndarray") 
-        ku = None
-       
-    return ku
-
-#=============================================================================
-def roughness (x, norm=None, axis=0) :
-    """
-    Computes the roughness (depends on the number of peaks and their amplitude)
-    of a vector or matrix x (i.e. waveform, spectrogram...)   
-    Roughness = sum(second_derivation(x)²)
-    
-    Parameters
-    ----------
-    x : ndarray of floats
-        x is a vector (1d) or a matrix (2d)
-        
-    norm : boolean, optional. Default is None
-    
-        - 'global' : normalize by the maximum value in the vector or matrix
-        - 'per_axis' : normalize by the maximum value found along each axis
-
-    axis : int, optional, default is 0
-        select the axis where the second derivation is computed
-        
-        if x is a vector, axis=0
-        
-        if x is a 2d ndarray, axis=0 => rows, axis=1 => columns
-                
-    Returns
-    -------
-    y : float or ndarray of floats
-
-    References
-    ----------
-    Described in [Ramsay JO, Silverman BW (2005) Functional data analysis.]
-    Ported from SEEWAVE R Package
-    """      
-    
-    if norm is not None:
-        if norm == 'per_axis' :
-            m = max(x, axis=axis) 
-            m[m==0] = _MIN_    # Avoid dividing by zero value
-            if axis==0:
-                x = x/m[None,:]
-            elif axis==1:
-                x = x/m[:,None]
-        elif norm == 'global' :
-            m = max(x) 
-            if m==0 : m = _MIN_    # Avoid dividing by zero value
-            x = x/m 
-            
-    deriv2 = diff(x, 2, axis=axis)
-    r = sum(deriv2**2, axis=axis)
-    
-    return r
-
-#=============================================================================
-def entropy (datain, axis=0):
-    """
-    Computes the entropy of a vector or matrix datain (i.e. waveform, spectrum...)    
-    
-    Parameters
-    ----------
-    datain : ndarray of floats
-        datain is a vector (1d) or a matrix (2d)
-
-    axis : int, optional, default is 0
-        select the axis where the entropy is computed
-        
-        if datain is a vector, axis=0
-        
-        if datain is a 2d ndarray, axis=0 => rows, axis=1 => columns
-                
-    Returns
-    -------
-    H : float or ndarray of floats
-    """
-    if isinstance(datain, (np.ndarray)) == True:
-        if datain.ndim > axis:
-            if datain.shape[axis] == 0: 
-                print ("WARNING: x is empty") 
-                H = None 
-            elif datain.shape[axis] == 1:
-                H = 0 # null entropy
-            elif sum(datain) == 0:
-                H = 0 # null entropy
-            else:
-                # if datain contains negative values -> rescale the signal between 
-                # between posSitive values (for example (0,1))
-                if np.min(datain)<0:
-                    datain = linear_scale(datain,minval=0,maxval=1)
-                # length of datain along axis
-                n = datain.shape[axis]
-                # Tranform the signal into a Probability mass function (pmf)
-                # Sum(pmf) = 1
-                if axis == 0 :
-                    pmf = datain/sum(datain,axis)
-                elif axis == 1 : 
-                    pmf = (datain.transpose()/sum(datain,axis)).transpose()
-                pmf[pmf==0] = _MIN_
-                #normalized by the length : H=>[0,1]
-                H = -sum(pmf*log(pmf),axis)/log(n)
-        else:
-            print ("WARNING :axis is greater than the dimension of the array")    
-            H = None 
-    else:
-        print ("WARNING: type of datain must be ndarray")   
-        H = None 
-
-    return H
-
-#=============================================================================
-def score (x, threshold, axis=0):
-    """
-    Score
-
-    count the number of times values in x that are greater than the threshold 
-    and normalized by the total number of values in x
-    
-    Parameters
-    ----------
-    x : ndarray of floats
-        Vector or matrix containing the data
-        
-    threshold : scalar
-        Value > threshold are counted    
-        
-    axis : integer, optional, default is 0
-        score is calculated along this axis.
-        
-    Returns
-    -------    
-    count : scalar
-        the number of times values in x that are greater than the threshold
-    s : scalar
-        count is normalized by the total number of values in x
-    """
-    x = np.asarray(x)
-    x = x>=threshold
-    count = sum(x,axis=axis)
-    s = sum(x,axis=axis)/x.shape[axis]
-    return s, count
-
-#=============================================================================
-def gini(x, corr=False):
-    """
-    Gini
-    
-    Compute the Gini value of x
-    
-    Parameters
-    ----------
-    x : ndarray of floats
-        Vector or matrix containing the data
-    
-    corr : boolean, optional, default is False
-        Correct the Gini value
-        
-    Returns
-    -------  
-    G: scalar
-        Gini value
-        
-    References
-    ----------
-    Ported from ineq library in R
-    """
-    if sum(x) == 0:
-       G = 0 # null gini
-    else:
-        n = len(x)
-        x.sort()
-        G = sum(x * np.arange(1,n+1,1))
-        G = 2 * G/sum(x) - (n + 1)
-        if corr : G = G/(n - 1)
-        else : G= G/n
-    return G
-
-#=============================================================================
-def shannonEntropy(datain, axis=0):
-    """
-    Shannon Entropy
-    
-    Parameters
-    ----------
-    datain : ndarray of floats
-        Vector or matrix containing the data
-    
-    axis : integer, optional, default is 0
-        entropy is calculated along this axis.
-
-    Returns
-    -------    
-    Hs : ndarray of floats
-        Vector or matrix of Shannon Entropy
-    """
-    # length of datain along axis
-    n = datain.shape[axis]
-    Hs = entropy(datain, axis=axis) * log(n)
-    return Hs
-
-#=============================================================================
-def acousticRichnessIndex (Ht_array, M_array):
-    """
-    Acoustic richness index : AR
-    
-    Parameters
-    ----------
-    Ht_array : 1d ndarray of floats
-        Vector containing the temporal entropy Ht of the selected files 
-    
-    M_array: 1d ndarray of floats
-        Vector containing the amplitude index M  of the selected files 
-
-    Returns
-    -------    
-    AR : 1d ndarray of floats
-        Vector of acoustic richenss index
-        
-    References
-    ----------
-    Described in [Depraetere & al. 2012]
-    Ported from SEEWAVE R package
-    """    
-    if len(Ht_array) != len(M_array) : 
-        print ("warning : Ht_array and M_array must have the same length")
-    
-    AR = rankdata(Ht_array) * rankdata(M_array) / len(Ht_array)**2
-    
-    return AR
-
-#=============================================================================
-def acousticComplexityIndex(Sxx, norm ='global'):
-    
-    """
-    Acoustic Complexity Index : ACI
-    
-    Parameters
-    ----------
-    Sxx : ndarray of floats
-        2d : Spectrogram (i.e matrix of spectrum)
-    
-    norm : string, optional, default is 'global'
-        Determine if the ACI is normalized by the sum on the whole frequencies
-        ('global' mode) or by the sum of frequency bin per frequency bin 
-        ('per_bin')
-
-    Returns
-    -------    
-    ACI_xx : 2d ndarray of scalars
-        Acoustic Complexity Index of the spectrogram
-    
-    ACI_per_bin : 1d ndarray of scalars
-        ACI value for each frequency bin
-        sum(ACI_xx,axis=1)
-        
-    ACI_sum : scalar
-        Sum of ACI value per frequency bin (Common definition)
-        sum(ACI_per_bin)
-        
-    ACI_mean ; scalar
-    
-    Notes
-    -----    
-    !!! pas de sens car non independant de la résolution freq et temporelle
-    
-    !!! Seulement sum donne un résultat independant de N (pour la FFT)  
-    
-    !!! et donc de df et dt
-        
-    References
-    ----------
-    Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
-    activity of an avian community: the Acoustic Complexity Index (ACI). 
-    Ecological Indicators, 11, 868-873.
-    
-    Ported from the Seewave R package.
-    
-    !!!!! in Seewave, the result is the sum of the ACI per bin.
-    
-    """   
-    if norm == 'per_bin':
-        ACI_xx = ((abs(diff(Sxx,1)).transpose())/(sum(Sxx,1)).transpose()).transpose()
-    elif norm == 'global':
-        ACI_xx = (abs(diff(Sxx,1))/sum(Sxx))
-
-    ACI_per_bin = sum(ACI_xx,axis=1)
-    ACI_sum = sum(ACI_per_bin)
-    
-    return ACI_xx, ACI_per_bin, ACI_sum, 
-
-
-#=============================================================================
-def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000, 
-                            dB_threshold=3, index="shannon", R_compatible = 'soundecology'):
-    
-    """
-    Acoustic Diversity Index : ADI
-    
-    Parameters
-    ----------
-    Sxx : ndarray of floats
-        2d : Spectrogram
-    
-    fn : 1d ndarray of floats
-        frequency vector
-    
-    fmin : scalar, optional, default is 0
-        Minimum frequency in Hz
-        
-    fmax : scalar, optional, default is 20000
-        Maximum frequency in Hz
-        
-    bin_step : scalar, optional, default is 500
-        Frequency step in Hz
-    
-    dB_threshold : scalar, optional, default is 3dB
-        Threshold to compute the score (ie. the number of data > threshold,
-        normalized by the length)
-        
-    index : string, optional, default is "shannon"
-        - "shannon" : Shannon entropy is calculated on the vector of scores
-        
-        - "simpson" : Simpson index is calculated on the vector of scores
-        
-        - "invsimpson" : Inverse Simpson index is calculated on the vector of scores
-        
-    Returns
-    -------    
-    ADI : scalar 
-        Acoustic Diversity Index of the spectrogram (ie. index of the vector 
-        of scores)
-    
-    References
-    ----------
-    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
-    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
-    """
-        
-    # number of frequency intervals to compute the score
-    N = np.floor((fmax-fmin)/bin_step)
-    
-    if R_compatible == 'soundecology' :
-        # convert into dB and normalization by the max
-        Sxx_dB = linear2dB(Sxx/max(Sxx), mode='amplitude')
-    else :
-        # convert into dB 
-        Sxx_dB = linear2dB(Sxx, mode='amplitude')         
-    
-    # Score for each frequency in the frequency bandwith
-    s_sum = []
-    for ii in np.arange(0,N):
-        f0 = int(fmin+bin_step*(ii))
-        f1 = int(f0+bin_step)
-        s,_ = score(Sxx_dB[index_bw(fn,(f0,f1)),:], threshold=dB_threshold, axis=0)
-        s_sum.append(mean(s))
-    
-    s = np.asarray(s_sum)
-    
-    # Entropy
-    if index =="shannon":
-        ADI = shannonEntropy(s)
-    elif index == "simpson":
-        s = s/sum(s)
-        s = s**2
-        ADI = 1-sum(s)
-    elif index == "invsimpson":
-        s = s/sum(s)
-        s = s**2
-        ADI = 1/sum(s)   
-    
-    return ADI
-
-#=============================================================================
-def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500, 
-                          dB_threshold=-50, R_compatible = 'soundecology'):
-    
-    """
-    Acoustic Eveness Index : AEI
-    
-    Parameters
-    ----------
-    Sxx: ndarray of floats
-        2d : Spectrogram
-    
-    fn : 1d ndarray of floats
-        frequency vector
-    
-    fmin : scalar, optional, default is 0
-        Minimum frequency in Hz
-        
-    fmax : scalar, optional, default is 20000
-        Maximum frequency in Hz
-        
-    bin_step : scalar, optional, default is 500
-        Frequency step in Hz
-    
-    dB_threshold : scalar, optional, default is -50
-        Threshold to compute the score (ie. the number of data > threshold,
-        normalized by the length)
-        
-    Returns
-    -------    
-    AEI : scalar 
-        Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)
-        
-    References 
-    ----------
-    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
-    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
-    """
-
-    # number of frequency intervals to compute the score
-    N = np.floor((fmax-fmin)/bin_step)
-    
-    if R_compatible == 'soundecology' :
-        # convert into dB and normalization by the max
-        Sxx_dB = linear2dB(Sxx/max(Sxx), mode='amplitude')
-    else :
-        # convert into dB 
-        Sxx_dB = linear2dB(Sxx, mode='amplitude')   
-    
-    # Score for each frequency in the frequency bandwith
-    s_sum = []
-    for ii in np.arange(0,N):
-        f0 = int(fmin+bin_step*(ii))
-        f1 = int(f0+bin_step)
-        s,_ = score(Sxx_dB[index_bw(fn,(f0,f1)),:], threshold=dB_threshold, axis=0)
-        s_sum.append(mean(s))
-    
-    s = np.asarray(s_sum)
-    
-    # Gini
-    AEI = gini(s)
-    
-    return AEI
-
-#=============================================================================
-
-####    Indices based on the entropy
-
-def spectral_entropy (X, fn, flim=None, display=False) :
-    """
-    Spectral entropy : EAS, ECU, ECV, EPS, 
-    
-    + kurtosis and skewness : KURT, SKEW
-    
-    Parameters
-    ----------
-    X : ndarray of floats
-        Spectrum (1d) or Spectrogram (2d). 
-        Better to use the PSD to be consistent with energy
-    
-    fn : 1d ndarray of floats
-        frequency vector
-    
-    flim : tupple (fmin, fmax), optional, default is None
-        Frequency band used to compute the spectral entropy.
-        For instance, one may want to compute the spectral entropy for the 
-        biophony bandwidth
-    
-    display : boolean, optional, default is False
-        Display the different spectra (mean, variance, covariance, max...)
-        
-    Returns
-    -------     
-    EAS : scalar
-        Entropy of spectrum
-    ECU : scalar
-        Entropy of spectral variance (along the time axis for each frequency)
-    ECV : scalar
-        Entropy of coefficient of variance (along the time axis for each frequency)
-    EPS : scalar
-        Entropy of spectral maxima 
-    KURT : scalar
-        Kurtosis of spectral maxima
-    SKEW : scalar
-        Skewness of spectral maxima
-        
-    References 
-    ----------
-    Credit : 
-    
-    """
-    
-    if isinstance(flim, numbers.Number) :
-        print ("WARNING: flim must be a tupple (fmin, fmax) or None")
-        return
-    
-    if flim is None : flim=(fn.min(),fn.max())
-    
-    # select the indices corresponding to the frequency range
-    iBAND = index_bw(fn, flim)
-
-    # TOWSEY & BUXTON : only on the bio band
-    # EAS [TOWSEY] #
-     
-    ####  COMMENT : Result a bit different due to different Hilbert implementation
-    
-    X_mean = mean(X[iBAND], axis=1)
-    Hf = entropy(X_mean)
-    EAS = 1 - Hf
-
-    #### Entropy of spectral variance (along the time axis for each frequency)
-    """ ECU [TOWSEY] """
-    X_Var = np.var(X[iBAND], axis=1)
-    Hf_var = entropy(X_Var)
-    ECU = 1 - Hf_var
-
-    #### Entropy of coefficient of variance (along the time axis for each frequency)
-    """ ECV [TOWSEY] """
-    X_CoV = np.var(X[iBAND], axis=1)/max(X[iBAND], axis=1)
-    Hf_CoV = entropy(X_CoV)
-    ECV = 1 - Hf_CoV
-    
-    #### Entropy of spectral maxima 
-    """ EPS [TOWSEY]  """
-    ioffset = np.argmax(iBAND==True)
-    Nbins = sum(iBAND==True)    
-    imax_X = np.argmax(X[iBAND],axis=0) + ioffset
-    imax_X = fn[imax_X]
-    max_X_bin, bin_edges = np.histogram(imax_X, bins=Nbins, range=flim)
-    max_X_bin = max_X_bin/sum(max_X_bin)
-    Hf_fmax = entropy(max_X_bin)
-    EPS = 1 - Hf_fmax    
-    
-    #### Kurtosis of spectral maxima
-    KURT = kurtosis(max_X_bin)
-    
-    #### skewness of spectral maxima
-    SKEW = skewness(max_X_bin)
-    
-    if display: 
-        fig, ax = plt.subplots()
-        ax.plot(fn[iBAND], X_mean/max(X_mean),label="Normalized mean Axx")
-        plt.plot(fn[iBAND], X_Var/max(X_Var),label="Normalized variance Axx")
-        ax.plot(fn[iBAND], X_CoV/max(X_CoV),label="Normalized covariance Axx")
-        ax.plot(fn[iBAND], max_X_bin/max(max_X_bin),label="Normalized Spectral max Axx")
-        ax.set_title('Signals')
-        ax.set_xlabel('Frequency [Hz]')
-        ax.legend()
-
-    return EAS, ECU, ECV, EPS, KURT, SKEW
-
-
-#=============================================================================
-
-####    Indices based on the energy
-
-    
-def _energy_per_freqbin (PSDxx, fn, flim = (0, 20000), bin_step = 1000):
-        
-    #Convert into bins
-    PSDxx_bins, bins = intoBins(PSDxx, fn, bin_min=0, bin_max=fn[-1], 
-                              bin_step=bin_step, axis=0)   
-    
-    # select the indices corresponding to the frequency bins range
-    indf = index_bw (bins, flim) 
-
-    # select the frequency bins and take the min
-    energy = sum(PSDxx_bins[indf, ])
-    
-    return energy
-
-#=============================================================================
-def soundscapeIndex (Sxx,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
-                     step=None):
-    """
-    soundscapeIndex
-        
-    Parameters
-    ----------
-    Sxx : ndarray of floats
-        2d : Amplitude Spectrogram
-    
-    fn : vector
-        frequency vector 
-        
-    flim_bioPh : tupple (fmin, fmax), optional, default is (1000,10000)
-        Frequency band of the biophony
-    
-    flim_antroPh: tupple (fmin, fmax), optional, default is (0,1000)
-        Frequency band of the anthropophony
-    
-    step: optional, default is None
-        if step is None, keep the original frequency resolution, otherwise,
-        the spectrogram is converted into new frequency bins
-        
-    Returns
-    -------
-    NDSI : scalar
-        (bioPh-antroPh)/(bioPh+antroPh)
-    ratioBA : scalar
-        biophonic energy / anthropophonic energy
-    antroPh : scalar
-        Acoustic energy in the anthropophonic bandwidth
-    bioPh : scalar
-        Acoustic energy in the biophonic bandwidth
-    
-    References
-    ----------
-    Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
-    The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive 
-    for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
-    
-    Inspired by Seewave R package
-    """
-
-    # Frequency resolution
-    # if step is None, keep the original frequency resolution, otherwise,
-    # the spectrogram is converted into new frequency bins
-    if step is None : step = fn[1]-fn[0]
-    
-    # Convert Sxx (amplitude) into PSDxx (energy)
-    PSDxx = Sxx**2
-
-    # Energy in BIOBAND
-    bioPh = _energy_per_freqbin(PSDxx, fn, flim=flim_bioPh, bin_step=step)
-    # Energy in ANTHROPOBAND
-    antroPh = _energy_per_freqbin(PSDxx, fn, flim=flim_antroPh, bin_step=step)
-    
-    # NDSI and ratioBA indices 
-    NDSI = (bioPh-antroPh)/(bioPh+antroPh)
-    ratioBA = bioPh / antroPh
-    
-    return NDSI, ratioBA, antroPh, bioPh
-
-#=============================================================================
-def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible = True):
-    """
-    Bioacoustics Index
-    
-    Parameters
-    ----------
-    Sxx : ndarray of floats
-        matrix : Spectrogram  
-    
-    fn : vector
-        frequency vector 
-    
-    flim : tupple (fmin, fmax), optional, default is (2000, 15000)
-        Frequency band used to compute the bioacoustic index.
-        
-    R_compatible : Boolean, optional, default is False
-        if True, the result is similar to the package SoundEcology in R 
-    
-    Returns
-    -------
-    BI : scalar
-        Bioacoustics Index
-    
-    References 
-    ----------
-    References: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
-    invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
-    remote sensing. Ecological Applications 17: 2137-2144.
-    
-    Ported and modified from the soundecology R package.
-    
-    Notes
-    -----    
-    Soundecology compatible version
-    - average of dB value
-    - remove negative value in order to get positive values only
-    - dividing by the frequency resolution df instead of multiplication
-    """    
-    
-    # select the indices corresponding to the frequency bins range
-    indf = index_bw(fn,flim)
-    
-    # frequency resolution. 
-    df = fn[1] - fn[0]
-    
-    # ======= As soundecology
-    if R_compatible == True :
-        # Mean Sxx normalized by the max
-        meanSxx = mean(Sxx/max(Sxx), axis=1)
-        # Convert into dB
-        meanSxxdB = linear2dB(meanSxx, mode='amplitude')
-        
-        # "normalization" in order to get positive 'vectical' values 
-        meanSxxdB = meanSxxdB[indf,]-min(meanSxxdB[indf,])
-    
-        # this is not the area under the curve...
-        # what is the meaning of an area under the curve in dB...
-        BI = sum(meanSxxdB)/df
-        
-    else:
-        # normalize by the max of the spectrogram
-        # better to average the PSD for energy conservation
-        PSDxx_norm = (Sxx**2/max(Sxx**2))
-        meanPSDxx_norm = mean(PSDxx_norm, axis=1)
-
-        # Compute the area
-        # take the sqrt in order to go back to Sxx
-        BI = sqrt(sum(meanPSDxx_norm))* df 
-        
-    return BI
-    
-
-####    Indices based on the acoustic event  ####
-    
-
-
-def acoustic_activity (xdB, dB_threshold, axis=1):
+def _acoustic_activity (xdB, dB_threshold, axis=1):
     """
     Acoustic Activity :
     
@@ -908,20 +57,13 @@ def acoustic_activity (xdB, dB_threshold, axis=1):
     Parameters
     ----------
     xdB : ndarray of floats
-        1d : envelope in dB
+        1d : envelope in dB of the audio signal 
         2d : PSD spectrogram in dB
         It's better to work with PSD or envelope without background variation
         as the process is based on threshold.
-
-    dt : scalar
-        Time resolution
-
     dB_threshold : scalar, optional, default is 6dB
         data >Threshold is considered to be an event 
         if the length is > rejectLength
-        
-    rejectDuration : scalar, optional, default is None
-        event shorter than rejectDuration are discarded
     
     Returns
     -------    
@@ -942,15 +84,19 @@ def acoustic_activity (xdB, dB_threshold, axis=1):
     ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)
     EVNsp [Towsey] : ACTcount (number of point value above the theshold)
     """ 
-    ACTfract, ACTcount = score(xdB, dB_threshold, axis=axis)
+    
+    ### For x to be a ndarray
+    xdB = np.asarray(xdB)
+   
+    ### compute _score
+    ACTfract, ACTcount = _score(xdB, dB_threshold, axis=axis)
     ACTfract= ACTfract.tolist()
     ACTcount = ACTcount.tolist()
-    ACTmean = linear2dB(mean(dB2linear(xdB[xdB>dB_threshold], mode='power')),mode='power')
-    return ACTfract, ACTcount, ACTmean
-       
+    ACTmean = mean_dB(xdB[xdB>dB_threshold])
+    return ACTfract, ACTcount, ACTmean 
 
 #=============================================================================     
-def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
+def _acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     """
     Acoustic events :
         - EVNsum : total events duration (s) 
@@ -976,9 +122,15 @@ def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     Returns
     -------    
     EVNsum :scalar
+        total events duration in s
     EVNmean: scalar
+        mean events duration in s
     EVNcount: scalar
+        number of events per s
     EVN: ndarray of floats 
+        binary vector or matrix.
+        1 corresponds to event
+        0 corresponds to background
 
     References 
     ----------
@@ -1041,11 +193,1489 @@ def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     return EVNsum, EVNmean, EVNcount, EVN
 
 
+#=============================================================================
+def _score (x, threshold, axis=0):
+    """
+    Score
+
+    count the number of times values in x that are greater than the threshold 
+    and normalized by the total number of values in x
+    
+    Parameters
+    ----------
+    x : ndarray of floats
+        Vector or matrix containing the data
+        
+    threshold : scalar
+        Value > threshold are counted    
+        
+    axis : integer, optional, default is 0
+        score is calculated along this axis.
+        
+    Returns
+    -------    
+    count : scalar
+        the number of times values in x that are greater than the threshold
+    s : scalar
+        count is normalized by the total number of values in x
+    """
+    x = np.asarray(x)
+    x = x>=threshold
+    count = sum(x,axis=axis)
+    s = sum(x,axis=axis)/x.shape[axis]
+    return s, count
+
+#=============================================================================
+
+def _shannonEntropy(datain, axis=0):
+    """
+    Shannon Entropy
+    
+    Parameters
+    ----------
+    datain : ndarray of floats
+        Vector or matrix containing the data
+    
+    axis : integer, optional, default is 0
+        entropy is calculated along this axis.
+
+    Returns
+    -------    
+    Hs : ndarray of floats
+        Vector or matrix of Shannon Entropy
+    """
+    # length of datain along axis
+    n = datain.shape[axis]
+    Hs = entropy(datain, axis=axis) * np.log(n)
+    return Hs
+
+#=============================================================================
+def _gini(x, corr=False):
+    """
+    Gini
+    
+    Compute the Gini value of x
+    
+    Parameters
+    ----------
+    x : ndarray of floats
+        Vector or matrix containing the data
+    
+    corr : boolean, optional, default is False
+        Correct the Gini value
+        
+    Returns
+    -------  
+    G: scalar
+        Gini value
+        
+    References
+    ----------
+    Ported from ineq library in R
+    """
+    if sum(x) == 0:
+       G = 0 # null gini
+    else:
+        n = len(x)
+        x.sort()
+        G = sum(x * np.arange(1,n+1,1))
+        G = 2 * G/sum(x) - (n + 1)
+        if corr : G = G/(n - 1)
+        else : G= G/n
+    return G
+
+#=============================================================================
+def _raoQ (p, bins):
+    """
+        compute Rao's Quadratic entropy in 1d
+    
+    Parameters
+    ---------
+    p : ndarray of floats (1d)
+        a vector containing the probality of each bin
+    bins : ndarray of floats (1d)
+        a vector containing the value of each bin
+        
+    Return
+    ------
+    Q : scalar
+        Rao's Quadratic entropy value
+    
+    Reference:
+    ---------
+    Botta-Dukát, Zoltán, Rao’s quadratic entropy as a measure of functional 
+    diversity based on multiple traits, Journal of Vegetation Science, 2005
+    
+    """
+    
+    # be sure they are ndarray
+    p = np.asarray(p)
+    bins = np.asarray(bins)
+    
+    # Normalize p by the sum in order to get the sum of p = 1
+    p = p/np.sum(p)
+    
+    # Bins is normalized by the bins range
+    bins = bins/(bins.max() - bins.min())
+    
+    # take advantage of broadcasting, 
+    # Get the pairwise distance 
+    # Euclidian distance
+    d = abs(bins[..., np.newaxis] - bins[np.newaxis, ...])
+        
+    # compute the crossproduct of pixels value pi,pj
+    pipj = (p[..., np.newaxis] * p[np.newaxis, ...])
+
+    # Multiply by 2*sqrt(2) to take into account the lower triangle (symmetric)
+    Q = np.sum(np.sum(pipj*d))*2*sqrt(2)
+    
+    return Q
+
+#=============================================================================
+
+def surfaceRoughness (x, norm ='global'):
+    
+    """
+    Surface Roughness 
+    
+    Parameters
+    ----------
+    x : ndarray of floats
+        vector (1d) or matrix (2d)
+    
+    norm : string, optional, default is 'global'
+        Determine if the ROUGHNESS is normalized by the sum of the whole data
+        ('global' mode) or by the sum of horizontal line for each line
+        ('per_bin')
+
+    Returns
+    -------                
+    Ra : scalar or 1d ndarray of scalars
+        if x is a vector => Arithmetical mean deviation of x.
+        if x is a matrix => Arithmetical mean deviation of each line of x.
+        
+    Rq : scalar or 1d ndarray of scalars
+        if x is a vector => Root mean squared of deviationn of x.
+        if x is a matrix => Root mean squared of deviation of each line of x.
+    
+    Reference
+    ---------
+    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness
+    
+    """    
+    # force to be ndarray
+    x = np.asarray(x)
+    
+    if x.ndim == 1 :
+        m = np.mean(x)
+        y = x-m
+        # Arithmetic mean deviation
+        Ra = mean(abs(y))
+        # Root mean square
+        Rq = sqrt(mean(y**2))  
+        
+    elif x.ndim ==2 :
+        if norm == 'per_bin':
+            m = np.mean(x, axis=1)
+            y = x-m[..., np.newaxis]
+        elif norm == 'global':
+            m = np.mean(x)
+            y = x-m 
+        else :
+            raise TypeError ('norm has to be in {per_bin, global}')    
+        
+        # Arithmetic mean deviation
+        Ra = mean(abs(y), axis=1)
+        # Root mean square
+        Rq = sqrt(mean(y**2, axis=1))   
+        
+    else :
+        raise TypeError ('x should be a vector (1d) or a matrix (2d) of floats')
+        
+    return Ra, Rq
+
+#=============================================================================
+def roughness (x, norm=None, axis=0) :
+    """
+    Computes the roughness (depends on the number of peaks and their amplitude)
+    of a vector or matrix x (i.e. waveform, spectrogram...)   
+    Roughness = sum(second_derivation(x)²)
+    
+    Parameters
+    ----------
+    x : ndarray of floats
+        x is a vector (1d) or a matrix (2d)
+        
+    norm : boolean, optional. Default is None
+    
+        - 'global' : normalize by the maximum value in the vector or matrix
+        - 'per_axis' : normalize by the maximum value found along each axis
+
+    axis : int, optional, default is 0
+        select the axis where the second derivation is computed
+        
+        if x is a vector, axis=0
+        
+        if x is a 2d ndarray, axis=0 => rows, axis=1 => columns
+                
+    Returns
+    -------
+    y : float or ndarray of floats
+
+    References
+    ----------
+    Described in [Ramsay JO, Silverman BW (2005) Functional data analysis.]
+    Ported from SEEWAVE R Package
+    """      
+    
+    if norm is not None:
+        if norm == 'per_axis' :
+            m = np.max(x, axis=axis) 
+            m[m==0] = _MIN_    # Avoid dividing by zero value
+            if axis==0:
+                x = x/m[None,:]
+            elif axis==1:
+                x = x/m[:,None]
+        elif norm == 'global' :
+            m = np.max(x) 
+            if m==0 : m = _MIN_    # Avoid dividing by zero value
+            x = x/m 
+            
+    deriv2 = np.diff(x, 2, axis=axis)
+    r = np.sum(deriv2**2, axis=axis)
+    
+    return r
+
+
+#******************************************************************************
+#               TEMPORAL ECOACOUSTICS INDICES
+#******************************************************************************
+    
+#=============================================================================
+def audio_moments (s):
+    """
+    Computes the first 4th moments of an audio
+    - mean
+    - variance
+    - skewness
+    - kurtosis
+    
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process
+        
+    Returns
+    -------
+    AUDIO_MEAN : float 
+        mean of the audio
+    AUDIO_VAR : float 
+        variance  of the audio
+    AUDIO_SKEW : float
+        skewness of the audio
+    AUDIO_KURT : float
+        kurtosis of the audio
+    """
+    # force s to be ndarray
+    s = np.asarray(s)
+    
+    # computes moments
+    AUDIO_MEAN = mean(s)
+    AUDIO_VAR = var(s)
+    AUDIO_SKEW = skewness(s)
+    AUDIO_KURT = kurtosis(s)
+    
+    return AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW,  AUDIO_KURT
+
+#=============================================================================
+def audio_median (s, mode ='fast', Nt=512) :
+    """
+    Computes the median of the envelope of an audio signal 
+
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process (wav)
+    mode : str, optional, default is "fast"
+        Select the mode to compute the envelope of the audio waveform
+        - "fast" : The sound is first divided into frames (2d) using the 
+            function _wave2timeframes(s), then the max of each frame gives a 
+            good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+            The method is slow
+    Nt : integer, optional, default is 512
+        Size of each frame. The largest, the highest is the approximation.
+    
+    Returns
+    -------
+    MED: float
+       Median of the envelope 
+
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')
+    >>> med = features.audio_median (s)
+
+    """
+    # Envelope
+    env = envelope(s, mode=mode, Nt=Nt)
+    # median
+    MED =  np.median(env)
+
+    return MED
+
+#=============================================================================
+def audio_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
+    """
+    Computes the median of the envelope of an audio signal 
+
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process (wav)
+    compatibility : string {'QUT', 'seewave'}, default is 'QUT'
+        Select the way to compute the temporal entropy.
+            - QUT : entropy of the envelope²
+            - seewave : entropy of the envelope
+    mode : str, optional, default is "fast"
+        Select the mode to compute the envelope of the audio waveform
+        - "fast" : The sound is first divided into frames (2d) using the 
+            function _wave2timeframes(s), then the max of each frame gives a 
+            good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+            The method is slow
+    Nt : integer, optional, default is 512
+        Size of each frame. The largest, the highest is the approximation.
+   
+    Returns
+    -------
+    Ht: float
+       Temporal entropy of the audio 
+       
+    References
+    ----------
+    Seewave : http://rug.mnhn.fr/seewave/
+    Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool 
+    for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
+     
+    QUT : https://github.com/QutEcoacoustics/audio-analysis/
+    Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. 
+    (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). 
+    Zenodo. http://doi.org/10.5281/zenodo.1188744
+    
+    Notes
+    -----
+    Entropy is a measure of ENERGY dispersal => square the amplitude.      
+    Temporal entropy => value<0.7 indicates a brief concentration of energy
+                     (few miliseconds)
+                     value close 1 indicates no peak events but rather 
+                     smooth sound or noise.
+
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')
+    >>> Ht = features.audio_entropy (s)
+
+    """
+    # Envelope
+    env = envelope(s, mode=mode, Nt=Nt)
+    # Entropy
+    if compatibility == 'QUT':
+        Ht = entropy(env**2)
+    elif compatibility == 'seewave':
+        Ht = entropy(env)
+    else:
+        raise TypeError('compatibility must be selected in {QUT, seewave}')  
+
+    return Ht
+
+#=============================================================================
+def acousticRichnessIndex (Ht_array, M_array):
+    """
+    Acoustic richness index : AR
+    
+    Parameters
+    ----------
+    Ht_array : 1d ndarray of floats
+        Vector containing the temporal entropy Ht of the selected files 
+    
+    M_array: 1d ndarray of floats
+        Vector containing the amplitude index M  of the selected files 
+
+    Returns
+    -------    
+    AR : 1d ndarray of floats
+        Vector of acoustic richenss index
+        
+    References
+    ----------
+    Described in [Depraetere & al. 2012]
+    Ported from SEEWAVE R package
+    """    
+    if len(Ht_array) != len(M_array) : 
+        print ("warning : Ht_array and M_array must have the same length")
+    
+    AR = rankdata(Ht_array) * rankdata(M_array) / len(Ht_array)**2
+    
+    return AR
+
+#=============================================================================
+
+def audio_activity (s, dB_threshold=3, mode='fast', Nt=512):
+    """
+    Acoustic Activity :
+    
+    for each frequency bin :
+    - ACTfract : proportion (fraction) of points above the threshold 
+    - ACTcount : number of points above the threshold
+    - ACTmean : mean value (in dB) of the portion of the signal above the threhold
+    
+    Parameters
+    ----------
+    s : 1D array of floats
+        audio to process (wav)
+    dB_threshold : scalar, optional, default is 3dB
+        data >Threshold is considered to be an activity 
+    mode : str, optional, default is "fast"
+        Select the mode to compute the envelope of the audio waveform
+        - "fast" : The sound is first divided into frames (2d) using the 
+            function _wave2timeframes(s), then the max of each frame gives a 
+            good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+            The method is slow
+    Nt : integer, optional, default is 512
+        Size of each frame. The largest, the highest is the approximation.    
+    
+    Returns
+    -------    
+    ACTfract :ndarray of scalars
+        proportion (fraction) of points above the threshold for each frequency bin
+    ACTcount: ndarray of scalars
+        number of points above the threshold for each frequency bin
+    ACTmean: scalar
+        mean value (in dB) of the portion of the signal above the threhold
+        
+    References 
+    ----------
+    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
+    from natural recordings of the environment.
+    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    """ 
+
+    ### For wave to be a ndarray
+    s = np.asarray(s) 
+    
+    ### envelope
+    if mode == 'fast' :
+        env = envelope(s, mode='fast', Nt=Nt)
+    elif mode == 'hilbert' :
+        env = envelope(s, mode='hilbert')
+
+    ### get background value
+    _,BGNt,_ = audio_SNR(s, mode, Nt)
+    
+    # linear to power dB
+    envdB = amplitude2dB(env)
+    
+    # subtract the background noise
+    envdB = envdB - BGNt
+    
+    ACTtFraction, ACTtCount, ACTtMean = _acoustic_activity (envdB, dB_threshold, axis=0)
+    
+    return ACTtFraction, ACTtCount, ACTtMean
+
+#=============================================================================
+def audio_events (s, fs, dB_threshold=3, rejectDuration=None, 
+                  mode='fast', Nt=512, display=False, **kwargs):
+    """
+    Acoustic events :
+        - EVNtFraction : Fraction: events duration over total duration
+        - EVNmean : mean events duration (s)
+        - EVNcount : number of events per s
+        - EVN : binary vector or matrix with 1 corresponding to event position
+    
+    Parameters
+    ----------
+    s : 1D array of floats
+        audio to process (wav)
+    fs : Integer
+        sampling frequency in Hz
+    dB_threshold : scalar, optional, default is 3dB
+        data >Threshold is considered to be an event 
+        if the length is > rejectLength
+    rejectDuration : scalar, optional, default is None
+        event shorter than rejectDuration are discarded
+        duration is in s
+    mode : str, optional, default is "fast"
+        Select the mode to compute the envelope of the audio waveform
+        - "fast" : The sound is first divided into frames (2d) using the 
+            function _wave2timeframes(s), then the max of each frame gives a 
+            good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+            The method is slow
+    Nt : integer, optional, default is 512
+        Size of each frame. The largest, the highest is the approximation.
+    display : boolean, optional, default is False
+        Display the selected events on the audio waveform
+    \*\*kwargs, optional. 
+        This parameter is used by plt.plot
+
+    Returns
+    -------    
+    EVNtFraction :scalar
+        Fraction: events duration over total duration
+    EVNmean: scalar
+        mean events duration in s
+    EVNcount: scalar
+        number of events per s
+    EVN: ndarray of floats 
+        binary vector or matrix.
+        1 corresponds to event
+        0 corresponds to background
+
+    References 
+    ----------
+    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
+    from natural recordings of the environment.
+    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    """  
+    ### For wave to be a ndarray
+    s = np.asarray(s) 
+    
+    ### envelope
+    if mode == 'fast' :
+        env = envelope(s, mode, Nt)
+        dt =1/fs*Nt
+    elif mode == 'hilbert' :
+        env = envelope(s, mode)
+        dt = 1/fs
+    
+    # Time vector
+    tn = np.arange(0,len(env),1)*len(s)/fs/len(env)
+    
+    ### get background value
+    _,BGNt,_ = audio_SNR(s, mode, Nt)
+    
+    # linear to power dB
+    envdB = 10*np.log10(env**2)
+    
+    # subtract the background noise
+    envdB = envdB - BGNt
+    
+    EVNtSum, EVNtMean, EVNtCount, EVNt = _acoustic_events (envdB, dt, dB_threshold, rejectDuration=rejectDuration)
+    
+    # EVNtFraction
+    EVNtFraction = EVNtSum / (dt*len(tn))
+    
+    ### display
+    if display :
+        fig, ax = plt.subplots()
+        ax.plot(tn, env/max(abs(env)), lw=0.5, alpha=1)
+        plt.fill_between(tn, 0, EVNt*1,color='red',alpha=0.5)
+        ax.set_title('Detected Events')
+        ax.set_xlabel('Time [sec]')   
+    
+    return EVNtFraction, EVNtMean, EVNtCount, EVNt
+
+
+#******************************************************************************
+#               FREQUENCY ECOACOUSTICS INDICES
+#******************************************************************************
+    
+def spectral_moments (X, axis=None):
+    """
+    Computes the first 4th moments of an amplitude spectrum (1d) or
+    spectrogram (2d) 
+    
+    - mean
+    - variance
+    - skewness
+    - kurtosis
+    
+    Parameters
+    ----------
+    X : ndarray of floats
+        Amplitude  spectrum (1d) or spectrogram (2d). 
+    axis : interger, optional, default is None
+        if spectrogram (2d), select the axis to estimate the moments.
+        
+    Returns
+    -------
+    SPEC_MEAN : float 
+        mean of the audio
+    SPEC_VAR : float 
+        variance  of the audio
+    SPEC_SKEW : float
+        skewness of the audio
+    SPEC_KURT : float
+        kurtosis of the audio
+    """
+    # force P to be ndarray
+    X = np.asarray(X)
+    
+    # computes moments
+    SPEC_MEAN = mean(X, axis)
+    SPEC_VAR = var(X, axis)
+    SPEC_SKEW = skewness(X, axis)
+    SPEC_KURT = kurtosis(X, axis)
+    
+    return SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT
+
+#=============================================================================
+def frequency_entropy (X, compatibility="QUT") :
+    """
+    Computes the spectral entropy of a power spectral density (1d) or power
+    spectrogram density (2d)
+
+    Parameters
+    ----------
+    X : 1D or 2D array
+        Power Spectral/Spectrogram Density (PSD) of an audio
+        Better to work with PSD (amplitude¹) than with amplitude for energy 
+        conservation
+    compatibility : string {'QUT', 'seewave'}, default is 'QUT'
+        Select the way to compute the spectral entropy.
+            - QUT : entropy of P
+            - seewave : entropy of sqrt(P)   
+    Returns
+    -------
+    Hf: float
+       spectral entropy of the audio 
+    Ht_per_bin : array of floats
+        temporal entropy along time axis for each frequency when P is a 
+        spectrogram (2d) otherwise Ht_per_bin is empty   
+       
+    References
+    ----------
+    Seewave : http://rug.mnhn.fr/seewave/
+    Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool 
+    for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
+     
+    QUT : https://github.com/QutEcoacoustics/audio-analysis/
+    Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. 
+    (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). 
+    Zenodo. http://doi.org/10.5281/zenodo.1188744
+    
+    Notes
+    -----
+    FREQUENCY ENTROPY => low value indicates concentration of energy around a
+                narrow frequency band. 
+                WARNING : if the DC value is not removed before processing
+                the large peak at f=0Hz (DC) will lower the entropy...
+
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('spinetail.wav')
+    >>> Pxx,_,_,_ = maad.sound.spectrogram (s, fs)   
+    >>> Hf,Ht_per_bin = maad.features.frequency_entropy(Pxx)
+    
+    """
+    # Force to be an array
+    X = np.asarray(X)
+    
+    # test if P has 2 dimension (i.e a spectrogram Pxx)
+    if X.ndim==1 :
+        # Entropy
+        if compatibility == 'QUT':
+            Hf = entropy(X)
+            Ht_per_bin = []
+        elif compatibility == 'seewave':
+            Hf = entropy(sqrt(X))
+            Ht_per_bin = []
+        else:
+            raise TypeError('compatibility must be selected in {QUT, seewave}') 
+    elif X.ndim==2 :     
+        # Entropy
+        if compatibility == 'QUT':
+            Hf = entropy(mean(X, axis=1))
+            # P is a spectrogram, computes entropy along time axis for each frequency
+            Ht_per_bin = entropy(X, axis=1) 
+        elif compatibility == 'seewave':
+            Hf = entropy(sqrt(mean(X, axis=1)))
+            # P is a spectrogram, computes entropy along time axis for each frequency
+            Ht_per_bin = entropy(sqrt(X), axis=1)
+        else:
+            raise TypeError('compatibility must be selected in {QUT, seewave}')             
+    else:
+        raise TypeError('P must be a spectrum (1d) or a spectrogram (2d)')    
+    
+    return Hf, Ht_per_bin
+
+#=============================================================================
+def numberOfPeaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200, 
+                  slopes=(1,1), display=False, **kwargs):
+    """
+    Counts the number of major frequency peaks obtained on a mean spectrum.
+    
+    Parameters
+    ----------
+    X : ndarray of floats (1d) or (2d)
+        Amplitude spectrum (1d) or spectrogram (2d). If spectrogram, the mean
+        spectrum will be computed before finding peaks
+    fn : 1d ndarray of floats
+        frequency vector
+    mode : string {dB, linear}, optional, default is dB
+        select if the amplitude spectrum is converted into dB 
+    min_peak_val : scalar, optional, default is None
+        amplitude threshold parameter. Only peaks above this threshold will be 
+        considered.
+    min_freq_dist: scalar, optional, default is 200 
+        frequency threshold parameter (in Hz). 
+        If the frequency difference of two successive peaks is less than this threshold, 
+        then the peak of highest amplitude will be kept only.
+    slopes : tupple of two values, optional, default is (1,1)   
+        slope parameter, tupple of float of length 2 corresponding to left and 
+        right slopes, one or both could be set to None.
+        Refers to the amplitude slopes of the peak. 
+        The first value is the left slope and the second value is the right slope. 
+        Only peaks with higher slopes than threshold values will be kept. 
+    display: boolean, optional, default is False
+        if True, display the mean spectrum with the detected peaks
+        
+    Return
+    ------
+    NBPeaks : integer
+        Number of detected peaks on the mean spectrum
+    
+    Reference :
+    -----------
+    Gasc, A. & al (2013). Biodiversity sampling using a global acoustic 
+    approach: contrasting sites with microendemics in New Caledonia. 
+    PloS one, 8(5), e65311.
+    
+    Inspired by the function fpeaks from Seewave
+
+    """
+    # Force to be an array
+    X = np.asarray(X)
+    
+    # mean spectrum
+    if X.ndim == 2 :
+        S = avg_amplitude_spectro(X)
+    else:
+        S = X
+    
+    # if mode is "dB", convert into dB
+    if mode == 'dB' :
+        S = amplitude2dB(S)
+
+    # Find peaks
+    min_pix_distance = min_freq_dist/(fn[1]-fn[0])
+    index, prop = find_peaks(S, height = min_peak_val, 
+                             distance = min_pix_distance, 
+                             prominence=0)
+    
+    # keep peaks with with slopes higher than the limit
+    if slopes is None :
+        index_select = index
+    if isinstance(slopes, numbers.Number) :
+        left_slope = S[index] - S[prop['left_bases']]
+        index_select = index[(left_slope>=slopes)]
+    elif len(slopes) == 2 :
+        if (slopes[0] is not None) and (slopes[1] is not None)   :
+            left_slope = S[index] - S[prop['left_bases']]
+            right_slope = S[index] - S[prop['right_bases']]
+            index_select = index[(left_slope>=slopes[0]) & (right_slope>slopes[1])]
+        elif (slopes[0] is not None) and (slopes[1] is None) :
+            left_slope = S[index] - S[prop['left_bases']]
+            index_select = index[(left_slope>=slopes[0])]
+        elif (slopes[0] is None) and (slopes[1] is not None) :
+            right_slope = S[index] - S[prop['right_bases']]
+            index_select = index[(right_slope>slopes[1])]
+        else:
+            index_select = index
+    else:
+        index_select = index
+    
+    # number of peaks
+    NBPeaks = len(index_select)
+    
+    # display
+    if display :
+        fig_kwargs = {
+                      'figtitle':'Mean Spectrum with detected peaks',
+                      'xlabel': kwargs.pop('xlabel','Frequency [Hz]'),
+                      'ylabel': kwargs.pop('ylabel','Amplitude [dB]'),
+                      }
+
+        ax, _ = plot1D(fn,S, **fig_kwargs)
+        ax.plot(fn[index_select], S[index_select], '+', mfc=None, mec='r', 
+                mew=2, ms=8)
+
+    return NBPeaks
+
+
+#=============================================================================
+
+####    Indices based on the entropy
+
+def spectral_entropy (Sxx, fn, flim=None, display=False) :
+    """
+    Spectral entropy : EAS, ECU, ECV, EPS, 
+    
+    + kurtosis and skewness of the spectrum maxima distribution: EPS_KURT, EPS_SKEW
+    
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        Spectrogram (2d). 
+        Recommanded to work with PSD to be consistent with energy conservation
+    
+    fn : 1d ndarray of floats
+        frequency vector
+    
+    flim : tupple (fmin, fmax), optional, default is None
+        Frequency band used to compute the spectral entropy.
+        For instance, one may want to compute the spectral entropy for the 
+        biophony bandwidth
+    
+    display : boolean, optional, default is False
+        Display the different spectra (mean, variance, covariance, max...)
+        
+    Returns
+    -------     
+    EAS : scalar
+        Entropy of Average Spectrum
+    ECU : scalar
+        Entropy of spectral variance (along the time axis for each frequency)
+    ECV : scalar
+        Entropy of Coefficient of Variation (along the time axis for each frequency)
+    EPS : scalar
+        Entropy of spectral maxima (peaks) 
+    EPS_KURT : scalar
+        Kurtosis of spectral maxima
+    EPS_SKEW : scalar
+        Skewness of spectral maxima
+        
+    References 
+    ----------
+    Credit : Towsey 2017
+    
+    """
+    
+    if isinstance(flim, numbers.Number) :
+        print ("WARNING: flim must be a tupple (fmin, fmax) or None")
+        return
+    
+    if flim is None : flim=(fn.min(),fn.max())
+    
+    # select the indices corresponding to the frequency range
+    iBAND = index_bw(fn, flim)
+    
+    # force Sxx to be an ndarray
+    X = np.asarray(Sxx)
+
+    # TOWSEY & BUXTON : only on the bio band
+    # EAS [TOWSEY] #
+    ####  COMMENT : Result a bit different due to different Hilbert implementation
+    X_mean = mean(X[iBAND], axis=1)
+    Hf = entropy(X_mean)
+    EAS = 1 - Hf
+
+    #### Entropy of spectral variance (along the time axis for each frequency)
+    """ ECU [TOWSEY] """
+    X_Var = var(X[iBAND], axis=1)
+    Hf_var = entropy(X_Var)
+    ECU = 1 - Hf_var
+
+    #### Entropy of coefficient of variance (along the time axis for each frequency)
+    """ ECV [TOWSEY] """
+    X_CoV = var(X[iBAND], axis=1)/mean(X[iBAND], axis=1)
+    Hf_CoV = entropy(X_CoV)
+    ECV = 1 - Hf_CoV
+    
+    #### Entropy of spectral maxima 
+    """ EPS [TOWSEY]  """
+    ioffset = np.argmax(iBAND==True)
+    Nbins = sum(iBAND==True)  
+    imax_X = np.argmax(X[iBAND],axis=0) + ioffset
+    imax_X = fn[imax_X]
+    max_X_bin, bin_edges = np.histogram(imax_X, bins=Nbins, range=flim)
+    max_X_bin = max_X_bin/sum(max_X_bin)
+    Hf_fmax = entropy(max_X_bin)
+    EPS = 1 - Hf_fmax    
+    
+    #### Kurtosis of spectral maxima
+    EPS_KURT = kurtosis(max_X_bin)
+    
+    #### skewness of spectral maxima
+    EPS_SKEW = skewness(max_X_bin)
+    
+    if display: 
+        fig, ax = plt.subplots()
+        ax.plot(fn[iBAND], X_mean/max(X_mean),label="Normalized mean")
+        plt.plot(fn[iBAND], X_Var/max(X_Var),label="Normalized variance")
+        ax.plot(fn[iBAND], X_CoV/max(X_CoV),label="Normalized covariance")
+        ax.plot(fn[iBAND], max_X_bin/max(max_X_bin),label="Normalized Spectral max")
+        ax.set_title('Signals')
+        ax.set_xlabel('Frequency [Hz]')
+        ax.legend()
+
+    return EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW
+
+#=============================================================================
+
+def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,10000), 
+                   flim_HF=(10000,20000)):
+    """
+    Spectral Activity Cover
+        
+    Parameters
+    ----------
+    Sxx : 2D array of floats
+        Spectrogram 2D in dB. Usually, better to work with spectrogram without 
+        stationnary noise in order to measure only acoustic activity above the
+        background noise
+    fn : 1d ndarray of floats
+        frequency vector 
+    dB_threshold : scalar, optional, default is 3dB
+        data >Threshold is considered to be an activity 
+    flim_LF : tupple, optional, default is (0,1000)
+        Low frequency band in Hz
+    flim_MF : tupple, optional, default is (1000,10000)
+        mid frequency band in Hz    
+    flim_HF : tupple, optional, default is (10000,20000)
+        high frequency band in Hz
+    
+    Returns
+    -------    
+    LFC :scalar
+        Proportion of the LF bandwith of the spectrogram with activity above the threshold
+    MFC: scalar
+        Proportion of the MF bandwith of the spectrogram with activity above the threshold
+    HFC: scalar
+        Proportion of the HF bandwith of the spectrogram with activity above the threshold
+        
+    References 
+    ----------
+    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
+    from natural recordings of the environment.
+    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    """ 
+
+    ### For Sxx to be a ndarray
+    Sxx = np.asarray(Sxx) 
+    
+    idx = index_bw(fn,flim_LF)
+    lowFreqCover, _, _ = _acoustic_activity (Sxx[idx], dB_threshold, axis=1)
+    LFC = mean(lowFreqCover)
+    
+    idx = index_bw(fn,flim_MF)
+    midFreqCover, _, _ = _acoustic_activity (Sxx[idx], dB_threshold, axis=1)
+    MFC = mean(midFreqCover)
+    
+    idx = index_bw(fn,flim_HF)
+    highFreqCover, _, _ = _acoustic_activity (Sxx[idx], dB_threshold, axis=1)
+    HFC = mean(highFreqCover)
+    
+    return LFC, MFC, HFC
+
+
+#=============================================================================
+
+def spectral_activity (Sxx, dB_threshold=3):
+    """
+    Acoustic Activity :
+    
+    for each frequency bin :
+    - ACTfract : proportion (fraction) of points above the threshold 
+    - ACTcount : number of points above the threshold
+    - ACTmean : mean value (in dB) of the portion of the signal above the threhold
+    
+    Parameters
+    ----------
+    Sxx : 2D array of floats
+        Spectrogram 2D
+    dB_threshold : scalar, optional, default is 3dB
+        data >Threshold is considered to be an activity 
+    
+    Returns
+    -------    
+    ACTspfract :ndarray of scalars
+        proportion (fraction) of points above the threshold for each frequency bin
+    ACTspcount: ndarray of scalars
+        number of points above the threshold for each frequency bin
+    ACTspmean: scalar
+        mean value (in dB) of the portion of the signal above the threhold
+        
+    References 
+    ----------
+    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
+    from natural recordings of the environment.
+    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    """ 
+
+    ### For Sxx to be a ndarray
+    Sxx = np.asarray(Sxx) 
+    
+    ACTspfract, ACTspcount, ACTspmean = _acoustic_activity (Sxx, dB_threshold, 
+                                                            axis=1)
+    
+    return ACTspfract, ACTspcount, ACTspmean
+
+#=============================================================================
+def spectral_events (Sxx, dt, dB_threshold=3, rejectDuration=None, 
+                     display=False, **kwargs):
+    """
+    Spectral Acoustic events :
+        - EVNspFraction : Fraction: events duration over total duration
+        - EVNspmean : mean events duration (s)
+        - EVNspcount : number of events per s
+        - EVNsp : binary vector or matrix with 1 corresponding to event position
+    
+    Parameters
+    ----------
+    Sxx : 2D array of floats
+        Spectrogram 2D
+    dt : float
+        time resolution in s (ie tn[1]-tn[0])
+    dB_threshold : scalar, optional, default is 3dB
+        data >Threshold is considered to be an event 
+        if the length is > rejectLength
+    rejectDuration : scalar, optional, default is None
+        event shorter than rejectDuration are discarded
+        duration is in s
+    display : boolean, optional, default is false
+        Display a plot with the number of events per s (EVNspCount) and
+        a binary image with the detected events.
+    \*\*kwargs : optional. See matplotlib documentation
+
+    Returns
+    -------    
+    EVNspFract :scalar
+        Fraction: events duration over total duration
+    EVNspMean: scalar
+        mean events duration in s
+    EVNspCount: scalar
+        number of events per s
+    EVNsp: ndarray of floats 
+        binary matrix.
+        1 corresponds to event
+        0 corresponds to background
+
+    References 
+    ----------
+    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
+    from natural recordings of the environment.
+    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    """  
+    ### For wave to be a ndarray
+    Sxx = np.asarray(Sxx) 
+        
+    EVNspSum, EVNspMean, EVNspCount, EVNsp = _acoustic_events (Sxx, dt, 
+                                                               dB_threshold, 
+                                                               rejectDuration=rejectDuration)
+    
+    # EVNspFract = EVNspSum  * total_duration
+    EVNspFract = EVNspSum / (dt * Sxx.shape[1])
+    
+    if display :
+        # display Number of events/s / frequency
+        extent =  kwargs.pop('extent',None)
+        if extent is not None : 
+            y = np.arange(0, Sxx.shape[0])/Sxx.shape[0]*extent[3]
+            xlabel = 'frequency [Hz]' 
+        else: 
+            y = np.arange(0, Sxx.shape[0])
+            xlabel = 'pseudofrequency [points]'   
+
+        fig1, ax1 = plt.subplots()
+        plt.plot(y, EVNspCount)
+        ax1.set_xlabel(xlabel)
+        ax1.set_title('EVNspCount : Number of events/s')
+        
+    # display EVENTS detected in the spectrogram
+        if extent is not None :
+            xlabel = 'Time [sec]'
+            ylabel = 'frequency [Hz]' 
+        else: 
+            extent = (0,Sxx.shape[1],0,Sxx.shape[0])
+            xlabel = 'pseudoTime [sec]'
+            ylabel = 'pseudofrequency [points]'   
+    
+        # set the paramters of the figure
+        title  =kwargs.pop('title','Events detected') 
+        cmap   =kwargs.pop('cmap','gray')  
+        figsize=kwargs.pop('figsize',(4, 13))  
+        vmin=kwargs.pop('vmin',0)  
+        vmax=kwargs.pop('vmax',1)
+        
+        ax, fig = plot2D (EVNsp*1, extent=extent, now=False, figsize=figsize, 
+                          title=title, ylabel=ylabel,xlabel=xlabel,
+                          vmin=vmin,vmax=vmax,  cmap=cmap, **kwargs) 
+    
+    return EVNspFract, EVNspMean, EVNspCount, EVNsp
+
+
+#=============================================================================
+def acousticComplexityIndex(Sxx):
+    
+    """
+    Acoustic Complexity Index : ACI
+    
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        2d : Spectrogram (i.e matrix of spectrum)
+    
+    Returns
+    -------    
+    ACI_xx : 2d ndarray of scalars
+        Acoustic Complexity Index of the spectrogram
+    
+    ACI_per_bin : 1d ndarray of scalars
+        ACI value for each frequency bin
+        sum(ACI_xx,axis=1)
+        
+    ACI_sum : scalar
+        Sum of ACI value per frequency bin (Common definition)
+        sum(ACI_per_bin)
+        
+    ACI_mean ; scalar
+    
+    Notes
+    -----   
+    ACI depends on the duration of the spectrogram as the derivation of the signal
+    is normalized by the sum of the signal for 
+    Moreover, if the background noise is high due to high acoustic activity the
+    normalization by the sum of the signal reduced ACI.
+    So ACI is low when no acoustic activity or high acoustic activity with 
+    continuous background noise
+    ACI is high only when acoustsic activity is medium, with distinguishable sounds
+    and low background noise.
+        
+    References
+    ----------
+    Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
+    activity of an avian community: the Acoustic Complexity Index (ACI). 
+    Ecological Indicators, 11, 868-873.
+    
+    Ported from the Seewave R package.
+    
+    """   
+    ACI_xx = ((np.abs(diff(Sxx,1)).transpose())/(np.sum(Sxx,1)).transpose()).transpose()       
+    ACI_per_bin = np.sum(ACI_xx,axis=1)
+    ACI_sum = np.sum(ACI_per_bin)
+    
+    return ACI_xx, ACI_per_bin, ACI_sum 
+
+#=============================================================================
+def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000, 
+                            dB_threshold=3, index="shannon", R_compatible='soundecology'):
+    
+    """
+    Acoustic Diversity Index : ADI
+    
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        2d : Spectrogram
+    
+    fn : 1d ndarray of floats
+        frequency vector
+    
+    fmin : scalar, optional, default is 0
+        Minimum frequency in Hz
+        
+    fmax : scalar, optional, default is 20000
+        Maximum frequency in Hz
+        
+    bin_step : scalar, optional, default is 500
+        Frequency step in Hz
+    
+    dB_threshold : scalar, optional, default is 3dB
+        Threshold to compute the score (ie. the number of data > threshold,
+        normalized by the length)
+        
+    index : string, optional, default is "shannon"
+        - "shannon" : Shannon entropy is calculated on the vector of scores
+        
+        - "simpson" : Simpson index is calculated on the vector of scores
+        
+        - "invsimpson" : Inverse Simpson index is calculated on the vector of scores
+    
+    R_compatible : string, optional, default is "soundecology"
+        if 'soundecology', the result is similar to the package SoundEcology in R 
+        Otherwise, the result is specific to maad
+        
+    Returns
+    -------    
+    ADI : scalar 
+        Acoustic Diversity Index of the spectrogram (ie. index of the vector 
+        of scores)
+    
+    Notes
+    -----
+    See acousticEvenessIndex
+    AEI and ADI are negatively correlated
+    
+    References
+    ----------
+    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
+    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
+    """
+        
+    # number of frequency intervals to compute the score
+    N = np.floor((fmax-fmin)/bin_step)
+    
+    if R_compatible == 'soundecology' :
+        # convert into dB and normalization by the max
+        Sxx_dB = amplitude2dB(Sxx/max(Sxx))
+    else :
+        # convert into dB 
+        Sxx_dB = amplitude2dB(Sxx)         
+    
+    # Score for each frequency in the frequency bandwith
+    s_sum = []
+    for ii in np.arange(0,N):
+        f0 = int(fmin+bin_step*(ii))
+        f1 = int(f0+bin_step)
+        s,_ = _score(Sxx_dB[index_bw(fn,(f0,f1)),:], threshold=dB_threshold, axis=0)
+        s_sum.append(mean(s))
+    
+    s = np.asarray(s_sum)
+    
+    # Entropy
+    if index =="shannon":
+        ADI = _shannonEntropy(s)
+    elif index == "simpson":
+        s = s/sum(s)
+        s = s**2
+        ADI = 1-sum(s)
+    elif index == "invsimpson":
+        s = s/sum(s)
+        s = s**2
+        ADI = 1/sum(s)   
+    
+    return ADI
+
+#=============================================================================
+def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500, 
+                          dB_threshold=-50, R_compatible = 'soundecology'):
+    
+    """
+    Acoustic Eveness Index : AEI
+    
+    Parameters
+    ----------
+    Sxx: ndarray of floats
+        2d : Spectrogram
+    
+    fn : 1d ndarray of floats
+        frequency vector
+    
+    fmin : scalar, optional, default is 0
+        Minimum frequency in Hz
+        
+    fmax : scalar, optional, default is 20000
+        Maximum frequency in Hz
+        
+    bin_step : scalar, optional, default is 500
+        Frequency step in Hz
+    
+    dB_threshold : scalar, optional, default is -50
+        Threshold to compute the score (ie. the number of data > threshold,
+        normalized by the length)
+        
+    R_compatible : string, optional, default is "soundecology"
+        if 'soundecology', the result is similar to the package SoundEcology in R 
+        Otherwise, the result is specific to maad
+        
+    Returns
+    -------    
+    AEI : scalar 
+        Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)
+        
+    Notes
+    -----
+    See acousticDiversityIndex
+    AEI and ADI are negatively correlated
+        
+    References 
+    ----------
+    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
+    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
+    """
+
+    # number of frequency intervals to compute the score
+    N = np.floor((fmax-fmin)/bin_step)
+    
+    if R_compatible == 'soundecology' :
+        # convert into dB and normalization by the max
+        Sxx_dB = amplitude2dB(Sxx/max(Sxx))
+    else :
+        # convert into dB 
+        Sxx_dB = amplitude2dB(Sxx)   
+    
+    # Score for each frequency in the frequency bandwith
+    s_sum = []
+    for ii in np.arange(0,N):
+        f0 = int(fmin+bin_step*(ii))
+        f1 = int(f0+bin_step)
+        s,_ = _score(Sxx_dB[index_bw(fn,(f0,f1)),:], threshold=dB_threshold, axis=0)
+        s_sum.append(mean(s))
+    
+    s = np.asarray(s_sum)
+    
+    # Gini
+    AEI = _gini(s)
+    
+    return AEI
+
+#=============================================================================
+####    Indices based on the energy
+#=============================================================================
+def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
+                     R_compatible = 'seewave'):
+    """
+    soundscapeIndex
+        
+    Parameters
+    ----------
+    Sxx_power : ndarray of floats
+        2d : Power Spectrogram
+    
+    fn : vector
+        frequency vector 
+        
+    flim_bioPh : tupple (fmin, fmax), optional, default is (1000,10000)
+        Frequency band of the biophony
+    
+    flim_antroPh: tupple (fmin, fmax), optional, default is (0,1000)
+        Frequency band of the anthropophony
+    
+    R_compatible: string {'seewave', 'soundecology'}, optional, default is seewave
+        Compute biophonic and anthropophonic energy following seewave or 
+        soundecology way. Note that in seewave, the first bin [0-1]kHz is not
+        taken into account for the evaluation of the anthropophonic energy
+        
+    Returns
+    -------
+    NDSI : scalar
+        (bioPh-antroPh)/(bioPh+antroPh)
+    ratioBA : scalar
+        biophonic energy / anthropophonic energy
+    antroPh : scalar
+        Acoustic energy in the anthropophonic bandwidth
+    bioPh : scalar
+        Acoustic energy in the biophonic bandwidth
+    
+    References
+    ----------
+    Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
+    The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive 
+    for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
+    
+    Inspired by Seewave and soundecology R package
+    """
+    
+    if R_compatible == 'seewave' :
+        # Frequency resolution is 1000 Hz
+        bin_step = 1000
+        #Convert into bins
+        Sxx_bins, bins = intoBins(Sxx_power, fn, bin_min=fn[0], bin_max=fn[-1], 
+                                  bin_step=bin_step, axis=0) 
+        # In Seewave, the first bin (0kHz) is removed
+        Sxx_bins = Sxx_bins[bins>=1000,]
+        bins = bins[bins>=1000]
+    elif R_compatible == 'soundecology' :
+        # Step is determined as the difference between anthro_max and anthro_min
+        bin_step = flim_antroPh[1] - flim_antroPh[0]
+        #Convert into bins
+        Sxx_bins, bins = intoBins(Sxx_power, fn, bin_min=fn[0], bin_max=fn[-1], 
+                                  bin_step=bin_step, axis=0)   
+        
+    # Energy in BIOBAND
+    bioPh = sum(Sxx_bins[index_bw(bins, flim_bioPh), ])
+    # Energy in ANTHROPOBAND
+    antroPh = sum(Sxx_bins[index_bw(bins, flim_antroPh), ])
+    
+    # NDSI and ratioBA indices 
+    NDSI = (bioPh-antroPh)/(bioPh+antroPh)
+    ratioBA = bioPh / antroPh
+
+    return NDSI, ratioBA, antroPh, bioPh
+
+#=============================================================================
+def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'):
+    """
+    Bioacoustics Index
+    
+    Parameters
+    ----------
+    Sxx : ndarray of floats
+        matrix : Spectrogram  
+    
+    fn : vector
+        frequency vector 
+    
+    flim : tupple (fmin, fmax), optional, default is (2000, 15000)
+        Frequency band used to compute the bioacoustic index.
+        
+    R_compatible : string, default is "soundecology"
+        if 'soundecology', the result is similar to the package SoundEcology in R 
+        Otherwise, the result is specific to maad
+    
+    Returns
+    -------
+    BI : scalar
+        Bioacoustics Index
+    
+    References 
+    ----------
+    References: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
+    invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
+    remote sensing. Ecological Applications 17: 2137-2144.
+    
+    Ported and modified from the soundecology R package.
+    
+    Notes
+    -----    
+    Soundecology compatible version
+    - average of dB value
+    - remove negative value in order to get positive values only
+    - dividing by the frequency resolution df instead of multiplication
+    """    
+    
+    # select the indices corresponding to the frequency bins range
+    indf = index_bw(fn,flim)
+    
+    # frequency resolution. 
+    df = fn[1] - fn[0]
+    
+    # ======= As soundecology
+    if R_compatible == 'soundecology' :
+        # Mean Sxx normalized by the max
+        meanSxx = mean(Sxx/max(Sxx), axis=1)
+        # Convert into dB
+        meanSxxdB = amplitude2dB(meanSxx)
+        
+        # "normalization" in order to get positive 'vectical' values 
+        meanSxxdB = meanSxxdB[indf,]-min(meanSxxdB[indf,])
+    
+        # this is not the area under the curve...
+        # what is the meaning of an area under the curve in dB...
+        BI = sum(meanSxxdB)/df
+    # ======= maad version    
+    else:
+        # better to average the PSD for energy conservation
+        PSDxx_norm = (Sxx**2/max(Sxx**2))
+        meanPSDxx_norm = mean(PSDxx_norm, axis=1)
+
+        # Compute the area
+        # take the sqrt in order to go back to Sxx
+        BI = sqrt(sum(meanPSDxx_norm))* df 
+        
+    return BI
+     
+
 #========================================
     
-#def roughnessAsACI (Sxx, norm ='global'):
-#def acousticGradientIndex(Sxx, dt, order=1, norm=None, n_pyr=1, display=False):
-#def raoQ (p, bins):
 #def hpss => harmonic vs percussion (voir librosa) librosa.decompose.hpss
     
 #=============================================================================
@@ -1054,166 +1684,163 @@ def acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
 #   
 #============================================================================= 
 
-def raoQ (p, bins):
+#=============================================================================
+
+def audio_LEQ (s, f, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1): 
     """
-        compute Rao's Quadratic entropy in 1d
+    Computes the Equivalent Continuous Sound level (Leq) of an audio signal 
+    in the time domain
+
+    Parameters
+    ----------
+    s : 1D array of floats
+        audio to process (wav)
+    f : Integer
+        sampling frequency in Hz
+    gain : integer
+        Total gain applied to the sound (preamplifer + amplifier)
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    
+    sensitivity : float, optional, default is -35 (dB/V)
+        Sensitivity of the microphone
+    dBref : integer, optional, default is 94 (dBSPL)
+        Pressure sound level used for the calibration of the microphone 
+        (usually 94dB, sometimes 114dB)
+    dt : float, optional, default is 1 (second)
+        Integration step to compute the Leq (Equivalent Continuous Sound level)
+    
+    Returns
+    -------
+    LEQt: float
+        Equivalent Continuous Sound level (Leq) in dB SPL
+
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')
+    >>> leq = signal2LEQt (s, f=fs, gain=42)
+    """
+    # compute the Leq for each dt step
+    leq = wav2Leq(s, f, gain, Vadc, dt, sensitivity, dBref)
+    # average them
+    LEQt = mean_dB(leq, axis=1)
+    
+    return LEQt
+
+#=============================================================================
+
+def spectral_LEQ (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6): 
+    """
+    Computes the Equivalent Continuous Sound level (Leq) from a power spectrum 
+    (1d) or power spectrogram (2d)
+
+    Parameters
+    ----------
+    X : ndarray of floats
+        Spectrum (1d) or Spectrogram (2d). 
+        Work with PSD to be consistent with energy concervation
+    gain : integer
+        Total gain applied to the sound (preamplifer + amplifier)
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    
+    sensitivity : float, optional, default is -35 (dB/V)
+        Sensitivity of the microphone
+    dBref : integer, optional, default is 94 (dBSPL)
+        Pressure sound level used for the calibration of the microphone 
+        (usually 94dB, sometimes 114dB)
+    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
+    
+    Returns
+    -------
+    LEQf: float
+        Equivalent Continuous Sound level (Leq) in dB SPL
+
+    Examples
+    --------
+    >>> s, fs = sound.load('spinetail.wav')
+    >>> Pxx,_,_,_ = maad.sound.spectrogram(s,fs)
+    >>> leqf = spectro2LEQf (Pxx, gain=42)
+    """
+    # force X to be an ndarray
+    X = np.asarray(X)
+    
+    # test if X has 2d (Spectrogram Pxx)
+    if X.ndim == 2 : 
+        # convert power spectrogram/spectrum into dBSPL
+        LEQf_per_bin = power2dBSPL(X, gain, Vadc, sensitivity, dBref, pRef)
+        # average spectrogram along time direction
+        X = mean(X, axis=1)
+    else :
+        LEQf_per_bin = []
+        
+    # convert spectrogram/spectrum into pressure
+    LEQf = PSD2Leq(X, gain, Vadc, sensitivity, dBref, pRef)
+    
+    return LEQf, LEQf_per_bin
+
+#=============================================================================
+
+def more_entropy(x, order=3, axis=0) :
+    """
+    
+    
+    References
+    ---------
+    Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). 
+    Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
+    Old Dominion University, DOI: 10.25777/qgak-sf09
+    """
+    
+    if isinstance(x, (np.ndarray)) == True:
+        if x.ndim > axis:
+            if x.shape[axis] == 1:
+                axis=0
+                print ("WARNING: axis is to large, axis is set to 0") 
+            # if datain contains negative values -> rescale the signal between 
+            # between posSitive values (for example (0,1))
+            if np.min(x)<0:
+                x = linear_scale(x,minval=0,maxval=1)
+            # Tranform the signal into a Probability mass function (pmf)
+            # Sum(pmf) = 1
+            if axis == 0 :
+                pmf = x/np.sum(x,axis)
+            elif axis == 1 :                     
+                pmf = (x.transpose()/np.sum(x,axis)).transpose()
+            pmf[pmf==0] = _MIN_
+            # alpha order entropy of Havrda and Charvat
+            H_Havrda = (1-np.sum(pmf**order, axis=axis)) / (2**(order-1)-1)
+            # alpha order entropy of Renyi
+            H_Renyi = np.log(np.sum(pmf**order, axis=axis))/(1-order)
+            # paired Shannon entropy
+            H_pairedShannon = -np.sum(pmf*log(pmf), axis=axis)-np.sum((1-pmf)*log(1-pmf), axis=axis)
+            # gamma entropy
+            H_gamma = (1-(np.sum(pmf**(1/order), axis=axis))**order)/(1-2**(order-1))
+            # Gini-Simpson entropy
+            H_GiniSimpson = 1-np.sum(pmf**2,axis=axis)           
+                
+    return H_Havrda, H_Renyi, H_pairedShannon, H_gamma, H_GiniSimpson
+
+#=============================================================================
+
+def frequency_raoQ (S_amplitude, fn, bin_step=1000):
+    """
+        Compute the Rao quadratic entropy on a spectrum (1d)
     """
     
     # be sure they are ndarray
-    p = np.asarray(p)
-    bins = np.asarray(bins)
-    
-    # Normalize p by the sum in order to get the sum of p = 1
-    p = p/sum(p)
-    
-    # take advantage of broadcasting, 
-    # Get the pairwise distance 
-    # Euclidian distance
-    d = abs(bins[..., np.newaxis] - bins[np.newaxis, ...])
-    # Keep only the upper triangle (symmetric)
-    #d = np.triu(d, 0)
-        
-    # compute the crossproduct of pixels value pi,pj
-    pipj = (p[..., np.newaxis] * p[np.newaxis, ...])
-    #pipj = np.triu(pipj, 0)
-    # Multiply by 2 to take into account the lower triangle (symmetric)
-    Q = sum(sum(pipj*d))/len(bins)**2
-    
-    return Q
+    X = np.asarray(S_amplitude)    
 
-#=============================================================================
-
-def surfaceRoughness (Sxx, norm ='global'):
+    #Convert into bins
+    X_bins, bins = intoBins(X, fn, bin_min=fn[0], bin_max=fn[-1], 
+                            bin_step=bin_step, axis=None) 
+              
+    # Compute Rao Quadratic Entropy
+    RAOQ = _raoQ(X_bins,bins)
     
-    """
-    Surface Roughness 
-    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness
-    
-    Parameters
-    ----------
-    Sxx : ndarray of floats
-        2d : Spectrogram (i.e matrix of spectrum)
-    
-    norm : string, optional, default is 'global'
-        Determine if the ROUGHNESS is normalized by the sum on the whole frequencies
-        ('global' mode) or by the sum of frequency bin per frequency bin 
-        ('per_bin')
-
-    Returns
-    -------        
-    Ra_per_bin : 1d ndarray of scalars
-        Arithmetical mean deviation from the mean line (global or per frequency bin)
-        => ROUGHNESS value for each frequency bin
-        
-    Ra : scalar
-        Arithmetical mean deviation from the mean line [mean (Ra_per_bin)]
-        => mean ROUGHNESS value over Sxx 
-        
-    Rq_per_bin : 1d ndarray of scalars
-        Root mean squared of deviation from the mean line (global or per frequency bin)
-        => RMS ROUGHNESS value for each frequency bin
-        
-    Rq : scalar
-        Root mean squared of deviation from the mean line  [mean (Rq_per_bin)]
-        => RMS ROUGHNESS value over Sxx 
-    """    
-    if norm == 'per_bin':
-        m = mean(Sxx, axis=1)
-        y = Sxx-m[..., np.newaxis]
-        
-    elif norm == 'global':
-        m = mean(Sxx)
-        y = Sxx-m
-
-    # Arithmetic mean deviation
-    Ra_per_bin = mean(abs(y), axis=1)
-    Ra = mean(Ra_per_bin)
-
-    Rq_per_bin = sqrt(mean(y**2, axis=1))
-    Rq = mean(Rq_per_bin) 
-    
-    return Ra_per_bin, Rq_per_bin, Ra, Rq
+    return RAOQ
 
 #=============================================================================    
 
-#=============================================================================
-def intoOctave (x, fn, thirdOctave=True, display=False):
-        
-    # define the third octave or octave frequency vector in Hz.
-    if thirdOctave :
-        bin_octave = np.array([16,20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000]) # third octave band.
-    else:
-        bin_octave = np.array([16,31.5,63,125,250,500,1000,2000,4000,8000,16000]) # octave
-
-    # Bins limit
-    bin_octave_low = bin_octave/(2**0.1666666)
-    bin_octave_up = bin_octave*(2**0.1666666)
-       
-    # select the indices corresponding to the frequency bins range
-    x_octave = []
-    for ii in np.arange(len(bin_octave)):
-        ind = (fn>=bin_octave_low[ii])  * (fn<=bin_octave_up[ii])
-        x_octave.append(sum(x[ind,], axis=0))
-    
-    x_octave = np.asarray(x_octave)
-            
-    if display :
-        x_octave_dB = linear2dB(x_octave)
-        fig_kwargs = {'vmax': max(x_octave_dB),
-                      'vmin': -90,
-                      'extent':(0, x_octave_dB.shape[1]-1, -0.5, len(bin_octave)-0.5),
-                      'figsize':(4,13),
-                      'yticks' : (np.arange(len(bin_octave)), bin_octave),
-                      'title':'Power Spectrogram',
-                      'xlabel':'Time [sec]',
-                      'ylabel':'Frequency [Hz]',
-                      }
-        plot2D(x_octave_dB,**fig_kwargs)
-
-    return x_octave, bin_octave
-
-#def tfsdt (Sxx, f , flim = (2000,6000), nbwindows = 1) :
-#
-#  # Warning, this index was initially developed to work from a third octave spectrogram with a time sampling of 125 ms.
-#  
-#  toctave = np.array([16,20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000]) # third octave band. 
-#  toctavemin = toctave/(2**0.1666666)
-#  toctavemax = toctave*(2**0.1666666)
-#  imin = (abs(toctave-flim[0])).argmin()
-#  imax = (abs(toctave-flim[1])).argmin()
-#  
-#  bin = 1
-##  spectoct[bin,]=sum(Sxx[indices]))
-#
-#    
-#    # third-octave band values between [100 Hz, 8kHz] from narrow band frequency values.
-#    bin = 1
-#    for (j in seq(4, 23)) {
-#      indices = which(freq>toctavemin[j] & freq <toctavemax[j] )
-#      L=0
-#      spectoct[bin,]=10*log10(colSums(10^(z1[indices,]/10)))
-#      bin =bin +1
-#    }
-#    
-#    spectoctdf <- (diff(spectoct)) 
-#    spectoctdft <- (diff(t(spectoctdf)))
-#    spectoctdft<-t(spectoctdft)
-#    
-#    imin <- imin - 4 # remove the three first third octave band [50-100 Hz[
-#    imax <- imax - 4 # remove the three first third octave band [50-100 Hz[
-#    
-#    tfsd <- 0
-#    for (ind in seq(imin, imax)) {
-#      tfsd =  sum(abs(spectoctdft[ind,])) + tfsd  
-#      }
-#    tfsds[jj] <- tfsd/sum(abs(spectoctdft))
-#    rm(spectoct)
-#  }
-#  
-#  return(na.omit(as.vector(tfsds)))
-
-
-def tfsd (Sxx, fn, flim=(2000,6000), thirdOctave = None, display=False):
+def tfsd (Sxx, fn, tn, flim=(2000,8000), mode=None, display=False):
     """
         Time frequency derivation : tfsd
         
@@ -1248,26 +1875,30 @@ def tfsd (Sxx, fn, flim=(2000,6000), thirdOctave = None, display=False):
     using deep learning techniques. Acta Acustica united with Acustica, 
     """
     # convert into 1/3 octave
-    if thirdOctave is not None : 
-        x, f = intoOctave(Sxx, fn, thirdOctave=thirdOctave, display=display)
-    else :
+    if mode == 'thirdOctave' : 
+        x, fn_bin = intoOctave(Sxx, fn, thirdOctave=True, display=display)
+    if mode == 'Octave' : 
+        x, fn_bin = intoOctave(Sxx, fn, thirdOctave=False, display=display)   
+    else:
         x = Sxx
-        f = fn
+        fn_bin = fn
 
     # Derivation along the time axis, for each frequency bin
-    GRADdt_xx = diff(x, n=1, axis=1)
+    GRADdt = diff(x, n=1, axis=1)
     # Derivation of the previously derivated matrix along the frequency axis 
-    GRADdf_xx = diff(GRADdt_xx, n=1, axis=0)
+    GRADdf = diff(GRADdt, n=1, axis=0)
 
     # select the bandwidth
-    GRADdf_xx_select = GRADdf_xx[index_bw(f[0:-1],bw=flim),]
+    GRADdf_select = GRADdf[index_bw(fn_bin[0:-1],bw=flim),]
     
     # calcul of the tfsdt : sum of the pseudo-gradient in the frequency bandwidth
     # which is normalized by the total sum of the pseudo-gradient
-    tfsd =  sum(abs(GRADdf_xx_select))/sum(abs(GRADdf_xx)) 
-    tfsd_per_bin =  sum(abs(GRADdf_xx_select),axis=1)/sum(abs(GRADdf_xx)) 
+    tfsd =  sum(abs(GRADdf_select))/sum(abs(GRADdf)) 
+    tfsd_per_bin =  sum(abs(GRADdf_select),axis=1)/sum(abs(GRADdf)) 
     
     if display==True :
+            ext=(tn[0], tn[-1], fn_bin[0], fn_bin[-1])
+        
             fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
             # set the paramteers of the figure
             fig.set_facecolor('w')
@@ -1276,10 +1907,11 @@ def tfsd (Sxx, fn, flim=(2000,6000), thirdOctave = None, display=False):
             fig.set_figwidth (13)
                     
             # display image
-            _im1 = ax1.imshow(linear2dB(GRADdt_xx), 
-                              vmax = max(linear2dB(GRADdt_xx)), vmin = -70,
+            _im1 = ax1.imshow(power2dB(GRADdt), 
+                              vmax = max(power2dB(GRADdt)), 
+                              vmin = min(power2dB(GRADdt)),
                               interpolation='none', origin='lower', 
-                              cmap='gray')
+                              cmap='gray', extent=ext)
             plt.colorbar(_im1, ax=ax1)
             
             # set the parameters of the subplot
@@ -1289,10 +1921,11 @@ def tfsd (Sxx, fn, flim=(2000,6000), thirdOctave = None, display=False):
             ax1.axis('tight') 
             
             # display image
-            _im2 = ax2.imshow(linear2dB(GRADdf_xx), 
-                              vmax = max(linear2dB(GRADdf_xx)), vmin = -70,
+            _im2 = ax2.imshow(power2dB(GRADdf), 
+                              vmax = max(power2dB(GRADdf)), 
+                              vmin = min(power2dB(GRADdf)),
                               interpolation='none', origin='lower', 
-                              cmap='gray')
+                              cmap='gray', extent=ext)
             plt.colorbar(_im2, ax=ax2)
        
             # set the parameters of the subplot
@@ -1306,10 +1939,10 @@ def tfsd (Sxx, fn, flim=(2000,6000), thirdOctave = None, display=False):
             # Display the figure now
             plt.show()
     
-    return tfsd, tfsd_per_bin
+    return tfsd, tfsd_per_bin, fn_bin
 
 #=============================================================================
-def acousticGradientIndex(Sxx, dt, order=1, norm=None, n_pyr=1, display=False):
+def acousticGradientIndex(Sxx, dt, order=1, norm=None, display=False):
     """
     Acoustic Gradient Index : AGI
     
@@ -1348,95 +1981,121 @@ def acousticGradientIndex(Sxx, dt, order=1, norm=None, n_pyr=1, display=False):
         mean(AGI_per_bin)
            
     """     
+
+    # derivative (order = 1, 2, 3...)
+    AGI_xx = abs(diff(Sxx, order, axis=1)) / (dt**order )
     
-    AGI_xx_pyr = []
-    AGI_per_bin_pyr = []
-    AGI_mean_pyr = []
-    AGI_sum_pyr = []
-    dt_pyr = []
-    
-    for n in np.arange(0,n_pyr):  
-        
-#        # Show the Leq energy in order to control that the conservation of
-#        # energy is preserved
-#        PSDxx_mean = mean(Sxx**2,axis=1)
-#        leq = 10*log10(sum(PSDxx_mean)/(20e-6)**2)
-#        print(leq)
-        
-        # derivative (order = 1, 2, 3...)
-        AGI_xx = abs(diff(Sxx, order, axis=1)) / (dt**order )
-        
-        #print('PYRAMID: %d / median ATI: %f / size: %s' % (n, median(AGI_xx), AGI_xx.shape))
-        
-        if norm is not None :
-            # Normalize the derivative by the median derivative which should 
-            # correspond to the background (noise) derivative
-            if norm =='per_bin':
-                m = median(AGI_xx, axis=1)    
-                m[m==0] = _MIN_    # Avoid dividing by zero value
-                AGI_xx = AGI_xx/m[:,None]
-            elif norm == 'global':
-                m = median(AGI_xx) 
-                if m==0: m = _MIN_ 
-                AGI_xx = AGI_xx/m
+    if norm is not None :
+        # Normalize the derivative by the median derivative which should 
+        # correspond to the background (noise) derivative
+        if norm =='per_bin':
+            m = median(AGI_xx, axis=1)    
+            m[m==0] = _MIN_    # Avoid dividing by zero value
+            AGI_xx = AGI_xx/m[:,None]
+        elif norm == 'global':
+            m = median(AGI_xx) 
+            if m==0: m = _MIN_ 
+            AGI_xx = AGI_xx/m
 
-        # mean per bin 
-        AGI_per_bin = mean (AGI_xx,axis=1) 
-        # Mean global
-        AGI_mean = mean(AGI_per_bin) 
-        # Sum Global
-        AGI_sum = sum(AGI_per_bin)
+    # mean per bin 
+    AGI_per_bin = mean (AGI_xx,axis=1) 
+    # Mean global
+    AGI_mean = mean(AGI_per_bin) 
+    # global sum
+    AGI_sum = np.sum(AGI_per_bin) 
 
-        # add to the lists
-        AGI_xx_pyr.append(AGI_xx)        
-        AGI_per_bin_pyr.append(AGI_per_bin)
-        AGI_mean_pyr.append(AGI_mean)
-        AGI_sum_pyr.append(AGI_sum)
-        dt_pyr.append(dt)
-
-        # build next pyramid level (gaussian filter then reduce)
-        # Sigma for gaussian filter. Default is 2 * downscale / 6.0 
-        # which corresponds to a filter mask twice the size of the scale factor 
-        # that covers more than 99% of the gaussian distribution.
-        # The total energy is kept
-        dt = dt*2 # the resolution decreases by 2 = x2
-        PSDxx = Sxx**2
-        # blur the image only on axis 1 (time axis)
-        PSDxx_blur = ndi.gaussian_filter1d(PSDxx,axis=1, sigma=2*2/6.0)
-        dim = tuple([PSDxx_blur.shape[0], math.ceil(PSDxx_blur.shape[1]/2)])
-        #  Reduce the size of the image by 2
-        PSDxx_reduced = transform.resize(PSDxx_blur,output_shape=dim, mode='reflect', anti_aliasing=True)      
-
-        # display full SPECTROGRAM in dB
-        if display==True :
-            
-            fig4, ax4 = plt.subplots()
-            # set the paramteers of the figure
-            fig4.set_facecolor('w')
-            fig4.set_edgecolor('k')
-            fig4.set_figheight(4)
-            fig4.set_figwidth (13)
-                    
-            # display image
-            _im = ax4.imshow(linear2dB(PSDxx_reduced), 
-                             interpolation='none', origin='lower', 
-                             vmin =20, vmax=70, cmap='gray')
-            plt.colorbar(_im, ax=ax4)
+    # display full SPECTROGRAM in dB
+    if display==True :
+        
+        fig4, ax4 = plt.subplots()
+        # set the paramteers of the figure
+        fig4.set_facecolor('w')
+        fig4.set_edgecolor('k')
+        fig4.set_figheight(4)
+        fig4.set_figwidth (13)
+                
+        # display image
+        _im = ax4.imshow(power2dB(Sxx**2), 
+                         interpolation='none', origin='lower', 
+                         vmin =20, vmax=70, cmap='gray')
+        plt.colorbar(_im, ax=ax4)
+ 
+        # set the parameters of the subplot
+        ax4.set_title('Spectrogram')
+        ax4.set_xlabel('Time [sec]')
+        ax4.set_ylabel('Frequency [Hz]')
+        ax4.axis('tight') 
      
-            # set the parameters of the subplot
-            ax4.set_title('Spectrogram')
-            ax4.set_xlabel('Time [sec]')
-            ax4.set_ylabel('Frequency [Hz]')
-            ax4.axis('tight') 
+        fig4.tight_layout()
          
-            fig4.tight_layout()
-             
-            # Display the figure now
-            plt.show()
+        # Display the figure now
+        plt.show()
         
-        # back to amplitude
-        Sxx = sqrt(PSDxx_reduced)
-        
-    return AGI_xx_pyr , AGI_per_bin_pyr, AGI_mean_pyr, AGI_sum_pyr, dt_pyr
+    return AGI_xx, AGI_per_bin, AGI_mean, AGI_sum
 
+#=============================================================================
 
+def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn, 
+                          smooth_param1=1, mask_mode='relatif', mask_param1=6, mask_param2=0.5, 
+                          min_roi=9, max_roi=512*10000, 
+                          display=False, **kwargs):
+    
+    # extent
+    ext = (tn[0], tn[-1], fn[0], fn[-1])
+    
+    # Smooth the spectrogram in order to facilitate the creation of masks
+    Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, ext, std=smooth_param1, 
+                         display=display, savefig=None, **kwargs) 
+    # binarization of the spectrogram to select part of the spectrogram with 
+    # acoustic activity
+    if mask_mode == 'relative' :
+        im_mask = create_mask(Sxx_dB_noNoise_smooth, ext, 
+                              mode_bin = 'relative', bin_std=mask_param1, 
+                              bin_per=mask_param2,
+                              display=display, savefig=None, **kwargs) 
+    elif  mask_mode == 'absolute' :   
+        im_mask = create_mask(Sxx_dB_noNoise_smooth, ext, 
+                              mode_bin = 'absolute', bin_h=mask_param1, 
+                              bin_l=mask_param2,
+                              display=display, savefig=None, **kwargs)    
+    else:
+        raise TypeError ('mask_mode should be selected in {relative, absolute}')
+            
+    # get the mask with rois (im_rois) and the bounding box for each rois (rois_bbox) 
+    # and an unique index for each rois => in the pandas dataframe rois
+    im_rois, rois  = select_rois(im_mask,min_roi=9, ext=ext, 
+                                 display= display, **kwargs)
+
+    ##### Extract centroids features of each roi from the spectrogram in dB without noise 
+    X = dB2power(Sxx_dB_noNoise)
+    rois = format_features(rois, tn, fn) 
+    centroid = centroid_features(X, rois, im_rois)
+    
+    if display :
+        X = Sxx_dB_noNoise
+        fig_kwargs = {'vmax': np.max(X),
+                      'vmin': np.min(X)}
+        ax, fig = overlay_rois(X, ext, rois, **fig_kwargs)
+ 
+#        dpi= 96
+#        bbox_inches= 'tight'
+#        format='png'
+#        savefilename='_spectrogram_bounding_box'
+#        filename = savefile+savefilename+'.'+format
+#        print('\n''save figure : %s' %filename)
+#        fig20.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
+#                    format=format)  
+
+    #ROItotal
+    ROItotal = len(centroid)
+    
+    ##### calcul the area of each roi
+    # rectangular area (overestimation)
+    area = (rois.max_y -rois.min_y) * (rois.max_x -rois.min_x)
+    # size of im_rois => whole spectrogram
+    x,y = im_rois.shape
+    total_area = x*y
+    # Pourcentage of ROI over the total area
+    ROIcover = sum(area) / total_area *100
+    
+    return  ROItotal, ROIcover
