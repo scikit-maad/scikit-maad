@@ -17,7 +17,8 @@ from .features_2d import (filter_multires,
 from .features_1d import (psd, 
                           rms,
                           skewness,
-                          kurtosis)
+                          kurtosis,
+                          zero_crossing_rate)
 
 from .alpha_indices import (audio_moments,
                             audio_median,
@@ -45,7 +46,9 @@ from .alpha_indices import (audio_moments,
                             more_entropy,
                             acousticGradientIndex,
                             frequency_raoQ,
-                            regionOfInterestIndex)
+                            regionOfInterestIndex,
+                            audio_indices,
+                            spectral_indices)
 
 __all__ = [
            # features_2d
@@ -63,6 +66,7 @@ __all__ = [
            'rms',
            'skewness',
            'kurtosis',
+           'zero_crossing_rate',
            # alpha_indices
            'audio_moments',
            'audio_median',
@@ -90,4 +94,6 @@ __all__ = [
            "more_entropy",
            "acousticGradientIndex",
            "frequency_raoQ",
-           "regionOfInterestIndex"]
+           "regionOfInterestIndex",
+           'audio_indices',
+           'spectral_indices']

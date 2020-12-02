@@ -10,8 +10,7 @@ import pandas as pd
 import numpy as np
 
 #### Importation from internal modules
-from maad.sound import envelope
-from maad.util import wav2pressure, mean_dB, pressure2Leq, wav2Leq, get_unimode
+from maad.sound import audio_SNR
 
 #=============================================================================
 def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None):
@@ -221,6 +220,8 @@ def zero_crossing_rate(s, fs):
     zcr = 1/duration * len(zero_crosses)
     
     return zcr
+
+
 
 
     

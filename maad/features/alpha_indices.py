@@ -28,13 +28,15 @@ from scipy.signal import find_peaks
 
 import matplotlib.pyplot as plt
 
+import pandas as pd # for csv
+
 #### Importation from internal modules
 from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB, 
                        format_features, intoBins, entropy, wav2Leq, PSD2Leq, 
                        power2dBSPL, linear_scale, plot1D, plot2D)
-from maad.features import skewness, kurtosis, centroid_features 
-from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro
-from maad.rois import smooth, select_rois, create_mask, overlay_rois
+from maad.features import skewness, kurtosis, centroid_features, zero_crossing_rate
+from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro, spectral_SNR
+from maad.rois import smooth, select_rois, create_mask, overlay_rois, remove_background_along_axis
 
 # min value
 import sys
@@ -1686,7 +1688,7 @@ def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'
 
 #=============================================================================
 
-def audio_LEQ (s, f, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1): 
+def audio_LEQ (s, fs, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1): 
     """
     Computes the Equivalent Continuous Sound level (Leq) of an audio signal 
     in the time domain
@@ -1695,7 +1697,7 @@ def audio_LEQ (s, f, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1):
     ----------
     s : 1D array of floats
         audio to process (wav)
-    f : Integer
+    fs : Integer
         sampling frequency in Hz
     gain : integer
         Total gain applied to the sound (preamplifer + amplifier)
@@ -1717,10 +1719,10 @@ def audio_LEQ (s, f, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1):
     Examples
     --------
     >>> s, fs = sound.load('spinetail.wav')
-    >>> leq = signal2LEQt (s, f=fs, gain=42)
+    >>> leq = signal2LEQt (s, fs, gain=42)
     """
     # compute the Leq for each dt step
-    leq = wav2Leq(s, f, gain, Vadc, dt, sensitivity, dBref)
+    leq = wav2Leq(s, fs, gain, Vadc, dt, sensitivity, dBref)
     # average them
     LEQt = mean_dB(leq, axis=1)
     
@@ -1747,7 +1749,7 @@ def spectral_LEQ (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6):
     dBref : integer, optional, default is 94 (dBSPL)
         Pressure sound level used for the calibration of the microphone 
         (usually 94dB, sometimes 114dB)
-    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
+    pRef : Sound pressure reference in the medium (air : 20e-6, water : 1e-6)
     
     Returns
     -------
@@ -1961,7 +1963,6 @@ def acousticGradientIndex(Sxx, dt, order=1, norm=None, display=False):
         ('global' mode) or by the median value per frequency bin 
         ('per_bin')
         
-
     Returns
     -------    
     AGI_xx : 2d ndarray of scalars
@@ -2036,9 +2037,61 @@ def acousticGradientIndex(Sxx, dt, order=1, norm=None, display=False):
 #=============================================================================
 
 def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn, 
-                          smooth_param1=1, mask_mode='relatif', mask_param1=6, mask_param2=0.5, 
+                          smooth_param1=1, mask_mode='relative', 
+                          mask_param1=6, mask_param2=0.5, 
                           min_roi=9, max_roi=512*10000, 
                           display=False, **kwargs):
+    """
+    Find regions of interest (ROI) and compute their number and their cover 
+    of the spectrogram
+    
+    Parameters
+    ----------
+    Sxx_dB_noNoise : ndarray of floats
+        Spectrogram without noise (i.e matrix of spectrum)
+    tn : 1d ndarray of floats
+        time vector (horizontal x-axis)
+    fn : 1d ndarray of floats
+        Frequency vector (vertical y-axis)
+    ext : list of scalars [left, right, bottom, top]
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners. 
+    smooth_param1 : scalar, default is 1
+        Standard deviation of the gaussian kernel used to smooth the image 
+        The larger is the number, the smoother will be the image and the longer 
+        it takes. Standard values should fall between 0.5 to 3 
+    mask_mode : string in {'relative', 'absolute'}, optional, default is 'relative'
+        if 'relative':
+            Binarize an image based on a double relative threshold.  
+            The values used for the thresholding depends on the values found 
+            in the image. => relative threshold 
+        if 'absolute' :
+            Binarize an image based on a double relative threshold.  
+            The values used for the thresholding are independent of the values 
+            in the image => absolute threshold 
+    mask_param1 : scalar, default is 6
+        if 'relative' : bin_h
+        if 'absolute' : bin_std
+    mask_param2 : scalar, default is 0.5
+        if 'relative' : bin_l
+        if 'absolute' : bin_per
+    min_roi, max_roi : scalars, optional, default : 9,  512*10000
+        Define the minimum and the maximum area possible for an ROI. If None,  
+        the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
+        the image     
+    display : boolean, default is false
+        plot graphs and spectrograms
+    /*/*kwargs optional. This parameter is used by plt.plot and savefig functions 
+
+    Returns
+    -------    
+    ROItotal : float
+         Total number of ROIs found. The higher is the number of ROI, the higher
+         is the acoustic abondance and/or richness expected
+    ROIcover : float
+        Percentage of spectrogram cover. The higher is the cover percentage, 
+        the higher is the acoustic richness expected.
+    """ 
     
     # extent
     ext = (tn[0], tn[-1], fn[0], fn[-1])
@@ -2099,3 +2152,702 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     ROIcover = sum(area) / total_area *100
     
     return  ROItotal, ROIcover
+
+
+#=============================================================================
+def audio_indices(s, fs, verbose=False, display=False, **kwargs):
+    """
+    Computes the indices in audio domain
+
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process (wav)
+    fs : float
+        Sampling frequency of the audio (Hz)
+    verbose : boolean, default is False
+        print indices on the default terminal
+    display : boolean, default is False
+        Display graphs
+    \*\*kwargs : arguments for functions :
+        - audio_LEQ(s, fs, gain, Vadc, sensitivity, dBref, dt)
+        - audio_SNR(s, mode, Nt) 
+        - audio_median(s, mode, Nt)
+        - audio_entropy(s, compatibility, mode, Nt)
+        - audio_activity (s,dB_threshold, mode, Nt)
+        - audio_events (s, fs, dB_threshold, rejectDuration, mode, Nt,display)
+    
+        For envelope
+        mode : str, optional, default is "fast"
+            Select the mode to compute the envelope of the audio waveform
+            - "fast" : The sound is first divided into frames (2d) using the 
+                function _wave2timeframes(s), then the max of each frame gives a 
+                good approximation of the envelope.
+            - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+                The method is slow
+        Nt : integer, optional, default is 512
+            Size of each frame. The largest, the highest is the approximation.
+            
+        For entropy
+        compatibility : string {'QUT', 'seewave'}, default is 'QUT'
+            Select the way to compute the temporal entropy.
+                - QUT : entropy of the envelope²
+                - seewave : entropy of the envelope
+                
+        For LEQt calculation
+        gain : integer
+            Total gain applied to the sound (preamplifer + amplifier)
+        Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+            Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    
+        sensitivity : float, optional, default is -35 (dB/V)
+            Sensitivity of the microphone
+        dBref : integer, optional, default is 94 (dBSPL)
+            Pressure sound level used for the calibration of the microphone 
+            (usually 94dB, sometimes 114dB)
+        dt : float, optional, default is 1 (second)
+            Integration step to compute the Leq (Equivalent Continuous Sound level) 
+        
+        for audio activity and events
+        dB_threshold : scalar, optional, default is 3dB
+            data >Threshold is considered to be an event 
+            if the length is > rejectLength
+        rejectDuration : scalar, optional, default is None
+            event shorter than rejectDuration are discarded
+            duration is in s
+   
+    Returns
+    -------
+    df_audio_indices: Panda dataframe
+       Dataframe containing of the calculated audio indices : ZCR, AUDIO_MEAN, 
+       AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT,LEQt,BGNt, SNRt,MED, Ht, ACTtFraction, 
+       ACTtCount, ACTtMean, EVNtFraction, EVNtMean, EVNtCount
+           
+    See also
+    --------
+    audio_moments, audio_events, audio_activity, audio_entropy, audio_median, 
+    audio_LEQ, audio_SNR, zero_crossing_rate
+
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('./data/jura_cold_forest_nuit.wav')
+    >>> pd_audio_indices_NUIT = maad.features.audio_indices (s,fs)
+    >>> s, fs = maad.sound.load('./data/jura_cold_forest_jour.wav')
+    >>> pd_audio_indices_JOUR = maad.features.audio_indices (s,fs)
+    variation between night and day
+    >>> var = abs(pd_audio_indices_JUR - pd_audio_indices_NUIT)/pd_audio_indices_NUIT*100
+    >>> print('LEQt var night vs day: %2.2f %%' % var.LEQt)
+    LEQt var : 29.66 %
+    >>> print('Ht var night vs day: %2.2f %%' % var.Ht)
+    Ht var : 2.33 %
+    >>> print('AUDIO_MEAN var night vs day: %2.2f %%' % var.AUDIO_MEAN)
+    AUDIO_MEAN var night vs day: 299.62 %
+    >>> print('AUDIO_VAR var night vs day: %2.2f %%' % var.AUDIO_VAR)
+    AUDIO_VAR var night vs day: 1664.02 %
+    >>> print('EVNtFraction var night vs day: %2.2f %%' % var.EVNtFraction)
+    EVNtFraction var : 98.48 %
+    """
+    
+    #### get variables
+    # Envelope => mode {'fast', 'hilbert"}, if 'fast', set Nt, number of point by frame 
+    mode = kwargs.pop('mode','fast')
+    Nt = kwargs.pop('Nt',512)
+    
+    # for entropy : compatibility {'QUT', 'seewave'}
+    compatibility = kwargs.pop('compatibility','QUT') 
+    
+    # for LEQ : 
+    gain = kwargs.pop('gain',42)
+    Vadc = kwargs.pop('Vadc',2)
+    dt = kwargs.pop('dt',1)
+    sensitivity = kwargs.pop('sensitivity',-35)
+    dBref = kwargs.pop('dBref',94)
+    
+    # for audio activity and events
+    dB_threshold = kwargs.pop('dB_threshold',3)
+    rejectDuration = kwargs.pop('rejectDuration',0.01)
+    
+    #### create a list
+    df_audio_indices=[] 
+    
+    """************************* Zero Crossing Rate ************ ***********""" 
+    ZCR = zero_crossing_rate(s,fs)
+    df_audio_indices += [ZCR]
+    if verbose :
+        print("ZCR %2.5f" % ZCR)
+        
+    """**************************** 4 audio moments *************************""" 
+    AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT = audio_moments(s)
+    df_audio_indices += [AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT]
+    if verbose :
+        print("AUDIO_MEAN %2.5f" % AUDIO_MEAN)
+        print("AUDIO_VAR %2.5f" % AUDIO_VAR)
+        print("AUDIO_SKEW %2.5f" % AUDIO_SKEW)
+        print("AUDIO_KURT %2.5f" % AUDIO_KURT)
+
+    """********** total sound pressure level in temporal domain ***********""" 
+    LEQt = audio_LEQ(s, fs, gain, Vadc, sensitivity, dBref, dt)
+    df_audio_indices += [LEQt]
+    if verbose :
+        print("LEQt %2.5f" % LEQt)
+    
+    """************ Signal to noise Ratio and noise energy   *************"""
+    _,BGNt,SNRt = audio_SNR(s, mode, Nt)  
+    df_audio_indices += [BGNt, SNRt]
+    if verbose :
+        print("SNRt %2.5f" % SNRt) 
+        print("BGNt %2.5f" % BGNt)
+    
+    """*********************** median energy   ***************************"""
+    MED =  audio_median(s, mode, Nt)
+    df_audio_indices += [MED]
+    if verbose :
+        print("MED %2.5f" % MED)
+    
+    """*******************  energy concentration : entropy****************"""
+    Ht =  audio_entropy(s, compatibility, mode, Nt)
+    df_audio_indices += [Ht]
+    if verbose :
+        print("Ht %2.5f" % Ht)
+    
+    """**************************** Acoustic activity ********************"""
+    """ ACT & EVN [TOWSEY] """
+    ACTtFraction, ACTtCount, ACTtMean = audio_activity (s,dB_threshold,
+                                                        mode, Nt)
+    df_audio_indices += [ACTtFraction, ACTtCount, ACTtMean]
+    if verbose :
+        print("ACTtFraction %2.5f" % ACTtFraction)
+        print("ACTtCount %2.5f" % ACTtCount)
+        print("ACTtMean %2.5f" % ACTtMean)
+    
+    EVNtFraction, EVNtMean, EVNtCount, _ = audio_events (s, fs, dB_threshold,
+                                                         rejectDuration,
+                                                         mode, Nt,
+                                                         display=display)
+    df_audio_indices += [EVNtFraction, EVNtMean, EVNtCount]
+    if verbose :    
+        print("EVNtFraction %2.5f" % EVNtFraction)
+        print("EVNtMean %2.5f" % EVNtMean)
+        print("EVNtCount %2.5f" % EVNtCount)
+    
+    df_audio_indices = pd.DataFrame([df_audio_indices], 
+                                    columns=['ZCR',
+                                            'AUDIO_MEAN', 
+                                            'AUDIO_VAR', 
+                                            'AUDIO_SKEW', 
+                                            'AUDIO_KURT',
+                                            'LEQt',
+                                            'BGNt', 
+                                            'SNRt',
+                                            'MED',
+                                            'Ht',
+                                            'ACTtFraction', 
+                                            'ACTtCount', 
+                                            'ACTtMean',
+                                            'EVNtFraction', 
+                                            'EVNtMean', 
+                                            'EVNtCount'])
+    return df_audio_indices
+
+
+def spectral_indices (Sxx_power, tn, fn, ext,
+                      flim_low=[0,1000], 
+                      flim_mid=[1000,10000], 
+                      flim_hi=[10000,20000], 
+                      verbose=False, display=False, **kwargs):
+    """
+    Computes the indices in spectral (spectrum (1d) or spectrogram (2d)) domain
+
+    Parameters
+    ----------
+    Sxx_power : 2D array of floats
+        Power spectrogram to process (taken directly from maad.sound.spectrogram)
+    tn : 1d ndarray of floats
+        time vector (horizontal x-axis)
+    fn : 1d ndarray of floats
+        Frequency vector (vertical y-axis)
+    ext : list of scalars [left, right, bottom, top]
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners.  
+    flim_low : tupple, optional, default is (0,1000)
+        Low frequency band in Hz
+    flim_mid : tupple, optional, default is (1000,10000)
+        mid frequency band in Hz
+    flim_hi : tupple, optional, default is (10000,20000)
+        high frequency band in Hz        
+    verbose : boolean, default is False
+        print indices on the default terminal
+    display : boolean, default is False
+        Display graphs
+    \*\*kwargs : arguments for functions :
+                spectral_LEQ
+                frequency_entropy
+                soundscapeIndex
+                bioacousticsIndex
+                acousticDiversityIndex
+                acousticEvenessIndex
+                spectral_cover
+                spectral_activity
+                spectral_events
+                tfsd
+                regionOfInterestIndex
+               
+        For soundscapeIndex, bioacousticsIndex, acousticDiversityIndex, acousticEvenessIndex
+        R_compatible : string, optional, default is "soundecology"
+            if 'soundecology', the result is similar to the package SoundEcology in R 
+            Otherwise, the result is specific to maad
+                
+        For LEQf calculation
+        gain : integer
+            Total gain applied to the sound (preamplifer + amplifier)
+        Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+            Maximal voltage (peak to peak) converted by the analog to digital convertor ADC    
+        sensitivity : float, optional, default is -35 (dB/V)
+            Sensitivity of the microphone
+        dBref : integer, optional, default is 94 (dBSPL)
+            Pressure sound level used for the calibration of the microphone 
+            (usually 94dB, sometimes 114dB)
+        pRef : Sound pressure reference in the medium (air : 20e-6, water : 1e-6)
+        
+        for spectral activity and events, ADI, AEI
+        dB_threshold : scalar, optional, default is 3dB
+            data >Threshold is considered to be an event 
+            if the length is > rejectLength
+            
+        for spectral activity and events
+        rejectDuration : scalar, optional, default is None
+            event shorter than rejectDuration are discarded
+            duration is in s
+            
+        for Roi
+        smooth_param1 : scalar, default is 1
+            Standard deviation of the gaussian kernel used to smooth the image 
+            The larger is the number, the smoother will be the image and the longer 
+            it takes. Standard values should fall between 0.5 to 3 
+        mask_mode : string in {'relative', 'absolute'}, optional, default is 'relative'
+            if 'relative':
+                Binarize an image based on a double relative threshold.  
+                The values used for the thresholding depends on the values found 
+                in the image. => relative threshold 
+            if 'absolute' :
+                Binarize an image based on a double relative threshold.  
+                The values used for the thresholding are independent of the values 
+                in the image => absolute threshold 
+        mask_param1 : scalar, default is 6
+            if 'relative' : bin_h
+            if 'absolute' : bin_std
+        mask_param2 : scalar, default is 0.5
+            if 'relative' : bin_l
+            if 'absolute' : bin_per
+        min_roi, max_roi : scalars, optional, default : 9,  512*10000
+            Define the minimum and the maximum area possible for an ROI. If None,  
+            the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
+            the image     
+        
+        for ADI, AEI, RAOQ
+        bin_step : scalar, optional, default is 500
+            Frequency step in Hz        
+  
+    Returns
+    -------
+    df_spectral_indices: Panda dataframe
+        Dataframe containing of the calculated spectral indices :
+    df_per_bin_indices : Panda dataframe
+        Dataframe containing of the calculated spectral indices  per frequency
+        bin :
+           
+    See also
+    --------
+    spectral_moments, spectral_moments, numberOfPeaks, spectral_LEQ, 
+    spectral_SNR, frequency_entropy,remove_background_along_axis, 
+    spectral_entropy, acousticComplexityIndex, soundscapeIndex, soundscapeIndex,
+    roughness, acousticDiversityIndex, acousticEvenessIndex, spectral_cover, 
+    spectral_activity, spectral_events, tfsd, more_entropy, frequency_raoQ, 
+    acousticGradientIndex,regionOfInterestIndex
+
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('./data/jura_cold_forest_nuit.wav')
+    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fse)   
+    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,
+                                                                  tn,fn,ext)
+
+    """
+    
+    #### get variables  
+    # for entropy : R_compatible {'soundecology', 'seewave'}
+    R_compatible = kwargs.pop('R_compatible','soundecology') 
+    
+    # for LEQ : 
+    gain = kwargs.pop('gain',42)
+    Vadc = kwargs.pop('Vadc',2)
+    sensitivity = kwargs.pop('sensitivity',-35)
+    dBref = kwargs.pop('dBref',94)
+    pRef = kwargs.pop('pRef',20e-6)
+    
+    # for audio activity and events
+    dB_threshold = kwargs.pop('dB_threshold',3)
+    rejectDuration = kwargs.pop('rejectDuration',None) # if None => 3 pixels
+    
+    ### for Roi
+    min_roi_area    = kwargs.pop('min_roi_area',None) # if None =>  30ms * 100Hz
+    smooth_param1   = kwargs.pop('smooth_param1',1)
+    mask_mode       = kwargs.pop('mask_mode','relative')
+    mask_param1     = kwargs.pop('mask_param1',6)
+    mask_param2     = kwargs.pop('mask_param2',0.5)
+    
+    ### for ADI, AEI, RAOQ
+    bin_step = kwargs.pop('bin_step',1000) # in Hz
+    
+    #### create a list
+    df_spectral_indices=[] 
+    df_per_bin_indices=[] 
+    
+    ### for flim to be ndarray
+    flim_low = np.asarray(flim_low)
+    flim_mid = np.asarray(flim_mid)
+    flim_hi = np.asarray(flim_hi)
+        
+    #### Prepare different spectrograms and spectrums
+    # amplitude spectrogram
+    Sxx_amplitude = sqrt(Sxx_power)
+    # dB spectrogram
+    Sxx_dB = power2dB(Sxx_power)
+    # mean amplitude spectrum
+    S_amplitude = avg_amplitude_spectro(Sxx_amplitude)
+
+    """**************************** 4 spectrum moments *********************""" 
+    SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = spectral_moments(S_amplitude)
+    df_spectral_indices += [SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT]
+    if verbose :
+        print("SPEC_MEAN %2.5f" % SPEC_MEAN)
+        print("SPEC_VAR %2.5f" % SPEC_VAR)
+        print("SPEC_SKEW %2.5f" % SPEC_SKEW)
+        print("SPEC_KURT %2.5f" % SPEC_KURT)
+     
+    """*********************** 4 audio moments per bin ********************""" 
+    AUDIO_MEAN_per_bin, AUDIO_VAR_per_bin, AUDIO_SKEW_per_bin, AUDIO_KURT_per_bin = spectral_moments(Sxx_amplitude, axis=1) 
+    AUDIO_MEAN_per_bin = np.asarray(AUDIO_MEAN_per_bin).tolist()
+    AUDIO_VAR_per_bin = np.asarray(AUDIO_VAR_per_bin).tolist()
+    AUDIO_SKEW_per_bin = np.asarray(AUDIO_SKEW_per_bin).tolist()
+    AUDIO_KURT_per_bin = np.asarray(AUDIO_KURT_per_bin).tolist()
+    df_per_bin_indices += [AUDIO_MEAN_per_bin,AUDIO_VAR_per_bin,
+                           AUDIO_SKEW_per_bin,AUDIO_KURT_per_bin]
+    """**************************** Number of peaks ************************"""
+    NBPEAKS = numberOfPeaks(S_amplitude,fn,display=display)
+    df_spectral_indices += [NBPEAKS]
+    if verbose :
+        print("NBPEAKS %2.5f" % NBPEAKS)
+    
+    """********* total sound pressure level in frequency domain ************"""
+    LEQf, LEQf_per_bin = spectral_LEQ(Sxx_power, gain, Vadc, sensitivity, dBref, pRef)
+    df_spectral_indices += [LEQf]
+    df_per_bin_indices += [np.asarray(LEQf_per_bin).tolist()]
+    if verbose :
+        print("LEQf %2.5f" % LEQf)
+    
+    """************ Signal to noise Ratio and noise energy   *************"""
+    """ SNRf [TOWSEY] """
+    ENRf, BGNf, SNRf, ENRf_per_bin, BGNf_per_bin, SNRf_per_bin = spectral_SNR(Sxx_power)
+    df_spectral_indices += [ENRf, BGNf, SNRf]
+    df_per_bin_indices += [np.asarray(ENRf_per_bin).tolist(),
+                           np.asarray(BGNf_per_bin).tolist(),
+                           np.asarray(SNRf_per_bin).tolist()]
+    if verbose :
+        print("ENRf %2.5f" % ENRf)
+        print("BGNf %2.5f" % BGNf)
+        print("SNRf %2.5f" % SNRf)
+
+    """*******************  energy concentration : entropy ****************"""
+    Hf, Ht_per_bin = frequency_entropy(Sxx_power, compatibility="QUT")
+    df_spectral_indices += [Hf] 
+    df_per_bin_indices += [np.asarray(Ht_per_bin).tolist()]
+    if verbose :
+        print("Hf %2.5f" % Hf)
+
+    """*********************** Remove stationnary noise ********************"""   
+    Sxx_dB_noNoise, _ = remove_background_along_axis(Sxx_dB, mode='ale', 
+                                                     display=display, ext=ext) 
+    
+    #### Prepare different spectrograms and spectrums without noise
+    Sxx_power_noNoise = dB2power(Sxx_dB_noNoise)
+    # dB spectrogram
+    Sxx_dB_noNoise = power2dB(Sxx_power_noNoise)
+
+    """******** Spectral indices from Spectrum (Amplitude or Energy) *******"""  
+    """ EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  """
+    EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = spectral_entropy (Sxx_power_noNoise,
+                                                               fn,
+                                                               flim=(flim_low[0],flim_hi[1]),
+                                                               display=display)
+    df_spectral_indices += [EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW] 
+    if verbose :
+        print("EAS %2.5f" % EAS)
+        print("ECU %2.5f" % ECU)
+        print("ECV %2.5f" % ECV)
+        print("EPS %2.5f" % EPS)
+        print("EPS_KURT %2.5f" % EPS_KURT)
+        print("EPS_SKEW %2.5f" % EPS_SKEW)
+    
+    """=============================================================
+    ECOLOGICAL INDICES :
+            ACI
+            NDSI 
+            rBA 
+            Bioacoustics Index
+    ============================================================="""
+    
+    #### Acoustic complexity index => 1st derivative of the spectrogram
+    """ ACI """
+    _,ACI_per_bin,ACI_sum = acousticComplexityIndex(Sxx_amplitude)
+    ACI=ACI_sum
+    df_spectral_indices += [ACI]
+    df_per_bin_indices += [np.asarray(ACI_per_bin).tolist()]
+    if verbose :
+        print("ACI {seewave} %2.5f" %ACI)
+
+    #### energy repartition in the frequency bins
+    """ NDSI & rBA """
+    NDSI, rBA, AnthroEnergy, BioEnergy = soundscapeIndex(Sxx_power, fn, 
+                                                         flim_bioPh=flim_mid,
+                                                         flim_antroPh=flim_low,
+                                                         R_compatible=R_compatible) 
+    df_spectral_indices += [NDSI, rBA, AnthroEnergy, BioEnergy]
+    if verbose :                                         
+        if R_compatible == 'soundecology' :
+            print("NDSI {soundecology} %2.5f" %NDSI)
+        else :
+            print("NDSI {seewave} %2.5f" %NDSI)
+   
+    ###### Bioacoustics Index : the calculation in R from soundecology is weird...
+    """ BI """
+    BI = bioacousticsIndex(Sxx_amplitude, fn, 
+                           flim=flim_mid, R_compatible=R_compatible) 
+    df_spectral_indices += [BI]
+    if verbose :
+        if R_compatible == 'soundecology' :
+            print("BI {SoundEcology} %2.5f" %BI)
+        else :
+            print("BI {MAAD} %2.5f" %BI)
+    
+    #### roughness
+    """ ROU """
+    ROU_per_bin = roughness(Sxx_amplitude, norm='global', axis=1)
+    ROU = np.sum(ROU_per_bin) 
+    df_spectral_indices += [ROU]
+    df_per_bin_indices += [np.asarray(ROU_per_bin).tolist()]
+    if verbose :
+        print("roughness %2.2f" % ROU)    
+    
+    """*********** Spectral indices from the decibel spectrogram ***********"""
+    #### Score
+    """ ADI & AEI """ 
+    """ 
+        COMMENT :
+                - threshold : -50dB when norm by the max (as soundecology)
+                              6dB if PSDxxdB_SansNoise
+    """    
+    ADI = acousticDiversityIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
+                                 fmax=flim_mid[1], bin_step=bin_step, 
+                                 dB_threshold=-50, index="shannon", 
+                                               R_compatible='soundecology') 
+    AEI = acousticEvenessIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
+                               fmax=flim_mid[1], bin_step=bin_step, 
+                               dB_threshold=-50, 
+                               R_compatible='soundecology') 
+    df_spectral_indices += [ADI, AEI]
+    if verbose :
+        print("ADI %2.5f" %ADI)
+        print("AEI %2.5f" %AEI)
+               
+    """************************** SPECTRAL COVER ***************************"""
+    #### frequency cover 
+    """ LFC, MFC, HFC [TOWSEY] """
+    LFC, MFC, HFC = spectral_cover (Sxx_dB_noNoise, fn, 
+                                                  dB_threshold=dB_threshold, 
+                                                  flim_LF=flim_low,
+                                                  flim_MF=flim_mid,
+                                                  flim_HF=flim_hi)
+    df_spectral_indices += [LFC, MFC, HFC]
+    if verbose :
+        print("LFC %2.5f" %LFC)
+        print("MFC %2.5f" %MFC)
+        print("HFC %2.5f" %HFC)
+    
+    """**************************** Activity *******************************"""
+    # Time resolution (in s)
+    DELTA_T = tn[1]-tn[0]
+    
+    if rejectDuration is None :
+        rejectDuration = DELTA_T * 3
+    
+    X = Sxx_dB_noNoise
+    ACTspFract, ACTspCount, ACTspMean = spectral_activity (X, dB_threshold=dB_threshold)
+    ACTspFract_avg = np.mean(ACTspFract)
+    ACTspCount_avg = np.mean(ACTspCount)
+    ACTspMean_avg = np.mean(ACTspMean)
+    df_spectral_indices += [ACTspFract_avg, ACTspCount_avg, ACTspMean_avg]
+    df_per_bin_indices += [np.asarray(ACTspFract).tolist(),
+                           np.asarray(ACTspCount).tolist(),
+                           np.asarray(ACTspMean).tolist()]
+    if verbose :
+        print("ACTspFract %2.5f" %ACTspFract_avg)
+        print("ACTspCount %2.5f" %ACTspCount_avg)
+        print("ACTspMean %2.5f" %ACTspMean_avg)
+
+    EVNspFract, EVNspMean, EVNspCount, _ = spectral_events (X, 
+                                                            dt=DELTA_T,
+                                                            dB_threshold=dB_threshold,
+                                                            rejectDuration=rejectDuration,
+                                                            display=display,
+                                                            extent = ext)
+    EVNspFract_avg = np.mean(EVNspFract)
+    EVNspMean_avg = np.mean(EVNspMean)
+    EVNspCount_avg = np.mean(EVNspCount)
+    df_spectral_indices += [EVNspFract_avg, EVNspMean_avg, EVNspCount_avg]
+    df_per_bin_indices += [np.asarray(EVNspFract).tolist(),
+                           np.asarray(EVNspMean).tolist(),
+                           np.asarray(EVNspCount).tolist()]
+    if verbose :
+        print("EVNspFract %2.5f" %mean(EVNspFract))
+        print("EVNspMean %2.5f" %mean(EVNspMean))
+        print("EVNspCount %2.5f" %mean(EVNspCount))
+          
+    """**************************** New indices*****************************""" 
+    """ TFSD """
+    TFSD, TFSD_per_bin, _ = tfsd(Sxx_amplitude, fn, tn, flim=flim_mid,
+                                mode='linear', display=display)
+    df_spectral_indices += [TFSD]
+    df_per_bin_indices += [np.asarray(TFSD_per_bin).tolist()]
+    if verbose :
+        print("TFSD %2.5f" % TFSD)
+    
+    """ More entropy"""
+    H_Havrda, H_Renyi, H_pairedShannon, H_gamma, H_GiniSimpson = more_entropy(S_amplitude, order=3)
+    df_spectral_indices += [H_Havrda, H_Renyi, H_pairedShannon, H_gamma, H_GiniSimpson]
+    if verbose :
+        print("H_Havrda %2.2f" % H_Havrda)
+        print("H_Renyi %2.2f" % H_Renyi)
+        print("H_pairedShannon %2.2f" % H_pairedShannon)
+        print("H_gamma %2.2f" % H_gamma)
+        print("H_GiniSimpson %2.2f" % H_GiniSimpson)  
+
+    """ RAOQ """
+    X = Sxx_amplitude
+    RAOQ = frequency_raoQ(X, fn, bin_step=bin_step) 
+    df_spectral_indices += [RAOQ]
+    if verbose :
+        print("RAOQ %2.2f" % RAOQ)
+    
+    #### Acoustic gradient index => real 1st derivative of the spectrogram
+    """ AGI """
+    # Time resolution (in s)
+    DELTA_T = tn[1]-tn[0]
+    X = Sxx_amplitude
+    _, AGI_per_bin, AGI, _ = acousticGradientIndex(X,dt=DELTA_T,order=1, norm=None)
+    df_spectral_indices += [AGI]
+    df_per_bin_indices += [np.asarray(AGI_per_bin).tolist()]
+    if verbose :
+        print("AGI %2.3f" % AGI)
+    
+    _, AGI_per_bin_2, AGI_2, _ = acousticGradientIndex(X,dt=DELTA_T,order=2, norm=None)  
+    df_spectral_indices += [AGI_2]
+    df_per_bin_indices += [np.asarray(AGI_per_bin_2).tolist()]
+    if verbose :
+        print("AGI_2 %2.3f" % AGI_2)
+    
+    """ ROI index """
+    # Time resolution (in s)
+    DELTA_T = tn[1]-tn[0]
+    # Frequency resolution (in Hz)
+    DELTA_F = fn[1]-fn[0]
+    # Minimum time duration of an event (in s)
+    MIN_EVENT_DUR = 30e-3
+    # Minimum frequency bandwidth (in Hz)
+    MIN_FREQ_BW = 100
+    # Min Region Of Interest ROI
+    if min_roi_area is None :
+        min_roi_area = int(MIN_EVENT_DUR/DELTA_T * MIN_FREQ_BW / DELTA_F)
+    ROItotal, ROIcover = regionOfInterestIndex(Sxx_dB_noNoise, 
+                                               tn, fn, 
+                                               smooth_param1, 
+                                               mask_mode,
+                                               mask_param1, 
+                                               mask_param2, 
+                                               min_roi=min_roi_area, 
+                                               display=display)
+    df_spectral_indices += [ROItotal, ROIcover]
+    if verbose :
+        print("ROItotal %2.3f" % ROItotal)
+        print("ROIcover %2.3f" % ROIcover)
+        
+    df_spectral_indices = pd.DataFrame([df_spectral_indices], 
+                                    columns=['SPEC_MEAN', 
+                                             'SPEC_VAR', 
+                                             'SPEC_SKEW', 
+                                             'SPEC_KURT', 
+                                             'NBPEAKS', 
+                                             'LEQf', 
+                                             'ENRf', 
+                                             'BGNf', 
+                                             'SNRf',
+                                             'Hf', 
+                                             'EAS',
+                                             'ECU',
+                                             'ECV',
+                                             'EPS',
+                                             'EPS_KURT',
+                                             'EPS_SKEW',
+                                             'ACI',
+                                             'NDSI',
+                                             'rBA',
+                                             'AnthroEnergy',
+                                             'BioEnergy',
+                                             'BI',
+                                             'ROU',
+                                             'ADI',
+                                             'AEI',
+                                             'LFC',
+                                             'MFC',
+                                             'HFC',
+                                             'ACTspFract',
+                                             'ACTspCount',
+                                             'ACTspMean', 
+                                             'EVNspFract',
+                                             'EVNspMean',
+                                             'EVNspCount',
+                                             'TFSD',
+                                             'H_Havrda',
+                                             'H_Renyi',
+                                             'H_pairedShannon', 
+                                             'H_gamma', 
+                                             'H_GiniSimpson',
+                                             'RAOQ',
+                                             'AGI',
+                                             'AGI_2',
+                                             'ROItotal',
+                                             'ROIcover'])
+        
+    df_per_bin_indices = pd.DataFrame([df_per_bin_indices], 
+                                    columns=['AUDIO_MEAN_per_bin',
+                                            'AUDIO_VAR_per_bin', 
+                                            'AUDIO_SKEW_per_bin',
+                                            'AUDIO_KURT_per_bin',
+                                            'LEQf_per_bin',
+                                            'ENRf_per_bin',
+                                            'BGNf_per_bin',
+                                            'SNRf_per_bin',
+                                            'Ht_per_bin',
+                                            'ACI_per_bin',
+                                            'ROU_per_bin',
+                                            'ACTspFract',
+                                            'ACTspCount',
+                                            'ACTspMean',
+                                            'EVNspFract',
+                                            'EVNspMean',
+                                            'EVNspCount',
+                                            'TFSD_per_bin',
+                                            'AGI_per_bin',
+                                            'AGI_per_bin_2'])
+                                    
+    return df_spectral_indices, df_per_bin_indices
+
