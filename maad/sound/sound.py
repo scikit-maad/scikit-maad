@@ -412,14 +412,22 @@ def spectral_SNR (Sxx_power) :
         
     Returns
     -------
-    ENRt : float
-        Total energy in dB computed in the time domain
-    BGNt : float
-        Estimation of the background energy (dB) computed in the time domain
-    SNRt: float
-        Signal to noise ratio (dB) computed in the time domain 
-        SNRt = ENRt - BGNt
-
+    ENRf : float
+        Total energy in dB computed in the frequency domain which corresponds
+        to the average of the power spectrogram then the sum of the average
+    BGNf : float
+        Estimation of the background energy (dB) computed based on the estimation
+        of the noise profile of the power spectrogram (2d)
+    SNRf: float
+        Signal to noise ratio (dB) computed in the frequency domain 
+        SNRf = ENRf - BGNf
+    ENRf_per_bin : vector of floats
+        Energy in dB per frequency bin
+    BGNf_per_bin : vector of floats
+        Background (noise profile) energy in dB per frequency bin
+    SNRf_per_bin : vector of floats  
+        Signal to noise ratio per frequency bin
+        
     References
     -----
     This is inspire by "ref QUT" [Towsey]
@@ -428,15 +436,15 @@ def spectral_SNR (Sxx_power) :
     --------
     >>> s, fs = maad.sound.load('guyana_tropical_forest.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
-    >>> _, _, _, snr = maad.sound.spectral_SNR(Sxx_power)
+    >>> _, _, snr, _, _, _ = maad.sound.spectral_SNR(Sxx_power)
     >>> snr
     4.111567933859188
     
     """
-    # average Pxx along time axis
-    S_power_mean = avg_power_spectro(Sxx_power)
+    # average Sxx_power along time axis
+    ENRf_per_bin = avg_power_spectro(Sxx_power)
     # compute total energy in dB
-    ENRf = power2dB(sum(S_power_mean))
+    ENRf = power2dB(sum(ENRf_per_bin))
     # Extract the noise profile (BGNf_per_bin) from the spectrogram Sxx_power
     _, noise_profile = remove_background_along_axis(Sxx_power, mode='median',axis=1) 
     # smooth the profile by removing spurious thin peaks (less than 5 pixels wide)
@@ -447,8 +455,10 @@ def spectral_SNR (Sxx_power) :
     BGNf = power2dB(sum(noise_profile))
     # compute signal to noise ratio
     SNRf = ENRf - BGNf 
+    # compute SNR_per_bin
+    SNRf_per_bin = ENRf_per_bin - ENRf_per_bin
 
-    return ENRf, BGNf, BGNf_per_bin, SNRf
+    return ENRf, BGNf, SNRf, ENRf_per_bin, BGNf_per_bin,SNRf_per_bin 
 
 
 #=============================================================================

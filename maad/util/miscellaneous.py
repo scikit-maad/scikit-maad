@@ -72,14 +72,11 @@ def index_bw (fn, bw):
     """
     # select the indices corresponding to the frequency bins range
     if bw is None :
-        # index = np.arange(0,len(fn),1)
         index = (np.ones(len(fn)))
         index = [bool(x) for x in index]
-    elif isinstance(bw, tuple) :
-        #index = (fn>=bw[0]) *(fn<=bw[1])
+    elif isinstance(bw, tuple) or  isinstance(bw, np.ndarray):
         index = (fn>=fn[(abs(fn-bw[0])).argmin()]) *(fn<=fn[(abs(fn-bw[1])).argmin()])
     elif isinstance(bw, numbers.Number) : 
-        # index =  (abs(fn-bw)).argmin()
         index = np.zeros(len(fn))
         index[(abs(fn-bw)).argmin()] = 1
         index = [bool(x) for x in index]
