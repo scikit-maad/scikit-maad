@@ -190,24 +190,33 @@ def rle(x):
 
 #=============================================================================
 
-def linear_scale(x, minval= 0.0, maxval=1.0):
+def linear_scale(x, minval= 0.0, maxval=1.0, axis=0):
     """ 
-    Program to scale the values of a matrix from a user specified minimum to 
-    a user specified maximum
+    Program to scale the values of a vector or matrix from a user specified 
+    minimum to a user specified maximum
     
     Parameters
     ----------
     x : array-like
-        numpy.array like with numbers
+        numpy.array like with numbers, list or dataframe
     minval : scalar, optional, default : 0
-        This minimum value is attributed to the minimum value of the array 
+        This minimum value is attributed to the minimum value of 
+        - the array if axis = None
+        - each column if axis =0
+        - each row if axis = 1
     maxval : scalar, optional, default : 1
-        This maximum value is attributed to the maximum value of the array         
+        This maximum value is attributed to the maximum value of  
+        - the array if axis = None
+        - each column if axis =0
+        - each row if axis = 1
+    axis : integer, optional, default : 0
+        select if the min,max is calculated on the entire matrix (axis=None),
+        on each column (axis=0), on each row (axis=1)
         
     Returns
     -------
     y : array-like
-        numpy.array like with numbers  
+        numpy.array like with numbers  or dataframe
         
     Examples
     --------
@@ -225,15 +234,16 @@ def linear_scale(x, minval= 0.0, maxval=1.0):
     if isinstance(x, list):
         x = np.asarray(x)
         
-    # avoid problems with inf and -inf values
-    x_min = np.min(x.ravel()[x.ravel()!=-np.inf]) 
-    x[np.where(x == -np.inf)] = x_min
-    x_max = np.max(x.ravel()[x.ravel()!=np.inf]) 
-    x[np.where(x == np.inf)] = x_max        
+    if isinstance(x, np.ndarray) : 
+        # avoid problems with inf and -inf values
+        x_min = np.min(x.ravel()[x.ravel()!=-np.inf]) 
+        x[np.where(x == -np.inf)] = x_min
+        x_max = np.max(x.ravel()[x.ravel()!=np.inf]) 
+        x[np.where(x == np.inf)] = x_max        
      
     # do the normalization
-    y = x - x.min();
-    y = (y/y.max())*(maxval-minval);
+    y = x - x.min(axis);
+    y = (y/y.max(axis))*(maxval-minval);
     y = y + minval;
     return y
 
