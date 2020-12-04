@@ -376,7 +376,6 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     Sxx : 2D numpy array  
         Original spectrogram (or image) 
         
-     
     display : boolean, optional, default is False 
         Display the signal if True 
          
@@ -759,7 +758,7 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
 """**************************************************************************** 
 *************                      smooth                            *********** 
 ****************************************************************************""" 
-def smooth (im, ext, std=1, display = False, savefig=None, **kwargs): 
+def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwargs): 
     """ 
     Smooth (i.e. blurr) the image with a gaussian filter 
      
@@ -777,7 +776,10 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
         Standard deviation of the gaussian kernel used to smooth the image 
         The larger is the number, the smoother will be the image and the longer 
         it takes. Standard values should fall between 0.5 to 3 
-         
+    
+    verbose : boolean, optional, default is False 
+        print messages
+    
     display : boolean, optional, default is False 
         Display the signal if True 
          
@@ -832,9 +834,10 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
     ------- 
     im_out: smothed or blurred image  
     """ 
-     
-    print(72 * '_') 
-    print('Smooth the image with a gaussian filter (std = %.1f)' %std) 
+    
+    if verbose:
+        print(72 * '_') 
+        print('Smooth the image with a gaussian filter (std = %.1f)' %std) 
      
     # use scikit image (faster than scipy) 
     im_out = filters.gaussian(im,std) 
@@ -868,8 +871,8 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
  
-def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefig=None, 
-                     **kwargs): 
+def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, 
+                           verbose=False, display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
     The values used for the thresholding depends on the values found in the  
@@ -900,6 +903,9 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
         Value higher than threshold2 and connected (directly or not) to the  
         seeds are set to 1, the other remains 0 
  
+    verbose : boolean, optional, default is False
+        print messages
+    
     display : boolean, optional, default is False 
         Display the signal if True 
          
@@ -972,12 +978,13 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
     h_th = val1 + val2 
     # Low threshold limit 
     l_th = (h_th-h_th*bin_per) 
-     
-    print(72 * '_') 
-    print('Double thresholding with values relative to the image...') 
-    print ('**********************************************************') 
-    print ('  high threshold value %.2f | low threshold value %.2f' % (h_th, l_th)) 
-    print ('**********************************************************') 
+    
+    if verbose :
+        print(72 * '_') 
+        print('Double thresholding with values relative to the image...') 
+        print ('**********************************************************') 
+        print ('  high threshold value %.2f | low threshold value %.2f' % (h_th, l_th)) 
+        print ('**********************************************************') 
      
     # binarisation  
     im_t1 = im > h_th    # mask1 
@@ -1224,8 +1231,8 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
 #**************************************************************************** 
 #*************                 select_rois                   *********** 
 #**************************************************************************** 
-def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,  
-                savefig = None, **kwargs): 
+def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
+                display=False, savefig = None, **kwargs): 
     """ 
     Select rois candidates based on area of rois. min and max boundaries. 
     The ouput image contains pixels with label as value. 
@@ -1244,6 +1251,9 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,
         Define the minimum and the maximum area possible for an ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
         the image 
+        
+    verbose : boolean, optional, default is False
+        print messages
          
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -1319,12 +1329,13 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,
     if min_roi is None: 
         # the min ROI area is set to 1 pixel 
         min_roi = 1 
-         
-    print(72 * '_') 
-    print('Automatic ROIs selection in progress...') 
-    print ('**********************************************************') 
-    print ('  Min ROI area %d pix² | Max ROI area %d pix²' % (min_roi, max_roi)) 
-    print ('**********************************************************') 
+    
+    if verbose :
+        print(72 * '_') 
+        print('Automatic ROIs selection in progress...') 
+        print ('**********************************************************') 
+        print ('  Min ROI area %d pix² | Max ROI area %d pix²' % (min_roi, max_roi)) 
+        print ('**********************************************************') 
  
     labels = measure.label(im_bin)    #Find connected components in binary image 
     rprops = measure.regionprops(labels) 
