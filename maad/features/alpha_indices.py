@@ -35,7 +35,7 @@ from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
                        format_features, intoBins, entropy, wav2Leq, PSD2Leq, 
                        power2dBSPL, linear_scale, plot1D, plot2D)
 from maad.features import skewness, kurtosis, centroid_features, zero_crossing_rate
-from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro, spectral_SNR
+from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro, avg_power_spectro, spectral_SNR
 from maad.rois import smooth, select_rois, create_mask, overlay_rois, remove_background_along_axis
 
 # min value
@@ -1612,13 +1612,10 @@ def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'
     ----------
     Sxx : ndarray of floats
         matrix : Spectrogram  
-    
     fn : vector
         frequency vector 
-    
     flim : tupple (fmin, fmax), optional, default is (2000, 15000)
         Frequency band used to compute the bioacoustic index.
-        
     R_compatible : string, default is "soundecology"
         if 'soundecology', the result is similar to the package SoundEcology in R 
         Otherwise, the result is specific to maad
@@ -1767,10 +1764,10 @@ def spectral_LEQ (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6):
     
     # test if X has 2d (Spectrogram Pxx)
     if X.ndim == 2 : 
-        # convert power spectrogram/spectrum into dBSPL
-        LEQf_per_bin = power2dBSPL(X, gain, Vadc, sensitivity, dBref, pRef)
         # average spectrogram along time direction
         X = mean(X, axis=1)
+        # convert power spectrogram/spectrum into dBSPL
+        LEQf_per_bin = power2dBSPL(X, gain, Vadc, sensitivity, dBref, pRef)
     else :
         LEQf_per_bin = []
         
@@ -1842,7 +1839,7 @@ def frequency_raoQ (S_amplitude, fn, bin_step=1000):
 
 #=============================================================================    
 
-def tfsd (Sxx, fn, tn, flim=(2000,8000), mode=None, display=False):
+def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     """
         Time frequency derivation : tfsd
         
@@ -1850,14 +1847,22 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode=None, display=False):
     ----------
     Sxx : ndarray of floats
         2d : Spectrogram (i.e matrix of spectrum)
-    
+    fn : vector
+        frequency vector corresponding to the spectrogram 
+    tn : vector
+        time vector corresponding to the spectrogram 
+    flim : tupple (fmin, fmax), optional, default is (2000, 8000)
+        Frequency band used to compute tfsd. 
+    mode : string {'thirdOctave','Octave'}, default is thirdOctave  
+        Select the way to transform the spectrogram with linear bands into 
+        octave bands    
     display : boolean, optional, default is False
         Display the 1st and 2nd derivation of the spectrogram
 
     Returns
     -------    
-    tfsd : 1d ndarray of scalars
-        Acoustic Gradient Index of the spectrogram
+    tfsd : scalar
+        Time frequency derivation index
         
     Notes
     -----
@@ -1879,11 +1884,8 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode=None, display=False):
     # convert into 1/3 octave
     if mode == 'thirdOctave' : 
         x, fn_bin = intoOctave(Sxx, fn, thirdOctave=True, display=display)
-    if mode == 'Octave' : 
+    elif mode == 'Octave' : 
         x, fn_bin = intoOctave(Sxx, fn, thirdOctave=False, display=display)   
-    else:
-        x = Sxx
-        fn_bin = fn
 
     # Derivation along the time axis, for each frequency bin
     GRADdt = diff(x, n=1, axis=1)
@@ -1891,14 +1893,17 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode=None, display=False):
     GRADdf = diff(GRADdt, n=1, axis=0)
 
     # select the bandwidth
-    GRADdf_select = GRADdf[index_bw(fn_bin[0:-1],bw=flim),]
+    if flim is not None :
+        GRADdf_select = GRADdf[index_bw(fn_bin[0:-1],bw=flim),]
+    else :
+        GRADdf_select = GRADdf    
     
     # calcul of the tfsdt : sum of the pseudo-gradient in the frequency bandwidth
     # which is normalized by the total sum of the pseudo-gradient
     tfsd =  sum(abs(GRADdf_select))/sum(abs(GRADdf)) 
-    tfsd_per_bin =  sum(abs(GRADdf_select),axis=1)/sum(abs(GRADdf)) 
     
-    if display==True :
+    if display :
+        
             ext=(tn[0], tn[-1], fn_bin[0], fn_bin[-1])
         
             fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
@@ -1941,7 +1946,7 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode=None, display=False):
             # Display the figure now
             plt.show()
     
-    return tfsd, tfsd_per_bin, fn_bin
+    return tfsd
 
 #=============================================================================
 def acousticGradientIndex(Sxx, dt, order=1, norm=None, display=False):
@@ -2514,7 +2519,13 @@ def spectral_indices (Sxx_power, tn, fn, ext,
     Sxx_dB = power2dB(Sxx_power)
     # mean amplitude spectrum
     S_amplitude = avg_amplitude_spectro(Sxx_amplitude)
-
+    
+    """************************* Long term spectrogram *********************"""
+    # mean power spectrum => for long term spectrogram (LTS)
+    LTS = avg_power_spectro(Sxx_power)
+    df_per_bin_indices +=[fn]
+    df_per_bin_indices +=[LTS]
+    
     """**************************** 4 spectrum moments *********************""" 
     SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = spectral_moments(S_amplitude)
     df_spectral_indices += [SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT]
@@ -2684,15 +2695,13 @@ def spectral_indices (Sxx_power, tn, fn, ext,
     ACTspFract, ACTspCount, ACTspMean = spectral_activity (X, dB_threshold=dB_threshold)
     ACTspFract_avg = np.mean(ACTspFract)
     ACTspCount_avg = np.mean(ACTspCount)
-    ACTspMean_avg = np.mean(ACTspMean)
-    df_spectral_indices += [ACTspFract_avg, ACTspCount_avg, ACTspMean_avg]
+    df_spectral_indices += [ACTspFract_avg, ACTspCount_avg, ACTspMean]
     df_per_bin_indices += [np.asarray(ACTspFract).tolist(),
-                           np.asarray(ACTspCount).tolist(),
-                           np.asarray(ACTspMean).tolist()]
+                           np.asarray(ACTspCount).tolist()]
     if verbose :
         print("ACTspFract %2.5f" %ACTspFract_avg)
         print("ACTspCount %2.5f" %ACTspCount_avg)
-        print("ACTspMean %2.5f" %ACTspMean_avg)
+        print("ACTspMean %2.5f" %ACTspMean)
 
     EVNspFract, EVNspMean, EVNspCount, _ = spectral_events (X, 
                                                             dt=DELTA_T,
@@ -2714,10 +2723,9 @@ def spectral_indices (Sxx_power, tn, fn, ext,
           
     """**************************** New indices*****************************""" 
     """ TFSD """
-    TFSD, TFSD_per_bin, _ = tfsd(Sxx_amplitude, fn, tn, flim=flim_mid,
-                                mode='linear', display=display)
+    # compute TFSD with mode = ThirdOctave and flim
+    TFSD= tfsd(Sxx_amplitude,fn,tn,flim=flim_mid,mode='thirdOctave', display=display)
     df_spectral_indices += [TFSD]
-    df_per_bin_indices += [np.asarray(TFSD_per_bin).tolist()]
     if verbose :
         print("TFSD %2.5f" % TFSD)
     
@@ -2828,7 +2836,9 @@ def spectral_indices (Sxx_power, tn, fn, ext,
                                              'ROIcover'])
         
     df_per_bin_indices = pd.DataFrame([df_per_bin_indices], 
-                                    columns=['AUDIO_MEAN_per_bin',
+                                    columns=['frequencies',
+                                            'LTS',
+                                            'AUDIO_MEAN_per_bin',
                                             'AUDIO_VAR_per_bin', 
                                             'AUDIO_SKEW_per_bin',
                                             'AUDIO_KURT_per_bin',
@@ -2839,15 +2849,13 @@ def spectral_indices (Sxx_power, tn, fn, ext,
                                             'Ht_per_bin',
                                             'ACI_per_bin',
                                             'ROU_per_bin',
-                                            'ACTspFract',
-                                            'ACTspCount',
-                                            'ACTspMean',
-                                            'EVNspFract',
-                                            'EVNspMean',
-                                            'EVNspCount',
-                                            'TFSD_per_bin',
+                                            'ACTspFract_per_bin',
+                                            'ACTspCount_per_bin',
+                                            'EVNspFract_per_bin',
+                                            'EVNspMean_per_bin',
+                                            'EVNspCount_per_bin',
                                             'AGI_per_bin',
-                                            'AGI_per_bin_2'])
+                                            'AGI2_per_bin'])
                                     
     return df_spectral_indices, df_per_bin_indices
 
