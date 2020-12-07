@@ -23,7 +23,10 @@ from .visualization import (rand_cmap,
                            crop_image,
                            save_figlist,
                            plot1D,
-                           plot2D)
+                           plot2D,
+                           plot_features_map,
+                           plot_features,
+                           plot_correlation_map)
 
 from .math_tools import (running_mean,
                          get_unimode,
@@ -68,6 +71,9 @@ __all__ = [
            'save_figlist',
            'plot1D',
            'plot2D',
+           'plot_features_map',
+           'plot_features',
+           'plot_correlation_map',
            # math       
            'running_mean',
            'get_unimode',
