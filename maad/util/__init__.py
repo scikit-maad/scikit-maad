@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-""" Utility functions for scikit-maad
-Collection of miscellaneous functions that help to simplify the framework
-
+"""
+Handfull of useful set of tools used in the audio analysis framework.
 """
 
 from .miscellaneous import (index_bw,

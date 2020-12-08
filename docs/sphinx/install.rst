@@ -1,7 +1,8 @@
 Installation instructions
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
-scikit-maad dependencies:
+**scikit-maad** is a free, open-source and modular Python package to analyze 
+ecoacoustics datasets. **scikit-maad** works with other popular Python Scientific Packages. The scikit-maad dependencies are listed below:
 
 - Python >= 3.5
 - NumPy >= 1.13
@@ -9,17 +10,30 @@ scikit-maad dependencies:
 - scikit-image >= 0.14
 
 
-**pypi**
+1. Standard installation
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-**scikit-maad** is hosted on PyPI. To install, run the following command in your Python environment: ::
+The simplest way to install **scikit-maad** is using **pypi**, the package installer for Python. To install, run the following command in your Python environment::
 
     pip install scikit-maad
 
-or::
 
-    sudo pip install scikit-maad
+2. Development installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To install the latest version from source clone the master repository and from the top-level folder call: ::
+You can install the development version if you want to work on the latest version or develop new features. First uninstall any existing installations::
+
+    pip uninstall scikit-maad
+
+To install the latest deveopment version from source clone the master repository from `GitHub <https://github.com/scikit-maad/scikit-maad>`::
+
+    git clone https://github.com/scikit-maad/scikit-maad.git
+
+Then, from the top-level folder call::
 
     python setup.py install
-
+    
+To update the installation pull the latest modifications from the repository and reinstall::
+    
+    git pull
+    python setup.py install

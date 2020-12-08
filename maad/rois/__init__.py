@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-""" rois functions for scikit-maad
-Collection of methods to find regions of interest in 1D and 2D signals.
-
+"""
+Collection of functions to find regions of interest in audio and spectrograms.
 """
 
 from .rois_2d import (load,
