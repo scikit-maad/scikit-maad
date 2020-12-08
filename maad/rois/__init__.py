@@ -5,6 +5,8 @@ Collection of functions to find regions of interest in audio and spectrograms.
 
 from .rois_2d import (load,
                      remove_background,
+                     remove_background_morpho,
+                     remove_background_along_axis,
                      median_equalizer,
                      select_bandwidth,
                      smooth,
@@ -20,6 +22,8 @@ from .rois_1d import (sinc,
 
 __all__ = ['load', 
            'remove_background', 
+           'remove_background_morpho',
+           'remove_background_along_axis',
            'median_equalizer',
            'select_bandwidth',
            'smooth',

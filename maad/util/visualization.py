@@ -13,6 +13,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+import pandas as pd
 from skimage.io import imsave 
 import colorsys
 
@@ -20,6 +21,9 @@ import colorsys
 import sys
 _MIN_ = sys.float_info.min
 
+
+#### Importation from internal modules
+from maad.util import linear_scale
 
 #=============================================================================
 def plot1D(x, y, ax=None, **kwargs):
@@ -249,7 +253,6 @@ def plot2D(im,ax=None,**kwargs):
     """ 
    
     # matplotlib parameters
-    figsize=kwargs.pop('figsize', (4, 13))
     title=kwargs.pop('title', 'Spectrogram')
     ylabel=kwargs.pop('ylabel', 'Frequency [Hz]')
     xlabel=kwargs.pop('xlabel', 'Time [sec]')  
@@ -260,6 +263,11 @@ def plot2D(im,ax=None,**kwargs):
     vmax=kwargs.pop('vmax', None)    
     ext=kwargs.pop('extent', None)   
     now=kwargs.pop('now', True)
+    
+    if ext is not None :
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+    else:
+        figsize=kwargs.pop('figsize',(4, 13))  
     
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -457,4 +465,124 @@ def save_figlist(fname, figlist):
     for i, fig in enumerate(figlist):
         fname_save='%d_%s' % (i, fname)
         imsave(fname_save,fig)
+
+#=============================================================================
+def plot_features_map (df, norm=True, mode='24h', **kwargs) : 
+
+    if isinstance(df, pd.DataFrame) == False :
+        raise TypeError ('df must be a Pandas Dataframe')
+    elif isinstance(df.index, pd.DatetimeIndex) == False :
+        raise TypeError ('df must have an index of type DateTimeIndex')
+    
+    if norm :
+        df = linear_scale(df)
+            
+    if mode == '24h' :      
+        # Mean values by hour
+        df = df.groupby(df.index.hour).mean()
+        # Get the list of unique index of type 'hour'
+        x_label = [i + j for i, j in zip(map(str, df.index.values), ['h']*len(df))]
+    else :
+        # Get the list of unique index of type 'hour'
+        x_value = df.index.strftime('%Y-%m-%d')
+        x_label = x_value.tolist()
+    
+    # kwargs
+    cmap = kwargs.pop('cmap','RdBu_r')  
+    
+    # plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    caxes = ax.matshow(df.transpose(), cmap=cmap, aspect='auto',**kwargs)
+    fig.colorbar(caxes, shrink=0.75, label='Normalized value')
+    # Set ticks on both sides of axes on
+    ax.tick_params(axis="x", bottom=True, top=False, labelbottom=True, labeltop=False)
+    # We want to show all ticks...
+    ax.set_yticks(np.arange(len(df.columns)))
+    ax.set_xticks(np.arange(len(x_label)))
+    # ... and label them with the respective list entries
+    ax.set_yticklabels(df.columns)
+    ax.set_xticklabels(x_label)
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=8)
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=8)
+    fig.tight_layout()
+    plt.show()
+    
+    return fig, ax
+
+#=============================================================================
+
+def plot_features (df, norm=True, mode='24h', **kwargs) : 
+    
+    if isinstance(df, pd.DataFrame) == False :
+        raise TypeError ('df must be a Pandas Dataframe')
+    elif isinstance(df.index, pd.DatetimeIndex) == False :
+        raise TypeError ('df must have an index of type DateTimeIndex')
+    
+    if norm :
+        df = linear_scale(df)
+            
+    if mode == '24h' :      
+        # Mean values by hour
+        df = df.groupby(df.index.hour).mean()
+        # Get the list of unique index of type 'hour'
+#        x_label = [i + j for i, j in zip(map(str, df.index.values), ['h']*len(df))]      
+
+    # plot
+    import itertools
+    from matplotlib.lines import Line2D
+    list_markers = tuple(list(Line2D.markers.keys())[0:-4])
+    marker = itertools.cycle(list_markers) 
+    
+    figsize = kwargs.pop('figsize',(5,5))
+    kwargs.pop('label',None)
+
+    fig, ax = plt.subplots(**kwargs)
+    fig.set_size_inches(figsize)
+    for IND in list(df) :
+        ax.plot(df.index, df[IND], next(marker), linestyle='-',
+                label=IND,**kwargs)
+        
+    if mode == '24h' :  
+        ax.set_xlabel('Day time (Hour)')
+    ax.grid()
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5,-0.25), ncol=3)
+    fig.tight_layout()
+    plt.show()
+    
+    return fig, ax
+
+def plot_correlation_map (df, R_threshold=0.75, method ='spearman', **kwargs) :
+
+    # Correlation matrix
+    corr_matrix = df.corr(method)
+     
+    # pop kwargs
+    figsize = kwargs.pop('figsize',(10,8))
+    cmap = kwargs.pop('cmap','RdBu_r')
+    label_colorbar = kwargs.pop('label_colorbar','R')
+    
+    fig = plt.figure()
+    fig.set_size_inches(figsize)
+    ax = fig.add_subplot(111)
+    caxes = ax.matshow(corr_matrix[abs(corr_matrix)**2>R_threshold**2], cmap=cmap)
+    fig.colorbar(caxes, shrink=0.75, label=label_colorbar)
+    
+    # We want to show all ticks...
+    ax.set_xticks(np.arange(len(corr_matrix.columns)))
+    ax.set_yticks(np.arange(len(corr_matrix.columns)))
+    # ... and label them with the respective list entries
+    ax.set_xticklabels(corr_matrix.columns)
+    ax.set_yticklabels(corr_matrix.columns)
+    
+    # Rotate the tick labels, set their alignment and fontsize
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=7)
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=8)
+    
+    fig.tight_layout()
+    plt.show()
+    
+    return fig, ax
 

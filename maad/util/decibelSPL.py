@@ -50,7 +50,6 @@ def wav2volt (wave, Vadc=2):
     volt : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in volt
         
-
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -89,7 +88,6 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
     p : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in pressure (Pa)
         
-
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -112,7 +110,7 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
     # coefficient to convert Volt into pressure (Pa)
     coeff = 1/10**(sensitivity/20) 
     p = volt * coeff / 10**(gain/20)
-    return (p)
+    return p
 
 #####  wav2pressure 
 def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94): 
@@ -165,7 +163,7 @@ def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
 
     v = wav2volt(wave, Vadc)
     p = volt2pressure(v, gain, sensitivity, dBref)
-    return (p)
+    return p
 
 #####  pressure2dBSPL
 def pressure2dBSPL (p, pRef=20e-6): 
@@ -177,7 +175,7 @@ def pressure2dBSPL (p, pRef=20e-6):
     p : ndarray-like or scalar
         Array or scalar containing the sound pressure in Pa 
                 
-    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)
+    pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
     Returns
     -------
@@ -201,6 +199,7 @@ def pressure2dBSPL (p, pRef=20e-6):
     >>> p_rms = maad.features.rms(p)
     >>> maad.util.pressure2dBSPL(p_rms)  
         54.53489077674256      
+        
     """    
     # force to be ndarray
     p = np.asarray(p)
@@ -210,7 +209,7 @@ def pressure2dBSPL (p, pRef=20e-6):
     
     # Take the log of the ratio pressure/pRef
     L = 20*log10(p/pRef) 
-    return (L)
+    return L
 
 #####  dBSPL2pressure
 def dBSPL2pressure (L, pRef=20e-6): 
@@ -222,14 +221,13 @@ def dBSPL2pressure (L, pRef=20e-6):
     L : ndarray-like or scalar
         Array or scalar containing the sound pressure level (L [dB])
                 
-    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)
+    pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
     Returns
     -------
     p : ndarray-like or scalar
         Array or scalar containing the sound pressure in Pa 
         
- 
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -246,99 +244,7 @@ def dBSPL2pressure (L, pRef=20e-6):
     
     # dB SPL to pressure
     p = 10**(L/20)*pRef
-    return (p)
-
-#####  power2dBSPL
-def power2dBSPL (P, pRef=20e-6): 
-    """
-    convert sound pressure power (P [Pa²]) to sound pressure level (L [dB])
-    
-    Parameters
-    ----------
-    P : ndarray-like or scalar
-        ndarray-like or scalar containing the sound pressure power (P [Pa²])
-                
-    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)
-                
-    Returns
-    -------
-    L : ndarray-like or scalar
-        ndarray-like or scalar containing the sound pressure level (L [dB])
-        
-
-    Examples
-    --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure(wave=w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram (p, fs, nperseg=1024, mode='psd')  
-    >>> P = mean(Pxx, axis=1)
-    
-    Get instantaneous sound pressure level (L)
-    
-    >>> maad.util.power2dBSPL(P)    
-    array([41.56456034, 45.44257539, 43.17154534, 41.50665519, 38.08392914,
-           34.52770543, 32.57142163, 31.68137318, 30.32861314, 28.46111069,
-           27.88530431, 27.48595098, 26.96673216, 25.88241843, 24.93524547,
-           ...
-           -5.24972979, -5.38796789, -5.42812278, -5.47003443, -5.47740917,
-           -5.67015921, -5.68214822])
-    
-    Get equivalent sound pressure level (Leq)
-        
-    >>> maad.util.add_dBSPL(L)
-        54.53489077674256
-    """    
-    # force to be ndarray
-    P= np.asarray(P)
-    
-    # if p ==0 set to MIN
-    P[P==0] = _MIN_
-    
-    # Take the log of the ratio power/pRef²
-    L = 10*log10(P/pRef**2) 
-    return (L)
-
-#####  dBSPL2power
-def dBSPL2power (L, pRef=20e-6): 
-    """
-    convert sound pressure level (L [dB])to sound pressure power (P [Pa²]) 
-    
-    Parameters
-    ----------
-    L : ndarray-like or scalar
-        ndarray-like or scalar containing the sound pressure level (L [dB])
-                
-    pRef : Sound pressure reference in the medium (air : 20e-6 Pa, water : ?)
-                
-    Returns
-    -------
-    P : ndarray-like or scalar
-        ndarray-like or scalar containing the pressure in Pa (!! amplitude not energy !!)
-        
-
-    Examples
-    --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> L = maad.util.wav2dBSPL(wave=w, gain=42)
-    >>> P = maad.util.dBSPL2power(L) 
-
-    >>> Sxx,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=4096, mode='amplitude')   
-    >>> Lxx = maad.util.wav2dBSPL(wave=Sxx, gain=42)
-    >>> Pxx = maad.util.dBSPL2power(Lxx) 
-    
-    Parceval's theorem of energy conservation
-    
-    Energy in time domain from power P
-    >>> sum(P)
-    Energy in frequency domain from power spectrogram Pxx
-    >>> sum(Pxx/Pxx.shape[1]*len(w))
-    """    
-    # force to be ndarray
-    L = np.asarray(L)
-    
-    # dB SPL to power (pressure²)
-    P = 10**(L/10)*pRef**2
-    return (P)
+    return p
 
 #####  wav2dBSPL
 def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
@@ -365,7 +271,7 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
         Pressure sound level used for the calibration of the microphone 
         (usually 94dB, sometimes 114dB)
         
-    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
+    pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
     Returns
     -------
@@ -378,11 +284,18 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
     >>> L = maad.util.wav2dBSPL(wave=w, gain=42)
     
-    Get equivalent sound pressure level (Leq)
+    Get an approximate of the equivalent sound pressure level (Leq)
         
-    >>> maad.util.mean_dBSPL(L)
+    >>> maad.util.mean_dB(L)
         54.53489077674256
-
+        
+    Get equivalent sound pressure level (Leq) from the dedicated function
+        
+    >>> Leq = maad.util.wav2Leq(w, fs, gain=42, dt=1)
+    >>> Leq_mean = maad.util.mean_dB(Leq)
+    >>> Leq_mean
+        54.575482584140005   
+    
     """       
     # force to be ndarray
     wave = np.asarray(wave)
@@ -390,139 +303,89 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     p = wav2pressure(wave, gain, Vadc, sensitivity, dBref)
     p_abs = abs(p)
     L = pressure2dBSPL(p_abs, pRef)
-    return (L)
+    return L
 
-##### add_dBSPL
-def add_dBSPL(*argv, axis=1): 
+def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
-    add Sound Pressure Level (L [dB  SPL])
-        
+    convert signal (amplitude) to instantaneous sound pressure level (L [dB SPL])
+    
     Parameters
     ----------
-    *argv : ndarray-like of floats
-        Arrays containing the sound waveform in dB SPL (Sound Pressure level in dB)
-                
-    axis : integer, optional, default is 0
-        if addition of multiple arrays, select the axis on which the sum is done
+    s : ndarray-like or scalar 
+        s is an amplitude signal (not energy signal : s² )
+        
+    gain : integer
+        Total gain applied to the sound (preamplifer + amplifier)
+        
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC     
+
+    sensitivity : float, optional, default is -35 (dB/V)
+        Sensitivity of the microphone
+    
+    dBref : integer, optional, default is 94 (dBSPL)
+        Pressure sound level used for the calibration of the microphone 
+        (usually 94dB, sometimes 114dB)
+        
+    pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
     Returns
     -------
-    L_sum : ndarray-like of floats
-        Array containing the sum of the Sound Pressure Level L in [dB SPL]
+    L : ndarray-like or scalar
+        ndarray-like or scalar containing the sound waveform in dB SPL (Sound Pressure level in dB)
         
-
-    Examples
-    --------
-    
-    Example with an audio file
-    
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure(w, gain=42)
-    >>> PSDxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> L = maad.util.energy2dBSPL(PSDxx)
-    >>> L_sum = maad.util.add_dBSPL(L, axis=2)  
-    >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
-                      'xlabel':'Frequency [Hz]',
-                      'ylabel':'Power [dB]',
-                      }
-    >>> fig, ax = maad.util.plot1D(fn, L_sum.transpose(), **fig_kwargs)
-
-    Example with single values
-    
-    >>> L1 = 90 # 90dB
-    >>> maad.util.add_dBSPL(L1,L1)
-        93.01029995663981
-        
-    Example with arrays
-    
-    >>> L1 = [90,80,70]
-    >>> maad.util.add_dBSPL(L1,L1)
-        array([90.45322979, 90.45322979])
-    >>> maad.util.add_dBSPL(L1,L1, axis=0)
-        array([93.01029996, 83.01029996, 73.01029996])
-    """    
+    """       
     # force to be ndarray
-    L = np.asarray(argv)
+    s = np.asarray(s)
     
-    # Verify the adequation between axis number and number of dimensions of L
-    if axis >= L.ndim:
-        axis= L.ndim -1
-    
-    # dB SPL to energy as sum has to be done with energy
-    e = dBSPL2pressure(L)**2   
-    e_sum = e.sum(axis)
-    
-    # energy=>pressure to dB SPL
-    L_sum = pressure2dBSPL(sqrt(e_sum))
-    
-    return (L_sum)
+    L = wav2dBSPL (s, gain, Vadc, sensitivity, dBref, pRef)
 
-##### mean_dBSPL
-def mean_dBSPL(*argv, axis=1): 
+    return L
+
+
+#####  power2dBSPL
+def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
-    Compute the average of Sound Pressure Level (L [dB  SPL])
-        
+    convert power (amplitude²) to sound pressure level (L [dB])
+    
     Parameters
     ----------
-    *argv : ndarray-like of floats
-        Arrays containing the sound waveform in dB SPL (Sound Pressure level in dB)
+    P : ndarray-like or scalar
+        ndarray-like or scalar containing the power signal (P), for instance 
+        Pxx, the power spectral density (PSD)
                 
-    axis : integer, optional, default is 0
-        if addition of multiple arrays, select the axis on which the sum is done
+    pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
     Returns
     -------
-    L_mean : ndarray-like of floats
-        Array containing the mean of the Sound Pressure Level L in [dB SPL]
+    L : ndarray-like or scalar
+        ndarray-like or scalar containing the sound pressure level (L [dB])
         
-
     Examples
     --------
-    
-    Example with an audio file
-    
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure(w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> L = maad.util.power2dBSPL(Pxx)
-    >>> L_mean = maad.util.mean_dBSPL(L, axis=2)  
-    >>> fig_kwargs = {'figtitle':'Power spectrum (PSD)',
-                      'xlabel':'Frequency [Hz]',
-                      'ylabel':'Power [dB]',
-                      }
-    >>> fig, ax = maad.util.plot1D(fn, L_mean.transpose(), **fig_kwargs)
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode='psd')  
+    >>> S_power_mean = mean(Sxx_power, axis=1)
+    
+    Get instantaneous sound pressure level (L)
+    
+    >>> maad.util.power2dBSPL(S_power_mean, gain=42)    
+    array([41.56456034, 45.44257539, 43.17154534, 41.50665519, 38.08392914,
+           34.52770543, 32.57142163, 31.68137318, 30.32861314, 28.46111069,
+           27.88530431, 27.48595098, 26.96673216, 25.88241843, 24.93524547,
+           ...
+           -5.24972979, -5.38796789, -5.42812278, -5.47003443, -5.47740917,
+           -5.67015921, -5.68214822])
 
-    Example with single values
-    
-    >>> L1 = 90 # 90dB
-    >>> maad.util.mean_dBSPL(L1,L1)
-        93.01029995663981
-        
-    Example with arrays
-    
-    >>> L1 = [90,80,70]
-    >>> maad.util.mean_dBSPL(L1,L1)
-        array([85.68201724, 85.68201724])
-    >>> maad.util.mean_dBSPL(L1,L1, axis=0)  
-        array([90., 80., 70.]) 
-        
     """    
     # force to be ndarray
-    L = np.asarray(argv)
+    P= np.asarray(P)
+    # convert power (energy) to amplitude
+    w = sqrt(P)
+    # convert amplitude to dB sPL
+    L = wav2dBSPL (w, gain, Vadc, sensitivity, dBref, pRef)
     
-    # Verify the adequation between axis number and number of dimensions of L
-    if axis >= L.ndim:
-        axis= L.ndim -1
-    
-    # dB SPL to energy as sum has to be done with energy
-    e = dBSPL2pressure(L)**2   
-    e_sum = e.mean(axis)
-    
-    # energy=>pressure to dB SPL
-    L_mean = pressure2dBSPL(sqrt(e_sum))
-    
-    return (L_mean)
-
+    return L
 
 ################################## Leq ########################################
 # wav2Leq
@@ -561,13 +424,12 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     Leq : float
         Equivalent Continuous Sound pressure level (Leq [dB SPL])
        
- 
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
     >>> Leq = maad.util.wav2Leq (w, fs, gain=42)  
-    >>> maad.util.mean_dBSPL(Leq)
-        array([54.57548258])
+    >>> maad.util.mean_dB(Leq)
+        54.575482584140005
     """    
     # force to be ndarray
     wave = np.asarray(wave)
@@ -588,7 +450,7 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     volt_RMS[volt_RMS==0] = _MIN_
     # RMS to Leq (Equivalent Continuous Sound level)
     Leq = 20*log10(volt_RMS) - sensitivity + dBref - gain
-    return(Leq)
+    return Leq
 
 #####  pressure2Leq
 def pressure2Leq (p, f, dt=1, pRef = 20e-6): 
@@ -606,21 +468,21 @@ def pressure2Leq (p, f, dt=1, pRef = 20e-6):
     dt : float, optional, default is 1 (second)
         Integration step to compute the Leq (Equivalent Continuous Sound level)
 
-    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
+    pRef : Sound pressure reference in the medium (air:20e-6, water:1e-6 Pa)
            
     Returns
     -------
     Leq : float
         Equivalent Continuous Sound pressure level (Leq [dB SPL])
         
-  
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
     >>> p = maad.util.wav2pressure(wave=w, gain=42)
     >>> Leq = maad.util.pressure2Leq (p, f=fs)
-    >>> maad.util.mean_dBSPL(Leq)
-        array([54.57548258])
+    >>> maad.util.mean_dB(Leq)
+        54.55488267086038
+        
     """     
     # be sure they are ndarray
     p = np.asarray(p)
@@ -639,20 +501,33 @@ def pressure2Leq (p, f, dt=1, pRef = 20e-6):
     p_RMS[p_RMS==0] = _MIN_
     # RMS to Leq (Equivalent Continuous Sound level)
     Leq = 20*log10(p_RMS/pRef)
-    return (Leq)
+    return Leq
 
 #####  PSD2Leq
-def PSD2Leq (P, pRef = 20e-6):
+def PSD2Leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     """
-    convert Power spectral density (PSD in [Pa²]) into 
+    convert Power spectral density (PSD, amplitude²) into 
     Equivalent Continuous Sound pressure level (Leq [dB SPL])
     
     Parameters
     ----------
-    P : ndarray-like
-        ndarray-like containing the Power spectral density (PSD) already in Pa²
+    P : ndarray-like (1d)
+        ndarray-like containing the Power spectral density (PSD=amplitude²) 
+        
+    gain : integer
+        Total gain applied to the sound (preamplifer + amplifier)
+        
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC  
 
-    pRef : Sound pressure reference in the medium (air : 20e-6, water : ?)
+    sensitivity : float, optional, default is -35 (dB/V)
+        Sensitivity of the microphone
+    
+    dBref : integer, optional, default is 94 (dBSPL)
+        Pressure sound level used for the calibration of the microphone 
+        (usually 94dB, sometimes 114dB)
+
+    pRef : Sound pressure reference in the medium (air:20e-6, water:1e-6 Pa)
            
     Returns
     -------
@@ -662,14 +537,16 @@ def PSD2Leq (P, pRef = 20e-6):
     Examples
     --------
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure(w, gain=42)
-    >>> from numpy import fft, abs
-    >>> S = abs(fft.fft(p)/len(p))
-    >>> maad.util.PSD2Leq(P=S**2)
-        54.53489077674256
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs)
+    >>> S_power_mean = maad.sound.avg_power_spectro(Sxx_power) 
+    >>> maad.util.PSD2Leq(S_power_mean, gain=42)
+        53.55842473963429
     """  
     # be sure they are ndarray
     P = np.asarray(P)
+    
+    # convert P (amplitude²) to pressure²
+    P = wav2pressure (sqrt(P), gain, Vadc, sensitivity, dBref)**2
     
     # if P ==0 set to MIN
     P[P==0] = _MIN_
@@ -677,7 +554,7 @@ def PSD2Leq (P, pRef = 20e-6):
     # Energy (pressure^2) to Leq (=> Leq (Equivalent Continuous Sound level) 
     # if the sum is performed on the whole PSD)
     Leq = 10*log10(sum(P)/pRef**2)
-    return(Leq)
+    return Leq
    
 ################################ TEST ########################################
     
@@ -720,41 +597,41 @@ if __name__ == "__main__":
     # wav -> pressure -> Leq
     p = wav2pressure(wav, gain=G, Vadc=VADC, sensitivity=S, dBref=94)
     Leq = pressure2Leq(p, f=fs, dt=deltaT)
-    print('Leq from volt', maad.util.linear2dB(mean(maad.util.dB2linear(Leq, mode="power")),mode="power"))
+    print('Leq from volt', maad.util.mean_dB(Leq))
     
     # wav -> Leq
     wav_Leq2 = wav2Leq(wav, f=fs, gain=G, Vadc=VADC, dt=deltaT, sensitivity=S, dBref = 94) 
-    print('Leq from wav', maad.util.linear2dB(mean(maad.util.dB2linear(wav_Leq2, mode="power")),mode="power"))
+    print('Leq from wav', maad.util.mean_dB(wav_Leq2))
         
     # Power Density Spectrum : PSD
     # with p
     from numpy import fft
     P = abs(fft.fft(p)/len(p))**2
     # average Leq from PSD
-    P_Leq3  = PSD2Leq(P)
+    P_Leq3  = PSD2Leq(P, G)
     print('Leq from PSD',P_Leq3)
        
     ########################################################################
-    # Leq from spectrogram PSDxx : 
+    # Leq from spectrogram Sxx_power : 
     print('-------------------------------------------------------------------------')
-    print('Leq calculation from Spectrogram (time-frequency representation of a sound ')
+    print('Leq calculation from Spectrogram (time-frequency representation of a sound)')
     
-    # Power Density Spectrogram : PSDxx
+    # Power Density Spectrogram : Sxx_power
     # with p
-    Pxx,tn,fn,_ = maad.sound.spectrogram (p, fs=fs, nperseg=NFFT, mode='psd')  
-    # Pxx to P
-    P = mean(Pxx,axis=1)
-    # average Leq from P
-    P_Leq5  = PSD2Leq(P)
-    print('Leq from Pxx spectrogram',P_Leq5)
+    Sxx_power,tn,fn,_ = maad.sound.spectrogram (p, fs=fs, nperseg=NFFT, mode='psd')  
+    # Sxx_power to S_power
+    S_power = mean(Sxx_power,axis=1)
+    # average Leq from S_power
+    P_Leq5  = PSD2Leq(S_power, G)
+    print('Leq from Sxx_power spectrogram',P_Leq5)
 
-    # total energy from PSD_mean
-    energy  =sum(P)
+    # total energy from S_power
+    energy  = sum(S_power)
     P_Leq6  = pressure2dBSPL(sqrt(energy))
-    print('Leq from Pxx energy',P_Leq6)
+    print('Leq from S_power energy',P_Leq6)
     
     print('')
-    print('> The difference with previous Leq calculation is due to the average of the PSDxx along the time axis which reduces the noise contribution into the total energy.')
+    print('> The difference with previous Leq calculation is due to the average of the Sxx_power along the time axis which reduces the noise contribution into the total energy.')
     print('> By increasing the NFFT length (i.e. NFFT=4096), Leq value converges towards previous Leq values') 
  
 

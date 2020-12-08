@@ -15,14 +15,16 @@ functions for processing ROIS
 # ============================================================================= 
 # Import external modules 
 import matplotlib.patches as mpatches 
- 
+import matplotlib.pyplot as plt 
+
 import numpy as np  
  
 from scipy import signal 
 from scipy.ndimage import morphology 
 from scipy.stats import iqr 
  
-from skimage import measure, filters 
+from skimage import measure, filters
+from skimage.morphology import reconstruction
 from skimage.io import imread 
  
 import pandas as pd 
@@ -32,7 +34,8 @@ import sys
 _MIN_ = sys.float_info.min 
  
 # Import internal modules 
-from maad.util import plot1D, plot2D, linear_scale, rand_cmap, nearest_idx 
+from maad.util import (plot1D, plot2D, linear_scale, rand_cmap, running_mean, 
+                       get_unimode, mean_dB, add_dB)
  
 # 
 #====== TO DO 
@@ -155,9 +158,9 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','loaded spectrogram') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1)  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        vmin=kwargs.pop('vmin',np.min(im))  
+        vmax=kwargs.pop('vmax',np.max(im))  
          
         _, fig = plot2D (im, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -168,7 +171,7 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
 #**************************************************************************** 
 #*************               noise_subtraction                    *********** 
 #**************************************************************************** 
-def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,  
+def remove_background(Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,  
                       llambda=1, display = False, savefig=None, **kwargs): 
     """ 
     Remove the background noise using spectral subtraction 
@@ -179,13 +182,8 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
  
     Parameters 
     ---------- 
-    im : 2d ndarray of scalars 
+    Sxx : 2d ndarray of scalars 
         Spectrogram  
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
          
     gauss_win=50 : int, optional, default: 50 
         Number of points in the gaussian window  
@@ -259,6 +257,10 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     ------- 
     Sxx_out : 2d ndarray of scalar 
         Spectrogram after denoising   
+    noise_profile : 1d darray of scalar
+        noise_profile
+    BGNxx : 2d ndarray of scalar 
+        Noise map
  
     References 
     ---------- 
@@ -274,36 +276,14 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     print(72 * '_' ) 
     print('Determine the profile of the stochastic background noise...') 
      
-    Nf, Nw = im.shape 
-           
-    # noise spectrum extraction 
-    absS=np.abs(im)**2; 
-    mean_profile=np.mean(absS,1) # average spectrum (assumed to be ergodic) 
-    if display == True: 
-        if ext is not None : 
-            #fn = np.arange(ext[2], ext[3]+(ext[3]-ext[2])/(Nf-1), (ext[3]-ext[2])/(Nf-1)) 
-            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
-            xlabel = 'frequency [Hz]' 
-        else: 
-            fn = np.arange(Nf) 
-            xlabel = 'pseudofrequency [points]' 
-        ax1,_ = plot1D(fn, mean_profile, now=False, figtitle = 'Noise profile', 
-                       xlabel = xlabel, ylabel = 'Amplitude [AU]', 
-                       linecolor = 'r')   
+    Nf, Nw = Sxx.shape 
+
+    # average spectrum (assumed to be ergodic) 
+    mean_profile=np.mean(Sxx,1) 
      
     # White Top Hat (to remove non uniform background) = i - opening(i) 
     selem = signal.gaussian(gauss_win, gauss_std) 
     noise_profile = morphology.grey_opening(mean_profile, structure=selem) 
-    if display == True:  
-        if ext is not None : 
-            #fn = np.arange(ext[2], ext[3]+(ext[3]-ext[2])/(Nf-1), (ext[3]-ext[2])/(Nf-1)) 
-            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
-            xlabel = 'frequency [Hz]' 
-        else: 
-            fn = np.arange(Nf) 
-            xlabel = 'pseudofrequency [points]' 
-        plot1D(fn, noise_profile, ax =ax1, now=False,figtitle = 'Noise profile',  
-               xlabel = xlabel, ylabel = 'Amplitude [AU]', linecolor = 'k')   
  
     # Remove the artefact at the end of the spectrum (2 highest frequencies) 
     noise_profile[-2:] = mean_profile [-2:] 
@@ -314,7 +294,7 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     noise_spectro=noise_spectro.transpose() 
          
     # snr estimate a posteriori 
-    SNR_est=(absS/noise_spectro) -1   
+    SNR_est=(Sxx/noise_spectro) -1   
     SNR_est=SNR_est*(SNR_est>0) # keep only positive values 
      
     # compute attenuation map 
@@ -322,26 +302,163 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     an_lk=(1-llambda*((1./(SNR_est+1))**beta1))**beta2 
     an_lk=an_lk*(an_lk>0) # keep only positive values 
      
-     
     print('Remove the stochastic background noise...') 
      
     # Apply the attenuation map to the STFT coefficients 
-    im_out=an_lk*im 
+    Sxx_out=an_lk*Sxx 
+    
+    # noise map BGNxx
+    BGNxx = Sxx - Sxx_out
      
     # if nan in the image, convert nan into 0 
-    np.nan_to_num(im_out,0) 
-                 
+    np.nan_to_num(Sxx_out,0) 
+    
+    # Set negative value to 0
+    Sxx_out[Sxx_out<0] = 0 
+    
+    print(np.max(Sxx_out))
+    
     # Display 
     if display :  
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Spectrogram without stationnary noise') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1)  
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
+        ext=kwargs.pop('ext',None)
+            
+        if ext is not None : 
+            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        else: 
+            fn = np.arange(Nf) 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13))  
+        
+        _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                         cmap=cmap, **kwargs) 
+        
+        fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
+        fig2.set_size_inches((5,4))
+        ax1,_ = plot1D(fn, mean_profile, ax=ax1, legend='Original profile',
+                       linecolor = 'b',
+                       xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
+        ax1,_ = plot1D(fn, np.mean(BGNxx, axis=1), ax =ax1, legend='Noise profile',
+                       linecolor = 'r',
+                       xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
+        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, linecolor = 'k', 
+                       legend='Denoized profile', 
+                       xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
+        fig2.tight_layout()  
+        
+        # SAVE FIGURE 
+        if savefig is not None :  
+            dpi   =kwargs.pop('dpi',96)             
+            dpi=kwargs.pop('dpi', 96)  
+            bbox_inches=kwargs.pop('bbox_inches', 'tight')  
+            format=kwargs.pop('format','png') 
+            savefilename=kwargs.pop('savefilename', '_spectro_after_noise_subtraction')   
+            filename = savefig+savefilename+'.'+format 
+            print('\n''save figure : %s' %filename) 
+            fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches, 
+                        format=format, **kwargs)  
+             
+    return Sxx_out, noise_profile, BGNxx
+ 
+def median_equalizer (Sxx, display=False, savefig=None, **kwargs): 
+    """ 
+    Median equalizer : remove background noise in a spectrogram 
+     
+    Parameters 
+    ---------- 
+    Sxx : 2D numpy array  
+        Original spectrogram (or image) 
+        
+    display : boolean, optional, default is False 
+        Display the signal if True 
          
-        _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title,  
+    savefig : string, optional, default is None 
+        Root filename (with full path) is required to save the figures. Postfix 
+        is added to the root filename. 
+         
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+             
+        - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
+            Postfix of the figure filename 
+         
+        - figsize : tuple of integers, optional, default: (4,10) 
+            width, height in inches.   
+         
+        - title : string, optional, default : 'Spectrogram' 
+            title of the figure 
+         
+        - xlabel : string, optional, default : 'Time [s]' 
+            label of the horizontal axis 
+         
+        - ylabel : string, optional, default : 'Amplitude [AU]' 
+            label of the vertical axis 
+         
+        - cmap : string or Colormap object, optional, default is 'gray' 
+            See https://matplotlib.org/examples/color/colormaps_reference.html 
+            in order to get all the  existing colormaps 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
+            'viridis'... 
+         
+        - vmin, vmax : scalar, optional, default: None 
+            `vmin` and `vmax` are used in conjunction with norm to normalize 
+            luminance data.  Note if you pass a `norm` instance, your 
+            settings for `vmin` and `vmax` will be ignored. 
+         
+        - ext : scalars (left, right, bottom, top), optional, default: None 
+            The location, in data-coordinates, of the lower-left and 
+            upper-right corners. If `None`, the image is positioned such that 
+            the pixel centers fall on zero-based (row, column) indices. 
+         
+        - dpi : integer, optional, default is 96 
+            Dot per inch.  
+            For printed version, choose high dpi (i.e. dpi=300) => slow 
+            For screen version, choose low dpi (i.e. dpi=96) => fast 
+         
+        - format : string, optional, default is 'png' 
+            Format to save the figure 
+             
+        ... and more, see matplotlib     
+                       
+    Returns 
+    ------- 
+    Sxx_out : 2d ndarray of scalar 
+        Spectrogram after denoising   
+     
+    References 
+    ---------- 
+    .. [1] This function has been proposed first by Carol BEDOYA <carol.bedoya@pg.canterbury.ac.nz> 
+       Adapted by S. Haupert Oct 9, 2018 for Python 
+    """  
+     
+    Sxx_out = (((Sxx.transpose()-np.median(Sxx.transpose(),axis=0)))/(np.median(Sxx.transpose())-np.min(Sxx.transpose(),axis=0))).transpose() 
+    
+    Sxx_out[Sxx_out<=0] = 0
+    Sxx_out = linear_scale(Sxx_out, axis=None)
+    
+    # Display 
+    if display :  
+        ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
+        xlabel =kwargs.pop('xlabel','Time [sec]')  
+        title  =kwargs.pop('title','Spectrogram without stationnary noise') 
+        cmap   =kwargs.pop('cmap','gray')  
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
+        ext=kwargs.pop('ext',None) 
+        
+        if ext is not None :
+            figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        else:
+            figsize=kwargs.pop('figsize',(4, 13))  
+         
+        _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -355,38 +472,303 @@ def remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
             print('\n''save figure : %s' %filename) 
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches, 
                         format=format, **kwargs)  
-             
-    return im_out   
  
-def median_equalizer (x): 
+    return Sxx_out 
+
+def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs): 
     """ 
     Median equalizer : remove background noise in a spectrogram 
      
     Parameters 
     ---------- 
-    x : 2D numpy array  
+    Sxx : 2D numpy array  
         Original spectrogram (or image) 
+        
+    q : float
+        Quantile which must be between  0 and 1 inclusive. The closest to one, 
+        the finest details are kept
      
+    display : boolean, optional, default is False 
+        Display the signal if True 
+         
+    savefig : string, optional, default is None 
+        Root filename (with full path) is required to save the figures. Postfix 
+        is added to the root filename. 
+         
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+             
+        - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
+            Postfix of the figure filename 
+         
+        - figsize : tuple of integers, optional, default: (4,10) 
+            width, height in inches.   
+         
+        - title : string, optional, default : 'Spectrogram' 
+            title of the figure 
+         
+        - xlabel : string, optional, default : 'Time [s]' 
+            label of the horizontal axis 
+         
+        - ylabel : string, optional, default : 'Amplitude [AU]' 
+            label of the vertical axis 
+         
+        - cmap : string or Colormap object, optional, default is 'gray' 
+            See https://matplotlib.org/examples/color/colormaps_reference.html 
+            in order to get all the  existing colormaps 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
+            'viridis'... 
+         
+        - vmin, vmax : scalar, optional, default: None 
+            `vmin` and `vmax` are used in conjunction with norm to normalize 
+            luminance data.  Note if you pass a `norm` instance, your 
+            settings for `vmin` and `vmax` will be ignored. 
+         
+        - ext : scalars (left, right, bottom, top), optional, default: None 
+            The location, in data-coordinates, of the lower-left and 
+            upper-right corners. If `None`, the image is positioned such that 
+            the pixel centers fall on zero-based (row, column) indices. 
+         
+        - dpi : integer, optional, default is 96 
+            Dot per inch.  
+            For printed version, choose high dpi (i.e. dpi=300) => slow 
+            For screen version, choose low dpi (i.e. dpi=96) => fast 
+         
+        - format : string, optional, default is 'png' 
+            Format to save the figure 
+             
+        ... and more, see matplotlib     
+                       
     Returns 
     ------- 
-    y : 1D numpy array  
-        Ouput spectrogram (or image) without background noise 
-     
-    References 
-    ---------- 
-    .. [1] This function has been proposed first by Carol BEDOYA <carol.bedoya@pg.canterbury.ac.nz> 
-       Adapted by S. Haupert Oct 9, 2018 for Python 
+    Sxx_out : 2d ndarray of scalar 
+        Spectrogram after denoising   
+    noise_profile : 1d ndarray of scalar
+        Noise profile
+    BGNxx : 2d ndarray of scalar 
+        Noise map
+    
     """  
+    
+    BGNxx = reconstruction(seed=Sxx-(np.quantile(Sxx, q)), mask=Sxx, method='dilation')
+    Sxx_out = Sxx - BGNxx 
+    
+    # noise profile along time axis
+    noise_profile = np.mean(BGNxx,1)
+    
+    # Set negative value to 0
+    Sxx_out[Sxx_out<0] = 0 
+    
+    # Display 
+    if display :  
+        ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
+        xlabel =kwargs.pop('xlabel','Time [sec]')  
+        title  =kwargs.pop('title','Spectrogram without stationnary noise') 
+        cmap   =kwargs.pop('cmap','gray')  
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
+        ext=kwargs.pop('ext',None) 
+        
+        Nf, Nw = Sxx.shape 
+
+        if ext is not None : 
+            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        else: 
+            fn = np.arange(Nf) 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13))  
+        
+        _, fig = plot2D (BGNxx, extent=ext, figsize=figsize,title='Noise map',  
+                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                         cmap=cmap, **kwargs) 
+        
+        _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                         cmap=cmap, **kwargs) 
+        
+        fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
+        fig2.set_size_inches((5,4))
+        ax1,_ = plot1D(fn, np.mean(Sxx,axis=1), ax=ax1, legend='Original profile', 
+                       linecolor = 'b',
+                       xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
+        ax1,_ = plot1D(fn, np.mean(BGNxx,1), ax =ax1, legend='Noise profile', 
+                       linecolor = 'r',
+                       xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
+        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, linecolor = 'k', 
+                       legend='Denoized profile', 
+                       xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
+        fig2.tight_layout()     
+        
+        # SAVE FIGURE 
+        if savefig is not None :  
+            dpi   =kwargs.pop('dpi',96)             
+            dpi=kwargs.pop('dpi', 96)  
+            bbox_inches=kwargs.pop('bbox_inches', 'tight')  
+            format=kwargs.pop('format','png') 
+            savefilename=kwargs.pop('savefilename', '_spectro_after_noise_subtraction')   
+            filename = savefig+savefilename+'.'+format 
+            print('\n''save figure : %s' %filename) 
+            fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches, 
+                        format=format, **kwargs)  
+ 
+    return Sxx_out, noise_profile, BGNxx
+ 
+    
+def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100, 
+                                  display=False, savefig=None, **kwargs): 
+    """ 
+    Get the horizontal noisy profile along the defined axis 
+    
+    Parameters 
+    ---------- 
+    Sxx : 2D numpy array  
+        Original spectrogram (or image) 
+    
+    mode : str, optional, default is 'median'
+        Select the mode to remove the noise
+        Possible values for mode are :
+        - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
+        - 'median' : subtract the median value
+        - 'mean' : subtract the mean value (DC)
+    
+    axis : integer, default is 1
+        if matrix, estimate the mode for each row (axis=0) or each column (axis=1)
+        
+    N : int (only for mode = "ale")
+        length of window to compute the running mean of the histogram
+        
+    N_bins : int (only for mode = "ale")
+        number of bins to compute the histogram 
      
-    y = (((x.transpose()-np.median(x.transpose(),axis=0)))/(np.median(x.transpose())-np.min(x.transpose(),axis=0))).transpose() 
- 
-    return y 
- 
- 
+    display : boolean, optional, default is False 
+        Display the signal if True 
+         
+    savefig : string, optional, default is None 
+        Root filename (with full path) is required to save the figures. Postfix 
+        is added to the root filename. 
+         
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+             
+        - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
+            Postfix of the figure filename 
+         
+        - figsize : tuple of integers, optional, default: (4,10) 
+            width, height in inches.   
+         
+        - title : string, optional, default : 'Spectrogram' 
+            title of the figure 
+         
+        - xlabel : string, optional, default : 'Time [s]' 
+            label of the horizontal axis 
+         
+        - ylabel : string, optional, default : 'Amplitude [AU]' 
+            label of the vertical axis 
+         
+        - cmap : string or Colormap object, optional, default is 'gray' 
+            See https://matplotlib.org/examples/color/colormaps_reference.html 
+            in order to get all the  existing colormaps 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
+            'viridis'... 
+         
+        - vmin, vmax : scalar, optional, default: None 
+            `vmin` and `vmax` are used in conjunction with norm to normalize 
+            luminance data.  Note if you pass a `norm` instance, your 
+            settings for `vmin` and `vmax` will be ignored. 
+         
+        - ext : scalars (left, right, bottom, top), optional, default: None 
+            The location, in data-coordinates, of the lower-left and 
+            upper-right corners. If `None`, the image is positioned such that 
+            the pixel centers fall on zero-based (row, column) indices. 
+         
+        - dpi : integer, optional, default is 96 
+            Dot per inch.  
+            For printed version, choose high dpi (i.e. dpi=300) => slow 
+            For screen version, choose low dpi (i.e. dpi=96) => fast 
+         
+        - format : string, optional, default is 'png' 
+            Format to save the figure 
+             
+        ... and more, see matplotlib     
+                       
+    Returns 
+    ------- 
+    Sxx_out : 2d ndarray of scalar 
+        Spectrogram after denoising   
+    noise_profile : 1d ndarray of scalar
+        Noise profile
+    """
+       
+    # get the noise profile
+    noise_profile = get_unimode (Sxx, mode, axis, N, N_bins)
+    # smooth the profile by removing spurious thin peaks (less than 5 pixels wide)
+    noise_profile = running_mean(noise_profile,N=5)
+    # Remove horizontal noisy peaks profile (BGN_VerticalNoise is an estimation) and negative value to zero
+    if axis == 1 :
+        Sxx_out = Sxx - noise_profile[..., np.newaxis]
+    elif axis == 0 :
+        Sxx_out = Sxx - noise_profile[np.newaxis, ...]
+    
+    # Set negative value to 0
+    Sxx_out[Sxx_out<0] = 0 
+    
+    # Display 
+    if display :  
+        
+        ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
+        xlabel =kwargs.pop('xlabel','Time [sec]')  
+        title  =kwargs.pop('title','Spectrogram without stationnary noise') 
+        cmap   =kwargs.pop('cmap','gray')  
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out))  
+        ext=kwargs.pop('ext',None) 
+        
+        Nf, Nw = Sxx.shape 
+        
+        if ext is not None : 
+            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        else: 
+            fn = np.arange(Nf) 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13))  
+            
+        _, fig1 = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                         cmap=cmap, **kwargs) 
+        
+        fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
+        fig2.set_size_inches((5,4))
+        ax1,_ = plot1D(fn, mean_dB(Sxx,axis=axis), ax=ax1, legend='Original profile',
+                       linecolor = 'b',
+                       xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
+        ax1,_ = plot1D(fn, noise_profile, ax =ax1, legend='Noise profile', 
+                       linecolor = 'r',
+                       xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
+        ax2,_ = plot1D(fn, mean_dB(Sxx_out,axis=axis), ax=ax2, linecolor = 'k', 
+                       legend='Denoized profile', 
+                       xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
+        fig2.tight_layout()
+        
+        # SAVE FIGURE 
+        if savefig is not None :  
+            dpi   =kwargs.pop('dpi',96)             
+            dpi=kwargs.pop('dpi', 96)  
+            bbox_inches=kwargs.pop('bbox_inches', 'tight')  
+            format=kwargs.pop('format','png') 
+            savefilename=kwargs.pop('savefilename', '_spectro_after_noise_subtraction')   
+            filename = savefig+savefilename+'.'+format 
+            print('\n''save figure : %s' %filename) 
+            fig1.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches, 
+                        format=format, **kwargs) 
+            
+    return Sxx_out, noise_profile 
+
 """**************************************************************************** 
 *************                      smooth                            *********** 
 ****************************************************************************""" 
-def smooth (im, ext, std=1, display = False, savefig=None, **kwargs): 
+def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwargs): 
     """ 
     Smooth (i.e. blurr) the image with a gaussian filter 
      
@@ -404,7 +786,10 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
         Standard deviation of the gaussian kernel used to smooth the image 
         The larger is the number, the smoother will be the image and the longer 
         it takes. Standard values should fall between 0.5 to 3 
-         
+    
+    verbose : boolean, optional, default is False 
+        print messages
+    
     display : boolean, optional, default is False 
         Display the signal if True 
          
@@ -459,9 +844,10 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
     ------- 
     im_out: smothed or blurred image  
     """ 
-     
-    print(72 * '_') 
-    print('Smooth the image with a gaussian filter (std = %.1f)' %std) 
+    
+    if verbose:
+        print(72 * '_') 
+        print('Smooth the image with a gaussian filter (std = %.1f)' %std) 
      
     # use scikit image (faster than scipy) 
     im_out = filters.gaussian(im,std) 
@@ -472,7 +858,7 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Blurred spectrogram') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',np.percentile(im_out,1)) 
         vmax=kwargs.pop('vmax',np.percentile(im_out,99)) 
          
@@ -495,8 +881,8 @@ def smooth (im, ext, std=1, display = False, savefig=None, **kwargs):
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
  
-def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefig=None, 
-                     **kwargs): 
+def _double_threshold_rel (im, ext, bin_std=6, bin_per=0.5, 
+                           verbose=False, display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
     The values used for the thresholding depends on the values found in the  
@@ -512,10 +898,11 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
         upper-right corners. If `None`, the image is positioned such that 
         the pixel centers fall on zero-based (row, column) indices.   
  
-    bin_std : scalar, optional, default is 3 
+    bin_std : scalar, optional, default is 6 
         Set the first threshold. This threshold is not an absolute value but 
-        depends on values that are similar to mean and std value of the image.  
-        threshold1 = "mean + "std" * bin_std    
+        depends on values that are similar to 75th percentile (pseudo_mean) and 
+        a sort of std value of the image.  
+        threshold1 = "pseudo_mean" + "std" * bin_std    
         Value higher than threshold1 are set to 1, they are the seeds for  
         the second step. The others are set to 0.  
          
@@ -526,6 +913,9 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
         Value higher than threshold2 and connected (directly or not) to the  
         seeds are set to 1, the other remains 0 
  
+    verbose : boolean, optional, default is False
+        print messages
+    
     display : boolean, optional, default is False 
         Display the signal if True 
          
@@ -598,12 +988,13 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
     h_th = val1 + val2 
     # Low threshold limit 
     l_th = (h_th-h_th*bin_per) 
-     
-    print(72 * '_') 
-    print('Double thresholding with values relative to the image...') 
-    print ('**********************************************************') 
-    print ('  high threshold value %.2f | low threshold value %.2f' % (h_th, l_th)) 
-    print ('**********************************************************') 
+    
+    if verbose :
+        print(72 * '_') 
+        print('Double thresholding with values relative to the image...') 
+        print ('**********************************************************') 
+        print ('  high threshold value %.2f | low threshold value %.2f' % (h_th, l_th)) 
+        print ('**********************************************************') 
      
     # binarisation  
     im_t1 = im > h_th    # mask1 
@@ -631,7 +1022,7 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','binary image => MASK') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
          
@@ -644,7 +1035,8 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
             format=kwargs.pop('format','png') 
             filename=kwargs.pop('filename','_spectro_binary')              
             filename = savefig+filename+'.'+format 
-            print('\n''save figure : %s' %filename) 
+            if verbose :
+                print('\n''save figure : %s' %filename) 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
  
@@ -653,8 +1045,8 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savef
 #**************************************************************************** 
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
-def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None, 
-                     **kwargs): 
+def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, 
+                          verbose=False,display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
     The values used for the thresholding are independent of the values in the 
@@ -679,6 +1071,9 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
         Set the second threshold. Value higher than this value and connected 
         to the seeds or to other pixels connected to the seeds are set to 1,  
         the other remains 0 
+        
+    verbose : boolean, optional, default is False
+        print messages
  
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -759,6 +1154,14 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
      
     im_out = np.isin(conncomp_t2, rprops_label[ind])    # test if the indice is in the maxtrix of indices 
     im_out =im_out*1    #  boolean to 0,1 conversion 
+    
+    if verbose :
+        print(72 * '_') 
+        print('Double thresholding with  absolute values...') 
+        print ('**********************************************************') 
+        print ('  Number of rois %.2f | Rois cover %.2f%' % (len(rprops_label), 
+                                                             sum(im_out)/(im_out.shape[1]*im_out.shape[0])*100)) 
+        print ('**********************************************************') 
                  
     # Display 
     if display :  
@@ -766,7 +1169,7 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','binary image => MASK') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
          
@@ -779,7 +1182,8 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
             format=kwargs.pop('format','png') 
             filename=kwargs.pop('filename','_spectro_binary')              
             filename = savefig+filename+'.'+format 
-            print('\n''save figure : %s' %filename) 
+            if verbose :
+                print('\n''save figure : %s' %filename) 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
  
@@ -788,8 +1192,8 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
 """**************************************************************************** 
 *************                   create_mask wrapper                 *********** 
 ****************************************************************************""" 
-def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None, 
-                **kwargs): 
+def create_mask(im, ext, mode_bin = 'relative', 
+                verbose= False, display = False, savefig = None, **kwargs): 
     """ 
     Binarize an image based on a double threshold.  
      
@@ -806,6 +1210,9 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
     mode_bin : string in {'relative', 'absolute'}, optional, default is 'relative' 
         if 'relative', a relative double threshold is performed 
         if 'absolute', an double threshold with absolute value is performed 
+        
+    verbose : boolean, optional, default is False
+        print messages
          
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -836,22 +1243,24 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
     """ 
         
     if mode_bin == 'relative': 
-        bin_std=kwargs.pop('bin_std', 3)  
+        bin_std=kwargs.pop('bin_std', 6)  
         bin_per=kwargs.pop('bin_per', 0.5)  
-        im_bin = _double_threshold_rel(im, ext, bin_std, bin_per, display, savefig, **kwargs) 
+        im_bin = _double_threshold_rel(im, ext, bin_std, bin_per, 
+                                       verbose, display, savefig, **kwargs) 
          
     elif mode_bin == 'absolute': 
         bin_h=kwargs.pop('bin_h', 0.7)  
         bin_l=kwargs.pop('bin_l', 0.3)  
-        im_bin = _double_threshold_abs(im, ext, bin_h, bin_l, display, savefig, **kwargs)    
+        im_bin = _double_threshold_abs(im, ext, bin_h, bin_l,
+                                       verbose, display, savefig, **kwargs)    
      
     return im_bin  
  
 #**************************************************************************** 
 #*************                 select_rois                   *********** 
 #**************************************************************************** 
-def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,  
-                savefig = None, **kwargs): 
+def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
+                display=False, savefig = None, **kwargs): 
     """ 
     Select rois candidates based on area of rois. min and max boundaries. 
     The ouput image contains pixels with label as value. 
@@ -870,6 +1279,9 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,
         Define the minimum and the maximum area possible for an ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
         the image 
+        
+    verbose : boolean, optional, default is False
+        print messages
          
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -923,18 +1335,17 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,
  
     Returns 
     ------- 
-    im_label: 2d ndarray 
+    im_rois: 2d ndarray 
         image with labels as values 
              
-    rois_bbox : list of tuple (min_y,min_x,max_y,max_x) 
-        Contain the bounding box of each ROI 
-             
-    rois_label : list of tuple (labelID, labelname) 
-        Contain the label (LabelID=scalar,labelname=string) for each ROI 
-        LabelID is a number from 1 to the number of ROI. The pixel value  
-        of im_label correspond the labelID 
-        Labname is a string. As the selection is auto, label is 'unknown' 
-        by default. 
+    rois: pandas DataFrame 
+        Regions of interest with future descriptors will be computed. 
+        Array have column names: ``labelID``, ``label``, ``min_y``, ``min_x``,
+        ``max_y``, ``max_x``,
+        Use the function ``maad.util.format_features`` before using 
+        centroid_features to format of the ``rois`` DataFrame 
+        correctly.
+        
     """ 
  
     # test if max_roi and min_roi are defined 
@@ -945,12 +1356,13 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,
     if min_roi is None: 
         # the min ROI area is set to 1 pixel 
         min_roi = 1 
-         
-    print(72 * '_') 
-    print('Automatic ROIs selection in progress...') 
-    print ('**********************************************************') 
-    print ('  Min ROI area %d pix² | Max ROI area %d pix²' % (min_roi, max_roi)) 
-    print ('**********************************************************') 
+    
+    if verbose :
+        print(72 * '_') 
+        print('Automatic ROIs selection in progress...') 
+        print ('**********************************************************') 
+        print ('  Min ROI area %d pix² | Max ROI area %d pix²' % (min_roi, max_roi)) 
+        print ('**********************************************************') 
  
     labels = measure.label(im_bin)    #Find connected components in binary image 
     rprops = measure.regionprops(labels) 
@@ -972,24 +1384,33 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, display=False,
      
     # create a list with labelID and labelName (None in this case) 
     rois_label = list(zip(rois_label,['unknown']*len(rois_label))) 
+    
+    # test if there is a roi
+    if len(rois_label)>0 :
+        # create a dataframe rois containing the coordonates and the label 
+        rois = np.concatenate((np.asarray(rois_label), np.asarray(rois_bbox)), axis=1) 
+        rois = pd.DataFrame(rois, columns = ['labelID', 'label', 'min_y','min_x','max_y', 'max_x']) 
+        # force type to integer 
+        rois = rois.astype({'label': str,'min_y':int,'min_x':int,'max_y':int, 'max_x':int}) 
+        # compensate half-open interval of bbox from skimage 
+        rois.max_y -= 1 
+        rois.max_x -= 1 
+        
+    else :
+        rois = []    
+        rois = pd.DataFrame(rois, columns = ['labelID', 'label', 'min_y','min_x','max_y', 'max_x']) 
+        rois = rois.astype({'label': str,'min_y':int,'min_x':int,'max_y':int, 'max_x':int}) 
      
-    # create a dataframe rois containing the coordonates and the label 
-    rois = np.concatenate((np.asarray(rois_label), np.asarray(rois_bbox)), axis=1) 
-    rois = pd.DataFrame(rois, columns = ['labelID', 'label', 'min_y','min_x','max_y', 'max_x']) 
-    # drop labelID 
-#    rois = rois.drop(columns=['labelID']) 
-    # force type to integer 
-    rois = rois.astype({'label': str,'min_y':int,'min_x':int,'max_y':int, 'max_x':int}) 
-    # compensate half-open interval of bbox from skimage 
-    rois.max_y -= 1 
-    rois.max_x -= 1 
- 
     # Display 
     if display :  
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Selected ROIs')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+         
+        if ext is not None :
+            figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        else:
+            figsize=kwargs.pop('figsize',(4, 13))  
          
         randcmap = rand_cmap(len(rois_label)) 
         cmap   =kwargs.pop('cmap',randcmap)  
@@ -1088,7 +1509,7 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
     xlabel =kwargs.pop('xlabel','Time [sec]')  
     title  =kwargs.pop('title','ROIs Overlay') 
     cmap   =kwargs.pop('cmap','gray')  
-    figsize=kwargs.pop('figsize',(4, 13))  
+    figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
     vmin=kwargs.pop('vmin',0)  
     vmax=kwargs.pop('vmax',1)  
     ax =kwargs.pop('ax',None)  
@@ -1201,145 +1622,3 @@ def rois_to_imblobs(im_blobs, rois):
  
  
  
-#"""**************************************************************************** 
-#*************                   find_rois_wrapper                   *********** 
-#****************************************************************************""" 
-#def find_rois_wrapper(im, ext, display=False, savefig=None, **kwargs): 
-#    """ 
-#    Wrapper function to find and select ROIs in a spectrogram (or image) 
-#     
-#    Parameters 
-#    ---------- 
-#    im : 2d ndarray of scalars 
-#        Spectrogram (or image)  
-#         
-#    ext : list of scalars [left, right, bottom, top], optional, default: None 
-#        The location, in data-coordinates, of the lower-left and 
-#        upper-right corners. If `None`, the image is positioned such that 
-#        the pixel centers fall on zero-based (row, column) indices.   
-#             
-#    display : boolean, optional, default is False 
-#        Display the signals and the spectrograms if True 
-#         
-#    savefig : string, optional, default is None 
-#        Root filename (with full path) is required to save the figures. Postfix 
-#        is added to the root filename. 
-#         
-#    \*\*kwargs, optional. This parameter is used by the maad function as well 
-#        as the plt.plot and savefig functions. 
-#        All the input arguments required or optional in the signature functions 
-#        can be passed. 
-#         
-#        Specific parameters 
-#         
-#        - std_pre : scalar 
-#            Standard deviation used for the first call of the smooth()  
-#            function. It defines the std of the gaussian kernel 
-#                  
-#        - std_post : scalar 
-#            Standard deviation used for the Second call of the smooth()  
-#            function. It defines the std of the gaussian kernel 
-#                
-#        See the signature of each maad function to know the other parameters  
-#        that can be passed as kwargs : 
-#           
-#        - remove_background(im, ext, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,llambda=1, display = False, savefig=None,  \*\*kwargs) 
-#             
-#        - smooth (im, ext, std=1, display = False, savefig=None, \*\*kwargs) 
-#             
-#        - create_mask(im, ext, mode_bin ='relative', display=False, savefig=None,\*\*kwargs) 
-#             
-#        - select_rois(im_bin,ext,mode_roi='auto',display=False,savefig=None,\*\*kwargs) 
-#             
-#        - overlay_rois (im_ref, ext, rois_bbox, rois_label=None, savefig=None,\*\*kwargs) 
-#             
-#        ... and more, see matplotlib   
-#         
-# 
-#    Returns 
-#    ------- 
-#    im_rois: 2d ndarray 
-#        image with labels as values 
-#             
-#    rois_bbox : list of tuple (min_y,min_x,max_y,max_x) 
-#        Contains the bounding box of each ROI 
-#         
-#    rois_label : list of tuple (labelID, labelname) 
-#        Contains the label (LabelID=scalar,labelname=string) for each ROI 
-#        LabelID is a number from 1 to the number of ROI. The pixel value  
-#        of im_label correspond the labelID 
-#        Labname is a string. As the selection is auto, label is 'unknown' 
-#        by default. 
-#         
-#    Examples 
-#    -------- 
-#    >>> find_rois_wrapper(im_ref, ext, display=True, std_pre = 2, std_post=1,  
-#    >>>                   llambda=1.1, gauss_win = round(1000/df),  
-#    >>>                   mode_bin='relative', bin_std=5, bin_per=0.5, 
-#    >>>                   mode_roi='auto')     
-#    """        
-#     
-#     
-#    # Frequency and time resolution 
-#    df = (ext[3]-ext[2])/(im.shape[0]-1) 
-#    dt = (ext[1]-ext[0])/(im.shape[1]-1) 
-#    
-#    # keep a copy of the reference image 
-#    im_ref=im 
-#     
-#    gauss_win=kwargs.pop('gauss_win',round(1000/df)) 
-#    gauss_std=kwargs.pop('gauss_std',round(500/df)) 
-#    beta1=kwargs.pop('beta1', 0.8) 
-#    beta2=kwargs.pop('beta2', 1) 
-#    llambda=kwargs.pop('llambda', 1)   
-#     
-#    std_pre=kwargs.pop('std_pre', 2)  
-#    std_post=kwargs.pop('std_post', 1)  
-#        
-#    mode_bin=kwargs.pop('mode_bin', 'relative')  
-#    mode_roi=kwargs.pop('mode_roi', 'auto')  
-#         
-#    min_roi=kwargs.pop('min_roi', None) 
-#    if min_roi is None: 
-#        min_f = ceil(100/df) # 100Hz  
-#        min_t = ceil(0.1/dt) # 100ms  
-#        min_roi=np.min(min_f*min_t)  
-#         
-#    max_roi=kwargs.pop('max_roi', None)  
-#    if max_roi is None:    
-#        # 1000Hz or vertical size of the image 
-#        max_f = np.asarray([round(1000/df), im.shape[0]])  
-#        # horizontal size of the image or 1s 
-#        max_t = np.asarray([im.shape[1], round(1/dt)])      
-#        max_roi =  np.max(max_f*max_t) 
-#     
-#    kwargs['min_roi']=min_roi  
-#    kwargs['max_roi']=max_roi 
-#     
-#    # smooth 
-#    if std_pre>0 : 
-#       im = smooth(im, ext, std=std_pre, display=display,  
-#                              savefig=savefig,**kwargs) 
-# 
-#    # Noise subtraction 
-#    im = remove_background(im, ext, gauss_win=gauss_win,  
-#                                    gauss_std=gauss_std, beta1=beta1,  
-#                                    beta2=beta2, llambda=llambda,  
-#                                    display= display, savefig=savefig, **kwargs) 
-#     
-#    # smooth 
-#    if std_post>0: 
-#        im = smooth(im, ext, std=std_post, display=display, 
-#                            savefig=savefig,**kwargs) 
-#     
-#    # Binarization 
-#    im = create_mask(im, ext, mode=mode_bin, display=display, savefig=savefig, **kwargs) 
-#     
-#    # Rois extraction 
-#    im_rois, rois_bbox, rois_label = select_rois(im,ext,mode=mode_roi, 
-#                                                  display=display,  
-#                                                  savefig=savefig, **kwargs) 
-#     
-#    if display: overlay_rois(im_ref, ext, rois_bbox, savefig=savefig, **kwargs) 
-# 
-#    return im_rois, rois_bbox, rois_label 
