@@ -253,7 +253,6 @@ def plot2D(im,ax=None,**kwargs):
     """ 
    
     # matplotlib parameters
-    figsize=kwargs.pop('figsize', (4, 13))
     title=kwargs.pop('title', 'Spectrogram')
     ylabel=kwargs.pop('ylabel', 'Frequency [Hz]')
     xlabel=kwargs.pop('xlabel', 'Time [sec]')  
@@ -264,6 +263,11 @@ def plot2D(im,ax=None,**kwargs):
     vmax=kwargs.pop('vmax', None)    
     ext=kwargs.pop('extent', None)   
     now=kwargs.pop('now', True)
+    
+    if ext is not None :
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+    else:
+        figsize=kwargs.pop('figsize',(4, 13))  
     
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax

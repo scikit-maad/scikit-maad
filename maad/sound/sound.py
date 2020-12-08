@@ -321,13 +321,15 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
             ext = kwargs.pop('ext',None)
             if ext is not None : 
                 xlabel = 'Time [sec]'
+                figsize = (4, 0.33*(ext[1]-ext[0]))
             else: 
                 xlabel = 'pseudoTime [points]'
+                figsize = (4,13)
             
             fig_kwargs = {'vmax': kwargs.pop('vmax',np.max(X_octave_dB)),
                           'vmin': kwargs.pop('vmin',np.min(X_octave_dB)),
                           'extent':kwargs.pop('ext',None),
-                          'figsize':kwargs.pop('figsize',(4,13)),
+                          'figsize':kwargs.pop('figsize',figsize),
                           'yticks' : (np.arange(len(bin_octave)), bin_octave),
                           'title':'Octave Spectrogram',
                           'xlabel': xlabel,
@@ -922,8 +924,8 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         xlabel =kwargs.pop('xlabel','Time [sec]') 
         title  =kwargs.pop('title','Spectrogram')
         cmap   =kwargs.pop('cmap','gray') 
-        figsize=kwargs.pop('figsize',(4, 13)) 
-        db_range=kwargs.pop('db_range',100)
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))
+        db_range=kwargs.pop('db_range',96)
         
         #### convert into dB 
         if mode=='psd':  

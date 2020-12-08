@@ -810,12 +810,14 @@ def centroid_features(Sxx, rois=None, im_rois=None):
     ---------- 
     Sxx :  2D array 
         Spectrogram 
-    rois: pandas DataFrame 
+    rois: pandas DataFrame, default is None 
         Regions of interest where descriptors will be computed. Array must  
         have a valid input format with column names: ``min_t``, ``min_f``, 
         ``max_t``, and ``max_f``. Use the function ``maad.util.format_features``
         before using centroid_features to format of the ``rois`` DataFrame 
         correctly.
+    im_rois: 2d ndarray 
+        image with labels as values
              
     Returns 
     ------- 
@@ -898,8 +900,8 @@ def centroid_features(Sxx, rois=None, im_rois=None):
         centroid['duration_x'] = (rois.max_x -rois.min_x)  
         ##### bandwidth in number of pixels 
         centroid['bandwidth_y'] = (rois.max_y -rois.min_y) 
-        ##### bandwidth in number of pixels 
-        centroid['area_xy'] = (rois.max_y * rois.min_y)         
+        ##### area
+        centroid['area_xy'] = area      
      
         # concat rois and centroid dataframes 
         centroid = rois.join(pd.DataFrame(centroid, index=rois.index))  
@@ -989,19 +991,21 @@ def overlay_centroid (im_ref, ext, centroid, savefig=None, **kwargs):
     xlabel =kwargs.pop('xlabel','Time [sec]')  
     title  =kwargs.pop('title','ROIs Overlay') 
     cmap   =kwargs.pop('cmap','gray')  
-    figsize=kwargs.pop('figsize',(4, 13))  
+    figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))
     vmin=kwargs.pop('vmin',0)  
     vmax=kwargs.pop('vmax',1)  
     ax =kwargs.pop('ax',None)  
     fig=kwargs.pop('fig',None)  
     color=kwargs.pop('color','firebrick')  
+    ms=kwargs.pop('ms',2) 
+    marker=kwargs.pop('marker','o')
          
     if (ax is None) and (fig is None): 
         ax, fig = plot2D (im_ref, extent=ext, now=False, figsize=figsize, title=title,  
                          ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
                          cmap=cmap, **kwargs) 
      
-    ax.plot(centroid.centroid_t, centroid.centroid_f, 'o', linewidth=5, color=color) 
+    ax.plot(centroid.centroid_t, centroid.centroid_f, marker, ms=ms, color=color) 
      
     fig.canvas.draw() 
      

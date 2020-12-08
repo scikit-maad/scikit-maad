@@ -158,9 +158,9 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','loaded spectrogram') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1)  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        vmin=kwargs.pop('vmin',np.min(im))  
+        vmax=kwargs.pop('vmax',np.max(im))  
          
         _, fig = plot2D (im, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -324,17 +324,18 @@ def remove_background(Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Spectrogram without stationnary noise') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1) 
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
         ext=kwargs.pop('ext',None)
-        
+            
         if ext is not None : 
             fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
             xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
         else: 
             fn = np.arange(Nf) 
             xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13))  
         
         _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -439,16 +440,23 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
      
     Sxx_out = (((Sxx.transpose()-np.median(Sxx.transpose(),axis=0)))/(np.median(Sxx.transpose())-np.min(Sxx.transpose(),axis=0))).transpose() 
     
+    Sxx_out[Sxx_out<=0] = 0
+    Sxx_out = linear_scale(Sxx_out, axis=None)
+    
     # Display 
     if display :  
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Spectrogram without stationnary noise') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1) 
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
         ext=kwargs.pop('ext',None) 
+        
+        if ext is not None :
+            figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        else:
+            figsize=kwargs.pop('figsize',(4, 13))  
          
         _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -556,19 +564,20 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Spectrogram without stationnary noise') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1) 
+        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
         ext=kwargs.pop('ext',None) 
         
         Nf, Nw = Sxx.shape 
-        
+
         if ext is not None : 
             fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
             xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
         else: 
             fn = np.arange(Nf) 
-            xlabel = 'pseudofrequency [points]' 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13))  
         
         _, fig = plot2D (BGNxx, extent=ext, figsize=figsize,title='Noise map',  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -710,7 +719,6 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Spectrogram without stationnary noise') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
         vmin=kwargs.pop('vmin',np.min(Sxx_out))  
         vmax=kwargs.pop('vmax',np.max(Sxx_out))  
         ext=kwargs.pop('ext',None) 
@@ -720,10 +728,12 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
         if ext is not None : 
             fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
             xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
         else: 
             fn = np.arange(Nf) 
-            xlabel = 'pseudofrequency [points]'       
-         
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13))  
+            
         _, fig1 = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
@@ -848,7 +858,7 @@ def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwar
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Blurred spectrogram') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',np.percentile(im_out,1)) 
         vmax=kwargs.pop('vmax',np.percentile(im_out,99)) 
          
@@ -871,7 +881,7 @@ def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwar
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
  
-def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, 
+def _double_threshold_rel (im, ext, bin_std=6, bin_per=0.5, 
                            verbose=False, display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
@@ -888,7 +898,7 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5,
         upper-right corners. If `None`, the image is positioned such that 
         the pixel centers fall on zero-based (row, column) indices.   
  
-    bin_std : scalar, optional, default is 3 
+    bin_std : scalar, optional, default is 6 
         Set the first threshold. This threshold is not an absolute value but 
         depends on values that are similar to 75th percentile (pseudo_mean) and 
         a sort of std value of the image.  
@@ -1012,7 +1022,7 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5,
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','binary image => MASK') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
          
@@ -1025,7 +1035,8 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5,
             format=kwargs.pop('format','png') 
             filename=kwargs.pop('filename','_spectro_binary')              
             filename = savefig+filename+'.'+format 
-            print('\n''save figure : %s' %filename) 
+            if verbose :
+                print('\n''save figure : %s' %filename) 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
  
@@ -1034,8 +1045,8 @@ def _double_threshold_rel (im, ext, bin_std=5, bin_per=0.5,
 #**************************************************************************** 
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
-def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None, 
-                     **kwargs): 
+def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, 
+                          verbose=False,display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
     The values used for the thresholding are independent of the values in the 
@@ -1060,6 +1071,9 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
         Set the second threshold. Value higher than this value and connected 
         to the seeds or to other pixels connected to the seeds are set to 1,  
         the other remains 0 
+        
+    verbose : boolean, optional, default is False
+        print messages
  
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -1140,6 +1154,14 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
      
     im_out = np.isin(conncomp_t2, rprops_label[ind])    # test if the indice is in the maxtrix of indices 
     im_out =im_out*1    #  boolean to 0,1 conversion 
+    
+    if verbose :
+        print(72 * '_') 
+        print('Double thresholding with  absolute values...') 
+        print ('**********************************************************') 
+        print ('  Number of rois %.2f | Rois cover %.2f%' % (len(rprops_label), 
+                                                             sum(im_out)/(im_out.shape[1]*im_out.shape[0])*100)) 
+        print ('**********************************************************') 
                  
     # Display 
     if display :  
@@ -1147,7 +1169,7 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','binary image => MASK') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
          
@@ -1160,7 +1182,8 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
             format=kwargs.pop('format','png') 
             filename=kwargs.pop('filename','_spectro_binary')              
             filename = savefig+filename+'.'+format 
-            print('\n''save figure : %s' %filename) 
+            if verbose :
+                print('\n''save figure : %s' %filename) 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
  
@@ -1169,8 +1192,8 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=
 """**************************************************************************** 
 *************                   create_mask wrapper                 *********** 
 ****************************************************************************""" 
-def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None, 
-                **kwargs): 
+def create_mask(im, ext, mode_bin = 'relative', 
+                verbose= False, display = False, savefig = None, **kwargs): 
     """ 
     Binarize an image based on a double threshold.  
      
@@ -1187,6 +1210,9 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
     mode_bin : string in {'relative', 'absolute'}, optional, default is 'relative' 
         if 'relative', a relative double threshold is performed 
         if 'absolute', an double threshold with absolute value is performed 
+        
+    verbose : boolean, optional, default is False
+        print messages
          
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -1217,14 +1243,16 @@ def create_mask(im, ext, mode_bin = 'relative', display = False, savefig = None,
     """ 
         
     if mode_bin == 'relative': 
-        bin_std=kwargs.pop('bin_std', 3)  
+        bin_std=kwargs.pop('bin_std', 6)  
         bin_per=kwargs.pop('bin_per', 0.5)  
-        im_bin = _double_threshold_rel(im, ext, bin_std, bin_per, display, savefig, **kwargs) 
+        im_bin = _double_threshold_rel(im, ext, bin_std, bin_per, 
+                                       verbose, display, savefig, **kwargs) 
          
     elif mode_bin == 'absolute': 
         bin_h=kwargs.pop('bin_h', 0.7)  
         bin_l=kwargs.pop('bin_l', 0.3)  
-        im_bin = _double_threshold_abs(im, ext, bin_h, bin_l, display, savefig, **kwargs)    
+        im_bin = _double_threshold_abs(im, ext, bin_h, bin_l,
+                                       verbose, display, savefig, **kwargs)    
      
     return im_bin  
  
@@ -1307,18 +1335,17 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
  
     Returns 
     ------- 
-    im_label: 2d ndarray 
+    im_rois: 2d ndarray 
         image with labels as values 
              
-    rois_bbox : list of tuple (min_y,min_x,max_y,max_x) 
-        Contain the bounding box of each ROI 
-             
-    rois_label : list of tuple (labelID, labelname) 
-        Contain the label (LabelID=scalar,labelname=string) for each ROI 
-        LabelID is a number from 1 to the number of ROI. The pixel value  
-        of im_label correspond the labelID 
-        Labname is a string. As the selection is auto, label is 'unknown' 
-        by default. 
+    rois: pandas DataFrame 
+        Regions of interest with future descriptors will be computed. 
+        Array have column names: ``labelID``, ``label``, ``min_y``, ``min_x``,
+        ``max_y``, ``max_x``,
+        Use the function ``maad.util.format_features`` before using 
+        centroid_features to format of the ``rois`` DataFrame 
+        correctly.
+        
     """ 
  
     # test if max_roi and min_roi are defined 
@@ -1379,7 +1406,11 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Selected ROIs')  
-        figsize=kwargs.pop('figsize',(4, 13))  
+         
+        if ext is not None :
+            figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        else:
+            figsize=kwargs.pop('figsize',(4, 13))  
          
         randcmap = rand_cmap(len(rois_label)) 
         cmap   =kwargs.pop('cmap',randcmap)  
@@ -1478,7 +1509,7 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
     xlabel =kwargs.pop('xlabel','Time [sec]')  
     title  =kwargs.pop('title','ROIs Overlay') 
     cmap   =kwargs.pop('cmap','gray')  
-    figsize=kwargs.pop('figsize',(4, 13))  
+    figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
     vmin=kwargs.pop('vmin',0)  
     vmax=kwargs.pop('vmax',1)  
     ax =kwargs.pop('ax',None)  
