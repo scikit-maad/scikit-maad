@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.miscellaneous.dB2linear" href="util.miscellaneous.dB2linear.html" />
+    <link rel="next" title="util.miscellaneous.add_dB" href="util.miscellaneous.add_dB.html" />
     <link rel="prev" title="util.math_tools.running_mean" href="util.math_tools.running_mean.html" /> 
 </head>
 
@@ -96,20 +96,25 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.math_tools.html">util.math_tools</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">util.miscellaneous</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2linear.html">util.miscellaneous.dB2linear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.add_dB.html">util.miscellaneous.add_dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.amplitude2dB.html">util.miscellaneous.amplitude2dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2amplitude.html">util.miscellaneous.dB2amplitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2power.html">util.miscellaneous.dB2power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.format_features.html">util.miscellaneous.format_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.get_df_single_row.html">util.miscellaneous.get_df_single_row</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.index_bw.html">util.miscellaneous.index_bw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear2dB.html">util.miscellaneous.linear2dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.intoBins.html">util.miscellaneous.intoBins</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear_scale.html">util.miscellaneous.linear_scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.mean_dB.html">util.miscellaneous.mean_dB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.nearest_idx.html">util.miscellaneous.nearest_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.power2dB.html">util.miscellaneous.power2dB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rle.html">util.miscellaneous.rle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.shift_bit_length.html">util.miscellaneous.shift_bit_length</a></li>
 </ul>
@@ -119,7 +124,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -199,31 +204,46 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.dB2linear.html#util.miscellaneous.dB2linear" title="util.miscellaneous.dB2linear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dB2linear</span></code></a></p></td>
-<td><p>Transform linear date into decibel scale within the dB range (db_range).</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.add_dB.html#util.miscellaneous.add_dB" title="util.miscellaneous.add_dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dB</span></code></a></p></td>
+<td><p>add dB values</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.format_features.html#util.miscellaneous.format_features" title="util.miscellaneous.format_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_features</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.amplitude2dB.html#util.miscellaneous.amplitude2dB" title="util.miscellaneous.amplitude2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplitude2dB</span></code></a></p></td>
+<td><p>Transform amplitude data (signal, scalar) into decibel scale within the dB range (db_range).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.dB2amplitude.html#util.miscellaneous.dB2amplitude" title="util.miscellaneous.dB2amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dB2amplitude</span></code></a></p></td>
+<td><p>Transform data in dB scale into amplitude A gain (db_gain) could be added at the end.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.dB2power.html#util.miscellaneous.dB2power" title="util.miscellaneous.dB2power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dB2power</span></code></a></p></td>
+<td><p>Transform data in dB scale into power (amplitude²) A gain (db_gain) could be added at the end.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.format_features.html#util.miscellaneous.format_features" title="util.miscellaneous.format_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_features</span></code></a></p></td>
 <td><p>Setup rectangular df to a predifined format:  time-frequency or bounding box</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.get_df_single_row.html#util.miscellaneous.get_df_single_row" title="util.miscellaneous.get_df_single_row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df_single_row</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.get_df_single_row.html#util.miscellaneous.get_df_single_row" title="util.miscellaneous.get_df_single_row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df_single_row</span></code></a></p></td>
 <td><p>Extract a single row from a dataframe keeping the DataFrame type (instead of becoming a Series)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.index_bw.html#util.miscellaneous.index_bw" title="util.miscellaneous.index_bw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_bw</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.index_bw.html#util.miscellaneous.index_bw" title="util.miscellaneous.index_bw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_bw</span></code></a></p></td>
 <td><p>Select all the index coresponding to the selected frequency band</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.linear2dB.html#util.miscellaneous.linear2dB" title="util.miscellaneous.linear2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear2dB</span></code></a></p></td>
-<td><p>Transform linear date into decibel scale within the dB range (db_range).</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.intoBins.html#util.miscellaneous.intoBins" title="util.miscellaneous.intoBins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoBins</span></code></a></p></td>
+<td><p>Transform a vector or a matrix into bins</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.linear_scale.html#util.miscellaneous.linear_scale" title="util.miscellaneous.linear_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_scale</span></code></a></p></td>
-<td><p>Program to scale the values of a matrix from a user specified minimum to  a user specified maximum</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.linear_scale.html#util.miscellaneous.linear_scale" title="util.miscellaneous.linear_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_scale</span></code></a></p></td>
+<td><p>Program to scale the values of a vector or matrix from a user specified  minimum to a user specified maximum</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.mean_dB.html#util.miscellaneous.mean_dB" title="util.miscellaneous.mean_dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_dB</span></code></a></p></td>
+<td><p>Compute the average of dB values</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.nearest_idx.html#util.miscellaneous.nearest_idx" title="util.miscellaneous.nearest_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest_idx</span></code></a></p></td>
 <td><p>Find nearest value on array and return index</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.rle.html#util.miscellaneous.rle" title="util.miscellaneous.rle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rle</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.power2dB.html#util.miscellaneous.power2dB" title="util.miscellaneous.power2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">power2dB</span></code></a></p></td>
+<td><p>Transform power (amplitude²) signal or scalar into decibel scale within the dB range (db_range).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.rle.html#util.miscellaneous.rle" title="util.miscellaneous.rle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rle</span></code></a></p></td>
 <td><p>Run-Length encoding     from rle function R</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.shift_bit_length.html#util.miscellaneous.shift_bit_length" title="util.miscellaneous.shift_bit_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shift_bit_length</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.shift_bit_length.html#util.miscellaneous.shift_bit_length" title="util.miscellaneous.shift_bit_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shift_bit_length</span></code></a></p></td>
 <td><p>find the closest power of 2 that is superior or equal to the number x</p></td>
 </tr>
 </tbody>
@@ -238,7 +258,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.miscellaneous.dB2linear.html" class="btn btn-neutral float-right" title="util.miscellaneous.dB2linear" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.miscellaneous.add_dB.html" class="btn btn-neutral float-right" title="util.miscellaneous.add_dB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="util.math_tools.running_mean.html" class="btn btn-neutral float-left" title="util.math_tools.running_mean" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

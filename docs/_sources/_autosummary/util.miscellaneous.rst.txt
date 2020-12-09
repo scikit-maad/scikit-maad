@@ -1,4 +1,4 @@
-util.miscellaneous
+﻿util.miscellaneous
 ==================
 
 .. automodule:: util.miscellaneous
@@ -15,13 +15,18 @@ util.miscellaneous
       :toctree:
       :nosignatures:
    
-      dB2linear
+      add_dB
+      amplitude2dB
+      dB2amplitude
+      dB2power
       format_features
       get_df_single_row
       index_bw
-      linear2dB
+      intoBins
       linear_scale
+      mean_dB
       nearest_idx
+      power2dB
       rle
       shift_bit_length
    

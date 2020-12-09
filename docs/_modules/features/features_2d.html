@@ -94,12 +94,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -169,8 +169,7 @@
 <span></span><span class="ch">#!/usr/bin/env python3 </span>
 <span class="c1"># -*- coding: utf-8 -*- </span>
 <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">Ensemble of functions to compute acoustic descriptors from 2D spectrograms </span>
-<span class="sd"> </span>
+<span class="sd">Ensemble of functions to compute acoustic descriptors from 2D spectrograms.</span>
 <span class="sd">&quot;&quot;&quot;</span> 
  
 <span class="c1"># Load required modules </span>
@@ -978,12 +977,14 @@
 <span class="sd">    ---------- </span>
 <span class="sd">    Sxx :  2D array </span>
 <span class="sd">        Spectrogram </span>
-<span class="sd">    rois: pandas DataFrame </span>
+<span class="sd">    rois: pandas DataFrame, default is None </span>
 <span class="sd">        Regions of interest where descriptors will be computed. Array must  </span>
 <span class="sd">        have a valid input format with column names: ``min_t``, ``min_f``, </span>
 <span class="sd">        ``max_t``, and ``max_f``. Use the function ``maad.util.format_features``</span>
 <span class="sd">        before using centroid_features to format of the ``rois`` DataFrame </span>
 <span class="sd">        correctly.</span>
+<span class="sd">    im_rois: 2d ndarray </span>
+<span class="sd">        image with labels as values</span>
 <span class="sd">             </span>
 <span class="sd">    Returns </span>
 <span class="sd">    ------- </span>
@@ -1066,8 +1067,8 @@
         <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;duration_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span> <span class="o">-</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="p">)</span>  
         <span class="c1">##### bandwidth in number of pixels </span>
         <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;bandwidth_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span> <span class="o">-</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="p">)</span> 
-        <span class="c1">##### bandwidth in number of pixels </span>
-        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;area_xy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span> <span class="o">*</span> <span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="p">)</span>         
+        <span class="c1">##### area</span>
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;area_xy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">area</span>      
      
         <span class="c1"># concat rois and centroid dataframes </span>
         <span class="n">centroid</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>  
@@ -1157,19 +1158,21 @@
     <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
     <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;ROIs Overlay&#39;</span><span class="p">)</span> 
     <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
-    <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>  
+    <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
     <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  
     <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  
     <span class="n">ax</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
     <span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fig&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
     <span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="s1">&#39;firebrick&#39;</span><span class="p">)</span>  
+    <span class="n">ms</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="n">marker</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;marker&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
          
     <span class="k">if</span> <span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span> 
         <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
                          <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>  
                          <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
      
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">centroid_t</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">centroid_f</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">centroid_t</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">centroid_f</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> 
      
     <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> 
      

@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sound.sound.envelope" href="sound.sound.envelope.html" />
+    <link rel="next" title="sound.sound.audio_SNR" href="sound.sound.audio_SNR.html" />
     <link rel="prev" title="sound" href="sound.html" /> 
 </head>
 
@@ -96,22 +96,27 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">sound.sound</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.audio_SNR.html">sound.sound.audio_SNR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_amplitude_spectro.html">sound.sound.avg_amplitude_spectro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_power_spectro.html">sound.sound.avg_power_spectro</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.envelope.html">sound.sound.envelope</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.fir_filter.html">sound.sound.fir_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.intoOctave.html">sound.sound.intoOctave</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.load.html">sound.sound.load</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -192,11 +197,23 @@ functions for processing sound</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.envelope.html#sound.sound.envelope" title="sound.sound.envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">envelope</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.audio_SNR.html#sound.sound.audio_SNR" title="sound.sound.audio_SNR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_SNR</span></code></a></p></td>
+<td><p>Computes the signal to noise ratio (SNR) of an audio signal in the time domain</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.sound.avg_amplitude_spectro.html#sound.sound.avg_amplitude_spectro" title="sound.sound.avg_amplitude_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_amplitude_spectro</span></code></a></p></td>
+<td><p>Computes the average of an amplitude spectrogram along the time axis</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.avg_power_spectro.html#sound.sound.avg_power_spectro" title="sound.sound.avg_power_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_power_spectro</span></code></a></p></td>
+<td><p>Computes the average of a power spectrogram along the time axis</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.sound.envelope.html#sound.sound.envelope" title="sound.sound.envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">envelope</span></code></a></p></td>
 <td><p>Calcul the envelope of a sound waveform (1d)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="sound.sound.fir_filter.html#sound.sound.fir_filter" title="sound.sound.fir_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir_filter</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.fir_filter.html#sound.sound.fir_filter" title="sound.sound.fir_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir_filter</span></code></a></p></td>
 <td><p>1d Finite impulse filter =&gt; Digital filter based on convolution of 1d kernel over a vector  or along an axis of a matrix</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.sound.intoOctave.html#sound.sound.intoOctave" title="sound.sound.intoOctave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoOctave</span></code></a></p></td>
+<td><p>Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave spectrum (1d) or Spectrogram (2d) Better to work with PSD (amplitude²) for energy conservation</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.load.html#sound.sound.load" title="sound.sound.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a></p></td>
 <td><p>Load a wav file (stereo or mono)</p></td>
@@ -204,7 +221,10 @@ functions for processing sound</p>
 <tr class="row-even"><td><p><a class="reference internal" href="sound.sound.select_bandwidth.html#sound.sound.select_bandwidth" title="sound.sound.select_bandwidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_bandwidth</span></code></a></p></td>
 <td><p>Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.spectrogram.html#sound.sound.spectrogram" title="sound.sound.spectrogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrogram</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.spectral_SNR.html#sound.sound.spectral_SNR" title="sound.sound.spectral_SNR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_SNR</span></code></a></p></td>
+<td><p>Computes the signal to noise ratio (SNR) of an audio from its spectrogram in the time-frequency domain</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.sound.spectrogram.html#sound.sound.spectrogram" title="sound.sound.spectrogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrogram</span></code></a></p></td>
 <td><p>Convert a sound waveform into a spectrogram  the output is :  - power (mode=’psd’) - amplitude (mode = ‘amplitude’) =&gt; sqrt(power) - complex with real and imaginary parts (mode = ‘complex’)</p></td>
 </tr>
 </tbody>
@@ -219,7 +239,7 @@ functions for processing sound</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sound.sound.envelope.html" class="btn btn-neutral float-right" title="sound.sound.envelope" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sound.sound.audio_SNR.html" class="btn btn-neutral float-right" title="sound.sound.audio_SNR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="sound.html" class="btn btn-neutral float-left" title="sound" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

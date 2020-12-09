@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="features.features_1d.psd" href="features.features_1d.psd.html" />
+    <link rel="next" title="features.features_1d.kurtosis" href="features.features_1d.kurtosis.html" />
     <link rel="prev" title="features.alpha_indices.tfsd" href="features.alpha_indices.tfsd.html" /> 
 </head>
 
@@ -96,21 +96,24 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="features.html">features</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">features.features_1d</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="features.features_1d.kurtosis.html">features.features_1d.kurtosis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_1d.psd.html">features.features_1d.psd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="features.features_1d.rms.html">features.features_1d.rms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_1d.skewness.html">features.features_1d.skewness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.features_1d.zero_crossing_rate.html">features.features_1d.zero_crossing_rate</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_2d.html">features.features_2d</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -190,11 +193,20 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="features.features_1d.psd.html#features.features_1d.psd" title="features.features_1d.psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psd</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_1d.kurtosis.html#features.features_1d.kurtosis" title="features.features_1d.kurtosis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kurtosis</span></code></a></p></td>
+<td><p>Calcul the kurtosis (tailedness or curved or arching) of a signal x</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="features.features_1d.psd.html#features.features_1d.psd" title="features.features_1d.psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psd</span></code></a></p></td>
 <td><p>Estimates power spectral density of 1D signal using Welch’s or periodogram methods.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="features.features_1d.rms.html#features.features_1d.rms" title="features.features_1d.rms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rms</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_1d.rms.html#features.features_1d.rms" title="features.features_1d.rms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rms</span></code></a></p></td>
 <td><p>Computes the root-mean-square (RMS) level of an input signal</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="features.features_1d.skewness.html#features.features_1d.skewness" title="features.features_1d.skewness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skewness</span></code></a></p></td>
+<td><p>Calcul the skewness (asymetry) of a signal x</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.features_1d.zero_crossing_rate.html#features.features_1d.zero_crossing_rate" title="features.features_1d.zero_crossing_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_crossing_rate</span></code></a></p></td>
+<td><p>Compute the Zero Crossing Rate of an audio signal.</p></td>
 </tr>
 </tbody>
 </table>
@@ -208,7 +220,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="features.features_1d.psd.html" class="btn btn-neutral float-right" title="features.features_1d.psd" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="features.features_1d.kurtosis.html" class="btn btn-neutral float-right" title="features.features_1d.kurtosis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="features.alpha_indices.tfsd.html" class="btn btn-neutral float-left" title="features.alpha_indices.tfsd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

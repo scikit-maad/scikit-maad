@@ -1,8 +1,7 @@
 #!/usr/bin/env python3 
 # -*- coding: utf-8 -*- 
 """ 
-Ensemble of functions to compute acoustic descriptors from 2D spectrograms 
- 
+Ensemble of functions to compute acoustic descriptors from 2D spectrograms.
 """ 
  
 # Load required modules 

@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="features" href="_autosummary/features.html" />
+    <link rel="next" title="sound" href="_autosummary/sound.html" />
     <link rel="prev" title="Installation instructions" href="install.html" /> 
 </head>
 
@@ -92,19 +92,16 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_autosummary/util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -174,33 +171,25 @@
             
   <div class="section" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>This section covers the fundamentals of developing</p>
-<div class="section" id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><dl class="simple">
-<dt>features</dt><dd><p>Compute descriptors to characterize sounds - <a class="reference internal" href="_autosummary/features.html#module-features"><span class="std std-ref">features</span></a></p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>rois</dt><dd><p>Find regions of interest in 1D and 2D signals - <a class="reference internal" href="_autosummary/rois.html#module-rois"><span class="std std-ref">rois</span></a></p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>sound</dt><dd><p>Load and transform (e.g. stft) audio signals - <a class="reference internal" href="_autosummary/sound.html#module-sound"><span class="std std-ref">sound</span></a></p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>util</dt><dd><p>Miscelaneous and useful set of tools used in the audio analysis framework
-- <a class="reference internal" href="_autosummary/util.html#module-util"><span class="std std-ref">util</span></a></p>
-</dd>
-</dl>
-</li>
-</ul>
+<p><strong>scikit-maad</strong> is a free, open-source and modular Python package to analyze
+ecoacoustics datasets.  The package is imported as <code class="docutils literal notranslate"><span class="pre">maad</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">maad</span>
+</pre></div>
 </div>
+<p>The functions are found within modules. The module <a class="reference internal" href="_autosummary/sound.html#module-sound"><span class="std std-ref">sound</span></a> has functions to load and preprocess audio signals, <a class="reference internal" href="_autosummary/rois.html#module-rois"><span class="std std-ref">rois</span></a> provides tools to find regions of interest in audio (1D) and spectrogram signals (2D), <a class="reference internal" href="_autosummary/features.html#module-features"><span class="std std-ref">features</span></a> include functions to compute robust descriptors to characterize audio signals, and <a class="reference internal" href="_autosummary/util.html#module-util"><span class="std std-ref">util</span></a> has a handfull of useful set of tools used in the audio analysis framework.</p>
+<p>To load a submodule juste type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">rois</span>
+</pre></div>
+</div>
+<p>The package provides some example audio files to test the functions and utilities provided. Audio files can be loaded with the function <code class="docutils literal notranslate"><span class="pre">maad.sound.load</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then apply any analysis to find regions of interest or characterize your audio signals.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rois</span><span class="o">.</span><span class="n">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">flims</span><span class="o">=</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mi">8000</span><span class="p">),</span> <span class="n">tlen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, visit the Online Documentation and the Example Gallery.</p>
 </div>
 
 
@@ -211,7 +200,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="_autosummary/features.html" class="btn btn-neutral float-right" title="features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="_autosummary/sound.html" class="btn btn-neutral float-right" title="sound" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="install.html" class="btn btn-neutral float-left" title="Installation instructions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

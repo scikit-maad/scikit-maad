@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sound.sound.fir_filter" href="sound.sound.fir_filter.html" />
-    <link rel="prev" title="sound.sound" href="sound.sound.html" /> 
+    <link rel="prev" title="sound.sound.avg_power_spectro" href="sound.sound.avg_power_spectro.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,22 +96,27 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="sound.sound.html">sound.sound</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.audio_SNR.html">sound.sound.audio_SNR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_amplitude_spectro.html">sound.sound.avg_amplitude_spectro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_power_spectro.html">sound.sound.avg_power_spectro</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound.envelope</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.fir_filter.html">sound.sound.fir_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.intoOctave.html">sound.sound.intoOctave</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.load.html">sound.sound.load</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -187,7 +192,7 @@
 <h1>sound.sound.envelope<a class="headerlink" href="#sound-sound-envelope" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="sound.sound.envelope">
-<code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">envelope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'fast'</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#envelope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.envelope" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">envelope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'fast'</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">32</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#envelope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.envelope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcul the envelope of a sound waveform (1d)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -208,7 +213,7 @@ good approximation of the envelope.</p>
 </li>
 </ul>
 </dd>
-<dt><strong>N</strong><span class="classifier">integer, optional, default is 32</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
+<dt><strong>Nt</strong><span class="classifier">integer, optional, default is 32</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
 </dd>
 </dl>
 </dd>
@@ -223,7 +228,7 @@ good approximation of the envelope.</p>
 <p>Fast calculation is inspired by the work of M. Towsey at Queensland University of Technology (QUT).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;guyana_tropical_forest.wav&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">env_fast</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">envelope</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env_fast</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">envelope</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">env_fast</span>
 <span class="go">array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,</span>
 <span class="go">   0.26074219])</span>
@@ -239,14 +244,16 @@ good approximation of the envelope.</p>
 &gt;&gt;&gt; t = np.arange(0,len(s),1)/fs
 compute the time vector for the vector env_fast
 &gt;&gt;&gt; t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)</p>
-<p>plot 0.1 of the envelope and 0.1s of the abs(s)
-import matplotlib.pyplot as plt
-fig1, ax1 = plt.subplots()
-ax1.plot(t[t&lt;0.1], abs(s[t&lt;0.1]), label=’abs(s)’)
-ax1.plot(t[t&lt;0.1], env_hilbert[t&lt;0.1], label=’env(s) - hilbert option’)
-ax1.plot(t_env_fast[t_env_fast&lt;0.1], env_fast[t_env_fast&lt;0.1], label=’env(s) - fast option’)
-ax1.set_xlabel(‘Time [sec]’)
-ax1.legend()</p>
+<p>plot 0.1 of the envelope and 0.1s of the abs(s)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig1</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">t</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">t</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;abs(s)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">t</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">env_hilbert</span><span class="p">[</span><span class="n">t</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;env(s) - hilbert option&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_env_fast</span><span class="p">[</span><span class="n">t_env_fast</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">env_fast</span><span class="p">[</span><span class="n">t_env_fast</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;env(s) - fast option&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -262,7 +269,7 @@ ax1.legend()</p>
         <a href="sound.sound.fir_filter.html" class="btn btn-neutral float-right" title="sound.sound.fir_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sound.sound.html" class="btn btn-neutral float-left" title="sound.sound" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sound.sound.avg_power_spectro.html" class="btn btn-neutral float-left" title="sound.sound.avg_power_spectro" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

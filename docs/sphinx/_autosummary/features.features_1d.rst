@@ -1,4 +1,4 @@
-features.features\_1d
+﻿features.features\_1d
 =====================
 
 .. automodule:: features.features_1d
@@ -15,8 +15,11 @@ features.features\_1d
       :toctree:
       :nosignatures:
    
+      kurtosis
       psd
       rms
+      skewness
+      zero_crossing_rate
    
    
 

@@ -20,21 +20,28 @@
       acousticEvenessIndex
       acousticGradientIndex
       acousticRichnessIndex
-      acoustic_activity
-      acoustic_events
+      audio_LEQ
+      audio_activity
+      audio_entropy
+      audio_events
+      audio_indices
+      audio_median
+      audio_moments
       bioacousticsIndex
-      entropy
-      gini
-      intoBins
-      intoOctave
-      kurtosis
-      raoQ
+      frequency_entropy
+      frequency_raoQ
+      more_entropy
+      numberOfPeaks
+      regionOfInterestIndex
       roughness
-      score
-      shannonEntropy
-      skewness
       soundscapeIndex
+      spectral_LEQ
+      spectral_activity
+      spectral_cover
       spectral_entropy
+      spectral_events
+      spectral_indices
+      spectral_moments
       surfaceRoughness
       tfsd
    

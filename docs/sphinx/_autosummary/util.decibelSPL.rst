@@ -1,4 +1,4 @@
-util.decibelSPL
+﻿util.decibelSPL
 ===============
 
 .. automodule:: util.decibelSPL
@@ -16,10 +16,8 @@ util.decibelSPL
       :nosignatures:
    
       PSD2Leq
-      add_dBSPL
-      dBSPL2power
+      amplitude2dBSPL
       dBSPL2pressure
-      mean_dBSPL
       power2dBSPL
       pressure2Leq
       pressure2dBSPL

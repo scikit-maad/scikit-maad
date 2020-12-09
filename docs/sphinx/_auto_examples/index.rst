@@ -55,6 +55,27 @@ that can be performed with scikit-maad.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="A spectrogram is a time-frequency (2d) representation of a audio recording.  Each acoustic even...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_find_rois_thumb.png
+     :alt: Find Regions of interest (ROIs) in a spectrogram
+
+     :ref:`sphx_glr__auto_examples_find_rois.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/find_rois
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Wrapper - This script gives an example of how to use scikit-MAAD package">
 
 .. only:: html

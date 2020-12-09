@@ -27,7 +27,7 @@ scikit-image and scikit-learn Python packages.
 import numpy as np
 import matplotlib.pyplot as plt
 from maad import sound, features
-from maad.util import linear2dB, plot2D
+from maad.util import power2dB, plot2D
 from skimage import transform
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import NMF
@@ -37,7 +37,7 @@ from sklearn.decomposition import NMF
 s, fs = sound.load('../data/spinetail.wav')
 Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
 
-Sxx_db = linear2dB(Sxx, db_range=70)
+Sxx_db = power2dB(Sxx, db_range=70)
 Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, multichannel=False)
 plot2D(Sxx_db, **{'figsize':(4,10),'extent':(tn[0], tn[-1], fn[0], fn[-1])})
 

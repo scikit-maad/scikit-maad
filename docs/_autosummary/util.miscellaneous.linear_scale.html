@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.miscellaneous.nearest_idx" href="util.miscellaneous.nearest_idx.html" />
-    <link rel="prev" title="util.miscellaneous.linear2dB" href="util.miscellaneous.linear2dB.html" /> 
+    <link rel="next" title="util.miscellaneous.mean_dB" href="util.miscellaneous.mean_dB.html" />
+    <link rel="prev" title="util.miscellaneous.intoBins" href="util.miscellaneous.intoBins.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,20 +96,25 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.math_tools.html">util.math_tools</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2linear.html">util.miscellaneous.dB2linear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.add_dB.html">util.miscellaneous.add_dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.amplitude2dB.html">util.miscellaneous.amplitude2dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2amplitude.html">util.miscellaneous.dB2amplitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.dB2power.html">util.miscellaneous.dB2power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.format_features.html">util.miscellaneous.format_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.get_df_single_row.html">util.miscellaneous.get_df_single_row</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.index_bw.html">util.miscellaneous.index_bw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.linear2dB.html">util.miscellaneous.linear2dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.intoBins.html">util.miscellaneous.intoBins</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.miscellaneous.linear_scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.mean_dB.html">util.miscellaneous.mean_dB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.nearest_idx.html">util.miscellaneous.nearest_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.power2dB.html">util.miscellaneous.power2dB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.rle.html">util.miscellaneous.rle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.miscellaneous.shift_bit_length.html">util.miscellaneous.shift_bit_length</a></li>
 </ul>
@@ -119,7 +124,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -195,23 +200,32 @@
 <h1>util.miscellaneous.linear_scale<a class="headerlink" href="#util-miscellaneous-linear-scale" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="util.miscellaneous.linear_scale">
-<code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">linear_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">minval</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">maxval</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#linear_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.linear_scale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Program to scale the values of a matrix from a user specified minimum to 
-a user specified maximum</p>
+<code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">linear_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">minval</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">maxval</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#linear_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.linear_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Program to scale the values of a vector or matrix from a user specified 
+minimum to a user specified maximum</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers</p>
+<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers, list or dataframe</p>
 </dd>
-<dt><strong>minval</strong><span class="classifier">scalar, optional, default</span></dt><dd><p>This minimum value is attributed to the minimum value of the array</p>
+<dt><strong>minval</strong><span class="classifier">scalar, optional, default</span></dt><dd><p>This minimum value is attributed to the minimum value of 
+- the array if axis = None
+- each column if axis =0
+- each row if axis = 1</p>
 </dd>
-<dt><strong>maxval</strong><span class="classifier">scalar, optional, default</span></dt><dd><p>This maximum value is attributed to the maximum value of the array</p>
+<dt><strong>maxval</strong><span class="classifier">scalar, optional, default</span></dt><dd><p>This maximum value is attributed to the maximum value of  
+- the array if axis = None
+- each column if axis =0
+- each row if axis = 1</p>
+</dd>
+<dt><strong>axis</strong><span class="classifier">integer, optional, default</span></dt><dd><p>select if the min,max is calculated on the entire matrix (axis=None),
+on each column (axis=0), on each row (axis=1)</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>y</strong><span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers</p>
+<dt><strong>y</strong><span class="classifier">array-like</span></dt><dd><p>numpy.array like with numbers  or dataframe</p>
 </dd>
 </dl>
 </dd>
@@ -237,10 +251,10 @@ Adapted by S. Haupert Dec 12, 2017 for Python</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.miscellaneous.nearest_idx.html" class="btn btn-neutral float-right" title="util.miscellaneous.nearest_idx" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.miscellaneous.mean_dB.html" class="btn btn-neutral float-right" title="util.miscellaneous.mean_dB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="util.miscellaneous.linear2dB.html" class="btn btn-neutral float-left" title="util.miscellaneous.linear2dB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.miscellaneous.intoBins.html" class="btn btn-neutral float-left" title="util.miscellaneous.intoBins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

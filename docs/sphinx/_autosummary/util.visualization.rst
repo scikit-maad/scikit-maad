@@ -1,4 +1,4 @@
-util.visualization
+﻿util.visualization
 ==================
 
 .. automodule:: util.visualization
@@ -18,6 +18,9 @@ util.visualization
       crop_image
       plot1D
       plot2D
+      plot_correlation_map
+      plot_features
+      plot_features_map
       rand_cmap
       save_figlist
    

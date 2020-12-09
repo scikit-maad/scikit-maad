@@ -1,4 +1,4 @@
-util.math\_tools
+﻿util.math\_tools
 ================
 
 .. automodule:: util.math_tools
@@ -15,6 +15,7 @@ util.math\_tools
       :toctree:
       :nosignatures:
    
+      entropy
       get_unimode
       running_mean
    

@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.decibelSPL.mean_dBSPL" href="util.decibelSPL.mean_dBSPL.html" />
-    <link rel="prev" title="util.decibelSPL.dBSPL2power" href="util.decibelSPL.dBSPL2power.html" /> 
+    <link rel="next" title="util.decibelSPL.power2dBSPL" href="util.decibelSPL.power2dBSPL.html" />
+    <link rel="prev" title="util.decibelSPL.amplitude2dBSPL" href="util.decibelSPL.amplitude2dBSPL.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,16 +96,14 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.PSD2Leq.html">util.decibelSPL.PSD2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.add_dBSPL.html">util.decibelSPL.add_dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2power.html">util.decibelSPL.dBSPL2power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.amplitude2dBSPL.html">util.decibelSPL.amplitude2dBSPL</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.decibelSPL.dBSPL2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.mean_dBSPL.html">util.decibelSPL.mean_dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.power2dBSPL.html">util.decibelSPL.power2dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2Leq.html">util.decibelSPL.pressure2Leq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2dBSPL.html">util.decibelSPL.pressure2dBSPL</a></li>
@@ -123,7 +121,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -206,7 +204,7 @@
 <dd class="field-odd"><dl class="simple">
 <dt><strong>L</strong><span class="classifier">ndarray-like or scalar</span></dt><dd><p>Array or scalar containing the sound pressure level (L [dB])</p>
 </dd>
-<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air</span></dt><dd></dd>
+<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)</span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -239,10 +237,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.decibelSPL.mean_dBSPL.html" class="btn btn-neutral float-right" title="util.decibelSPL.mean_dBSPL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.decibelSPL.power2dBSPL.html" class="btn btn-neutral float-right" title="util.decibelSPL.power2dBSPL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="util.decibelSPL.dBSPL2power.html" class="btn btn-neutral float-left" title="util.decibelSPL.dBSPL2power" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.decibelSPL.amplitude2dBSPL.html" class="btn btn-neutral float-left" title="util.decibelSPL.amplitude2dBSPL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="util.math_tools.running_mean" href="util.math_tools.running_mean.html" />
-    <link rel="prev" title="util.math_tools" href="util.math_tools.html" /> 
+    <link rel="prev" title="util.math_tools.entropy" href="util.math_tools.entropy.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,12 +96,13 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.math_tools.html">util.math_tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="util.math_tools.entropy.html">util.math_tools.entropy</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.math_tools.get_unimode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.math_tools.running_mean.html">util.math_tools.running_mean</a></li>
 </ul>
@@ -112,7 +113,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -188,7 +189,7 @@
 <h1>util.math_tools.get_unimode<a class="headerlink" href="#util-math-tools-get-unimode" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="util.math_tools.get_unimode">
-<code class="sig-prename descclassname">util.math_tools.</code><code class="sig-name descname">get_unimode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">7</span></em>, <em class="sig-param"><span class="n">N_bins</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/math_tools.html#get_unimode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.math_tools.get_unimode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">util.math_tools.</code><code class="sig-name descname">get_unimode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'median'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">7</span></em>, <em class="sig-param"><span class="n">N_bins</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/math_tools.html#get_unimode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.math_tools.get_unimode" title="Permalink to this definition">¶</a></dt>
 <dd><p>determine the statistical mode or modal value which is 
 the most common number in the dataset</p>
 <dl class="field-list simple">
@@ -196,7 +197,7 @@ the most common number in the dataset</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">1d or 2d ndarray of scalars</span></dt><dd><p>Vector or matrix</p>
 </dd>
-<dt><strong>mode</strong><span class="classifier">str, optional, default is ‘mean’</span></dt><dd><p>Select the mode to remove the noise
+<dt><strong>mode</strong><span class="classifier">str, optional, default is ‘median’</span></dt><dd><p>Select the mode to remove the noise
 Possible values for mode are :
 - ‘ale’ : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]
 - ‘median’ : subtract the median value
@@ -264,7 +265,7 @@ by frequency bin) of a spectrogram</p>
         <a href="util.math_tools.running_mean.html" class="btn btn-neutral float-right" title="util.math_tools.running_mean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="util.math_tools.html" class="btn btn-neutral float-left" title="util.math_tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.math_tools.entropy.html" class="btn btn-neutral float-left" title="util.math_tools.entropy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

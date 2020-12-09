@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sound" href="sound.html" />
+    <link rel="next" title="features" href="features.html" />
     <link rel="prev" title="rois.rois_2d.select_rois" href="rois.rois_2d.select_rois.html" /> 
 </head>
 
@@ -96,7 +96,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
@@ -105,6 +105,8 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html">rois.rois_2d.remove_background_along_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html">rois.rois_2d.remove_background_morpho</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
@@ -113,10 +115,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -192,7 +194,7 @@
 <h1>rois.rois_2d.smooth<a class="headerlink" href="#rois-rois-2d-smooth" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.smooth">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">smooth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.smooth" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">smooth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.smooth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smooth (i.e. blurr) the image with a gaussian filter</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -206,6 +208,8 @@ the pixel centers fall on zero-based (row, column) indices.</p>
 <dt><strong>std</strong><span class="classifier">scalar, optional, default is 1</span></dt><dd><p>Standard deviation of the gaussian kernel used to smooth the image 
 The larger is the number, the smoother will be the image and the longer 
 it takes. Standard values should fall between 0.5 to 3</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages</p>
 </dd>
 <dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
@@ -295,7 +299,7 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sound.html" class="btn btn-neutral float-right" title="sound" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="features.html" class="btn btn-neutral float-right" title="features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="rois.rois_2d.select_rois.html" class="btn btn-neutral float-left" title="rois.rois_2d.select_rois" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

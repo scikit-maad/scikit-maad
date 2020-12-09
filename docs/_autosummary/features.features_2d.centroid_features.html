@@ -96,6 +96,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="features.html">features</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="features.alpha_indices.html">features.alpha_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="features.features_1d.html">features.features_1d</a></li>
@@ -113,11 +115,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -201,11 +201,13 @@
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Sxx</strong><span class="classifier">2D array</span></dt><dd><p>Spectrogram</p>
 </dd>
-<dt><strong>rois: pandas DataFrame</strong></dt><dd><p>Regions of interest where descriptors will be computed. Array must  
+<dt><strong>rois: pandas DataFrame, default is None</strong></dt><dd><p>Regions of interest where descriptors will be computed. Array must  
 have a valid input format with column names: <code class="docutils literal notranslate"><span class="pre">min_t</span></code>, <code class="docutils literal notranslate"><span class="pre">min_f</span></code>, 
 <code class="docutils literal notranslate"><span class="pre">max_t</span></code>, and <code class="docutils literal notranslate"><span class="pre">max_f</span></code>. Use the function <code class="docutils literal notranslate"><span class="pre">maad.util.format_features</span></code>
 before using centroid_features to format of the <code class="docutils literal notranslate"><span class="pre">rois</span></code> DataFrame 
 correctly.</p>
+</dd>
+<dt><strong>im_rois: 2d ndarray</strong></dt><dd><p>image with labels as values</p>
 </dd>
 </dl>
 </dd>

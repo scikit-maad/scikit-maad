@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois.rois_2d.rois_to_imblobs" href="rois.rois_2d.rois_to_imblobs.html" />
+    <link rel="next" title="rois.rois_2d.remove_background_along_axis" href="rois.rois_2d.remove_background_along_axis.html" />
     <link rel="prev" title="rois.rois_2d.overlay_rois" href="rois.rois_2d.overlay_rois.html" /> 
 </head>
 
@@ -96,7 +96,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
@@ -105,6 +105,8 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html">rois.rois_2d.remove_background_along_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html">rois.rois_2d.remove_background_morpho</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
@@ -113,10 +115,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -192,7 +194,7 @@
 <h1>rois.rois_2d.remove_background<a class="headerlink" href="#rois-rois-2d-remove-background" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.remove_background">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">remove_background</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">gauss_win</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">gauss_std</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">beta1</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">beta2</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">llambda</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#remove_background"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.remove_background" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">remove_background</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">gauss_win</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">gauss_std</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">beta1</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">beta2</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">llambda</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#remove_background"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.remove_background" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the background noise using spectral subtraction</p>
 <p>Based on the spectrum of the A posteriori noise profile.   
 It computes an atenuation map in the time-frequency domain.  
@@ -200,11 +202,7 @@ See <a class="reference internal" href="#r526f65e32380-1" id="id1">[1]</a> or <a
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
-upper-right corners. If <cite>None</cite>, the image is positioned such that 
-the pixel centers fall on zero-based (row, column) indices.</p>
+<dt><strong>Sxx</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram</p>
 </dd>
 <dt><strong>gauss_win=50</strong><span class="classifier">int, optional, default: 50</span></dt><dd><p>Number of points in the gaussian window</p>
 </dd>
@@ -293,6 +291,10 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 <dd class="field-even"><dl class="simple">
 <dt><strong>Sxx_out</strong><span class="classifier">2d ndarray of scalar</span></dt><dd><p>Spectrogram after denoising</p>
 </dd>
+<dt><strong>noise_profile</strong><span class="classifier">1d darray of scalar</span></dt><dd><p>noise_profile</p>
+</dd>
+<dt><strong>BGNxx</strong><span class="classifier">2d ndarray of scalar</span></dt><dd><p>Noise map</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -321,7 +323,7 @@ Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rois.rois_2d.rois_to_imblobs.html" class="btn btn-neutral float-right" title="rois.rois_2d.rois_to_imblobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rois.rois_2d.remove_background_along_axis.html" class="btn btn-neutral float-right" title="rois.rois_2d.remove_background_along_axis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="rois.rois_2d.overlay_rois.html" class="btn btn-neutral float-left" title="rois.rois_2d.overlay_rois" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

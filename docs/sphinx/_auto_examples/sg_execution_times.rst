@@ -5,10 +5,12 @@
 
 Computation times
 =================
-**00:02.191** total execution time for **_auto_examples** files:
+**00:01.737** total execution time for **_auto_examples** files:
 
 +----------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr__auto_examples_plot_nmf_and_false_color_spectrogram.py` (``plot_nmf_and_false_color_spectrogram.py``) | 00:02.191 | 0.0 MB |
+| :ref:`sphx_glr__auto_examples_plot_nmf_and_false_color_spectrogram.py` (``plot_nmf_and_false_color_spectrogram.py``) | 00:01.737 | 0.0 MB |
++----------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr__auto_examples_find_rois.py` (``find_rois.py``)                                                       | 00:00.000 | 0.0 MB |
 +----------------------------------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr__auto_examples_find_rois_comparison.py` (``find_rois_comparison.py``)                                 | 00:00.000 | 0.0 MB |
 +----------------------------------------------------------------------------------------------------------------------+-----------+--------+

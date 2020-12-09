@@ -96,16 +96,14 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.PSD2Leq.html">util.decibelSPL.PSD2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.add_dBSPL.html">util.decibelSPL.add_dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2power.html">util.decibelSPL.dBSPL2power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.amplitude2dBSPL.html">util.decibelSPL.amplitude2dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2pressure.html">util.decibelSPL.dBSPL2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.mean_dBSPL.html">util.decibelSPL.mean_dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.power2dBSPL.html">util.decibelSPL.power2dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2Leq.html">util.decibelSPL.pressure2Leq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2dBSPL.html">util.decibelSPL.pressure2dBSPL</a></li>
@@ -123,7 +121,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -217,7 +215,7 @@ ndarray-like or scalar containing the raw sound waveform</p>
 <dt><strong>dBref</strong><span class="classifier">integer, optional, default is 94 (dBSPL)</span></dt><dd><p>Pressure sound level used for the calibration of the microphone 
 (usually 94dB, sometimes 114dB)</p>
 </dd>
-<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air</span></dt><dd></dd>
+<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)</span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -232,9 +230,16 @@ ndarray-like or scalar containing the raw sound waveform</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2dBSPL</span><span class="p">(</span><span class="n">wave</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Get equivalent sound pressure level (Leq)</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dBSPL</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+<p>Get an approximate of the equivalent sound pressure level (Leq)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dB</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 <span class="go">    54.53489077674256</span>
+</pre></div>
+</div>
+<p>Get equivalent sound pressure level (Leq) from the dedicated function</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Leq</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2Leq</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Leq_mean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dB</span><span class="p">(</span><span class="n">Leq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Leq_mean</span>
+<span class="go">    54.575482584140005   </span>
 </pre></div>
 </div>
 </dd></dl>

@@ -96,7 +96,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
@@ -105,6 +105,8 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html">rois.rois_2d.remove_background_along_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html">rois.rois_2d.remove_background_morpho</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.select_rois</a></li>
@@ -113,10 +115,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -192,7 +194,7 @@
 <h1>rois.rois_2d.select_rois<a class="headerlink" href="#rois-rois-2d-select-rois" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.select_rois">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">select_rois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_bin</span></em>, <em class="sig-param"><span class="n">ext</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_roi</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_roi</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#select_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.select_rois" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">select_rois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_bin</span></em>, <em class="sig-param"><span class="n">ext</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_roi</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_roi</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#select_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.select_rois" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select rois candidates based on area of rois. min and max boundaries. 
 The ouput image contains pixels with label as value.</p>
 <dl class="field-list">
@@ -207,6 +209,8 @@ the pixel centers fall on zero-based (row, column) indices.</p>
 <dt><strong>min_roi, max_roi</strong><span class="classifier">scalars, optional, default</span></dt><dd><p>Define the minimum and the maximum area possible for an ROI. If None,  
 the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
 the image</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages</p>
 </dd>
 <dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
@@ -280,15 +284,14 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>im_label: 2d ndarray</dt><dd><p>image with labels as values</p>
+<dt>im_rois: 2d ndarray</dt><dd><p>image with labels as values</p>
 </dd>
-<dt><strong>rois_bbox</strong><span class="classifier">list of tuple (min_y,min_x,max_y,max_x)</span></dt><dd><p>Contain the bounding box of each ROI</p>
-</dd>
-<dt><strong>rois_label</strong><span class="classifier">list of tuple (labelID, labelname)</span></dt><dd><p>Contain the label (LabelID=scalar,labelname=string) for each ROI 
-LabelID is a number from 1 to the number of ROI. The pixel value  
-of im_label correspond the labelID 
-Labname is a string. As the selection is auto, label is ‘unknown’ 
-by default.</p>
+<dt>rois: pandas DataFrame</dt><dd><p>Regions of interest with future descriptors will be computed. 
+Array have column names: <code class="docutils literal notranslate"><span class="pre">labelID</span></code>, <code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">min_y</span></code>, <code class="docutils literal notranslate"><span class="pre">min_x</span></code>,
+<code class="docutils literal notranslate"><span class="pre">max_y</span></code>, <code class="docutils literal notranslate"><span class="pre">max_x</span></code>,
+Use the function <code class="docutils literal notranslate"><span class="pre">maad.util.format_features</span></code> before using 
+centroid_features to format of the <code class="docutils literal notranslate"><span class="pre">rois</span></code> DataFrame 
+correctly.</p>
 </dd>
 </dl>
 </dd>

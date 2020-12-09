@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """ 
-Ensemble of functions to compute acoustic features and characterize audio signals.
+Ensemble of functions to characterize audio signals using multiple acoustic features and ecoacoustic indices.
 """
 
 from .features_2d import (filter_multires,

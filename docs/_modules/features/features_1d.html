@@ -94,12 +94,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -177,6 +177,10 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="c1">#### Importation from internal modules</span>
+<span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">audio_SNR</span>
+
+<span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="psd"><a class="viewcode-back" href="../../_autosummary/features.features_1d.psd.html#features.features_1d.psd">[docs]</a><span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;welch&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Estimates power spectral density of 1D signal using Welch&#39;s or periodogram methods. </span>
@@ -241,6 +245,7 @@
     <span class="n">f_idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">f_idx</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index_names</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">psd_s</span><span class="p">,</span> <span class="n">f_idx</span></div>
 
+<span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="rms"><a class="viewcode-back" href="../../_autosummary/features.features_1d.rms.html#features.features_1d.rms">[docs]</a><span class="k">def</span> <span class="nf">rms</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the root-mean-square (RMS) level of an input signal</span>
@@ -262,6 +267,132 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="skewness"><a class="viewcode-back" href="../../_autosummary/features.features_1d.skewness.html#features.features_1d.skewness">[docs]</a><span class="k">def</span> <span class="nf">skewness</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calcul the skewness (asymetry) of a signal x</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray of floats </span>
+<span class="sd">        1d signal or 2d matrix</span>
+<span class="sd">        </span>
+<span class="sd">    axis : integer, optional, default is None</span>
+<span class="sd">        select the axis to compute the kurtosis</span>
+<span class="sd">        The default is to compute the mean of the flattened array.</span>
+<span class="sd">                            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------    </span>
+<span class="sd">    ku : float or ndarray of floats</span>
+<span class="sd">        skewness of x </span>
+<span class="sd">        </span>
+<span class="sd">        if x is a 1d vector =&gt; single value</span>
+<span class="sd">        </span>
+<span class="sd">        if x is a 2d matrix =&gt; array of values corresponding to the number of</span>
+<span class="sd">        points in the other axis</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># flatten the array</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">((</span><span class="n">x</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+        <span class="n">mean_x</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">std_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">mean_x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">sk</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">z</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">std_x</span><span class="o">**</span><span class="mi">3</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING: type of x must be ndarray&quot;</span><span class="p">)</span> 
+        <span class="n">sk</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># test if ku is an array with a single value</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">sk</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sk</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">sk</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sk</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sk</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="kurtosis"><a class="viewcode-back" href="../../_autosummary/features.features_1d.kurtosis.html#features.features_1d.kurtosis">[docs]</a><span class="k">def</span> <span class="nf">kurtosis</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calcul the kurtosis (tailedness or curved or arching) of a signal x</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray of floats </span>
+<span class="sd">        1d signal or 2d matrix       </span>
+<span class="sd">    axis : integer, optional, default is None</span>
+<span class="sd">        select the axis to compute the kurtosis</span>
+<span class="sd">        The default is to compute the mean of the flattened array.</span>
+<span class="sd">                            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------    </span>
+<span class="sd">    ku : float or ndarray of floats</span>
+<span class="sd">        kurtosis of x </span>
+<span class="sd">        </span>
+<span class="sd">        if x is a 1d vector =&gt; single value</span>
+<span class="sd">        </span>
+<span class="sd">        if x is a 2d matrix =&gt; array of values corresponding to the number of</span>
+<span class="sd">        points in the other axis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># flatten the array</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">((</span><span class="n">x</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+        <span class="n">mean_x</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">std_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">mean_x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">ku</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">z</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">std_x</span><span class="o">**</span><span class="mi">4</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING: type of x must be ndarray&quot;</span><span class="p">)</span> 
+        <span class="n">ku</span> <span class="o">=</span> <span class="kc">None</span>
+        
+    <span class="c1"># test if ku is an array with a single value</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ku</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ku</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">ku</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ku</span><span class="p">)</span>
+       
+    <span class="k">return</span> <span class="n">ku</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="zero_crossing_rate"><a class="viewcode-back" href="../../_autosummary/features.features_1d.zero_crossing_rate.html#features.features_1d.zero_crossing_rate">[docs]</a><span class="k">def</span> <span class="nf">zero_crossing_rate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the Zero Crossing Rate of an audio signal.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : 1D array</span>
+<span class="sd">        Audio to process (wav)</span>
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency of the audio (Hz)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ------- </span>
+<span class="sd">    zcr : float   </span>
+<span class="sd">        number of zero crossing /s</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    From wikipedia :</span>
+<span class="sd">    The zero-crossing rate is the rate of sign-changes along a signal, i.e., </span>
+<span class="sd">    the rate at which the signal changes from positive to zero to negative or </span>
+<span class="sd">    from negative to zero to positive.[1] This feature has been used heavily </span>
+<span class="sd">    in both speech recognition and music information retrieval, </span>
+<span class="sd">    being a key feature to classify percussive sounds</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">zero_crosses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="n">fs</span>
+    <span class="n">zcr</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">duration</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_crosses</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">zcr</span></div>
+
+
+
+
+    
 </pre></div>
 
            </div>

@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="util.decibelSPL.pressure2Leq" href="util.decibelSPL.pressure2Leq.html" />
-    <link rel="prev" title="util.decibelSPL.mean_dBSPL" href="util.decibelSPL.mean_dBSPL.html" /> 
+    <link rel="prev" title="util.decibelSPL.dBSPL2pressure" href="util.decibelSPL.dBSPL2pressure.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,16 +96,14 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.PSD2Leq.html">util.decibelSPL.PSD2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.add_dBSPL.html">util.decibelSPL.add_dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2power.html">util.decibelSPL.dBSPL2power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.amplitude2dBSPL.html">util.decibelSPL.amplitude2dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2pressure.html">util.decibelSPL.dBSPL2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.mean_dBSPL.html">util.decibelSPL.mean_dBSPL</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.decibelSPL.power2dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2Leq.html">util.decibelSPL.pressure2Leq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2dBSPL.html">util.decibelSPL.pressure2dBSPL</a></li>
@@ -123,7 +121,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -199,14 +197,15 @@
 <h1>util.decibelSPL.power2dBSPL<a class="headerlink" href="#util-decibelspl-power2dbspl" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="util.decibelSPL.power2dBSPL">
-<code class="sig-prename descclassname">util.decibelSPL.</code><code class="sig-name descname">power2dBSPL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/decibelSPL.html#power2dBSPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.decibelSPL.power2dBSPL" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert sound pressure power (P [Pa²]) to sound pressure level (L [dB])</p>
+<code class="sig-prename descclassname">util.decibelSPL.</code><code class="sig-name descname">power2dBSPL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span></em>, <em class="sig-param"><span class="n">gain</span></em>, <em class="sig-param"><span class="n">Vadc</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">sensitivity</span><span class="o">=</span><span class="default_value">- 35</span></em>, <em class="sig-param"><span class="n">dBref</span><span class="o">=</span><span class="default_value">94</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/decibelSPL.html#power2dBSPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.decibelSPL.power2dBSPL" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert power (amplitude²) to sound pressure level (L [dB])</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>P</strong><span class="classifier">ndarray-like or scalar</span></dt><dd><p>ndarray-like or scalar containing the sound pressure power (P [Pa²])</p>
+<dt><strong>P</strong><span class="classifier">ndarray-like or scalar</span></dt><dd><p>ndarray-like or scalar containing the power signal (P), for instance 
+Pxx, the power spectral density (PSD)</p>
 </dd>
-<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air</span></dt><dd></dd>
+<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)</span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -218,24 +217,18 @@
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2pressure</span><span class="p">(</span><span class="n">wave</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Pxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Pxx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Get instantaneous sound pressure level (L)</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>    
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">S_power_mean</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>    
 <span class="go">array([41.56456034, 45.44257539, 43.17154534, 41.50665519, 38.08392914,</span>
 <span class="go">       34.52770543, 32.57142163, 31.68137318, 30.32861314, 28.46111069,</span>
 <span class="go">       27.88530431, 27.48595098, 26.96673216, 25.88241843, 24.93524547,</span>
 <span class="go">       ...</span>
 <span class="go">       -5.24972979, -5.38796789, -5.42812278, -5.47003443, -5.47740917,</span>
 <span class="go">       -5.67015921, -5.68214822])</span>
-</pre></div>
-</div>
-<p>Get equivalent sound pressure level (Leq)</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">add_dBSPL</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
-<span class="go">    54.53489077674256</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -253,7 +246,7 @@
         <a href="util.decibelSPL.pressure2Leq.html" class="btn btn-neutral float-right" title="util.decibelSPL.pressure2Leq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="util.decibelSPL.mean_dBSPL.html" class="btn btn-neutral float-left" title="util.decibelSPL.mean_dBSPL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.decibelSPL.dBSPL2pressure.html" class="btn btn-neutral float-left" title="util.decibelSPL.dBSPL2pressure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

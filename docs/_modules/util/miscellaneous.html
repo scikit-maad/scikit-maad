@@ -94,12 +94,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -167,6 +167,7 @@
             
   <h1>Source code for util.miscellaneous</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot; Utilitary functions for scikit-MAAD &quot;&quot;&quot;</span>
 <span class="c1">#</span>
 <span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
@@ -178,8 +179,9 @@
 <span class="c1"># Load the modules</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">diff</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">mean</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -238,20 +240,103 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># select the indices corresponding to the frequency bins range</span>
     <span class="k">if</span> <span class="n">bw</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
-        <span class="c1"># index = np.arange(0,len(fn),1)</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">)))</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="p">:</span>
-        <span class="c1">#index = (fn&gt;=bw[0]) *(fn&lt;=bw[1])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="o">&gt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span> <span class="o">*</span><span class="p">(</span><span class="n">fn</span><span class="o">&lt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span> <span class="p">:</span> 
-        <span class="c1"># index =  (abs(fn-bw)).argmin()</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
         <span class="n">index</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">index</span></div>
 
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="intoBins"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.intoBins.html#util.miscellaneous.intoBins">[docs]</a><span class="k">def</span> <span class="nf">intoBins</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bin_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Transform a vector or a matrix into bins </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        1D or 2D array.</span>
+<span class="sd">    an :1d ndarray of floats </span>
+<span class="sd">        Vector containing the positions of each value. </span>
+<span class="sd">        In case of 2D matrix, this vector corresponds to the horizontal (row)</span>
+<span class="sd">        or vertical (columns) units</span>
+<span class="sd">    bin_step : scalar</span>
+<span class="sd">        Determine the width of each bin.</span>
+<span class="sd">    axis : integer, optional, default is 0</span>
+<span class="sd">        Determine  along which axis the transformation is done.</span>
+<span class="sd">        In case of matrix :</span>
+<span class="sd">        axis = 0 =&gt; transformation is done on column</span>
+<span class="sd">        </span>
+<span class="sd">        axis = 1 =&gt; transformation is done on row </span>
+<span class="sd">    bin_min : scalar, optional, default is None</span>
+<span class="sd">        This minimum value corresponds to the start of the first bin. </span>
+<span class="sd">        By default, the minimum value is the first value of an.</span>
+<span class="sd">    bin_max : scalar, optional, default is None</span>
+<span class="sd">        This maximum value corresponds to end of the last bin. </span>
+<span class="sd">        By default, the maximum value is the last value of an.   </span>
+<span class="sd">    display : boolean, optional, defualt is False</span>
+<span class="sd">        Display the result of the tranformation : an histogram</span>
+<span class="sd">        In case of matrix, the mean histogram is shown.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xbins :  array-like</span>
+<span class="sd">        1D or 2D array which correspond to the data after being transformed into bins</span>
+<span class="sd">    bin : 1d ndarray of floats </span>
+<span class="sd">        Vector containing the positions of each bin</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force x to be an ndarray</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="c1"># Test if the bin_step is larger than the resolution of an</span>
+    <span class="k">if</span> <span class="n">bin_step</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">an</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">an</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;WARNING: bin step must be larger or equal than the actual resolution of x&#39;</span><span class="p">)</span>
 
+    <span class="c1"># In case the limits of the bin are not set</span>
+    <span class="k">if</span> <span class="n">bin_min</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bin_min</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">bin_max</span> <span class="o">==</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="n">bin_max</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c1"># Creation of the bins</span>
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bin_min</span><span class="p">,</span><span class="n">bin_max</span><span class="o">+</span><span class="n">bin_step</span><span class="p">,</span><span class="n">bin_step</span><span class="p">)</span>
+    
+    <span class="c1"># select the indices corresponding to the frequency bins range</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">xbin</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">an</span><span class="o">&gt;=</span><span class="n">b0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">an</span><span class="o">&lt;</span><span class="n">b</span><span class="p">)</span> 
+        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">indices</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">axis</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">indices</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">axis</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="n">indices</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+        <span class="n">b0</span> <span class="o">=</span> <span class="n">b</span>
+      
+    <span class="n">xbin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xbin</span><span class="p">)</span> <span class="o">*</span> <span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="c1"># if xbin is a vector</span>
+        <span class="k">if</span> <span class="n">xbin</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">an</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span><span class="n">xbin</span><span class="p">,</span> <span class="n">bin_step</span><span class="o">*</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if xbin is a matrix</span>
+            <span class="k">if</span> <span class="n">axis</span><span class="o">==</span><span class="mi">0</span> <span class="p">:</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">axis</span><span class="o">==</span><span class="mi">1</span> <span class="p">:</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">an</span><span class="p">,</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span><span class="n">mean</span><span class="p">(</span><span class="n">xbin</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bin_step</span><span class="o">*</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">xbin</span><span class="p">,</span> <span class="n">bins</span></div>
 
 <span class="c1">#=============================================================================</span>
        
@@ -273,24 +358,33 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear_scale.html#util.miscellaneous.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear_scale.html#util.miscellaneous.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Program to scale the values of a matrix from a user specified minimum to </span>
-<span class="sd">    a user specified maximum</span>
+<span class="sd">    Program to scale the values of a vector or matrix from a user specified </span>
+<span class="sd">    minimum to a user specified maximum</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like</span>
-<span class="sd">        numpy.array like with numbers</span>
+<span class="sd">        numpy.array like with numbers, list or dataframe</span>
 <span class="sd">    minval : scalar, optional, default : 0</span>
-<span class="sd">        This minimum value is attributed to the minimum value of the array </span>
+<span class="sd">        This minimum value is attributed to the minimum value of </span>
+<span class="sd">        - the array if axis = None</span>
+<span class="sd">        - each column if axis =0</span>
+<span class="sd">        - each row if axis = 1</span>
 <span class="sd">    maxval : scalar, optional, default : 1</span>
-<span class="sd">        This maximum value is attributed to the maximum value of the array         </span>
+<span class="sd">        This maximum value is attributed to the maximum value of  </span>
+<span class="sd">        - the array if axis = None</span>
+<span class="sd">        - each column if axis =0</span>
+<span class="sd">        - each row if axis = 1</span>
+<span class="sd">    axis : integer, optional, default : 0</span>
+<span class="sd">        select if the min,max is calculated on the entire matrix (axis=None),</span>
+<span class="sd">        on each column (axis=0), on each row (axis=1)</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : array-like</span>
-<span class="sd">        numpy.array like with numbers  </span>
+<span class="sd">        numpy.array like with numbers  or dataframe</span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -308,31 +402,30 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         
-    <span class="c1"># avoid problems with inf and -inf values</span>
-    <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
-    <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_min</span>
-    <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
-    <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_max</span>        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="p">:</span> 
+        <span class="c1"># avoid problems with inf and -inf values</span>
+        <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+        <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_min</span>
+        <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+        <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_max</span>        
      
     <span class="c1"># do the normalization</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">();</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">*</span><span class="p">(</span><span class="n">maxval</span><span class="o">-</span><span class="n">minval</span><span class="p">);</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="p">);</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">maxval</span><span class="o">-</span><span class="n">minval</span><span class="p">);</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">minval</span><span class="p">;</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="linear2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear2dB.html#util.miscellaneous.linear2dB">[docs]</a><span class="k">def</span> <span class="nf">linear2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;power&#39;</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="amplitude2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.amplitude2dB.html#util.miscellaneous.amplitude2dB">[docs]</a><span class="k">def</span> <span class="nf">amplitude2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transform linear date into decibel scale within the dB range (db_range).</span>
+<span class="sd">    Transform amplitude data (signal, scalar) into decibel scale within the dB range (db_range).</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : array-like</span>
+<span class="sd">    x : array-like or scalar</span>
 <span class="sd">        data to rescale in dB  </span>
-<span class="sd">    mode : str, default is &#39;power&#39;</span>
-<span class="sd">        select the type of data : &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
 <span class="sd">    db_range : scalar, optional, default : None</span>
 <span class="sd">        if db_range is a number, anything lower than -db_range is set to </span>
 <span class="sd">        -db_range and anything larger than 0 is set to 0</span>
@@ -343,14 +436,12 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : scalars</span>
-<span class="sd">        amplitude--&gt; 20*log10(x) + db_gain  </span>
+<span class="sd">        y = 20*log10(x) + db_gain  </span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
-<span class="sd">    &gt;&gt;&gt; linear2dB(a**2, mode=&#39;power&#39;)</span>
-<span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
-<span class="sd">    &gt;&gt;&gt; linear2dB(a, mode=&#39;amplitude&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; amplitude2dB(a, mode=&#39;amplitude&#39;)</span>
 <span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>            
@@ -364,10 +455,58 @@
         <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10 </span>
 
     <span class="c1"># conversion in dB  </span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log</span>
-    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log </span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log</span>
+
+    <span class="k">if</span> <span class="n">db_gain</span> <span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
+    
+    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="c1"># set anything above db_range as 0</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  
+        <span class="c1"># set anything less than -db_range as -db_range</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>  
+        
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="power2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.power2dB.html#util.miscellaneous.power2dB">[docs]</a><span class="k">def</span> <span class="nf">power2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform power (amplitude²) signal or scalar into decibel scale within the dB range (db_range).</span>
+<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        data to rescale in dB  </span>
+<span class="sd">    db_range : scalar, optional, default : None</span>
+<span class="sd">        if db_range is a number, anything lower than -db_range is set to </span>
+<span class="sd">        -db_range and anything larger than 0 is set to 0</span>
+<span class="sd">    db_gain : scalar, optional, default is 0</span>
+<span class="sd">        Gain added to the results </span>
+<span class="sd">        amplitude --&gt; 20*log10(x) + db_gain  </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalars</span>
+<span class="sd">        y = 10*log10(x) + db_gain  </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
+<span class="sd">    &gt;&gt;&gt; power2dB(a**2, mode=&#39;power&#39;)</span>
+<span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>            
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of x</span>
+    
+    <span class="c1"># Avoid zero value for log10  </span>
+    <span class="c1"># if it&#39;s a scalar</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>  
+    <span class="k">else</span> <span class="p">:</span>     
+        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10 </span>
+
+    <span class="c1"># conversion in dB  </span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log </span>
     
     <span class="k">if</span> <span class="n">db_gain</span> <span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
     
@@ -380,17 +519,15 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="dB2linear"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2linear.html#util.miscellaneous.dB2linear">[docs]</a><span class="k">def</span> <span class="nf">dB2linear</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;power&#39;</span><span class="p">,</span>  <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="dB2amplitude"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2amplitude.html#util.miscellaneous.dB2amplitude">[docs]</a><span class="k">def</span> <span class="nf">dB2amplitude</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transform linear date into decibel scale within the dB range (db_range).</span>
+<span class="sd">    Transform data in dB scale into amplitude</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like</span>
-<span class="sd">        data in dB to rescale in linear </span>
-<span class="sd">    mode : str, default is &#39;power&#39;</span>
-<span class="sd">        select &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
+<span class="sd">        data in dB to rescale in amplitude </span>
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain that was added to the result </span>
 <span class="sd">        --&gt; 20*log10(x) + db_gain</span>
@@ -398,22 +535,198 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : scalars</span>
-<span class="sd">        output in amplitude or power unit</span>
+<span class="sd">        output in amplitude unit</span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
-<span class="sd">    &gt;&gt;&gt; dB2linear(a, mode=&#39;power&#39;)</span>
-<span class="sd">        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])</span>
-<span class="sd">    &gt;&gt;&gt; dB2linear(a, mode=&#39;amplitude&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; dB2amplitude(a)</span>
 <span class="sd">        array([1., 2., 3., 4., 5.])</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>  
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
-    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> 
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
+
     <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="dB2power"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2power.html#util.miscellaneous.dB2power">[docs]</a><span class="k">def</span> <span class="nf">dB2power</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform data in dB scale into power (amplitude²)</span>
+<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        data in dB to rescale in power </span>
+<span class="sd">    db_gain : scalar, optional, default is 0</span>
+<span class="sd">        Gain that was added to the result </span>
+<span class="sd">        --&gt; 10*log10(x) + db_gain</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalars</span>
+<span class="sd">        output in power unit</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
+<span class="sd">    &gt;&gt;&gt; dB2power(a)</span>
+<span class="sd">        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> 
+     
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="add_dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.add_dB.html#util.miscellaneous.add_dB">[docs]</a><span class="k">def</span> <span class="nf">add_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    add dB values </span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *argv : ndarray-like of floats</span>
+<span class="sd">        Arrays containing the sound waveform in dB </span>
+<span class="sd">                </span>
+<span class="sd">    axis : integer, optional, default is 0</span>
+<span class="sd">        if addition of multiple arrays, select the axis on which the sum is done</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    e_sum : ndarray-like of floats</span>
+<span class="sd">        Array containing the sum of the dB values</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Example with an audio file</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(PSDxx,gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; L_sum = maad.util.add_dB(L, axis=2)  </span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Spectrum (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, L_sum.transpose(), **fig_kwargs)</span>
+
+<span class="sd">    Example with single values</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = 90 # 90dB</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dB(L1,L1)</span>
+<span class="sd">        93.01029995663981</span>
+<span class="sd">        </span>
+<span class="sd">    Example with arrays</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dB(L1,L1,axis=1)</span>
+<span class="sd">        array([90.45322979, 90.45322979])</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.add_dB(L1,L1,axis=0)</span>
+<span class="sd">        array([93.01029996, 83.01029996, 73.01029996])</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    
+    <span class="c1"># test if the 1st dim is = 1 (in case argv is a single 2d array) in order to remove this dimension</span>
+    <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,]</span>
+   
+    <span class="c1"># Verify the adequation between axis number and number of dimensions of L</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="c1"># dB to energy as sum has to be done with energy</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">dB2power</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">e_sum</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    
+    
+    <span class="c1"># test if 2 dimensions but length on 1 dimension is 1</span>
+    <span class="k">if</span> <span class="n">e_sum</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">e_sum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e_sum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> 
+            <span class="n">e_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">e_sum</span><span class="p">)</span>
+    
+    <span class="c1"># energy=&gt;pressure to dB</span>
+    <span class="n">L_sum</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">e_sum</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">L_sum</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="mean_dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.mean_dB.html#util.miscellaneous.mean_dB">[docs]</a><span class="k">def</span> <span class="nf">mean_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the average of dB values</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *argv : ndarray-like of floats</span>
+<span class="sd">        Arrays containing the sound waveform in dB</span>
+<span class="sd">                </span>
+<span class="sd">    axis : integer, optional, default is 0</span>
+<span class="sd">        if addition of multiple arrays, select the axis on which the sum is done</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    e_mean : ndarray-like of floats</span>
+<span class="sd">        Array containing the mean of the dB values</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Example with an audio file</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(PSDxx,gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; L_mean = maad.util.mean_dB(L, axis=2)  </span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Power spectrum (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, L_mean.transpose(), **fig_kwargs)</span>
+
+<span class="sd">    Example with single values</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = 90 # 90dB</span>
+<span class="sd">    &gt;&gt;&gt; L2 = 96 # 96dB</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L2)</span>
+<span class="sd">        93.96292</span>
+<span class="sd">        </span>
+<span class="sd">    Example with arrays</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1)</span>
+<span class="sd">        array([85.68201724, 85.68201724])</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1, axis=0)  </span>
+<span class="sd">        array([90., 80., 70.]) </span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># force to be ndarray</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    
+    <span class="c1"># test if the 1st dim is = 1 (in case argv is a single 2d array) in order to remove this dimension</span>
+    <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,]</span>
+    
+    <span class="c1"># Verify the adequation between axis number and number of dimensions of L</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="c1"># dB to energy as sum has to be done with energy</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">dB2power</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">e_mean</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    
+    <span class="c1"># energy (power) =&gt; dB</span>
+    <span class="n">e_mean</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">e_mean</span><span class="p">)</span>
+    
+    <span class="c1"># test if 2 dimensions but length on 1 dimension is 1</span>
+    <span class="k">if</span> <span class="n">e_mean</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">e_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> 
+            <span class="n">e_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">e_mean</span><span class="p">)</span>
+    
+    <span class="c1"># test if it&#39;s a single value</span>
+    <span class="k">if</span> <span class="n">e_mean</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> 
+        <span class="n">e_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">e_mean</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">e_mean</span></div>
 
 <span class="c1">#=============================================================================</span>
 

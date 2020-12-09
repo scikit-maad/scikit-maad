@@ -2460,21 +2460,20 @@ def spectral_indices (Sxx_power, tn, fn, ext,
         Dataframe containing of the calculated spectral indices  per frequency
         bin :
            
-    See also
+    See Also
     --------
     spectral_moments, spectral_moments, numberOfPeaks, spectral_LEQ, 
-    spectral_SNR, frequency_entropy,remove_background_along_axis, 
+    spectral_SNR, frequency_entropy, remove_background_along_axis, 
     spectral_entropy, acousticComplexityIndex, soundscapeIndex, soundscapeIndex,
     roughness, acousticDiversityIndex, acousticEvenessIndex, spectral_cover, 
     spectral_activity, spectral_events, tfsd, more_entropy, frequency_raoQ, 
-    acousticGradientIndex,regionOfInterestIndex
+    acousticGradientIndex, regionOfInterestIndex
 
     Examples
     --------
     >>> s, fs = maad.sound.load('./data/jura_cold_forest_nuit.wav')
     >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fse)   
-    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,
-                                                                  tn,fn,ext)
+    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,tn,fn,ext)
 
     """
     

@@ -94,12 +94,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -181,12 +181,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span>
 <span class="kn">from</span> <span class="nn">scipy.ndimage.filters</span> <span class="kn">import</span> <span class="n">uniform_filter1d</span> <span class="c1"># for fast running mean</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear_scale</span>
 
 <span class="c1"># min value</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
-
 
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="running_mean"><a class="viewcode-back" href="../../_autosummary/util.math_tools.running_mean.html#util.math_tools.running_mean">[docs]</a><span class="k">def</span> <span class="nf">running_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">):</span>
@@ -239,7 +239,7 @@
     <span class="k">return</span> <span class="n">x_mean</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="get_unimode"><a class="viewcode-back" href="../../_autosummary/util.math_tools.get_unimode.html#util.math_tools.get_unimode">[docs]</a><span class="k">def</span> <span class="nf">get_unimode</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="get_unimode"><a class="viewcode-back" href="../../_autosummary/util.math_tools.get_unimode.html#util.math_tools.get_unimode">[docs]</a><span class="k">def</span> <span class="nf">get_unimode</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    determine the statistical mode or modal value which is </span>
 <span class="sd">    the most common number in the dataset</span>
@@ -249,7 +249,7 @@
 <span class="sd">    X :  1d or 2d ndarray of scalars</span>
 <span class="sd">        Vector or matrix </span>
 <span class="sd">                </span>
-<span class="sd">    mode : str, optional, default is &#39;mean&#39;</span>
+<span class="sd">    mode : str, optional, default is &#39;median&#39;</span>
 <span class="sd">        Select the mode to remove the noise</span>
 <span class="sd">        Possible values for mode are :</span>
 <span class="sd">        - &#39;ale&#39; : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</span>
@@ -365,8 +365,59 @@
         
     <span class="k">return</span> <span class="n">unimode_value</span></div>
 
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="entropy"><a class="viewcode-back" href="../../_autosummary/util.math_tools.entropy.html#util.math_tools.entropy">[docs]</a><span class="k">def</span> <span class="nf">entropy</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the entropy of a vector or matrix x (i.e. waveform, spectrum...)    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray of floats</span>
+<span class="sd">        x is a vector (1d) or a matrix (2d)</span>
 
+<span class="sd">    axis : int, optional, default is 0</span>
+<span class="sd">        select the axis where the entropy is computed</span>
+<span class="sd">        if x is a vector, axis=0</span>
+<span class="sd">        if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : float or ndarray of floats</span>
+<span class="sd">        entropy of x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="n">axis</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> 
+                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING: x is empty&quot;</span><span class="p">)</span> 
+                <span class="n">H</span> <span class="o">=</span> <span class="kc">None</span> 
+            <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
+            <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if datain contains negative values -&gt; rescale the signal between </span>
+                <span class="c1"># between posSitive values (for example (0,1))</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">maxval</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># length of datain along axis</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+                <span class="c1"># Tranform the signal into a Probability mass function (pmf)</span>
+                <span class="c1"># Sum(pmf) = 1</span>
+                <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+                    <span class="n">pmf</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>                     
+                    <span class="n">pmf</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+                <span class="n">pmf</span><span class="p">[</span><span class="n">pmf</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
+                <span class="c1">#normalized by the length : H=&gt;[0,1]</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pmf</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pmf</span><span class="p">),</span><span class="n">axis</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING :axis is greater than the dimension of the array&quot;</span><span class="p">)</span>    
+            <span class="n">H</span> <span class="o">=</span> <span class="kc">None</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING: x must be ndarray&quot;</span><span class="p">)</span>   
+        <span class="n">H</span> <span class="o">=</span> <span class="kc">None</span> 
 
+    <span class="k">return</span> <span class="n">H</span></div>
 </pre></div>
 
            </div>

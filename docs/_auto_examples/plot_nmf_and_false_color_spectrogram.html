@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Wrapper - This script gives an example of how to use scikit-MAAD package" href="maad_wrapper.html" />
+    <link rel="next" title="Find Regions of interest (ROIs) in a spectrogram" href="find_rois.html" />
     <link rel="prev" title="Using wavelets to characterize the time-frequency shape of sounds" href="using_shape_features.html" /> 
 </head>
 
@@ -96,12 +96,12 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/rois.html">rois</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../_autosummary/util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="find_rois.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="maad_wrapper.html">Wrapper - This script gives an example of how to use scikit-MAAD package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="maad_batch.html">Batch - This script gives an example of how to use scikit-MAAD package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="maad_details_auto.html">Details Auto - This script gives an example of how to use scikit-MAAD package</a></li>
@@ -209,7 +210,7 @@ scikit-image and scikit-learn Python packages.</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">features</span>
-<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear2dB</span><span class="p">,</span> <span class="n">plot2D</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">plot2D</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">transform</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">NMF</span>
@@ -230,14 +231,14 @@ scikit-image and scikit-learn Python packages.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
 <span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
 
-<span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+<span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 <span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multichannel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">4</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="s1">&#39;extent&#39;</span><span class="p">:(</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])})</span>
 </pre></div>
 </div>
 <img alt="Spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_nmf_and_false_color_spectrogram_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:295: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:303: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   if now: plt.show()
 </pre></div>
 </div>
@@ -299,7 +300,7 @@ where it can be easily distinguished the different sound sources by color.</p>
 <li><p>Lee, D., &amp; Sueng, S. (1999). Learning the parts of objects by non-negative matrix factorization. Nature, 401, 788–791. <a class="reference external" href="https://doi.org/10.1038/44565">https://doi.org/10.1038/44565</a></p></li>
 <li><p>Towsey, M., Znidersic, E., Broken-Brow, J., Indraswari, K., Watson, D. M., Phillips, Y., Truskinger, A., &amp; Roe, P. (2018). Long-duration, false-colour spectrograms for detecting species in large audio data-sets. Journal of Ecoacoustics, 2(1), 1–1. <a class="reference external" href="https://doi.org/10.22261/JEA.IUSWUI">https://doi.org/10.22261/JEA.IUSWUI</a></p></li>
 </ol>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.191 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.737 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-nmf-and-false-color-spectrogram-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/29fcf3e58e57e9cfbb68b402a8e0da2a/plot_nmf_and_false_color_spectrogram.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nmf_and_false_color_spectrogram.py</span></code></a></p>
@@ -320,7 +321,7 @@ where it can be easily distinguished the different sound sources by color.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="maad_wrapper.html" class="btn btn-neutral float-right" title="Wrapper - This script gives an example of how to use scikit-MAAD package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="find_rois.html" class="btn btn-neutral float-right" title="Find Regions of interest (ROIs) in a spectrogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="using_shape_features.html" class="btn btn-neutral float-left" title="Using wavelets to characterize the time-frequency shape of sounds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -96,7 +96,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
@@ -105,6 +105,8 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html">rois.rois_2d.remove_background_along_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html">rois.rois_2d.remove_background_morpho</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
@@ -113,10 +115,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -192,7 +194,7 @@
 <h1>rois.rois_2d.create_mask<a class="headerlink" href="#rois-rois-2d-create-mask" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.create_mask">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">mode_bin</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.create_mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">mode_bin</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.create_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binarize an image based on a double threshold.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -205,6 +207,8 @@ the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
 <dt><strong>mode_bin</strong><span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘relative’, a relative double threshold is performed 
 if ‘absolute’, an double threshold with absolute value is performed</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages</p>
 </dd>
 <dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>

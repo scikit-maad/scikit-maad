@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util" href="util.html" />
-    <link rel="prev" title="sound.sound.select_bandwidth" href="sound.sound.select_bandwidth.html" /> 
+    <link rel="next" title="rois" href="rois.html" />
+    <link rel="prev" title="sound.sound.spectral_SNR" href="sound.sound.spectral_SNR.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,22 +96,27 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="sound.sound.html">sound.sound</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.audio_SNR.html">sound.sound.audio_SNR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_amplitude_spectro.html">sound.sound.avg_amplitude_spectro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_power_spectro.html">sound.sound.avg_power_spectro</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.envelope.html">sound.sound.envelope</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.fir_filter.html">sound.sound.fir_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.intoOctave.html">sound.sound.intoOctave</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.load.html">sound.sound.load</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound.spectrogram</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
 </ul>
@@ -305,12 +310,14 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>Pxx</strong><span class="classifier">2d ndarray of floats</span></dt><dd><p>Spectrogram : Matrix containing K frames with N/2 frequency bins, 
-K*N &lt;= length (wave)</p>
+<dt><strong>Sxx</strong><span class="classifier">2d ndarray of floats</span></dt><dd><p>Spectrogram : Matrix containing K frames with N/2 frequency bins, 
+K*N &lt;= length (wave)
+Sxx unit is power =&gt; Sxx_power if mode is ‘psd’
+Sxx unit is amplitude =&gt; Sxx_ampli if mode is ‘amplitude’ or ‘complex’</p>
 </dd>
-<dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution of the spectrogram (horizontal x-axis)</p>
+<dt><strong>tn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>time vector (horizontal x-axis)</p>
 </dd>
-<dt><strong>df</strong><span class="classifier">scalar</span></dt><dd><p>Frequency resolution of the spectrogram (vertical y-axis)</p>
+<dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Frequency vector (vertical y-axis)</p>
 </dd>
 <dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners.</p>
@@ -327,18 +334,18 @@ when working in with sound pressure level (dB SPL)</p>
 </div>
 <p>Compute energy of signal s</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">E1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">E1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">E1</span><span class="p">)</span>
 <span class="go">44.861029507805256</span>
 </pre></div>
 </div>
 <p>Compute the spectrogram with ‘psd’ output (if N&lt;4096, the energy is lost)</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">4096</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Pxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;psd&#39;</span><span class="p">)</span>   
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;psd&#39;</span><span class="p">)</span>   
 </pre></div>
 </div>
 <p>Display Power Spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PxxdB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">Pxx</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span> <span class="c1"># convert into dB</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">PxxdB</span><span class="p">),</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="c1"># convert into dB</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">),</span>
 <span class="go">                  &#39;vmin&#39;:-70,</span>
 <span class="go">                  &#39;extent&#39;:ext,</span>
 <span class="go">                  &#39;figsize&#39;:(4,13),</span>
@@ -346,30 +353,30 @@ when working in with sound pressure level (dB SPL)</p>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="go">fig, ax = maad.util.plot2D(PxxdB,**fig_kwargs)     </span>
+<span class="go">fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     </span>
 </pre></div>
 </div>
-<p>Compute mean power os spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_power</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Pxx</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<p>Compute mean power spectrogram</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>energy =&gt; power x time</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">E2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">mean_power</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">E2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">E2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">S_power_mean</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">E2</span><span class="p">)</span>
 <span class="go">44.93083283875093</span>
 </pre></div>
 </div>
 <p>Compute the spectrogram with ‘amplitude’ output</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>  
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_ampli</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>  
 </pre></div>
 </div>
-<p>For energy conservation =&gt; convert Sxx (amplitude) into power before doing the average.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_power</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<p>For energy conservation =&gt; convert Sxx_ampli (amplitude) into power before doing the average.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx_ampli</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>energy =&gt; power x time</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">E3</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">mean_power</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> 
-<span class="gp">&gt;&gt;&gt; </span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">E3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">E3</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">S_power_mean</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> 
+<span class="gp">&gt;&gt;&gt; </span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">E3</span><span class="p">)</span>
 <span class="go">44.93083283875093</span>
 </pre></div>
 </div>
@@ -385,10 +392,10 @@ when working in with sound pressure level (dB SPL)</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.html" class="btn btn-neutral float-right" title="util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rois.html" class="btn btn-neutral float-right" title="rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sound.sound.select_bandwidth.html" class="btn btn-neutral float-left" title="sound.sound.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sound.sound.spectral_SNR.html" class="btn btn-neutral float-left" title="sound.sound.spectral_SNR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
