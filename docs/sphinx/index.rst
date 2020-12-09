@@ -21,8 +21,8 @@ This work started in 2016 at the Museum National d'Histoire Naturelle (MNHN)
 in Paris, France. It was initiated by **Juan Sebastian Ulloa**, supervised by 
 **Jérôme Sueur** and **Thierry Aubin** at the Muséum National d'Histoire Naturelle 
 and the Université Paris Saclay respectively. Python functions were added by 
-**Sylvain Haupert** and **Chloe Huetz** in 2018. New features are currently being 
-developped and a stable release will be available by the end of 2019.
+**Sylvain Haupert** and **Juan Sebastian Ulloa** in 2018. New features are currently being developped and a stable release will be available by the end of 2020.
+
 
 .. toctree::
    :maxdepth: 2
@@ -37,14 +37,14 @@ developped and a stable release will be available by the end of 2019.
    :caption: Documentation
    :recursive:
    
-   features
-   rois
    sound
+   rois
+   features
    util
    
 .. toctree::
    :maxdepth: 2
-   :caption: Examples Gallery
+   :caption: Example Gallery
 
    _auto_examples/index
    

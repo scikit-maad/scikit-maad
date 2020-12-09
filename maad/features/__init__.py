@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-""" feature functions for scikit-maad
-Methods to compute multiple descriptors to characterize sounds
-
+""" 
+Ensemble of functions to compute acoustic features and characterize audio signals.
 """
 
 from .features_2d import (filter_multires,

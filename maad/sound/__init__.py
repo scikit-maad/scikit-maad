@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """ 
-Sound functions for scikit-maad
-Load, filter and transform 1D audio signals
-
+Ensemble of functions to load and preprocess audio signals.
 """
 
 from .sound import (load,
