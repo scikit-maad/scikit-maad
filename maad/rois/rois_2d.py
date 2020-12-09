@@ -689,7 +689,13 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
         - format : string, optional, default is 'png' 
             Format to save the figure 
              
-        ... and more, see matplotlib     
+        ... and more, see matplotlib    
+        
+    Reference:
+    ---------
+    Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
+    Natural Recordings of the Environment. Queensland University of Technology,
+    Brisbane
                        
     Returns 
     ------- 

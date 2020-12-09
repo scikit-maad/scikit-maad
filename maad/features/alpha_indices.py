@@ -78,8 +78,6 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
         
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
