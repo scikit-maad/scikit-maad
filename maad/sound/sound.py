@@ -33,7 +33,6 @@ def _wave2frames (s, Nt=512):
     ----------
     s : 1d ndarray of floats (already divided by the number of bits)
         Vector containing the sound waveform 
-
     Nt : int, optional, default is 512
         Number of points per frame
                 
@@ -66,47 +65,35 @@ def load(filename, channel='left', detrend=True, verbose=False,
         must have this postfix :
         XXXX_yyyymmdd_hhmmss.wav
         with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-        mm : minutes / ss : seconds
-            
-    channel : {'left', right'}, optional, default: left
+        mm : minutes / ss : seconds     
+    channel : {`'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
-
     detrend : boolean, optional, default is True
         Subtract the DC value.
-    
     verbose : boolean, optional, default is False
         print messages into the consol or terminal if verbose is True
-        
     display : boolean, optional, default is False
         Display the signal if True
-        
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
-        
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
            
         - savefilename : str, optional, default :'_audiogram.png'
             Postfix of the figure filename
-         
         - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        
         - title : string, optional, default : 'Spectrogram'
             title of the figure
-        
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        
         - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-        
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
             'viridis'...
-        
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
@@ -115,22 +102,19 @@ def load(filename, channel='left', detrend=True, verbose=False,
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        
         - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
-        
         - format : string, optional, default is 'png'
             Format to save the figure
-            
+           
         ... and more, see matplotlib     
         
     Returns
     -------    
     s_out : 1d ndarray of integer
         Vector containing the audiogram 
-        
     fs : int 
         The sampling frequency in Hz of the audiogram    
         
@@ -203,16 +187,14 @@ def envelope (s, mode='fast', Nt=32):
     Parameters
     ----------
     s : 1d ndarray of floats 
-        Vector containing sound waveform
-        
-    mode : str, optional, default is "fast"
-        - "fast" : The sound is first divided into frames (2d) using the 
+        Vector containing sound waveform 
+    mode : str, optional, default is `fast`
+        - `fast` : The sound is first divided into frames (2d) using the 
             function wave2timeframes(s), then the max of each frame gives a 
             good approximation of the envelope.
-        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+        - `Hilbert` : estimation of the envelope from the Hilbert transform. 
             The method is slow
-    
-    Nt : integer, optional, default is 32
+    Nt : integer, optional, default is `32`
         Size of each frame. The largest, the highest is the approximation.
                   
     Returns
@@ -222,7 +204,12 @@ def envelope (s, mode='fast', Nt=32):
         
     References
     ----------
-    Fast calculation is inspired by the work of M. Towsey at Queensland University of Technology (QUT).
+    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
+          Derived from Natural Recordings of the Environment. 
+          Queensland University of Technology, Brisbane.
+    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived 
+          from long-duration recordings of the naturalenvironment.
+          Queensland University of Technology, Brisbane.
     
     Examples
     --------
@@ -238,11 +225,13 @@ def envelope (s, mode='fast', Nt=32):
        0.10258595])
     
     compute the time vector for the vector wave
+    
     >>> t = np.arange(0,len(s),1)/fs
+    
     compute the time vector for the vector env_fast
     >>> t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)
     
-    plot 0.1 of the envelope and 0.1s of the abs(s)
+    plot 0.1s of the envelope and 0.1s of the abs(s)
     
     >>> import matplotlib.pyplot as plt
     >>> fig1, ax1 = plt.subplots()
@@ -283,6 +272,8 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
         choose between Octave or thirdOctave frequency resolution
     display : boolean, default is False
         Display the octave spectrum/spectrogram
+    ** kwargs : optional. This parameter is used by plt.plot    
+    
     Returns
     -------
     X_octave : ndarray of floats
@@ -356,13 +347,13 @@ def audio_SNR (s, mode ='fast', Nt=512) :
     ----------
     s : 1D array
         Audio to process
-    mode : str, optional, default is "fast"
+    mode : str, optional, default is `fast`
         Select the mode to compute the envelope of the audio waveform
-        - "fast" : The sound is first divided into frames (2d) using the 
-            function _wave2timeframes(s), then the max of each frame gives a 
-            good approximation of the envelope.
-        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
-            The method is slow
+        `fast` : The sound is first divided into frames (2d) using the 
+        function _wave2timeframes(s), then the max of each frame gives a 
+        good approximation of the envelope.
+        `Hilbert` : estimation of the envelope from the Hilbert transform. 
+        The method is slow
     Nt : integer, optional, default is 512
         Size of each frame. The largest, the highest is the approximation.
     
@@ -377,8 +368,13 @@ def audio_SNR (s, mode ='fast', Nt=512) :
         SNRt = ENRt - BGNt
 
     References
-    -----
-    This is inspire by "ref QUT" [Towsey]
+    ----------
+    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
+          Derived from Natural Recordings of the Environment. 
+          Queensland University of Technology, Brisbane.
+    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived 
+          from long-duration recordings of the naturalenvironment.
+          Queensland University of Technology, Brisbane.
 
     Examples
     --------
@@ -431,8 +427,13 @@ def spectral_SNR (Sxx_power) :
         Signal to noise ratio per frequency bin
         
     References
-    -----
-    This is inspire by "ref QUT" [Towsey]
+    ----------
+    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
+          Derived from Natural Recordings of the Environment. 
+          Queensland University of Technology, Brisbane.
+    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived 
+          from long-duration recordings of the naturalenvironment.
+          Queensland University of Technology, Brisbane.
 
     Examples
     --------
@@ -473,39 +474,26 @@ def select_bandwidth (s, fs, fcut, forder, fname ='butter', ftype='bandpass',
     ----------
     x : array_like
         1d vector of scalars to be filtered
-        
     fs : scalar
         sampling frequency   
-        
     fcut : array_like
         A scalar or length-2 sequence giving the critical frequencies.             
-    
     forder : int
         The order of the filter.
-    
-    ftype : {'bandpass', 'lowpass', 'highpass', 'bandstop'}, optional, default 
-        is 'bandpass'
+    ftype : {`bandpass`, `lowpass`, `highpass`, `bandstop`}, optional, default 
+        is `bandpass`
         The type of filter.
-        
-    fname : {'butter', 'cheby1', 'cheby2', 'ellip', 'bessel'}, optional, default
-        is 'butter'
-        
-    The type of IIR filter to design:
-    
-        Butterworth : 'butter'
-        
-        Chebyshev I : 'cheby1'
-        
-        Chebyshev II : 'cheby2'
-        
-        Cauer/elliptic: 'ellip'
-        
-        Bessel/Thomson: 'bessel'
-            
+    fname : {`butter`, 'cheby1`, `cheby2`, `ellip`, `bessel`}, optional, default
+        is 'butter'   
+        The type of IIR filter to design:
+        - Butterworth : `butter`
+        - Chebyshev I : 'cheby1`
+        - Chebyshev II : `cheby2`
+        - Cauer/elliptic: `ellip`
+        - Bessel/Thomson: `bessel`   
     rp : float, optional
         For Chebyshev and elliptic filters, provides the maximum ripple in 
-        the passband. (dB)
-        
+        the passband. (dB)   
     rs : float, optional
         For Chebyshev and elliptic filters, provides the minimum attenuation 
         in the stop band. (dB)           
@@ -518,10 +506,10 @@ def select_bandwidth (s, fs, fcut, forder, fname ='butter', ftype='bandpass',
     See Also
     --------
     fir_filter1d
+        Lowpass, highpass, bandpass or bandstop a 1d signal with an Fir filter
     
     Examples
     --------
-    
     Load and display the spectrogram of a sound waveform
     
     >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
@@ -563,14 +551,12 @@ def fir_filter(x, kernel, axis=0):
     ----------
     x : array_like
         1d vector or 2d matrix of scalars to be filtered
-   
     kernel : array_like or tuple
         Pass directly the kernel (1d vector of scalars) 
         Or pass the arguments in a tuple to create a kernel. Arguments are:   
         - window : string, float, or tuple. The type of window to create. 
         boxcar, triang, blackman, hamming, hann, bartlett, flattop,
         parzen, bohman, blackmanharris, nuttall, barthann, 
-        
         - (kaiser, beta), 
         - (gaussian, standard deviation), 
         - (general_gaussian, power, width), 
@@ -580,25 +566,24 @@ def fir_filter(x, kernel, axis=0):
         - (exponential, decay scale), 
         - (tukey, taper fraction)
         - N : length of the kernel
-              
         Examples:
-        kernel = ('boxcar', 9)
-        kernel = (('gaussian', 0.5), 5)
-        kernel = [1 3 5 7 5 3 1] 
-        
+        - kernel = ('boxcar', 9)
+        - kernel = (('gaussian', 0.5), 5)
+        - kernel = [1 3 5 7 5 3 1] 
     axis : int
         Determine along which axis is performed the filtering in case of 2d matrix
         axis = 0 : vertical
         axis = 1 : horizontal
     
-    Returns :
-    --------
+    Returns
+    -------
     y : array_like
         The filtered output with the same shape and phase as x
         
     See Also
     --------
     select_bandwidth
+        Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter
     
     Examples
     --------  
@@ -627,6 +612,7 @@ def fir_filter(x, kernel, axis=0):
     >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
     
     Smooth the spectrogram, frequency by frequency (blurr)
+    
     >>> Lxx_blurr = maad.sound.fir_filter(Lxx, kernel=(('gaussian', 1), 5), axis=1)
     >>> fig, ax = maad.util.plot2D(Lxx_blurr,**fig_kwargs)
     
@@ -674,24 +660,21 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     """
     Convert a sound waveform into a spectrogram 
     the output is : 
-    - power (mode='psd')
-    - amplitude (mode = 'amplitude') => sqrt(power)
-    - complex with real and imaginary parts (mode = 'complex')
+    . power (mode='psd')
+    . amplitude (mode = 'amplitude') => sqrt(power)
+    . complex with real and imaginary parts (mode = 'complex')
     
     Parameters
     ----------
     x : 1d ndarray
         Vector containing the sound waveform 
-        
     fs : int
         The sampling frequency in Hz 
-        
     window : str or tuple or array_like, optional, default to 'hann'
         Desired window to use. If window is a string or tuple, it is passed to 
         get_window to generate the window values, which are DFT-even by default. 
         See get_window for a list of windows and required parameters. 
         If window is array_like it will be used directly as the window and its length must be nperseg. 
-        
     nperseg : int, optional. Defaults to 1024.
         Length of the segment used to compute the FFT. No zero padding. 
         For fast calculation, it's better to use a number that is a power 2. 
@@ -700,59 +683,43 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         df = fs/nperseg
         It sets also the time slot (dt) of each frequency frames : dt = nperseg/fs
         The higher is the number, the lower is the resolution in time (dt) 
-        but better is the resolution in frequency (df).
-        
+        but better is the resolution in frequency (df).  
     noverlap : int, optional. Defaults to None.
         Number of points to overlap between segments. 
         If None, noverlap = nperseg // 2. 
-
     mode : str, optional. Default is 'psd'
         Choose the output between 
         - 'psd' : Power Spectral Density 
         - 'amplitude' : module of the stft (sqrt(psd))
-        - 'complex' : real and imaginary part of the stft
-        
+        - 'complex' : real and imaginary part of the stft  
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
         tcrop corresponds to the min and max boundary time values  
-        
     verbose : boolean, optional, default is False
-        print messages into the consol or terminal if verbose is True
-        
+        print messages into the consol or terminal if verbose is True   
     display : boolean, optional, default is False
         Display the signal if True
-        
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.
-        
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
-            
+        is added to the root filename.        
+    **kwargs, optional. This parameter is used by plt.plot and savefig functions
         - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
-        
         - db_range : scalar, optional, default : 100
             if db_range is a number, anything lower than -db_range is set to 
             -db_range and anything larger than 0 is set to 0
-        
         - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        
         - title : string, optional, default : 'Spectrogram'
             title of the figure
-        
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        
         - ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
-        
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
             'viridis'...
-        
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
@@ -762,7 +729,6 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        
         - dpi : integer, optional, default is 96
             Dot per inch. 
             For printed version, choose high dpi (i.e. dpi=300) => slow
@@ -779,13 +745,10 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         K*N <= length (wave)
         Sxx unit is power => Sxx_power if mode is 'psd'
         Sxx unit is amplitude => Sxx_ampli if mode is 'amplitude' or 'complex'
-        
     tn : 1d ndarray of floats
-        time vector (horizontal x-axis)
-        
+        time vector (horizontal x-axis)    
     fn : 1d ndarray of floats
-        Frequency vector (vertical y-axis)
-        
+        Frequency vector (vertical y-axis)    
     ext : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and
         upper-right corners. 
