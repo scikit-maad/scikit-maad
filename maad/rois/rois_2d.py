@@ -28,8 +28,6 @@ from skimage.morphology import reconstruction
 from skimage.io import imread 
  
 import pandas as pd 
-
-from timeit import default_timer as timer
  
 # min value 
 import sys 
