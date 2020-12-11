@@ -13,14 +13,16 @@ from .rois_2d import (load,
                      create_mask,
                      select_rois,
                      overlay_rois,
-                     rois_to_imblobs)
+                     rois_to_imblobs,
+                     sharpness)
 
 from .rois_1d import (sinc,
                       _corresp_onset_offset,
                       _energy_windowed,
                       find_rois_cwt)
 
-__all__ = ['load', 
+__all__ = [ # rois 2d
+            'load', 
            'remove_background', 
            'remove_background_morpho',
            'remove_background_along_axis',
@@ -31,6 +33,8 @@ __all__ = ['load',
            'select_rois',
            'overlay_rois',
            'rois_to_imblobs',
+           'sharpness',
+           # rois 1d
            'sinc',
            '_corresp_onset_offset',
            '_energy_windowed',

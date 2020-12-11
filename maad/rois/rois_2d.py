@@ -28,6 +28,8 @@ from skimage.morphology import reconstruction
 from skimage.io import imread 
  
 import pandas as pd 
+
+from timeit import default_timer as timer
  
 # min value 
 import sys 
@@ -117,10 +119,9 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
         third dimension, such that a gray-image is MxN, an 
         RGB-image MxNx3 and an RGBA-image MxNx4. 
          
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
+    ext : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
+        upper-right corners.
          
     dt : scalar 
         Time resolution of the spectrogram (horizontal x-axis) 
@@ -171,7 +172,7 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
 #**************************************************************************** 
 #*************               noise_subtraction                    *********** 
 #**************************************************************************** 
-def remove_background(Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,  
+def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,  
                       llambda=1, display = False, savefig=None, **kwargs): 
     """ 
     Remove the background noise using spectral subtraction 
@@ -202,6 +203,9 @@ def remove_background(Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     llambda : int, optional, default: 1        
         over-subtraction factor to compensate variation of noise amplitude. 
         Should be close to 1 
+    
+    verbose : boolean, optional, default is False
+        Print messages and speed
          
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -270,9 +274,36 @@ def remove_background(Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
  
     .. [2] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean square  
        error short-time spectral amplitude estimator, IEEE. Transactions in 
-       Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.          
+       Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.   
+
+    Examples:
+    ---------
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
+    
+    Convert linear spectrogram into dB and add 96dB (which is the maximum dB
+    for 16 bits wav) in order to have positive values
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) + 96
+    
+    Remove stationnary noise from the spectrogram in dB
+    
+    >>> Sxx_dB_noNoise, noise_profile, _ = maad.rois.remove_background(Sxx_dB)
+
+    Plot both spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2) = plt.subplots(2, 1)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> fig.set_size_inches(15,8)
+    >>> fig.tight_layout()
+       
     """   
-     
+    
     print(72 * '_' ) 
     print('Determine the profile of the stochastic background noise...') 
      
@@ -436,12 +467,39 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     ---------- 
     .. [1] This function has been proposed first by Carol BEDOYA <carol.bedoya@pg.canterbury.ac.nz> 
        Adapted by S. Haupert Oct 9, 2018 for Python 
+       
+    Examples:
+    ---------
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Remove stationnary noise from the spectrogram 
+    
+    >>> Sxx_noNoise = maad.rois.median_equalizer(Sxx)
+    >>> Sxx_dB_noNoise =  maad.util.power2dB(Sxx_noNoise) 
+
+    Plot both spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2) = plt.subplots(2, 1)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> fig.set_size_inches(15,8)
+    >>> fig.tight_layout() 
+       
     """  
      
-    Sxx_out = (((Sxx.transpose()-np.median(Sxx.transpose(),axis=0)))/(np.median(Sxx.transpose())-np.min(Sxx.transpose(),axis=0))).transpose() 
+    Sxx_out = (Sxx-np.median(Sxx,axis=1)[..., np.newaxis])/(np.median(Sxx,axis=1)-np.min(Sxx,axis=1))[..., np.newaxis]
     
-    Sxx_out[Sxx_out<=0] = 0
-    Sxx_out = linear_scale(Sxx_out, axis=None)
+#    Sxx_out[Sxx_out<=0] = 0
+#    Sxx_out = linear_scale(Sxx_out, axis=None)
     
     # Display 
     if display :  
@@ -472,12 +530,13 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
             print('\n''save figure : %s' %filename) 
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches, 
                         format=format, **kwargs)  
- 
+    
     return Sxx_out 
 
 def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs): 
     """ 
-    Median equalizer : remove background noise in a spectrogram 
+    Remove background noise in a spectrogram using mathematical morphology tool
+    This process becomes slower as the spectrogram becomes larger
      
     Parameters 
     ---------- 
@@ -547,8 +606,56 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     BGNxx : 2d ndarray of scalar 
         Noise map
     
+    Examples:
+    ---------
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Remove stationnary noise from the spectrogram 
+    
+    >>> Sxx_dB_noNoise,_,_ = maad.rois.remove_background_morpho(Sxx_dB, q=0.5)
+
+    Plot both spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2) = plt.subplots(2, 1)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> fig.set_size_inches(15,8)
+    >>> fig.tight_layout()     
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(0,20))   
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Remove stationnary noise from the spectrogram with different q
+    
+    >>> Sxx_dB_noNoise_q25,_,_ = maad.rois.remove_background_morpho(Sxx_dB, q=0.25)
+    >>> Sxx_dB_noNoise_q50,_,_ = maad.rois.remove_background_morpho(Sxx_dB, q=0.5)
+    >>> Sxx_dB_noNoise_q75,_,_ = maad.rois.remove_background_morpho(Sxx_dB, q=0.75)
+    
+    Plot 3 spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> fig.set_size_inches(15,9)
+    >>> fig.tight_layout()     
+        
     """  
     
+    # Use morpho math tools to estimate the background noise
     BGNxx = reconstruction(seed=Sxx-(np.quantile(Sxx, q)), mask=Sxx, method='dilation')
     Sxx_out = Sxx - BGNxx 
     
@@ -618,14 +725,15 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
 def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100, 
                                   display=False, savefig=None, **kwargs): 
     """ 
-    Get the horizontal noisy profile along the defined axis 
+    Get the noisy profile along the defined axis and remove this profile from
+    the spectrogram
     
     Parameters 
     ---------- 
     Sxx : 2D numpy array  
         Original spectrogram (or image) 
     
-    mode : str, optional, default is 'median'
+    mode : str, optional, default is 'ale'
         Select the mode to remove the noise
         Possible values for mode are :
         - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
@@ -693,16 +801,54 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
         
     Reference:
     ---------
-    Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
+    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
     Natural Recordings of the Environment. Queensland University of Technology,
     Brisbane
                        
     Returns 
     ------- 
     Sxx_out : 2d ndarray of scalar 
-        Spectrogram after denoising   
+        Spectrogram after denoising 
+        
     noise_profile : 1d ndarray of scalar
         Noise profile
+        
+    Examples:
+    ---------
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(0,10))   
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Remove stationnary noise from the spectrogram 
+    - with mode 'ale"
+    
+    >>> Sxx_dB_noNoise_ale,_ = maad.rois.remove_background_along_axis(Sxx_dB, mode='ale')
+    
+    - with mode 'median"
+    
+    >>> Sxx_dB_noNoise_med,_ = maad.rois.remove_background_along_axis(Sxx_dB, mode='median')
+    
+    - with mode 'mean"
+    
+    >>> Sxx_dB_noNoise_mean,_ = maad.rois.remove_background_along_axis(Sxx_dB, mode='mean')
+
+    Plot spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> fig.set_size_inches(8,10)
+    >>> fig.tight_layout()   
+    
     """
        
     # get the noise profile
@@ -768,13 +914,13 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
             print('\n''save figure : %s' %filename) 
             fig1.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches, 
                         format=format, **kwargs) 
-            
+                
     return Sxx_out, noise_profile 
 
 """**************************************************************************** 
 *************                      smooth                            *********** 
 ****************************************************************************""" 
-def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwargs): 
+def smooth (im, std=1, verbose=False, display = False, savefig=None, **kwargs): 
     """ 
     Smooth (i.e. blurr) the image with a gaussian filter 
      
@@ -782,11 +928,6 @@ def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwar
     ---------- 
     im : 2d ndarray of scalars 
         Spectrogram (or image) 
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
      
     std : scalar, optional, default is 1 
         Standard deviation of the gaussian kernel used to smooth the image 
@@ -849,6 +990,36 @@ def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwar
     Returns 
     ------- 
     im_out: smothed or blurred image  
+    
+    Examples:
+    ---------
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(5,10), fcrop=(0,10000))   
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Smooth the spectrogram
+    
+    >>> Sxx_dB_std05 = maad.rois.smooth(Sxx_dB, std=0.5)
+    >>> Sxx_dB_std10 = maad.rois.smooth(Sxx_dB, std=1)
+    >>> Sxx_dB_std15 = maad.rois.smooth(Sxx_dB, std=1.5)
+    
+    Plot spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
+    >>> maad.util.plot2D(Sxx_dB_std05, ax=ax2, extent=ext, title='smooth (std=0.5)', vmin=10, vmax=70)
+    >>> maad.util.plot2D(Sxx_dB_std10, ax=ax3, extent=ext, title='smooth (std=1)', vmin=10, vmax=70)
+    >>> maad.util.plot2D(Sxx_dB_std15, ax=ax4, extent=ext, title='smooth (std=1.5)', vmin=10, vmax=70)
+    >>> fig.set_size_inches(7,9)
+    >>> fig.tight_layout() 
+    
     """ 
     
     if verbose:
@@ -861,16 +1032,30 @@ def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwar
     # Display 
     if display :  
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
-        xlabel =kwargs.pop('xlabel','Time [sec]')  
-        title  =kwargs.pop('title','Blurred spectrogram') 
+        xlabel =kwargs.pop('xlabel','Time [sec]')   
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
-        vmin=kwargs.pop('vmin',np.percentile(im_out,1)) 
-        vmax=kwargs.pop('vmax',np.percentile(im_out,99)) 
+        vmin=kwargs.pop('vmin',np.percentile(im_out,0.1)) 
+        vmax=kwargs.pop('vmax',np.percentile(im_out,99.9)) 
+        ext=kwargs.pop('ext',None)
+            
+        if ext is not None : 
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4*2, 0.33*(ext[1]-ext[0])))
+        else: 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4*2, 13)) 
+        
          
-        _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title,  
-                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
-                         cmap=cmap, **kwargs) 
+        fig, (ax1, ax2) = plt.subplots(2, 1)
+        plot2D (im, ax=ax1, extent=ext, figsize=figsize,
+                title=('Orignal Spectrogram'),  
+                ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                cmap=cmap, **kwargs)
+        plot2D (im_out, ax=ax2, extent=ext, figsize=figsize,
+                title='Blurred Spectrogram (std='+str(std)+')',  
+                ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                cmap=cmap, **kwargs) 
+        
         # SAVE FIGURE 
         if savefig is not None :  
             dpi   =kwargs.pop('dpi',96) 
@@ -880,14 +1065,14 @@ def smooth (im, ext, std=1, verbose=False, display = False, savefig=None, **kwar
             print('\n''save figure : %s' %filename) 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
-     
+
     return im_out 
  
 #**************************************************************************** 
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
  
-def _double_threshold_rel (im, ext, bin_std=6, bin_per=0.5, 
+def _double_threshold_rel (im, bin_std=6, bin_per=0.5, 
                            verbose=False, display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
@@ -898,11 +1083,6 @@ def _double_threshold_rel (im, ext, bin_std=6, bin_per=0.5,
     ---------- 
     im : 2d ndarray of scalars 
         Spectrogram (or image) 
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
  
     bin_std : scalar, optional, default is 6 
         Set the first threshold. This threshold is not an absolute value but 
@@ -1028,9 +1208,16 @@ def _double_threshold_rel (im, ext, bin_std=6, bin_per=0.5,
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','binary image => MASK') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
+        ext=kwargs.pop('ext',None)
+            
+        if ext is not None : 
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        else: 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13)) 
          
         _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -1051,7 +1238,7 @@ def _double_threshold_rel (im, ext, bin_std=6, bin_per=0.5,
 #**************************************************************************** 
 #*************                double_threshold                    *********** 
 #**************************************************************************** 
-def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, 
+def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2, 
                           verbose=False,display=False, savefig=None, **kwargs): 
     """ 
     Binarize an image based on a double relative threshold.  
@@ -1063,12 +1250,7 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2,
     ---------- 
     im : 2d ndarray of scalars 
         Spectrogram (or image) 
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
- 
+
     bin_h : scalar, optional, default is 0.7 
         Set the first threshold. Value higher than this value are set to 1,  
         the others are set to 0. They are the seeds for the second step 
@@ -1175,9 +1357,16 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2,
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','binary image => MASK') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
+        ext=kwargs.pop('ext',None)
+            
+        if ext is not None : 
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        else: 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13)) 
          
         _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
@@ -1198,7 +1387,7 @@ def _double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2,
 """**************************************************************************** 
 *************                   create_mask wrapper                 *********** 
 ****************************************************************************""" 
-def create_mask(im, ext, mode_bin = 'relative', 
+def create_mask(im, mode_bin = 'relative', 
                 verbose= False, display = False, savefig = None, **kwargs): 
     """ 
     Binarize an image based on a double threshold.  
@@ -1207,11 +1396,6 @@ def create_mask(im, ext, mode_bin = 'relative',
     ---------- 
     im : 2d ndarray of scalars 
         Spectrogram (or image) 
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
  
     mode_bin : string in {'relative', 'absolute'}, optional, default is 'relative' 
         if 'relative', a relative double threshold is performed 
@@ -1251,22 +1435,22 @@ def create_mask(im, ext, mode_bin = 'relative',
     if mode_bin == 'relative': 
         bin_std=kwargs.pop('bin_std', 6)  
         bin_per=kwargs.pop('bin_per', 0.5)  
-        im_bin = _double_threshold_rel(im, ext, bin_std, bin_per, 
+        im_bin = _double_threshold_rel(im, bin_std, bin_per, 
                                        verbose, display, savefig, **kwargs) 
          
     elif mode_bin == 'absolute': 
         bin_h=kwargs.pop('bin_h', 0.7)  
         bin_l=kwargs.pop('bin_l', 0.3)  
-        im_bin = _double_threshold_abs(im, ext, bin_h, bin_l,
+        im_bin = _double_threshold_abs(im, bin_h, bin_l,
                                        verbose, display, savefig, **kwargs)    
-     
+    
     return im_bin  
  
 #**************************************************************************** 
 #*************                 select_rois                   *********** 
 #**************************************************************************** 
-def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
-                display=False, savefig = None, **kwargs): 
+def select_rois(im_bin, min_roi=None ,max_roi=None, 
+                verbose=False, display=False, savefig = None, **kwargs): 
     """ 
     Select rois candidates based on area of rois. min and max boundaries. 
     The ouput image contains pixels with label as value. 
@@ -1275,11 +1459,6 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
     ---------- 
     im : 2d ndarray of scalars 
         Spectrogram (or image) 
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.  
          
     min_roi, max_roi : scalars, optional, default : None 
         Define the minimum and the maximum area possible for an ROI. If None,  
@@ -1412,11 +1591,14 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Selected ROIs')  
-         
-        if ext is not None :
-            figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
-        else:
-            figsize=kwargs.pop('figsize',(4, 13))  
+        ext=kwargs.pop('ext',None)
+            
+        if ext is not None : 
+            xlabel = 'frequency [Hz]' 
+            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        else: 
+            xlabel = 'pseudofrequency [points]'
+            figsize=kwargs.pop('figsize',(4, 13)) 
          
         randcmap = rand_cmap(len(rois_label)) 
         cmap   =kwargs.pop('cmap',randcmap)  
@@ -1432,13 +1614,13 @@ def select_rois(im_bin, ext=None, min_roi=None ,max_roi=None, verbose=False,
             filename = savefig+filename+'.'+format 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)  
-  
+            
     return im_rois, rois 
  
 #**************************************************************************** 
 #*************                   overlay_rois                     *********** 
 #**************************************************************************** 
-def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs): 
+def overlay_rois (im_ref, rois, savefig=None, **kwargs): 
     """ 
     Overlay bounding box on the original spectrogram 
      
@@ -1446,11 +1628,6 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
     ---------- 
     im_ref : 2d ndarray of scalars 
         Spectrogram (or image) 
-         
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.   
  
     rois_bbox : list of tuple (min_y,min_x,max_y,max_x) 
         Contains the bounding box of each ROI 
@@ -1515,11 +1692,19 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
     xlabel =kwargs.pop('xlabel','Time [sec]')  
     title  =kwargs.pop('title','ROIs Overlay') 
     cmap   =kwargs.pop('cmap','gray')  
-    figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
     vmin=kwargs.pop('vmin',0)  
     vmax=kwargs.pop('vmax',1)  
     ax =kwargs.pop('ax',None)  
     fig=kwargs.pop('fig',None)  
+    ext=kwargs.pop('ext',None)
+        
+    if ext is not None : 
+        xlabel = 'frequency [Hz]' 
+        figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+    else: 
+        xlabel = 'pseudofrequency [points]'
+        figsize=kwargs.pop('figsize',(4, 13)) 
+    
          
     if (ax is None) and (fig is None): 
         ax, fig = plot2D (im_ref,extent=ext,now=False, figsize=figsize,title=title,  
@@ -1583,11 +1768,11 @@ def overlay_rois (im_ref, ext, rois, savefig=None, **kwargs):
         filename = savefig+filename+'.'+format 
         fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                     **kwargs)  
-     
+        
     return ax, fig 
  
 #**************************************************************************** 
-#*************                   rois_to_imblobs                     *********** 
+#*************                   rois_to_imblobs                  *********** 
 #**************************************************************************** 
  
 def rois_to_imblobs(im_blobs, rois): 
@@ -1625,6 +1810,31 @@ def rois_to_imblobs(im_blobs, rois):
     im_blobs = im_blobs.astype(int) 
      
     return im_blobs 
+
+#**************************************************************************** 
+#*************                   sharpness                     *********** 
+#**************************************************************************** 
+
+def sharpness (im) :
+    """ 
+    Compute the sharpness of an image (or spectrogram)
+     
+    Parameters 
+    ---------- 
+    im : 2d ndarray of scalars 
+        Spectrogram (or image) 
+        
+    Returns
+    -------
+    sharpness : scalar
+        sharpness of the spectrogram (or image)
+    """
+    
+    Gt = np.gradient(im, edge_order=1, axis=1)
+    Gf = np.gradient(im, edge_order=1, axis=0)
+    S = np.sqrt(Gt**2+ Gf**2)
+    sharpness=sum(sum(S))/(Gt.shape[0]*Gt.shape[1])
+    return sharpness   
  
  
  
