@@ -60,33 +60,35 @@ Sxx_db_noNoise, _ = rois.remove_background_along_axis(Sxx_db, mode='ale',
 
 # Then we smooth the spectrogram in order to facilitate the creation of masks as
 # small sparse details are merged if they are close to each other
-Sxx_db_noNoise_smooth = rois.smooth(Sxx_db_noNoise, ext, std=1, 
-                         display=True, savefig=None)
+Sxx_db_noNoise_smooth = rois.smooth(Sxx_db_noNoise, std=1, 
+                         display=True, savefig=None, 
+                         **{'vmin':0, 'vmax':dB_max, 'ext':ext})
 
 # Then we create a mask (i.e. binarization of the spectrogram) by using the 
 # double thresholding technique
-im_mask = rois.create_mask(im=Sxx_db_noNoise_smooth, ext=ext, 
-                           mode_bin ='relative', bin_std=6, bin_per=0.5,
+im_mask = rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin ='relative', 
+                           bin_std=6, bin_per=0.5,
                            verbose=False, display=False)
 
 # Finaly, we put together pixels that belong to the same acoustic event, and 
 # remove very small events (<=25 pixel²)
 im_rois, df_rois = rois.select_rois(im_mask, min_roi=25, max_roi=None, 
-                                 ext=ext, display= False,
-                                 figsize=(4,(t1-t0)))
+                                 display= False,
+                                 **{'figsize':(4,(t1-t0)), 'ext':ext})
     
 # format dataframe df_rois in order to convert pixels into time and frequency
 df_rois = format_features(df_rois, tn, fn)
 
 # overlay bounding box on the original spectrogram
-ax0, fig0 = rois.overlay_rois(Sxx_db, ext, df_rois, vmin=0, vmax=96)
+ax0, fig0 = rois.overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':dB_max, 'ext':ext})
 
 # Compute and visualize centroids
 df_centroid = features.centroid_features(Sxx_db, df_rois, im_rois)
 df_centroid = format_features(df_centroid, tn, fn)
-ax0, fig0 = features.overlay_centroid(Sxx_db, ext, df_centroid, savefig=None,
-                                    vmin=0, vmax=dB_max, marker='+',ms=2,
-                                    fig=fig0, ax=ax0)
+ax0, fig0 = features.overlay_centroid(Sxx_db, df_centroid, savefig=None,
+                                      **{'vmin':0,'vmax':dB_max,'ext':ext,'ms':2, 
+                                         'marker':'+', 'fig':fig0, 'ax':ax0})
+
 
 #%% 
 # Let's compare with the manual annotation (Ground Truth GT) obtained with 
@@ -105,14 +107,15 @@ df_rois_GT = df_rois_GT[(df_rois_GT.min_t >= tn.min()) &
 df_rois_GT = format_features(df_rois_GT, tn, fn)
 
 # overlay bounding box on the original spectrogram
-ax1, fig1 = rois.overlay_rois(Sxx_db, ext, df_rois_GT, vmin=0, vmax=96)
+ax1, fig1 = rois.overlay_rois(Sxx_db, df_rois_GT, **{'vmin':0,'vmax':dB_max,'ext':ext})
     
 # Compute and visualize centroids
 df_centroid_GT = features.centroid_features(Sxx_db, df_rois_GT)
 df_centroid_GT = format_features(df_centroid_GT, tn, fn)
-ax1, fig1 = features.overlay_centroid(Sxx_db, ext, df_centroid_GT, savefig=None, 
-                                    vmin=-0, vmax=dB_max, ms=2, color='blue',
-                                    fig=fig1, ax=ax1)
+ax1, fig1 = features.overlay_centroid(Sxx_db, df_centroid_GT, savefig=None, 
+                                      **{'vmin':0,'vmax':dB_max,'ext':ext,
+                                         'ms':2, 'marker':'+','color':'blue',
+                                         'fig':fig1, 'ax':ax1})
 
 # print informations about the rois
 print ('Total number of ROIs : %2.0f' %len(df_rois_GT))
@@ -146,10 +149,10 @@ df_centroid['label'] = [str(i) for i in labels]
 
 # overlay color bounding box corresponding to the label, and centroids
 # on the original spectrogram
-ax2, fig2 = rois.overlay_rois(Sxx_db, ext, df_centroid, vmin=0, vmax=96)
-ax2, fig2 = features.overlay_centroid(Sxx_db, ext, df_centroid, savefig=None, 
-                                    vmin=-0, vmax=dB_max, ms=2,
-                                    fig=fig2, ax=ax2)
+ax2, fig2 = rois.overlay_rois(Sxx_db, df_centroid, **{'vmin':0,'vmax':dB_max,'ext':ext})
+ax2, fig2 = features.overlay_centroid(Sxx_db, df_centroid, savefig=None, 
+                                      **{'vmin':0,'vmax':dB_max,'ext':ext,'ms':2, 
+                                         'fig':fig2, 'ax':ax2})
 
 #%% 
 # It is possible to extract Rois directly from the audio waveform without 
@@ -180,10 +183,11 @@ df_rois_WAV = df_rois_WAV[(df_rois_WAV.min_t >= tn.min()) &
 df_rois_WAV = format_features(df_rois_WAV, tn, fn)
 df_centroid_WAV = features.centroid_features(Sxx_db, df_rois_WAV)
 
-ax3, fig3 = rois.overlay_rois(Sxx_db, ext, df_rois_WAV, vmin=0, vmax=dB_max)
+ax3, fig3 = rois.overlay_rois(Sxx_db, df_rois_WAV, **{'vmin':0,'vmax':dB_max,'ext':ext})
 df_centroid_WAV = format_features(df_centroid_WAV, tn, fn)
-ax3, fig3 = features.overlay_centroid(Sxx_db, ext, df_centroid_WAV, savefig=None, 
-                                    vmin=0, vmax=dB_max, fig=fig3, ax=ax3)
+ax3, fig3 = features.overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
+                                      **{'vmin':0,'vmax':dB_max,'ext':ext,'ms':2, 
+                                         'fig':fig3, 'ax':ax3})
 
 #%%
 # Prepare the features in order to have zero mean and same variance
@@ -197,10 +201,10 @@ df_centroid_WAV['label'] = [str(i) for i in labels]
 
 # overlay color bounding box corresponding to the label, and centroids
 # on the original spectrogram
-ax4, fig4 = rois.overlay_rois(Sxx_db, ext, df_centroid_WAV, vmin=0, vmax=dB_max)
-ax4, fig4 = features.overlay_centroid(Sxx_db, ext, df_centroid_WAV, savefig=None, 
-                                    vmin=-0, vmax=dB_max, ms=2,
-                                    fig=fig4, ax=ax4)
+ax4, fig4 = rois.overlay_rois(Sxx_db, df_centroid_WAV, **{'vmin':0,'vmax':dB_max,'ext':ext})
+ax4, fig4 = features.overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
+                                      **{'vmin':0,'vmax':dB_max,'ext':ext,'ms':2, 
+                                         'fig':fig4, 'ax':ax4})
 
 #%%
 # References
