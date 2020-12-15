@@ -910,7 +910,7 @@ def centroid_features(Sxx, rois=None, im_rois=None):
 #**************************************************************************** 
 #*************                   plot_centroid                  *********** 
 #**************************************************************************** 
-def overlay_centroid (im_ref, ext, centroid, savefig=None, **kwargs): 
+def overlay_centroid (im_ref, centroid, savefig=None, **kwargs): 
     """ 
     Overlay centroids on the original spectrogram 
      
@@ -918,10 +918,7 @@ def overlay_centroid (im_ref, ext, centroid, savefig=None, **kwargs):
     ---------- 
     Sxx :  2D array 
         Spectrogram 
-    ext : list of scalars [left, right, bottom, top], optional, default: None 
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners. If `None`, the image is positioned such that 
-        the pixel centers fall on zero-based (row, column) indices.                 
+               
     centroid: pandas DataFrame 
         DataFrame with centroid descriptors (centroid_f, centroid_t) 
         Do format_features(rois,tn,fn) before using overlay_centroid to be sure that 
@@ -990,7 +987,15 @@ def overlay_centroid (im_ref, ext, centroid, savefig=None, **kwargs):
     xlabel =kwargs.pop('xlabel','Time [sec]')  
     title  =kwargs.pop('title','ROIs Overlay') 
     cmap   =kwargs.pop('cmap','gray')  
-    figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))
+    ext=kwargs.pop('ext',None)
+        
+    if ext is not None : 
+        xlabel = 'frequency [Hz]' 
+        figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+    else: 
+        xlabel = 'pseudofrequency [points]'
+        figsize=kwargs.pop('figsize',(4, 13)) 
+
     vmin=kwargs.pop('vmin',0)  
     vmax=kwargs.pop('vmax',1)  
     ax =kwargs.pop('ax',None)  
@@ -1173,9 +1178,9 @@ def compute_all_features(s, fs, rois, resolution='low',
     
     if display :
         # view bbox
-        ax, fig = overlay_rois(Sxx, ext, rois, vmin=vmin, vmax=vmax, **kwargs)
+        ax, fig = overlay_rois(Sxx, rois, vmin=vmin, vmax=vmax, **kwargs)
         # view centroids
-        overlay_centroid(Sxx, ext, centroid, savefig=None, 
+        overlay_centroid(Sxx, centroid, savefig=None, 
                          fig=fig, ax=ax, **kwargs)
         # plot shape
         plot_shape(shape.mean(), params)

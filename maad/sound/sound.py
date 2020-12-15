@@ -24,7 +24,7 @@ from maad.rois import remove_background_along_axis
 # =============================================================================
 # private functions
 # =============================================================================
-def _wave2frames (s, Nt=512):
+def wave2frames (s, Nt=512):
     """
     Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
     length Nt
@@ -98,7 +98,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-            ext : list of scalars [left, right, bottom, top], optional, default: None
+            extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
@@ -243,7 +243,7 @@ def envelope (s, mode='fast', Nt=32):
     """
     if mode == 'fast' :
         # Envelope : take the max (see M. Towsey) of each frame
-        frames = _wave2frames(s, Nt)
+        frames = wave2frames(s, Nt)
         env = np.max(abs(frames),0) 
     elif mode =='hilbert' :
         # Compute the hilbert transform of the waveform and take the norm 
@@ -309,17 +309,17 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
     if display :
         X_octave_dB = power2dB(X_octave)
         if np.ndim(X_octave_dB) == 2 :
-            ext = kwargs.pop('ext',None)
-            if ext is not None : 
+            extent = kwargs.pop('extent',None)
+            if extent is not None : 
                 xlabel = 'Time [sec]'
-                figsize = (4, 0.33*(ext[1]-ext[0]))
+                figsize = (4, 0.33*(extent[1]-extent[0]))
             else: 
                 xlabel = 'pseudoTime [points]'
                 figsize = (4,13)
             
             fig_kwargs = {'vmax': kwargs.pop('vmax',np.max(X_octave_dB)),
                           'vmin': kwargs.pop('vmin',np.min(X_octave_dB)),
-                          'extent':kwargs.pop('ext',None),
+                          'extent':kwargs.pop('extent',None),
                           'figsize':kwargs.pop('figsize',figsize),
                           'yticks' : (np.arange(len(bin_octave)), bin_octave),
                           'title':'Octave Spectrogram',
@@ -725,7 +725,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
         
-        - ext : list of scalars [left, right, bottom, top], optional, default: None
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
@@ -749,7 +749,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         time vector (horizontal x-axis)    
     fn : 1d ndarray of floats
         Frequency vector (vertical y-axis)    
-    ext : list of scalars [left, right, bottom, top]
+    extent : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and
         upper-right corners. 
     
@@ -869,7 +869,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         print('max value of the spectrogram %.5f' % Sxx_out.max())
 
     # Extent
-    ext = [tn[0], tn[-1], fn[0], fn[-1]]
+    extent = [tn[0], tn[-1], fn[0], fn[-1]]
     # dt and df resolution
     dt = tn[1]-tn[0]
     df = fn[1]-fn[0]
@@ -887,7 +887,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         xlabel =kwargs.pop('xlabel','Time [sec]') 
         title  =kwargs.pop('title','Spectrogram')
         cmap   =kwargs.pop('cmap','gray') 
-        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))
+        figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))
         db_range=kwargs.pop('db_range',96)
         
         #### convert into dB 
@@ -901,7 +901,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         vmin=kwargs.pop('vmin',-db_range) 
         vmax=kwargs.pop('vmax',Sxx_disp.max()) 
 
-        _, fig = plot2D (Sxx_disp, extent=ext, figsize=figsize,title=title, 
+        _, fig = plot2D (Sxx_disp, extent=extent, figsize=figsize,title=title, 
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax,
                          cmap=cmap, **kwargs)
         # SAVE FIGURE
@@ -915,7 +915,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
                         format=format, **kwargs)     
 
-    return Sxx_out, tn, fn, ext   
+    return Sxx_out, tn, fn, extent   
 
 #=============================================================================
 def avg_power_spectro (Sxx_power) :

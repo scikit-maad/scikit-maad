@@ -172,11 +172,11 @@ def plot2D(im,ax=None,**kwargs):
     Parameters
     ----------
     im : 2D numpy array 
-        The name or path of the .wav file to load
+        Image or Spectrogram
              
     ax : axis, optional, default is None
         Draw the image on this specific axis. Allow multiple plots on the same
-        axis.
+        figure.
             
     \*\*kwargs, optional
         
@@ -215,7 +215,7 @@ def plot2D(im,ax=None,**kwargs):
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
         
-        - ext : list of scalars [left, right, bottom, top], optional, default: None
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
@@ -261,11 +261,11 @@ def plot2D(im,ax=None,**kwargs):
     cmap=kwargs.pop('cmap', 'gray') 
     vmin=kwargs.pop('vmin', None) 
     vmax=kwargs.pop('vmax', None)    
-    ext=kwargs.pop('extent', None)   
+    extent=kwargs.pop('extent', None)   
     now=kwargs.pop('now', True)
     
-    if ext is not None :
-        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+    if extent is not None :
+        figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))  
     else:
         figsize=kwargs.pop('figsize',(4, 13))  
     
@@ -282,7 +282,8 @@ def plot2D(im,ax=None,**kwargs):
         fig = ax.get_figure()
 
     # display image
-    _im = ax.imshow(im, extent=ext, interpolation='none', origin='lower', vmin =vmin, vmax=vmax, cmap=cmap)
+    _im = ax.imshow(im, extent=extent, interpolation='none', origin='lower', 
+                    vmin =vmin, vmax=vmax, cmap=cmap)
     plt.colorbar(_im, ax=ax)
 
     # set the parameters of the subplot

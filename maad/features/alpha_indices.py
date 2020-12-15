@@ -134,10 +134,9 @@ def _acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
 
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
-    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [1]  Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
+            Derived from Natural Recordings of the Environment. 
+            Queensland University of Technology, Brisbane.
     """    
     # total duration
     if xdB.ndim ==1 : duration = (len(xdB)-1) * dt
@@ -2055,10 +2054,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     tn : 1d ndarray of floats
         time vector (horizontal x-axis)
     fn : 1d ndarray of floats
-        Frequency vector (vertical y-axis)
-    ext : list of scalars [left, right, bottom, top]
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners. 
+        Frequency vector (vertical y-axis) 
     smooth_param1 : scalar, default is 1
         Standard deviation of the gaussian kernel used to smooth the image 
         The larger is the number, the smoother will be the image and the longer 
@@ -2097,20 +2093,20 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     """ 
     
     # extent
-    ext = (tn[0], tn[-1], fn[0], fn[-1])
+    kwargs.update({'ext':(tn[0], tn[-1], fn[0], fn[-1])})
     
     # Smooth the spectrogram in order to facilitate the creation of masks
-    Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, ext, std=smooth_param1, 
-                         display=display, savefig=None, **kwargs) 
+    Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, std=smooth_param1, 
+                         display=display, savefig=None,**kwargs) 
     # binarization of the spectrogram to select part of the spectrogram with 
     # acoustic activity
     if mask_mode == 'relative' :
-        im_mask = create_mask(Sxx_dB_noNoise_smooth, ext, 
+        im_mask = create_mask(Sxx_dB_noNoise_smooth,  
                               mode_bin = 'relative', bin_std=mask_param1, 
                               bin_per=mask_param2,
                               display=display, savefig=None, **kwargs) 
     elif  mask_mode == 'absolute' :   
-        im_mask = create_mask(Sxx_dB_noNoise_smooth, ext, 
+        im_mask = create_mask(Sxx_dB_noNoise_smooth,  
                               mode_bin = 'absolute', bin_h=mask_param1, 
                               bin_l=mask_param2,
                               display=display, savefig=None, **kwargs)    
@@ -2119,7 +2115,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
             
     # get the mask with rois (im_rois) and the bounding box for each rois (rois_bbox) 
     # and an unique index for each rois => in the pandas dataframe rois
-    im_rois, rois  = select_rois(im_mask,min_roi=9, ext=ext, 
+    im_rois, rois  = select_rois(im_mask,min_roi=9, 
                                  display= display, **kwargs)
 
     ##### Extract centroids features of each roi from the spectrogram in dB without noise 
@@ -2131,7 +2127,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
         X = Sxx_dB_noNoise
         fig_kwargs = {'vmax': np.max(X),
                       'vmin': np.min(X)}
-        ax, fig = overlay_rois(X, ext, rois, **fig_kwargs)
+        ax, fig = overlay_rois(X, rois, **fig_kwargs)
  
 #        dpi= 96
 #        bbox_inches= 'tight'
@@ -2352,7 +2348,7 @@ def audio_indices(s, fs, verbose=False, display=False, **kwargs):
     return df_audio_indices
 
 
-def spectral_indices (Sxx_power, tn, fn, ext,
+def spectral_indices (Sxx_power, tn, fn,
                       flim_low=[0,1000], 
                       flim_mid=[1000,10000], 
                       flim_hi=[10000,20000], 
@@ -2368,9 +2364,6 @@ def spectral_indices (Sxx_power, tn, fn, ext,
         time vector (horizontal x-axis)
     fn : 1d ndarray of floats
         Frequency vector (vertical y-axis)
-    ext : list of scalars [left, right, bottom, top]
-        The location, in data-coordinates, of the lower-left and
-        upper-right corners.  
     flim_low : tupple, optional, default is (0,1000)
         Low frequency band in Hz
     flim_mid : tupple, optional, default is (1000,10000)
@@ -2470,10 +2463,13 @@ def spectral_indices (Sxx_power, tn, fn, ext,
     Examples
     --------
     >>> s, fs = maad.sound.load('./data/jura_cold_forest_nuit.wav')
-    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fse)   
-    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,tn,fn,ext)
+    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)   
+    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,tn,fn,ext=ext)
 
     """
+    
+    # extent
+    kwargs.update({'ext':(tn[0], tn[-1], fn[0], fn[-1])})
     
     #### get variables  
     # for entropy : R_compatible {'soundecology', 'seewave'}
@@ -2574,7 +2570,8 @@ def spectral_indices (Sxx_power, tn, fn, ext,
 
     """*********************** Remove stationnary noise ********************"""   
     Sxx_dB_noNoise, _ = remove_background_along_axis(Sxx_dB, mode='ale', 
-                                                     display=display, ext=ext) 
+                                                     display=display, 
+                                                     ext=ext,**kwargs) 
     
     #### Prepare different spectrograms and spectrums without noise
     Sxx_power_noNoise = dB2power(Sxx_dB_noNoise)

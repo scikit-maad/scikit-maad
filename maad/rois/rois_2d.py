@@ -95,7 +95,7 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -117,7 +117,7 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
         third dimension, such that a gray-image is MxN, an 
         RGB-image MxNx3 and an RGBA-image MxNx4. 
          
-    ext : list of scalars [left, right, bottom, top]
+    extent : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and 
         upper-right corners.
          
@@ -146,7 +146,7 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
     dt = duration/(im.shape[1]-1) 
      
     # Extent 
-    ext = [0, duration, 0, fs/2] 
+    extent = [0, duration, 0, fs/2] 
      
     # flip the image vertically 
     if flipud: im = np.flip(im, 0) 
@@ -157,15 +157,15 @@ def load(filename, fs, duration, flipud = True, display=False, **kwargs):
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','loaded spectrogram') 
         cmap   =kwargs.pop('cmap','gray')  
-        figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))  
         vmin=kwargs.pop('vmin',np.min(im))  
         vmax=kwargs.pop('vmax',np.max(im))  
          
-        _, fig = plot2D (im, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (im, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
      
-    return im, ext, dt, df 
+    return im, extent, dt, df 
  
 #**************************************************************************** 
 #*************               noise_subtraction                    *********** 
@@ -240,7 +240,7 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -355,18 +355,18 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',np.min(Sxx_out))  
         vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
-        ext=kwargs.pop('ext',None)
+        extent=kwargs.pop('extent',None)
             
-        if ext is not None : 
-            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
+        if extent is not None : 
+            fn = np.arange(0, Nf)*(extent[3]-extent[2])/(Nf-1) + extent[2]  
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
         else: 
             fn = np.arange(Nf) 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13))  
         
-        _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
@@ -441,7 +441,7 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -507,14 +507,14 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',np.min(Sxx_out))  
         vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
-        ext=kwargs.pop('ext',None) 
+        extent=kwargs.pop('extent',None) 
         
-        if ext is not None :
-            figsize=kwargs.pop('figsize',(4, 0.33*(ext[1]-ext[0])))  
+        if extent is not None :
+            figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))  
         else:
             figsize=kwargs.pop('figsize',(4, 13))  
          
-        _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -580,7 +580,7 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -671,24 +671,24 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',np.min(Sxx_out))  
         vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
-        ext=kwargs.pop('ext',None) 
+        extent=kwargs.pop('extent',None) 
         
         Nf, Nw = Sxx.shape 
 
-        if ext is not None : 
-            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
+        if extent is not None : 
+            fn = np.arange(0, Nf)*(extent[3]-extent[2])/(Nf-1) + extent[2]  
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
         else: 
             fn = np.arange(Nf) 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13))  
         
-        _, fig = plot2D (BGNxx, extent=ext, figsize=figsize,title='Noise map',  
+        _, fig = plot2D (BGNxx, extent=extent, figsize=figsize,title='Noise map',  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
-        _, fig = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
@@ -782,7 +782,7 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -871,20 +871,20 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',np.min(Sxx_out))  
         vmax=kwargs.pop('vmax',np.max(Sxx_out))  
-        ext=kwargs.pop('ext',None) 
+        extent=kwargs.pop('extent',None) 
         
         Nf, Nw = Sxx.shape 
         
-        if ext is not None : 
-            fn = np.arange(0, Nf)*(ext[3]-ext[2])/(Nf-1) + ext[2]  
+        if extent is not None : 
+            fn = np.arange(0, Nf)*(extent[3]-extent[2])/(Nf-1) + extent[2]  
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
         else: 
             fn = np.arange(Nf) 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13))  
             
-        _, fig1 = plot2D (Sxx_out, extent=ext, figsize=figsize,title=title,  
+        _, fig1 = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
@@ -970,7 +970,7 @@ def smooth (im, std=1, verbose=False, display = False, savefig=None, **kwargs):
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -1034,22 +1034,22 @@ def smooth (im, std=1, verbose=False, display = False, savefig=None, **kwargs):
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',np.percentile(im_out,0.1)) 
         vmax=kwargs.pop('vmax',np.percentile(im_out,99.9)) 
-        ext=kwargs.pop('ext',None)
+        extent=kwargs.pop('extent',None)
             
-        if ext is not None : 
+        if extent is not None : 
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4*2, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4*2, 0.33*(extent[1]-extent[0])))
         else: 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4*2, 13)) 
         
          
         fig, (ax1, ax2) = plt.subplots(2, 1)
-        plot2D (im, ax=ax1, extent=ext, figsize=figsize,
+        plot2D (im, ax=ax1, extent=extent, figsize=figsize,
                 title=('Orignal Spectrogram'),  
                 ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                 cmap=cmap, **kwargs)
-        plot2D (im_out, ax=ax2, extent=ext, figsize=figsize,
+        plot2D (im_out, ax=ax2, extent=extent, figsize=figsize,
                 title='Blurred Spectrogram (std='+str(std)+')',  
                 ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                 cmap=cmap, **kwargs) 
@@ -1135,7 +1135,7 @@ def _double_threshold_rel (im, bin_std=6, bin_per=0.5,
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -1208,16 +1208,16 @@ def _double_threshold_rel (im, bin_std=6, bin_per=0.5,
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
-        ext=kwargs.pop('ext',None)
+        extent=kwargs.pop('extent',None)
             
-        if ext is not None : 
+        if extent is not None : 
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
         else: 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13)) 
          
-        _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (im_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -1296,7 +1296,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -1357,16 +1357,16 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
         cmap   =kwargs.pop('cmap','gray')  
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
-        ext=kwargs.pop('ext',None)
+        extent=kwargs.pop('extent',None)
             
-        if ext is not None : 
+        if extent is not None : 
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
         else: 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13)) 
          
-        _, fig = plot2D (im_out, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (im_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -1414,9 +1414,9 @@ def create_mask(im, mode_bin = 'relative',
         All the input arguments required or optional in the signature of the 
         functions above can be passed as kwargs : 
          
-        - double_threshold_abs(im, ext, bin_h=0.7, bin_l=0.2, display=False, savefig=None, \*\*kwargs) 
+        - double_threshold_abs(im, bin_h=0.7, bin_l=0.2, display=False, savefig=None, \*\*kwargs) 
          
-        - double_threshold_rel (im, ext, bin_std=5, bin_per=0.5, display=False, savefig=None, \*\*kwargs) 
+        - double_threshold_rel (im, bin_std=5, bin_per=0.5, display=False, savefig=None, \*\*kwargs) 
             
         ... and more, see matplotlib    
  
@@ -1426,8 +1426,33 @@ def create_mask(im, mode_bin = 'relative',
      
     Examples 
     -------- 
-    >>> im_bin = create_mask(im, ext, bin_std=5, bin_per=0.5, mode='relative', 
-    >>>                      display=True, savefig=None, dpi=300) 
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))   
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Smooth the spectrogram
+    
+    >>> Sxx_dB_blurred = maad.rois.smooth(Sxx_dB)
+    
+    Detection of the acoustic signature => creation of a mask
+    
+    >>> im_bin = maad.rois.create_mask(Sxx_dB_blurred, bin_std=1.5, bin_per=0.25, mode='relative') 
+    
+    Plot spectrograms
+    
+    >>> import matplotlib.pyplot as plt 
+    >>> fig, (ax1, ax2) = plt.subplots(2, 1)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
+    >>> maad.util.plot2D(im_bin, ax=ax2, extent=ext, title='mask)')
+    >>> fig.set_size_inches(13,8)
+    >>> fig.tight_layout() 
+    
     """ 
         
     if mode_bin == 'relative': 
@@ -1501,7 +1526,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
          
-        - ext : scalars (left, right, bottom, top), optional, default: None 
+        - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
@@ -1528,6 +1553,32 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         Use the function ``maad.util.format_features`` before using 
         centroid_features to format of the ``rois`` DataFrame 
         correctly.
+        
+    Examples 
+    -------- 
+    
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000))   
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    
+    Smooth the spectrogram
+    
+    >>> Sxx_dB_blurred = maad.rois.smooth(Sxx_dB)
+    
+    Detection of the acoustic signature => creation of a mask
+    
+    >>> im_bin = maad.rois.create_mask(Sxx_dB_blurred, bin_std=1.5, bin_per=0.25, mode='relative') 
+    
+    Select rois from the mask
+    
+    >>> df_rois = maad.rois.select_rois(im_bin)
+    
+    
         
     """ 
  
@@ -1589,11 +1640,11 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Selected ROIs')  
-        ext=kwargs.pop('ext',None)
+        extent=kwargs.pop('extent',None)
             
-        if ext is not None : 
+        if extent is not None : 
             xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
         else: 
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13)) 
@@ -1601,7 +1652,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         randcmap = rand_cmap(len(rois_label)) 
         cmap   =kwargs.pop('cmap',randcmap)  
          
-        _, fig = plot2D (im_rois, extent=ext, figsize=figsize,title=title,  
+        _, fig = plot2D (im_rois, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -1678,6 +1729,8 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     ax : axis object (see matplotlib) 
          
     fig : figure object (see matplotlib) 
+    
+    
     """        
      
     # Check format of the input data 
@@ -1694,18 +1747,18 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     vmax=kwargs.pop('vmax',1)  
     ax =kwargs.pop('ax',None)  
     fig=kwargs.pop('fig',None)  
-    ext=kwargs.pop('ext',None)
+    extent=kwargs.pop('extent',None)
         
-    if ext is not None : 
+    if extent is not None : 
         xlabel = 'frequency [Hz]' 
-        figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+        figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
     else: 
         xlabel = 'pseudofrequency [points]'
         figsize=kwargs.pop('figsize',(4, 13)) 
     
          
     if (ax is None) and (fig is None): 
-        ax, fig = plot2D (im_ref,extent=ext,now=False, figsize=figsize,title=title,  
+        ax, fig = plot2D (im_ref,extent=extent,now=False, figsize=figsize,title=title,  
                          ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
                          cmap=cmap, **kwargs) 
  

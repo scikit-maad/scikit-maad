@@ -4,6 +4,7 @@ Ensemble of functions to load and preprocess audio signals.
 """
 
 from .sound import (load,
+                    wave2frames,
                     envelope,
                     intoOctave,
                     audio_SNR,
@@ -15,6 +16,7 @@ from .sound import (load,
                     avg_amplitude_spectro)
 
 __all__ = ['load',
+           'wave2frames',
            'envelope',
            'intoOctave',
            'audio_SNR',
