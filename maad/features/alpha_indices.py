@@ -2571,7 +2571,7 @@ def spectral_indices (Sxx_power, tn, fn,
     """*********************** Remove stationnary noise ********************"""   
     Sxx_dB_noNoise, _ = remove_background_along_axis(Sxx_dB, mode='ale', 
                                                      display=display, 
-                                                     ext=ext,**kwargs) 
+                                                     **kwargs) 
     
     #### Prepare different spectrograms and spectrums without noise
     Sxx_power_noNoise = dB2power(Sxx_dB_noNoise)
@@ -2654,7 +2654,7 @@ def spectral_indices (Sxx_power, tn, fn,
     ADI = acousticDiversityIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
                                  fmax=flim_mid[1], bin_step=bin_step, 
                                  dB_threshold=-50, index="shannon", 
-                                               R_compatible='soundecology') 
+                                 R_compatible='soundecology') 
     AEI = acousticEvenessIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
                                fmax=flim_mid[1], bin_step=bin_step, 
                                dB_threshold=-50, 
@@ -2702,7 +2702,7 @@ def spectral_indices (Sxx_power, tn, fn,
                                                             dB_threshold=dB_threshold,
                                                             rejectDuration=rejectDuration,
                                                             display=display,
-                                                            extent = ext)
+                                                            **kwargs)
     EVNspFract_avg = np.mean(EVNspFract)
     EVNspMean_avg = np.mean(EVNspMean)
     EVNspCount_avg = np.mean(EVNspCount)
