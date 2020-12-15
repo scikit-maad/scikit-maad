@@ -1901,7 +1901,7 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     
     if display :
         
-            ext=(tn[0], tn[-1], fn_bin[0], fn_bin[-1])
+            extent=(tn[0], tn[-1], fn_bin[0], fn_bin[-1])
         
             fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
             # set the paramteers of the figure
@@ -1915,7 +1915,7 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
                               vmax = max(power2dB(GRADdt)), 
                               vmin = min(power2dB(GRADdt)),
                               interpolation='none', origin='lower', 
-                              cmap='gray', extent=ext)
+                              cmap='gray', extent=extent)
             plt.colorbar(_im1, ax=ax1)
             
             # set the parameters of the subplot
@@ -1929,7 +1929,7 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
                               vmax = max(power2dB(GRADdf)), 
                               vmin = min(power2dB(GRADdf)),
                               interpolation='none', origin='lower', 
-                              cmap='gray', extent=ext)
+                              cmap='gray', extent=extent)
             plt.colorbar(_im2, ax=ax2)
        
             # set the parameters of the subplot
@@ -2093,7 +2093,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     """ 
     
     # extent
-    kwargs.update({'ext':(tn[0], tn[-1], fn[0], fn[-1])})
+    kwargs.update({'extent':(tn[0], tn[-1], fn[0], fn[-1])})
     
     # Smooth the spectrogram in order to facilitate the creation of masks
     Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, std=smooth_param1, 
@@ -2464,12 +2464,12 @@ def spectral_indices (Sxx_power, tn, fn,
     --------
     >>> s, fs = maad.sound.load('./data/jura_cold_forest_nuit.wav')
     >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)   
-    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,tn,fn,ext=ext)
+    >>> pd_spectral_indices_NUIT = maad.features.spectral_indices(Sxx_power,tn,fn,**{'extent':ext})
 
     """
     
     # extent
-    kwargs.update({'ext':(tn[0], tn[-1], fn[0], fn[-1])})
+    kwargs.update({'extent':(tn[0], tn[-1], fn[0], fn[-1])})
     
     #### get variables  
     # for entropy : R_compatible {'soundecology', 'seewave'}
@@ -2516,8 +2516,8 @@ def spectral_indices (Sxx_power, tn, fn,
     """************************* Long term spectrogram *********************"""
     # mean power spectrum => for long term spectrogram (LTS)
     LTS = avg_power_spectro(Sxx_power)
-    df_per_bin_indices +=[fn]
-    df_per_bin_indices +=[LTS]
+    df_per_bin_indices +=[fn.tolist()]
+    df_per_bin_indices +=[LTS.tolist()]
     
     """**************************** 4 spectrum moments *********************""" 
     SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = spectral_moments(S_amplitude)

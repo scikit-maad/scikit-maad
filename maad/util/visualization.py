@@ -468,7 +468,13 @@ def save_figlist(fname, figlist):
         imsave(fname_save,fig)
 
 #=============================================================================
-def plot_features_map (df, norm=True, mode='24h', **kwargs) : 
+def plot_features_map (df, norm=True, mode='24h', **kwargs) :
+    """
+    **kwargs
+        ftime : Time format to display as x label 
+            by default '%Y-%m-%d'
+            see https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior
+    """
 
     if isinstance(df, pd.DataFrame) == False :
         raise TypeError ('df must be a Pandas Dataframe')
@@ -485,7 +491,8 @@ def plot_features_map (df, norm=True, mode='24h', **kwargs) :
         x_label = [i + j for i, j in zip(map(str, df.index.values), ['h']*len(df))]
     else :
         # Get the list of unique index of type 'hour'
-        x_value = df.index.strftime('%Y-%m-%d')
+        ftime = kwargs.pop('ftime','%Y-%m-%d')
+        x_value = df.index.strftime(ftime)
         x_label = x_value.tolist()
     
     # kwargs
