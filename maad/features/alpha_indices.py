@@ -1548,10 +1548,9 @@ def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
     flim_antroPh: tupple (fmin, fmax), optional, default is (0,1000)
         Frequency band of the anthropophony
     
-    R_compatible: string {'seewave', 'soundecology'}, optional, default is seewave
-        Compute biophonic and anthropophonic energy following seewave or 
-        soundecology way. Note that in seewave, the first bin [0-1]kHz is not
-        taken into account for the evaluation of the anthropophonic energy
+    R_compatible : string, optional, default is "soundecology"
+        if 'soundecology', the result is similar to the package SoundEcology in R 
+        Otherwise, the result is specific to maad
         
     Returns
     -------
@@ -1573,7 +1572,13 @@ def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
     Inspired by Seewave and soundecology R package
     """
     
-    if R_compatible == 'seewave' :
+    if R_compatible == 'soundecology' :
+        # Step is determined as the difference between anthro_max and anthro_min
+        bin_step = flim_antroPh[1] - flim_antroPh[0]
+        #Convert into bins
+        Sxx_bins, bins = intoBins(Sxx_power, fn, bin_min=fn[0], bin_max=fn[-1], 
+                                  bin_step=bin_step, axis=0)   
+    else:
         # Frequency resolution is 1000 Hz
         bin_step = 1000
         #Convert into bins
@@ -1582,12 +1587,6 @@ def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
         # In Seewave, the first bin (0kHz) is removed
         Sxx_bins = Sxx_bins[bins>=1000,]
         bins = bins[bins>=1000]
-    elif R_compatible == 'soundecology' :
-        # Step is determined as the difference between anthro_max and anthro_min
-        bin_step = flim_antroPh[1] - flim_antroPh[0]
-        #Convert into bins
-        Sxx_bins, bins = intoBins(Sxx_power, fn, bin_min=fn[0], bin_max=fn[-1], 
-                                  bin_step=bin_step, axis=0)   
         
     # Energy in BIOBAND
     bioPh = sum(Sxx_bins[index_bw(bins, flim_bioPh), ])
@@ -2472,7 +2471,6 @@ def spectral_indices (Sxx_power, tn, fn,
     kwargs.update({'extent':(tn[0], tn[-1], fn[0], fn[-1])})
     
     #### get variables  
-    # for entropy : R_compatible {'soundecology', 'seewave'}
     R_compatible = kwargs.pop('R_compatible','soundecology') 
     
     # for LEQ : 
@@ -2636,7 +2634,7 @@ def spectral_indices (Sxx_power, tn, fn,
     
     #### roughness
     """ ROU """
-    ROU_per_bin = roughness(Sxx_amplitude, norm='global', axis=1)
+    ROU_per_bin = roughness(Sxx_amplitude, norm=None, axis=1)
     ROU = np.sum(ROU_per_bin) 
     df_spectral_indices += [ROU]
     df_per_bin_indices += [np.asarray(ROU_per_bin).tolist()]
@@ -2654,11 +2652,11 @@ def spectral_indices (Sxx_power, tn, fn,
     ADI = acousticDiversityIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
                                  fmax=flim_mid[1], bin_step=bin_step, 
                                  dB_threshold=-50, index="shannon", 
-                                 R_compatible='soundecology') 
+                                 R_compatible=R_compatible) 
     AEI = acousticEvenessIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
                                fmax=flim_mid[1], bin_step=bin_step, 
                                dB_threshold=-50, 
-                               R_compatible='soundecology') 
+                               R_compatible=R_compatible) 
     df_spectral_indices += [ADI, AEI]
     if verbose :
         print("ADI %2.5f" %ADI)
@@ -2751,12 +2749,6 @@ def spectral_indices (Sxx_power, tn, fn,
     if verbose :
         print("AGI %2.3f" % AGI)
     
-    _, AGI_per_bin_2, AGI_2, _ = acousticGradientIndex(X,dt=DELTA_T,order=2, norm=None)  
-    df_spectral_indices += [AGI_2]
-    df_per_bin_indices += [np.asarray(AGI_per_bin_2).tolist()]
-    if verbose :
-        print("AGI_2 %2.3f" % AGI_2)
-    
     """ ROI index """
     # Time resolution (in s)
     DELTA_T = tn[1]-tn[0]
@@ -2825,7 +2817,6 @@ def spectral_indices (Sxx_power, tn, fn,
                                              'H_GiniSimpson',
                                              'RAOQ',
                                              'AGI',
-                                             'AGI_2',
                                              'ROItotal',
                                              'ROIcover'])
         
@@ -2848,8 +2839,7 @@ def spectral_indices (Sxx_power, tn, fn,
                                             'EVNspFract_per_bin',
                                             'EVNspMean_per_bin',
                                             'EVNspCount_per_bin',
-                                            'AGI_per_bin',
-                                            'AGI2_per_bin'])
+                                            'AGI_per_bin'])
                                     
     return df_spectral_indices, df_per_bin_indices
 
