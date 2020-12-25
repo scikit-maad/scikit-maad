@@ -1365,7 +1365,7 @@ def acousticComplexityIndex(Sxx):
 
 #=============================================================================
 def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000, 
-                            dB_threshold=3, index="shannon", R_compatible='soundecology'):
+                            dB_threshold=-50, index="shannon"):
     
     """
     Acoustic Diversity Index : ADI
@@ -1387,21 +1387,15 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     bin_step : scalar, optional, default is 500
         Frequency step in Hz
     
-    dB_threshold : scalar, optional, default is 3dB
+    dB_threshold : scalar, optional, default is -50dB
         Threshold to compute the score (ie. the number of data > threshold,
         normalized by the length)
         
     index : string, optional, default is "shannon"
         - "shannon" : Shannon entropy is calculated on the vector of scores
-        
         - "simpson" : Simpson index is calculated on the vector of scores
-        
         - "invsimpson" : Inverse Simpson index is calculated on the vector of scores
     
-    R_compatible : string, optional, default is "soundecology"
-        if 'soundecology', the result is similar to the package SoundEcology in R 
-        Otherwise, the result is specific to maad
-        
     Returns
     -------    
     ADI : scalar 
@@ -1422,12 +1416,8 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     # number of frequency intervals to compute the score
     N = np.floor((fmax-fmin)/bin_step)
     
-    if R_compatible == 'soundecology' :
-        # convert into dB and normalization by the max
-        Sxx_dB = amplitude2dB(Sxx/max(Sxx))
-    else :
-        # convert into dB 
-        Sxx_dB = amplitude2dB(Sxx)         
+    # convert into dB and normalization by the max
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx))       
     
     # Score for each frequency in the frequency bandwith
     s_sum = []
@@ -1455,7 +1445,7 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
 
 #=============================================================================
 def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500, 
-                          dB_threshold=-50, R_compatible = 'soundecology'):
+                          dB_threshold=-50):
     
     """
     Acoustic Eveness Index : AEI
@@ -1481,10 +1471,6 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
         Threshold to compute the score (ie. the number of data > threshold,
         normalized by the length)
         
-    R_compatible : string, optional, default is "soundecology"
-        if 'soundecology', the result is similar to the package SoundEcology in R 
-        Otherwise, the result is specific to maad
-        
     Returns
     -------    
     AEI : scalar 
@@ -1504,13 +1490,9 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     # number of frequency intervals to compute the score
     N = np.floor((fmax-fmin)/bin_step)
     
-    if R_compatible == 'soundecology' :
-        # convert into dB and normalization by the max
-        Sxx_dB = amplitude2dB(Sxx/max(Sxx))
-    else :
-        # convert into dB 
-        Sxx_dB = amplitude2dB(Sxx)   
-    
+    # convert into dB and normalization by the max
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx))
+ 
     # Score for each frequency in the frequency bandwith
     s_sum = []
     for ii in np.arange(0,N):
@@ -1530,7 +1512,7 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
 ####    Indices based on the energy
 #=============================================================================
 def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
-                     R_compatible = 'seewave'):
+                     R_compatible = 'soundecology'):
     """
     soundscapeIndex
         
@@ -1550,7 +1532,7 @@ def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
     
     R_compatible : string, optional, default is "soundecology"
         if 'soundecology', the result is similar to the package SoundEcology in R 
-        Otherwise, the result is specific to maad
+        Otherwise, the result is specific to maad or Seewave R package
         
     Returns
     -------
@@ -2578,9 +2560,10 @@ def spectral_indices (Sxx_power, tn, fn,
 
     """******** Spectral indices from Spectrum (Amplitude or Energy) *******"""  
     """ EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  """
+    #### Does not take into account low frequencies.
     EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = spectral_entropy (Sxx_power_noNoise,
                                                                fn,
-                                                               flim=(flim_low[0],flim_hi[1]),
+                                                               flim=(flim_mid[0],flim_hi[1]),
                                                                display=display)
     df_spectral_indices += [EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW] 
     if verbose :
@@ -2648,15 +2631,13 @@ def spectral_indices (Sxx_power, tn, fn,
         COMMENT :
                 - threshold : -50dB when norm by the max (as soundecology)
                               6dB if PSDxxdB_SansNoise
-    """    
+    """  
     ADI = acousticDiversityIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
                                  fmax=flim_mid[1], bin_step=bin_step, 
-                                 dB_threshold=-50, index="shannon", 
-                                 R_compatible=R_compatible) 
+                                 dB_threshold=-50, index="shannon") 
     AEI = acousticEvenessIndex(Sxx_amplitude, fn, fmin=flim_low[0], 
                                fmax=flim_mid[1], bin_step=bin_step, 
-                               dB_threshold=-50, 
-                               R_compatible=R_compatible) 
+                               dB_threshold=-50) 
     df_spectral_indices += [ADI, AEI]
     if verbose :
         print("ADI %2.5f" %ADI)
@@ -2665,11 +2646,8 @@ def spectral_indices (Sxx_power, tn, fn,
     """************************** SPECTRAL COVER ***************************"""
     #### frequency cover 
     """ LFC, MFC, HFC [TOWSEY] """
-    LFC, MFC, HFC = spectral_cover (Sxx_dB_noNoise, fn, 
-                                                  dB_threshold=dB_threshold, 
-                                                  flim_LF=flim_low,
-                                                  flim_MF=flim_mid,
-                                                  flim_HF=flim_hi)
+    LFC, MFC, HFC = spectral_cover (Sxx_dB_noNoise, fn,dB_threshold=dB_threshold, 
+                                    flim_LF=flim_low,flim_MF=flim_mid,flim_HF=flim_hi)
     df_spectral_indices += [LFC, MFC, HFC]
     if verbose :
         print("LFC %2.5f" %LFC)

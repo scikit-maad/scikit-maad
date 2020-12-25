@@ -25,7 +25,8 @@ from .visualization import (rand_cmap,
                            plot2D,
                            plot_features_map,
                            plot_features,
-                           plot_correlation_map)
+                           plot_correlation_map,
+                           false_Color_Spectro)
 
 from .math_tools import (running_mean,
                          get_unimode,
@@ -73,6 +74,7 @@ __all__ = [
            'plot_features_map',
            'plot_features',
            'plot_correlation_map',
+           'false_Color_Spectro',
            # math       
            'running_mean',
            'get_unimode',
