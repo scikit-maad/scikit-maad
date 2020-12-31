@@ -373,12 +373,12 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
         fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
         fig2.set_size_inches((5,4))
         ax1,_ = plot1D(fn, mean_profile, ax=ax1, legend='Original profile',
-                       linecolor = 'b',
+                       color = 'b',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
         ax1,_ = plot1D(fn, np.mean(BGNxx, axis=1), ax =ax1, legend='Noise profile',
-                       linecolor = 'r',
+                       color = 'r',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
-        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, linecolor = 'k', 
+        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, color = 'k', 
                        legend='Denoized profile', 
                        xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
         fig2.tight_layout()  
@@ -695,12 +695,12 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
         fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
         fig2.set_size_inches((5,4))
         ax1,_ = plot1D(fn, np.mean(Sxx,axis=1), ax=ax1, legend='Original profile', 
-                       linecolor = 'b',
+                       color = 'b',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
         ax1,_ = plot1D(fn, np.mean(BGNxx,1), ax =ax1, legend='Noise profile', 
-                       linecolor = 'r',
+                       color = 'r',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
-        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, linecolor = 'k', 
+        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, color = 'k', 
                        legend='Denoized profile', 
                        xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
         fig2.tight_layout()     
@@ -891,12 +891,12 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
         fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
         fig2.set_size_inches((5,4))
         ax1,_ = plot1D(fn, mean_dB(Sxx,axis=axis), ax=ax1, legend='Original profile',
-                       linecolor = 'b',
+                       color = 'b',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
         ax1,_ = plot1D(fn, noise_profile, ax =ax1, legend='Noise profile', 
-                       linecolor = 'r',
+                       color = 'r',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
-        ax2,_ = plot1D(fn, mean_dB(Sxx_out,axis=axis), ax=ax2, linecolor = 'k', 
+        ax2,_ = plot1D(fn, mean_dB(Sxx_out,axis=axis), ax=ax2, color = 'k', 
                        legend='Denoized profile', 
                        xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
         fig2.tight_layout()

@@ -54,7 +54,7 @@ def plot1D(x, y, ax=None, **kwargs):
         - edgecolor : matplotlib color, optional, default: 'k' (black)
             the border color. 
         
-        - linecolor : matplotlib color, optional, default: 'k' (black)
+        - color : matplotlib color, optional, default: 'k' (black)
             the line color
         
         The following color abbreviations are supported:
@@ -106,10 +106,12 @@ def plot1D(x, y, ax=None, **kwargs):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure (w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
+    
+    Convert spectrogram into dB SPL
+    
+    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) 
        
     Plot the spectrum at t = 7s
     
@@ -117,6 +119,7 @@ def plot1D(x, y, ax=None, **kwargs):
     >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
+                      'linewidth': 0.5
                       }
     
     >>> fig, ax = maad.util.plot1D(fn, Lxx[:,index], **fig_kwargs)
@@ -125,7 +128,7 @@ def plot1D(x, y, ax=None, **kwargs):
     figsize=kwargs.pop('figsize', (4, 10))
     facecolor=kwargs.pop('facecolor', 'w')
     edgecolor=kwargs.pop('edgecolor', 'k')
-    linewidth=kwargs.pop('linewidth', 0.1)
+    linewidth=kwargs.pop('linewidth', 0.5)
     color=kwargs.pop('color', 'k')
     title=kwargs.pop('figtitle', 'Audiogram')
     xlabel=kwargs.pop('xlabel', 'Time [s]')
@@ -146,7 +149,7 @@ def plot1D(x, y, ax=None, **kwargs):
         fig = ax.get_figure()
     
     # plot the data on the subplot
-    line = ax.plot(x, y, linewidth, color=color, **kwargs)
+    line = ax.plot(x, y, color=color, linewidth=linewidth, **kwargs)
     
     # set legend to the line
     line[0].set_label(legend)
