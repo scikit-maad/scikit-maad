@@ -133,7 +133,10 @@ def skewness (x, axis=None):
             Nf = x.shape[axis]
         mean_x =  np.mean(x, axis=axis)
         std_x = np.std(x, axis=axis)
-        z = x - mean_x[..., np.newaxis]
+        if axis == 0 :
+            z = x - mean_x[np.newaxis, ...]
+        else :
+            z = x - mean_x[..., np.newaxis]
         sk = (np.sum(z**3, axis=axis)/(Nf-1))/std_x**3
     else:
         print ("WARNING: type of x must be ndarray") 
@@ -176,7 +179,10 @@ def kurtosis (x, axis=None):
             Nf = x.shape[axis]
         mean_x =  np.mean(x, axis=axis)
         std_x = np.std(x, axis=axis)
-        z = x - mean_x[..., np.newaxis]
+        if axis==0 :
+            z = x - mean_x[np.newaxis, ...]
+        else:
+            z = x - mean_x[..., np.newaxis]
         ku = (np.sum(z**4, axis=axis)/(Nf-1))/std_x**4
     else:
         print ("WARNING: type of x must be ndarray") 
