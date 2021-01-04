@@ -318,7 +318,7 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
             
             fig_kwargs = {'vmax': kwargs.pop('vmax',np.max(X_octave_dB)),
                           'vmin': kwargs.pop('vmin',np.min(X_octave_dB)),
-                          'extent':kwargs.pop('extent',None),
+                          'extent':extent,
                           'figsize':kwargs.pop('figsize',figsize),
                           'yticks' : (np.arange(len(bin_octave)), bin_octave),
                           'title':'Octave Spectrogram',

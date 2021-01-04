@@ -19,7 +19,7 @@ _MIN_ = sys.float_info.min
  
 # Import internal modules 
 from maad.util import (plot1D, plot2D, linear_scale, rand_cmap, running_mean, 
-                       get_unimode, mean_dB, add_dB)
+                       get_unimode, mean_dB, add_dB, power2dB)
  
 # 
 #====== TO DO 
@@ -282,8 +282,8 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()
        
@@ -391,7 +391,7 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     Parameters 
     ---------- 
     Sxx : 2D numpy array  
-        Original spectrogram (or image) 
+        Original spectrogram (or image), !!! not in dB 
         
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -474,8 +474,8 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout() 
        
@@ -483,8 +483,10 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
      
     Sxx_out = (Sxx-np.median(Sxx,axis=1)[..., np.newaxis])/(np.median(Sxx,axis=1)-np.min(Sxx,axis=1))[..., np.newaxis]
     
-#    Sxx_out[Sxx_out<=0] = 0
-#    Sxx_out = linear_scale(Sxx_out, axis=None)
+    # if the ratio is < 1, set the value to 1. 
+    # Values < 1 are noise and should not be less than 1.
+    # When Sxx_out is converted into dB => log10(1) => 0
+    Sxx_out[Sxx_out<1] = 1
     
     # Display 
     if display :  
@@ -492,16 +494,20 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Spectrogram without stationnary noise') 
         cmap   =kwargs.pop('cmap','gray')  
-        vmin=kwargs.pop('vmin',np.min(Sxx_out))  
-        vmax=kwargs.pop('vmax',np.max(Sxx_out)) 
         extent=kwargs.pop('extent',None) 
         
         if extent is not None :
             figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))  
         else:
-            figsize=kwargs.pop('figsize',(4, 13))  
+            figsize=kwargs.pop('figsize',(4, 13)) 
+            
+        # convert into dB
+        Sxx_out_dB = power2dB(Sxx_out)
+        
+        vmin=kwargs.pop('vmin',0)  
+        vmax=kwargs.pop('vmax',np.max(Sxx_out_dB)) 
          
-        _, fig = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2D (Sxx_out_dB, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -610,8 +616,8 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()     
     
@@ -631,9 +637,9 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise_q25), vmax=np.median(Sxx_dB_noNoise_q25)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise_q50), vmax=np.median(Sxx_dB_noNoise_q50)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise_q75), vmax=np.median(Sxx_dB_noNoise_q75)+40)
     >>> fig.set_size_inches(15,9)
     >>> fig.tight_layout()     
         
@@ -706,7 +712,7 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     return Sxx_out, noise_profile, BGNxx
  
     
-def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100, 
+def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50, 
                                   display=False, savefig=None, **kwargs): 
     """ 
     Get the noisy profile along the defined axis and remove this profile from
@@ -717,7 +723,7 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
     Sxx : 2D numpy array  
         Original spectrogram (or image) 
     
-    mode : str, optional, default is 'ale'
+    mode : str, optional, default is 'median'
         Select the mode to remove the noise
         Possible values for mode are :
         - 'ale' : Adaptative Level Equalization algorithm [Lamel & al. 1981]
@@ -727,10 +733,10 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
     axis : integer, default is 1
         if matrix, estimate the mode for each row (axis=0) or each column (axis=1)
         
-    N : int (only for mode = "ale")
-        length of window to compute the running mean of the histogram
+    N : int, default is 25
+        length of window to compute the running mean of the noise profile
         
-    N_bins : int (only for mode = "ale")
+    N_bins : int (only for mode = "ale"), default is 50
         number of bins to compute the histogram 
      
     display : boolean, optional, default is False 
@@ -803,7 +809,7 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
     Load audio recording and convert it into spectrogram
     
     >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(0,10))   
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
     
     Convert linear spectrogram into dB
     
@@ -826,20 +832,22 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+60)
+    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise_ale), vmax=np.median(Sxx_dB_noNoise_ale)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise_med), vmax=np.median(Sxx_dB_noNoise_med)+40)
+    >>> maad.util.plot2D(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)
     >>> fig.set_size_inches(8,10)
     >>> fig.tight_layout()   
     
     """
        
-    # get the noise profile
-    noise_profile = get_unimode (Sxx, mode, axis, N, N_bins)
-    # smooth the profile by removing spurious thin peaks (less than 5 pixels wide)
-    noise_profile = running_mean(noise_profile,N=5)
-    # Remove horizontal noisy peaks profile (BGN_VerticalNoise is an estimation) and negative value to zero
+    # get the noise profile, N define the running mean size of the histogram
+    # in case of mode='ale'
+    noise_profile = get_unimode (Sxx, mode, axis, N=7, N_bins=N_bins)
+    # smooth the profile by removing spurious thin peaks
+    noise_profile = running_mean(noise_profile,N)
+    # Remove horizontal noisy peaks profile (BGN_VerticalNoise is an estimation) 
+    # and negative value to zero
     if axis == 1 :
         Sxx_out = Sxx - noise_profile[..., np.newaxis]
     elif axis == 0 :
@@ -1546,8 +1554,8 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     
     Load audio recording and convert it into spectrogram
     
-    >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000))   
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)   
     
     Convert linear spectrogram into dB
     
@@ -1563,10 +1571,30 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     
     Select rois from the mask
     
-    >>> df_rois = maad.rois.select_rois(im_bin)
+    >>> im_rois, df_rois = maad.rois.select_rois(im_bin, display=True)
     
+    We can observe that we detect as ROI background noise and also that we merge
+    all together several ROIs. A solution consits in subtracting the background
+    noise before finding ROIs.
     
-        
+    >>> Sxx_noNoise = maad.rois.median_equalizer(Sxx)
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise) 
+    
+    Smooth the spectrogram
+    
+    >>> Sxx_noNoise_dB_blurred = maad.rois.smooth(Sxx_noNoise_dB)
+    
+    Detection of the acoustic signature => creation of a mask
+    
+    >>> im_bin2 = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=1, bin_per=0.75, mode='relative') 
+    
+    Select rois from the mask
+    
+    >>> im_rois2, df_rois2 = maad.rois.select_rois(im_bin2, display=True)
+    
     """ 
  
     # test if max_roi and min_roi are defined 
@@ -1717,7 +1745,35 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
          
     fig : figure object (see matplotlib) 
     
+    Examples 
+    -------- 
     
+    Load audio recording and convert it into spectrogram
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))   
+
+    Subtract the background noise before finding ROIs.
+    
+    >>> Sxx_noNoise = maad.rois.median_equalizer(Sxx)
+    
+    Convert linear spectrogram into dB
+    
+    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise) 
+    
+    Smooth the spectrogram
+    
+    >>> Sxx_noNoise_dB_blurred = maad.rois.smooth(Sxx_noNoise_dB)
+    
+    Detection of the acoustic signature => creation of a mask
+    
+    >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=0.25, bin_per=0.75, mode='relative') 
+    
+    Select rois from the mask and display bounding box over the spectrogram without noise
+    
+    >>> im_rois, df_rois = maad.rois.select_rois(im_bin)  
+    >>> maad.rois.overlay_rois (Sxx_noNoise_dB, df_rois, extent=ext,vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60) 
+        
     """        
      
     # Check format of the input data 
@@ -1730,8 +1786,8 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     xlabel =kwargs.pop('xlabel','Time [sec]')  
     title  =kwargs.pop('title','ROIs Overlay') 
     cmap   =kwargs.pop('cmap','gray')  
-    vmin=kwargs.pop('vmin',0)  
-    vmax=kwargs.pop('vmax',1)  
+    vmin=kwargs.pop('vmin',np.percentile(im_ref,0.05))  
+    vmax=kwargs.pop('vmax',np.percentile(im_ref,0.95))   
     ax =kwargs.pop('ax',None)  
     fig=kwargs.pop('fig',None)  
     extent=kwargs.pop('extent',None)

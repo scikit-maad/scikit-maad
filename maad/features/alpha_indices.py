@@ -34,7 +34,7 @@ from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
                        power2dBSPL, linear_scale, plot1D, plot2D)
 from maad.features import skewness, kurtosis, centroid_features, zero_crossing_rate
 from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro, avg_power_spectro, spectral_SNR
-from maad.rois import smooth, select_rois, create_mask, overlay_rois, remove_background_along_axis
+from maad.rois import smooth, select_rois, create_mask, overlay_rois, remove_background_along_axis, median_equalizer
 
 # min value
 import sys
@@ -1219,12 +1219,12 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
     Examples :
     ----------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
-    >>> Sxx_dB = maad.util.power2dB(Sxx_power)
-    >>> Sxx_dB_noNoise, _ = maad.rois.remove_background_along_axis(Sxx_dB) 
+    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
+    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power, display=True, extent=ext) 
+    >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> LFC, MFC, HFC = maad.features.spectral_cover(Sxx_dB_noNoise, fn) 
     >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC))
-    LFC: 0.21 / MFC: 0.28 / HFC: 0.17
+    LFC: 0.15 / MFC: 0.19 / HFC: 0.13
     
     """ 
 
@@ -1285,12 +1285,12 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
     Examples :
     ----------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
-    >>> Sxx_dB = maad.util.power2dB(Sxx_power)
-    >>> Sxx_dB_noNoise, _ = maad.rois.remove_background_along_axis(Sxx_dB) 
+    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
+    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power, display=True, extent=ext) 
+    >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ACTspfract_per_bin, ACTspcount_per_bin, ACTspmean_per_bin = maad.features.spectral_activity(Sxx_dB_noNoise)  
     >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %mean(ACTspfract_per_bin))
-    Mean proportion of spectrogram above threshold : 0.08%
+    Mean proportion of spectrogram above threshold : 0.07%
     
     """ 
 
@@ -1355,11 +1355,11 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     ----------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
-    >>> Sxx_dB = maad.util.power2dB(Sxx_power)
-    >>> Sxx_dB_noNoise, _ = maad.rois.remove_background_along_axis(Sxx_dB) 
+    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power) 
+    >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)  
     >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %mean(EVNspFract_per_bin))
-    Mean proportion of spectrogram with events : 0.08%
+    Mean proportion of spectrogram with events : 0.01%
     
     """  
     ### For wave to be a ndarray
@@ -2275,7 +2275,7 @@ def acousticGradientIndex(Sxx, dt, order=1, norm='per_bin', display=False):
 def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn, 
                           smooth_param1=1, mask_mode='relative', 
                           mask_param1=6, mask_param2=0.5, 
-                          min_roi=9, max_roi=512*10000, 
+                          min_roi=25, max_roi=512*10000, 
                           display=False, **kwargs):
     """
     Find regions of interest (ROI) and compute their number and their cover 
@@ -2329,13 +2329,13 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     ---------- 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    >>> Sxx_dB = maad.util.power2dB(Sxx_power)
-    >>> Sxx_dB_noNoise, _ = maad.rois.remove_background_along_axis(Sxx_dB) 
+    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power) 
+    >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ROItotal, ROIcover = maad.features.regionOfInterestIndex(Sxx_dB_noNoise, tn, fn, display=True)
     >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal)
-    The total number of ROIs found in the spectrogram is 187
+    The total number of ROIs found in the spectrogram is 265
     >>> print('The percentage of spectrogram covered by ROIs is %2.0f%%' %ROIcover)
-    The percentage of spectrogram covered by ROIs is 15%
+    The percentage of spectrogram covered by ROIs is 12%
     
     """ 
     
@@ -2372,9 +2372,9 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     
     if display :
         X = Sxx_dB_noNoise
-        fig_kwargs = {'vmax': np.max(X),
-                      'vmin': np.min(X)}
-        ax, fig = overlay_rois(X, rois, **fig_kwargs)
+        kwargs.update({'vmax':np.max(X)})
+        kwargs.update({'vmin':np.min(X)})
+        ax, fig = overlay_rois(X, rois, **kwargs)
  
 #        dpi= 96
 #        bbox_inches= 'tight'
@@ -2716,13 +2716,13 @@ def spectral_indices (Sxx_power, tn, fn,
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)  
-    >>> df_spectral_indices_DAY, _ = maad.features.spectral_indices(Sxx_power,tn,fn)
+    >>> df_spectral_indices_DAY, _ = maad.features.spectral_indices(Sxx_power,tn,fn,display=True, extent=ext)
     
     Spectral indices on a night recording
     
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
     >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)  
-    >>> df_spectral_indices_NIGHT, _ = maad.features.spectral_indices(Sxx_power,tn,fn)
+    >>> df_spectral_indices_NIGHT, _ = maad.features.spectral_indices(Sxx_power,tn,fn,display=True)
     
     Variation between night and day
     
@@ -2736,7 +2736,7 @@ def spectral_indices (Sxx_power, tn, fn,
     >>> print('AGI var night vs day: %2.2f %%' % var.AGI)
     AGI var night vs day: 20.50 %
     >>> print('ROItotal var night vs day: %2.2f %%' % var.ROItotal)
-    ROItotal var night vs day: 266.67 %
+    ROItotal var night vs day: 248.68 %
     
     """
     
@@ -2779,8 +2779,6 @@ def spectral_indices (Sxx_power, tn, fn,
     #### Prepare different spectrograms and spectrums
     # amplitude spectrogram
     Sxx_amplitude = sqrt(Sxx_power)
-    # dB spectrogram
-    Sxx_dB = power2dB(Sxx_power)
     # mean amplitude spectrum
     S_amplitude = avg_amplitude_spectro(Sxx_amplitude)
     # mean power spectrum
@@ -2841,13 +2839,12 @@ def spectral_indices (Sxx_power, tn, fn,
     if verbose :
         print("Hf %2.5f" % Hf)
 
-    """*********************** Remove stationnary noise ********************"""   
-    Sxx_dB_noNoise, _ = remove_background_along_axis(Sxx_dB, mode='ale', 
-                                                     display=display, 
-                                                     **kwargs) 
+    """*********************** Remove stationnary noise ********************"""       
+    #### Use median_equalizer function as it is fast reliable
+    Sxx_power_noNoise = median_equalizer(Sxx_power, display=display, **kwargs)    
     
-    #### Prepare different spectrograms and spectrums without noise
-    Sxx_power_noNoise = dB2power(Sxx_dB_noNoise)
+    #### Convert into dB
+    Sxx_dB_noNoise = power2dB(Sxx_power_noNoise)
 
     """******** Spectral indices from Spectrum (Amplitude or Energy) *******"""  
     """ EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  """
