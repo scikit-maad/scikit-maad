@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ 
-Multiresolution Analysis of Acoustic Diversity
-functions for processing sound 
+Collection of functions to load and preprocess audio signals
 """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>

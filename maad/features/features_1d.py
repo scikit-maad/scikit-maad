@@ -103,7 +103,7 @@ def rms(s):
 #=============================================================================
 def skewness (x, axis=None):
     """
-    Calcul the skewness (asymetry) of a signal x
+    Compute the skewness (asymetry) of an audio signal.
     
     Parameters
     ----------
@@ -151,7 +151,7 @@ def skewness (x, axis=None):
 #=============================================================================
 def kurtosis (x, axis=None):
     """
-    Calcul the kurtosis (tailedness or curved or arching) of a signal x
+    Compute the kurtosis (tailedness or curved or arching) of an audio signal.
     
     Parameters
     ----------

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """  
-Alpha indices used in ecoacoustics
-
-Created on Wed Oct 24 11:56:28 2018
+Collection of functions to compute alpha acoustic indices to chracterise audio signals
 """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
@@ -1641,7 +1639,7 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
 def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
                      R_compatible = 'soundecology'):
     """
-    soundscapeIndex
+    Compute the Normalized Difference Soundscape Index from a power spectrogram.
         
     Parameters
     ----------

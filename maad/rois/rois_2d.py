@@ -1,35 +1,19 @@
 #!/usr/bin/env python 
 """  
-Multiresolution Analysis of Acoustic Diversity 
-     
-functions for processing ROIS  
+Segmentation methods to find regions of interest in the time and frequency domain.
 """ 
-# 
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com> 
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr> 
-# 
-# License: New BSD License 
- 
-# ============================================================================= 
-# Load the modules 
-# ============================================================================= 
+
 # Import external modules 
 import matplotlib.patches as mpatches 
 import matplotlib.pyplot as plt 
-
 import numpy as np  
- 
 from scipy import signal 
 from scipy.ndimage import morphology 
 from scipy.stats import iqr 
- 
 from skimage import measure, filters
 from skimage.morphology import reconstruction
 from skimage.io import imread 
- 
 import pandas as pd 
- 
-# min value 
 import sys 
 _MIN_ = sys.float_info.min 
  
@@ -40,7 +24,10 @@ from maad.util import (plot1D, plot2D, linear_scale, rand_cmap, running_mean,
 # 
 #====== TO DO 
 # 
-def select_bandwidth(): 
+def select_bandwidth():
+    """ 
+    This functions is under construction. 
+    """
     return 
 # 
 #======  
@@ -533,8 +520,7 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
 
 def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs): 
     """ 
-    Remove background noise in a spectrogram using mathematical morphology tool
-    This process becomes slower as the spectrogram becomes larger
+    Remove background noise in a spectrogram using mathematical morphology tool.
      
     Parameters 
     ---------- 
@@ -920,7 +906,7 @@ def remove_background_along_axis (Sxx, mode ='ale', axis=1, N=7, N_bins=100,
 ****************************************************************************""" 
 def smooth (im, std=1, verbose=False, display = False, savefig=None, **kwargs): 
     """ 
-    Smooth (i.e. blurr) the image with a gaussian filter 
+    Smooth a spectrogram with a gaussian filter 
      
     Parameters 
     ---------- 
@@ -1475,8 +1461,9 @@ def create_mask(im, mode_bin = 'relative',
 def select_rois(im_bin, min_roi=None ,max_roi=None, 
                 verbose=False, display=False, savefig = None, **kwargs): 
     """ 
-    Select rois candidates based on area of rois. min and max boundaries. 
-    The ouput image contains pixels with label as value. 
+    Select regions of interest based on its dimensions.
+    
+    The input is a binary mask, and the output is an image with labelled pixels. 
  
     Parameters 
     ---------- 

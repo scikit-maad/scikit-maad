@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 """ Segmentation methods for 1D signals
 
-This module gathers a collection of functions to detect regions of interest 
-on 1D signals
-
-Authors: Juan Sebastian Ulloa, Sylvain Haupert
-License: 3-Clause BSD license
+This module gathers a collection of functions to detect regions of interest (ROIs)
+on the temporal domain.
 """
 import numpy as np
 from scipy import signal
@@ -111,13 +108,13 @@ def _energy_windowed(s, wl=512, fs=None):
 def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
                   savefilename='rois.csv', **kwargs):
     """
-    Find region of interest (ROIS) based on predetermined temporal length and frequency limits
+    Find region of interest using simple known estimates of signal length and frequency limits.
     
     The general approach is based on continous wavelet transform following a three step process
     
     1. Filter the signal with a bandpass sinc filter
     
-    2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]
+    2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [1]
     
     3. Binarize the signal applying a linear threshold
         

@@ -55,14 +55,35 @@ that can be performed with scikit-maad.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows different ways to remove background noise directly from the spectrogram. We ...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_remove_background_thumb.png
+     :alt: Remove background noise from audio with signal processing tools
+
+     :ref:`sphx_glr__auto_examples_remove_background.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/remove_background
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="A spectrogram is a time-frequency (2d) representation of a audio recording.  Each acoustic even...">
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_find_rois_thumb.png
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_compare_auto_and_manual_rois_selection_thumb.png
      :alt: Find Regions of interest (ROIs) in a spectrogram
 
-     :ref:`sphx_glr__auto_examples_find_rois.py`
+     :ref:`sphx_glr__auto_examples_compare_auto_and_manual_rois_selection.py`
 
 .. raw:: html
 
@@ -72,39 +93,18 @@ that can be performed with scikit-maad.
 .. toctree::
    :hidden:
 
-   /_auto_examples/find_rois
+   /_auto_examples/compare_auto_and_manual_rois_selection
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Wrapper - This script gives an example of how to use scikit-MAAD package">
+    <div class="sphx-glr-thumbcontainer" tooltip="In ecoacoustics, acoustics diversity is measured by single values, the so-called alpha indices,...">
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_wrapper_thumb.png
-     :alt: Wrapper - This script gives an example of how to use scikit-MAAD package
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_extract_alpha_indices_thumb.png
+     :alt: Extract ecoacoustics alpha indices from audio recording
 
-     :ref:`sphx_glr__auto_examples_maad_wrapper.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/maad_wrapper
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@author: haupert">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_find_rois_comparison_thumb.png
-     :alt: Created on Tue Nov  3 12:45:22 2020
-
-     :ref:`sphx_glr__auto_examples_find_rois_comparison.py`
+     :ref:`sphx_glr__auto_examples_extract_alpha_indices.py`
 
 .. raw:: html
 
@@ -114,133 +114,7 @@ that can be performed with scikit-maad.
 .. toctree::
    :hidden:
 
-   /_auto_examples/find_rois_comparison
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Created on Mon Aug  6 17:59:44 2018 @author: haupert">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_batch_thumb.png
-     :alt: Batch - This script gives an example of how to use scikit-MAAD package
-
-     :ref:`sphx_glr__auto_examples_maad_batch.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/maad_batch
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Created on Mon Aug  6 17:59:44 2018 @author: haupert">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_details_auto_thumb.png
-     :alt: Details Auto - This script gives an example of how to use scikit-MAAD package
-
-     :ref:`sphx_glr__auto_examples_maad_details_auto.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/maad_details_auto
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Created on Mon Aug  6 17:59:44 2018 @author: haupert">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_details_man_thumb.png
-     :alt: Details Man - This script gives an example of how to use scikit-MAAD package
-
-     :ref:`sphx_glr__auto_examples_maad_details_man.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/maad_details_man
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Created on Mon Aug  6 17:59:44 2018">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_indice_thumb.png
-     :alt: Indice - This script gives an example of how to use scikit-MAAD for ecoacoustics indices
-
-     :ref:`sphx_glr__auto_examples_maad_indice.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/maad_indice
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Created on Mon Aug  6 17:59:44 2018">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_maad_examples_thumb.png
-     :alt: Indice - This script gives an example of how to use scikit-MAAD for ecoacoustics indices
-
-     :ref:`sphx_glr__auto_examples_maad_examples.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/maad_examples
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Updated Thu 28 May 2020">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_indices_calculation_indice_thumb.png
-     :alt: Created on Mon Aug  6 17:59:44 2018
-
-     :ref:`sphx_glr__auto_examples_indices_calculation_indice.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/indices_calculation_indice
+   /_auto_examples/extract_alpha_indices
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

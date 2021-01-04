@@ -16,6 +16,7 @@
       :nosignatures:
    
       crop_image
+      false_Color_Spectro
       plot1D
       plot2D
       plot_correlation_map

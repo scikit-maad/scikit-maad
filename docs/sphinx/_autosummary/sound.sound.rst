@@ -25,6 +25,7 @@
       select_bandwidth
       spectral_SNR
       spectrogram
+      wave2frames
    
    
 
