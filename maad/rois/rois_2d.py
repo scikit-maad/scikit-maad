@@ -481,7 +481,16 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
        
     """  
      
-    Sxx_out = (Sxx-np.median(Sxx,axis=1)[..., np.newaxis])/(np.median(Sxx,axis=1)-np.min(Sxx,axis=1))[..., np.newaxis]
+    Sxx_out = (Sxx-np.median(Sxx,axis=1)[..., np.newaxis])
+    
+    # Numerator for normalization. Test if values of norm are <=0 and set them
+    # to the highest value in Sxx. This will ensure that the result of the 
+    # normalization will be lower than 1
+    norm = (np.median(Sxx,axis=1)-np.min(Sxx,axis=1))
+    norm[norm<=0] = Sxx.max()
+    
+    # normalization. Test if the numerator is 0
+    Sxx_out = Sxx_out/norm[..., np.newaxis]
     
     # if the ratio is < 1, set the value to 1. 
     # Values < 1 are noise and should not be less than 1.
@@ -1153,77 +1162,82 @@ def _double_threshold_rel (im, bin_std=6, bin_per=0.5,
     .. [1] from MATLAB: Threshold estimation (from Oliveira et al, 2015) 
        Adapted by S. Haupert Dec 12, 2017 
     """ 
-     
-    # Compute the qth percentile of the data along the specified axis 
-    val1 = np.percentile(im[np.where(im>0)],75)   # value corresponding to the limit between the 75% lowest value and 25% largest value 
-     
-    # The interquartile range (IQR) is the difference between the 75th and  
-    # 25th percentile of the data. It is a measure of the dispersion similar  
-    # to standard deviation or variance, but is much more robust against outliers 
-    val2 = iqr(im[np.where(im>0)])*bin_std 
-     
-    # Threshold : qth  percentile + sort of std 
-    h_th = val1 + val2 
-    # Low threshold limit 
-    l_th = (h_th-h_th*bin_per) 
     
-    if verbose :
-        print(72 * '_') 
-        print('Double thresholding with values relative to the image...') 
-        print ('**********************************************************') 
-        print ('  high threshold value %.2f | low threshold value %.2f' % (h_th, l_th)) 
-        print ('**********************************************************') 
-     
-    # binarisation  
-    im_t1 = im > h_th    # mask1 
-    im_t2 = im > l_th    # mask2 
-    im_t3 = im * im_t1   # selected parts of the image 
-     
-    #find index of regions which meet the criteria 
-    conncomp_t2 = measure.label(im_t2)    #Find connected components in binary image 
-    rprops = measure.regionprops(conncomp_t2,im_t3)  
-     
-    rprops_mean_intensity = [region['mean_intensity'] for region in rprops]   
-    rprops_mean_intensity = np.asarray(rprops_mean_intensity) 
-     
-    rprops_label = [region['label'] for region in rprops]  
-    rprops_label = np.asarray(rprops_label) 
+    # test if im is full of zeros
+    if not im.any() :
+        im_out = np.zeros(im.shape)   
+    else:
+    
+        # Compute the qth percentile of the data along the specified axis 
+        val1 = np.percentile(im[np.where(im>0)],75)   # value corresponding to the limit between the 75% lowest value and 25% largest value 
          
-    [ind]=np.where(rprops_mean_intensity>0) 
-     
-    im_out = np.isin(conncomp_t2, rprops_label[ind])    # test if the indice is in the matrix of indices 
-    im_out =im_out*1    #  boolean to 0,1 conversion 
-                 
-    # Display 
-    if display :  
-        ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
-        xlabel =kwargs.pop('xlabel','Time [sec]')  
-        title  =kwargs.pop('title','binary image => MASK') 
-        cmap   =kwargs.pop('cmap','gray')  
-        vmin=kwargs.pop('vmin',0)  
-        vmax=kwargs.pop('vmax',1)  
-        extent=kwargs.pop('extent',None)
-            
-        if extent is not None : 
-            xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
-        else: 
-            xlabel = 'pseudofrequency [points]'
-            figsize=kwargs.pop('figsize',(4, 13)) 
+        # The interquartile range (IQR) is the difference between the 75th and  
+        # 25th percentile of the data. It is a measure of the dispersion similar  
+        # to standard deviation or variance, but is much more robust against outliers 
+        val2 = iqr(im[np.where(im>0)])*bin_std 
          
-        _, fig = plot2D (im_out, extent=extent, figsize=figsize,title=title,  
-                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
-                         cmap=cmap, **kwargs) 
-        # SAVE FIGURE 
-        if savefig is not None :  
-            dpi   =kwargs.pop('dpi',96) 
-            format=kwargs.pop('format','png') 
-            filename=kwargs.pop('filename','_spectro_binary')              
-            filename = savefig+filename+'.'+format 
-            if verbose :
-                print('\n''save figure : %s' %filename) 
-            fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
-                        **kwargs)    
+        # Threshold : qth  percentile + sort of std 
+        h_th = val1 + val2 
+        # Low threshold limit 
+        l_th = (h_th-h_th*bin_per) 
+        
+        if verbose :
+            print(72 * '_') 
+            print('Double thresholding with values relative to the image...') 
+            print ('**********************************************************') 
+            print ('  high threshold value %.2f | low threshold value %.2f' % (h_th, l_th)) 
+            print ('**********************************************************') 
+         
+        # binarisation  
+        im_t1 = im > h_th    # mask1 
+        im_t2 = im > l_th    # mask2 
+        im_t3 = im * im_t1   # selected parts of the image 
+         
+        #find index of regions which meet the criteria 
+        conncomp_t2 = measure.label(im_t2)    #Find connected components in binary image 
+        rprops = measure.regionprops(conncomp_t2,im_t3)  
+         
+        rprops_mean_intensity = [region['mean_intensity'] for region in rprops]   
+        rprops_mean_intensity = np.asarray(rprops_mean_intensity) 
+         
+        rprops_label = [region['label'] for region in rprops]  
+        rprops_label = np.asarray(rprops_label) 
+             
+        [ind]=np.where(rprops_mean_intensity>0) 
+         
+        im_out = np.isin(conncomp_t2, rprops_label[ind])    # test if the indice is in the matrix of indices 
+        im_out =im_out*1    #  boolean to 0,1 conversion 
+                     
+        # Display 
+        if display :  
+            ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
+            xlabel =kwargs.pop('xlabel','Time [sec]')  
+            title  =kwargs.pop('title','binary image => MASK') 
+            cmap   =kwargs.pop('cmap','gray')  
+            vmin=kwargs.pop('vmin',0)  
+            vmax=kwargs.pop('vmax',1)  
+            extent=kwargs.pop('extent',None)
+                
+            if extent is not None : 
+                xlabel = 'frequency [Hz]' 
+                figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
+            else: 
+                xlabel = 'pseudofrequency [points]'
+                figsize=kwargs.pop('figsize',(4, 13)) 
+             
+            _, fig = plot2D (im_out, extent=extent, figsize=figsize,title=title,  
+                             ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                             cmap=cmap, **kwargs) 
+            # SAVE FIGURE 
+            if savefig is not None :  
+                dpi   =kwargs.pop('dpi',96) 
+                format=kwargs.pop('format','png') 
+                filename=kwargs.pop('filename','_spectro_binary')              
+                filename = savefig+filename+'.'+format 
+                if verbose :
+                    print('\n''save figure : %s' %filename) 
+                fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
+                            **kwargs)    
  
     return im_out 
  
