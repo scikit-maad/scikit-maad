@@ -118,25 +118,22 @@ def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
     This function is interesting to obtain the background noise (BGN) profile (e.g. frequency bin
     by frequency bin) of a spectrogram
     
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
-    >>> PSDxx_dB = maad.util.energy2dBSPL(PSDxx)
-    >>> BGN_med = maad.util.get_unimode (PSDxx_dB, mode ='median', axis=1, 
-                                               verbose=False, display=False)
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
+    >>> Sxx_dB = maad.util.power2dB(Sxx_power)
+    >>> BGN_med = maad.util.get_unimode (Sxx_dB, mode='median', axis=1)
     >>> import matplotlib.pyplot as plt 
-    >>> plt.plot(fn,maad.util.energy2dBSPL(mean(PSDxx,axis=1)))
+    >>> plt.plot(fn,maad.util.mean_dB(Sxx_dB,axis=1))
     >>> plt.plot(fn,BGN_med)
     
     Extract the background noise from mean
     
-    >>> BGN_mean = maad.util.get_unimode (PSDxx_dB, mode ='mean', axis=1, 
-                                               verbose=False, display=False)
+    >>> BGN_mean = maad.util.get_unimode (Sxx_dB, mode='mean', axis=1)
     >>> plt.plot(fn,BGN_mean)
     
     Extract the background noise from ale (i.e. unimode)
     
-    >>> BGN_ale = maad.util.get_unimode (PSDxx_dB, mode ='ale', N=7, N_bins=100, axis=1, 
-                                               verbose=False, display=False)
+    >>> BGN_ale = maad.util.get_unimode (Sxx_dB, mode='ale', N=7, N_bins=100, axis=1)
     >>> plt.plot(fn,BGN_ale)
     
     """         
@@ -225,7 +222,11 @@ def entropy (x, axis=0):
             elif x.shape[axis] == 1:
                 H = 0 # null entropy
             elif x.all() == 0:
-                H = 0 # null entropy
+                if x.ndim == 1 : # case vector
+                    H = 0 # null entropy
+                else : # case matrix
+                    if axis == 0 : H = np.zeros(x.shape[1]) # null entropy
+                    if axis == 1 : H = np.zeros(x.shape[0]) # null entropy
             else:
                 # if datain contains negative values -> rescale the signal between 
                 # between posSitive values (for example (0,1))

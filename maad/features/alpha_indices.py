@@ -1154,15 +1154,22 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
     imax_X = np.argmax(X[iBAND],axis=0) + ioffset
     imax_X = fn[imax_X]
     max_X_bin, bin_edges = np.histogram(imax_X, bins=Nbins, range=flim)
-    max_X_bin = max_X_bin/sum(max_X_bin)
-    Hf_fmax = entropy(max_X_bin)
-    EPS = 1 - Hf_fmax    
     
-    #### Kurtosis of spectral maxima
-    EPS_KURT = kurtosis(max_X_bin)
-    
-    #### skewness of spectral maxima
-    EPS_SKEW = skewness(max_X_bin)
+    if sum(max_X_bin) == 0 :
+        max_X_bin = np.zeros(len(max_X_bin))
+        EPS = float('nan')
+        #### Kurtosis of spectral maxima
+        EPS_KURT = float('nan')
+        #### skewness of spectral maxima
+        EPS_SKEW = float('nan')
+    else:
+        max_X_bin = max_X_bin/sum(max_X_bin)
+        Hf_fmax = entropy(max_X_bin)
+        EPS = 1 - Hf_fmax    
+        #### Kurtosis of spectral maxima
+        EPS_KURT = kurtosis(max_X_bin)
+        #### skewness of spectral maxima
+        EPS_SKEW = skewness(max_X_bin)
     
     if display: 
         fig, ax = plt.subplots()
