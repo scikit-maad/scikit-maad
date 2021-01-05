@@ -44,30 +44,30 @@ def index_bw (fn, bw):
     
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
-    >>> PSDxxdB = maad.util.linear2dB (PSDxx) # convert into dB
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
+    >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
     >>> bw = (2000,6000) #in Hz
-    >>> fig_kwargs = {'vmax': max(PSDxxdB),
-                      'vmin':min(PSDxxdB),
+    >>> fig_kwargs = {'vmax': Sxx_dB.max(),
+                      'vmin': -90,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'figsize':(10,13),
                       'title':'Power Spectrum Density (PSD)',
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> maad.util.plot2D(PSDxxdB,**fig_kwargs)
-    >>> PSDxxdB_crop = PSDxxdB[index_bw(fn, bw)]
-    >>> fn_crop = fn[index_bw(fn, bw)]
-    >>> fig_kwargs = {'vmax': max(PSDxxdB),
-                      'vmin':min(PSDxxdB),
+    >>> maad.util.plot2D(Sxx_dB,**fig_kwargs)
+    >>> Sxx_dB_crop = Sxx_dB[maad.util.index_bw(fn, bw)]
+    >>> fn_crop = fn[maad.util.index_bw(fn, bw)]
+    >>> fig_kwargs = {'vmax': Sxx_dB.max(),
+                      'vmin': -90,
                       'extent':(tn[0], tn[-1], fn_crop[0], fn_crop[-1]),
                       'figsize':(10*len(fn_crop)/len(fn),13),
                       'title':'Power Spectrum Density (PSD)',
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> maad.util.plot2D(PSDxxdB_crop,**fig_kwargs)
+    >>> maad.util.plot2D(Sxx_dB_crop,**fig_kwargs)
     
     """
     # select the indices corresponding to the frequency bins range
@@ -174,8 +174,36 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
        
 def rle(x):
     """
-    Run-Length encoding    
-    from rle function R
+    Run-Length encoding (RLE)   
+    
+    Wikipedia :
+        Run-length encoding (RLE) is a form of lossless data compression in 
+        which runs of data (sequences in which the same data value occurs in 
+        many consecutive data elements) are stored as a single data value and 
+        count, rather than as the original run. This is most useful on data 
+        that contains many such runs. Consider, for example, simple graphic 
+        images such as icons, line drawings, Conway's Game of Life, and 
+        animations. It is not useful with files that don't have many runs 
+        as it could greatly increase the file size. 
+    
+    Parameters:
+    -----------
+    x : 1D array
+        vector with numbers (ndarray or list)
+        
+    Returns:
+    -------
+    lengths, values : 1D array
+        2 vectors that stores values (in values) and the number of times each
+        value is repeated (in lengths)
+        
+        ex : RLE compression of the vector [111122333345] 
+            => lengths = [4 2 4 1 1] and values = [1 2 3 4 5]
+            
+    References:
+    -----------
+    Transcription of the function rle from R
+    
     """
     x = np.asarray(x)
     if x.ndim >1 : 
@@ -221,13 +249,14 @@ def linear_scale(x, minval= 0.0, maxval=1.0, axis=0):
     Examples
     --------
     >>> a = np.array([1,2,3,4,5])
-    >>> linear_scale(a, 0, 1)
+    >>> maad.util.linear_scale(a, 0, 1)
         array([0.  , 0.25, 0.5 , 0.75, 1.  ])
         
     References
     ----------
     Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
     Adapted by S. Haupert Dec 12, 2017 for Python
+    
     """
 
     # if x is a list, convert x into ndarray 
@@ -251,7 +280,8 @@ def linear_scale(x, minval= 0.0, maxval=1.0, axis=0):
 #=============================================================================
 def amplitude2dB (x, db_range=None, db_gain=0):
     """
-    Transform amplitude data (signal, scalar) into decibel scale within the dB range (db_range).
+    Transform amplitude data (signal, scalar) into decibel scale within the 
+    dB range (db_range).
     A gain (db_gain) could be added at the end.    
     
     Parameters
@@ -267,13 +297,13 @@ def amplitude2dB (x, db_range=None, db_gain=0):
     
     Returns
     -------
-    y : scalars
+    y : array-like or scalar
         y = 20*log10(x) + db_gain  
         
     Examples
     --------
     >>> a = np.array([1,2,3,4,5])
-    >>> amplitude2dB(a, mode='amplitude')
+    >>> maad.util.amplitude2dB(a)
         array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
         
     """            
@@ -302,7 +332,8 @@ def amplitude2dB (x, db_range=None, db_gain=0):
 #=============================================================================
 def power2dB (x, db_range=None, db_gain=0):
     """
-    Transform power (amplitude²) signal or scalar into decibel scale within the dB range (db_range).
+    Transform power (amplitude²) signal or scalar into decibel scale 
+    within the dB range (db_range).
     A gain (db_gain) could be added at the end.    
     
     Parameters
@@ -318,13 +349,13 @@ def power2dB (x, db_range=None, db_gain=0):
     
     Returns
     -------
-    y : scalars
+    y : array-like or scalar
         y = 10*log10(x) + db_gain  
         
     Examples
     --------
     >>> a = np.array([1,2,3,4,5])
-    >>> power2dB(a**2, mode='power')
+    >>> maad.util.power2dB(a**2)
         array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
         
     """            
@@ -358,7 +389,7 @@ def dB2amplitude (x, db_gain=0):
     
     Parameters
     ----------
-    x : array-like
+    x : array-like or scalar
         data in dB to rescale in amplitude 
     db_gain : scalar, optional, default is 0
         Gain that was added to the result 
@@ -366,13 +397,13 @@ def dB2amplitude (x, db_gain=0):
                 
     Returns
     -------
-    y : scalars
+    y : array-like or scalar
         output in amplitude unit
         
     Examples
     --------
     >>> a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
-    >>> dB2amplitude(a)
+    >>> maad.util.dB2amplitude(a)
         array([1., 2., 3., 4., 5.])
         
     """  
@@ -388,7 +419,7 @@ def dB2power (x, db_gain=0):
     
     Parameters
     ----------
-    x : array-like
+    x : array-like or scalar
         data in dB to rescale in power 
     db_gain : scalar, optional, default is 0
         Gain that was added to the result 
@@ -396,13 +427,13 @@ def dB2power (x, db_gain=0):
                 
     Returns
     -------
-    y : scalars
+    y : array-like or scalar
         output in power unit
         
     Examples
     --------
     >>> a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
-    >>> dB2power(a)
+    >>> maad.util.dB2power(a)
         array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        
     """  
     y = 10**((x- db_gain)/10) 
@@ -432,10 +463,10 @@ def add_dB(*argv, axis=0):
     
     Example with an audio file
     
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> L = maad.util.power2dBSPL(PSDxx,gain=42)
-    >>> L_sum = maad.util.add_dB(L, axis=2)  
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> L = maad.util.power2dBSPL(Sxx_power,gain=42)
+    >>> L_sum = maad.util.add_dB(L, axis=1)  
     >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
@@ -505,10 +536,10 @@ def mean_dB(*argv, axis=0):
     
     Example with an audio file
     
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> L = maad.util.power2dBSPL(PSDxx,gain=42)
-    >>> L_mean = maad.util.mean_dB(L, axis=2)  
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> L = maad.util.power2dBSPL(Sxx_power,gain=42)
+    >>> L_mean = maad.util.mean_dB(L, axis=1)  
     >>> fig_kwargs = {'figtitle':'Power spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
@@ -525,7 +556,7 @@ def mean_dB(*argv, axis=0):
     Example with arrays
     
     >>> L1 = [90,80,70]
-    >>> maad.util.mean_dB(L1,L1)
+    >>> maad.util.mean_dB(L1,L1, axis=1)
         array([85.68201724, 85.68201724])
     >>> maad.util.mean_dB(L1,L1, axis=0)  
         array([90., 80., 70.]) 
@@ -577,7 +608,7 @@ def shift_bit_length(x):
     
     Examples
     --------
-    >>> shift_bit_length(1000)
+    >>> maad.util.shift_bit_length(1000)
         1024
     """
     y = 1<<(x-1).bit_length()
@@ -591,8 +622,8 @@ def nearest_idx(array,value):
     
     Parameters
     ----------
-    array: ndarray
-        array of values to search for nearest values
+    array: ndarray-like of floats
+        array of values where to search the nearest values
     value: float
         value to be searched in array
             
@@ -604,9 +635,9 @@ def nearest_idx(array,value):
     Examples
     --------
     >>> x = np.array([1,2,3])
-    >>> nearest_idx(x, 1.3)
+    >>> maad.util.nearest_idx(x, 1.3)
         0
-    >>> nearest_idx(x, 1.6)
+    >>> maad.util.nearest_idx(x, 1.6)
         1
     """
     # be sure it's ndarray
@@ -619,7 +650,8 @@ def nearest_idx(array,value):
 
 def get_df_single_row (df, index, mode='iloc'):
     """
-    Extract a single row from a dataframe keeping the DataFrame type (instead of becoming a Series)
+    Extract a single row from a dataframe keeping the DataFrame type 
+    (instead of becoming a Series)
     
     Parameters
     ----------
@@ -632,6 +664,7 @@ def get_df_single_row (df, index, mode='iloc'):
     mode : string, optional, default is 'iloc'
         choose between row number ('iloc') or row index ('loc')
         (see Pandas documentation for the difference)
+        
     Returns
     -------
     df_out : pandas DataFrame
@@ -639,19 +672,19 @@ def get_df_single_row (df, index, mode='iloc'):
     
     Examples
     --------
-    >>>import pandas as pd
-    >>>from maad.util import get_df_single_row
-    >>>species = [ ('bird', 8, 'Yes' ,'NYC') ,
+    >>> import pandas as pd
+    >>> from maad.util import get_df_single_row
+    >>> species = [ ('bird', 8, 'Yes' ,'NYC') ,
                   ('insect', 4, 'No','NYC' ) ,
                   ('mammal', 2, 'No','NYC' ) ,
                   ('frog', 3, 'Yes',"LA" ) ]
     
-    >>>df = pd.DataFrame(species, 
+    >>> df = pd.DataFrame(species, 
                           columns = ['category',
                                      'abundance',
                                      'presence',
                                      'location']) 
-    >>>print(df)
+    >>> print(df)
           category  abundance presence location
         0     bird          8      Yes      NYC
         1   insect          4       No      NYC
@@ -663,14 +696,14 @@ def get_df_single_row (df, index, mode='iloc'):
         presence      Yes
         location      NYC
         Name: 0, dtype: object
-    >>> get_df_single_row (df, index=0, mode='iloc')
+    >>> maad.util.get_df_single_row (df, index=0, mode='iloc')
           category abundance presence location
         0     bird         8      Yes      NYC
         
      Now with index   
         
-    >>>df_modified=df.set_index("category")
-    >>>print(df_modified)
+    >>> df_modified=df.set_index("category")
+    >>> print(df_modified)
                     abundance presence location
         category                             
         bird              8      Yes      NYC
@@ -682,10 +715,10 @@ def get_df_single_row (df, index, mode='iloc'):
         presence      No
         location     NYC
         Name: insect, dtype: object
-    >>> get_df_single_row (df_modified, index='insect', mode='loc')
+    >>> maad.util.get_df_single_row (df_modified, index='insect', mode='loc')
                abundance presence location
         insect         4       No      NYC
-    >>> get_df_single_row (df_modified, index=1, mode='iloc')    
+    >>> maad.util.get_df_single_row (df_modified, index=1, mode='iloc')    
                abundance presence location
         insect         4       No      NYC
     """
@@ -702,19 +735,19 @@ def get_df_single_row (df, index, mode='iloc'):
 
 def format_features(df, tn, fn):
     """ 
-    Setup rectangular df to a predifined format: 
-    time-frequency or bounding box
+    Format features such as bounding box coordinates and centroids coordinates
+    to predifined format : time-frequency => pixels or pixels to time-frequency
+    units 
     
     Parameters
     ----------
     df : pandas DataFrame
+        df with bounding box coordinates and/or centroids coordinates       
         array must have a valid input format with column names
-        
         - bounding box: min_y, min_x, max_y, max_x
         - time frequency: min_f, min_t, max_f, max_t
         - centroid tf : centroid_f, centroid_t
         - centroid pixels : centroid_y, centroid_x
-    
     tn : ndarray
         vector with temporal indices, output from the spectrogram function (in seconds)
     fn: ndarray
@@ -722,8 +755,22 @@ def format_features(df, tn, fn):
 
     Returns
     -------
-    df: ndarray
-        array with indices of ROIs matched on spectrogram
+    df: pandas DataFrame
+        df with bounding box coordinates and/or centroids coordinates in pixels
+        and time-frequency units
+    
+    See also
+    --------
+    select_rois, centroid_features, read_audacity_annot, overlay_rois, 
+    overlay_centroid
+    
+    Note
+    ----
+    Use this function after using MAAD functions such as select_rois, 
+    centroid_features, read_audacity_annot or before using MAAD functions such
+    as overlay_rois, overlay_centroid in order to format the coordinates
+    into pixels and/or time-frequency units
+    
     """
     # Check format of the input data
     if type(df) is not pd.core.frame.DataFrame :

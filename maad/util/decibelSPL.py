@@ -52,7 +52,7 @@ def wav2volt (wave, Vadc=2):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> maad.util.wav2volt(wave=w, Vadc=2)
         array([ 0.02155849,  0.02570888,  0.02583096, ..., -0.0082877 ,
        -0.00438145, -0.00755528])
@@ -90,7 +90,7 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> v = maad.util.wav2volt(wave=w)
     >>> maad.util.volt2pressure(volt=v, gain=42) 
         array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,
@@ -145,7 +145,7 @@ def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> maad.util.wav2pressure(wave=w, gain=42)
         array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,
        -0.00195712, -0.00337482])
@@ -185,7 +185,7 @@ def pressure2dBSPL (p, pRef=20e-6):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> p = maad.util.wav2pressure(wave=w, gain=42)
     
     Get instantaneous sound pressure level (L)
@@ -230,7 +230,7 @@ def dBSPL2pressure (L, pRef=20e-6):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> p = maad.util.wav2pressure(wave=w, gain=42)
     >>> p_rms = maad.features.rms(p)
     >>> print(p_rms)
@@ -281,7 +281,7 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> L = maad.util.wav2dBSPL(wave=w, gain=42)
     
     Get an approximate of the equivalent sound pressure level (Leq)
@@ -333,6 +333,10 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     -------
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in dB SPL (Sound Pressure level in dB)
+      
+    See also:
+    ---------
+    power2dBSPL
         
     """       
     # force to be ndarray
@@ -361,9 +365,13 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound pressure level (L [dB])
         
+    See also:
+    ---------
+    amplitude2dBSPL
+        
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode='psd')  
     >>> S_power_mean = mean(Sxx_power, axis=1)
     
@@ -426,7 +434,7 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
        
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Leq = maad.util.wav2Leq (w, fs, gain=42)  
     >>> maad.util.mean_dB(Leq)
         54.575482584140005
@@ -477,7 +485,7 @@ def pressure2Leq (p, f, dt=1, pRef = 20e-6):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> p = maad.util.wav2pressure(wave=w, gain=42)
     >>> Leq = maad.util.pressure2Leq (p, f=fs)
     >>> maad.util.mean_dB(Leq)
@@ -536,11 +544,12 @@ def PSD2Leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs)
     >>> S_power_mean = maad.sound.avg_power_spectro(Sxx_power) 
     >>> maad.util.PSD2Leq(S_power_mean, gain=42)
         53.55842473963429
+        
     """  
     # be sure they are ndarray
     P = np.asarray(P)
@@ -571,7 +580,7 @@ if __name__ == "__main__":
     
     # data directory 
     datadir = (Path(dir_path).parents[1] / "data/").resolve()
-    filename = datadir/"jura_cold_forest_jour.wav"
+    filename = datadir/"cold_forest_daylight.wav"
     
     # Go to the root directory where is the module maad and import maad
     maad_path = Path(dir_path).parents[1]
@@ -590,7 +599,7 @@ if __name__ == "__main__":
     wav,fs = maad.sound.load(filename=filename, channel='right', detrend=False, verbose=False)
     
     print('-------------------------------------------------------------------------')
-    print('Leq calculation directly from the sound file (in time or frequency domain')
+    print('Leq calculation directly from the sound file (in time or frequency domain)')
     
     # convert sounds (wave) into SPL and subtract DC offset
     wav = wav - mean(wav)

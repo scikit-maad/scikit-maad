@@ -13,7 +13,6 @@ from maad.util import format_features, read_audacity_annot, power2dB
 from maad.rois import overlay_rois
 
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.decomposition import PCA
