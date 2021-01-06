@@ -34,7 +34,6 @@ from .math_tools import (running_mean,
 
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
-                     date_from_filename,
                      date_parser)
 
 from .decibelSPL import (wav2volt,
@@ -82,7 +81,6 @@ __all__ = [
            # parser
            'read_audacity_annot',
            'write_audacity_annot',
-           'date_from_filename',
            'date_parser',
            # decibelSPL        
            'wav2volt',

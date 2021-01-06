@@ -354,7 +354,7 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     ----------
     P : ndarray-like or scalar
         ndarray-like or scalar containing the power signal (P), for instance 
-        Pxx, the power spectral density (PSD)
+        Sxx_power, the power spectral density (PSD)
                 
     pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
@@ -385,7 +385,7 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 
     """    
     # force to be ndarray
-    P= np.asarray(P)
+    P = np.asarray(P)
     # convert power (energy) to amplitude
     w = sqrt(P)
     # convert amplitude to dB sPL
