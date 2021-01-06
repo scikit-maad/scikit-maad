@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-""" Utilitary functions for scikit-MAAD """
+""" Ensemble of usefull functions for scikit-maad. """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>

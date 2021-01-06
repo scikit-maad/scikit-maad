@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """ 
-Ensemble of functions to compute acoustic descriptors from 1D signals
+Ensemble of functions to compute acoustic descriptors from 1D signals.
 
 """
 
 from scipy.signal import periodogram, welch
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
-#### Importation from internal modules
+#### Import internal modules
 from maad.sound import audio_SNR
 
 #=============================================================================
-def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None):
+def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None,
+        display=False):
     """ 
-    Estimates power spectral density of 1D signal using Welch's or periodogram methods. 
+    Estimate the power spectral density of 1D signal using Welch's or periodogram methods. 
     
     Parameters
     ----------
@@ -46,12 +48,13 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     
     Notes
     -----
-    This is a wrapper that uses functions from Scipy. In particular the scipy.signal module
+    This is a wrapper that uses functions from Scipy (scipy.org), in particular from the scipy.signal module.
     
     Examples
     --------
-    >>> s, fs = sound.load('spinetail.wav')
-    >>> psd, f_idx = features.psd(s, fs, nperseg=512)
+    >>> from maad import sound, features
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> psd, f_idx = features.psd(s, fs, nperseg=512, display=True)
     """
     
     if tlims is not None:
@@ -75,13 +78,23 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     index_names = ['psd_' + str(idx).zfill(3) for idx in range(1,len(psd_s)+1)]
     psd_s = pd.Series(psd_s, index=index_names)
     f_idx = pd.Series(f_idx, index=index_names)
+    
+    if display:
+        fig, ax = plt.subplots(figsize=(9,5))
+        ax.plot(f_idx, psd_s)
+        ax.set_xlabel('Frequency (kHz)')
+        ax.set_ylabel('Amplitude')
+        
     return psd_s, f_idx
 
 #=============================================================================
 def rms(s):
     """
-    Computes the root-mean-square (RMS) level of an input signal
-
+    Compute the root-mean-square (RMS) level of an input signal. 
+    
+    RMS is defined as the square root of the arithmetic mean of the square of a set of numbers [1]. The RMS is used to estimate de mean amplitude level of an audio signal or any alternative time series.
+    
+    
     Parameters
     ----------
     s : 1D array
@@ -92,9 +105,14 @@ def rms(s):
     rms: float
         Root mean square of input signal
     
+    References
+    ----------
+    .. [1] 'Root mean square' (2010). Wikipedia. Available at https://en.wikipedia.org/wiki/Root_mean_square
+    
     Examples
     --------
-    >>> s, fs = sound.load('spinetail.wav')
+    >>> from maad import sound, features
+    >>> s, fs = sound.load('../data/spinetail.wav')
     >>> rms = features.rms(s)
     
     """
@@ -218,7 +236,7 @@ def zero_crossing_rate(s, fs):
     the rate at which the signal changes from positive to zero to negative or 
     from negative to zero to positive.[1] This feature has been used heavily 
     in both speech recognition and music information retrieval, 
-    being a key feature to classify percussive sounds
+    being a key feature to classify percussive sounds.
     
     """
     zero_crosses = np.nonzero(np.diff(s > 0))[0]

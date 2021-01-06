@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ 
-Collection of functions to load and preprocess audio signals
+Collection of functions to load and preprocess audio signals.
 """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
@@ -26,7 +26,7 @@ from maad.rois import remove_background_along_axis
 def wave2frames (s, Nt=512):
     """
     Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
-    length Nt
+    length Nt.
     
     Parameters
     ----------
@@ -54,7 +54,9 @@ def wave2frames (s, Nt=512):
 def load(filename, channel='left', detrend=True, verbose=False,
          display=False, savefig=None, **kwargs): 
     """
-    Load a wav file (stereo or mono)
+    Load an audio file (stereo or mono). 
+    
+    Currently, this function con only load WAVE files.
     
     Parameters
     ----------
@@ -203,12 +205,8 @@ def envelope (s, mode='fast', Nt=32):
         
     References
     ----------
-    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
-          Derived from Natural Recordings of the Environment. 
-          Queensland University of Technology, Brisbane.
-    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived 
-          from long-duration recordings of the naturalenvironment.
-          Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [2] Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the natural environment. Queensland University of Technology, Brisbane.
     
     Examples
     --------
@@ -340,7 +338,7 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
 #=============================================================================
 def audio_SNR (s, mode ='fast', Nt=512) :
     """
-    Computes the signal to noise ratio (SNR) of an audio signal in the time domain
+    Compute the signal to noise ratio (SNR) of an audio signal in the time domain.
 
     Parameters
     ----------
@@ -368,12 +366,8 @@ def audio_SNR (s, mode ='fast', Nt=512) :
 
     References
     ----------
-    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
-          Derived from Natural Recordings of the Environment. 
-          Queensland University of Technology, Brisbane.
-    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived 
-          from long-duration recordings of the naturalenvironment.
-          Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [2] Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the naturalenvironment. Queensland University of Technology, Brisbane.
 
     Examples
     --------
@@ -399,8 +393,8 @@ def audio_SNR (s, mode ='fast', Nt=512) :
 #=============================================================================
 def spectral_SNR (Sxx_power) :
     """
-    Computes the signal to noise ratio (SNR) of an audio from its spectrogram
-    in the time-frequency domain
+    Compute the signal to noise ratio (SNR) of an audio from its spectrogram
+    in the time-frequency domain.
 
     Parameters
     ----------
@@ -467,7 +461,7 @@ def spectral_SNR (Sxx_power) :
 def select_bandwidth (s, fs, fcut, forder, fname ='butter', ftype='bandpass', 
                      rp=None, rs=None):
     """
-    Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter
+    Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.
         
     Parameters
     ----------
@@ -541,9 +535,9 @@ def select_bandwidth (s, fs, fcut, forder, fname ='butter', ftype='bandpass',
 #=============================================================================
 def fir_filter(x, kernel, axis=0):
     """
+    Filter a signal using a 1d Finite impulse filter.
     
-    1d Finite impulse filter
-    => Digital filter based on convolution of 1d kernel over a vector 
+    This function uses a digital filter based on convolution of 1d kernel over a vector 
     or along an axis of a matrix
     
     Parameters
@@ -657,11 +651,12 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
                  savefig = None, **kwargs):
      
     """
-    Convert a sound waveform into a spectrogram 
-    the output is : 
-    . power (mode='psd')
-    . amplitude (mode = 'amplitude') => sqrt(power)
-    . complex with real and imaginary parts (mode = 'complex')
+    Compute a spectrogram using the short-time Fourier transform from an audio signal.
+        
+    The function can compute diferent outputs according to the parameter 'mode':
+        - power (mode='psd')
+        - amplitude (mode = 'amplitude') => sqrt(power)
+        - complex with real and imaginary parts (mode = 'complex')
     
     Parameters
     ----------

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """ 
-SPL conversion functions for scikit-maad
-Collection of miscelaneous functions that help to convert wav and volt data
-to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL)
+Collection of functions to convert audio and voltage data to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL).
 """   
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>

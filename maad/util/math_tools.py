@@ -1,14 +1,8 @@
 #!/usr/bin/env python
-""" Utilitary functions for scikit-MAAD """
-#
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
-# License: New BSD License
+""" 
+Mathematical tools for audio signal processing.
+"""
 
-# =============================================================================
-# Load the modules
-# =============================================================================
 # Import external modules
 import numpy as np 
 from numpy import mean, median
@@ -73,8 +67,8 @@ def running_mean(x, N, mode="nearest"):
 #=============================================================================
 def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
     """
-    determine the statistical mode or modal value which is 
-    the most common number in the dataset
+    Get the statistical mode or modal value which is 
+    the most common number in the dataset.
     
     Parameters
     ----------
@@ -197,7 +191,7 @@ def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
 #=============================================================================
 def entropy (x, axis=0):
     """
-    Computes the entropy of a vector or matrix x (i.e. waveform, spectrum...)    
+    Compute the entropy of a vector (waveform) or matrix (spectrogram).
     
     Parameters
     ----------

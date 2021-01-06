@@ -46,7 +46,7 @@ First, load and audio file and compute the power spectrogram.
     f1 = 10000
     dB_max = 96
 
-    Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512, 
+    Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2,
                                          fcrop=(f0,f1), tcrop=(t0,t1))
 
     # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
@@ -71,20 +71,20 @@ than the second threshold value.
 
 
     # First we remove the stationary background in order to increase the contrast [1]
-    Sxx_db_noNoise, _ = rois.remove_background_along_axis(Sxx_db, mode='ale', 
-                                                     display=True, 
-                                                     **{'extent':ext})
+    # Then we convert the spectrogram into dB
+    Sxx_noNoise= rois.median_equalizer(Sxx, display=True, **{'extent':ext})
+    Sxx_db_noNoise = power2dB(Sxx_noNoise)
 
     # Then we smooth the spectrogram in order to facilitate the creation of masks as
     # small sparse details are merged if they are close to each other
-    Sxx_db_noNoise_smooth = rois.smooth(Sxx_db_noNoise, std=1, 
+    Sxx_db_noNoise_smooth = rois.smooth(Sxx_db_noNoise, std=0.5, 
                              display=True, savefig=None, 
                              **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
     # Then we create a mask (i.e. binarization of the spectrogram) by using the 
     # double thresholding technique
     im_mask = rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin ='relative', 
-                               bin_std=6, bin_per=0.5,
+                               bin_std=8, bin_per=0.5,
                                verbose=False, display=False)
 
     # Finaly, we put together pixels that belong to the same acoustic event, and 

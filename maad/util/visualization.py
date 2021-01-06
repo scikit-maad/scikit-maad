@@ -1,14 +1,8 @@
 #!/usr/bin/env python
-""" Utilitary functions for scikit-MAAD """
-#
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
-# License: New BSD License
+""" 
+Ensemble of functions that facilitate data visualization.
+"""
 
-# =============================================================================
-# Load the modules
-# =============================================================================
 # Import external modules
 import numpy as np 
 import matplotlib.pyplot as plt

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" Segmentation methods for 1D signals
+""" Segmentation methods for 1D signals.
 
 This module gathers a collection of functions to detect regions of interest (ROIs)
 on the temporal domain.
@@ -13,14 +13,14 @@ import pandas as pd
 
 def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     """
-    Filter 1D signal with a Kaiser-windowed filter
+    Filter 1D signal with a Kaiser-windowed filter.
     
     Parameters
     ----------
     s : ndarray
         input 1D signal
     cutoff : ndarray
-        upper and lower frequencies (min_f, max_f)
+        upper and lower frequencies (min_f, max_f) in Hertz
     atten : float 
         attenuation in dB
     transition_bw : float
@@ -32,6 +32,13 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     -------
     s_filt : array 
         signal filtered
+    
+    Examples
+    --------
+    >>> from maad import sound, rois
+    >>> s, fs = sound.load('./data/spinetail.wav')
+    >>> s_filt = rois.sinc(s, cutoff=(4500,8000), fs=fs, atten=80, transition_bw=0.8)
+    
     """
     width = (cutoff[1] - cutoff[0]) * transition_bw
     numtaps, beta = signal.kaiserord(atten, width/(0.5*fs))
@@ -44,7 +51,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
 
 def _corresp_onset_offset(onset, offset, tmin, tmax):
     """ 
-    Check that each onsets have a corresponding offset 
+    Check that each onsets have a corresponding offset.
 
     Parameters
     ----------
@@ -76,7 +83,7 @@ def _corresp_onset_offset(onset, offset, tmin, tmax):
 
 def _energy_windowed(s, wl=512, fs=None):
     """ 
-    Computse windowed energy on signal
+    Computse windowed energy on an audio signal.
     
     Computes the energy of the signals by windows of length wl. Used to amplify sectors where the density of energy is higher
     
@@ -143,6 +150,17 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     References
     ----------
     .. [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
+    
+    Examples
+    --------
+    >>> from maad import sound, rois
+    >>> s, fs = sound.load('./data/spinetail.wav')
+    >>> rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
+        min_f     min_t   max_f     max_t
+    0  4500.0   0.74304  8000.0   2.50776
+    1  4500.0   5.10839  8000.0   7.33751
+    2  4500.0  11.23846  8000.0  13.37469
+    3  4500.0  16.16109  8000.0  18.29732
     """
     # filter signal
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)

@@ -1,4 +1,4 @@
-Examples gallery
+Example gallery
 =======================
 
 This gallery is intended to illustrate how to use some of the soundscape analyses 

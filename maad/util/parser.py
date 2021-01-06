@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-""" Utilitary functions to parse or read files"""
+""" Utilitary functions to parse and read audio and text files. """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>

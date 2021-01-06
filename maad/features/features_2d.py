@@ -368,8 +368,15 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
 #*************                filter_bank_2d_nodc                 *********** 
 #****************************************************************************  
 def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, **kwargs): 
-    """ 
+    r""" 
     Build an ensemble of complex 2D Gabor filters with no DC offset. 
+    
+    A Gabor kernel is a Gaussian kernel modulated by a complex harmonic function. 
+    Harmonic function consists of an imaginary sine function and a real 
+    cosine function. Spatial frequency is inversely proportional to the 
+    wavelength of the harmonic and to the standard deviation of a Gaussian 
+    kernel. The bandwidth is also inversely proportional to the standard 
+    deviation [1-3]. These filters have been used to classify textures in images and can be applied to characterize spectrograms to classify sounds [4, 5]. 
      
     Parameters 
     ---------- 
@@ -403,10 +410,18 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
              
     kernels: 2d ndarray of complex values 
          Complex Gabor kernels 
+    
+    References 
+    ---------- 
+    .. [1] http://en.wikipedia.org/wiki/Gabor_filter 
+    .. [2] http://mplab.ucsd.edu/tutorials/gabor.pdf 
+    .. [3] http://www.cs.rug.nl/~imaging/simplecell.html 
+    .. [4] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
+    .. [5] Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026
+
      
     Examples 
     -------- 
- 
     It is possible to load presets to build the filter bank using predefined  
     parameters with the function maad.features.opt_shape_presets 
  

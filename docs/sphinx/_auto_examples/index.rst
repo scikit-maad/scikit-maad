@@ -4,33 +4,12 @@
 
 .. _sphx_glr__auto_examples:
 
-Examples gallery
+Example gallery
 =======================
 
 This gallery is intended to illustrate how to use some of the soundscape analyses 
 that can be performed with scikit-maad.
 
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@author:">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_using_shape_features_thumb.png
-     :alt: Using wavelets to characterize the time-frequency shape of sounds
-
-     :ref:`sphx_glr__auto_examples_using_shape_features.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/using_shape_features
 
 .. raw:: html
 
@@ -52,6 +31,27 @@ that can be performed with scikit-maad.
    :hidden:
 
    /_auto_examples/plot_nmf_and_false_color_spectrogram
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="@author:">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_using_shape_features_thumb.png
+     :alt: Using wavelets to characterize the time-frequency shape of sounds
+
+     :ref:`sphx_glr__auto_examples_using_shape_features.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/using_shape_features
 
 .. raw:: html
 

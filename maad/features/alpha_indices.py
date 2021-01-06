@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """  
-Collection of functions to compute alpha acoustic indices to chracterise audio signals
+Collection of functions to compute alpha acoustic indices to chracterise audio signals.
 """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
