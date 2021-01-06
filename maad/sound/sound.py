@@ -59,12 +59,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     Parameters
     ----------
     filename : string 
-        The name or path of the .wav file to load      
-        if you want to extract the date of creation of the file, the filename 
-        must have this postfix :
-        XXXX_yyyymmdd_hhmmss.wav
-        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-        mm : minutes / ss : seconds     
+        name or path of the .wav file to load      
     channel : {`'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
     detrend : boolean, optional, default is True
@@ -76,8 +71,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions
-           
+    **kwargs, optional. This parameter is used by plt.plot and savefig functions    
         - savefilename : str, optional, default :'_audiogram.png'
             Postfix of the figure filename
         - figsize : tuple of integers, optional, default: (4,10)
@@ -119,10 +113,17 @@ def load(filename, channel='left', detrend=True, verbose=False,
         
     Examples
     --------
-    >>> s, fs = maad.sound.load("guyana_tropical_forest.wav", channel='LEFT', detrend=True, verbose=False)
+    >>> s, fs = maad.sound.load("../data/tropical_forest_morning.wav", channel='left')
     >>> import numpy as np
     >>> tn = np.arange(0,len(s))/fs
-    >>> maad.util.plot1D(tn,s)
+    >>> import matplotlib.pyplot as plt
+    >>> fig, (ax0, ax1) = plt.subplots(2,1, sharex=True, squeeze=True)
+    >>> ax0, _ = maad.util.plot1D(tn,s,ax=ax0, figtitle='ground level')
+    >>> ax0.set_ylim((-0.075,0.0751))
+    >>> s, fs = maad.sound.load("../data/tropical_forest_morning.wav", channel='right')
+    >>> ax1, _ = maad.util.plot1D(tn,s,ax=ax1, figtitle='canopy level')
+    >>> ax1.set_ylim((-0.075,0.075))
+    >>> fig.tight_layout()
     """
     if verbose :
         print(72 * '_' )
@@ -212,7 +213,7 @@ def envelope (s, mode='fast', Nt=32):
     
     Examples
     --------
-    >>> s,fs = maad.sound.load("guyana_tropical_forest.wav")
+    >>> s,fs = maad.sound.load("../data/guyana_tropical_forest.wav")
     >>> env_fast = maad.sound.envelope(s, mode='fast', Nt=32)
     >>> env_fast
     array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,
@@ -264,7 +265,7 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
     ----------
     X : ndarray of floats
         Linear spectrum (1d) or Spectrogram (2d). 
-        Work with PSD to be consistent with energy concervation
+        Work with PSD to be consistent with energy conservation
     fn : 1d ndarray of floats
         Frequency vector of the linear spectrum/spectrogram
     thirdOctave : Boolean, default is True
@@ -279,6 +280,12 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
         Octave or 1/3 octave Spectrum (1d) or Spectrogram (2d)
     bin_octave : vector of floats
         New frequency vector (octave or 1/3 octave frequency repartition)
+        
+    Examples
+    --------
+    >>> w, fs = maad.sound.load('../data/guyana_tropical_forest.wav') 
+    >>> Sxx_power,tn,fn, ext = maad.sound.spectrogram (w, fs, nperseg=8192)
+    >>> maad.sound.intoOctave(Sxx_power, fn, display=True, extent=ext, vmin=-50)
     """
 
     # define the third octave or octave frequency vector in Hz.
@@ -287,7 +294,7 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
                                400,500,630,800,1000,1250,1600,2000,2500,3150,4000,
                                5000,6300,8000,10000,12500,16000,20000]) # third octave band.
     else:
-        bin_octave = np.array([16,31.5,63,125,250,500,1000,2000,4000,8000,16000]) # octave
+        bin_octave = np.array([16,31,63,125,250,500,1000,2000,4000,8000,16000]) # octave
 
     
     # get the corresponding octave from fn
@@ -311,14 +318,19 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
             extent = kwargs.pop('extent',None)
             if extent is not None : 
                 xlabel = 'Time [sec]'
+                duration = extent[1]- extent[0]
+                deltaT = int(duration/10)
+                xticks = (np.floor(np.arange(0,X.shape[1], X.shape[1]/10)*10)/10, 
+                          np.floor(np.arange(extent[0],extent[1], deltaT)*10)/10)
                 figsize = (4, 0.33*(extent[1]-extent[0]))
             else: 
                 xlabel = 'pseudoTime [points]'
+                xticks = np.arange(0,X.shape[1], 10),
                 figsize = (4,13)
             
             fig_kwargs = {'vmax': kwargs.pop('vmax',np.max(X_octave_dB)),
                           'vmin': kwargs.pop('vmin',np.min(X_octave_dB)),
-                          'extent':extent,
+                          'xticks': xticks,
                           'figsize':kwargs.pop('figsize',figsize),
                           'yticks' : (np.arange(len(bin_octave)), bin_octave),
                           'title':'Octave Spectrogram',
@@ -327,7 +339,6 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
                           }
             plot2D(X_octave_dB,**fig_kwargs)
         elif np.ndim(X_octave_dB) == 1 :
-            
             fig_kwargs = {
                           'title':'Octave Spectrum',
                           'xlabel': kwargs.pop('xlabel','Frequency [Hz]'),
@@ -377,7 +388,7 @@ def audio_SNR (s, mode ='fast', Nt=512) :
 
     Examples
     --------
-    >>> s, fs = maad.sound.load('guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
     >>> _,_,snr = maad.sound.audio_SNR(s)
     >>> snr
     1.5744987447774665
@@ -436,11 +447,11 @@ def spectral_SNR (Sxx_power) :
 
     Examples
     --------
-    >>> s, fs = maad.sound.load('guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
     >>> _, _, snr, _, _, _ = maad.sound.spectral_SNR(Sxx_power)
     >>> snr
-    4.111567933859188
+    4.084065436435541
     
     """
     # average Sxx_power along time axis
@@ -511,10 +522,10 @@ def select_bandwidth (s, fs, fcut, forder, fname ='butter', ftype='bandpass',
     --------
     Load and display the spectrogram of a sound waveform
     
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB 
-    >>> fig_kwargs = {'vmax': max(Sxx_dB),
+    >>> fig_kwargs = {'vmax': Sxx_dB.max(),
                       'vmin':-90,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'figsize':(4,13),
@@ -589,11 +600,10 @@ def fir_filter(x, kernel, axis=0):
     
     Load and display the spectrogram of a sound waveform
     
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure (w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
-    >>> fig_kwargs = {'vmax': max(Lxx),
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'figsize':(4,13),
@@ -605,9 +615,9 @@ def fir_filter(x, kernel, axis=0):
     
     Smooth the waveform (lowpass)
     
-    >>> p_filtered = maad.sound.fir_filter(p, kernel=(('gaussian', 2), 5))
-    >>> Pxx_filtered,tn,fn,_ = maad.sound.spectrogram(p_filtered,fs)
-    >>> Lxx_filtered = maad.util.power2dBSPL(Pxx_filtered) # convert into dB SPL
+    >>> w_filtered = maad.sound.fir_filter(w, kernel=(('gaussian', 2), 5))
+    >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
+    >>> Lxx_filtered = maad.util.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL
     >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
     
     Smooth the spectrogram, frequency by frequency (blurr)
@@ -759,7 +769,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
         
     Examples
     --------
-    >>> s,fs = maad.sound.load("guyana_tropical_forest.wav")
+    >>> s,fs = maad.sound.load("../data/guyana_tropical_forest.wav")
     
     Compute energy of signal s
     
@@ -775,7 +785,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     Display Power Spectrogram
     
     >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
-    >>> fig_kwargs = {'vmax': max(Sxx_dB),
+    >>> fig_kwargs = {'vmax': Sxx_dB.max(),
                       'vmin':-70,
                       'extent':ext,
                       'figsize':(4,13),
@@ -787,7 +797,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     
     Compute mean power spectrogram
     
-    >>> S_power_mean = mean(Sxx_power, axis = 1)
+    >>> S_power_mean = maad.sound.avg_power_spectro(Sxx_power)
     
     energy => power x time
     
@@ -801,7 +811,8 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     
     For energy conservation => convert Sxx_ampli (amplitude) into power before doing the average.
     
-    >>> S_power_mean = mean(Sxx_ampli**2, axis = 1)
+    >>> S_ampli_mean = maad.sound.avg_amplitude_spectro(Sxx_ampli)
+    >>> S_power_mean = S_ampli_mean**2
     
     energy => power x time
     

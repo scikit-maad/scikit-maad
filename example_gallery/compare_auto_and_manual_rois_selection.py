@@ -33,12 +33,12 @@ f0 = 100
 f1 = 10000
 dB_max = 96
 
-Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2,
+Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2,
                                      fcrop=(f0,f1), tcrop=(t0,t1))
 
 # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
 # range when quantification bit is 16bits and display the result
-Sxx_db = power2dB(Sxx) + dB_max
+Sxx_db = power2dB(Sxx_power) + dB_max
 plot2D(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
 #%% 
@@ -55,8 +55,8 @@ plot2D(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
 # First we remove the stationary background in order to increase the contrast [1]
 # Then we convert the spectrogram into dB
-Sxx_noNoise= rois.median_equalizer(Sxx, display=True, **{'extent':ext})
-Sxx_db_noNoise = power2dB(Sxx_noNoise)
+Sxx_power_noNoise= rois.median_equalizer(Sxx_power, display=True, **{'extent':ext})
+Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
 
 # Then we smooth the spectrogram in order to facilitate the creation of masks as
 # small sparse details are merged if they are close to each other

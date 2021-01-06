@@ -44,52 +44,39 @@ def plot1D(x, y, ax=None, **kwargs):
         axis.
             
     \*\*kwargs, optional
-        
         - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
-        
         - facecolor : matplotlib color, optional, default: 'w' (white)
             the background color.  
-        
         - edgecolor : matplotlib color, optional, default: 'k' (black)
             the border color. 
-        
         - color : matplotlib color, optional, default: 'k' (black)
             the line color
-        
-        The following color abbreviations are supported:
-    
-        ==========  ========
-        character   color
-        ==========  ========
-        'b'         blue
-        'g'         green
-        'r'         red
-        'c'         cyan
-        'm'         magenta
-        'y'         yellow
-        'k'         black
-        'w'         white
-        ==========  ========
-        
-        In addition, you can specify colors in many ways, including RGB tuples 
-        (0.2,1,0.5). See matplotlib color 
-        
+            The following color abbreviations are supported:
+            ==========  ========
+            character   color
+            ==========  ========
+            'b'         blue
+            'g'         green
+            'r'         red
+            'c'         cyan
+            'm'         magenta
+            'y'         yellow
+            'k'         black
+            'w'         white
+            ==========  ========
+            In addition, you can specify colors in many ways, including RGB 
+            tuples (0.2,1,0.5). See matplotlib color
         - linewidth : scalar, optional, default: 0.5
             width in pixels
-        
         - figtitle: string, optional, default: 'Audiogram'
             Title of the plot 
-        
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        
         - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-                    
         - legend : string, optional, default : None
             Legend for the plot
-        
         - now : boolean, optional, default : True
             if True, display now. Cannot display multiple plots. 
             To display mutliple plots, set now=False until the last call for 
@@ -183,47 +170,37 @@ def plot2D(im,ax=None,**kwargs):
         figure.
             
     \*\*kwargs, optional
-        
-        - figsize : tuple of integers, optional, default: (4,10)
+        - figsize : tuple of integers, optional, default: (4,13)
             width, height in inches.  
-        
         - title : string, optional, default : 'Spectrogram'
             title of the figure
-        
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        
-        - ylabel : string, optional, default : 'Amplitude [AU]'
+        - ylabel : string, optional, default : 'Frequency [Hz]'
             label of the vertical axis
-            
         - xticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should 
             be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place 
             at the given locs.
-            
         - yticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should 
             be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place 
             at the given locs.
-        
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
             'viridis'...
-        
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        
         - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        
         - now : boolean, optional, default : True
             if True, display now. Cannot display multiple images. 
             To display mutliple images, set now=False until the last call for 
@@ -240,15 +217,13 @@ def plot2D(im,ax=None,**kwargs):
         
     Examples
     --------
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure (w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
-    >>> fig_kwargs = {'vmax': max(Lxx),
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                      'figsize':(4,13),
-                      'title':'Power spectrogram density (PSD)',
+                      'title':'Power spectrogram density (PSD) in dB SPL',
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
@@ -269,7 +244,8 @@ def plot2D(im,ax=None,**kwargs):
     now=kwargs.pop('now', True)
     
     if extent is not None :
-        figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))  
+        figsize=kwargs.pop('figsize',(0.20*(extent[3]-extent[2])/1000, 
+                                      0.33*(extent[1]-extent[0])))  
     else:
         figsize=kwargs.pop('figsize',(4, 13))  
     
@@ -280,7 +256,7 @@ def plot2D(im,ax=None,**kwargs):
         # set the paramters of the figure
         fig.set_facecolor('w')
         fig.set_edgecolor('k')
-        fig.set_figheight(figsize[0])
+        fig.set_figheight(figsize[0]+1)
         fig.set_figwidth (figsize[1])
     else:
         fig = ax.get_figure()
@@ -412,14 +388,14 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
         
     tn, fn, 1d ndarray
         new time and frequency vectors
-        
-    >>> w, fs = maad.sound.load('jura_cold_forest_jour.wav') 
-    >>> p = maad.util.wav2pressure (w, gain=42)
-    >>> Pxx,tn,fn,_ = maad.sound.spectrogram(p,fs)
-    >>> Lxx = maad.util.power2dBSPL(Pxx) # convert into dB SPL
-    >>> fig_kwargs = {'vmax': max(Lxx),
+    
+    Examples
+    --------
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
+    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
-                      'figsize':(10,13),
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'title':'Power spectrogram density (PSD)',
                       'xlabel':'Time [sec]',
@@ -427,10 +403,9 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
                       }
     >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
     
-    >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,6000), tcrop=(0,30))
-    >>> fig_kwargs = {'vmax': max(Lxx),
+    >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,10000), tcrop=(0,30))
+    >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
-                      'figsize':(10*len(fn_crop)/len(fn),13*len(tn_crop)/len(tn)),
                       'extent':(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),
                       'title':'Crop of the power spectrogram density (PSD)',
                       'xlabel':'Time [sec]',

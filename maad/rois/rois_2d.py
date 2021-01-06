@@ -1581,7 +1581,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     
     Detection of the acoustic signature => creation of a mask
     
-    >>> im_bin = maad.rois.create_mask(Sxx_dB_blurred, bin_std=1.5, bin_per=0.25, mode='relative') 
+    >>> im_bin = maad.rois.create_mask(Sxx_dB_blurred, bin_std=1.5, bin_per=0.5, mode='relative')
     
     Select rois from the mask
     
@@ -1603,7 +1603,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     
     Detection of the acoustic signature => creation of a mask
     
-    >>> im_bin2 = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=1, bin_per=0.75, mode='relative') 
+    >>> im_bin2 = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
     
     Select rois from the mask
     
@@ -1781,7 +1781,7 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     
     Detection of the acoustic signature => creation of a mask
     
-    >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=0.25, bin_per=0.75, mode='relative') 
+    >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
     
     Select rois from the mask and display bounding box over the spectrogram without noise
     

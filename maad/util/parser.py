@@ -33,7 +33,17 @@ def read_audacity_annot (audacity_filename):
     
     References
     ----------
-    https://manual.audacityteam.org/man/label_tracks.html   
+    https://manual.audacityteam.org/man/label_tracks.html  
+    
+    Examples:
+    --------
+    >>> s, fs = sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
+    >>> Sxx_db = power2dB(Sxx_power) + 96
+    >>> df_rois = read_audacity_annot('../data/cold_forest_daylight_label.txt') 
+    >>> df_rois = format_features(df_rois, tn, fn)
+    >>> rois.overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
+    
     """
     # read file with tab delimiter
     tab_in = pd.read_csv(audacity_filename, delimiter='\t', header=None)
@@ -85,7 +95,7 @@ def write_audacity_annot(fname, onset, offset):
 
 #=============================================================================
 
-def date_from_filename (filename):
+def _date_from_filename (filename):
     """
     Extract date and time from the filename. Return a datetime object
     
@@ -149,10 +159,9 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     Parameters
     ----------
     filename : string
-    The filename must follow this format :
-    XXXX_yyyymmdd_hhmmss.wav
-    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-    mm : minutes / ss : seconds
+        filename must follow 
+        - SM4 format : XXXX_yyyymmdd_hhmmss.wav, ex: S4A03895_20190522_191500.wav
+        - Audiomoth format : 8 Hexa, ex: 5EE84AC8.wav
             
     Returns
     -------
@@ -160,6 +169,24 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
         This dataframe has one column
         - 'file' => full path + filename
         and a index 'Date' with the type Datetime
+    
+    Examples
+    --------
+    >>> df = maad.util.date_parser("../data/indices/", dateformat='SM4', verbose=True)
+    >>> list(df)
+    >>> df
+                                                                 file
+    Date                                                             
+    2019-05-22 00:00:00  ../data/indices/S4A03895_20190522_000000.wav
+    2019-05-22 00:15:00  ../data/indices/S4A03895_20190522_001500.wav
+    2019-05-22 00:30:00  ../data/indices/S4A03895_20190522_003000.wav
+    2019-05-22 00:45:00  ../data/indices/S4A03895_20190522_004500.wav
+    2019-05-22 01:00:00  ../data/indices/S4A03895_20190522_010000.wav
+    2019-05-22 01:15:00  ../data/indices/S4A03895_20190522_011500.wav
+    2019-05-22 01:30:00  ../data/indices/S4A03895_20190522_013000.wav
+    2019-05-22 01:45:00  ../data/indices/S4A03895_20190522_014500.wav
+    2019-05-22 02:00:00  ../data/indices/S4A03895_20190522_020000.wav
+    ...
     """
     
     c_file = []
@@ -172,7 +199,7 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
                 filename = os.path.join(root, file)
                 c_file.append(filename) 
                 if dateformat == "SM4":
-                    c_date.append(date_from_filename(filename))      
+                    c_date.append(_date_from_filename(filename))      
                 elif dateformat == "POSIX" :
                     file_stem = Path(filename).stem
                     print(file_stem)
