@@ -21,17 +21,6 @@ _MIN_ = sys.float_info.min
 from maad.util import (plot1D, plot2D, linear_scale, rand_cmap, running_mean, 
                        get_unimode, mean_dB, add_dB, power2dB)
  
-# 
-#====== TO DO 
-# 
-def select_bandwidth():
-    """ 
-    This functions is under construction. 
-    """
-    return 
-# 
-#======  
-# 
  
 #**************************************************************************** 
 #************* Load an image and convert it in gray level if needed  *********** 
