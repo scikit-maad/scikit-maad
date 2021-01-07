@@ -59,10 +59,10 @@ that can be performed with scikit-maad.
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_remove_background_thumb.png
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_remove_background_thumb.png
      :alt: Remove background noise from audio with signal processing tools
 
-     :ref:`sphx_glr__auto_examples_remove_background.py`
+     :ref:`sphx_glr__auto_examples_plot_remove_background.py`
 
 .. raw:: html
 
@@ -72,7 +72,7 @@ that can be performed with scikit-maad.
 .. toctree::
    :hidden:
 
-   /_auto_examples/remove_background
+   /_auto_examples/plot_remove_background
 
 .. raw:: html
 
@@ -80,10 +80,10 @@ that can be performed with scikit-maad.
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_compare_auto_and_manual_rois_selection_thumb.png
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_compare_auto_and_manual_rois_selection_thumb.png
      :alt: Find Regions of interest (ROIs) in a spectrogram
 
-     :ref:`sphx_glr__auto_examples_compare_auto_and_manual_rois_selection.py`
+     :ref:`sphx_glr__auto_examples_plot_compare_auto_and_manual_rois_selection.py`
 
 .. raw:: html
 
@@ -93,7 +93,7 @@ that can be performed with scikit-maad.
 .. toctree::
    :hidden:
 
-   /_auto_examples/compare_auto_and_manual_rois_selection
+   /_auto_examples/plot_compare_auto_and_manual_rois_selection
 
 .. raw:: html
 
@@ -101,10 +101,10 @@ that can be performed with scikit-maad.
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_extract_alpha_indices_thumb.png
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_extract_alpha_indices_thumb.png
      :alt: Extract ecoacoustics alpha indices from audio recording
 
-     :ref:`sphx_glr__auto_examples_extract_alpha_indices.py`
+     :ref:`sphx_glr__auto_examples_plot_extract_alpha_indices.py`
 
 .. raw:: html
 
@@ -114,7 +114,7 @@ that can be performed with scikit-maad.
 .. toctree::
    :hidden:
 
-   /_auto_examples/extract_alpha_indices
+   /_auto_examples/plot_extract_alpha_indices
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

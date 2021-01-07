@@ -3,10 +3,10 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download__auto_examples_compare_auto_and_manual_rois_selection.py>`     to download the full example code
+        Click :ref:`here <sphx_glr_download__auto_examples_plot_compare_auto_and_manual_rois_selection.py>`     to download the full example code
     .. rst-class:: sphx-glr-example-title
 
-    .. _sphx_glr__auto_examples_compare_auto_and_manual_rois_selection.py:
+    .. _sphx_glr__auto_examples_plot_compare_auto_and_manual_rois_selection.py:
 
 
 Find Regions of interest (ROIs) in a spectrogram
@@ -33,6 +33,12 @@ scikit-image, scikit-learn and pandas Python packages.
     from maad.util import power2dB, plot2D, format_features, read_audacity_annot
 
 
+
+
+
+
+
+
 First, load and audio file and compute the power spectrogram.
 
 
@@ -53,6 +59,25 @@ First, load and audio file and compute the power spectrogram.
     # range when quantification bit is 16bits and display the result
     Sxx_db = power2dB(Sxx_power) + dB_max
     plot2D(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
+
+
+
+
+.. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_001.png
+    :alt: Spectrogram
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:278: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      if now: plt.show()
+
+
 
 
 Then, relevant acoustic events are extracted directly from the power 
@@ -108,6 +133,39 @@ than the second threshold value.
 
 
 
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_002.png
+          :alt: Spectrogram without stationnary noise
+          :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_003.png
+          :alt: Orignal Spectrogram, Blurred Spectrogram (std=0.5)
+          :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_004.png
+          :alt: Selected ROIs
+          :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_005.png
+          :alt: ROIs Overlay
+          :class: sphx-glr-multi-img
+
+
+
+
+
 Let's compare with the manual annotation (Ground Truth GT) obtained with 
 Audacity software.
 Each acoustic signature is manually selected and labeled. All similar acoustic 
@@ -141,6 +199,25 @@ signatures are labeled with the same name
     # print informations about the rois
     print ('Total number of ROIs : %2.0f' %len(df_rois_GT))
     print ('Number of different ROIs : %2.0f' %len(np.unique(df_rois_GT['label'])))
+
+
+
+
+.. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_006.png
+    :alt: ROIs Overlay
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Total number of ROIs : 49
+    Number of different ROIs :  5
+
+
 
 
 Now we cluster the ROIS depending on 3 ROIS features :
@@ -178,6 +255,25 @@ by KMeans
     ax2, fig2 = features.overlay_centroid(Sxx_db, df_centroid, savefig=None, 
                                           **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':2, 
                                              'fig':fig2, 'ax':ax2})
+
+
+
+
+.. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_007.png
+    :alt: ROIs Overlay
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
+      return f(*args, **kwds)
+
+
 
 
 It is possible to extract Rois directly from the audio waveform without 
@@ -220,6 +316,16 @@ To extract
                                              'ms':2, 'fig':fig3, 'ax':ax3})
 
 
+
+
+.. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_008.png
+    :alt: ROIs Overlay
+    :class: sphx-glr-single-img
+
+
+
+
+
 Prepare the features in order to have zero mean and same variance
 
 
@@ -242,6 +348,16 @@ Prepare the features in order to have zero mean and same variance
                                              'ms':2,'fig':fig4, 'ax':ax4})
 
 
+
+
+.. image:: /_auto_examples/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_009.png
+    :alt: ROIs Overlay
+    :class: sphx-glr-single-img
+
+
+
+
+
 References
 -----------
 1.Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
@@ -251,10 +367,10 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.000 seconds)
+   **Total running time of the script:** ( 0 minutes  4.307 seconds)
 
 
-.. _sphx_glr_download__auto_examples_compare_auto_and_manual_rois_selection.py:
+.. _sphx_glr_download__auto_examples_plot_compare_auto_and_manual_rois_selection.py:
 
 
 .. only :: html
@@ -266,13 +382,13 @@ References
 
   .. container:: sphx-glr-download sphx-glr-download-python
 
-     :download:`Download Python source code: compare_auto_and_manual_rois_selection.py <compare_auto_and_manual_rois_selection.py>`
+     :download:`Download Python source code: plot_compare_auto_and_manual_rois_selection.py <plot_compare_auto_and_manual_rois_selection.py>`
 
 
 
   .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-     :download:`Download Jupyter notebook: compare_auto_and_manual_rois_selection.ipynb <compare_auto_and_manual_rois_selection.ipynb>`
+     :download:`Download Jupyter notebook: plot_compare_auto_and_manual_rois_selection.ipynb <plot_compare_auto_and_manual_rois_selection.ipynb>`
 
 
 .. only:: html

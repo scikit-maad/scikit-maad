@@ -10,7 +10,7 @@ alpha indices, which compress a portion of audio into a single value. In this
 example, we will see how to compute these indices and show basics post-processing
 
 """
-# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_extract_alpha_indices.png'
+# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_extract_alpha_indices_002.png'
 
 import pandas as pd
 import os
