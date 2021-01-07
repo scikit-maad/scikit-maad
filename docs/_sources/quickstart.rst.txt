@@ -2,7 +2,7 @@ Quickstart
 ^^^^^^^^^^
 
 **scikit-maad** is a free, open-source and modular Python package to analyze 
-ecoacoustics datasets.  The package is imported as ``maad``.::
+ecoacoustics datasets.  The package is imported as ``maad``::
 
     import maad
     
@@ -20,4 +20,4 @@ You can then apply any analysis to find regions of interest or characterize your
     
     rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
 
-For more information, visit the Online Documentation and the Example Gallery.
+For more information, visit the :ref:`modindex` and the :ref:`Example gallery`.

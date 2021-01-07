@@ -115,7 +115,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -190,7 +190,8 @@
 <dl class="py function">
 <dt id="features.features_1d.rms">
 <code class="sig-prename descclassname">features.features_1d.</code><code class="sig-name descname">rms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_1d.html#rms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_1d.rms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the root-mean-square (RMS) level of an input signal</p>
+<dd><p>Compute the root-mean-square (RMS) level of an input signal.</p>
+<p>RMS is defined as the square root of the arithmetic mean of the square of a set of numbers [1]. The RMS is used to estimate de mean amplitude level of an audio signal or any alternative time series.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -205,8 +206,15 @@
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="rc1d449d720ff-1"><span class="brackets">1</span></dt>
+<dd><p>‘Root mean square’ (2010). Wikipedia. Available at <a class="reference external" href="https://en.wikipedia.org/wiki/Root_mean_square">https://en.wikipedia.org/wiki/Root_mean_square</a></p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;spinetail.wav&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">features</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rms</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">rms</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </pre></div>
 </div>

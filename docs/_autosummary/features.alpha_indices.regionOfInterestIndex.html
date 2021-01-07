@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -213,7 +213,7 @@
 <h1>features.alpha_indices.regionOfInterestIndex<a class="headerlink" href="#features-alpha-indices-regionofinterestindex" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.regionOfInterestIndex">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">regionOfInterestIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_dB_noNoise</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">smooth_param1</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">mask_mode</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">mask_param1</span><span class="o">=</span><span class="default_value">6</span></em>, <em class="sig-param"><span class="n">mask_param2</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">min_roi</span><span class="o">=</span><span class="default_value">9</span></em>, <em class="sig-param"><span class="n">max_roi</span><span class="o">=</span><span class="default_value">5120000</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#regionOfInterestIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.regionOfInterestIndex" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">regionOfInterestIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_dB_noNoise</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">smooth_param1</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">mask_mode</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">mask_param1</span><span class="o">=</span><span class="default_value">6</span></em>, <em class="sig-param"><span class="n">mask_param2</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">min_roi</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">max_roi</span><span class="o">=</span><span class="default_value">5120000</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#regionOfInterestIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.regionOfInterestIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find regions of interest (ROI) and compute their number and their cover 
 of the spectrogram</p>
 <dl class="field-list simple">
@@ -224,9 +224,6 @@ of the spectrogram</p>
 <dt><strong>tn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>time vector (horizontal x-axis)</p>
 </dd>
 <dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Frequency vector (vertical y-axis)</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners.</p>
 </dd>
 <dt><strong>smooth_param1</strong><span class="classifier">scalar, default is 1</span></dt><dd><p>Standard deviation of the gaussian kernel used to smooth the image 
 The larger is the number, the smoother will be the image and the longer 

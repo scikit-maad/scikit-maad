@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="features" href="features.html" />
-    <link rel="prev" title="rois.rois_2d.select_rois" href="rois.rois_2d.select_rois.html" /> 
+    <link rel="prev" title="rois.rois_2d.sharpness" href="rois.rois_2d.sharpness.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -110,6 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.sharpness.html">rois.rois_2d.sharpness</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -120,7 +121,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -194,16 +195,12 @@
 <h1>rois.rois_2d.smooth<a class="headerlink" href="#rois-rois-2d-smooth" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.smooth">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">smooth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.smooth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Smooth (i.e. blurr) the image with a gaussian filter</p>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">smooth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth a spectrogram with a gaussian filter</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
-upper-right corners. If <cite>None</cite>, the image is positioned such that 
-the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
 <dt><strong>std</strong><span class="classifier">scalar, optional, default is 1</span></dt><dd><p>Standard deviation of the gaussian kernel used to smooth the image 
 The larger is the number, the smoother will be the image and the longer 
@@ -258,7 +255,7 @@ settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ext<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+<dt>extent<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
 upper-right corners. If <cite>None</cite>, the image is positioned such that 
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
@@ -302,7 +299,7 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
         <a href="features.html" class="btn btn-neutral float-right" title="features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="rois.rois_2d.select_rois.html" class="btn btn-neutral float-left" title="rois.rois_2d.select_rois" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="rois.rois_2d.sharpness.html" class="btn btn-neutral float-left" title="rois.rois_2d.sharpness" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -110,6 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.sharpness.html">rois.rois_2d.sharpness</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -120,7 +121,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -190,8 +191,7 @@
             
   <div class="section" id="module-rois.rois_2d">
 <span id="rois-rois-2d"></span><h1>rois.rois_2d<a class="headerlink" href="#module-rois.rois_2d" title="Permalink to this headline">¶</a></h1>
-<p>Multiresolution Analysis of Acoustic Diversity</p>
-<p>functions for processing ROIS</p>
+<p>Segmentation methods to find regions of interest in the time and frequency domain.</p>
 <p class="rubric">Functions</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -215,22 +215,25 @@
 <td><p>Remove the background noise using spectral subtraction</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html#rois.rois_2d.remove_background_along_axis" title="rois.rois_2d.remove_background_along_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_along_axis</span></code></a></p></td>
-<td><p>Get the horizontal noisy profile along the defined axis</p></td>
+<td><p>Get the noisy profile along the defined axis and remove this profile from the spectrogram</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html#rois.rois_2d.remove_background_morpho" title="rois.rois_2d.remove_background_morpho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_morpho</span></code></a></p></td>
-<td><p>Median equalizer : remove background noise in a spectrogram</p></td>
+<td><p>Remove background noise in a spectrogram using mathematical morphology tool.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html#rois.rois_2d.rois_to_imblobs" title="rois.rois_2d.rois_to_imblobs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rois_to_imblobs</span></code></a></p></td>
 <td><p>Add 1 corresponding to rois to im_blobs which is an empty matrix</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.select_bandwidth.html#rois.rois_2d.select_bandwidth" title="rois.rois_2d.select_bandwidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_bandwidth</span></code></a></p></td>
-<td><p></p></td>
+<td><p>This functions is under construction.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.select_rois.html#rois.rois_2d.select_rois" title="rois.rois_2d.select_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_rois</span></code></a></p></td>
-<td><p>Select rois candidates based on area of rois.</p></td>
+<td><p>Select regions of interest based on its dimensions.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.smooth.html#rois.rois_2d.smooth" title="rois.rois_2d.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a></p></td>
-<td><p>Smooth (i.e.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rois.rois_2d.sharpness.html#rois.rois_2d.sharpness" title="rois.rois_2d.sharpness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sharpness</span></code></a></p></td>
+<td><p>Compute the sharpness of an image (or spectrogram)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="rois.rois_2d.smooth.html#rois.rois_2d.smooth" title="rois.rois_2d.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a></p></td>
+<td><p>Smooth a spectrogram with a gaussian filter</p></td>
 </tr>
 </tbody>
 </table>

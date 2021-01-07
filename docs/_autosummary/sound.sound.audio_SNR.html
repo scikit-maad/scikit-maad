@@ -108,6 +108,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.wave2frames.html">sound.sound.wave2frames</a></li>
 </ul>
 </li>
 </ul>
@@ -118,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -193,25 +194,18 @@
 <dl class="py function">
 <dt id="sound.sound.audio_SNR">
 <code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">audio_SNR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'fast'</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#audio_SNR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.audio_SNR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the signal to noise ratio (SNR) of an audio signal in the time domain</p>
+<dd><p>Compute the signal to noise ratio (SNR) of an audio signal in the time domain.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>s</strong><span class="classifier">1D array</span></dt><dd><p>Audio to process</p>
 </dd>
-<dt><strong>mode</strong><span class="classifier">str, optional, default is “fast”</span></dt><dd><p>Select the mode to compute the envelope of the audio waveform
-- “fast” : The sound is first divided into frames (2d) using the</p>
-<blockquote>
-<div><p>function _wave2timeframes(s), then the max of each frame gives a 
-good approximation of the envelope.</p>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>“Hilbert”<span class="classifier">estimation of the envelope from the Hilbert transform. </span></dt><dd><p>The method is slow</p>
-</dd>
-</dl>
-</li>
-</ul>
+<dt><strong>mode</strong><span class="classifier">str, optional, default is <cite>fast</cite></span></dt><dd><p>Select the mode to compute the envelope of the audio waveform
+<cite>fast</cite> : The sound is first divided into frames (2d) using the 
+function _wave2timeframes(s), then the max of each frame gives a 
+good approximation of the envelope.
+<cite>Hilbert</cite> : estimation of the envelope from the Hilbert transform. 
+The method is slow</p>
 </dd>
 <dt><strong>Nt</strong><span class="classifier">integer, optional, default is 512</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
 </dd>
@@ -226,17 +220,20 @@ good approximation of the envelope.</p>
 <dt>SNRt: float</dt><dd><p>Signal to noise ratio (dB) computed in the time domain 
 SNRt = ENRt - BGNt</p>
 </dd>
-<dt>References</dt><dd></dd>
-</dl>
-<blockquote>
-<div></div></blockquote>
-<dl class="simple">
-<dt>This is inspire by “ref QUT” [Towsey]</dt><dd></dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r0e82056f74ab-1"><span class="brackets">1</span></dt>
+<dd><p>Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+</dd>
+<dt class="label" id="r0e82056f74ab-2"><span class="brackets">2</span></dt>
+<dd><p>Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the naturalenvironment. Queensland University of Technology, Brisbane.</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;guyana_tropical_forest.wav&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/guyana_tropical_forest.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">snr</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">audio_SNR</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">snr</span>
 <span class="go">1.5744987447774665</span>

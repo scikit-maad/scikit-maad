@@ -119,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -195,6 +195,12 @@
 <dt id="features.features_2d.filter_bank_2d_nodc">
 <code class="sig-prename descclassname">features.features_2d.</code><code class="sig-name descname">filter_bank_2d_nodc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frequency</span></em>, <em class="sig-param"><span class="n">ntheta</span></em>, <em class="sig-param"><span class="n">bandwidth</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_2d.html#filter_bank_2d_nodc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_2d.filter_bank_2d_nodc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an ensemble of complex 2D Gabor filters with no DC offset.</p>
+<p>A Gabor kernel is a Gaussian kernel modulated by a complex harmonic function. 
+Harmonic function consists of an imaginary sine function and a real 
+cosine function. Spatial frequency is inversely proportional to the 
+wavelength of the harmonic and to the standard deviation of a Gaussian 
+kernel. The bandwidth is also inversely proportional to the standard 
+deviation [1-3]. These filters have been used to classify textures in images and can be applied to characterize spectrograms to classify sounds [4, 5].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -225,6 +231,24 @@ This can be useful to interpret the result of the filtering process.</p>
 <dt>kernels: 2d ndarray of complex values</dt><dd><p>Complex Gabor kernels</p>
 </dd>
 </dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="rb865f07155cd-1"><span class="brackets">1</span></dt>
+<dd><p><a class="reference external" href="http://en.wikipedia.org/wiki/Gabor_filter">http://en.wikipedia.org/wiki/Gabor_filter</a></p>
+</dd>
+<dt class="label" id="rb865f07155cd-2"><span class="brackets">2</span></dt>
+<dd><p><a class="reference external" href="http://mplab.ucsd.edu/tutorials/gabor.pdf">http://mplab.ucsd.edu/tutorials/gabor.pdf</a></p>
+</dd>
+<dt class="label" id="rb865f07155cd-3"><span class="brackets">3</span></dt>
+<dd><p><a class="reference external" href="http://www.cs.rug.nl/~imaging/simplecell.html">http://www.cs.rug.nl/~imaging/simplecell.html</a></p>
+</dd>
+<dt class="label" id="rb865f07155cd-4"><span class="brackets">4</span></dt>
+<dd><p>Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. <a class="reference external" href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007">http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</a></p>
+</dd>
+<dt class="label" id="rb865f07155cd-5"><span class="brackets">5</span></dt>
+<dd><p>Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., &amp; Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. <a class="reference external" href="https://doi.org/10.1016/j.ecolind.2018.03.026">https://doi.org/10.1016/j.ecolind.2018.03.026</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>

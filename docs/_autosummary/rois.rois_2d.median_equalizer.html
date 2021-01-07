@@ -110,6 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.sharpness.html">rois.rois_2d.sharpness</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -120,7 +121,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -199,7 +200,7 @@
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>Sxx</strong><span class="classifier">2D numpy array</span></dt><dd><p>Original spectrogram (or image)</p>
+<dt><strong>Sxx</strong><span class="classifier">2D numpy array</span></dt><dd><p>Original spectrogram (or image), !!! not in dB</p>
 </dd>
 <dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
@@ -248,7 +249,7 @@ settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ext<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+<dt>extent<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
 upper-right corners. If <cite>None</cite>, the image is positioned such that 
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>

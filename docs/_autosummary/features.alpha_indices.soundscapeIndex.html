@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -213,8 +213,9 @@
 <h1>features.alpha_indices.soundscapeIndex<a class="headerlink" href="#features-alpha-indices-soundscapeindex" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.soundscapeIndex">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">soundscapeIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">flim_bioPh</span><span class="o">=</span><span class="default_value">1000, 10000</span></em>, <em class="sig-param"><span class="n">flim_antroPh</span><span class="o">=</span><span class="default_value">0, 1000</span></em>, <em class="sig-param"><span class="n">R_compatible</span><span class="o">=</span><span class="default_value">'seewave'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#soundscapeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.soundscapeIndex" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">soundscapeIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">flim_bioPh</span><span class="o">=</span><span class="default_value">1000, 10000</span></em>, <em class="sig-param"><span class="n">flim_antroPh</span><span class="o">=</span><span class="default_value">0, 1000</span></em>, <em class="sig-param"><span class="n">R_compatible</span><span class="o">=</span><span class="default_value">'soundecology'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#soundscapeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.soundscapeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Normalized Difference Soundscape Index from a power spectrogram.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Sxx_power</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Power Spectrogram</p>
@@ -225,9 +226,8 @@
 </dd>
 <dt><strong>flim_antroPh: tupple (fmin, fmax), optional, default is (0,1000)</strong></dt><dd><p>Frequency band of the anthropophony</p>
 </dd>
-<dt><strong>R_compatible: string {‘seewave’, ‘soundecology’}, optional, default is seewave</strong></dt><dd><p>Compute biophonic and anthropophonic energy following seewave or 
-soundecology way. Note that in seewave, the first bin [0-1]kHz is not
-taken into account for the evaluation of the anthropophonic energy</p>
+<dt><strong>R_compatible</strong><span class="classifier">string, optional, default is “soundecology”</span></dt><dd><p>if ‘soundecology’, the result is similar to the package SoundEcology in R 
+Otherwise, the result is specific to maad or Seewave R package</p>
 </dd>
 </dl>
 </dd>

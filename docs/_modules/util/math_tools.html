@@ -101,7 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -167,16 +167,10 @@
             
   <h1>Source code for util.math_tools</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="sd">&quot;&quot;&quot; Utilitary functions for scikit-MAAD &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
-<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
-<span class="c1">#</span>
-<span class="c1"># License: New BSD License</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Mathematical tools for audio signal processing.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Load the modules</span>
-<span class="c1"># =============================================================================</span>
 <span class="c1"># Import external modules</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span>
@@ -241,8 +235,8 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="get_unimode"><a class="viewcode-back" href="../../_autosummary/util.math_tools.get_unimode.html#util.math_tools.get_unimode">[docs]</a><span class="k">def</span> <span class="nf">get_unimode</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    determine the statistical mode or modal value which is </span>
-<span class="sd">    the most common number in the dataset</span>
+<span class="sd">    Get the statistical mode or modal value which is </span>
+<span class="sd">    the most common number in the dataset.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -286,25 +280,22 @@
 <span class="sd">    This function is interesting to obtain the background noise (BGN) profile (e.g. frequency bin</span>
 <span class="sd">    by frequency bin) of a spectrogram</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs,window=&#39;hanning&#39;,noverlap=512, nFFT=1024)</span>
-<span class="sd">    &gt;&gt;&gt; PSDxx_dB = maad.util.energy2dBSPL(PSDxx)</span>
-<span class="sd">    &gt;&gt;&gt; BGN_med = maad.util.get_unimode (PSDxx_dB, mode =&#39;median&#39;, axis=1, </span>
-<span class="sd">                                               verbose=False, display=False)</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window=&#39;hanning&#39;,noverlap=512, nFFT=1024)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; BGN_med = maad.util.get_unimode (Sxx_dB, mode=&#39;median&#39;, axis=1)</span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
-<span class="sd">    &gt;&gt;&gt; plt.plot(fn,maad.util.energy2dBSPL(mean(PSDxx,axis=1)))</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(fn,maad.util.mean_dB(Sxx_dB,axis=1))</span>
 <span class="sd">    &gt;&gt;&gt; plt.plot(fn,BGN_med)</span>
 <span class="sd">    </span>
 <span class="sd">    Extract the background noise from mean</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; BGN_mean = maad.util.get_unimode (PSDxx_dB, mode =&#39;mean&#39;, axis=1, </span>
-<span class="sd">                                               verbose=False, display=False)</span>
+<span class="sd">    &gt;&gt;&gt; BGN_mean = maad.util.get_unimode (Sxx_dB, mode=&#39;mean&#39;, axis=1)</span>
 <span class="sd">    &gt;&gt;&gt; plt.plot(fn,BGN_mean)</span>
 <span class="sd">    </span>
 <span class="sd">    Extract the background noise from ale (i.e. unimode)</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; BGN_ale = maad.util.get_unimode (PSDxx_dB, mode =&#39;ale&#39;, N=7, N_bins=100, axis=1, </span>
-<span class="sd">                                               verbose=False, display=False)</span>
+<span class="sd">    &gt;&gt;&gt; BGN_ale = maad.util.get_unimode (Sxx_dB, mode=&#39;ale&#39;, N=7, N_bins=100, axis=1)</span>
 <span class="sd">    &gt;&gt;&gt; plt.plot(fn,BGN_ale)</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>         
@@ -368,7 +359,7 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="entropy"><a class="viewcode-back" href="../../_autosummary/util.math_tools.entropy.html#util.math_tools.entropy">[docs]</a><span class="k">def</span> <span class="nf">entropy</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the entropy of a vector or matrix x (i.e. waveform, spectrum...)    </span>
+<span class="sd">    Compute the entropy of a vector (waveform) or matrix (spectrogram).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -393,7 +384,11 @@
             <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
             <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> <span class="c1"># case vector</span>
+                    <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
+                <span class="k">else</span> <span class="p">:</span> <span class="c1"># case matrix</span>
+                    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># null entropy</span>
+                    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># null entropy</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># if datain contains negative values -&gt; rescale the signal between </span>
                 <span class="c1"># between posSitive values (for example (0,1))</span>

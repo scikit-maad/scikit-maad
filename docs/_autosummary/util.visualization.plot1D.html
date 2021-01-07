@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="util.visualization.plot2D" href="util.visualization.plot2D.html" />
-    <link rel="prev" title="util.visualization.crop_image" href="util.visualization.crop_image.html" /> 
+    <link rel="prev" title="util.visualization.false_Color_Spectro" href="util.visualization.false_Color_Spectro.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.visualization.html">util.visualization</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.visualization.crop_image.html">util.visualization.crop_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.visualization.false_Color_Spectro.html">util.visualization.false_Color_Spectro</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.visualization.plot1D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.visualization.plot2D.html">util.visualization.plot2D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.visualization.plot_correlation_map.html">util.visualization.plot_correlation_map</a></li>
@@ -120,7 +121,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -223,52 +224,25 @@ axis.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>linecolor<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the line color</p>
+<dt>color<span class="classifier">matplotlib color, optional, default: ‘k’ (black)</span></dt><dd><p>the line color
+The following color abbreviations are supported:
+==========  ========
+character   color
+==========  ========
+‘b’         blue
+‘g’         green
+‘r’         red
+‘c’         cyan
+‘m’         magenta
+‘y’         yellow
+‘k’         black
+‘w’         white
+==========  ========
+In addition, you can specify colors in many ways, including RGB 
+tuples (0.2,1,0.5). See matplotlib color</p>
 </dd>
 </dl>
 </li>
-</ul>
-<p>The following color abbreviations are supported:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 56%" />
-<col style="width: 44%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>character</p></th>
-<th class="head"><p>color</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>‘b’</p></td>
-<td><p>blue</p></td>
-</tr>
-<tr class="row-odd"><td><p>‘g’</p></td>
-<td><p>green</p></td>
-</tr>
-<tr class="row-even"><td><p>‘r’</p></td>
-<td><p>red</p></td>
-</tr>
-<tr class="row-odd"><td><p>‘c’</p></td>
-<td><p>cyan</p></td>
-</tr>
-<tr class="row-even"><td><p>‘m’</p></td>
-<td><p>magenta</p></td>
-</tr>
-<tr class="row-odd"><td><p>‘y’</p></td>
-<td><p>yellow</p></td>
-</tr>
-<tr class="row-even"><td><p>‘k’</p></td>
-<td><p>black</p></td>
-</tr>
-<tr class="row-odd"><td><p>‘w’</p></td>
-<td><p>white</p></td>
-</tr>
-</tbody>
-</table>
-<p>In addition, you can specify colors in many ways, including RGB tuples 
-(0.2,1,0.5). See matplotlib color</p>
-<ul class="simple">
 <li><dl class="simple">
 <dt>linewidth<span class="classifier">scalar, optional, default: 0.5</span></dt><dd><p>width in pixels</p>
 </dd>
@@ -316,10 +290,12 @@ the last plot</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2pressure</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Pxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Pxx</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Convert spectrogram into dB SPL</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> 
 </pre></div>
 </div>
 <p>Plot the spectrum at t = 7s</p>
@@ -327,6 +303,7 @@ the last plot</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;figtitle&#39;</span><span class="p">:</span><span class="s1">&#39;Spectrum (PSD)&#39;</span><span class="p">,</span>
 <span class="go">                  &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
+<span class="go">                  &#39;linewidth&#39;: 0.5</span>
 <span class="go">                  }</span>
 </pre></div>
 </div>
@@ -348,7 +325,7 @@ the last plot</p>
         <a href="util.visualization.plot2D.html" class="btn btn-neutral float-right" title="util.visualization.plot2D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="util.visualization.crop_image.html" class="btn btn-neutral float-left" title="util.visualization.crop_image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.visualization.false_Color_Spectro.html" class="btn btn-neutral float-left" title="util.visualization.false_Color_Spectro" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

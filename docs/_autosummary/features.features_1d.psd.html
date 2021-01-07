@@ -115,7 +115,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -189,8 +189,8 @@
 <h1>features.features_1d.psd<a class="headerlink" href="#features-features-1d-psd" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.features_1d.psd">
-<code class="sig-prename descclassname">features.features_1d.</code><code class="sig-name descname">psd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">256</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'welch'</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hanning'</span></em>, <em class="sig-param"><span class="n">nfft</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tlims</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_1d.html#psd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_1d.psd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimates power spectral density of 1D signal using Welch’s or periodogram methods.</p>
+<code class="sig-prename descclassname">features.features_1d.</code><code class="sig-name descname">psd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">256</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'welch'</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hanning'</span></em>, <em class="sig-param"><span class="n">nfft</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tlims</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/features_1d.html#psd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.features_1d.psd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the power spectral density of 1D signal using Welch’s or periodogram methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -223,10 +223,11 @@ Default is ‘None’</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>This is a wrapper that uses functions from Scipy. In particular the scipy.signal module</p>
+<p>This is a wrapper that uses functions from Scipy (scipy.org), in particular from the scipy.signal module.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">psd</span><span class="p">,</span> <span class="n">f_idx</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">features</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">psd</span><span class="p">,</span> <span class="n">f_idx</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

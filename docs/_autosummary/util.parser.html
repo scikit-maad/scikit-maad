@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.parser.date_from_filename" href="util.parser.date_from_filename.html" />
+    <link rel="next" title="util.parser.date_parser" href="util.parser.date_parser.html" />
     <link rel="prev" title="util.miscellaneous.shift_bit_length" href="util.miscellaneous.shift_bit_length.html" /> 
 </head>
 
@@ -104,7 +104,6 @@
 <li class="toctree-l2"><a class="reference internal" href="util.math_tools.html">util.math_tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">util.parser</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="util.parser.date_from_filename.html">util.parser.date_from_filename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.parser.date_parser.html">util.parser.date_parser</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.parser.read_audacity_annot.html">util.parser.read_audacity_annot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.parser.write_audacity_annot.html">util.parser.write_audacity_annot</a></li>
@@ -116,7 +115,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -186,7 +185,7 @@
             
   <div class="section" id="module-util.parser">
 <span id="util-parser"></span><h1>util.parser<a class="headerlink" href="#module-util.parser" title="Permalink to this headline">¶</a></h1>
-<p>Utilitary functions to parse or read files</p>
+<p>Utilitary functions to parse and read audio and text files.</p>
 <p class="rubric">Functions</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -194,16 +193,13 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.parser.date_from_filename.html#util.parser.date_from_filename" title="util.parser.date_from_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_from_filename</span></code></a></p></td>
-<td><p>Extract date and time from the filename.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.parser.date_parser.html#util.parser.date_parser" title="util.parser.date_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_parser</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.parser.date_parser.html#util.parser.date_parser" title="util.parser.date_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_parser</span></code></a></p></td>
 <td><p>Parse all filenames contained in a directory and its subdirectories  Keep only filenames corresponding to extension Filenames must follow : - SM4 format (XXXX_yyyymmdd_hhmmss.wav)  - or POSIX format (for audiomoth)   The result is a panda dataframe with ‘Date’ as index and ‘File’ (with full path as column)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.parser.read_audacity_annot.html#util.parser.read_audacity_annot" title="util.parser.read_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_audacity_annot</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.parser.read_audacity_annot.html#util.parser.read_audacity_annot" title="util.parser.read_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_audacity_annot</span></code></a></p></td>
 <td><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe with the bounding box and the label of each region of interest (ROI)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.parser.write_audacity_annot.html#util.parser.write_audacity_annot" title="util.parser.write_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_audacity_annot</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.parser.write_audacity_annot.html#util.parser.write_audacity_annot" title="util.parser.write_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_audacity_annot</span></code></a></p></td>
 <td><p>Write audio segmentation to file (Audacity format)</p></td>
 </tr>
 </tbody>
@@ -218,7 +214,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.parser.date_from_filename.html" class="btn btn-neutral float-right" title="util.parser.date_from_filename" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.parser.date_parser.html" class="btn btn-neutral float-right" title="util.parser.date_parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="util.miscellaneous.shift_bit_length.html" class="btn btn-neutral float-left" title="util.miscellaneous.shift_bit_length" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

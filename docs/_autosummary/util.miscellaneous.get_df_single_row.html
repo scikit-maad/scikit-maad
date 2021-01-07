@@ -126,7 +126,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -201,7 +201,8 @@
 <dl class="py function">
 <dt id="util.miscellaneous.get_df_single_row">
 <code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">get_df_single_row</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">index</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'iloc'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#get_df_single_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.get_df_single_row" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract a single row from a dataframe keeping the DataFrame type (instead of becoming a Series)</p>
+<dd><p>Extract a single row from a dataframe keeping the DataFrame type 
+(instead of becoming a Series)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -212,46 +213,42 @@
 <dt><strong>mode</strong><span class="classifier">string, optional, default is ‘iloc’</span></dt><dd><p>choose between row number (‘iloc’) or row index (‘loc’)
 (see Pandas documentation for the difference)</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>df_out</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>Single row DataFrame</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>&gt;&gt;&gt;import pandas as pd
-&gt;&gt;&gt;from maad.util import get_df_single_row
-&gt;&gt;&gt;species = [ (‘bird’, 8, ‘Yes’ ,’NYC’) ,</p>
-<blockquote>
-<div><p>(‘insect’, 4, ‘No’,’NYC’ ) ,
-(‘mammal’, 2, ‘No’,’NYC’ ) ,
-(‘frog’, 3, ‘Yes’,”LA” ) ]</p>
-</div></blockquote>
-<dl>
-<dt>&gt;&gt;&gt;df = pd.DataFrame(species, </dt><dd><dl class="simple">
-<dt>columns = [‘category’,</dt><dd><p>‘abundance’,
-‘presence’,
-‘location’])</p>
-</dd>
-</dl>
-</dd>
-<dt>&gt;&gt;&gt;print(df)</dt><dd><blockquote>
-<div><p>category  abundance presence location</p>
-</div></blockquote>
-<p>0     bird          8      Yes      NYC
-1   insect          4       No      NYC
-2   mammal          2       No      NYC
-3     frog          3      Yes       LA</p>
-</dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">get_df_single_row</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">species</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;bird&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Yes&#39;</span> <span class="p">,</span><span class="s1">&#39;NYC&#39;</span><span class="p">)</span> <span class="p">,</span>
+<span class="go">              (&#39;insect&#39;, 4, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
+<span class="go">              (&#39;mammal&#39;, 2, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
+<span class="go">              (&#39;frog&#39;, 3, &#39;Yes&#39;,&quot;LA&quot; ) ]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> 
+<span class="go">                      columns = [&#39;category&#39;,</span>
+<span class="go">                                 &#39;abundance&#39;,</span>
+<span class="go">                                 &#39;presence&#39;,</span>
+<span class="go">                                 &#39;location&#39;]) </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">      category  abundance presence location</span>
+<span class="go">    0     bird          8      Yes      NYC</span>
+<span class="go">    1   insect          4       No      NYC</span>
+<span class="go">    2   mammal          2       No      NYC</span>
+<span class="go">    3     frog          3      Yes       LA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">    category     bird</span>
 <span class="go">    abundance       8</span>
 <span class="go">    presence      Yes</span>
 <span class="go">    location      NYC</span>
 <span class="go">    Name: 0, dtype: object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">)</span>
 <span class="go">      category abundance presence location</span>
 <span class="go">    0     bird         8      Yes      NYC</span>
 </pre></div>
@@ -259,27 +256,23 @@
 <blockquote>
 <div><p>Now with index</p>
 </div></blockquote>
-<p>&gt;&gt;&gt;df_modified=df.set_index(“category”)
-&gt;&gt;&gt;print(df_modified)</p>
-<blockquote>
-<div><blockquote>
-<div><p>abundance presence location</p>
-</div></blockquote>
-<p>category                             
-bird              8      Yes      NYC
-insect            4       No      NYC
-mammal            2       No      NYC
-frog              3      Yes       LA</p>
-</div></blockquote>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df_modified</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;insect&#39;</span><span class="p">]</span>  
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df_modified</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df_modified</span><span class="p">)</span>
+<span class="go">                abundance presence location</span>
+<span class="go">    category                             </span>
+<span class="go">    bird              8      Yes      NYC</span>
+<span class="go">    insect            4       No      NYC</span>
+<span class="go">    mammal            2       No      NYC</span>
+<span class="go">    frog              3      Yes       LA </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_modified</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;insect&#39;</span><span class="p">]</span>  
 <span class="go">    abundance      4</span>
 <span class="go">    presence      No</span>
 <span class="go">    location     NYC</span>
 <span class="go">    Name: insect, dtype: object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">get_df_single_row</span> <span class="p">(</span><span class="n">df_modified</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;insect&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;loc&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_df_single_row</span> <span class="p">(</span><span class="n">df_modified</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;insect&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;loc&#39;</span><span class="p">)</span>
 <span class="go">           abundance presence location</span>
 <span class="go">    insect         4       No      NYC</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">get_df_single_row</span> <span class="p">(</span><span class="n">df_modified</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">)</span>    
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_df_single_row</span> <span class="p">(</span><span class="n">df_modified</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">)</span>    
 <span class="go">           abundance presence location</span>
 <span class="go">    insect         4       No      NYC</span>
 </pre></div>

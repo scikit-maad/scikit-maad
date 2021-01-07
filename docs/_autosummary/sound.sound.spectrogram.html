@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois" href="rois.html" />
+    <link rel="next" title="sound.sound.wave2frames" href="sound.sound.wave2frames.html" />
     <link rel="prev" title="sound.sound.spectral_SNR" href="sound.sound.spectral_SNR.html" /> 
 </head>
 
@@ -108,6 +108,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound.spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.wave2frames.html">sound.sound.wave2frames</a></li>
 </ul>
 </li>
 </ul>
@@ -118,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -193,11 +194,15 @@
 <dl class="py function">
 <dt id="sound.sound.spectrogram">
 <code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hann'</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">noverlap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'psd'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#spectrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.spectrogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a sound waveform into a spectrogram 
-the output is : 
-- power (mode=’psd’)
-- amplitude (mode = ‘amplitude’) =&gt; sqrt(power)
-- complex with real and imaginary parts (mode = ‘complex’)</p>
+<dd><p>Compute a spectrogram using the short-time Fourier transform from an audio signal.</p>
+<dl class="simple">
+<dt>The function can compute diferent outputs according to the parameter ‘mode’:</dt><dd><ul class="simple">
+<li><p>power (mode=’psd’)</p></li>
+<li><p>amplitude (mode = ‘amplitude’) =&gt; sqrt(power)</p></li>
+<li><p>complex with real and imaginary parts (mode = ‘complex’)</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -264,11 +269,7 @@ is added to the root filename.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
-</dd>
-</dl>
-</li>
+<li><p>ylabel : string, optional, default : ‘Amplitude [AU]’</p></li>
 <li><dl class="simple">
 <dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
 in order to get all the  existing colormaps
@@ -285,7 +286,7 @@ settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt>extent<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
@@ -319,7 +320,7 @@ Sxx unit is amplitude =&gt; Sxx_ampli if mode is ‘amplitude’ or ‘complex�
 </dd>
 <dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Frequency vector (vertical y-axis)</p>
 </dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt><strong>extent</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners.</p>
 </dd>
 </dl>
@@ -329,7 +330,7 @@ upper-right corners.</p>
 <p>This function take care of the energy conservation which is crucial 
 when working in with sound pressure level (dB SPL)</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;guyana_tropical_forest.wav&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../data/guyana_tropical_forest.wav&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Compute energy of signal s</p>
@@ -345,7 +346,7 @@ when working in with sound pressure level (dB SPL)</p>
 </div>
 <p>Display Power Spectrogram</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="c1"># convert into dB</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Sxx_dB</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
 <span class="go">                  &#39;vmin&#39;:-70,</span>
 <span class="go">                  &#39;extent&#39;:ext,</span>
 <span class="go">                  &#39;figsize&#39;:(4,13),</span>
@@ -357,7 +358,7 @@ when working in with sound pressure level (dB SPL)</p>
 </pre></div>
 </div>
 <p>Compute mean power spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">avg_power_spectro</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>energy =&gt; power x time</p>
@@ -371,7 +372,8 @@ when working in with sound pressure level (dB SPL)</p>
 </pre></div>
 </div>
 <p>For energy conservation =&gt; convert Sxx_ampli (amplitude) into power before doing the average.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx_ampli</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_ampli_mean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">avg_amplitude_spectro</span><span class="p">(</span><span class="n">Sxx_ampli</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">S_ampli_mean</span><span class="o">**</span><span class="mi">2</span>
 </pre></div>
 </div>
 <p>energy =&gt; power x time</p>
@@ -392,7 +394,7 @@ when working in with sound pressure level (dB SPL)</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rois.html" class="btn btn-neutral float-right" title="rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sound.sound.wave2frames.html" class="btn btn-neutral float-right" title="sound.sound.wave2frames" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="sound.sound.spectral_SNR.html" class="btn btn-neutral float-left" title="sound.sound.spectral_SNR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

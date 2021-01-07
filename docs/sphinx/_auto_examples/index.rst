@@ -13,6 +13,27 @@ that can be performed with scikit-maad.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="@author: jsulloa">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_audio_shape_features_thumb.png
+     :alt: Created on Wed Jan  6 16:15:19 2021
+
+     :ref:`sphx_glr__auto_examples_audio_shape_features.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/audio_shape_features
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Soundscapes result from a combination of multiple signals that are mixed-down into a single tim...">
 
 .. only:: html

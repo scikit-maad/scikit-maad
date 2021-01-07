@@ -101,7 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -168,7 +168,7 @@
   <h1>Source code for maad.util.miscellaneous</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot; Utilitary functions for scikit-MAAD &quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot; Ensemble of usefull functions for scikit-maad. &quot;&quot;&quot;</span>
 <span class="c1">#</span>
 <span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
 <span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
@@ -212,30 +212,30 @@
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs,window=&#39;hanning&#39;,noverlap=512, nFFT=1024)</span>
-<span class="sd">    &gt;&gt;&gt; PSDxxdB = maad.util.linear2dB (PSDxx) # convert into dB</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window=&#39;hanning&#39;,noverlap=512, nFFT=1024)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB</span>
 <span class="sd">    &gt;&gt;&gt; bw = (2000,6000) #in Hz</span>
-<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(PSDxxdB),</span>
-<span class="sd">                      &#39;vmin&#39;:min(PSDxxdB),</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Sxx_dB.max(),</span>
+<span class="sd">                      &#39;vmin&#39;: -90,</span>
 <span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
 <span class="sd">                      &#39;figsize&#39;:(10,13),</span>
 <span class="sd">                      &#39;title&#39;:&#39;Power Spectrum Density (PSD)&#39;,</span>
 <span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(PSDxxdB,**fig_kwargs)</span>
-<span class="sd">    &gt;&gt;&gt; PSDxxdB_crop = PSDxxdB[index_bw(fn, bw)]</span>
-<span class="sd">    &gt;&gt;&gt; fn_crop = fn[index_bw(fn, bw)]</span>
-<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: max(PSDxxdB),</span>
-<span class="sd">                      &#39;vmin&#39;:min(PSDxxdB),</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_crop = Sxx_dB[maad.util.index_bw(fn, bw)]</span>
+<span class="sd">    &gt;&gt;&gt; fn_crop = fn[maad.util.index_bw(fn, bw)]</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Sxx_dB.max(),</span>
+<span class="sd">                      &#39;vmin&#39;: -90,</span>
 <span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn_crop[0], fn_crop[-1]),</span>
 <span class="sd">                      &#39;figsize&#39;:(10*len(fn_crop)/len(fn),13),</span>
 <span class="sd">                      &#39;title&#39;:&#39;Power Spectrum Density (PSD)&#39;,</span>
 <span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(PSDxxdB_crop,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_crop,**fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># select the indices corresponding to the frequency bins range</span>
@@ -342,8 +342,36 @@
        
 <span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run-Length encoding    </span>
-<span class="sd">    from rle function R</span>
+<span class="sd">    Run-Length encoding (RLE)   </span>
+<span class="sd">    </span>
+<span class="sd">    Wikipedia :</span>
+<span class="sd">        Run-length encoding (RLE) is a form of lossless data compression in </span>
+<span class="sd">        which runs of data (sequences in which the same data value occurs in </span>
+<span class="sd">        many consecutive data elements) are stored as a single data value and </span>
+<span class="sd">        count, rather than as the original run. This is most useful on data </span>
+<span class="sd">        that contains many such runs. Consider, for example, simple graphic </span>
+<span class="sd">        images such as icons, line drawings, Conway&#39;s Game of Life, and </span>
+<span class="sd">        animations. It is not useful with files that don&#39;t have many runs </span>
+<span class="sd">        as it could greatly increase the file size. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    x : 1D array</span>
+<span class="sd">        vector with numbers (ndarray or list)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    -------</span>
+<span class="sd">    lengths, values : 1D array</span>
+<span class="sd">        2 vectors that stores values (in values) and the number of times each</span>
+<span class="sd">        value is repeated (in lengths)</span>
+<span class="sd">        </span>
+<span class="sd">        ex : RLE compression of the vector [111122333345] </span>
+<span class="sd">            =&gt; lengths = [4 2 4 1 1] and values = [1 2 3 4 5]</span>
+<span class="sd">            </span>
+<span class="sd">    References:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    Transcription of the function rle from R</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span><span class="mi">1</span> <span class="p">:</span> 
@@ -389,13 +417,14 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
-<span class="sd">    &gt;&gt;&gt; linear_scale(a, 0, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.linear_scale(a, 0, 1)</span>
 <span class="sd">        array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
 <span class="sd">        </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</span>
 <span class="sd">    Adapted by S. Haupert Dec 12, 2017 for Python</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># if x is a list, convert x into ndarray </span>
@@ -419,7 +448,8 @@
 <span class="c1">#=============================================================================</span>
 <span class="k">def</span> <span class="nf">amplitude2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transform amplitude data (signal, scalar) into decibel scale within the dB range (db_range).</span>
+<span class="sd">    Transform amplitude data (signal, scalar) into decibel scale within the </span>
+<span class="sd">    dB range (db_range).</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -435,13 +465,13 @@
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    y : scalars</span>
+<span class="sd">    y : array-like or scalar</span>
 <span class="sd">        y = 20*log10(x) + db_gain  </span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
-<span class="sd">    &gt;&gt;&gt; amplitude2dB(a, mode=&#39;amplitude&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.amplitude2dB(a)</span>
 <span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>            
@@ -470,7 +500,8 @@
 <span class="c1">#=============================================================================</span>
 <span class="k">def</span> <span class="nf">power2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transform power (amplitude²) signal or scalar into decibel scale within the dB range (db_range).</span>
+<span class="sd">    Transform power (amplitude²) signal or scalar into decibel scale </span>
+<span class="sd">    within the dB range (db_range).</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -486,13 +517,13 @@
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    y : scalars</span>
+<span class="sd">    y : array-like or scalar</span>
 <span class="sd">        y = 10*log10(x) + db_gain  </span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
-<span class="sd">    &gt;&gt;&gt; power2dB(a**2, mode=&#39;power&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.power2dB(a**2)</span>
 <span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>            
@@ -526,7 +557,7 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : array-like</span>
+<span class="sd">    x : array-like or scalar</span>
 <span class="sd">        data in dB to rescale in amplitude </span>
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain that was added to the result </span>
@@ -534,13 +565,13 @@
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    y : scalars</span>
+<span class="sd">    y : array-like or scalar</span>
 <span class="sd">        output in amplitude unit</span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
-<span class="sd">    &gt;&gt;&gt; dB2amplitude(a)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.dB2amplitude(a)</span>
 <span class="sd">        array([1., 2., 3., 4., 5.])</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>  
@@ -556,7 +587,7 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : array-like</span>
+<span class="sd">    x : array-like or scalar</span>
 <span class="sd">        data in dB to rescale in power </span>
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain that was added to the result </span>
@@ -564,13 +595,13 @@
 <span class="sd">                </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    y : scalars</span>
+<span class="sd">    y : array-like or scalar</span>
 <span class="sd">        output in power unit</span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
-<span class="sd">    &gt;&gt;&gt; dB2power(a)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.dB2power(a)</span>
 <span class="sd">        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        </span>
 <span class="sd">    &quot;&quot;&quot;</span>  
     <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> 
@@ -600,10 +631,10 @@
 <span class="sd">    </span>
 <span class="sd">    Example with an audio file</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; PSDxx,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
-<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(PSDxx,gain=42)</span>
-<span class="sd">    &gt;&gt;&gt; L_sum = maad.util.add_dB(L, axis=2)  </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(Sxx_power,gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; L_sum = maad.util.add_dB(L, axis=1)  </span>
 <span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Spectrum (PSD)&#39;,</span>
 <span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
@@ -673,10 +704,10 @@
 <span class="sd">    </span>
 <span class="sd">    Example with an audio file</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;jura_cold_forest_jour.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
-<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(PSDxx,gain=42)</span>
-<span class="sd">    &gt;&gt;&gt; L_mean = maad.util.mean_dB(L, axis=2)  </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(Sxx_power,gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; L_mean = maad.util.mean_dB(L, axis=1)  </span>
 <span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Power spectrum (PSD)&#39;,</span>
 <span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
@@ -693,7 +724,7 @@
 <span class="sd">    Example with arrays</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1, axis=1)</span>
 <span class="sd">        array([85.68201724, 85.68201724])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1, axis=0)  </span>
 <span class="sd">        array([90., 80., 70.]) </span>
@@ -745,7 +776,7 @@
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; shift_bit_length(1000)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.shift_bit_length(1000)</span>
 <span class="sd">        1024</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
@@ -759,8 +790,8 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    array: ndarray</span>
-<span class="sd">        array of values to search for nearest values</span>
+<span class="sd">    array: ndarray-like of floats</span>
+<span class="sd">        array of values where to search the nearest values</span>
 <span class="sd">    value: float</span>
 <span class="sd">        value to be searched in array</span>
 <span class="sd">            </span>
@@ -772,9 +803,9 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; x = np.array([1,2,3])</span>
-<span class="sd">    &gt;&gt;&gt; nearest_idx(x, 1.3)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.nearest_idx(x, 1.3)</span>
 <span class="sd">        0</span>
-<span class="sd">    &gt;&gt;&gt; nearest_idx(x, 1.6)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.nearest_idx(x, 1.6)</span>
 <span class="sd">        1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># be sure it&#39;s ndarray</span>
@@ -787,7 +818,8 @@
 
 <span class="k">def</span> <span class="nf">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract a single row from a dataframe keeping the DataFrame type (instead of becoming a Series)</span>
+<span class="sd">    Extract a single row from a dataframe keeping the DataFrame type </span>
+<span class="sd">    (instead of becoming a Series)</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -800,6 +832,7 @@
 <span class="sd">    mode : string, optional, default is &#39;iloc&#39;</span>
 <span class="sd">        choose between row number (&#39;iloc&#39;) or row index (&#39;loc&#39;)</span>
 <span class="sd">        (see Pandas documentation for the difference)</span>
+<span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    df_out : pandas DataFrame</span>
@@ -807,19 +840,19 @@
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt;import pandas as pd</span>
-<span class="sd">    &gt;&gt;&gt;from maad.util import get_df_single_row</span>
-<span class="sd">    &gt;&gt;&gt;species = [ (&#39;bird&#39;, 8, &#39;Yes&#39; ,&#39;NYC&#39;) ,</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import get_df_single_row</span>
+<span class="sd">    &gt;&gt;&gt; species = [ (&#39;bird&#39;, 8, &#39;Yes&#39; ,&#39;NYC&#39;) ,</span>
 <span class="sd">                  (&#39;insect&#39;, 4, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
 <span class="sd">                  (&#39;mammal&#39;, 2, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
 <span class="sd">                  (&#39;frog&#39;, 3, &#39;Yes&#39;,&quot;LA&quot; ) ]</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt;df = pd.DataFrame(species, </span>
+<span class="sd">    &gt;&gt;&gt; df = pd.DataFrame(species, </span>
 <span class="sd">                          columns = [&#39;category&#39;,</span>
 <span class="sd">                                     &#39;abundance&#39;,</span>
 <span class="sd">                                     &#39;presence&#39;,</span>
 <span class="sd">                                     &#39;location&#39;]) </span>
-<span class="sd">    &gt;&gt;&gt;print(df)</span>
+<span class="sd">    &gt;&gt;&gt; print(df)</span>
 <span class="sd">          category  abundance presence location</span>
 <span class="sd">        0     bird          8      Yes      NYC</span>
 <span class="sd">        1   insect          4       No      NYC</span>
@@ -831,14 +864,14 @@
 <span class="sd">        presence      Yes</span>
 <span class="sd">        location      NYC</span>
 <span class="sd">        Name: 0, dtype: object</span>
-<span class="sd">    &gt;&gt;&gt; get_df_single_row (df, index=0, mode=&#39;iloc&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.get_df_single_row (df, index=0, mode=&#39;iloc&#39;)</span>
 <span class="sd">          category abundance presence location</span>
 <span class="sd">        0     bird         8      Yes      NYC</span>
 <span class="sd">        </span>
 <span class="sd">     Now with index   </span>
 <span class="sd">        </span>
-<span class="sd">    &gt;&gt;&gt;df_modified=df.set_index(&quot;category&quot;)</span>
-<span class="sd">    &gt;&gt;&gt;print(df_modified)</span>
+<span class="sd">    &gt;&gt;&gt; df_modified=df.set_index(&quot;category&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(df_modified)</span>
 <span class="sd">                    abundance presence location</span>
 <span class="sd">        category                             </span>
 <span class="sd">        bird              8      Yes      NYC</span>
@@ -850,10 +883,10 @@
 <span class="sd">        presence      No</span>
 <span class="sd">        location     NYC</span>
 <span class="sd">        Name: insect, dtype: object</span>
-<span class="sd">    &gt;&gt;&gt; get_df_single_row (df_modified, index=&#39;insect&#39;, mode=&#39;loc&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.get_df_single_row (df_modified, index=&#39;insect&#39;, mode=&#39;loc&#39;)</span>
 <span class="sd">               abundance presence location</span>
 <span class="sd">        insect         4       No      NYC</span>
-<span class="sd">    &gt;&gt;&gt; get_df_single_row (df_modified, index=1, mode=&#39;iloc&#39;)    </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.get_df_single_row (df_modified, index=1, mode=&#39;iloc&#39;)    </span>
 <span class="sd">               abundance presence location</span>
 <span class="sd">        insect         4       No      NYC</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -870,19 +903,19 @@
 
 <span class="k">def</span> <span class="nf">format_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Setup rectangular df to a predifined format: </span>
-<span class="sd">    time-frequency or bounding box</span>
+<span class="sd">    Format features such as bounding box coordinates and centroids coordinates</span>
+<span class="sd">    to predifined format : time-frequency =&gt; pixels or pixels to time-frequency</span>
+<span class="sd">    units </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas DataFrame</span>
+<span class="sd">        df with bounding box coordinates and/or centroids coordinates       </span>
 <span class="sd">        array must have a valid input format with column names</span>
-<span class="sd">        </span>
 <span class="sd">        - bounding box: min_y, min_x, max_y, max_x</span>
 <span class="sd">        - time frequency: min_f, min_t, max_f, max_t</span>
 <span class="sd">        - centroid tf : centroid_f, centroid_t</span>
 <span class="sd">        - centroid pixels : centroid_y, centroid_x</span>
-<span class="sd">    </span>
 <span class="sd">    tn : ndarray</span>
 <span class="sd">        vector with temporal indices, output from the spectrogram function (in seconds)</span>
 <span class="sd">    fn: ndarray</span>
@@ -890,8 +923,22 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    df: ndarray</span>
-<span class="sd">        array with indices of ROIs matched on spectrogram</span>
+<span class="sd">    df: pandas DataFrame</span>
+<span class="sd">        df with bounding box coordinates and/or centroids coordinates in pixels</span>
+<span class="sd">        and time-frequency units</span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    select_rois, centroid_features, read_audacity_annot, overlay_rois, </span>
+<span class="sd">    overlay_centroid</span>
+<span class="sd">    </span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Use this function after using MAAD functions such as select_rois, </span>
+<span class="sd">    centroid_features, read_audacity_annot or before using MAAD functions such</span>
+<span class="sd">    as overlay_rois, overlay_centroid in order to format the coordinates</span>
+<span class="sd">    into pixels and/or time-frequency units</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check format of the input data</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="p">:</span>

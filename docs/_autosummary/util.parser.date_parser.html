@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="util.parser.read_audacity_annot" href="util.parser.read_audacity_annot.html" />
-    <link rel="prev" title="util.parser.date_from_filename" href="util.parser.date_from_filename.html" /> 
+    <link rel="prev" title="util.parser" href="util.parser.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -104,7 +104,6 @@
 <li class="toctree-l2"><a class="reference internal" href="util.math_tools.html">util.math_tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.parser.html">util.parser</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="util.parser.date_from_filename.html">util.parser.date_from_filename</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.parser.date_parser</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.parser.read_audacity_annot.html">util.parser.read_audacity_annot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.parser.write_audacity_annot.html">util.parser.write_audacity_annot</a></li>
@@ -116,7 +115,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -200,11 +199,10 @@ The result is a panda dataframe with ‘Date’ as index and ‘File’ (with fu
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>filename</strong><span class="classifier">string</span></dt><dd></dd>
-<dt><strong>The filename must follow this format :</strong></dt><dd></dd>
-<dt><strong>XXXX_yyyymmdd_hhmmss.wav</strong></dt><dd></dd>
-<dt><strong>with yyyy</strong><span class="classifier">year / mm</span></dt><dd></dd>
-<dt><strong>mm</strong><span class="classifier">minutes / ss</span></dt><dd></dd>
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>filename must follow 
+- SM4 format : XXXX_yyyymmdd_hhmmss.wav, ex: S4A03895_20190522_191500.wav
+- Audiomoth format : 8 Hexa, ex: 5EE84AC8.wav</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -216,6 +214,24 @@ and a index ‘Date’ with the type Datetime</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">date_parser</span><span class="p">(</span><span class="s2">&quot;../data/indices/&quot;</span><span class="p">,</span> <span class="n">dateformat</span><span class="o">=</span><span class="s1">&#39;SM4&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">                                                             file</span>
+<span class="go">Date                                                             </span>
+<span class="go">2019-05-22 00:00:00  ../data/indices/S4A03895_20190522_000000.wav</span>
+<span class="go">2019-05-22 00:15:00  ../data/indices/S4A03895_20190522_001500.wav</span>
+<span class="go">2019-05-22 00:30:00  ../data/indices/S4A03895_20190522_003000.wav</span>
+<span class="go">2019-05-22 00:45:00  ../data/indices/S4A03895_20190522_004500.wav</span>
+<span class="go">2019-05-22 01:00:00  ../data/indices/S4A03895_20190522_010000.wav</span>
+<span class="go">2019-05-22 01:15:00  ../data/indices/S4A03895_20190522_011500.wav</span>
+<span class="go">2019-05-22 01:30:00  ../data/indices/S4A03895_20190522_013000.wav</span>
+<span class="go">2019-05-22 01:45:00  ../data/indices/S4A03895_20190522_014500.wav</span>
+<span class="go">2019-05-22 02:00:00  ../data/indices/S4A03895_20190522_020000.wav</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -231,7 +247,7 @@ and a index ‘Date’ with the type Datetime</p>
         <a href="util.parser.read_audacity_annot.html" class="btn btn-neutral float-right" title="util.parser.read_audacity_annot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="util.parser.date_from_filename.html" class="btn btn-neutral float-left" title="util.parser.date_from_filename" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.parser.html" class="btn btn-neutral float-left" title="util.parser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

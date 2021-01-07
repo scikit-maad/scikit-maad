@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -213,39 +213,9 @@
 <h1>features.alpha_indices.acousticGradientIndex<a class="headerlink" href="#features-alpha-indices-acousticgradientindex" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.acousticGradientIndex">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acousticGradientIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acousticGradientIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acousticGradientIndex" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acousticGradientIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">'per_bin'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acousticGradientIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acousticGradientIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acoustic Gradient Index : AGI</p>
 <p>!!! Must be calculated on raw spectrogram (background noise must remain)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram (i.e matrix of spectrum)</p>
-</dd>
-<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>Time resolution in seconds.</p>
-</dd>
-<dt><strong>norm</strong><span class="classifier">string, optional, default is ‘per_bin’</span></dt><dd><p>Determine if the AGI is normalized by the global meaian value 
-(‘global’ mode) or by the median value per frequency bin 
-(‘per_bin’)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>AGI_xx</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Acoustic Gradient Index of the spectrogram</p>
-</dd>
-<dt><strong>AGI_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>AGI value for each frequency bin
-sum(AGI_xx,axis=1)</p>
-</dd>
-<dt><strong>AGI_sum</strong><span class="classifier">scalar</span></dt><dd><p>Sum of AGI value per frequency bin (Common definition)
-sum(AGI_per_bin)</p>
-</dd>
-<dt>AGI_mean ; scalar</dt><dd><p>average AGI value per frequency bin (independant of the number of 
-frequency bin)
-mean(AGI_per_bin)</p>
-</dd>
-</dl>
-</dd>
-</dl>
 </dd></dl>
 
 </div>

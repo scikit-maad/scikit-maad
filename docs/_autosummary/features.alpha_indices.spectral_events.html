@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -213,7 +213,7 @@
 <h1>features.alpha_indices.spectral_events<a class="headerlink" href="#features-alpha-indices-spectral-events" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.spectral_events">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">rejectDuration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_events" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_dB</span></em>, <em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">6</span></em>, <em class="sig-param"><span class="n">rejectDuration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_events" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Spectral Acoustic events :</dt><dd><ul class="simple">
 <li><p>EVNspFraction : Fraction: events duration over total duration</p></li>
@@ -226,11 +226,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>Sxx</strong><span class="classifier">2D array of floats</span></dt><dd><p>Spectrogram 2D</p>
+<dt><strong>Sxx_dB</strong><span class="classifier">2D array of floats</span></dt><dd><p>2D in dB. Usually, better to work with spectrogram without 
+stationnary noise in order to measure only acoustic activity above the
+background noise</p>
 </dd>
 <dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>time resolution in s (ie tn[1]-tn[0])</p>
 </dd>
-<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is 3dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
+<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is 6dB</span></dt><dd><p>data &gt;Threshold is considered to be an event 
 if the length is &gt; rejectLength</p>
 </dd>
 <dt><strong>rejectDuration</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>event shorter than rejectDuration are discarded

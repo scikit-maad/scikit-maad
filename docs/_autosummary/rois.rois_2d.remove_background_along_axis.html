@@ -110,6 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.sharpness.html">rois.rois_2d.sharpness</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
 </ul>
 </li>
@@ -120,7 +121,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -194,8 +195,9 @@
 <h1>rois.rois_2d.remove_background_along_axis<a class="headerlink" href="#rois-rois-2d-remove-background-along-axis" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="rois.rois_2d.remove_background_along_axis">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">remove_background_along_axis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'ale'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">7</span></em>, <em class="sig-param"><span class="n">N_bins</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#remove_background_along_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.remove_background_along_axis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the horizontal noisy profile along the defined axis</p>
+<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">remove_background_along_axis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'median'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">N_bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#remove_background_along_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.remove_background_along_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the noisy profile along the defined axis and remove this profile from
+the spectrogram</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -209,9 +211,9 @@ Possible values for mode are :
 </dd>
 <dt><strong>axis</strong><span class="classifier">integer, default is 1</span></dt><dd><p>if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</p>
 </dd>
-<dt><strong>N</strong><span class="classifier">int (only for mode = “ale”)</span></dt><dd><p>length of window to compute the running mean of the histogram</p>
+<dt><strong>N</strong><span class="classifier">int, default is 25</span></dt><dd><p>length of window to compute the running mean of the noise profile</p>
 </dd>
-<dt><strong>N_bins</strong><span class="classifier">int (only for mode = “ale”)</span></dt><dd><p>number of bins to compute the histogram</p>
+<dt><strong>N_bins</strong><span class="classifier">int (only for mode = “ale”), default is 50</span></dt><dd><p>number of bins to compute the histogram</p>
 </dd>
 <dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
 </dd>
@@ -260,7 +262,7 @@ settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ext<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+<dt>extent<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
 upper-right corners. If <cite>None</cite>, the image is positioned such that 
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
@@ -281,6 +283,11 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 </ul>
 <p>… and more, see matplotlib</p>
 </dd>
+<dt><strong>Reference:</strong></dt><dd></dd>
+<dt><strong>———</strong></dt><dd></dd>
+<dt><strong>.. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from</strong></dt><dd></dd>
+<dt><strong>Natural Recordings of the Environment. Queensland University of Technology,</strong></dt><dd></dd>
+<dt><strong>Brisbane</strong></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>

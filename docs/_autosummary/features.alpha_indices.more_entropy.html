@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -214,9 +214,30 @@
 <dl class="py function">
 <dt id="features.alpha_indices.more_entropy">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">more_entropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#more_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.more_entropy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zhao, Yueqin. “Rao’s Quadratic Entropy and Some New Applications” (2010). 
-Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
-Old Dominion University, DOI: 10.25777/qgak-sf09</p>
+<dd><dl class="simple">
+<dt>Compute more types of entropy :</dt><dd><p>-Havrda
+-Renyi
+-paired Shannon
+-gamma
+-Gini Simpson</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>vector (1d) or matrix (2d) of scalars.
+Vector could be audio recording or spectrum
+Matrix could be spectrogram</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">integer, default is 3</span></dt><dd><p>determine the order of the entropy in case of Havrda, Renyi and gamma 
+entropy. if order =2, Havrda is equal to Gini Simpson entropy</p>
+</dd>
+<dt><strong>axis</strong><span class="classifier">integer, default is 0</span></dt><dd><p>In case of x is a matrix, select the row (axis=0) or the columns (axis=1)
+of the matrix to compute the entropies.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

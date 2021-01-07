@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -213,7 +213,7 @@
 <h1>features.alpha_indices.acousticDiversityIndex<a class="headerlink" href="#features-alpha-indices-acousticdiversityindex" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.acousticDiversityIndex">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acousticDiversityIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">fmax</span><span class="o">=</span><span class="default_value">20000</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">'shannon'</span></em>, <em class="sig-param"><span class="n">R_compatible</span><span class="o">=</span><span class="default_value">'soundecology'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acousticDiversityIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acousticDiversityIndex" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acousticDiversityIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">fmax</span><span class="o">=</span><span class="default_value">20000</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">- 50</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">'shannon'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acousticDiversityIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acousticDiversityIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acoustic Diversity Index : ADI</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -228,7 +228,7 @@
 </dd>
 <dt><strong>bin_step</strong><span class="classifier">scalar, optional, default is 500</span></dt><dd><p>Frequency step in Hz</p>
 </dd>
-<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is 3dB</span></dt><dd><p>Threshold to compute the score (ie. the number of data &gt; threshold,
+<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is -50dB</span></dt><dd><p>Threshold to compute the score (ie. the number of data &gt; threshold,
 normalized by the length)</p>
 </dd>
 <dt><strong>index</strong><span class="classifier">string, optional, default is “shannon”</span></dt><dd><ul class="simple">
@@ -236,9 +236,6 @@ normalized by the length)</p>
 <li><p>“simpson” : Simpson index is calculated on the vector of scores</p></li>
 <li><p>“invsimpson” : Inverse Simpson index is calculated on the vector of scores</p></li>
 </ul>
-</dd>
-<dt><strong>R_compatible</strong><span class="classifier">string, optional, default is “soundecology”</span></dt><dd><p>if ‘soundecology’, the result is similar to the package SoundEcology in R 
-Otherwise, the result is specific to maad</p>
 </dd>
 </dl>
 </dd>

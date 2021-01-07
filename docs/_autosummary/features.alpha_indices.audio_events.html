@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -278,6 +278,13 @@ good approximation of the envelope.</p>
 from natural recordings of the environment.
 Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
 from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EVNtFract</span><span class="p">,</span> <span class="n">EVNmean</span><span class="p">,</span> <span class="n">EVNcount</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">audio_events</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;EVNtFract: </span><span class="si">%2.2f</span><span class="s1"> / EVNmean: </span><span class="si">%2.2f</span><span class="s1"> / EVNcount: </span><span class="si">%2.0f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">EVNtFract</span><span class="p">,</span> <span class="n">EVNmean</span><span class="p">,</span> <span class="n">EVNcount</span><span class="p">))</span>
+<span class="go">EVNtFract: 0.37 / EVNmean: 0.08 / EVNcount:  5</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

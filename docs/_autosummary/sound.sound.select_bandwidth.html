@@ -108,6 +108,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.wave2frames.html">sound.sound.wave2frames</a></li>
 </ul>
 </li>
 </ul>
@@ -118,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -193,7 +194,7 @@
 <dl class="py function">
 <dt id="sound.sound.select_bandwidth">
 <code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">select_bandwidth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">fcut</span></em>, <em class="sig-param"><span class="n">forder</span></em>, <em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">'butter'</span></em>, <em class="sig-param"><span class="n">ftype</span><span class="o">=</span><span class="default_value">'bandpass'</span></em>, <em class="sig-param"><span class="n">rp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#select_bandwidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.select_bandwidth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter</p>
+<dd><p>Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -205,16 +206,16 @@
 </dd>
 <dt><strong>forder</strong><span class="classifier">int</span></dt><dd><p>The order of the filter.</p>
 </dd>
-<dt><strong>ftype</strong><span class="classifier">{‘bandpass’, ‘lowpass’, ‘highpass’, ‘bandstop’}, optional, default</span></dt><dd><p>is ‘bandpass’
+<dt><strong>ftype</strong><span class="classifier">{<cite>bandpass</cite>, <cite>lowpass</cite>, <cite>highpass</cite>, <cite>bandstop</cite>}, optional, default</span></dt><dd><p>is <cite>bandpass</cite>
 The type of filter.</p>
 </dd>
-<dt><strong>fname</strong><span class="classifier">{‘butter’, ‘cheby1’, ‘cheby2’, ‘ellip’, ‘bessel’}, optional, default</span></dt><dd><p>is ‘butter’</p>
-</dd>
-<dt><strong>The type of IIR filter to design:</strong></dt><dd><p>Butterworth : ‘butter’</p>
-<p>Chebyshev I : ‘cheby1’</p>
-<p>Chebyshev II : ‘cheby2’</p>
-<p>Cauer/elliptic: ‘ellip’</p>
-<p>Bessel/Thomson: ‘bessel’</p>
+<dt><strong>fname</strong><span class="classifier">{<cite>butter</cite>, ‘cheby1`, <cite>cheby2</cite>, <cite>ellip</cite>, <cite>bessel</cite>}, optional, default</span></dt><dd><p>is ‘butter’   
+The type of IIR filter to design:
+- Butterworth : <cite>butter</cite>
+- Chebyshev I : ‘cheby1`
+- Chebyshev II : <cite>cheby2</cite>
+- Cauer/elliptic: <cite>ellip</cite>
+- Bessel/Thomson: <cite>bessel</cite></p>
 </dd>
 <dt><strong>rp</strong><span class="classifier">float, optional</span></dt><dd><p>For Chebyshev and elliptic filters, provides the maximum ripple in 
 the passband. (dB)</p>
@@ -234,15 +235,16 @@ in the stop band. (dB)</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir_filter1d</span></code></dt><dd></dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir_filter1d</span></code></dt><dd><p>Lowpass, highpass, bandpass or bandstop a 1d signal with an Fir filter</p>
+</dd>
 </dl>
 </div>
 <p class="rubric">Examples</p>
 <p>Load and display the spectrogram of a sound waveform</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="c1"># convert into dB </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Sxx_dB</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
 <span class="go">                  &#39;vmin&#39;:-90,</span>
 <span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
 <span class="go">                  &#39;figsize&#39;:(4,13),</span>

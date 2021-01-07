@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -213,7 +213,7 @@
 <h1>features.alpha_indices.spectral_indices<a class="headerlink" href="#features-alpha-indices-spectral-indices" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.spectral_indices">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">ext</span></em>, <em class="sig-param"><span class="n">flim_low</span><span class="o">=</span><span class="default_value">[0, 1000]</span></em>, <em class="sig-param"><span class="n">flim_mid</span><span class="o">=</span><span class="default_value">[1000, 10000]</span></em>, <em class="sig-param"><span class="n">flim_hi</span><span class="o">=</span><span class="default_value">[10000, 20000]</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_indices" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">flim_low</span><span class="o">=</span><span class="default_value">[0, 1000]</span></em>, <em class="sig-param"><span class="n">flim_mid</span><span class="o">=</span><span class="default_value">[1000, 10000]</span></em>, <em class="sig-param"><span class="n">flim_hi</span><span class="o">=</span><span class="default_value">[10000, 20000]</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the indices in spectral (spectrum (1d) or spectrogram (2d)) domain</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -223,9 +223,6 @@
 <dt><strong>tn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>time vector (horizontal x-axis)</p>
 </dd>
 <dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Frequency vector (vertical y-axis)</p>
-</dd>
-<dt><strong>ext</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
-upper-right corners.</p>
 </dd>
 <dt><strong>flim_low</strong><span class="classifier">tupple, optional, default is (0,1000)</span></dt><dd><p>Low frequency band in Hz</p>
 </dd>
@@ -343,9 +340,30 @@ bin :</p>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/jura_cold_forest_nuit.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fse</span><span class="p">)</span>   
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pd_spectral_indices_NUIT</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">spectral_indices</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span><span class="p">)</span>
+<p>Spectral indices on a daylight recording</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_spectral_indices_DAY</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">spectral_indices</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Spectral indices on a night recording</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_night.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_spectral_indices_NIGHT</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">spectral_indices</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Variation between night and day</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">var</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">df_spectral_indices_DAY</span> <span class="o">-</span> <span class="n">df_spectral_indices_NIGHT</span><span class="p">)</span><span class="o">/</span><span class="n">df_spectral_indices_NIGHT</span><span class="o">*</span><span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LEQf var night vs day: </span><span class="si">%2.2f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="o">.</span><span class="n">LEQf</span><span class="p">)</span>
+<span class="go">LEQf var night vs day: 34.94 %</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hf var night vs day: </span><span class="si">%2.2f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="o">.</span><span class="n">Hf</span><span class="p">)</span>
+<span class="go">Hf var night vs day: 105.61 %</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ACI var night vs day: </span><span class="si">%2.2f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="o">.</span><span class="n">ACI</span><span class="p">)</span>
+<span class="go">ACI var night vs day: 3.39 %</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;AGI var night vs day: </span><span class="si">%2.2f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="o">.</span><span class="n">AGI</span><span class="p">)</span>
+<span class="go">AGI var night vs day: 20.50 %</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ROItotal var night vs day: </span><span class="si">%2.2f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="o">.</span><span class="n">ROItotal</span><span class="p">)</span>
+<span class="go">ROItotal var night vs day: 248.68 %</span>
 </pre></div>
 </div>
 </dd></dl>

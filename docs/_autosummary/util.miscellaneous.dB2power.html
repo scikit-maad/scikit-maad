@@ -126,7 +126,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -206,7 +206,7 @@ A gain (db_gain) could be added at the end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>data in dB to rescale in power</p>
+<dt><strong>x</strong><span class="classifier">array-like or scalar</span></dt><dd><p>data in dB to rescale in power</p>
 </dd>
 <dt><strong>db_gain</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><p>Gain that was added to the result 
 –&gt; 10*log10(x) + db_gain</p>
@@ -215,14 +215,14 @@ A gain (db_gain) could be added at the end.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>y</strong><span class="classifier">scalars</span></dt><dd><p>output in power unit</p>
+<dt><strong>y</strong><span class="classifier">array-like or scalar</span></dt><dd><p>output in power unit</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">6.02059991</span><span class="p">,</span>  <span class="mf">9.54242509</span><span class="p">,</span> <span class="mf">12.04119983</span><span class="p">,</span> <span class="mf">13.97940009</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dB2power</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2power</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="go">    array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        </span>
 </pre></div>
 </div>

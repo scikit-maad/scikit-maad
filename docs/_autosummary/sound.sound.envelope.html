@@ -108,6 +108,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sound.sound.wave2frames.html">sound.sound.wave2frames</a></li>
 </ul>
 </li>
 </ul>
@@ -118,7 +119,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -194,26 +195,26 @@
 <dt id="sound.sound.envelope">
 <code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">envelope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'fast'</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">32</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#envelope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.envelope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcul the envelope of a sound waveform (1d)</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>s</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Vector containing sound waveform</p>
 </dd>
-<dt><strong>mode</strong><span class="classifier">str, optional, default is “fast”</span></dt><dd><ul class="simple">
+<dt><strong>mode</strong><span class="classifier">str, optional, default is <cite>fast</cite></span></dt><dd><ul class="simple">
 <li><dl class="simple">
-<dt>“fast”<span class="classifier">The sound is first divided into frames (2d) using the </span></dt><dd><p>function wave2timeframes(s), then the max of each frame gives a 
+<dt><cite>fast</cite><span class="classifier">The sound is first divided into frames (2d) using the </span></dt><dd><p>function wave2timeframes(s), then the max of each frame gives a 
 good approximation of the envelope.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>“Hilbert”<span class="classifier">estimation of the envelope from the Hilbert transform. </span></dt><dd><p>The method is slow</p>
+<dt><cite>Hilbert</cite><span class="classifier">estimation of the envelope from the Hilbert transform. </span></dt><dd><p>The method is slow</p>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
-<dt><strong>Nt</strong><span class="classifier">integer, optional, default is 32</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
+<dt><strong>Nt</strong><span class="classifier">integer, optional, default is <cite>32</cite></span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
 </dd>
 </dl>
 </dd>
@@ -225,9 +226,16 @@ good approximation of the envelope.</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Fast calculation is inspired by the work of M. Towsey at Queensland University of Technology (QUT).</p>
+<dl class="citation">
+<dt class="label" id="r5c4e4fd7446b-1"><span class="brackets">1</span></dt>
+<dd><p>Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+</dd>
+<dt class="label" id="r5c4e4fd7446b-2"><span class="brackets">2</span></dt>
+<dd><p>Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the natural environment. Queensland University of Technology, Brisbane.</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;guyana_tropical_forest.wav&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../data/guyana_tropical_forest.wav&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">env_fast</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">envelope</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">env_fast</span>
 <span class="go">array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,</span>
@@ -240,11 +248,13 @@ good approximation of the envelope.</p>
 <span class="go">   0.10258595])</span>
 </pre></div>
 </div>
-<p>compute the time vector for the vector wave
-&gt;&gt;&gt; t = np.arange(0,len(s),1)/fs
-compute the time vector for the vector env_fast
+<p>compute the time vector for the vector wave</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span>
+</pre></div>
+</div>
+<p>compute the time vector for the vector env_fast
 &gt;&gt;&gt; t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)</p>
-<p>plot 0.1 of the envelope and 0.1s of the abs(s)</p>
+<p>plot 0.1s of the envelope and 0.1s of the abs(s)</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig1</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">t</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">t</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;abs(s)&#39;</span><span class="p">)</span>

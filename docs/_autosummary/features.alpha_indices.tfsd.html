@@ -139,7 +139,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -214,13 +214,11 @@
 <dl class="py function">
 <dt id="features.alpha_indices.tfsd">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">tfsd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">flim</span><span class="o">=</span><span class="default_value">2000, 8000</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'thirdOctave'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#tfsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.tfsd" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Time frequency derivation : tfsd</p>
-</div></blockquote>
+<dd><p>Time frequency spectrogram derivation : tfsd</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram (i.e matrix of spectrum)</p>
+<dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>matrix : Spectrogram</p>
 </dd>
 <dt><strong>fn</strong><span class="classifier">vector</span></dt><dd><p>frequency vector corresponding to the spectrogram</p>
 </dd>
@@ -243,8 +241,8 @@ octave bands</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>The higher the TFSD varies between 0 and 1, 
-the greater the temporal presence of avian or human vocalizations.  
+<p>The higher the TFSD varies between 0 and 1, the greater the temporal 
+presence of avian or human vocalizations.  
 With the default configuration, a TFSD &gt; 0.3 indicates a very important 
 presence time of the vocalizations in the signal. 
 The TFSD is always greater than 0.</p>

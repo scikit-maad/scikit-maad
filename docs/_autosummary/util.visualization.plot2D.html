@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="util.visualization.html">util.visualization</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="util.visualization.crop_image.html">util.visualization.crop_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.visualization.false_Color_Spectro.html">util.visualization.false_Color_Spectro</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.visualization.plot1D.html">util.visualization.plot1D</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">util.visualization.plot2D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.visualization.plot_correlation_map.html">util.visualization.plot_correlation_map</a></li>
@@ -120,7 +121,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -199,14 +200,14 @@
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>im</strong><span class="classifier">2D numpy array</span></dt><dd><p>The name or path of the .wav file to load</p>
+<dt><strong>im</strong><span class="classifier">2D numpy array</span></dt><dd><p>Image or Spectrogram</p>
 </dd>
 <dt><strong>ax</strong><span class="classifier">axis, optional, default is None</span></dt><dd><p>Draw the image on this specific axis. Allow multiple plots on the same
-axis.</p>
+figure.</p>
 </dd>
 <dt><strong>**kwargs, optional</strong></dt><dd><ul>
 <li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,13)</span></dt><dd><p>width, height in inches.</p>
 </dd>
 </dl>
 </li>
@@ -221,7 +222,7 @@ axis.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Frequency [Hz]’</span></dt><dd><p>label of the vertical axis</p>
 </dd>
 </dl>
 </li>
@@ -261,7 +262,7 @@ settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>ext<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+<dt>extent<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
 upper-right corners. If <cite>None</cite>, the image is positioned such that
 the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
@@ -289,15 +290,13 @@ the last image</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;jura_cold_forest_jour.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">wav2pressure</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Pxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Pxx</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">Lxx</span><span class="p">),</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Lxx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
 <span class="go">                  &#39;vmin&#39;:0,</span>
 <span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
-<span class="go">                  &#39;figsize&#39;:(4,13),</span>
-<span class="go">                  &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="go">                  &#39;title&#39;:&#39;Power spectrogram density (PSD) in dB SPL&#39;,</span>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>

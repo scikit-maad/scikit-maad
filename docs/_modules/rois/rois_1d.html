@@ -101,7 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -168,13 +168,10 @@
   <h1>Source code for rois.rois_1d</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot; Segmentation methods for 1D signals</span>
+<span class="sd">&quot;&quot;&quot; Segmentation methods for 1D signals.</span>
 
-<span class="sd">This module gathers a collection of functions to detect regions of interest </span>
-<span class="sd">on 1D signals</span>
-
-<span class="sd">Authors: Juan Sebastian Ulloa, Sylvain Haupert</span>
-<span class="sd">License: 3-Clause BSD license</span>
+<span class="sd">This module gathers a collection of functions to detect regions of interest (ROIs)</span>
+<span class="sd">on the temporal domain.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
@@ -184,14 +181,14 @@
 
 <div class="viewcode-block" id="sinc"><a class="viewcode-back" href="../../_autosummary/rois.rois_1d.sinc.html#rois.rois_1d.sinc">[docs]</a><span class="k">def</span> <span class="nf">sinc</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">atten</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">transition_bw</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">bandpass</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filter 1D signal with a Kaiser-windowed filter</span>
+<span class="sd">    Filter 1D signal with a Kaiser-windowed filter.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    s : ndarray</span>
 <span class="sd">        input 1D signal</span>
 <span class="sd">    cutoff : ndarray</span>
-<span class="sd">        upper and lower frequencies (min_f, max_f)</span>
+<span class="sd">        upper and lower frequencies (min_f, max_f) in Hertz</span>
 <span class="sd">    atten : float </span>
 <span class="sd">        attenuation in dB</span>
 <span class="sd">    transition_bw : float</span>
@@ -203,6 +200,13 @@
 <span class="sd">    -------</span>
 <span class="sd">    s_filt : array </span>
 <span class="sd">        signal filtered</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound, rois</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; s_filt = rois.sinc(s, cutoff=(4500,8000), fs=fs, atten=80, transition_bw=0.8)</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">cutoff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cutoff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">transition_bw</span>
     <span class="n">numtaps</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">kaiserord</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">))</span>
@@ -215,7 +219,7 @@
 
 <span class="k">def</span> <span class="nf">_corresp_onset_offset</span><span class="p">(</span><span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Check that each onsets have a corresponding offset </span>
+<span class="sd">    Check that each onsets have a corresponding offset.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -247,7 +251,7 @@
 
 <span class="k">def</span> <span class="nf">_energy_windowed</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">wl</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Computse windowed energy on signal</span>
+<span class="sd">    Computse windowed energy on an audio signal.</span>
 <span class="sd">    </span>
 <span class="sd">    Computes the energy of the signals by windows of length wl. Used to amplify sectors where the density of energy is higher</span>
 <span class="sd">    </span>
@@ -279,13 +283,13 @@
 <div class="viewcode-block" id="find_rois_cwt"><a class="viewcode-back" href="../../_autosummary/rois.rois_1d.find_rois_cwt.html#rois.rois_1d.find_rois_cwt">[docs]</a><span class="k">def</span> <span class="nf">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">flims</span><span class="p">,</span> <span class="n">tlen</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_df</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
                   <span class="n">savefilename</span><span class="o">=</span><span class="s1">&#39;rois.csv&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find region of interest (ROIS) based on predetermined temporal length and frequency limits</span>
+<span class="sd">    Find region of interest using simple known estimates of signal length and frequency limits.</span>
 <span class="sd">    </span>
 <span class="sd">    The general approach is based on continous wavelet transform following a three step process</span>
 <span class="sd">    </span>
 <span class="sd">    1. Filter the signal with a bandpass sinc filter</span>
 <span class="sd">    </span>
-<span class="sd">    2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]</span>
+<span class="sd">    2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [1]</span>
 <span class="sd">    </span>
 <span class="sd">    3. Binarize the signal applying a linear threshold</span>
 <span class="sd">        </span>
@@ -314,6 +318,17 @@
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound, rois</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)</span>
+<span class="sd">        min_f     min_t   max_f     max_t</span>
+<span class="sd">    0  4500.0   0.74304  8000.0   2.50776</span>
+<span class="sd">    1  4500.0   5.10839  8000.0   7.33751</span>
+<span class="sd">    2  4500.0  11.23846  8000.0  13.37469</span>
+<span class="sd">    3  4500.0  16.16109  8000.0  18.29732</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># filter signal</span>
     <span class="n">s_filt</span> <span class="o">=</span> <span class="n">sinc</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">flims</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">atten</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">transition_bw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>

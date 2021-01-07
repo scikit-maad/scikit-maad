@@ -126,7 +126,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
 </ul>
 
             
@@ -201,18 +201,18 @@
 <dl class="py function">
 <dt id="util.miscellaneous.format_features">
 <code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">format_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#format_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.format_features" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup rectangular df to a predifined format: 
-time-frequency or bounding box</p>
+<dd><p>Format features such as bounding box coordinates and centroids coordinates
+to predifined format : time-frequency =&gt; pixels or pixels to time-frequency
+units</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>df</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>array must have a valid input format with column names</p>
-<ul class="simple">
-<li><p>bounding box: min_y, min_x, max_y, max_x</p></li>
-<li><p>time frequency: min_f, min_t, max_f, max_t</p></li>
-<li><p>centroid tf : centroid_f, centroid_t</p></li>
-<li><p>centroid pixels : centroid_y, centroid_x</p></li>
-</ul>
+<dt><strong>df</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>df with bounding box coordinates and/or centroids coordinates       
+array must have a valid input format with column names
+- bounding box: min_y, min_x, max_y, max_x
+- time frequency: min_f, min_t, max_f, max_t
+- centroid tf : centroid_f, centroid_t
+- centroid pixels : centroid_y, centroid_x</p>
 </dd>
 <dt><strong>tn</strong><span class="classifier">ndarray</span></dt><dd><p>vector with temporal indices, output from the spectrogram function (in seconds)</p>
 </dd>
@@ -222,11 +222,19 @@ time-frequency or bounding box</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>df: ndarray</dt><dd><p>array with indices of ROIs matched on spectrogram</p>
+<dt>df: pandas DataFrame</dt><dd><p>df with bounding box coordinates and/or centroids coordinates in pixels
+and time-frequency units</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_rois</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">centroid_features</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">read_audacity_annot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_rois</span></code></dt><dd></dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></dt><dd></dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

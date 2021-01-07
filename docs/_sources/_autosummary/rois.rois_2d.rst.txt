@@ -25,6 +25,7 @@
       rois_to_imblobs
       select_bandwidth
       select_rois
+      sharpness
       smooth
    
    

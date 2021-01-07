@@ -1,4 +1,4 @@
-util.parser
+﻿util.parser
 ===========
 
 .. automodule:: util.parser
@@ -15,7 +15,6 @@ util.parser
       :toctree:
       :nosignatures:
    
-      date_from_filename
       date_parser
       read_audacity_annot
       write_audacity_annot
