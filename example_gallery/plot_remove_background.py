@@ -14,9 +14,9 @@ should be use in complement.
 """
 # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_remove_background.png'
 
-from maad.sound import load, spectrogram
 from maad.util import plot2D, power2dB
-from maad.rois import (remove_background, median_equalizer, 
+from maad.sound import (load, spectrogram, 
+                       remove_background, median_equalizer, 
                        remove_background_morpho, 
                        remove_background_along_axis, sharpness)
 import numpy as np

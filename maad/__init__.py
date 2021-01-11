@@ -10,6 +10,10 @@ scikit-learn, allowing to identify key patterns in all kind of soundscapes.
 Subpackages
 -----------
 
+acoustics
+    Collection of functions to describe the physics of acoustic waves such as
+    sound pressure level, attenuation laws or propagation - :ref:`maad.acoustics`
+
 features
     Compute descriptors to characterize sounds - :ref:`maad.features`
 
@@ -17,12 +21,13 @@ rois
     Find regions of interest in 1D and 2D signals - :ref:`maad.rois`
 
 sound
-    Load and transform (e.g. stft) audio signals - :ref:`maad.sound`
+    Load, preprocess and transform (e.g. stft) audio signals - :ref:`maad.sound`
     
 util
     Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`    
 """
 
+from . import acoustics
 from . import features
 from . import rois
 from . import sound

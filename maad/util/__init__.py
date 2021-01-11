@@ -30,24 +30,15 @@ from .visualization import (rand_cmap,
 
 from .math_tools import (running_mean,
                          get_unimode,
-                         entropy)
+                         entropy,
+                         psd,
+                         rms,
+                         kurtosis,
+                         skewness)                     
 
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
                      date_parser)
-
-from .decibelSPL import (wav2volt,
-                        volt2pressure,
-                        wav2pressure,
-                        pressure2dBSPL,
-                        dBSPL2pressure,
-                        power2dBSPL,
-                        amplitude2dBSPL,
-                        wav2dBSPL,
-                        wav2Leq,
-                        pressure2Leq,
-                        PSD2Leq)
-
 __all__ = [
            # miscellaneous 
            'index_bw',
@@ -78,19 +69,12 @@ __all__ = [
            'running_mean',
            'get_unimode',
            'entropy',
+           'psd',
+           'rms',
+           'kurtosis',
+           'skewness',
            # parser
            'read_audacity_annot',
            'write_audacity_annot',
-           'date_parser',
-           # decibelSPL        
-           'wav2volt',
-           'volt2pressure',
-           'wav2pressure',
-           'pressure2dBSPL',
-           'dBSPL2pressure',
-           'power2dBSPL',
-           'amplitude2dBSPL',
-           'wav2dBSPL',
-           'wav2Leq',
-           'pressure2Leq',
-           'PSD2Leq']
+           'date_parser'
+            ]

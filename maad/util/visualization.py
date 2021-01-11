@@ -266,10 +266,12 @@ def plot2D(im,ax=None,**kwargs):
     ax.set_ylabel(ylabel)
     if xticks is not None :  
         ax.set_xticks(ticks =xticks[0])
-        ax.set_xticklabels(labels=xticks[1])
+        if len(xticks) == 2 :
+            ax.set_xticklabels(labels=xticks[1])
     if yticks is not None :  
         ax.set_yticks(ticks =yticks[0])
-        ax.set_yticklabels(labels=yticks[1])
+        if len(yticks) == 2 :
+            ax.set_yticklabels(labels=yticks[1])
     ax.axis('tight') 
 
     fig.tight_layout()

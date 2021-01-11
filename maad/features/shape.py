@@ -3,30 +3,36 @@
 """ 
 Ensemble of functions to compute acoustic descriptors from 2D spectrograms.
 """ 
- 
-# Load required modules 
+#
+# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>        
+#
+# License: New BSD License
+
+#%%
+#***************************************************************************
+# -------------------       Load modules         ---------------------------
+#***************************************************************************
+# Import external modules
+
 from __future__ import print_function 
 import numpy as np 
 import pandas as pd 
 from scipy import ndimage as ndi 
 import itertools as it 
 import matplotlib.pyplot as plt 
- 
 from skimage import transform, measure 
 from scipy import ndimage 
-from skimage.filters import gaussian 
-from maad.util import linear_scale, nearest_idx, plot2D, format_features 
+
+# Import internal modules
+from maad.util import plot2D, format_features 
 from maad.rois import rois_to_imblobs, overlay_rois  
 from maad.sound import spectrogram 
  
- 
+#%%
 #============================================================================ 
-#                           PRIVATE FUNCTIONS 
+# PRIVATE FUNCTIONS 
 #============================================================================ 
- 
-#**************************************************************************** 
-#*************               _gabor_kernel_nodc                   *********** 
-#**************************************************************************** 
 def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1, 
                       n_stds=3, offset=0): 
     """ 
@@ -111,9 +117,7 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
   
     return g_nodc 
  
-#**************************************************************************** 
-#*************               _plot_filter_bank                    *********** 
-#**************************************************************************** 
+#%%
 def _plot_filter_bank(kernels, frequency, ntheta): 
     """ 
     Display filter bank 
@@ -163,9 +167,7 @@ def _plot_filter_bank(kernels, frequency, ntheta):
     plt.subplots_adjust(wspace=0.02, hspace=0.02) 
     return ax, fig 
  
-#**************************************************************************** 
-#*************               _plot_filter_results                 *********** 
-#****************************************************************************  
+#%% 
 def _plot_filter_results(im_ref, im_list, kernels, params, m, n): 
     """ 
     Display the resulting spectrograms after filtering with gabor filters 
@@ -231,9 +233,7 @@ def _plot_filter_results(im_ref, im_list, kernels, params, m, n):
     plt.show() 
     return ax, fig 
  
-#**************************************************************************** 
-#*************                    _filter_mag                     *********** 
-#**************************************************************************** 
+#%%
 def _filter_mag(im, kernel): 
     """ 
     Normalizes the image and computes im and real part of filter response using  
@@ -257,9 +257,7 @@ def _filter_mag(im, kernel):
                    ndi.convolve(im, np.imag(kernel), mode='reflect')**2) 
     return im_out 
  
-#**************************************************************************** 
-#*************                    _params_to_df                   *********** 
-#**************************************************************************** 
+#%%
 def _params_to_df(params_filter_bank, npyr): 
     """ 
     Organises parameters used in multiresolution analysis into a dataframe 
@@ -293,13 +291,10 @@ def _params_to_df(params_filter_bank, npyr):
  
     return params_multires 
  
+#%%
 #============================================================================ 
-#                           PUBLIC FUNCTIONS 
+# Public functions 
 #============================================================================ 
-     
-#**************************************************************************** 
-#*************                    filter_multires                 *********** 
-#**************************************************************************** 
 def filter_multires(Sxx, kernels, npyr=4, rescale=True): 
     """ 
     Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid  
@@ -364,9 +359,7 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
  
     return Sxx_out 
  
-#**************************************************************************** 
-#*************                filter_bank_2d_nodc                 *********** 
-#****************************************************************************  
+#%%
 def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, **kwargs): 
     r""" 
     Build an ensemble of complex 2D Gabor filters with no DC offset. 
@@ -454,9 +447,7 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
              
     return params, kernels   
  
-#**************************************************************************** 
-#*************                opt_shape_presets                   *********** 
-#****************************************************************************  
+#%%
 def opt_shape_presets(resolution, opt_shape=None): 
     """  
     Set parameters for multiresolution analysis using presets or custom parameters 
@@ -479,16 +470,20 @@ def opt_shape_presets(resolution, opt_shape=None):
          
     Examples 
     -------- 
-     
-    Get parameters using predefined presets 
+    Get parameters to analyse at low shape resolution 
      
     >>> from maad.features import opt_shape_presets 
-    >>> opt = opt_shape_presets('med') 
+    >>> opt_shape_presets('low') 
+    
+    Get parameters to analyse at med shape resolution 
+     
+    >>> from maad.features import opt_shape_presets 
+    >>> opt_shape_presets('med') 
          
     Get parameters to analyse at high shape resolution 
      
     >>> from maad.features import opt_shape_presets 
-    >>> opt = opt_shape_presets('high') 
+    >>> opt_shape_presets('high') 
     """ 
     # Factory presets 
     opt_shape_low = dict(ntheta=2,  
@@ -537,9 +532,7 @@ def opt_shape_presets(resolution, opt_shape=None):
  
     return opt_shape 
  
-#**************************************************************************** 
-#*************                   plot_shape                       *********** 
-#****************************************************************************  
+#%%
 def plot_shape(shape, params, row=0, display_values=False): 
     """ 
     Plot shape features in a bidimensional plot 
@@ -568,9 +561,9 @@ def plot_shape(shape, params, row=0, display_values=False):
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features, plot_shape 
     >>> import numpy as np 
-    >>> s, fs = load('./data/spinetail.wav') 
+    >>> s, fs = load('../data/spinetail.wav') 
     >>> Sxx, ts, f, ext = spectrogram(s, fs) 
-    >>> shape, params = shape_features(np.log10(Sxx), ts, f, resolution='high') 
+    >>> shape, params = shape_features(np.log10(Sxx), resolution='high') 
     >>> plot_shape(shape, params) 
  
     """ 
@@ -617,9 +610,7 @@ def plot_shape(shape, params, row=0, display_values=False):
      
     return ax 
  
-#**************************************************************************** 
-#*************                   shape_features                   *********** 
-#****************************************************************************  
+#%%
 def shape_features(Sxx, resolution='low', rois=None): 
     """ 
     Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.
@@ -651,10 +642,8 @@ def shape_features(Sxx, resolution='low', rois=None):
     --------
     maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.features.plot_shape
     
-    
     References
     ----------
-    
     1. Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026
     2. Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
     3. Mallat, S. (2008). A Wavelet Tour of Signal Processing: The Sparse Way. Academic Press.
@@ -666,17 +655,17 @@ def shape_features(Sxx, resolution='low', rois=None):
  
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features, plot_shape 
-    >>> from maad.util import format_features, linear2dB
-    >>> s, fs = load('./data/spinetail.wav')
+    >>> from maad.util import format_features, power2dB
+    >>> s, fs = load('../data/spinetail.wav')
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True) 
-    >>> Sxx_db = linear2dB(Sxx, db_range=100)
+    >>> Sxx_db = power2dB(Sxx, db_range=100)
     >>> shape, params = shape_features(Sxx_db, resolution='med') 
     >>> ax = plot_shape(shape.mean(), params) 
      
     Or get shape features from specific regions of interest 
      
     >>> from maad.util import read_audacity_annot
-    >>> rois = read_audacity_annot('./data/spinetail.txt') 
+    >>> rois = read_audacity_annot('../data/spinetail.txt') 
     >>> rois = format_features(rois, tn, fn) 
     >>> shape, params = shape_features(Sxx_db, resolution='med', rois=rois)
     
@@ -743,9 +732,7 @@ def shape_features(Sxx, resolution='low', rois=None):
          
     return shape, params_multires 
  
-#**************************************************************************** 
-#*************                   shape_features_raw               *********** 
-#****************************************************************************  
+#%%
 def shape_features_raw(im, resolution='low', opt_shape=None): 
     """ 
     Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  
@@ -787,10 +774,10 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
 
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features_raw
-    >>> from maad.util import linear2dB
-    >>> s, fs = load('./data/spinetail.wav')
+    >>> from maad.util import power2dB, plot2D
+    >>> s, fs = load('../data/spinetail.wav')
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) 
-    >>> Sxx_db = linear2dB(Sxx, db_range=80)
+    >>> Sxx_db = power2dB(Sxx, db_range=80)
     >>> shape_raw, params = shape_features_raw(Sxx_db, resolution='low')
     >>> plot2D(shape_raw[13], **{'extent':(tn[0], tn[-1], fn[0], fn[-1])})
     >>> plot2D(shape_raw[14], **{'extent':(tn[0], tn[-1], fn[0], fn[-1])})
@@ -812,9 +799,7 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
      
     return shape_raw, params_multires
  
-#**************************************************************************** 
-#*************                   centroid_features                *********** 
-#****************************************************************************  
+#%%
 def centroid_features(Sxx, rois=None, im_rois=None): 
     """ 
     Computes intensity centroid of a spectrogram. If regions of interest 
@@ -922,9 +907,7 @@ def centroid_features(Sxx, rois=None, im_rois=None):
 
     return centroid 
  
-#**************************************************************************** 
-#*************                   plot_centroid                  *********** 
-#**************************************************************************** 
+#%%
 def overlay_centroid (im_ref, centroid, savefig=None, **kwargs): 
     """ 
     Overlay centroids on the original spectrogram 
@@ -1040,10 +1023,8 @@ def overlay_centroid (im_ref, centroid, savefig=None, **kwargs):
     return ax, fig 
  
  
-#**************************************************************************** 
-#*************                 compute_all_features               *********** 
-#****************************************************************************      
-def compute_all_features(s, fs, rois, resolution='low',  
+#%%     
+def all_shape_features(s, fs, rois, resolution='low',  
                           display=False, **kwargs): 
     """ 
     Computes shape and central frequency features from signal at specified 

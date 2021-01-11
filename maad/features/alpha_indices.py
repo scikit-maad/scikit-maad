@@ -10,41 +10,39 @@ Collection of functions to compute alpha acoustic indices to chracterise audio s
 #
 # License: New BSD License
 
+#%%
 #***************************************************************************
 # -------------------       Load modules         ---------------------------
 #***************************************************************************
-
 # Import external modules
 import numbers
-
 import numpy as np 
 from numpy import sum, log, min, max, abs, mean, median, sqrt, diff, var
-
 from scipy.ndimage.morphology import binary_erosion, binary_dilation
 from scipy.stats import rankdata
 from scipy.signal import find_peaks
-
 import matplotlib.pyplot as plt
-
 import pandas as pd # for csv
-
-#### Importation from internal modules
-from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB, 
-                       format_features, intoBins, entropy, wav2Leq, PSD2Leq, 
-                       power2dBSPL, linear_scale, plot1D, plot2D)
-from maad.features import skewness, kurtosis, centroid_features, zero_crossing_rate
-from maad.sound import envelope, audio_SNR, intoOctave, avg_amplitude_spectro, avg_power_spectro, spectral_SNR
-from maad.rois import smooth, select_rois, create_mask, overlay_rois, remove_background_along_axis, median_equalizer
-
 # min value
 import sys
 _MIN_ = sys.float_info.min
 
-# =============================================================================
-# List of functions
-# =============================================================================
+# Import internal modules
+from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
+                       skewness, kurtosis, format_features, intoBins, entropy, 
+                       linear_scale, plot1D, plot2D)
+from maad.acoustics import wav2Leq, PSD2Leq, power2dBSPL
+from maad.features import centroid_features, zero_crossing_rate, moments
 
+from maad.sound import (envelope, smooth, audio_SNR, intoOctave, 
+                        avg_amplitude_spectro, avg_power_spectro, spectral_SNR, 
+                        median_equalizer)
+from maad.rois import select_rois, create_mask, overlay_rois
 
+#%%
+# =============================================================================
+# Private functions
+# =============================================================================
 def _acoustic_activity (xdB, dB_threshold, axis=1):
     """
     Acoustic Activity :
@@ -93,7 +91,7 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
     ACTmean = mean_dB(xdB[xdB>dB_threshold])
     return ACTfract, ACTcount, ACTmean 
 
-#=============================================================================     
+#%%    
 def _acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     """
     Acoustic events :
@@ -189,8 +187,7 @@ def _acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     
     return EVNsum, EVNmean, EVNcount, EVN
 
-
-#=============================================================================
+#%%
 def _score (x, threshold, axis=0):
     """
     Score
@@ -222,8 +219,7 @@ def _score (x, threshold, axis=0):
     s = sum(x,axis=axis)/x.shape[axis]
     return s, count
 
-#=============================================================================
-
+#%%
 def _shannonEntropy(datain, axis=0):
     """
     Shannon Entropy
@@ -246,7 +242,7 @@ def _shannonEntropy(datain, axis=0):
     Hs = entropy(datain, axis=axis) * np.log(n)
     return Hs
 
-#=============================================================================
+#%%
 def _gini(x, corr=False):
     """
     Gini
@@ -281,7 +277,7 @@ def _gini(x, corr=False):
         else : G= G/n
     return G
 
-#=============================================================================
+#%%
 def _raoQ (p, bins):
     """
         compute Rao's Quadratic entropy in 1d
@@ -328,8 +324,10 @@ def _raoQ (p, bins):
     
     return Q
 
-#=============================================================================
-
+#%%
+# =============================================================================
+# Public functions
+# =============================================================================
 def surfaceRoughness (x, norm ='global'):
     
     """
@@ -447,8 +445,6 @@ def roughness (x, norm=None, axis=0) :
 #******************************************************************************
 #               TEMPORAL ECOACOUSTICS INDICES
 #******************************************************************************
-    
-#=============================================================================
 def audio_moments (s):
     """
     Computes the first 4th moments of an audio
@@ -464,25 +460,19 @@ def audio_moments (s):
         
     Returns
     -------
-    AUDIO_MEAN : float 
+    mean : float 
         mean of the audio
-    AUDIO_VAR : float 
+    var : float 
         variance  of the audio
-    AUDIO_SKEW : float
+    skew : float
         skewness of the audio
-    AUDIO_KURT : float
+    kurt : float
         kurtosis of the audio
     """
     # force s to be ndarray
     s = np.asarray(s)
     
-    # computes moments
-    AUDIO_MEAN = mean(s)
-    AUDIO_VAR = var(s)
-    AUDIO_SKEW = skewness(s)
-    AUDIO_KURT = kurtosis(s)
-    
-    return AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW,  AUDIO_KURT
+    return moments(s)
 
 #=============================================================================
 def audio_median (s, mode ='fast', Nt=512) :
@@ -519,7 +509,7 @@ def audio_median (s, mode ='fast', Nt=512) :
     # Envelope
     env = envelope(s, mode=mode, Nt=Nt)
     # median
-    MED =  np.median(env)
+    MED = np.median(env)
 
     return MED
 
@@ -799,7 +789,6 @@ def audio_events (s, fs, dB_threshold=3, rejectDuration=None,
 #******************************************************************************
 #               FREQUENCY ECOACOUSTICS INDICES
 #******************************************************************************
-    
 def spectral_moments (X, axis=None):
     """
     Computes the first 4th moments of an amplitude spectrum (1d) or
@@ -819,13 +808,13 @@ def spectral_moments (X, axis=None):
         
     Returns
     -------
-    SPEC_MEAN : float 
+    mean : float 
         mean of the audio
-    SPEC_VAR : float 
+    var : float 
         variance  of the audio
-    SPEC_SKEW : float
+    skew : float
         skewness of the audio
-    SPEC_KURT : float
+    kurt : float
         kurtosis of the audio
         
     Examples
@@ -837,7 +826,7 @@ def spectral_moments (X, axis=None):
     
     >>> import numpy as np
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power)
-    >>> sm, sv, ss, sk = maad.features.spectral_moments (maad.sound.avg_power_spectro)
+    >>> sm, sv, ss, sk = maad.features.spectral_moments (S_power)
     >>> print('mean: %2.8f / var: %2.10f / skewness: %2.2f / kurtosis: %2.2f' % (sm, sv, ss, sk))
     mean: 0.00000228 / var: 0.0000000001 / skewness: 5.84 / kurtosis: 40.49
     
@@ -851,13 +840,7 @@ def spectral_moments (X, axis=None):
     # force P to be ndarray
     X = np.asarray(X)
     
-    # computes moments
-    SPEC_MEAN = mean(X, axis)
-    SPEC_VAR = var(X, axis)
-    SPEC_SKEW = skewness(X, axis)
-    SPEC_KURT = kurtosis(X, axis)
-    
-    return SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT
+    return moments(X,axis)
 
 #=============================================================================
 def frequency_entropy (X, compatibility="QUT") :
@@ -1227,7 +1210,7 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
     ----------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
-    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power, display=True, extent=ext) 
+    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> LFC, MFC, HFC = maad.features.spectral_cover(Sxx_dB_noNoise, fn) 
     >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC))
@@ -1291,12 +1274,13 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
     
     Examples :
     ----------
+    >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
-    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power, display=True, extent=ext) 
+    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ACTspfract_per_bin, ACTspcount_per_bin, ACTspmean_per_bin = maad.features.spectral_activity(Sxx_dB_noNoise)  
-    >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %mean(ACTspfract_per_bin))
+    >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %np.mean(ACTspfract_per_bin))
     Mean proportion of spectrogram above threshold : 0.07%
     
     """ 
@@ -1360,12 +1344,13 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     
     Examples :
     ----------
+    >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)  
-    >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %mean(EVNspFract_per_bin))
+    >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %np.mean(EVNspFract_per_bin))
     Mean proportion of spectrogram with events : 0.01%
     
     """  
@@ -1804,12 +1789,7 @@ def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'
         BI = sqrt(sum(meanPSDxx_norm))* df 
         
     return BI
-     
-
-#========================================
-    
-#def hpss => harmonic vs percussion (voir librosa) librosa.decompose.hpss
-    
+        
 #=============================================================================
 #       
 #   New ecoacoustics indices introduced by S. HAUPERT, 2020
@@ -2108,9 +2088,9 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     """
     # convert into 1/3 octave
     if mode == 'thirdOctave' : 
-        x, fn_bin = intoOctave(Sxx, fn, thirdOctave=True, display=display)
+        x, fn_bin = intoOctave(Sxx, fn, thirdOctave=True)
     elif mode == 'Octave' : 
-        x, fn_bin = intoOctave(Sxx, fn, thirdOctave=False, display=display)   
+        x, fn_bin = intoOctave(Sxx, fn, thirdOctave=False)   
 
     # Derivation along the time axis, for each frequency bin
     GRADdt = diff(x, n=1, axis=1)
@@ -2336,7 +2316,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
     ---------- 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power) 
+    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ROItotal, ROIcover = maad.features.regionOfInterestIndex(Sxx_dB_noNoise, tn, fn, display=True)
     >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal)
@@ -2408,7 +2388,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
 
 
 #=============================================================================
-def audio_indices(s, fs, verbose=False, display=False, **kwargs):
+def all_audio_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
     """
     Computes the indices in audio domain
 
@@ -2483,9 +2463,9 @@ def audio_indices(s, fs, verbose=False, display=False, **kwargs):
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
-    >>> df_audio_indices_NIGHT = maad.features.audio_indices (s,fs)
+    >>> df_audio_indices_NIGHT = maad.features.all_audio_alpha_indices (s,fs)
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> df_audio_indices_DAY = maad.features.audio_indices (s,fs)
+    >>> df_audio_indices_DAY = maad.features.all_audio_alpha_indices (s,fs)
     
     Variation between night and day
     
@@ -2532,7 +2512,7 @@ def audio_indices(s, fs, verbose=False, display=False, **kwargs):
         print("ZCR %2.5f" % ZCR)
         
     """**************************** 4 audio moments *************************""" 
-    AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT = audio_moments(s)
+    AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT = moments(s)
     df_audio_indices += [AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT]
     if verbose :
         print("AUDIO_MEAN %2.5f" % AUDIO_MEAN)
@@ -2605,7 +2585,7 @@ def audio_indices(s, fs, verbose=False, display=False, **kwargs):
     return df_audio_indices
 
 
-def spectral_indices (Sxx_power, tn, fn,
+def all_spectral_alpha_indices (Sxx_power, tn, fn,
                       flim_low=[0,1000], 
                       flim_mid=[1000,10000], 
                       flim_hi=[10000,20000], 
@@ -2710,8 +2690,7 @@ def spectral_indices (Sxx_power, tn, fn,
            
     See Also
     --------
-    spectral_moments, spectral_moments, numberOfPeaks, spectral_LEQ, 
-    spectral_SNR, frequency_entropy, remove_background_along_axis, 
+    numberOfPeaks, spectral_LEQ, spectral_SNR, frequency_entropy, 
     spectral_entropy, acousticComplexityIndex, soundscapeIndex, soundscapeIndex,
     roughness, acousticDiversityIndex, acousticEvenessIndex, spectral_cover, 
     spectral_activity, spectral_events, tfsd, more_entropy, frequency_raoQ, 
@@ -2723,13 +2702,13 @@ def spectral_indices (Sxx_power, tn, fn,
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)  
-    >>> df_spectral_indices_DAY, _ = maad.features.spectral_indices(Sxx_power,tn,fn,display=True, extent=ext)
+    >>> df_spectral_indices_DAY, _ = maad.features.all_spectral_alpha_indices(Sxx_power,tn,fn,display=True, extent=ext)
     
     Spectral indices on a night recording
     
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
     >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)  
-    >>> df_spectral_indices_NIGHT, _ = maad.features.spectral_indices(Sxx_power,tn,fn,display=True)
+    >>> df_spectral_indices_NIGHT, _ = maad.features.all_spectral_alpha_indices(Sxx_power,tn,fn,display=True)
     
     Variation between night and day
     
@@ -2798,7 +2777,7 @@ def spectral_indices (Sxx_power, tn, fn,
     df_per_bin_indices +=[LTS.tolist()]
     
     """**************************** 4 spectrum moments *********************""" 
-    SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = spectral_moments(S_amplitude)
+    SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = moments(S_amplitude)
     df_spectral_indices += [SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT]
     if verbose :
         print("SPEC_MEAN %2.5f" % SPEC_MEAN)
@@ -2989,7 +2968,7 @@ def spectral_indices (Sxx_power, tn, fn,
     """**************************** New indices*****************************""" 
     """ TFSD """
     # compute TFSD with mode = ThirdOctave and flim
-    TFSD= tfsd(Sxx_amplitude,fn,tn,flim=flim_mid,mode='thirdOctave', display=display)
+    TFSD= tfsd(Sxx_amplitude,fn,tn,flim=flim_mid,mode='thirdOctave')
     df_spectral_indices += [TFSD]
     if verbose :
         print("TFSD %2.5f" % TFSD)

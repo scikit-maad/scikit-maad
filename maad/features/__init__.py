@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """ 
-Ensemble of functions to characterize audio signals using multiple acoustic features and ecoacoustic indices.
+Ensemble of functions to characterize audio signals using multiple acoustic 
+features and ecoacoustic indices.
 """
 
-from .features_2d import (filter_multires,
+from .shape import (filter_multires,
                           filter_bank_2d_nodc,
                           opt_shape_presets,
                           shape_features,
@@ -11,13 +12,10 @@ from .features_2d import (filter_multires,
                           plot_shape,
                           centroid_features,
                           overlay_centroid,
-                          compute_all_features)
+                          all_shape_features)
 
-from .features_1d import (psd, 
-                          rms,
-                          skewness,
-                          kurtosis,
-                          zero_crossing_rate)
+from .music import (moments,
+                    zero_crossing_rate)
 
 from .alpha_indices import (audio_moments,
                             audio_median,
@@ -46,11 +44,11 @@ from .alpha_indices import (audio_moments,
                             acousticGradientIndex,
                             frequency_raoQ,
                             regionOfInterestIndex,
-                            audio_indices,
-                            spectral_indices)
+                            all_audio_alpha_indices,
+                            all_spectral_alpha_indices)
 
 __all__ = [
-           # features_2d
+           # shape
            'filter_multires', 
            'filter_bank_2d_nodc',
            'opt_shape_presets',
@@ -59,12 +57,9 @@ __all__ = [
            'plot_shape',
            'centroid_features',
            'overlay_centroid',
-           'compute_all_features',
-           # features_1d
-           'psd',
-           'rms',
-           'skewness',
-           'kurtosis',
+           'all_shape_features',
+           # music
+           'moments',
            'zero_crossing_rate',
            # alpha_indices
            'audio_moments',
@@ -94,5 +89,5 @@ __all__ = [
            "acousticGradientIndex",
            "frequency_raoQ",
            "regionOfInterestIndex",
-           'audio_indices',
-           'spectral_indices']
+           'all_audio_alpha_indices',
+           'all_spectral_alpha_indices']
