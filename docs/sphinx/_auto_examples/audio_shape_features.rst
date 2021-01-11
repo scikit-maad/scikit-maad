@@ -9,32 +9,18 @@
     .. _sphx_glr__auto_examples_audio_shape_features.py:
 
 
-Created on Wed Jan  6 16:15:19 2021
+Compute robust audio features using 2D wavelets
+===============================================
 
-@author: jsulloa
+
+
+Dependencies: To execute this example you will need to have instaled the Python packages
+matplotlib, scikit-image and scikit-learn.
 
 
 .. code-block:: default
 
 
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    #!/usr/bin/env python3
-    # -*- coding: utf-8 -*-
-
-    """
-    Compute robust audio features using 2D wavelets
-    ===============================================
-
-
-
-    Dependencies: To execute this example you will need to have instaled the Python packages
-    matplotlib, scikit-image and scikit-learn.
-
-    """
-
-    import numpy as np
     import matplotlib.pyplot as plt
     from maad import sound, features, rois
     from maad.util import power2dB, plot2D, format_features
@@ -43,12 +29,12 @@ Created on Wed Jan  6 16:15:19 2021
 
 
 First, load and audio file and compute the spectrogram.
-s, fs = sound.load('../data/spinetail.wav')
 
 
 .. code-block:: default
 
-    s, fs = sound.load('/Users/jsulloa/Downloads/usignolo.wav')
+    s, fs = sound.load('../data/spinetail.wav')
+    #s, fs = sound.load('/Users/jsulloa/Downloads/usignolo.wav')
     s = s[0:30*fs]
     Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
 
@@ -62,11 +48,10 @@ Find Rois
 
 .. code-block:: default
 
-    Sxx_db_smooth = rois.smooth(Sxx_db, std=0.5, display=False,
-                             **{'vmin':0, 'vmax':db_max, 'extent':ext})
+    Sxx_db_smooth = sound.smooth(Sxx_db, std=1, display=False,
+                                 **{'vmin':0, 'vmax':db_max, 'extent':ext})
 
-
-    im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=2, bin_per=0.5)
+    im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=6, bin_per=0.5)
     im_rois, df_rois = rois.select_rois(im_mask, min_roi=25, max_roi=None, display=True, **{'extent':ext})
 
     df_rois = format_features(df_rois, tn, fn)
@@ -80,6 +65,11 @@ Find Rois
 
     df_shape, params = features.shape_features(Sxx_db, resolution='low', rois=df_rois)
 
+
+
+.. code-block:: default
+
+    features.plot_shape(df_shape.mean(), params)
 
 
 .. rst-class:: sphx-glr-timing

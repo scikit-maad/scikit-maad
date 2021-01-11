@@ -27,6 +27,6 @@
    :recursive:
 
    features.alpha_indices
-   features.features_1d
-   features.features_2d
+   features.music
+   features.shape
 

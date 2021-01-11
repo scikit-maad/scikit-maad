@@ -26,5 +26,11 @@
    :template: custom-module-template.rst
    :recursive:
 
-   sound.sound
+   sound.envelope
+   sound.filter
+   sound.input_output
+   sound.metrics
+   sound.spectral_subtraction
+   sound.spectrogram
+   sound.trim
 

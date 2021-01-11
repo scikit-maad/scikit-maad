@@ -3,8 +3,8 @@
 Ensemble of functions to load and preprocess audio signals.
 """
 
-from .io import (load,
-                 loadSpectro)
+from .input_output import (load,
+                           loadSpectro)
 
 from .filter import (select_bandwidth,
                      fir_filter,

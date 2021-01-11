@@ -13,12 +13,12 @@ that can be performed with scikit-maad.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@author: jsulloa">
+    <div class="sphx-glr-thumbcontainer" tooltip="Dependencies: To execute this example you will need to have instaled the Python packages matplo...">
 
 .. only:: html
 
  .. figure:: /_auto_examples/images/thumb/sphx_glr_audio_shape_features_thumb.png
-     :alt: Created on Wed Jan  6 16:15:19 2021
+     :alt: Compute robust audio features using 2D wavelets
 
      :ref:`sphx_glr__auto_examples_audio_shape_features.py`
 
