@@ -13,20 +13,19 @@ Collection of functions to extract features from music
 # =============================================================================
 # Import external modules
 import numpy as np
-from numpy import mean, var
 
 # Import internal modules
-from maad.util import kurtosis, skewness
+from maad.util import moments
 
 #%%
 # =============================================================================
 # public functions
 # =============================================================================
 #%%
-def moments (X, axis=None):
+def spectral_moments (X, axis=None):
     """
-    Computes the first 4th moments of a vector (1d, ie. spectrum or waveform) 
-    or spectrogram (2d) 
+    Computes the first 4th moments of an amplitude spectrum (1d) or
+    spectrogram (2d) 
     
     - mean
     - variance
@@ -36,20 +35,20 @@ def moments (X, axis=None):
     Parameters
     ----------
     X : ndarray of floats
-        vector (1d : spectrum, waveform) or matrix (2d : spectrogram). 
+        Amplitude  spectrum (1d) or spectrogram (2d). 
     axis : interger, optional, default is None
         if spectrogram (2d), select the axis to estimate the moments.
         
     Returns
     -------
     mean : float 
-        mean of X
+        mean of the audio
     var : float 
-        variance  of X
+        variance  of the audio
     skew : float
-        skewness of X
+        skewness of the audio
     kurt : float
-        kurtosis of X
+        kurtosis of the audio
         
     Examples
     --------
@@ -74,42 +73,5 @@ def moments (X, axis=None):
     # force P to be ndarray
     X = np.asarray(X)
     
-    return mean(X, axis), var(X, axis), skewness(X, axis), kurtosis(X, axis)
+    return moments(X,axis)
 
-#%%
-def zero_crossing_rate(s, fs):
-    """
-    Compute the Zero Crossing Rate of an audio signal.
-    
-    Parameters
-    ----------
-    s : 1D array
-        Audio to process (wav)
-    fs : float
-        Sampling frequency of the audio (Hz)
-
-    Returns
-    ------- 
-    zcr : float   
-        number of zero crossing /s
-
-    Note
-    ----
-    From wikipedia :
-    The zero-crossing rate is the rate of sign-changes along a signal, i.e., 
-    the rate at which the signal changes from positive to zero to negative or 
-    from negative to zero to positive.[1] This feature has been used heavily 
-    in both speech recognition and music information retrieval, 
-    being a key feature to classify percussive sounds.
-    
-    """
-    zero_crosses = np.nonzero(np.diff(s > 0))[0]
-    duration = len(s) / fs
-    zcr = 1/duration * len(zero_crosses)
-    
-    return zcr
-
-
-
-
-    

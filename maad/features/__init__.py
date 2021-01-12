@@ -14,11 +14,12 @@ from .shape import (filter_multires,
                           overlay_centroid,
                           all_shape_features)
 
-from .music import (moments,
-                    zero_crossing_rate)
+from .spectral import (spectral_moments)
 
-from .alpha_indices import (audio_moments,
-                            audio_median,
+from .temporal import (audio_moments,
+                       zero_crossing_rate)
+
+from .alpha_indices import (audio_median,
                             audio_entropy,
                             acousticRichnessIndex,
                             audio_activity,
@@ -27,7 +28,6 @@ from .alpha_indices import (audio_moments,
                             frequency_entropy,
                             numberOfPeaks,
                             spectral_entropy,
-                            spectral_moments,
                             spectral_activity,
                             spectral_events,
                             spectral_cover,
@@ -58,8 +58,10 @@ __all__ = [
            'centroid_features',
            'overlay_centroid',
            'all_shape_features',
-           # music
-           'moments',
+           # spectral
+           'spectral_moments',
+           # temporal
+           'audio_moments',
            'zero_crossing_rate',
            # alpha_indices
            'audio_moments',

@@ -28,13 +28,14 @@ from .visualization import (rand_cmap,
                            plot_correlation_map,
                            false_Color_Spectro)
 
-from .math_tools import (running_mean,
+from .math_func import (running_mean,
                          get_unimode,
                          entropy,
                          psd,
                          rms,
                          kurtosis,
-                         skewness)                     
+                         skewness,
+                         moments)                     
 
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
@@ -65,7 +66,7 @@ __all__ = [
            'plot_features',
            'plot_correlation_map',
            'false_Color_Spectro',
-           # math       
+           # math_func       
            'running_mean',
            'get_unimode',
            'entropy',
@@ -73,6 +74,7 @@ __all__ = [
            'rms',
            'kurtosis',
            'skewness',
+           'moments',
            # parser
            'read_audacity_annot',
            'write_audacity_annot',

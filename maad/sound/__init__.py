@@ -18,12 +18,12 @@ from .spectral_subtraction import (remove_background,
 
 from .trim import wave2frames
 
-from .envelope import envelope
+from .envelope_func import envelope
 
-from .spectrogram import (spectrogram,
-                          avg_power_spectro,
-                          avg_amplitude_spectro,
-                          intoOctave)
+from .spectro_func import (spectrogram,
+                           avg_power_spectro,
+                           avg_amplitude_spectro,
+                           intoOctave)
                           
 from .metrics import (audio_SNR,
                       spectral_SNR,
@@ -45,9 +45,9 @@ __all__ = [
         'median_equalizer',
         # trim.py
         'wave2frames',
-        # envelope.py
+        # envelope_func.py
         'envelope',
-        # spectrogram.py
+        # spectro_func.py
         'spectrogram',
         'avg_power_spectro',
         'avg_amplitude_spectro',

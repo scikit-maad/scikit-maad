@@ -3,7 +3,7 @@
 Collection of functions to describe the physics of acoustic waves
 """
 
-from .decibelSPL import (wav2volt,
+from .conversion_SPL import (wav2volt,
                         volt2pressure,
                         wav2pressure,
                         pressure2dBSPL,
@@ -16,7 +16,7 @@ from .decibelSPL import (wav2volt,
                         PSD2Leq)
 
 __all__ = [
-           # decibelSPL        
+           # conversion_SPL        
            'wav2volt',
            'volt2pressure',
            'wav2pressure',

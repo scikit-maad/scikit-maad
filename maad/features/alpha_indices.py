@@ -31,9 +31,9 @@ _MIN_ = sys.float_info.min
 from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
                        skewness, kurtosis, format_features, intoBins, entropy, 
                        linear_scale, plot1D, plot2D)
-from maad.acoustics import wav2Leq, PSD2Leq, power2dBSPL
-from maad.features import centroid_features, zero_crossing_rate, moments
-
+from maad.spl import wav2Leq, PSD2Leq, power2dBSPL
+from maad.features import (centroid_features, zero_crossing_rate, audio_moments, 
+                           spectral_moments)
 from maad.sound import (envelope, smooth, audio_SNR, intoOctave, 
                         avg_amplitude_spectro, avg_power_spectro, spectral_SNR, 
                         median_equalizer)
@@ -445,35 +445,6 @@ def roughness (x, norm=None, axis=0) :
 #******************************************************************************
 #               TEMPORAL ECOACOUSTICS INDICES
 #******************************************************************************
-def audio_moments (s):
-    """
-    Computes the first 4th moments of an audio
-    - mean
-    - variance
-    - skewness
-    - kurtosis
-    
-    Parameters
-    ----------
-    s : 1D array
-        Audio to process
-        
-    Returns
-    -------
-    mean : float 
-        mean of the audio
-    var : float 
-        variance  of the audio
-    skew : float
-        skewness of the audio
-    kurt : float
-        kurtosis of the audio
-    """
-    # force s to be ndarray
-    s = np.asarray(s)
-    
-    return moments(s)
-
 #=============================================================================
 def audio_median (s, mode ='fast', Nt=512) :
     """
@@ -789,60 +760,7 @@ def audio_events (s, fs, dB_threshold=3, rejectDuration=None,
 #******************************************************************************
 #               FREQUENCY ECOACOUSTICS INDICES
 #******************************************************************************
-def spectral_moments (X, axis=None):
-    """
-    Computes the first 4th moments of an amplitude spectrum (1d) or
-    spectrogram (2d) 
-    
-    - mean
-    - variance
-    - skewness
-    - kurtosis
-    
-    Parameters
-    ----------
-    X : ndarray of floats
-        Amplitude  spectrum (1d) or spectrogram (2d). 
-    axis : interger, optional, default is None
-        if spectrogram (2d), select the axis to estimate the moments.
-        
-    Returns
-    -------
-    mean : float 
-        mean of the audio
-    var : float 
-        variance  of the audio
-    skew : float
-        skewness of the audio
-    kurt : float
-        kurtosis of the audio
-        
-    Examples
-    --------
-    >>> s, fs = maad.sound.load('../data/spinetail.wav')
-    >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs) 
-    
-    Compute spectral moments on the mean spectrum
-    
-    >>> import numpy as np
-    >>> S_power = maad.sound.avg_power_spectro(Sxx_power)
-    >>> sm, sv, ss, sk = maad.features.spectral_moments (S_power)
-    >>> print('mean: %2.8f / var: %2.10f / skewness: %2.2f / kurtosis: %2.2f' % (sm, sv, ss, sk))
-    mean: 0.00000228 / var: 0.0000000001 / skewness: 5.84 / kurtosis: 40.49
-    
-    Compute spectral moments of the spectrogram along the time axis
-    
-    >>> sm_per_bin, sv_per_bin, ss_per_bin, sk_per_bin = maad.features.spectral_moments (Sxx_power, axis=1)
-    >>> print('Length of sk_per_bin is : %2.0f' % len(sk_per_bin))
-    Length of sk is : 512
 
-    """
-    # force P to be ndarray
-    X = np.asarray(X)
-    
-    return moments(X,axis)
-
-#=============================================================================
 def frequency_entropy (X, compatibility="QUT") :
     """
     Computes the spectral entropy of a power spectral density (1d) or power
@@ -2512,7 +2430,7 @@ def all_audio_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         print("ZCR %2.5f" % ZCR)
         
     """**************************** 4 audio moments *************************""" 
-    AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT = moments(s)
+    AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT = audio_moments(s)
     df_audio_indices += [AUDIO_MEAN, AUDIO_VAR, AUDIO_SKEW, AUDIO_KURT]
     if verbose :
         print("AUDIO_MEAN %2.5f" % AUDIO_MEAN)
@@ -2777,7 +2695,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     df_per_bin_indices +=[LTS.tolist()]
     
     """**************************** 4 spectrum moments *********************""" 
-    SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = moments(S_amplitude)
+    SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = spectral_moments(S_amplitude)
     df_spectral_indices += [SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT]
     if verbose :
         print("SPEC_MEAN %2.5f" % SPEC_MEAN)
