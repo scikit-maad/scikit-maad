@@ -1,6 +1,53 @@
 # -*- coding: utf-8 -*-
 """ 
-Ensemble of functions to load and preprocess audio signals.
+Sound processing
+================
+
+The module ``sound`` is an ensemble of functions to load and preprocess audio signals.
+
+Input and output
+-----------------
+.. autosummary::
+    :toctree: generated/
+
+    load
+    loadSpectro
+
+Preprocess audio
+-----------------
+.. autosummary::
+    :toctree: generated/
+
+    fir_filter
+    sinc
+    smooth
+    select_bandwidth
+    remove_background
+    remove_background_morpho
+    remove_background_along_axis
+    median_equalizer
+    wave2frames
+   
+Transform audio
+---------------
+.. autosummary::
+    :toctree: generated/
+    
+    spectrogram
+    avg_power_spectro
+    avg_amplitude_spectro
+    intoOctave
+    envelope
+
+Metrics
+-------
+.. autosummary::
+    :toctree: generated/
+    
+    audio_SNR
+    spectral_SNR
+    sharpness
+
 """
 
 from .input_output import (load,

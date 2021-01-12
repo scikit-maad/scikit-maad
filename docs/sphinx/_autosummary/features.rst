@@ -27,6 +27,7 @@
    :recursive:
 
    features.alpha_indices
-   features.music
    features.shape
+   features.spectral
+   features.temporal
 

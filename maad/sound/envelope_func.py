@@ -14,6 +14,7 @@ Collection of functions to transform audio signals : Take the envelope
 # Import external modules
 import numpy as np
 from scipy.signal import hilbert
+from scipy.signal import periodogram, welch
 
 # import internal modules
 from maad.sound import wave2frames
@@ -92,3 +93,78 @@ def envelope (s, mode='fast', Nt=32):
         print ("WARNING : choose a mode between 'fast' and 'hilbert'")
         
     return env
+
+#%%
+def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None,
+        display=False):
+    """ 
+    Estimate the power spectral density of 1D signal using Welch's or periodogram methods. 
+    
+    Parameters
+    ----------
+    s: 1D array 
+        Input signal to process 
+    fs: float, optional
+        Sampling frequency of audio signal
+    nperseg: int, optional
+        Length of segment for 'welch' method, default is 256
+    window : string, default is 'hanning
+        Name of the window used for the short fourier transform.
+    nfft: int, optional
+        Length of FFT for periodogram method. If None, length of signal will be used.
+        Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.
+    method: {'welch', 'periodogram'}
+        Method used to estimate the power spectral density of the signal
+    tlims: tuple of ints or floats
+        Temporal limits to compute the power spectral density in seconds (s)
+        If None, estimates for the complete signal will be computed.
+        Default is 'None'
+    
+    Returns
+    -------
+    psd: pandas Series
+        Estimate of power spectral density
+    f_idx: pandas Series
+        Index of sample frequencies
+    
+    Notes
+    -----
+    This is a wrapper that uses functions from Scipy (scipy.org), in particular from the scipy.signal module.
+    
+    Examples
+    --------
+    >>> from maad import sound, features
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> psd, f_idx = features.psd(s, fs, nperseg=512, display=True)
+    """
+    
+    if tlims is not None:
+    # trim audio signal
+        try:
+            s = s[int(tlims[0]*fs): int(tlims[1]*fs)]
+        except:
+            raise Exception('length of tlims tuple should be 2')
+    
+    
+    if method=='welch':
+        f_idx, psd_s = welch(s, fs, window, nperseg, nfft)
+    
+    elif method=='periodogram':
+        f_idx, psd_s = periodogram(s, fs, window, nfft, scaling='spectrum')
+        
+    else:
+        raise Exception("Invalid method. Method should be 'welch' or 'periodogram' ")
+        
+
+    index_names = ['psd_' + str(idx).zfill(3) for idx in range(1,len(psd_s)+1)]
+    psd_s = pd.Series(psd_s, index=index_names)
+    f_idx = pd.Series(f_idx, index=index_names)
+    
+    if display:
+        fig, ax = plt.subplots(figsize=(9,5))
+        ax.plot(f_idx, psd_s)
+        ax.set_xlabel('Frequency (kHz)')
+        ax.set_ylabel('Amplitude')
+        
+    return psd_s, f_idx
+

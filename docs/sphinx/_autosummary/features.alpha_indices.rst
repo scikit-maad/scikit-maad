@@ -27,7 +27,6 @@ features.alpha\_indices
       audio_entropy
       audio_events
       audio_median
-      audio_moments
       bioacousticsIndex
       frequency_entropy
       frequency_raoQ
@@ -41,7 +40,6 @@ features.alpha\_indices
       spectral_cover
       spectral_entropy
       spectral_events
-      spectral_moments
       surfaceRoughness
       tfsd
    

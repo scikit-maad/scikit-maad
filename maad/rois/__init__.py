@@ -1,6 +1,27 @@
 # -*- coding: utf-8 -*-
 """
+Segmentation methods
+====================
+
 Collection of functions to find regions of interest in audio and spectrograms.
+
+Temporal
+----------
+.. autosummary::
+    :toctree: generated/
+
+    find_rois_cwt
+    
+Spectro-temporal
+---------------
+.. autosummary::
+    :toctree: generated/
+    
+    create_mask
+    select_rois
+    overlay_rois
+    rois_to_imblobs
+
 """
 
 from .rois_2d import (create_mask,
