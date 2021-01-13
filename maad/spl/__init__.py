@@ -22,6 +22,18 @@ Conversion SPL
     wav2Leq
     pressure2Leq
     PSD2Leq
+    
+Attenuation and active distance
+-------------------------------
+.. autosummary::
+    :toctree: generated/
+    
+    attenuation_dB,
+    dBSPL_per_bin,
+    active_distance,
+    pressure_at_r0,
+    L0_at_r0,
+    apply_attenuation
 
 """
 
@@ -37,6 +49,13 @@ from .conversion_SPL import (wav2volt,
                         pressure2Leq,
                         PSD2Leq)
 
+from .active_space import (attenuation_dB,
+                           dBSPL_per_bin,
+                           active_distance,
+                           pressure_at_r0,
+                           dBSPL_at_r0,
+                           apply_attenuation)
+
 __all__ = [
            # conversion_SPL        
            'wav2volt',
@@ -49,4 +68,12 @@ __all__ = [
            'wav2dBSPL',
            'wav2Leq',
            'pressure2Leq',
-           'PSD2Leq']
+           'PSD2Leq'
+           #active_space
+           'attenuation_dB',
+           'dBSPL_per_bin',
+           'active_distance',
+           'pressure_at_r0',
+           'dBSPL_at_r0',
+           'apply_attenuation'
+           ]
