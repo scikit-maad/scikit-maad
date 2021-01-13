@@ -28,11 +28,11 @@ Attenuation and active distance
 .. autosummary::
     :toctree: generated/
     
-    attenuation_dB,
-    dBSPL_per_bin,
-    active_distance,
-    pressure_at_r0,
-    L0_at_r0,
+    attenuation_dB
+    dBSPL_per_bin
+    active_distance
+    pressure_at_r0
+    L0_at_r0
     apply_attenuation
 
 """
