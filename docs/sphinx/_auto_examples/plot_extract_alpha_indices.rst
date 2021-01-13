@@ -221,7 +221,7 @@ LOAD SOUND AND PREPROCESS SOUND
 
         # compute all the audio indices and store them into a DataFrame
         # dB_threshold and rejectDuration are used to select audio events.
-        df_audio_ind = features.audio_indices(wave, fs, 
+        df_audio_ind = features.all_audio_alpha_indices(wave, fs, 
                                               gain = G, sensibility = S,
                                               dB_threshold = 3, rejectDuration = 0.01,
                                               verbose = False, display = False)
@@ -244,17 +244,17 @@ LOAD SOUND AND PREPROCESS SOUND
         # mask_param1 and mask_param2 are two parameters to find the regions of 
         # interest (ROIs). These parameters need to be adapted to the dataset in 
         # order to select ROIs
-        df_spec_ind, df_spec_ind_per_bin = features.spectral_indices(Sxx_power,
-                                                        tn,fn,
-                                                        flim_low = [0,1500], 
-                                                        flim_mid = [1500,8000], 
-                                                        flim_hi  = [8000,20000], 
-                                                        gain = G, sensitivity = S,
-                                                        verbose = False, 
-                                                        R_compatible = 'soundecology',
-                                                        mask_param1 = 6, 
-                                                        mask_param2=0.5,
-                                                        display = False)
+        df_spec_ind, df_spec_ind_per_bin = features.all_spectral_alpha_indices(Sxx_power,
+                                                                tn,fn,
+                                                                flim_low = [0,1500], 
+                                                                flim_mid = [1500,8000], 
+                                                                flim_hi  = [8000,20000], 
+                                                                gain = G, sensitivity = S,
+                                                                verbose = False, 
+                                                                R_compatible = 'soundecology',
+                                                                mask_param1 = 6, 
+                                                                mask_param2=0.5,
+                                                                display = False)
     
         """ =======================================================================
                          Create a dataframe 
@@ -605,7 +605,7 @@ set the threshold to 0.75 for instance.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:787: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:789: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -665,9 +665,9 @@ For a better view, we seperate spectral and audio indices.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:565: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:567: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:684: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:686: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -709,7 +709,7 @@ df_indices_per_bin.to_csv(path_or_buf=os.path.join("../data/indices/",'per_bin_'
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  23.940 seconds)
+   **Total running time of the script:** ( 0 minutes  24.545 seconds)
 
 
 .. _sphx_glr_download__auto_examples_plot_extract_alpha_indices.py:

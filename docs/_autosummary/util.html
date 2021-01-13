@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.decibelSPL" href="util.decibelSPL.html" />
-    <link rel="prev" title="features.features_2d.shape_features_raw" href="features.features_2d.shape_features_raw.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,18 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">util</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_tools.html">util.math_tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -178,26 +170,169 @@
             
   <div class="section" id="module-util">
 <span id="util"></span><h1>util<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h1>
-<p>Handfull of useful set of tools used in the audio analysis framework.</p>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<p>The module <code class="docutils literal notranslate"><span class="pre">utils</span></code> has a handfull of useful set of tools used in the audio analysis framework.</p>
+<div class="section" id="visualization">
+<h3>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.html#module-util.decibelSPL" title="util.decibelSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.decibelSPL</span></code></a></p></td>
-<td><p>Collection of functions to convert audio and voltage data to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL).</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.rand_cmap.html#util.rand_cmap" title="util.rand_cmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rand_cmap</span></code></a>(nlabels[, type, …])</p></td>
+<td><p>Creates a random colormap to be used together with matplotlib.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.math_tools.html#module-util.math_tools" title="util.math_tools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.math_tools</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.crop_image.html#util.crop_image" title="util.crop_image"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crop_image</span></code></a>(im, tn, fn[, fcrop, tcrop])</p></td>
+<td><p>Crop a spectrogram (or an image) in time (horizontal X axis) and frequency (vertical y axis)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.save_figlist.html#util.save_figlist" title="util.save_figlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_figlist</span></code></a>(fname, figlist)</p></td>
+<td><p>Save a list of figures to file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot1D.html#util.plot1D" title="util.plot1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot1D</span></code></a>(x, y[, ax])</p></td>
+<td><p>plot a signal s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot2D.html#util.plot2D" title="util.plot2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot2D</span></code></a>(im[, ax])</p></td>
+<td><p>display an image (spectrogram, 2D binary mask, ROIS…)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_features_map.html#util.plot_features_map" title="util.plot_features_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features_map</span></code></a>(df[, norm, mode])</p></td>
+<td><p>Plot features amplitude as heatmap.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot_features.html#util.plot_features" title="util.plot_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features</span></code></a>(df[, ax, norm, mode])</p></td>
+<td><p>Plot phenology of the features (ie.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_correlation_map.html#util.plot_correlation_map" title="util.plot_correlation_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlation_map</span></code></a>(df[, R_threshold, method])</p></td>
+<td><p>Plot the correlation map between indices in the DataFrame obtained with MAAD</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.false_Color_Spectro.html#util.false_Color_Spectro" title="util.false_Color_Spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">false_Color_Spectro</span></code></a>(df[, indices, plim, …])</p></td>
+<td><p>Create False Color Spectrogram from indices obtained by MAAD Only indices than can be computed bin per bin (ie frequency per frequency) are used to create False Color Spectro.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="mathematical">
+<h3>Mathematical<a class="headerlink" href="#mathematical" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.running_mean.html#util.running_mean" title="util.running_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">running_mean</span></code></a>(x, N[, mode])</p></td>
+<td><p>Compute fast running mean for a window size N</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.get_unimode.html#util.get_unimode" title="util.get_unimode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_unimode</span></code></a>(X[, mode, axis, N, N_bins, verbose])</p></td>
+<td><p>Get the statistical mode or modal value which is  the most common number in the dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.entropy.html#util.entropy" title="util.entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy</span></code></a>(x[, axis])</p></td>
+<td><p>Compute the entropy of a vector (waveform) or matrix (spectrogram).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.rms.html#util.rms" title="util.rms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rms</span></code></a>(s)</p></td>
+<td><p>Compute the root-mean-square (RMS) level of an input signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.kurtosis.html#util.kurtosis" title="util.kurtosis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kurtosis</span></code></a>(x[, axis])</p></td>
+<td><p>Compute the kurtosis (tailedness or curved or arching) of an audio signal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.skewness.html#util.skewness" title="util.skewness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skewness</span></code></a>(x[, axis])</p></td>
+<td><p>Compute the skewness (asymetry) of an audio signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.moments.html#util.moments" title="util.moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moments</span></code></a>(X[, axis])</p></td>
+<td><p>Computes the first 4th moments of a vector (1d, ie.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="parser">
+<h3>Parser<a class="headerlink" href="#parser" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.read_audacity_annot.html#util.read_audacity_annot" title="util.read_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_audacity_annot</span></code></a>(audacity_filename)</p></td>
+<td><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe with the bounding box and the label of each region of interest (ROI)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.write_audacity_annot.html#util.write_audacity_annot" title="util.write_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_audacity_annot</span></code></a>(fname, onset, offset)</p></td>
+<td><p>Write audio segmentation to file (Audacity format)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.date_parser.html#util.date_parser" title="util.date_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_parser</span></code></a>(datadir[, dateformat, …])</p></td>
+<td><p>Parse all filenames contained in a directory and its subdirectories  Keep only filenames corresponding to extension Filenames must follow : - SM4 format (XXXX_yyyymmdd_hhmmss.wav)  - or POSIX format (for audiomoth)   The result is a panda dataframe with ‘Date’ as index and ‘File’ (with full path as column)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="miscellaneous">
+<h3>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.index_bw.html#util.index_bw" title="util.index_bw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_bw</span></code></a>(fn, bw)</p></td>
+<td><p>Select all the index coresponding to the selected frequency band</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.intoBins.html#util.intoBins" title="util.intoBins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoBins</span></code></a>(x, an, bin_step[, axis, bin_min, …])</p></td>
+<td><p>Transform a vector or a matrix into bins</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.shift_bit_length.html#util.shift_bit_length" title="util.shift_bit_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shift_bit_length</span></code></a>(x)</p></td>
+<td><p>find the closest power of 2 that is superior or equal to the number x</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.rle.html#util.rle" title="util.rle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rle</span></code></a>(x)</p></td>
+<td><p>Run-Length encoding (RLE)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.linear_scale.html#util.linear_scale" title="util.linear_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_scale</span></code></a>(x[, minval, maxval, axis])</p></td>
+<td><p>Program to scale the values of a vector or matrix from a user specified  minimum to a user specified maximum</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.amplitude2dB.html#util.amplitude2dB" title="util.amplitude2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplitude2dB</span></code></a>(x[, db_range, db_gain])</p></td>
+<td><p>Transform amplitude data (signal, scalar) into decibel scale within the  dB range (db_range).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.power2dB.html#util.power2dB" title="util.power2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">power2dB</span></code></a>(x[, db_range, db_gain])</p></td>
+<td><p>Transform power (amplitude²) signal or scalar into decibel scale  within the dB range (db_range).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.dB2amplitude.html#util.dB2amplitude" title="util.dB2amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dB2amplitude</span></code></a>(x[, db_gain])</p></td>
+<td><p>Transform data in dB scale into amplitude A gain (db_gain) could be added at the end.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.dB2power.html#util.dB2power" title="util.dB2power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dB2power</span></code></a>(x[, db_gain])</p></td>
+<td><p>Transform data in dB scale into power (amplitude²) A gain (db_gain) could be added at the end.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.mean_dB.html#util.mean_dB" title="util.mean_dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_dB</span></code></a>(*argv[, axis])</p></td>
+<td><p>Compute the average of dB values</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.add_dB.html#util.add_dB" title="util.add_dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dB</span></code></a>(*argv[, axis])</p></td>
+<td><p>add dB values</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.nearest_idx.html#util.nearest_idx" title="util.nearest_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest_idx</span></code></a>(array, value)</p></td>
+<td><p>Find nearest value on array and return index</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.get_df_single_row.html#util.get_df_single_row" title="util.get_df_single_row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df_single_row</span></code></a>(df, index[, mode])</p></td>
+<td><p>Extract a single row from a dataframe keeping the DataFrame type  (instead of becoming a Series)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.format_features.html#util.format_features" title="util.format_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_features</span></code></a>(df, tn, fn)</p></td>
+<td><p>Format features such as bounding box coordinates and centroids coordinates to predifined format : time-frequency =&gt; pixels or pixels to time-frequency units</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.math_func.html#module-util.math_func" title="util.math_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.math_func</span></code></a></p></td>
 <td><p>Mathematical tools for audio signal processing.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.miscellaneous.html#module-util.miscellaneous" title="util.miscellaneous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.miscellaneous</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.miscellaneous.html#module-util.miscellaneous" title="util.miscellaneous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.miscellaneous</span></code></a></p></td>
 <td><p>Ensemble of usefull functions for scikit-maad.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.parser.html#module-util.parser" title="util.parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.parser</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="util.parser.html#module-util.parser" title="util.parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.parser</span></code></a></p></td>
 <td><p>Utilitary functions to parse and read audio and text files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.visualization.html#module-util.visualization" title="util.visualization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.visualization</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="util.visualization.html#module-util.visualization" title="util.visualization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util.visualization</span></code></a></p></td>
 <td><p>Ensemble of functions that facilitate data visualization.</p></td>
 </tr>
 </tbody>
@@ -209,15 +344,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.decibelSPL.html" class="btn btn-neutral float-right" title="util.decibelSPL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="features.features_2d.shape_features_raw.html" class="btn btn-neutral float-left" title="features.features_2d.shape_features_raw" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

@@ -1,4 +1,4 @@
-﻿util.miscellaneous
+util.miscellaneous
 ==================
 
 .. automodule:: util.miscellaneous

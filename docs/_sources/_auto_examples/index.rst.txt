@@ -13,27 +13,6 @@ that can be performed with scikit-maad.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@author: jsulloa">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_audio_shape_features_thumb.png
-     :alt: Created on Wed Jan  6 16:15:19 2021
-
-     :ref:`sphx_glr__auto_examples_audio_shape_features.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/audio_shape_features
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Soundscapes result from a combination of multiple signals that are mixed-down into a single tim...">
 
 .. only:: html
@@ -52,6 +31,27 @@ that can be performed with scikit-maad.
    :hidden:
 
    /_auto_examples/plot_nmf_and_false_color_spectrogram
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Unsupervised learning algorithms search for structures or patterns in a dataset without requiri...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
+     :alt: Use unsupervised learning to classify sounds in a recording
+
+     :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/plot_unsupervised_sound_classification
 
 .. raw:: html
 

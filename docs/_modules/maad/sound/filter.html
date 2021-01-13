@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.filter &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.sound.filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.sound.filter</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Collection of functions to filter audio signal in time and frequency</span>
+<span class="sd">domains. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">sosfiltfilt</span><span class="p">,</span> <span class="n">convolve</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">get_window</span><span class="p">,</span> 
+                          <span class="n">kaiserord</span><span class="p">,</span> <span class="n">firwin</span><span class="p">,</span> <span class="n">lfilter</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">filters</span>
+
+<span class="c1"># Import internal modules </span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot2D</span>
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="select_bandwidth"><a class="viewcode-back" href="../../../generated/maad.sound.select_bandwidth.html#rois.rois_1d.select_bandwidth">[docs]</a><span class="k">def</span> <span class="nf">select_bandwidth</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fcut</span><span class="p">,</span> <span class="n">forder</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span><span class="s1">&#39;butter&#39;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> 
+                     <span class="n">rp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        1d vector of scalars to be filtered</span>
+<span class="sd">    fs : scalar</span>
+<span class="sd">        sampling frequency   </span>
+<span class="sd">    fcut : array_like</span>
+<span class="sd">        A scalar or length-2 sequence giving the critical frequencies.             </span>
+<span class="sd">    forder : int</span>
+<span class="sd">        The order of the filter.</span>
+<span class="sd">    fname : {`butter`, &#39;cheby1`, `cheby2`, `ellip`, `bessel`}, optional, default</span>
+<span class="sd">        is &#39;butter&#39;   </span>
+<span class="sd">        The type of IIR filter to design:</span>
+<span class="sd">        - Butterworth : `butter`</span>
+<span class="sd">        - Chebyshev I : &#39;cheby1`</span>
+<span class="sd">        - Chebyshev II : `cheby2`</span>
+<span class="sd">        - Cauer/elliptic: `ellip`</span>
+<span class="sd">        - Bessel/Thomson: `bessel`   </span>
+<span class="sd">    ftype : {`bandpass`, `lowpass`, `highpass`, `bandstop`}, optional, default </span>
+<span class="sd">        is `bandpass`</span>
+<span class="sd">        The type of filter.</span>
+<span class="sd">    rp : float, optional</span>
+<span class="sd">        For Chebyshev and elliptic filters, provides the maximum ripple in </span>
+<span class="sd">        the passband. (dB)   </span>
+<span class="sd">    rs : float, optional</span>
+<span class="sd">        For Chebyshev and elliptic filters, provides the minimum attenuation </span>
+<span class="sd">        in the stop band. (dB)           </span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : array_like</span>
+<span class="sd">        The filtered output with the same shape and phase as x</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    fir_filter1d</span>
+<span class="sd">        Lowpass, highpass, bandpass or bandstop a 1d signal with an Fir filter</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Load and display the spectrogram of a sound waveform</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB </span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Sxx_dB.max(),</span>
+<span class="sd">                      &#39;vmin&#39;:-90,</span>
+<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="sd">                      &#39;figsize&#39;:(4,13),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig1, ax1 = maad.util.plot2D(Sxx_dB, **fig_kwargs)</span>
+<span class="sd">    </span>
+<span class="sd">    Filter the waveform : keep the bandwidth between 6-10kHz</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w_filtered = maad.sound.select_bandwidth(w,fs,fcut=(6000,10000), forder=5, fname =&#39;butter&#39;, ftype=&#39;bandpass&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_filtered = maad.util.power2dB(Sxx_power_filtered) # convert into dB </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_filtered, **fig_kwargs)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">forder</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fcut</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="n">ftype</span><span class="p">,</span><span class="n">ftype</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">rp</span><span class="p">,</span> 
+                     <span class="n">rs</span><span class="o">=</span><span class="n">rs</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+    <span class="c1"># use sosfiltfilt insteasd of sosfilt to keep the phase of y matches x</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span></div>
+ 
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="fir_filter"><a class="viewcode-back" href="../../../generated/maad.sound.fir_filter.html#rois.rois_1d.fir_filter">[docs]</a><span class="k">def</span> <span class="nf">fir_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter a signal using a 1d Finite impulse filter.</span>
+<span class="sd">    </span>
+<span class="sd">    This function uses a digital filter based on convolution of 1d kernel over a vector </span>
+<span class="sd">    or along an axis of a matrix</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        1d vector or 2d matrix of scalars to be filtered</span>
+<span class="sd">    kernel : array_like or tuple</span>
+<span class="sd">        Pass directly the kernel (1d vector of scalars) </span>
+<span class="sd">        Or pass the arguments in a tuple to create a kernel. Arguments are:   </span>
+<span class="sd">        - window : string, float, or tuple. The type of window to create. </span>
+<span class="sd">        boxcar, triang, blackman, hamming, hann, bartlett, flattop,</span>
+<span class="sd">        parzen, bohman, blackmanharris, nuttall, barthann, </span>
+<span class="sd">        - (kaiser, beta), </span>
+<span class="sd">        - (gaussian, standard deviation), </span>
+<span class="sd">        - (general_gaussian, power, width), </span>
+<span class="sd">        - (slepian, width), </span>
+<span class="sd">        - (dpss, normalized half-bandwidth), </span>
+<span class="sd">        - (chebwin, attenuation), </span>
+<span class="sd">        - (exponential, decay scale), </span>
+<span class="sd">        - (tukey, taper fraction)</span>
+<span class="sd">        - N : length of the kernel</span>
+<span class="sd">        Examples:</span>
+<span class="sd">        - kernel = (&#39;boxcar&#39;, 9)</span>
+<span class="sd">        - kernel = ((&#39;gaussian&#39;, 0.5), 5)</span>
+<span class="sd">        - kernel = [1 3 5 7 5 3 1] </span>
+<span class="sd">    axis : int</span>
+<span class="sd">        Determine along which axis is performed the filtering in case of 2d matrix</span>
+<span class="sd">        axis = 0 : vertical</span>
+<span class="sd">        axis = 1 : horizontal</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : array_like</span>
+<span class="sd">        The filtered output with the same shape and phase as x</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    select_bandwidth</span>
+<span class="sd">        Lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------  </span>
+<span class="sd">    </span>
+<span class="sd">    Load and display the spectrogram of a sound waveform</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Lxx.max(),</span>
+<span class="sd">                      &#39;vmin&#39;:0,</span>
+<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
+<span class="sd">                      &#39;figsize&#39;:(4,13),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)</span>
+<span class="sd">    </span>
+<span class="sd">    Smooth the waveform (lowpass)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w_filtered = maad.sound.fir_filter(w, kernel=((&#39;gaussian&#39;, 2), 5))</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Lxx_filtered = maad.util.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)</span>
+<span class="sd">    </span>
+<span class="sd">    Smooth the spectrogram, frequency by frequency (blurr)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Lxx_blurr = maad.sound.fir_filter(Lxx, kernel=((&#39;gaussian&#39;, 1), 5), axis=1)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx_blurr,**fig_kwargs)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span> <span class="o">==</span><span class="mi">1</span> <span class="p">:</span>
+            <span class="n">win</span> <span class="o">=</span> <span class="n">get_window</span><span class="p">(</span><span class="n">kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span> <span class="o">==</span><span class="mi">2</span> <span class="p">:</span>
+            <span class="n">win</span> <span class="o">=</span> <span class="n">get_window</span><span class="p">(</span><span class="n">kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">kernel</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">kernel</span>
+
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Trick to avoid strange values at the beginning and end of the convolve</span>
+        <span class="c1"># signal. Add mirror values</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">):]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="c1"># convolve and normalized the result by the sum of the kernel</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">win</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span><span class="mi">1</span> <span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        
+        <span class="c1"># Trick to avoid strange values at the beginning and end of the convolve</span>
+        <span class="c1"># signal. Add mirror values</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>  <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">):]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">y</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">win</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">win</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">),:]</span>
+        
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span><span class="mi">1</span> <span class="p">:</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="sinc"><a class="viewcode-back" href="../../../generated/maad.sound.sinc.html#rois.rois_1d.sinc">[docs]</a><span class="k">def</span> <span class="nf">sinc</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">atten</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">transition_bw</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">bandpass</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter 1D signal with a Kaiser-windowed filter.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : ndarray</span>
+<span class="sd">        input 1D signal</span>
+<span class="sd">    cutoff : ndarray</span>
+<span class="sd">        upper and lower frequencies (min_f, max_f) in Hertz</span>
+<span class="sd">    atten : float </span>
+<span class="sd">        attenuation in dB</span>
+<span class="sd">    transition_bw : float</span>
+<span class="sd">        transition bandwidth in percent default 5% of total band</span>
+<span class="sd">    bandpass : bool</span>
+<span class="sd">        bandpass (True) or bandreject (False) filter, default is bandpass</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s_filt : array </span>
+<span class="sd">        signal filtered</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; tn = np.arange(0,len(s))/fs</span>
+<span class="sd">    &gt;&gt;&gt; s_filt_7_12kHz = maad.sound.sinc(s, cutoff=[7000,12000], fs=fs, atten=80, transition_bw=0.8)</span>
+<span class="sd">    &gt;&gt;&gt; s_filt_4_8kHz = maad.sound.sinc(s, cutoff=[4500,8000], fs=fs, atten=80, transition_bw=0.8)</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax0, ax1,ax2) = plt.subplots(3,1, sharex=True, squeeze=True)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot1D(tn,s,ax=ax0, figtitle=&#39;original&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot1D(tn,s_filt_7_12kHz,ax=ax1, figtitle=&#39;Kaiser-windowed filter 7-12kHz&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot1D(tn,s_filt_4_8kHz,ax=ax2, figtitle=&#39;Kaiser-windowed filter 4.5-8kHz&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout()</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">cutoff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cutoff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">transition_bw</span>
+    <span class="n">numtaps</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">kaiserord</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">numtaps</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># round to nearest odd to have Type I filter</span>
+    <span class="n">taps</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">numtaps</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;kaiser&#39;</span><span class="p">,</span> <span class="n">beta</span><span class="p">),</span> 
+                         <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="ow">not</span><span class="p">(</span><span class="n">bandpass</span><span class="p">))</span>
+    <span class="n">s_filt</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">taps</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s_filt</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="smooth"><a class="viewcode-back" href="../../../generated/maad.sound.smooth.html#rois.rois_1d.smooth">[docs]</a><span class="k">def</span> <span class="nf">smooth</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Smooth a spectrogram with a gaussian filter </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx : 2d ndarray of scalars </span>
+<span class="sd">        Spectrogram (or image) </span>
+<span class="sd">     </span>
+<span class="sd">    std : scalar, optional, default is 1 </span>
+<span class="sd">        Standard deviation of the gaussian kernel used to smooth the image </span>
+<span class="sd">        The larger is the number, the smoother will be the image and the longer </span>
+<span class="sd">        it takes. Standard values should fall between 0.5 to 3 </span>
+<span class="sd">    </span>
+<span class="sd">    verbose : boolean, optional, default is False </span>
+<span class="sd">        print messages</span>
+<span class="sd">    </span>
+<span class="sd">    display : boolean, optional, default is False </span>
+<span class="sd">        Display the signal if True </span>
+<span class="sd">         </span>
+<span class="sd">    savefig : string, optional, default is None </span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
+<span class="sd">        is added to the root filename. </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">             </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">          </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">         </span>
+<span class="sd">        - extent : scalars (left, right, bottom, top), optional, default: None </span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that </span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">         </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure </span>
+<span class="sd">             </span>
+<span class="sd">        ... and more, see matplotlib    </span>
+<span class="sd">         </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    im_out: smothed or blurred image  </span>
+<span class="sd">    </span>
+<span class="sd">    Examples:</span>
+<span class="sd">    ---------</span>
+<span class="sd">    </span>
+<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(5,10), fcrop=(0,10000))   </span>
+<span class="sd">    </span>
+<span class="sd">    Convert linear spectrogram into dB</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
+<span class="sd">    </span>
+<span class="sd">    Smooth the spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_std05 = maad.rois.smooth(Sxx_dB, std=0.5)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_std10 = maad.rois.smooth(Sxx_dB, std=1)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_std15 = maad.rois.smooth(Sxx_dB, std=1.5)</span>
+<span class="sd">    </span>
+<span class="sd">    Plot spectrograms</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_std05, ax=ax2, extent=ext, title=&#39;smooth (std=0.5)&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_std10, ax=ax3, extent=ext, title=&#39;smooth (std=1)&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_std15, ax=ax4, extent=ext, title=&#39;smooth (std=1.5)&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; fig.set_size_inches(7,9)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout() </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Smooth the image with a gaussian filter (std = </span><span class="si">%.1f</span><span class="s1">)&#39;</span> <span class="o">%</span><span class="n">std</span><span class="p">)</span> 
+     
+    <span class="c1"># use scikit image (faster than scipy) </span>
+    <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">std</span><span class="p">)</span> 
+     
+    <span class="c1"># Display </span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>  
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>   
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="mf">0.1</span><span class="p">))</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="mf">99.9</span><span class="p">))</span> 
+        <span class="n">extent</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        
+         
+        <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Orignal Spectrogram&#39;</span><span class="p">),</span>  
+                <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Blurred Spectrogram (std=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">std</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="p">,</span>  
+                <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        
+        <span class="c1"># SAVE FIGURE </span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span> 
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_blurr&#39;</span><span class="p">)</span>              
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span> 
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> 
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>    
+
+    <span class="k">return</span> <span class="n">Sxx_out</span> </div>
+ 
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

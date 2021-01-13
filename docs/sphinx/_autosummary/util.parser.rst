@@ -1,4 +1,4 @@
-﻿util.parser
+util.parser
 ===========
 
 .. automodule:: util.parser

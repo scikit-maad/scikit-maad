@@ -23,9 +23,9 @@ should be use in complement.
 
     # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_remove_background.png'
 
-    from maad.sound import load, spectrogram
     from maad.util import plot2D, power2dB
-    from maad.rois import (remove_background, median_equalizer, 
+    from maad.sound import (load, spectrogram, 
+                           remove_background, median_equalizer, 
                            remove_background_morpho, 
                            remove_background_along_axis, sharpness)
     import numpy as np
@@ -64,7 +64,7 @@ which is the maximum dB range value for a 16bits audio recording. We add
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/sound/sound.py:136: WavFileWarning: Chunk (non-data) not understood, skipping it.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/sound/io_.py:109: WavFileWarning: Chunk (non-data) not understood, skipping it.
       fs, s = wavfile.read(filename)
 
 
@@ -75,8 +75,7 @@ We plot the original spectrogram.
 
 .. code-block:: default
 
-    fig, (ax0, ax1, ax2, ax3, ax4) = plt.subplots(5, 1, sharex=True)
-    plot2D(Sxx_dB, ax=ax0, extent=ext, title='original', xlabel=None,
+    plot2D(Sxx_dB, extent=ext, title='original',
            vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
 
     print ("Original sharpness : %2.3f" % sharpness(Sxx_dB))
@@ -95,7 +94,7 @@ We plot the original spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:278: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
     Original sharpness : 2.247
 
@@ -114,14 +113,14 @@ Test the function "remove_background"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" % sharpness(X1))
 
-    plot2D(X1, ax=ax1, extent=ext, title='remove_background', xlabel=None,
+    plot2D(X1, extent=ext, title='remove_background',
            vmin=np.median(X1), vmax=np.median(X1)+40)
 
 
 
 
 .. image:: /_auto_examples/images/sphx_glr_plot_remove_background_002.png
-    :alt: plot remove background
+    :alt: remove_background
     :class: sphx-glr-single-img
 
 
@@ -131,21 +130,9 @@ Test the function "remove_background"
 
  .. code-block:: none
 
-    ________________________________________________________________________
-    Determine the profile of the stochastic background noise...
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/rois/rois_2d.py:313: RuntimeWarning: divide by zero encountered in true_divide
-      SNR_est=(Sxx/noise_spectro) -1
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/rois/rois_2d.py:313: RuntimeWarning: invalid value encountered in true_divide
-      SNR_est=(Sxx/noise_spectro) -1
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/rois/rois_2d.py:314: RuntimeWarning: invalid value encountered in greater
-      SNR_est=SNR_est*(SNR_est>0) # keep only positive values
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/rois/rois_2d.py:319: RuntimeWarning: invalid value encountered in greater
-      an_lk=an_lk*(an_lk>0) # keep only positive values
-    Remove the stochastic background noise...
-    41.119111903312586
     ---- test remove_background -----
-    duration 0.122 s
-    sharpness : 1.533
+    duration 0.144 s
+    sharpness : 1.706
 
 
 
@@ -163,29 +150,15 @@ Test the function "median_equalizer"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" %sharpness(X2))
 
-    plot2D(X2, ax=ax2, extent=ext, title='median_equalizer', xlabel=None,
-           vmin=np.median(X2), vmax=np.median(X2)+40)
-
     plot2D(X2,extent=ext, title='median_equalizer',
            vmin=np.median(X2), vmax=np.median(X2)+40)
 
 
 
 
-.. rst-class:: sphx-glr-horizontal
-
-
-    *
-
-      .. image:: /_auto_examples/images/sphx_glr_plot_remove_background_003.png
-          :alt: plot remove background
-          :class: sphx-glr-multi-img
-
-    *
-
-      .. image:: /_auto_examples/images/sphx_glr_plot_remove_background_004.png
-          :alt: median_equalizer
-          :class: sphx-glr-multi-img
+.. image:: /_auto_examples/images/sphx_glr_plot_remove_background_003.png
+    :alt: median_equalizer
+    :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -197,8 +170,6 @@ Test the function "median_equalizer"
     ---- test median_equalizer -----
     duration 0.085 s
     sharpness : 1.502
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:275: UserWarning: Tight layout not applied. tight_layout cannot make axes height small enough to accommodate all axes decorations
-      fig.tight_layout()
 
 
 
@@ -215,14 +186,14 @@ Test the function "remove_background_morpho"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" %sharpness(X3))
 
-    plot2D(X3, ax=ax3, extent=ext, title='remove_background_morpho', xlabel=None, 
+    plot2D(X3, extent=ext, title='remove_background_morpho',
            vmin=np.median(X3), vmax=np.median(X3)+40)
 
 
 
 
-.. image:: /_auto_examples/images/sphx_glr_plot_remove_background_005.png
-    :alt: plot remove background
+.. image:: /_auto_examples/images/sphx_glr_plot_remove_background_004.png
+    :alt: remove_background_morpho
     :class: sphx-glr-single-img
 
 
@@ -235,7 +206,7 @@ Test the function "remove_background_morpho"
     //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
       return f(*args, **kwds)
     ---- test remove_background_morpho -----
-    duration 1.274 s
+    duration 1.247 s
     sharpness : 1.093
 
 
@@ -254,17 +225,14 @@ Test the function "remove_background_along_axis"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" %sharpness(X4))
 
-    plot2D(X4, extent=ext, title='remove_background_along_axis',
-           vmin=np.median(X4), vmax=np.median(X4)+40)
-
-    plot2D(X4, ax=ax4, extent=ext, title='remove_background_along_axis',
+    plot2D(X4,  extent=ext, title='remove_background_along_axis',
            vmin=np.median(X4), vmax=np.median(X4)+40)
 
     plt.tight_layout()
 
 
 
-.. image:: /_auto_examples/images/sphx_glr_plot_remove_background_006.png
+.. image:: /_auto_examples/images/sphx_glr_plot_remove_background_005.png
     :alt: remove_background_along_axis
     :class: sphx-glr-single-img
 
@@ -285,7 +253,7 @@ Test the function "remove_background_along_axis"
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.627 seconds)
+   **Total running time of the script:** ( 0 minutes  4.200 seconds)
 
 
 .. _sphx_glr_download__auto_examples_plot_remove_background.py:

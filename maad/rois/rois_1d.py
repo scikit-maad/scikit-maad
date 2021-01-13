@@ -1,54 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" Segmentation methods for 1D signals.
-
+""" S
+Segmentation methods for 1D signals.
 This module gathers a collection of functions to detect regions of interest (ROIs)
-on the temporal domain.
+in the temporal domain.
 """
+#
+# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
+#
+# License: New BSD License
+
+# =============================================================================
+# Load the modules
+# =============================================================================
+# Import external modules
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import pandas as pd
 
-def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
-    """
-    Filter 1D signal with a Kaiser-windowed filter.
-    
-    Parameters
-    ----------
-    s : ndarray
-        input 1D signal
-    cutoff : ndarray
-        upper and lower frequencies (min_f, max_f) in Hertz
-    atten : float 
-        attenuation in dB
-    transition_bw : float
-        transition bandwidth in percent default 5% of total band
-    bandpass : bool
-        bandpass (True) or bandreject (False) filter, default is bandpass
-    
-    Returns
-    -------
-    s_filt : array 
-        signal filtered
-    
-    Examples
-    --------
-    >>> from maad import sound, rois
-    >>> s, fs = sound.load('./data/spinetail.wav')
-    >>> s_filt = rois.sinc(s, cutoff=(4500,8000), fs=fs, atten=80, transition_bw=0.8)
-    
-    """
-    width = (cutoff[1] - cutoff[0]) * transition_bw
-    numtaps, beta = signal.kaiserord(atten, width/(0.5*fs))
-    np.ceil(numtaps-1) // 2 * 2 + 1  # round to nearest odd to have Type I filter
-    taps = signal.firwin(numtaps, cutoff, window=('kaiser', beta), 
-                         scale=False, nyq=0.5*fs, pass_zero=not(bandpass))
-    s_filt = signal.lfilter(taps, 1, s)
-    return s_filt
+# import internal modules
+from maad.sound import sinc
 
-
+#%%
+# =============================================================================
+# Private functions
+# =============================================================================
 def _corresp_onset_offset(onset, offset, tmin, tmax):
     """ 
     Check that each onsets have a corresponding offset.
@@ -81,6 +60,7 @@ def _corresp_onset_offset(onset, offset, tmin, tmax):
         pass
     return onset, offset
 
+#%%
 def _energy_windowed(s, wl=512, fs=None):
     """ 
     Computse windowed energy on an audio signal.
@@ -112,6 +92,10 @@ def _energy_windowed(s, wl=512, fs=None):
     time = np.arange(0,len(s_rms)) * wl / fs + wl*0.5/fs
     return time, s_rms
 
+#%%
+# =============================================================================
+# Public functions
+# =============================================================================
 def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
                   savefilename='rois.csv', **kwargs):
     """

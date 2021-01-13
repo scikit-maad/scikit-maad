@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.math_tools.get_unimode" href="util.math_tools.get_unimode.html" />
-    <link rel="prev" title="util.math_tools" href="util.math_tools.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,23 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="util.decibelSPL.html">util.decibelSPL</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="util.math_tools.html">util.math_tools</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">util.math_tools.entropy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.math_tools.get_unimode.html">util.math_tools.get_unimode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.math_tools.running_mean.html">util.math_tools.running_mean</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -162,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
-          <li><a href="util.math_tools.html">util.math_tools</a> &raquo;</li>
-        
       <li>util.math_tools.entropy</li>
     
     
@@ -187,30 +170,6 @@
             
   <div class="section" id="util-math-tools-entropy">
 <h1>util.math_tools.entropy<a class="headerlink" href="#util-math-tools-entropy" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="util.math_tools.entropy">
-<code class="sig-prename descclassname">util.math_tools.</code><code class="sig-name descname">entropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/math_tools.html#entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.math_tools.entropy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the entropy of a vector (waveform) or matrix (spectrogram).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>x is a vector (1d) or a matrix (2d)</p>
-</dd>
-<dt><strong>axis</strong><span class="classifier">int, optional, default is 0</span></dt><dd><p>select the axis where the entropy is computed
-if x is a vector, axis=0
-if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>H</strong><span class="classifier">float or ndarray of floats</span></dt><dd><p>entropy of x</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -218,15 +177,6 @@ if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.math_tools.get_unimode.html" class="btn btn-neutral float-right" title="util.math_tools.get_unimode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.math_tools.html" class="btn btn-neutral float-left" title="util.math_tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

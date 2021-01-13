@@ -1,6 +1,67 @@
 # -*- coding: utf-8 -*-
 """
-Handfull of useful set of tools used in the audio analysis framework.
+Utilities
+=========
+
+The module ``utils`` has a handfull of useful set of tools used in the audio analysis framework.
+
+Visualization
+-------------
+.. autosummary::
+    :toctree: generated/
+    
+    rand_cmap
+    crop_image
+    save_figlist
+    plot1D
+    plot2D
+    plot_features_map
+    plot_features
+    plot_correlation_map
+    false_Color_Spectro
+
+Mathematical
+------------
+.. autosummary::
+    :toctree: generated/
+    
+    running_mean
+    get_unimode
+    entropy
+    rms
+    kurtosis
+    skewness
+    moments
+
+Parser
+------
+.. autosummary::
+    :toctree: generated/
+    
+    read_audacity_annot
+    write_audacity_annot
+    date_parser
+
+Miscellaneous
+-------------
+.. autosummary::
+    :toctree: generated/
+    
+    index_bw
+    intoBins
+    shift_bit_length
+    rle
+    linear_scale
+    amplitude2dB
+    power2dB
+    dB2amplitude
+    dB2power
+    mean_dB
+    add_dB
+    nearest_idx
+    get_df_single_row
+    format_features
+
 """
 
 from .miscellaneous import (index_bw,
@@ -28,26 +89,17 @@ from .visualization import (rand_cmap,
                            plot_correlation_map,
                            false_Color_Spectro)
 
-from .math_tools import (running_mean,
+from .math_func import (running_mean,
                          get_unimode,
-                         entropy)
+                         entropy,
+                         rms,
+                         kurtosis,
+                         skewness,
+                         moments)                     
 
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
                      date_parser)
-
-from .decibelSPL import (wav2volt,
-                        volt2pressure,
-                        wav2pressure,
-                        pressure2dBSPL,
-                        dBSPL2pressure,
-                        power2dBSPL,
-                        amplitude2dBSPL,
-                        wav2dBSPL,
-                        wav2Leq,
-                        pressure2Leq,
-                        PSD2Leq)
-
 __all__ = [
            # miscellaneous 
            'index_bw',
@@ -74,23 +126,17 @@ __all__ = [
            'plot_features',
            'plot_correlation_map',
            'false_Color_Spectro',
-           # math       
+           # math_func       
            'running_mean',
            'get_unimode',
            'entropy',
+           'psd',
+           'rms',
+           'kurtosis',
+           'skewness',
+           'moments',
            # parser
            'read_audacity_annot',
            'write_audacity_annot',
-           'date_parser',
-           # decibelSPL        
-           'wav2volt',
-           'volt2pressure',
-           'wav2pressure',
-           'pressure2dBSPL',
-           'dBSPL2pressure',
-           'power2dBSPL',
-           'amplitude2dBSPL',
-           'wav2dBSPL',
-           'wav2Leq',
-           'pressure2Leq',
-           'PSD2Leq']
+           'date_parser'
+            ]

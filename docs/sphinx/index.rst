@@ -20,7 +20,7 @@ This work started in 2016 at the Museum National d'Histoire Naturelle (MNHN)
 in Paris, France. It was initiated by **Juan Sebastian Ulloa**, supervised by 
 **Jérôme Sueur** and **Thierry Aubin** at the Muséum National d'Histoire Naturelle 
 and the Université Paris Saclay respectively. Python functions were added by 
-**Sylvain Haupert** and **Juan Sebastian Ulloa** in 2018. New features are currently being developped and a stable release will be available by the end of 2020.
+**Sylvain Haupert**, **Juan Felipe Latorre**, and **Juan Sebastian Ulloa**.
 
 
 .. toctree::
@@ -30,15 +30,14 @@ and the Université Paris Saclay respectively. Python functions were added by
    install
    quickstart
    
-.. autosummary::
-   :toctree: _autosummary
-   :template: custom-module-template.rst
+.. toctree::
    :caption: Documentation
-   :recursive:
+   :maxdepth: 1
    
    sound
    rois
    features
+   spl
    util
    
 .. toctree::
