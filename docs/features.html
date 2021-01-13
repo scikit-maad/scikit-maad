@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Acoustic features &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="maad.features.shape_features" href="generated/maad.features.shape_features.html" />
+    <link rel="prev" title="maad.rois.rois_to_imblobs" href="generated/maad.rois.rois_to_imblobs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">Segmentation methods</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Acoustic features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spectro-temporal-features">Spectro-temporal features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.shape_features.html">maad.features.shape_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.shape_features_raw.html">maad.features.shape_features_raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.opt_shape_presets.html">maad.features.opt_shape_presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.filter_multires.html">maad.features.filter_multires</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.filter_bank_2d_nodc.html">maad.features.filter_bank_2d_nodc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.plot_shape.html">maad.features.plot_shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.overlay_centroid.html">maad.features.overlay_centroid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.centroid_features.html">maad.features.centroid_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.all_shape_features.html">maad.features.all_shape_features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#alpha-acoustic-indices">Alpha acoustic indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.audio_median.html">maad.features.audio_median</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.audio_entropy.html">maad.features.audio_entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.acousticRichnessIndex.html">maad.features.acousticRichnessIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.audio_activity.html">maad.features.audio_activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.audio_events.html">maad.features.audio_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.acousticComplexityIndex.html">maad.features.acousticComplexityIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.frequency_entropy.html">maad.features.frequency_entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.numberOfPeaks.html">maad.features.numberOfPeaks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.spectral_entropy.html">maad.features.spectral_entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.spectral_activity.html">maad.features.spectral_activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.spectral_events.html">maad.features.spectral_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.spectral_cover.html">maad.features.spectral_cover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.soundscapeIndex.html">maad.features.soundscapeIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.bioacousticsIndex.html">maad.features.bioacousticsIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.acousticDiversityIndex.html">maad.features.acousticDiversityIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.acousticEvenessIndex.html">maad.features.acousticEvenessIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.roughness.html">maad.features.roughness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.audio_LEQ.html">maad.features.audio_LEQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.spectral_LEQ.html">maad.features.spectral_LEQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.surfaceRoughness.html">maad.features.surfaceRoughness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.tfsd.html">maad.features.tfsd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.more_entropy.html">maad.features.more_entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.acousticGradientIndex.html">maad.features.acousticGradientIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.frequency_raoQ.html">maad.features.frequency_raoQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.regionOfInterestIndex.html">maad.features.regionOfInterestIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.all_audio_alpha_indices.html">maad.features.all_audio_alpha_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.all_spectral_alpha_indices.html">maad.features.all_spectral_alpha_indices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#temporal-features">Temporal features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.audio_moments.html">maad.features.audio_moments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.zero_crossing_rate.html">maad.features.zero_crossing_rate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#spectral-features">Spectral features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.features.spectral_moments.html">maad.features.spectral_moments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Acoustic features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-maad.features"></span><div class="section" id="acoustic-features">
+<h1>Acoustic features<a class="headerlink" href="#acoustic-features" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">features</span></code> is an ensemble of functions to characterize audio signals using temporal and spectral features, and ecoacoustic indices.</p>
+<div class="section" id="spectro-temporal-features">
+<h2>Spectro-temporal features<a class="headerlink" href="#spectro-temporal-features" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.shape_features.html#maad.features.shape_features" title="maad.features.shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features</span></code></a>(Sxx[, resolution, rois])</p></td>
+<td><p>Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.shape_features_raw.html#maad.features.shape_features_raw" title="maad.features.shape_features_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features_raw</span></code></a>(im[, resolution, opt_shape])</p></td>
+<td><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions   using 2D Gabor filters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.opt_shape_presets.html#maad.features.opt_shape_presets" title="maad.features.opt_shape_presets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opt_shape_presets</span></code></a>(resolution[, opt_shape])</p></td>
+<td><p>Set parameters for multiresolution analysis using presets or custom parameters</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.filter_multires.html#maad.features.filter_multires" title="maad.features.filter_multires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_multires</span></code></a>(Sxx, kernels[, npyr, rescale])</p></td>
+<td><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid   transformation to downscale the input spectrogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.filter_bank_2d_nodc.html#maad.features.filter_bank_2d_nodc" title="maad.features.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_bank_2d_nodc</span></code></a>(frequency, ntheta[, …])</p></td>
+<td><p>Build an ensemble of complex 2D Gabor filters with no DC offset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.plot_shape.html#maad.features.plot_shape" title="maad.features.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a>(shape, params[, row, display_values])</p></td>
+<td><p>Plot shape features in a bidimensional plot</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.overlay_centroid.html#maad.features.overlay_centroid" title="maad.features.overlay_centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></a>(im_ref, centroid[, savefig])</p></td>
+<td><p>Overlay centroids on the original spectrogram</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.centroid_features.html#maad.features.centroid_features" title="maad.features.centroid_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">centroid_features</span></code></a>(Sxx[, rois, im_rois])</p></td>
+<td><p>Computes intensity centroid of a spectrogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.all_shape_features.html#maad.features.all_shape_features" title="maad.features.all_shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_shape_features</span></code></a>(s, fs, rois[, …])</p></td>
+<td><p>Computes shape and central frequency features from signal at specified  time-frequency limits defined by regions of interest (ROIs)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="alpha-acoustic-indices">
+<h2>Alpha acoustic indices<a class="headerlink" href="#alpha-acoustic-indices" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.audio_median.html#maad.features.audio_median" title="maad.features.audio_median"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_median</span></code></a>(s[, mode, Nt])</p></td>
+<td><p>Computes the median of the envelope of an audio signal</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.audio_entropy.html#maad.features.audio_entropy" title="maad.features.audio_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_entropy</span></code></a>(s[, compatibility, mode, Nt])</p></td>
+<td><p>Computes the median of the envelope of an audio signal</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.acousticRichnessIndex.html#maad.features.acousticRichnessIndex" title="maad.features.acousticRichnessIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticRichnessIndex</span></code></a>(Ht_array, M_array)</p></td>
+<td><p>Acoustic richness index : AR</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.audio_activity.html#maad.features.audio_activity" title="maad.features.audio_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_activity</span></code></a>(s[, dB_threshold, mode, Nt])</p></td>
+<td><p>Acoustic Activity :</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.audio_events.html#maad.features.audio_events" title="maad.features.audio_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_events</span></code></a>(s, fs[, dB_threshold, …])</p></td>
+<td><p>Acoustic events :</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.acousticComplexityIndex.html#maad.features.acousticComplexityIndex" title="maad.features.acousticComplexityIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticComplexityIndex</span></code></a>(Sxx)</p></td>
+<td><p>Acoustic Complexity Index : ACI</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.frequency_entropy.html#maad.features.frequency_entropy" title="maad.features.frequency_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_entropy</span></code></a>(X[, compatibility])</p></td>
+<td><p>Computes the spectral entropy of a power spectral density (1d) or power spectrogram density (2d)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.numberOfPeaks.html#maad.features.numberOfPeaks" title="maad.features.numberOfPeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numberOfPeaks</span></code></a>(X, fn[, mode, min_peak_val, …])</p></td>
+<td><p>Counts the number of major frequency peaks obtained on a mean spectrum.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.spectral_entropy.html#maad.features.spectral_entropy" title="maad.features.spectral_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_entropy</span></code></a>(Sxx, fn[, flim, display])</p></td>
+<td><p>Spectral entropy : EAS, ECU, ECV, EPS,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.spectral_activity.html#maad.features.spectral_activity" title="maad.features.spectral_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_activity</span></code></a>(Sxx_dB[, dB_threshold])</p></td>
+<td><p>Acoustic Activity :</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.spectral_events.html#maad.features.spectral_events" title="maad.features.spectral_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_events</span></code></a>(Sxx_dB, dt[, dB_threshold, …])</p></td>
+<td><p>Spectral Acoustic events :</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.spectral_cover.html#maad.features.spectral_cover" title="maad.features.spectral_cover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_cover</span></code></a>(Sxx, fn[, dB_threshold, …])</p></td>
+<td><p>Spectral Activity Cover</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.soundscapeIndex.html#maad.features.soundscapeIndex" title="maad.features.soundscapeIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soundscapeIndex</span></code></a>(Sxx_power, fn[, flim_bioPh, …])</p></td>
+<td><p>Compute the Normalized Difference Soundscape Index from a power spectrogram.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.bioacousticsIndex.html#maad.features.bioacousticsIndex" title="maad.features.bioacousticsIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bioacousticsIndex</span></code></a>(Sxx, fn[, flim, R_compatible])</p></td>
+<td><p>Bioacoustics Index</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.acousticDiversityIndex.html#maad.features.acousticDiversityIndex" title="maad.features.acousticDiversityIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticDiversityIndex</span></code></a>(Sxx, fn[, fmin, …])</p></td>
+<td><p>Acoustic Diversity Index : ADI</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.acousticEvenessIndex.html#maad.features.acousticEvenessIndex" title="maad.features.acousticEvenessIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticEvenessIndex</span></code></a>(Sxx, fn[, fmin, fmax, …])</p></td>
+<td><p>Acoustic Eveness Index : AEI</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.roughness.html#maad.features.roughness" title="maad.features.roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roughness</span></code></a>(x[, norm, axis])</p></td>
+<td><p>Computes the roughness (depends on the number of peaks and their amplitude) of a vector or matrix x (i.e.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.audio_LEQ.html#maad.features.audio_LEQ" title="maad.features.audio_LEQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_LEQ</span></code></a>(s, fs, gain[, Vadc, sensitivity, …])</p></td>
+<td><p>Computes the Equivalent Continuous Sound level (Leq) of an audio signal  in the time domain</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.spectral_LEQ.html#maad.features.spectral_LEQ" title="maad.features.spectral_LEQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_LEQ</span></code></a>(X, gain[, Vadc, sensitivity, …])</p></td>
+<td><p>Computes the Equivalent Continuous Sound level (Leq) from a power spectrum  (1d) or power spectrogram (2d)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.surfaceRoughness.html#maad.features.surfaceRoughness" title="maad.features.surfaceRoughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surfaceRoughness</span></code></a>(x[, norm])</p></td>
+<td><p>Surface Roughness</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.tfsd.html#maad.features.tfsd" title="maad.features.tfsd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tfsd</span></code></a>(Sxx, fn, tn[, flim, mode, display])</p></td>
+<td><p>Time frequency spectrogram derivation : tfsd</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.more_entropy.html#maad.features.more_entropy" title="maad.features.more_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">more_entropy</span></code></a>(x[, order, axis])</p></td>
+<td><p>Compute more types of entropy :</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.acousticGradientIndex.html#maad.features.acousticGradientIndex" title="maad.features.acousticGradientIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticGradientIndex</span></code></a>(Sxx, dt[, order, …])</p></td>
+<td><p>Acoustic Gradient Index : AGI</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.frequency_raoQ.html#maad.features.frequency_raoQ" title="maad.features.frequency_raoQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_raoQ</span></code></a>(S_power, fn[, bin_step])</p></td>
+<td><p>Compute Rao quadratic entropy on a power spectrum (1d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.regionOfInterestIndex.html#maad.features.regionOfInterestIndex" title="maad.features.regionOfInterestIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regionOfInterestIndex</span></code></a>(Sxx_dB_noNoise, tn, fn)</p></td>
+<td><p>Find regions of interest (ROI) and compute their number and their cover  of the spectrogram</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.all_audio_alpha_indices.html#maad.features.all_audio_alpha_indices" title="maad.features.all_audio_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_audio_alpha_indices</span></code></a>(s, fs[, verbose, …])</p></td>
+<td><p>Computes the indices in audio domain</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.all_spectral_alpha_indices.html#maad.features.all_spectral_alpha_indices" title="maad.features.all_spectral_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_spectral_alpha_indices</span></code></a>(Sxx_power, tn, fn)</p></td>
+<td><p>Computes the indices in spectral (spectrum (1d) or spectrogram (2d)) domain</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="temporal-features">
+<h2>Temporal features<a class="headerlink" href="#temporal-features" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.audio_moments.html#maad.features.audio_moments" title="maad.features.audio_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_moments</span></code></a>(s)</p></td>
+<td><p>Computes the first 4th moments of an audio - mean - variance - skewness - kurtosis</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.features.zero_crossing_rate.html#maad.features.zero_crossing_rate" title="maad.features.zero_crossing_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_crossing_rate</span></code></a>(s, fs)</p></td>
+<td><p>Compute the Zero Crossing Rate of an audio signal.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="spectral-features">
+<h2>Spectral features<a class="headerlink" href="#spectral-features" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.features.spectral_moments.html#maad.features.spectral_moments" title="maad.features.spectral_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_moments</span></code></a>(X[, axis])</p></td>
+<td><p>Computes the first 4th moments of an amplitude spectrum (1d) or spectrogram (2d)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/maad.features.shape_features.html" class="btn btn-neutral float-right" title="maad.features.shape_features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="generated/maad.rois.rois_to_imblobs.html" class="btn btn-neutral float-left" title="maad.rois.rois_to_imblobs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

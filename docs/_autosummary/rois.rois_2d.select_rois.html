@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois.rois_2d.sharpness" href="rois.rois_2d.sharpness.html" />
-    <link rel="prev" title="rois.rois_2d.select_bandwidth" href="rois.rois_2d.select_bandwidth.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,29 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.create_mask.html">rois.rois_2d.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.load.html">rois.rois_2d.load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.median_equalizer.html">rois.rois_2d.median_equalizer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html">rois.rois_2d.remove_background_along_axis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html">rois.rois_2d.remove_background_morpho</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.select_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.sharpness.html">rois.rois_2d.sharpness</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -167,10 +148,6 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="rois.html">rois</a> &raquo;</li>
-        
-          <li><a href="rois.rois_2d.html">rois.rois_2d</a> &raquo;</li>
         
       <li>rois.rois_2d.select_rois</li>
     
@@ -304,7 +281,7 @@ correctly.</p>
 </pre></div>
 </div>
 <p>Smooth the spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB_blurred</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB_blurred</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Detection of the acoustic signature =&gt; creation of a mask</p>
@@ -318,7 +295,7 @@ correctly.</p>
 <p>We can observe that we detect as ROI background noise and also that we merge
 all together several ROIs. A solution consits in subtracting the background
 noise before finding ROIs.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Convert linear spectrogram into dB</p>
@@ -326,7 +303,7 @@ noise before finding ROIs.</p>
 </pre></div>
 </div>
 <p>Smooth the spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise_dB_blurred</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_noNoise_dB</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise_dB_blurred</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_noNoise_dB</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Detection of the acoustic signature =&gt; creation of a mask</p>
@@ -346,15 +323,6 @@ noise before finding ROIs.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="rois.rois_2d.sharpness.html" class="btn btn-neutral float-right" title="rois.rois_2d.sharpness" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="rois.rois_2d.select_bandwidth.html" class="btn btn-neutral float-left" title="rois.rois_2d.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

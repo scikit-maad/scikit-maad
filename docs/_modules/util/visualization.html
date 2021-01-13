@@ -94,10 +94,11 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -189,7 +190,7 @@
 <span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear_scale</span>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="plot1D"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot1D.html#util.visualization.plot1D">[docs]</a><span class="k">def</span> <span class="nf">plot1D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="plot1D"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot1D.html#util.plot1D">[docs]</a><span class="k">def</span> <span class="nf">plot1D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plot a signal s</span>
 <span class="sd">    </span>
@@ -318,7 +319,7 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="plot2D"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot2D.html#util.visualization.plot2D">[docs]</a><span class="k">def</span> <span class="nf">plot2D</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="plot2D"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot2D.html#util.plot2D">[docs]</a><span class="k">def</span> <span class="nf">plot2D</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    display an image (spectrogram, 2D binary mask, ROIS...)</span>
 <span class="sd">    </span>
@@ -434,10 +435,12 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">xticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">=</span><span class="n">xticks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">xticks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xticks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">xticks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">yticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">=</span><span class="n">yticks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">yticks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">yticks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">yticks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
 
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -448,7 +451,7 @@
     <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="rand_cmap"><a class="viewcode-back" href="../../_autosummary/util.visualization.rand_cmap.html#util.visualization.rand_cmap">[docs]</a><span class="k">def</span> <span class="nf">rand_cmap</span><span class="p">(</span><span class="n">nlabels</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bright&#39;</span><span class="p">,</span> <span class="n">first_color_black</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">last_color_black</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+<div class="viewcode-block" id="rand_cmap"><a class="viewcode-back" href="../../_autosummary/util.visualization.rand_cmap.html#util.rand_cmap">[docs]</a><span class="k">def</span> <span class="nf">rand_cmap</span><span class="p">(</span><span class="n">nlabels</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bright&#39;</span><span class="p">,</span> <span class="n">first_color_black</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">last_color_black</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
               <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a random colormap to be used together with matplotlib. Useful for segmentation tasks</span>
@@ -525,7 +528,7 @@
     <span class="k">return</span> <span class="n">random_colormap</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="crop_image"><a class="viewcode-back" href="../../_autosummary/util.visualization.crop_image.html#util.visualization.crop_image">[docs]</a><span class="k">def</span> <span class="nf">crop_image</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="crop_image"><a class="viewcode-back" href="../../_autosummary/util.visualization.crop_image.html#util.crop_image">[docs]</a><span class="k">def</span> <span class="nf">crop_image</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Crop a spectrogram (or an image) in time (horizontal X axis) and frequency</span>
 <span class="sd">    (vertical y axis)</span>
@@ -590,7 +593,7 @@
     <span class="k">return</span> <span class="n">im</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="save_figlist"><a class="viewcode-back" href="../../_autosummary/util.visualization.save_figlist.html#util.visualization.save_figlist">[docs]</a><span class="k">def</span> <span class="nf">save_figlist</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">figlist</span><span class="p">):</span>
+<div class="viewcode-block" id="save_figlist"><a class="viewcode-back" href="../../_autosummary/util.visualization.save_figlist.html#util.save_figlist">[docs]</a><span class="k">def</span> <span class="nf">save_figlist</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">figlist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save a list of figures to file.</span>
 <span class="sd">    </span>
@@ -610,7 +613,7 @@
         <span class="n">imsave</span><span class="p">(</span><span class="n">fname_save</span><span class="p">,</span><span class="n">fig</span><span class="p">)</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="plot_features_map"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot_features_map.html#util.visualization.plot_features_map">[docs]</a><span class="k">def</span> <span class="nf">plot_features_map</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="plot_features_map"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot_features_map.html#util.plot_features_map">[docs]</a><span class="k">def</span> <span class="nf">plot_features_map</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot features amplitude as heatmap.</span>
 <span class="sd">    Features are on the vertical axis</span>
@@ -736,7 +739,7 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="plot_features"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot_features.html#util.visualization.plot_features">[docs]</a><span class="k">def</span> <span class="nf">plot_features</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span> 
+<div class="viewcode-block" id="plot_features"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot_features.html#util.plot_features">[docs]</a><span class="k">def</span> <span class="nf">plot_features</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot phenology of the features (ie. indices) in the DataFrame obtained </span>
 <span class="sd">    with MAAD</span>
@@ -854,7 +857,7 @@
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="plot_correlation_map"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot_correlation_map.html#util.visualization.plot_correlation_map">[docs]</a><span class="k">def</span> <span class="nf">plot_correlation_map</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">R_threshold</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span><span class="s1">&#39;spearman&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="plot_correlation_map"><a class="viewcode-back" href="../../_autosummary/util.visualization.plot_correlation_map.html#util.plot_correlation_map">[docs]</a><span class="k">def</span> <span class="nf">plot_correlation_map</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">R_threshold</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span><span class="s1">&#39;spearman&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot the correlation map between indices in the DataFrame obtained</span>
 <span class="sd">    with MAAD</span>
@@ -957,7 +960,7 @@
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="false_Color_Spectro"><a class="viewcode-back" href="../../_autosummary/util.visualization.false_Color_Spectro.html#util.visualization.false_Color_Spectro">[docs]</a><span class="k">def</span> <span class="nf">false_Color_Spectro</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">99</span><span class="p">),</span> <span class="n">reverseLUT</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+<div class="viewcode-block" id="false_Color_Spectro"><a class="viewcode-back" href="../../_autosummary/util.visualization.false_Color_Spectro.html#util.false_Color_Spectro">[docs]</a><span class="k">def</span> <span class="nf">false_Color_Spectro</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">99</span><span class="p">),</span> <span class="n">reverseLUT</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
                          <span class="n">permut</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;minutes&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                          <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>

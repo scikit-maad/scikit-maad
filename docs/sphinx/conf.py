@@ -43,6 +43,8 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
     'sphinx_gallery.gen_gallery',
 ]
 
+autosummary_generate = True
+
 # -- Example Gallery --
 sphinx_gallery_conf = {
      'examples_dirs': '../../example_gallery',   # path to your example scripts
@@ -89,3 +91,9 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# If false, no module index is generated.
+html_domain_indices = True
+# If false, no index is generated.
+html_use_index = True
+html_use_modindex = True

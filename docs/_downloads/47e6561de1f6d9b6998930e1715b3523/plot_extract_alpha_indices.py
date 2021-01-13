@@ -78,7 +78,7 @@ for index, row in df.iterrows() :
 
     # compute all the audio indices and store them into a DataFrame
     # dB_threshold and rejectDuration are used to select audio events.
-    df_audio_ind = features.audio_indices(wave, fs, 
+    df_audio_ind = features.all_audio_alpha_indices(wave, fs, 
                                           gain = G, sensibility = S,
                                           dB_threshold = 3, rejectDuration = 0.01,
                                           verbose = False, display = False)
@@ -101,17 +101,17 @@ for index, row in df.iterrows() :
     # mask_param1 and mask_param2 are two parameters to find the regions of 
     # interest (ROIs). These parameters need to be adapted to the dataset in 
     # order to select ROIs
-    df_spec_ind, df_spec_ind_per_bin = features.spectral_indices(Sxx_power,
-                                                    tn,fn,
-                                                    flim_low = [0,1500], 
-                                                    flim_mid = [1500,8000], 
-                                                    flim_hi  = [8000,20000], 
-                                                    gain = G, sensitivity = S,
-                                                    verbose = False, 
-                                                    R_compatible = 'soundecology',
-                                                    mask_param1 = 6, 
-                                                    mask_param2=0.5,
-                                                    display = False)
+    df_spec_ind, df_spec_ind_per_bin = features.all_spectral_alpha_indices(Sxx_power,
+                                                            tn,fn,
+                                                            flim_low = [0,1500], 
+                                                            flim_mid = [1500,8000], 
+                                                            flim_hi  = [8000,20000], 
+                                                            gain = G, sensitivity = S,
+                                                            verbose = False, 
+                                                            R_compatible = 'soundecology',
+                                                            mask_param1 = 6, 
+                                                            mask_param2=0.5,
+                                                            display = False)
     
     """ =======================================================================
                      Create a dataframe 

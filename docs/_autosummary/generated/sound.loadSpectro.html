@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sound.loadSpectro &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>sound.loadSpectro</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_autosummary/generated/sound.loadSpectro.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sound-loadspectro">
+<h1>sound.loadSpectro<a class="headerlink" href="#sound-loadspectro" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="sound.loadSpectro">
+<code class="sig-prename descclassname">sound.</code><code class="sig-name descname">loadSpectro</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">flipud</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sound/input_output.html#loadSpectro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.loadSpectro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an image from a file or an URL</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>Image file name, e.g. <code class="docutils literal notranslate"><span class="pre">test.jpg</span></code> or URL.</p>
+</dd>
+<dt><strong>fs</strong><span class="classifier">scalar</span></dt><dd><p>Sampling frequency of the audiogram (in Hz)</p>
+</dd>
+<dt><strong>duration</strong><span class="classifier">scalar</span></dt><dd><p>Duration of the audiogram (in s)</p>
+</dd>
+<dt><strong>flipud</strong><span class="classifier">boolean, optional, default is True</span></dt><dd><p>Vertical flip of the matrix (image)</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>if True, print message in terminal</p>
+</dd>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>if True, display the image</p>
+</dd>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’ </span></dt><dd><p>title of the figure</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’ </span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’ </span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’ </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a> 
+in order to get all the  existing colormaps 
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,  
+‘viridis’…</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None </span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize 
+luminance data.  Note if you pass a <cite>norm</cite> instance, your 
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>extent<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+upper-right corners. If <cite>None</cite>, the image is positioned such that 
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>dpi<span class="classifier">integer, optional, default is 96 </span></dt><dd><p>Dot per inch.  
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow 
+For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>format<span class="classifier">string, optional, default is ‘png’ </span></dt><dd><p>Format to save the figure</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Sxx</strong><span class="classifier">ndarray</span></dt><dd><p>The different color bands/channels are stored in the 
+third dimension, such that a gray-image is MxN, an 
+RGB-image MxNx3 and an RGBA-image MxNx4.</p>
+</dd>
+<dt><strong>extent</strong><span class="classifier">list of scalars [left, right, bottom, top]</span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
+upper-right corners.</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">scalar</span></dt><dd><p>Time resolution of the spectrogram (horizontal x-axis)</p>
+</dd>
+<dt><strong>df</strong><span class="classifier">scalar</span></dt><dd><p>Frequency resolution of the spectrogram (vertical y-axis)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

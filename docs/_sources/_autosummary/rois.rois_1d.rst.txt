@@ -1,4 +1,4 @@
-rois.rois\_1d
+﻿rois.rois\_1d
 =============
 
 .. automodule:: rois.rois_1d
@@ -16,7 +16,6 @@ rois.rois\_1d
       :nosignatures:
    
       find_rois_cwt
-      sinc
    
    
 

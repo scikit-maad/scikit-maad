@@ -96,15 +96,17 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Example gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds in a recording</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Find Regions of interest (ROIs) in a spectrogram</a><ul>
@@ -223,7 +225,7 @@ scikit-image, scikit-learn and pandas Python packages.</p>
 </div>
 <img alt="Spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:278: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   if now: plt.show()
 </pre></div>
 </div>
@@ -239,12 +241,12 @@ aggregated, meaning that there is no more connected pixels with value upper
 than the second threshold value.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First we remove the stationary background in order to increase the contrast [1]</span>
 <span class="c1"># Then we convert the spectrogram into dB</span>
-<span class="n">Sxx_power_noNoise</span><span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
+<span class="n">Sxx_power_noNoise</span><span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
 <span class="n">Sxx_db_noNoise</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power_noNoise</span><span class="p">)</span>
 
 <span class="c1"># Then we smooth the spectrogram in order to facilitate the creation of masks as</span>
 <span class="c1"># small sparse details are merged if they are close to each other</span>
-<span class="n">Sxx_db_noNoise_smooth</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_db_noNoise</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="n">Sxx_db_noNoise_smooth</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_db_noNoise</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                          <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dB_max</span></a><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
 
@@ -422,7 +424,7 @@ To extract</p>
 Brisbane</p>
 </dd>
 </dl>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.307 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.589 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-compare-auto-and-manual-rois-selection-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/d04f30b87481153bb1fea11ace012513/plot_compare_auto_and_manual_rois_selection.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_compare_auto_and_manual_rois_selection.py</span></code></a></p>

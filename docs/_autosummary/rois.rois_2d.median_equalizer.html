@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois.rois_2d.overlay_rois" href="rois.rois_2d.overlay_rois.html" />
-    <link rel="prev" title="rois.rois_2d.load" href="rois.rois_2d.load.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,29 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="rois.html">rois</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="rois.rois_1d.html">rois.rois_1d</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="rois.rois_2d.html">rois.rois_2d</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.create_mask.html">rois.rois_2d.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.load.html">rois.rois_2d.load</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">rois.rois_2d.median_equalizer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.overlay_rois.html">rois.rois_2d.overlay_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background.html">rois.rois_2d.remove_background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_along_axis.html">rois.rois_2d.remove_background_along_axis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.remove_background_morpho.html">rois.rois_2d.remove_background_morpho</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.rois_to_imblobs.html">rois.rois_2d.rois_to_imblobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_bandwidth.html">rois.rois_2d.select_bandwidth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.select_rois.html">rois.rois_2d.select_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.sharpness.html">rois.rois_2d.sharpness</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rois.rois_2d.smooth.html">rois.rois_2d.smooth</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -168,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="rois.html">rois</a> &raquo;</li>
-        
-          <li><a href="rois.rois_2d.html">rois.rois_2d</a> &raquo;</li>
-        
       <li>rois.rois_2d.median_equalizer</li>
     
     
@@ -193,101 +170,6 @@
             
   <div class="section" id="rois-rois-2d-median-equalizer">
 <h1>rois.rois_2d.median_equalizer<a class="headerlink" href="#rois-rois-2d-median-equalizer" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="rois.rois_2d.median_equalizer">
-<code class="sig-prename descclassname">rois.rois_2d.</code><code class="sig-name descname">median_equalizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rois/rois_2d.html#median_equalizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rois.rois_2d.median_equalizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Median equalizer : remove background noise in a spectrogram</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>Sxx</strong><span class="classifier">2D numpy array</span></dt><dd><p>Original spectrogram (or image), !!! not in dB</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix 
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>savefilename<span class="classifier">str, optional, default :’_spectro_after_noise_subtraction.png’ </span></dt><dd><p>Postfix of the figure filename</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’ </span></dt><dd><p>title of the figure</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’ </span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’ </span></dt><dd><p>label of the vertical axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’ </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a> 
-in order to get all the  existing colormaps 
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,  
-‘viridis’…</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>vmin, vmax<span class="classifier">scalar, optional, default: None </span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize 
-luminance data.  Note if you pass a <cite>norm</cite> instance, your 
-settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>extent<span class="classifier">scalars (left, right, bottom, top), optional, default: None </span></dt><dd><p>The location, in data-coordinates, of the lower-left and 
-upper-right corners. If <cite>None</cite>, the image is positioned such that 
-the pixel centers fall on zero-based (row, column) indices.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>dpi<span class="classifier">integer, optional, default is 96 </span></dt><dd><p>Dot per inch.  
-For printed version, choose high dpi (i.e. dpi=300) =&gt; slow 
-For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>format<span class="classifier">string, optional, default is ‘png’ </span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>… and more, see matplotlib</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>Sxx_out</strong><span class="classifier">2d ndarray of scalar</span></dt><dd><p>Spectrogram after denoising</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r5b5e5c5fb2f0-1"><span class="brackets">1</span></dt>
-<dd><p>This function has been proposed first by Carol BEDOYA &lt;<a class="reference external" href="mailto:carol&#46;bedoya&#37;&#52;&#48;pg&#46;canterbury&#46;ac&#46;nz">carol<span>&#46;</span>bedoya<span>&#64;</span>pg<span>&#46;</span>canterbury<span>&#46;</span>ac<span>&#46;</span>nz</a>&gt; 
-Adapted by S. Haupert Oct 9, 2018 for Python</p>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -295,15 +177,6 @@ Adapted by S. Haupert Oct 9, 2018 for Python</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="rois.rois_2d.overlay_rois.html" class="btn btn-neutral float-right" title="rois.rois_2d.overlay_rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="rois.rois_2d.load.html" class="btn btn-neutral float-left" title="rois.rois_2d.load" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

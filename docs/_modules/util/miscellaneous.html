@@ -94,10 +94,11 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -192,7 +193,7 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.index_bw.html#util.miscellaneous.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
+<div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.index_bw.html#util.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Select all the index coresponding to the selected frequency band</span>
 <span class="sd">    </span>
@@ -251,7 +252,7 @@
     <span class="k">return</span> <span class="n">index</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="intoBins"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.intoBins.html#util.miscellaneous.intoBins">[docs]</a><span class="k">def</span> <span class="nf">intoBins</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bin_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="intoBins"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.intoBins.html#util.intoBins">[docs]</a><span class="k">def</span> <span class="nf">intoBins</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bin_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Transform a vector or a matrix into bins </span>
 <span class="sd">    </span>
@@ -340,7 +341,7 @@
 
 <span class="c1">#=============================================================================</span>
        
-<div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.rle.html#util.miscellaneous.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.rle.html#util.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run-Length encoding (RLE)   </span>
 <span class="sd">    </span>
@@ -386,7 +387,7 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear_scale.html#util.miscellaneous.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.linear_scale.html#util.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Program to scale the values of a vector or matrix from a user specified </span>
 <span class="sd">    minimum to a user specified maximum</span>
@@ -446,7 +447,7 @@
 
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="amplitude2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.amplitude2dB.html#util.miscellaneous.amplitude2dB">[docs]</a><span class="k">def</span> <span class="nf">amplitude2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="amplitude2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.amplitude2dB.html#util.amplitude2dB">[docs]</a><span class="k">def</span> <span class="nf">amplitude2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform amplitude data (signal, scalar) into decibel scale within the </span>
 <span class="sd">    dB range (db_range).</span>
@@ -498,7 +499,7 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="power2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.power2dB.html#util.miscellaneous.power2dB">[docs]</a><span class="k">def</span> <span class="nf">power2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="power2dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.power2dB.html#util.power2dB">[docs]</a><span class="k">def</span> <span class="nf">power2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform power (amplitude²) signal or scalar into decibel scale </span>
 <span class="sd">    within the dB range (db_range).</span>
@@ -550,7 +551,7 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="dB2amplitude"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2amplitude.html#util.miscellaneous.dB2amplitude">[docs]</a><span class="k">def</span> <span class="nf">dB2amplitude</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="dB2amplitude"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2amplitude.html#util.dB2amplitude">[docs]</a><span class="k">def</span> <span class="nf">dB2amplitude</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform data in dB scale into amplitude</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
@@ -580,7 +581,7 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="dB2power"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2power.html#util.miscellaneous.dB2power">[docs]</a><span class="k">def</span> <span class="nf">dB2power</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="dB2power"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.dB2power.html#util.dB2power">[docs]</a><span class="k">def</span> <span class="nf">dB2power</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform data in dB scale into power (amplitude²)</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
@@ -609,7 +610,7 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="add_dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.add_dB.html#util.miscellaneous.add_dB">[docs]</a><span class="k">def</span> <span class="nf">add_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+<div class="viewcode-block" id="add_dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.add_dB.html#util.add_dB">[docs]</a><span class="k">def</span> <span class="nf">add_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    add dB values </span>
 <span class="sd">        </span>
@@ -682,7 +683,7 @@
     <span class="k">return</span> <span class="n">L_sum</span></div>
 
 <span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="mean_dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.mean_dB.html#util.miscellaneous.mean_dB">[docs]</a><span class="k">def</span> <span class="nf">mean_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+<div class="viewcode-block" id="mean_dB"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.mean_dB.html#util.mean_dB">[docs]</a><span class="k">def</span> <span class="nf">mean_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the average of dB values</span>
 <span class="sd">        </span>
@@ -761,7 +762,7 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.shift_bit_length.html#util.miscellaneous.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.shift_bit_length.html#util.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    find the closest power of 2 that is superior or equal to the number x</span>
 <span class="sd">    </span>
@@ -784,7 +785,7 @@
 
 <span class="c1">#=============================================================================</span>
     
-<div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.nearest_idx.html#util.miscellaneous.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.nearest_idx.html#util.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Find nearest value on array and return index</span>
 <span class="sd">    </span>
@@ -816,7 +817,7 @@
 
 <span class="c1">#=============================================================================</span>
 
-<div class="viewcode-block" id="get_df_single_row"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.get_df_single_row.html#util.miscellaneous.get_df_single_row">[docs]</a><span class="k">def</span> <span class="nf">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="get_df_single_row"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.get_df_single_row.html#util.get_df_single_row">[docs]</a><span class="k">def</span> <span class="nf">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract a single row from a dataframe keeping the DataFrame type </span>
 <span class="sd">    (instead of becoming a Series)</span>
@@ -901,7 +902,7 @@
     <span class="k">return</span> <span class="n">df_out</span></div>
     
 
-<div class="viewcode-block" id="format_features"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.format_features.html#util.miscellaneous.format_features">[docs]</a><span class="k">def</span> <span class="nf">format_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<div class="viewcode-block" id="format_features"><a class="viewcode-back" href="../../_autosummary/util.miscellaneous.format_features.html#util.format_features">[docs]</a><span class="k">def</span> <span class="nf">format_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Format features such as bounding box coordinates and centroids coordinates</span>
 <span class="sd">    to predifined format : time-frequency =&gt; pixels or pixels to time-frequency</span>

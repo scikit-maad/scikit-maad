@@ -1,4 +1,4 @@
-﻿features.alpha\_indices
+features.alpha\_indices
 =======================
 
 .. automodule:: features.alpha_indices
@@ -20,13 +20,13 @@
       acousticEvenessIndex
       acousticGradientIndex
       acousticRichnessIndex
+      all_audio_alpha_indices
+      all_spectral_alpha_indices
       audio_LEQ
       audio_activity
       audio_entropy
       audio_events
-      audio_indices
       audio_median
-      audio_moments
       bioacousticsIndex
       frequency_entropy
       frequency_raoQ
@@ -40,8 +40,6 @@
       spectral_cover
       spectral_entropy
       spectral_events
-      spectral_indices
-      spectral_moments
       surfaceRoughness
       tfsd
    

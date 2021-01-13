@@ -17,7 +17,11 @@
    
       entropy
       get_unimode
+      kurtosis
+      psd
+      rms
       running_mean
+      skewness
    
    
 
