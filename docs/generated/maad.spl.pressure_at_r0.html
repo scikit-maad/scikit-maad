@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.pressure_at_r0 &mdash; scikit-maad 0.1.4 documentation</title>
   
 
   
@@ -149,10 +149,14 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Overview: module code</li>
+      <li>maad.spl.pressure_at_r0</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.spl.pressure_at_r0.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -164,44 +168,50 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="features/alpha_indices.html">features.alpha_indices</a></li>
-<li><a href="features/shape.html">features.shape</a></li>
-<li><a href="features/spectral.html">features.spectral</a></li>
-<li><a href="features/temporal.html">features.temporal</a></li>
-<li><a href="maad/features/alpha_indices.html">maad.features.alpha_indices</a></li>
-<li><a href="maad/features/shape.html">maad.features.shape</a></li>
-<li><a href="maad/features/spectral.html">maad.features.spectral</a></li>
-<li><a href="maad/features/temporal.html">maad.features.temporal</a></li>
-<li><a href="maad/rois/rois_1d.html">maad.rois.rois_1d</a></li>
-<li><a href="maad/rois/rois_2d.html">maad.rois.rois_2d</a></li>
-<li><a href="maad/sound/filter.html">maad.sound.filter</a></li>
-<li><a href="maad/sound/input_output.html">maad.sound.input_output</a></li>
-<li><a href="maad/sound/metrics.html">maad.sound.metrics</a></li>
-<li><a href="maad/sound/spectral_subtraction.html">maad.sound.spectral_subtraction</a></li>
-<li><a href="maad/sound/spectro_func.html">maad.sound.spectro_func</a></li>
-<li><a href="maad/sound/transform.html">maad.sound.transform</a></li>
-<li><a href="maad/sound/trim.html">maad.sound.trim</a></li>
-<li><a href="maad/spl/active_space.html">maad.spl.active_space</a></li>
-<li><a href="maad/spl/conversion_SPL.html">maad.spl.conversion_SPL</a></li>
-<li><a href="maad/util/math_func.html">maad.util.math_func</a></li>
-<li><a href="maad/util/miscellaneous.html">maad.util.miscellaneous</a></li>
-<li><a href="maad/util/parser.html">maad.util.parser</a></li>
-<li><a href="maad/util/visualization.html">maad.util.visualization</a></li>
-<li><a href="rois/rois_1d.html">rois.rois_1d</a></li>
-<li><a href="rois/rois_2d.html">rois.rois_2d</a></li>
-<li><a href="sound/filter.html">sound.filter</a></li>
-<li><a href="sound/input_output.html">sound.input_output</a></li>
-<li><a href="sound/metrics.html">sound.metrics</a></li>
-<li><a href="sound/spectral_subtraction.html">sound.spectral_subtraction</a></li>
-<li><a href="sound/spectro_func.html">sound.spectro_func</a></li>
-<li><a href="sound/transform.html">sound.transform</a></li>
-<li><a href="sound/trim.html">sound.trim</a></li>
-<li><a href="util/math_func.html">util.math_func</a></li>
-<li><a href="util/miscellaneous.html">util.miscellaneous</a></li>
-<li><a href="util/parser.html">util.parser</a></li>
-<li><a href="util/visualization.html">util.visualization</a></li>
-</ul>
+  <div class="section" id="maad-spl-pressure-at-r0">
+<h1>maad.spl.pressure_at_r0<a class="headerlink" href="#maad-spl-pressure-at-r0" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.spl.pressure_at_r0">
+<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">pressure_at_r0</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">r</span></em>, <em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">r0</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">rh</span><span class="o">=</span><span class="default_value">60</span></em>, <em class="sig-param"><span class="n">pa</span><span class="o">=</span><span class="default_value">101325</span></em>, <em class="sig-param"><span class="n">a0</span><span class="o">=</span><span class="default_value">0.002</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/active_space.html#pressure_at_r0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.pressure_at_r0" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Estimate the pressure p0 at distance r0 from pressure p measured at 
+distance r. This function takes into account the geometric, atmospheric 
+and habitat attenuations</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>f: scalar or array-like</strong></dt><dd><p>frequency in Hz</p>
+</dd>
+<dt><strong>r: scalar or array-like</strong></dt><dd><p>distance in m at which p in Pa was measured</p>
+</dd>
+<dt><strong>p</strong><span class="classifier">scalar or array-like</span></dt><dd><p>pressure in Pa</p>
+</dd>
+<dt><strong>r0</strong><span class="classifier">scalar</span></dt><dd><p>distance at which p0 needs to be estimated (generally &#64;1m)</p>
+</dd>
+<dt><strong>t: scalar, optional, default is 20</strong></dt><dd><p>temperature in °C</p>
+</dd>
+<dt><strong>rh: scalar, optional, default is 60</strong></dt><dd><p>relative humidity in %</p>
+</dd>
+<dt><strong>pa: scalar, optional, default is 101325</strong></dt><dd><p>atmospheric pressure in Pa</p>
+</dd>
+<dt><strong>a0</strong><span class="classifier">scalar, optional, default is 0.002</span></dt><dd><p>attenuation coefficient of the habitat in Neper/Hz/m</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>p0</strong><span class="classifier">scalar or array-like</span></dt><dd><p>estimated pressure at distance r0.
+This is a scalar if p is a scalar or a vector if p and r are vectors or 
+a matrix if p,</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
 
            </div>
            

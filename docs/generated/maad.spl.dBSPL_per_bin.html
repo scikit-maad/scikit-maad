@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.dBSPL_per_bin &mdash; scikit-maad 0.1.4 documentation</title>
   
 
   
@@ -149,10 +149,14 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Overview: module code</li>
+      <li>maad.spl.dBSPL_per_bin</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.spl.dBSPL_per_bin.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -164,44 +168,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="features/alpha_indices.html">features.alpha_indices</a></li>
-<li><a href="features/shape.html">features.shape</a></li>
-<li><a href="features/spectral.html">features.spectral</a></li>
-<li><a href="features/temporal.html">features.temporal</a></li>
-<li><a href="maad/features/alpha_indices.html">maad.features.alpha_indices</a></li>
-<li><a href="maad/features/shape.html">maad.features.shape</a></li>
-<li><a href="maad/features/spectral.html">maad.features.spectral</a></li>
-<li><a href="maad/features/temporal.html">maad.features.temporal</a></li>
-<li><a href="maad/rois/rois_1d.html">maad.rois.rois_1d</a></li>
-<li><a href="maad/rois/rois_2d.html">maad.rois.rois_2d</a></li>
-<li><a href="maad/sound/filter.html">maad.sound.filter</a></li>
-<li><a href="maad/sound/input_output.html">maad.sound.input_output</a></li>
-<li><a href="maad/sound/metrics.html">maad.sound.metrics</a></li>
-<li><a href="maad/sound/spectral_subtraction.html">maad.sound.spectral_subtraction</a></li>
-<li><a href="maad/sound/spectro_func.html">maad.sound.spectro_func</a></li>
-<li><a href="maad/sound/transform.html">maad.sound.transform</a></li>
-<li><a href="maad/sound/trim.html">maad.sound.trim</a></li>
-<li><a href="maad/spl/active_space.html">maad.spl.active_space</a></li>
-<li><a href="maad/spl/conversion_SPL.html">maad.spl.conversion_SPL</a></li>
-<li><a href="maad/util/math_func.html">maad.util.math_func</a></li>
-<li><a href="maad/util/miscellaneous.html">maad.util.miscellaneous</a></li>
-<li><a href="maad/util/parser.html">maad.util.parser</a></li>
-<li><a href="maad/util/visualization.html">maad.util.visualization</a></li>
-<li><a href="rois/rois_1d.html">rois.rois_1d</a></li>
-<li><a href="rois/rois_2d.html">rois.rois_2d</a></li>
-<li><a href="sound/filter.html">sound.filter</a></li>
-<li><a href="sound/input_output.html">sound.input_output</a></li>
-<li><a href="sound/metrics.html">sound.metrics</a></li>
-<li><a href="sound/spectral_subtraction.html">sound.spectral_subtraction</a></li>
-<li><a href="sound/spectro_func.html">sound.spectro_func</a></li>
-<li><a href="sound/transform.html">sound.transform</a></li>
-<li><a href="sound/trim.html">sound.trim</a></li>
-<li><a href="util/math_func.html">util.math_func</a></li>
-<li><a href="util/miscellaneous.html">util.miscellaneous</a></li>
-<li><a href="util/parser.html">util.parser</a></li>
-<li><a href="util/visualization.html">util.visualization</a></li>
-</ul>
+  <div class="section" id="maad-spl-dbspl-per-bin">
+<h1>maad.spl.dBSPL_per_bin<a class="headerlink" href="#maad-spl-dbspl-per-bin" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.spl.dBSPL_per_bin">
+<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">dBSPL_per_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">L</span></em>, <em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/active_space.html#dBSPL_per_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.dBSPL_per_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to spread the sound pressure level (Energy in dB) along a frequency 
+vector (bins)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">scalar</span></dt><dd><p>Sound Pressure Level in dB</p>
+</dd>
+<dt><strong>f: array-like (vector (1D))</strong></dt><dd><p>frequency vector in Hz</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L_per_bin</strong><span class="classifier">array-like (vector (1D))</span></dt><dd><p>sound pressure level in dB with values corresponding to the frequency’s 
+number of bins</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
 
            </div>
            

@@ -35,18 +35,19 @@ matplotlib, scikit-image and scikit-learn.
 
 
 
-Start by loading and audio file and compute the spectrogram.
+Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
 
 
 .. code-block:: default
 
 
     s, fs = sound.load('/Users/jsulloa/Downloads/rock_savana.wav')
-    db_max=70
+    s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 
-    Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
+    db_max=70  # used to define the range of the spectrogram
+    Sxx, tn, fn, ext = sound.spectrogram(s_filt, fs, nperseg=1024, noverlap=512)
     Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
-    plot2D(Sxx_db, **{'figsize':(4,10),'extent':ext})
+    plot2D(Sxx_db, **{'extent':ext})
 
 
 
@@ -76,10 +77,10 @@ To find regions of interest in the spectrogram, we will remove stationary backgr
 .. code-block:: default
 
 
-    Sxx_db, noise_profile1, _ = sound.remove_background(Sxx_db)
-    Sxx_db_smooth = sound.smooth(Sxx_db, std=1)
-    im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=3.5, bin_per=0.5)
-    im_rois, df_rois = rois.select_rois(im_mask, min_roi=100, max_roi=None)
+    Sxx_db_rmbg, _, _ = sound.remove_background(Sxx_db)
+    Sxx_db_smooth = sound.smooth(Sxx_db_rmbg, std=1.2)
+    im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=2, bin_per=0.25)
+    im_rois, df_rois = rois.select_rois(im_mask, min_roi=50, max_roi=None)
 
     # Format ROIs and visualize the bounding box on the audio spectrogram.
     df_rois = format_features(df_rois, tn, fn)
@@ -155,19 +156,13 @@ The shape audio features have 26 dimensions. To facilitate the clustering proces
 
     //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
       return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    [t-SNE] Computing 14 nearest neighbors...
-    [t-SNE] Indexed 15 samples in 0.000s...
-    [t-SNE] Computed neighbors for 15 samples in 0.005s...
-    [t-SNE] Computed conditional probabilities for sample 15 / 15
-    [t-SNE] Mean sigma: 0.823847
-    [t-SNE] KL divergence after 250 iterations with early exaggeration: 47.240616
-    [t-SNE] KL divergence after 1000 iterations: 0.162495
+    [t-SNE] Computing 37 nearest neighbors...
+    [t-SNE] Indexed 187 samples in 0.000s...
+    [t-SNE] Computed neighbors for 187 samples in 0.004s...
+    [t-SNE] Computed conditional probabilities for sample 187 / 187
+    [t-SNE] Mean sigma: 0.044609
+    [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
+    [t-SNE] KL divergence after 1000 iterations: 0.288394
 
 
 
@@ -196,7 +191,7 @@ In the above plot it is possible to observe how sounds are aggregated. It is pos
 
     //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
       return f(*args, **kwds)
-    Number of soundtypes found: 1
+    Number of soundtypes found: 5
 
 
 
@@ -249,7 +244,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.601 seconds)
+   **Total running time of the script:** ( 1 minutes  4.754 seconds)
 
 
 .. _sphx_glr_download__auto_examples_plot_unsupervised_sound_classification.py:

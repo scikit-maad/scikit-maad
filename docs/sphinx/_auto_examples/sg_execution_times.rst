@@ -5,10 +5,10 @@
 
 Computation times
 =================
-**00:12.601** total execution time for **_auto_examples** files:
+**01:04.754** total execution time for **_auto_examples** files:
 
 +------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py` (``plot_unsupervised_sound_classification.py``)           | 00:12.601 | 0.0 MB |
+| :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py` (``plot_unsupervised_sound_classification.py``)           | 01:04.754 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr__auto_examples_plot_compare_auto_and_manual_rois_selection.py` (``plot_compare_auto_and_manual_rois_selection.py``) | 00:00.000 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+

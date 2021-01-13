@@ -33,9 +33,9 @@ plot2D(Sxx_db, **{'extent':ext})
 # ---------------------------
 # To find regions of interest in the spectrogram, we will remove stationary background noise and then find isolated sounds using a double threshold method. Small ROIs due to noise in the signal will be removed.
 
-Sxx_db, noise_profile1, _ = sound.remove_background(Sxx_db)
-Sxx_db_smooth = sound.smooth(Sxx_db, std=1)
-im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=3, bin_per=0.3)
+Sxx_db_rmbg, _, _ = sound.remove_background(Sxx_db)
+Sxx_db_smooth = sound.smooth(Sxx_db_rmbg, std=1.2)
+im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=2, bin_per=0.25)
 im_rois, df_rois = rois.select_rois(im_mask, min_roi=50, max_roi=None)
 
 # Format ROIs and visualize the bounding box on the audio spectrogram.

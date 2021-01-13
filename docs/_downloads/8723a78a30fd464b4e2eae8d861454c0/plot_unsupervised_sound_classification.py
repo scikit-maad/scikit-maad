@@ -18,24 +18,25 @@ from maad import sound, features, rois
 from maad.util import power2dB, plot2D, format_features
 
 #%%
-# Start by loading and audio file and compute the spectrogram.
+# Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
 
 s, fs = sound.load('/Users/jsulloa/Downloads/rock_savana.wav')
-db_max=70
+s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 
-Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
+db_max=70  # used to define the range of the spectrogram
+Sxx, tn, fn, ext = sound.spectrogram(s_filt, fs, nperseg=1024, noverlap=512)
 Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
-plot2D(Sxx_db, **{'figsize':(4,10),'extent':ext})
+plot2D(Sxx_db, **{'extent':ext})
 
 #%%
 # 1. Find regions of interest
 # ---------------------------
 # To find regions of interest in the spectrogram, we will remove stationary background noise and then find isolated sounds using a double threshold method. Small ROIs due to noise in the signal will be removed.
 
-Sxx_db, noise_profile1, _ = sound.remove_background(Sxx_db)
-Sxx_db_smooth = sound.smooth(Sxx_db, std=1)
-im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=3.5, bin_per=0.5)
-im_rois, df_rois = rois.select_rois(im_mask, min_roi=100, max_roi=None)
+Sxx_db_rmbg, _, _ = sound.remove_background(Sxx_db)
+Sxx_db_smooth = sound.smooth(Sxx_db_rmbg, std=1.2)
+im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin ='relative', bin_std=2, bin_per=0.25)
+im_rois, df_rois = rois.select_rois(im_mask, min_roi=50, max_roi=None)
 
 # Format ROIs and visualize the bounding box on the audio spectrogram.
 df_rois = format_features(df_rois, tn, fn)

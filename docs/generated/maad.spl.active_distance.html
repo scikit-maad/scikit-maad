@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.active_distance &mdash; scikit-maad 0.1.4 documentation</title>
   
 
   
@@ -149,10 +149,14 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Overview: module code</li>
+      <li>maad.spl.active_distance</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.spl.active_distance.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -164,44 +168,55 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="features/alpha_indices.html">features.alpha_indices</a></li>
-<li><a href="features/shape.html">features.shape</a></li>
-<li><a href="features/spectral.html">features.spectral</a></li>
-<li><a href="features/temporal.html">features.temporal</a></li>
-<li><a href="maad/features/alpha_indices.html">maad.features.alpha_indices</a></li>
-<li><a href="maad/features/shape.html">maad.features.shape</a></li>
-<li><a href="maad/features/spectral.html">maad.features.spectral</a></li>
-<li><a href="maad/features/temporal.html">maad.features.temporal</a></li>
-<li><a href="maad/rois/rois_1d.html">maad.rois.rois_1d</a></li>
-<li><a href="maad/rois/rois_2d.html">maad.rois.rois_2d</a></li>
-<li><a href="maad/sound/filter.html">maad.sound.filter</a></li>
-<li><a href="maad/sound/input_output.html">maad.sound.input_output</a></li>
-<li><a href="maad/sound/metrics.html">maad.sound.metrics</a></li>
-<li><a href="maad/sound/spectral_subtraction.html">maad.sound.spectral_subtraction</a></li>
-<li><a href="maad/sound/spectro_func.html">maad.sound.spectro_func</a></li>
-<li><a href="maad/sound/transform.html">maad.sound.transform</a></li>
-<li><a href="maad/sound/trim.html">maad.sound.trim</a></li>
-<li><a href="maad/spl/active_space.html">maad.spl.active_space</a></li>
-<li><a href="maad/spl/conversion_SPL.html">maad.spl.conversion_SPL</a></li>
-<li><a href="maad/util/math_func.html">maad.util.math_func</a></li>
-<li><a href="maad/util/miscellaneous.html">maad.util.miscellaneous</a></li>
-<li><a href="maad/util/parser.html">maad.util.parser</a></li>
-<li><a href="maad/util/visualization.html">maad.util.visualization</a></li>
-<li><a href="rois/rois_1d.html">rois.rois_1d</a></li>
-<li><a href="rois/rois_2d.html">rois.rois_2d</a></li>
-<li><a href="sound/filter.html">sound.filter</a></li>
-<li><a href="sound/input_output.html">sound.input_output</a></li>
-<li><a href="sound/metrics.html">sound.metrics</a></li>
-<li><a href="sound/spectral_subtraction.html">sound.spectral_subtraction</a></li>
-<li><a href="sound/spectro_func.html">sound.spectro_func</a></li>
-<li><a href="sound/transform.html">sound.transform</a></li>
-<li><a href="sound/trim.html">sound.trim</a></li>
-<li><a href="util/math_func.html">util.math_func</a></li>
-<li><a href="util/miscellaneous.html">util.miscellaneous</a></li>
-<li><a href="util/parser.html">util.parser</a></li>
-<li><a href="util/visualization.html">util.visualization</a></li>
-</ul>
+  <div class="section" id="maad-spl-active-distance">
+<h1>maad.spl.active_distance<a class="headerlink" href="#maad-spl-active-distance" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.spl.active_distance">
+<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">active_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">L_bkg</span></em>, <em class="sig-param"><span class="n">L0</span></em>, <em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">r0</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">delta_r</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">rh</span><span class="o">=</span><span class="default_value">60</span></em>, <em class="sig-param"><span class="n">pa</span><span class="o">=</span><span class="default_value">101325</span></em>, <em class="sig-param"><span class="n">a0</span><span class="o">=</span><span class="default_value">0.002</span></em>, <em class="sig-param"><span class="n">rmax</span><span class="o">=</span><span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/active_space.html#active_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.active_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the active distance also known as detection range or active space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>L_bkg</strong><span class="classifier">scalar or array-like</span></dt><dd><p>sound pressure level of the background/ambient “noise” in dB SPL</p>
+</dd>
+<dt><strong>L0</strong><span class="classifier">scalar or array-like</span></dt><dd><p>Initial sound pressure level measured at distance r0</p>
+</dd>
+<dt><strong>f: scalar or array-like</strong></dt><dd><p>frequency in Hz</p>
+</dd>
+<dt><strong>r0</strong><span class="classifier">scalar</span></dt><dd><p>distance at which L0 was measured (generally &#64;1m)</p>
+</dd>
+<dt><strong>delta_r</strong><span class="classifier">scalar</span></dt><dd><p>distance resolution in m</p>
+</dd>
+<dt><strong>t: scalar, optional, default is 20</strong></dt><dd><p>temperature in °C</p>
+</dd>
+<dt><strong>rh: scalar, optional, default is 60</strong></dt><dd><p>relative humidity in %</p>
+</dd>
+<dt><strong>pa: scalar, optional, default is 101325</strong></dt><dd><p>atmospheric pressure in Pa</p>
+</dd>
+<dt><strong>a0</strong><span class="classifier">scalar, optional, default is 0.002</span></dt><dd><p>attenuation coefficient of the habitat in Neper/Hz/m</p>
+</dd>
+<dt><strong>rmax</strong><span class="classifier">scalar, optional, default is 10000</span></dt><dd><p>define the maximal distance that is taken into account for active distance
+calculation. Default value is 10000m (i.e. 10km) which is OK for most of
+the purpose. If you increase the value, the calculation will be longer</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>distance_max</strong><span class="classifier">scalar or array-like</span></dt><dd><p>maximum distance of propagation before the sound pressure level is below 
+the background</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The maximum detection range is limited by the background or ambient sound also
+called noise as this background sound prevent signal to go further is the 
+signal level is below the noise level.</p>
+</dd></dl>
+
+</div>
+
 
            </div>
            

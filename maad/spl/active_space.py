@@ -811,16 +811,6 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   reference distance r0 and the final distance r taken into account the 
   geometric, atmospheric and habitat attenuation contributions
   
-  Parameters
-  ----------
-  p0 : temporal signal (time domain) [VECTOR]
-  fs: sampling frequency Hz [SCALAR]
-  r : propagation distances in m [SCALAR or VECTOR]
-  r0 : reference distance in m [SCALAR]
-  t: temperature in °C [SCALAR]
-  rh: relative humidity in % [SCALAR]
-  pa: atmospheric pressure in Pa [SCALAR]
-  a0 : attenuation coefficient of the habitat in Neper/kHz/m [SCALAR]
   
   Parameters
   ----------

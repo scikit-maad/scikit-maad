@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.apply_attenuation &mdash; scikit-maad 0.1.4 documentation</title>
   
 
   
@@ -38,7 +38,9 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utilities" href="../util.html" />
+    <link rel="prev" title="maad.spl.PSD2Leq" href="maad.spl.PSD2Leq.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,11 +95,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../spl.html">Sound pressure level</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../spl.html#conversion-spl">Conversion SPL</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spl.html#attenuation-and-active-distance">Attenuation and active distance</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.spl.apply_attenuation</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
@@ -149,10 +158,16 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Overview: module code</li>
+          <li><a href="../spl.html">Sound pressure level</a> &raquo;</li>
+        
+      <li>maad.spl.apply_attenuation</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.spl.apply_attenuation.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -164,49 +179,60 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="features/alpha_indices.html">features.alpha_indices</a></li>
-<li><a href="features/shape.html">features.shape</a></li>
-<li><a href="features/spectral.html">features.spectral</a></li>
-<li><a href="features/temporal.html">features.temporal</a></li>
-<li><a href="maad/features/alpha_indices.html">maad.features.alpha_indices</a></li>
-<li><a href="maad/features/shape.html">maad.features.shape</a></li>
-<li><a href="maad/features/spectral.html">maad.features.spectral</a></li>
-<li><a href="maad/features/temporal.html">maad.features.temporal</a></li>
-<li><a href="maad/rois/rois_1d.html">maad.rois.rois_1d</a></li>
-<li><a href="maad/rois/rois_2d.html">maad.rois.rois_2d</a></li>
-<li><a href="maad/sound/filter.html">maad.sound.filter</a></li>
-<li><a href="maad/sound/input_output.html">maad.sound.input_output</a></li>
-<li><a href="maad/sound/metrics.html">maad.sound.metrics</a></li>
-<li><a href="maad/sound/spectral_subtraction.html">maad.sound.spectral_subtraction</a></li>
-<li><a href="maad/sound/spectro_func.html">maad.sound.spectro_func</a></li>
-<li><a href="maad/sound/transform.html">maad.sound.transform</a></li>
-<li><a href="maad/sound/trim.html">maad.sound.trim</a></li>
-<li><a href="maad/spl/active_space.html">maad.spl.active_space</a></li>
-<li><a href="maad/spl/conversion_SPL.html">maad.spl.conversion_SPL</a></li>
-<li><a href="maad/util/math_func.html">maad.util.math_func</a></li>
-<li><a href="maad/util/miscellaneous.html">maad.util.miscellaneous</a></li>
-<li><a href="maad/util/parser.html">maad.util.parser</a></li>
-<li><a href="maad/util/visualization.html">maad.util.visualization</a></li>
-<li><a href="rois/rois_1d.html">rois.rois_1d</a></li>
-<li><a href="rois/rois_2d.html">rois.rois_2d</a></li>
-<li><a href="sound/filter.html">sound.filter</a></li>
-<li><a href="sound/input_output.html">sound.input_output</a></li>
-<li><a href="sound/metrics.html">sound.metrics</a></li>
-<li><a href="sound/spectral_subtraction.html">sound.spectral_subtraction</a></li>
-<li><a href="sound/spectro_func.html">sound.spectro_func</a></li>
-<li><a href="sound/transform.html">sound.transform</a></li>
-<li><a href="sound/trim.html">sound.trim</a></li>
-<li><a href="util/math_func.html">util.math_func</a></li>
-<li><a href="util/miscellaneous.html">util.miscellaneous</a></li>
-<li><a href="util/parser.html">util.parser</a></li>
-<li><a href="util/visualization.html">util.visualization</a></li>
-</ul>
+  <div class="section" id="maad-spl-apply-attenuation">
+<h1>maad.spl.apply_attenuation<a class="headerlink" href="#maad-spl-apply-attenuation" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.spl.apply_attenuation">
+<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">apply_attenuation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">r</span></em>, <em class="sig-param"><span class="n">r0</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">rh</span><span class="o">=</span><span class="default_value">60</span></em>, <em class="sig-param"><span class="n">pa</span><span class="o">=</span><span class="default_value">101325</span></em>, <em class="sig-param"><span class="n">a0</span><span class="o">=</span><span class="default_value">0.002</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/active_space.html#apply_attenuation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.apply_attenuation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply attenuation of a temporal signal p0 after propagation between the 
+reference distance r0 and the final distance r taken into account the 
+geometric, atmospheric and habitat attenuation contributions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>p0</strong><span class="classifier">array-like (vector 1d)</span></dt><dd><p>temporal signal p0 in Pa (time domain)</p>
+</dd>
+<dt><strong>fs: scalar</strong></dt><dd><p>sampling frequency Hz</p>
+</dd>
+<dt><strong>r: scalar</strong></dt><dd><p>distance of propagation (in m) of the signal p0</p>
+</dd>
+<dt><strong>r0</strong><span class="classifier">scalar</span></dt><dd><p>distance at which the temporal signal p0 was measured</p>
+</dd>
+<dt><strong>t: scalar, optional, default is 20</strong></dt><dd><p>temperature in °C</p>
+</dd>
+<dt><strong>rh: scalar, optional, default is 60</strong></dt><dd><p>relative humidity in %</p>
+</dd>
+<dt><strong>pa: scalar, optional, default is 101325</strong></dt><dd><p>atmospheric pressure in Pa</p>
+</dd>
+<dt><strong>a0</strong><span class="classifier">scalar, optional, default is 0.002</span></dt><dd><p>attenuation coefficient of the habitat in Neper/Hz/m</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>p</strong><span class="classifier">array-like (vector 1d)</span></dt><dd><p>temporal signal (time domain) after attenuation</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../util.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.spl.PSD2Leq.html" class="btn btn-neutral float-left" title="maad.spl.PSD2Leq" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
