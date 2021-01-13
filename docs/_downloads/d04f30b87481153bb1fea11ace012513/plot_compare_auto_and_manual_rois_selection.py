@@ -55,12 +55,12 @@ plot2D(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
 # First we remove the stationary background in order to increase the contrast [1]
 # Then we convert the spectrogram into dB
-Sxx_power_noNoise= rois.median_equalizer(Sxx_power, display=True, **{'extent':ext})
+Sxx_power_noNoise= sound.median_equalizer(Sxx_power, display=True, **{'extent':ext})
 Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
 
 # Then we smooth the spectrogram in order to facilitate the creation of masks as
 # small sparse details are merged if they are close to each other
-Sxx_db_noNoise_smooth = rois.smooth(Sxx_db_noNoise, std=0.5, 
+Sxx_db_noNoise_smooth = sound.smooth(Sxx_db_noNoise, std=0.5, 
                          display=True, savefig=None, 
                          **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 

@@ -1,4 +1,4 @@
-util.math\_func
+﻿util.math\_func
 ===============
 
 .. automodule:: util.math_func
@@ -19,7 +19,6 @@ util.math\_func
       get_unimode
       kurtosis
       moments
-      psd
       rms
       running_mean
       skewness

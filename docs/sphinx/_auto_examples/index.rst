@@ -38,10 +38,10 @@ that can be performed with scikit-maad.
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_audio_shape_features_thumb.png
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
      :alt: Use unsupervised learning to classify sounds in a recording
 
-     :ref:`sphx_glr__auto_examples_audio_shape_features.py`
+     :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py`
 
 .. raw:: html
 
@@ -51,7 +51,7 @@ that can be performed with scikit-maad.
 .. toctree::
    :hidden:
 
-   /_auto_examples/audio_shape_features
+   /_auto_examples/plot_unsupervised_sound_classification
 
 .. raw:: html
 

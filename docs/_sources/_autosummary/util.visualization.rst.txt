@@ -1,4 +1,4 @@
-﻿util.visualization
+util.visualization
 ==================
 
 .. automodule:: util.visualization

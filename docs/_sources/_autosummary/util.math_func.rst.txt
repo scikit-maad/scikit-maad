@@ -1,4 +1,4 @@
-util.math\_func
+﻿util.math\_func
 ===============
 
 .. automodule:: util.math_func
@@ -15,8 +15,13 @@ util.math\_func
       :toctree:
       :nosignatures:
    
+      entropy
       get_unimode
+      kurtosis
+      moments
+      rms
       running_mean
+      skewness
    
    
 

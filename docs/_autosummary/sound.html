@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sound.sound" href="sound.sound.html" />
-    <link rel="prev" title="Quickstart" href="../quickstart.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,14 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">sound</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sound.sound.html">sound.sound</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -174,15 +170,137 @@
             
   <div class="section" id="module-sound">
 <span id="sound"></span><h1>sound<a class="headerlink" href="#module-sound" title="Permalink to this headline">¶</a></h1>
-<p>Ensemble of functions to load and preprocess audio signals.</p>
+<div class="section" id="sound-processing">
+<h2>Sound processing<a class="headerlink" href="#sound-processing" title="Permalink to this headline">¶</a></h2>
+<p>The module <code class="docutils literal notranslate"><span class="pre">sound</span></code> is an ensemble of functions to load and preprocess audio signals.</p>
+<div class="section" id="input-and-output">
+<h3>Input and output<a class="headerlink" href="#input-and-output" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="sound.sound.html#module-sound.sound" title="sound.sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.sound</span></code></a></p></td>
-<td><p>Collection of functions to load and preprocess audio signals.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.load.html#sound.load" title="sound.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(filename[, channel, detrend, verbose, …])</p></td>
+<td><p>Load an audio file (stereo or mono).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.loadSpectro.html#sound.loadSpectro" title="sound.loadSpectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadSpectro</span></code></a>(filename, fs, duration[, …])</p></td>
+<td><p>Load an image from a file or an URL</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="preprocess-audio">
+<h3>Preprocess audio<a class="headerlink" href="#preprocess-audio" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.fir_filter.html#sound.fir_filter" title="sound.fir_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir_filter</span></code></a>(x, kernel[, axis])</p></td>
+<td><p>Filter a signal using a 1d Finite impulse filter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.sinc.html#sound.sinc" title="sound.sinc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sinc</span></code></a>(s, cutoff, fs[, atten, transition_bw, …])</p></td>
+<td><p>Filter 1D signal with a Kaiser-windowed filter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.smooth.html#sound.smooth" title="sound.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a>(Sxx[, std, verbose, display, savefig])</p></td>
+<td><p>Smooth a spectrogram with a gaussian filter</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.select_bandwidth.html#sound.select_bandwidth" title="sound.select_bandwidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_bandwidth</span></code></a>(x, fs, fcut, forder[, …])</p></td>
+<td><p>Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background.html#sound.remove_background" title="sound.remove_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background</span></code></a>(Sxx[, gauss_win, …])</p></td>
+<td><p>Remove the background noise using spectral subtraction</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.remove_background_morpho.html#sound.remove_background_morpho" title="sound.remove_background_morpho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_morpho</span></code></a>(Sxx[, q, display, …])</p></td>
+<td><p>Remove background noise in a spectrogram using mathematical morphology tool.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background_along_axis.html#sound.remove_background_along_axis" title="sound.remove_background_along_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_along_axis</span></code></a>(Sxx[, mode, …])</p></td>
+<td><p>Get the noisy profile along the defined axis and remove this profile from the spectrogram</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.median_equalizer.html#sound.median_equalizer" title="sound.median_equalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">median_equalizer</span></code></a>(Sxx[, display, savefig])</p></td>
+<td><p>Median equalizer : remove background noise in a spectrogram</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.wave2frames.html#sound.wave2frames" title="sound.wave2frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wave2frames</span></code></a>(s[, Nt])</p></td>
+<td><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of length Nt.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="transform-audio">
+<h3>Transform audio<a class="headerlink" href="#transform-audio" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.spectrogram.html#module-sound.spectrogram" title="sound.spectrogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrogram</span></code></a>(x, fs[, window, nperseg, …])</p></td>
+<td><p>Compute a spectrogram using the short-time Fourier transform from an audio signal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.avg_power_spectro.html#sound.avg_power_spectro" title="sound.avg_power_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_power_spectro</span></code></a>(Sxx_power)</p></td>
+<td><p>Computes the average of a power spectrogram along the time axis</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.avg_amplitude_spectro.html#sound.avg_amplitude_spectro" title="sound.avg_amplitude_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_amplitude_spectro</span></code></a>(Sxx_ampli)</p></td>
+<td><p>Computes the average of an amplitude spectrogram along the time axis</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.intoOctave.html#sound.intoOctave" title="sound.intoOctave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoOctave</span></code></a>(X, fn[, thirdOctave, display])</p></td>
+<td><p>Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave spectrum (1d) or Spectrogram (2d) Better to work with PSD (amplitude²) for energy conservation</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.envelope.html#module-sound.envelope" title="sound.envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">envelope</span></code></a>(s[, mode, Nt])</p></td>
+<td><p>Calcul the envelope of a sound waveform (1d)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.psd.html#sound.psd" title="sound.psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psd</span></code></a>(s, fs[, nperseg, method, window, nfft, …])</p></td>
+<td><p>Estimate the power spectral density of 1D signal using Welch’s or periodogram methods.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="metrics">
+<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.audio_SNR.html#sound.audio_SNR" title="sound.audio_SNR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_SNR</span></code></a>(s[, mode, Nt])</p></td>
+<td><p>Compute the signal to noise ratio (SNR) of an audio signal in the time domain.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.spectral_SNR.html#sound.spectral_SNR" title="sound.spectral_SNR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_SNR</span></code></a>(Sxx_power)</p></td>
+<td><p>Compute the signal to noise ratio (SNR) of an audio from its spectrogram in the time-frequency domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.sharpness.html#sound.sharpness" title="sound.sharpness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sharpness</span></code></a>(Sxx)</p></td>
+<td><p>Compute the sharpness of a spectrogram</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.filter.html#module-sound.filter" title="sound.filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.filter</span></code></a></p></td>
+<td><p>Collection of functions to filter audio signal in time and frequency domains.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.input_output.html#module-sound.input_output" title="sound.input_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.input_output</span></code></a></p></td>
+<td><p>Collection of functions to load, read, write, play audio signal or  its time-frequency representation</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.metrics.html#module-sound.metrics" title="sound.metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.metrics</span></code></a></p></td>
+<td><p>Collection of metrics functions to evaluate audio preprocessing methods</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.spectral_subtraction.html#module-sound.spectral_subtraction" title="sound.spectral_subtraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.spectral_subtraction</span></code></a></p></td>
+<td><p>Collection of functions to remove background noise from spectrogram using spectral subtraction methods</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="sound.spectro_func.html#module-sound.spectro_func" title="sound.spectro_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.spectro_func</span></code></a></p></td>
+<td><p>Collection of functions transform an audio signal into spectrogram and  manipulate spectrograms.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.trim.html#module-sound.trim" title="sound.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.trim</span></code></a></p></td>
+<td><p>Collection of functions to trim audio signals.</p></td>
 </tr>
 </tbody>
 </table>
@@ -193,15 +311,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="sound.sound.html" class="btn btn-neutral float-right" title="sound.sound" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

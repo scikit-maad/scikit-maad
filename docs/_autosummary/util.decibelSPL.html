@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="util.decibelSPL.PSD2Leq" href="util.decibelSPL.PSD2Leq.html" />
-    <link rel="prev" title="util" href="util.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,31 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="util.html">util</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">util.decibelSPL</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.PSD2Leq.html">util.decibelSPL.PSD2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.amplitude2dBSPL.html">util.decibelSPL.amplitude2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.dBSPL2pressure.html">util.decibelSPL.dBSPL2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.power2dBSPL.html">util.decibelSPL.power2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2Leq.html">util.decibelSPL.pressure2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.pressure2dBSPL.html">util.decibelSPL.pressure2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.volt2pressure.html">util.decibelSPL.volt2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2Leq.html">util.decibelSPL.wav2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2dBSPL.html">util.decibelSPL.wav2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2pressure.html">util.decibelSPL.wav2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="util.decibelSPL.wav2volt.html">util.decibelSPL.wav2volt</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="util.math_tools.html">util.math_tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.miscellaneous.html">util.miscellaneous</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.parser.html">util.parser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.visualization.html">util.visualization</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -170,8 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="util.html">util</a> &raquo;</li>
-        
       <li>util.decibelSPL</li>
     
     
@@ -191,51 +168,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-util.decibelSPL">
-<span id="util-decibelspl"></span><h1>util.decibelSPL<a class="headerlink" href="#module-util.decibelSPL" title="Permalink to this headline">¶</a></h1>
-<p>Collection of functions to convert audio and voltage data to Sound Pressure Level (SPL in Pascal) and Leq (Continuous Equivalent SPL).</p>
-<p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.PSD2Leq.html#util.decibelSPL.PSD2Leq" title="util.decibelSPL.PSD2Leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSD2Leq</span></code></a></p></td>
-<td><p>convert Power spectral density (PSD, amplitude²) into  Equivalent Continuous Sound pressure level (Leq [dB SPL])</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.decibelSPL.amplitude2dBSPL.html#util.decibelSPL.amplitude2dBSPL" title="util.decibelSPL.amplitude2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplitude2dBSPL</span></code></a></p></td>
-<td><p>convert signal (amplitude) to instantaneous sound pressure level (L [dB SPL])</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.dBSPL2pressure.html#util.decibelSPL.dBSPL2pressure" title="util.decibelSPL.dBSPL2pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dBSPL2pressure</span></code></a></p></td>
-<td><p>convert sound pressure level (L [dB]) to sound pressure (p [Pa])</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.decibelSPL.power2dBSPL.html#util.decibelSPL.power2dBSPL" title="util.decibelSPL.power2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">power2dBSPL</span></code></a></p></td>
-<td><p>convert power (amplitude²) to sound pressure level (L [dB])</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.pressure2Leq.html#util.decibelSPL.pressure2Leq" title="util.decibelSPL.pressure2Leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure2Leq</span></code></a></p></td>
-<td><p>convert pressure (p [Pa]) to Equivalent Continuous Sound Pressure level (Leq [dB SPL])</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.decibelSPL.pressure2dBSPL.html#util.decibelSPL.pressure2dBSPL" title="util.decibelSPL.pressure2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure2dBSPL</span></code></a></p></td>
-<td><p>convert sound pressure (p [Pa]) to sound pressure level (L [dB])</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.volt2pressure.html#util.decibelSPL.volt2pressure" title="util.decibelSPL.volt2pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volt2pressure</span></code></a></p></td>
-<td><p>convert volt to instantaneous sound pressure (p [Pa])</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.decibelSPL.wav2Leq.html#util.decibelSPL.wav2Leq" title="util.decibelSPL.wav2Leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2Leq</span></code></a></p></td>
-<td><p>convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL])</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.wav2dBSPL.html#util.decibelSPL.wav2dBSPL" title="util.decibelSPL.wav2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2dBSPL</span></code></a></p></td>
-<td><p>convert wave to instantaneous sound pressure level (L [dB SPL])</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="util.decibelSPL.wav2pressure.html#util.decibelSPL.wav2pressure" title="util.decibelSPL.wav2pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2pressure</span></code></a></p></td>
-<td><p>convert wave to instantaneous sound pressure (p [Pa])</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="util.decibelSPL.wav2volt.html#util.decibelSPL.wav2volt" title="util.decibelSPL.wav2volt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2volt</span></code></a></p></td>
-<td><p>convert in Volt</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="util-decibelspl">
+<h1>util.decibelSPL<a class="headerlink" href="#util-decibelspl" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -243,15 +177,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="util.decibelSPL.PSD2Leq.html" class="btn btn-neutral float-right" title="util.decibelSPL.PSD2Leq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="util.html" class="btn btn-neutral float-left" title="util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

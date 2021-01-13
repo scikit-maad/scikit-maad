@@ -28,7 +28,6 @@ Mathematical
     running_mean
     get_unimode
     entropy
-    psd
     rms
     kurtosis
     skewness
@@ -93,7 +92,6 @@ from .visualization import (rand_cmap,
 from .math_func import (running_mean,
                          get_unimode,
                          entropy,
-                         psd,
                          rms,
                          kurtosis,
                          skewness,

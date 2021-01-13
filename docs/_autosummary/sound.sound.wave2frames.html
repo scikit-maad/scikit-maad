@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rois" href="rois.html" />
-    <link rel="prev" title="sound.sound.spectrogram" href="sound.sound.spectrogram.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,27 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="sound.sound.html">sound.sound</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.audio_SNR.html">sound.sound.audio_SNR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_amplitude_spectro.html">sound.sound.avg_amplitude_spectro</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_power_spectro.html">sound.sound.avg_power_spectro</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.envelope.html">sound.sound.envelope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.fir_filter.html">sound.sound.fir_filter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.intoOctave.html">sound.sound.intoOctave</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.load.html">sound.sound.load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.spectral_SNR.html">sound.sound.spectral_SNR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound.wave2frames</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -166,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="sound.html">sound</a> &raquo;</li>
-        
-          <li><a href="sound.sound.html">sound.sound</a> &raquo;</li>
-        
       <li>sound.sound.wave2frames</li>
     
     
@@ -191,29 +170,6 @@
             
   <div class="section" id="sound-sound-wave2frames">
 <h1>sound.sound.wave2frames<a class="headerlink" href="#sound-sound-wave2frames" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="sound.sound.wave2frames">
-<code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">wave2frames</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#wave2frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.wave2frames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
-length Nt.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>s</strong><span class="classifier">1d ndarray of floats (already divided by the number of bits)</span></dt><dd><p>Vector containing the sound waveform</p>
-</dd>
-<dt><strong>Nt</strong><span class="classifier">int, optional, default is 512</span></dt><dd><p>Number of points per frame</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>timeframes</strong><span class="classifier">2d ndarray of floats</span></dt><dd><p>Matrix containing K frames (row) with Nt points (column), K*N &lt;= length (s)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -221,15 +177,6 @@ length Nt.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="rois.html" class="btn btn-neutral float-right" title="rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="sound.sound.spectrogram.html" class="btn btn-neutral float-left" title="sound.sound.spectrogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

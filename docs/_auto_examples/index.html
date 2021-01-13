@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="audio_shape_features.html" />
-    <link rel="prev" title="util.visualization.save_figlist" href="../_autosummary/util.visualization.save_figlist.html" /> 
+    <link rel="next" title="Signal decomposition and false-color spectrograms" href="plot_nmf_and_false_color_spectrogram.html" />
+    <link rel="prev" title="maad.util.format_features" href="../generated/maad.util.format_features.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,15 +96,17 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Example gallery</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds in a recording</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_compare_auto_and_manual_rois_selection.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
@@ -180,15 +182,15 @@
 <span id="sphx-glr-auto-examples"></span><h1>Example gallery<a class="headerlink" href="#example-gallery" title="Permalink to this headline">¶</a></h1>
 <p>This gallery is intended to illustrate how to use some of the soundscape analyses
 that can be performed with scikit-maad.</p>
-<div class="sphx-glr-thumbcontainer" tooltip="@author: jsulloa"><div class="figure align-default" id="id1">
-<img alt="Created on Wed Jan  6 16:15:19 2021" src="../_images/sphx_glr_audio_shape_features_thumb.png" />
-<p class="caption"><span class="caption-text"><span class="xref std std-ref">sphx_glr__auto_examples_audio_shape_features.py</span></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<div class="sphx-glr-thumbcontainer" tooltip="Soundscapes result from a combination of multiple signals that are mixed-down into a single tim..."><div class="figure align-default" id="id1">
+<img alt="Signal decomposition and false-color spectrograms" src="../_images/sphx_glr_plot_nmf_and_false_color_spectrogram_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html#sphx-glr-auto-examples-plot-nmf-and-false-color-spectrogram-py"><span class="std std-ref">Signal decomposition and false-color spectrograms</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 </div><div class="toctree-wrapper compound">
 </div>
-<div class="sphx-glr-thumbcontainer" tooltip="Soundscapes result from a combination of multiple signals that are mixed-down into a single tim..."><div class="figure align-default" id="id2">
-<img alt="Signal decomposition and false-color spectrograms" src="../_images/sphx_glr_plot_nmf_and_false_color_spectrogram_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html#sphx-glr-auto-examples-plot-nmf-and-false-color-spectrogram-py"><span class="std std-ref">Signal decomposition and false-color spectrograms</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<div class="sphx-glr-thumbcontainer" tooltip="Unsupervised learning algorithms search for structures or patterns in a dataset without requiri..."><div class="figure align-default" id="id2">
+<img alt="Use unsupervised learning to classify sounds in a recording" src="../_images/sphx_glr_plot_unsupervised_sound_classification_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_unsupervised_sound_classification.html#sphx-glr-auto-examples-plot-unsupervised-sound-classification-py"><span class="std std-ref">Use unsupervised learning to classify sounds in a recording</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 </div><div class="toctree-wrapper compound">
 </div>
@@ -235,10 +237,10 @@ that can be performed with scikit-maad.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="audio_shape_features.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_nmf_and_false_color_spectrogram.html" class="btn btn-neutral float-right" title="Signal decomposition and false-color spectrograms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../_autosummary/util.visualization.save_figlist.html" class="btn btn-neutral float-left" title="util.visualization.save_figlist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../generated/maad.util.format_features.html" class="btn btn-neutral float-left" title="maad.util.format_features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

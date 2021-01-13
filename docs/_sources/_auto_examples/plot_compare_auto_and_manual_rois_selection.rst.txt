@@ -74,7 +74,7 @@ First, load and audio file and compute the power spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:278: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
 
 
@@ -97,12 +97,12 @@ than the second threshold value.
 
     # First we remove the stationary background in order to increase the contrast [1]
     # Then we convert the spectrogram into dB
-    Sxx_power_noNoise= rois.median_equalizer(Sxx_power, display=True, **{'extent':ext})
+    Sxx_power_noNoise= sound.median_equalizer(Sxx_power, display=True, **{'extent':ext})
     Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
 
     # Then we smooth the spectrogram in order to facilitate the creation of masks as
     # small sparse details are merged if they are close to each other
-    Sxx_db_noNoise_smooth = rois.smooth(Sxx_db_noNoise, std=0.5, 
+    Sxx_db_noNoise_smooth = sound.smooth(Sxx_db_noNoise, std=0.5, 
                              display=True, savefig=None, 
                              **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
@@ -367,7 +367,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.307 seconds)
+   **Total running time of the script:** ( 0 minutes  3.589 seconds)
 
 
 .. _sphx_glr_download__auto_examples_plot_compare_auto_and_manual_rois_selection.py:

@@ -38,6 +38,7 @@ Transform audio
     avg_amplitude_spectro
     intoOctave
     envelope
+    psd
 
 Metrics
 -------
@@ -65,7 +66,8 @@ from .spectral_subtraction import (remove_background,
 
 from .trim import wave2frames
 
-from .envelope_func import envelope
+from .transform import (envelope,
+                        psd)
 
 from .spectro_func import (spectrogram,
                            avg_power_spectro,
@@ -94,6 +96,7 @@ __all__ = [
         'wave2frames',
         # envelope_func.py
         'envelope',
+        'psd',
         # spectro_func.py
         'spectrogram',
         'avg_power_spectro',

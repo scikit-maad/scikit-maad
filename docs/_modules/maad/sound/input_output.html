@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.input_output &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.sound.input_output</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.sound.input_output</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Collection of functions to load, read, write, play audio signal or </span>
+<span class="sd">its time-frequency representation</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span> 
+<span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span> 
+
+<span class="c1"># Import internal modules</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">linear_scale</span>
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../../../generated/maad.sound.load.html#maad.sound.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load an audio file (stereo or mono). </span>
+<span class="sd">    </span>
+<span class="sd">    Currently, this function con only load WAVE files.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string </span>
+<span class="sd">        name or path of the .wav file to load      </span>
+<span class="sd">    channel : {`&#39;left&#39;, right&#39;}, optional, default: left</span>
+<span class="sd">        In case of stereo sound select the channel that is kept </span>
+<span class="sd">    detrend : boolean, optional, default is True</span>
+<span class="sd">        Subtract the DC value.</span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        print messages into the consol or terminal if verbose is True</span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions    </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_audiogram.png&#39;</span>
+<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">            width, height in inches.  </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">            title of the figure</span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">            label of the vertical axis</span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">            in order to get all the  existing colormaps</span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">            &#39;viridis&#39;...</span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">            extent : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        - dpi : integer, optional, default is 96</span>
+<span class="sd">            Dot per inch. </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure</span>
+<span class="sd">           </span>
+<span class="sd">        ... and more, see matplotlib     </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------    </span>
+<span class="sd">    s_out : 1d ndarray of integer</span>
+<span class="sd">        Vector containing the audiogram </span>
+<span class="sd">    fs : int </span>
+<span class="sd">        The sampling frequency in Hz of the audiogram    </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&quot;../data/tropical_forest_morning.wav&quot;, channel=&#39;left&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; tn = np.arange(0,len(s))/fs</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax0, ax1) = plt.subplots(2,1, sharex=True, squeeze=True)</span>
+<span class="sd">    &gt;&gt;&gt; ax0, _ = maad.util.plot1D(tn,s,ax=ax0, figtitle=&#39;ground level&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax0.set_ylim((-0.075,0.0751))</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&quot;../data/tropical_forest_morning.wav&quot;, channel=&#39;right&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax1, _ = maad.util.plot1D(tn,s,ax=ax1, figtitle=&#39;canopy level&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.set_ylim((-0.075,0.075))</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;loading </span><span class="si">%s</span><span class="s2">...&quot;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>   
+    
+    <span class="c1"># read the .wav file and return the sampling frequency fs (Hz) </span>
+    <span class="c1"># and the audiogram s as a 1D array of integer</span>
+    <span class="n">fs</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">wavfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sampling frequency: </span><span class="si">%d</span><span class="s2">Hz&quot;</span> <span class="o">%</span> <span class="n">fs</span><span class="p">)</span>
+    
+    <span class="c1"># Normalize the signal between -1 to 1 depending on the type (number of bits)</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="mi">32</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span> <span class="c1"># as it&#39;s unsigned</span>
+    
+    <span class="c1"># test if stereo signal. if YES =&gt; keep only the ch_select</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">2</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select left channel&quot;</span><span class="p">)</span>
+            <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select right channel&quot;</span><span class="p">)</span>
+            <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        
+    <span class="c1"># Detrend the signal by removing the DC offset</span>
+    <span class="k">if</span> <span class="n">detrend</span><span class="p">:</span> <span class="n">s_out</span> <span class="o">=</span> <span class="n">s_out</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s_out</span><span class="p">)</span>
+    
+    <span class="c1"># Time vector</span>
+    <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">s_out</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span> 
+    
+    <span class="c1"># DISPLAY</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">figtitle</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figtitle&#39;</span><span class="p">,</span> <span class="s1">&#39;Orignal sound&#39;</span><span class="p">)</span>        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot1D</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="n">figtitle</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span> 
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_audiogram&#39;</span><span class="p">)</span>  
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+                           
+    <span class="k">return</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">fs</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="loadSpectro"><a class="viewcode-back" href="../../../generated/maad.sound.loadSpectro.html#maad.sound.loadSpectro">[docs]</a><span class="k">def</span> <span class="nf">loadSpectro</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">flipud</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Load an image from a file or an URL </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------   </span>
+<span class="sd">    filename : string </span>
+<span class="sd">        Image file name, e.g. ``test.jpg`` or URL. </span>
+<span class="sd">     </span>
+<span class="sd">    fs : scalar </span>
+<span class="sd">        Sampling frequency of the audiogram (in Hz) </span>
+<span class="sd">     </span>
+<span class="sd">    duration : scalar </span>
+<span class="sd">        Duration of the audiogram (in s) </span>
+<span class="sd">     </span>
+<span class="sd">    flipud : boolean, optional, default is True </span>
+<span class="sd">        Vertical flip of the matrix (image) </span>
+<span class="sd">        </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        if True, print message in terminal</span>
+<span class="sd">     </span>
+<span class="sd">    display : boolean, optional, default is False </span>
+<span class="sd">        if True, display the image </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot  </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">         </span>
+<span class="sd">        - extent : scalars (left, right, bottom, top), optional, default: None </span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that </span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">         </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure  </span>
+<span class="sd">         </span>
+<span class="sd">        ... and more, see matplotlib  </span>
+<span class="sd">         </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    Sxx : ndarray </span>
+<span class="sd">        The different color bands/channels are stored in the </span>
+<span class="sd">        third dimension, such that a gray-image is MxN, an </span>
+<span class="sd">        RGB-image MxNx3 and an RGBA-image MxNx4. </span>
+<span class="sd">         </span>
+<span class="sd">    extent : list of scalars [left, right, bottom, top]</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">        upper-right corners.</span>
+<span class="sd">         </span>
+<span class="sd">    dt : scalar </span>
+<span class="sd">        Time resolution of the spectrogram (horizontal x-axis) </span>
+<span class="sd">         </span>
+<span class="sd">    df : scalar </span>
+<span class="sd">        Frequency resolution of the spectrogram (vertical y-axis) </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;loading </span><span class="si">%s</span><span class="s2">...&quot;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>  
+     
+    <span class="c1"># Load image </span>
+    <span class="n">Sxx</span>  <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">as_gray</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+     
+    <span class="c1"># if 3D, convert into 2D </span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> 
+        <span class="n">Sxx</span> <span class="o">=</span> <span class="n">Sxx</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span> 
+         
+    <span class="c1"># Rescale the image between 0 to 1 </span>
+    <span class="n">Sxx</span> <span class="o">=</span> <span class="n">linear_scale</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> 
+             
+    <span class="c1"># Get the resolution </span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">duration</span><span class="o">/</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+     
+    <span class="c1"># Extent </span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span> 
+     
+    <span class="c1"># flip the image vertically </span>
+    <span class="k">if</span> <span class="n">flipud</span><span class="p">:</span> <span class="n">Sxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> 
+     
+    <span class="c1"># Display </span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>  
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;loaded spectrogram&#39;</span><span class="p">)</span> 
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>  
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">Sxx</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>  
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">Sxx</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>  
+         
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+     
+    <span class="k">return</span> <span class="n">Sxx</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span> </div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

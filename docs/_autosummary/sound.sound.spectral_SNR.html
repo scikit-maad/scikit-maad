@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sound.sound.spectrogram" href="sound.sound.spectrogram.html" />
-    <link rel="prev" title="sound.sound.select_bandwidth" href="sound.sound.select_bandwidth.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,27 +93,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="sound.html">sound</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="sound.sound.html">sound.sound</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.audio_SNR.html">sound.sound.audio_SNR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_amplitude_spectro.html">sound.sound.avg_amplitude_spectro</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.avg_power_spectro.html">sound.sound.avg_power_spectro</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.envelope.html">sound.sound.envelope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.fir_filter.html">sound.sound.fir_filter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.intoOctave.html">sound.sound.intoOctave</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.load.html">sound.sound.load</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.select_bandwidth.html">sound.sound.select_bandwidth</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sound.sound.spectral_SNR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.spectrogram.html">sound.sound.spectrogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sound.sound.wave2frames.html">sound.sound.wave2frames</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">util</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -166,10 +149,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="sound.html">sound</a> &raquo;</li>
-        
-          <li><a href="sound.sound.html">sound.sound</a> &raquo;</li>
-        
       <li>sound.sound.spectral_SNR</li>
     
     
@@ -191,57 +170,6 @@
             
   <div class="section" id="sound-sound-spectral-snr">
 <h1>sound.sound.spectral_SNR<a class="headerlink" href="#sound-sound-spectral-snr" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="sound.sound.spectral_SNR">
-<code class="sig-prename descclassname">sound.sound.</code><code class="sig-name descname">spectral_SNR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/sound.html#spectral_SNR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.sound.spectral_SNR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the signal to noise ratio (SNR) of an audio from its spectrogram
-in the time-frequency domain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>Sxx_power</strong><span class="classifier">2D array</span></dt><dd><p>Power spectrogram density [Matrix] to process.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>ENRf</strong><span class="classifier">float</span></dt><dd><p>Total energy in dB computed in the frequency domain which corresponds
-to the average of the power spectrogram then the sum of the average</p>
-</dd>
-<dt><strong>BGNf</strong><span class="classifier">float</span></dt><dd><p>Estimation of the background energy (dB) computed based on the estimation
-of the noise profile of the power spectrogram (2d)</p>
-</dd>
-<dt>SNRf: float</dt><dd><p>Signal to noise ratio (dB) computed in the frequency domain 
-SNRf = ENRf - BGNf</p>
-</dd>
-<dt><strong>ENRf_per_bin</strong><span class="classifier">vector of floats</span></dt><dd><p>Energy in dB per frequency bin</p>
-</dd>
-<dt><strong>BGNf_per_bin</strong><span class="classifier">vector of floats</span></dt><dd><p>Background (noise profile) energy in dB per frequency bin</p>
-</dd>
-<dt><strong>SNRf_per_bin</strong><span class="classifier">vector of floats</span></dt><dd><p>Signal to noise ratio per frequency bin</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<dl class="simple">
-<dt>..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms </dt><dd><p>Derived from Natural Recordings of the Environment. 
-Queensland University of Technology, Brisbane.</p>
-</dd>
-<dt>..[2] Towsey, Michael (2017),The calculation of acoustic indices derived </dt><dd><p>from long-duration recordings of the naturalenvironment.
-Queensland University of Technology, Brisbane.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/guyana_tropical_forest.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectral_SNR</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">snr</span>
-<span class="go">4.084065436435541</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -249,15 +177,6 @@ Queensland University of Technology, Brisbane.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="sound.sound.spectrogram.html" class="btn btn-neutral float-right" title="sound.sound.spectrogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="sound.sound.select_bandwidth.html" class="btn btn-neutral float-left" title="sound.sound.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

@@ -95,15 +95,17 @@
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/sound.html">sound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/rois.html">rois</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_autosummary/util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Example gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds in a recording</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_compare_auto_and_manual_rois_selection.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
@@ -355,7 +357,7 @@ S4A03895_20190522_234500.wav
 
     <span class="c1"># compute all the audio indices and store them into a DataFrame</span>
     <span class="c1"># dB_threshold and rejectDuration are used to select audio events.</span>
-    <span class="n">df_audio_ind</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">audio_indices</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span>
+    <span class="n">df_audio_ind</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">all_audio_alpha_indices</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span>
                                           <span class="n">gain</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">G</span></a><span class="p">,</span> <span class="n">sensibility</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">S</span></a><span class="p">,</span>
                                           <span class="n">dB_threshold</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rejectDuration</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
                                           <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
@@ -378,17 +380,17 @@ S4A03895_20190522_234500.wav
     <span class="c1"># mask_param1 and mask_param2 are two parameters to find the regions of</span>
     <span class="c1"># interest (ROIs). These parameters need to be adapted to the dataset in</span>
     <span class="c1"># order to select ROIs</span>
-    <span class="n">df_spec_ind</span><span class="p">,</span> <span class="n">df_spec_ind_per_bin</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">spectral_indices</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span>
-                                                    <span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span>
-                                                    <span class="n">flim_low</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1500</span><span class="p">],</span>
-                                                    <span class="n">flim_mid</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span><span class="mi">8000</span><span class="p">],</span>
-                                                    <span class="n">flim_hi</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">8000</span><span class="p">,</span><span class="mi">20000</span><span class="p">],</span>
-                                                    <span class="n">gain</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">G</span></a><span class="p">,</span> <span class="n">sensitivity</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">S</span></a><span class="p">,</span>
-                                                    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                                                    <span class="n">R_compatible</span> <span class="o">=</span> <span class="s1">&#39;soundecology&#39;</span><span class="p">,</span>
-                                                    <span class="n">mask_param1</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
-                                                    <span class="n">mask_param2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                                                    <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">df_spec_ind</span><span class="p">,</span> <span class="n">df_spec_ind_per_bin</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">all_spectral_alpha_indices</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span>
+                                                            <span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span>
+                                                            <span class="n">flim_low</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1500</span><span class="p">],</span>
+                                                            <span class="n">flim_mid</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span><span class="mi">8000</span><span class="p">],</span>
+                                                            <span class="n">flim_hi</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">8000</span><span class="p">,</span><span class="mi">20000</span><span class="p">],</span>
+                                                            <span class="n">gain</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">G</span></a><span class="p">,</span> <span class="n">sensitivity</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">S</span></a><span class="p">,</span>
+                                                            <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                                            <span class="n">R_compatible</span> <span class="o">=</span> <span class="s1">&#39;soundecology&#39;</span><span class="p">,</span>
+                                                            <span class="n">mask_param1</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+                                                            <span class="n">mask_param2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                                            <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="sd">&quot;&quot;&quot; =======================================================================</span>
 <span class="sd">                     Create a dataframe</span>
@@ -713,7 +715,7 @@ set the threshold to 0.75 for instance.</p>
 </div>
 <img alt="plot extract alpha indices" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_extract_alpha_indices_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:787: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:789: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
@@ -746,9 +748,9 @@ For a better view, we seperate spectral and audio indices.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:565: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:567: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
-/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:684: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:686: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
@@ -771,7 +773,7 @@ save_csv = ‘indices.csv’
 df_indices.to_csv(path_or_buf=os.path.join(“../data/indices/”,save_csv),sep=’,’,mode=’w’,header=True, index=True)
 # save df_indices_per_bin (for future false color spectro)
 df_indices_per_bin.to_csv(path_or_buf=os.path.join(“../data/indices/”,’<a href="#id1"><span class="problematic" id="id2">per_bin_</span></a>’+save_csv),sep=’,’,mode=’w’,header=True, index=True)</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  23.940 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  24.545 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-extract-alpha-indices-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/47e6561de1f6d9b6998930e1715b3523/plot_extract_alpha_indices.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_extract_alpha_indices.py</span></code></a></p>
