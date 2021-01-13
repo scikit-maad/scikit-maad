@@ -836,9 +836,8 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   p :  array-like (vector 1d)
       temporal signal (time domain) after attenuation
   
-  Examples:
-  ---------
-  
+  Examples
+  --------
   Prepare the Spine Tail sound (Sound level @1m = 80dB SPL)
   
   >>> w, fs = maad.sound.load('../data/spinetail.wav') 
