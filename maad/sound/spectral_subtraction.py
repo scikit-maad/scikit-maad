@@ -34,7 +34,7 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
                       llambda=1, verbose = False, display = False, 
                       savefig=None, **kwargs): 
     """ 
-    Remove the background noise using spectral subtraction 
+    Remove background noise using spectral subtraction.
  
     Based on the spectrum of the A posteriori noise profile.   
     It computes an atenuation map in the time-frequency domain.  
@@ -135,8 +135,8 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
        error short-time spectral amplitude estimator, IEEE. Transactions in 
        Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.   
 
-    Examples:
-    ---------
+    Examples
+    --------
     
     Load audio recording and convert it into spectrogram
     
@@ -336,8 +336,8 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     BGNxx : 2d ndarray of scalar 
         Noise map
     
-    Examples:
-    ---------
+    Examples
+    --------
     
     Load audio recording and convert it into spectrogram
     
@@ -355,6 +355,7 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     Plot both spectrograms
     
     >>> import matplotlib.pyplot as plt 
+    >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
     >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
     >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
@@ -456,7 +457,7 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
                                   display=False, savefig=None, **kwargs): 
     """ 
     Get the noisy profile along the defined axis and remove this profile from
-    the spectrogram
+    the spectrogram.
     
     Parameters 
     ---------- 
@@ -529,12 +530,6 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
              
         ... and more, see matplotlib    
         
-    Reference:
-    ---------
-    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
-    Natural Recordings of the Environment. Queensland University of Technology,
-    Brisbane
-                       
     Returns 
     ------- 
     Sxx_out : 2d ndarray of scalar 
@@ -542,9 +537,18 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
         
     noise_profile : 1d ndarray of scalar
         Noise profile
+
+
+    References
+    ----------
+    
+    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
+    Natural Recordings of the Environment. Queensland University of Technology,
+    Brisbane
+                       
         
-    Examples:
-    ---------
+    Examples
+    --------
     
     Load audio recording and convert it into spectrogram
     
@@ -555,17 +559,10 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
     
     >>> Sxx_dB = maad.util.power2dB(Sxx) +96
     
-    Remove stationnary noise from the spectrogram 
-    - with mode 'ale"
+    Remove stationnary noise from the spectrogram with modes 'ale', 'median', and 'mean'.
     
-    >>> Sxx_dB_noNoise_ale,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode='ale')
-    
-    - with mode 'median"
-    
+    >>> Sxx_dB_noNoise_ale,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode='ale')    
     >>> Sxx_dB_noNoise_med,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode='median')
-    
-    - with mode 'mean"
-    
     >>> Sxx_dB_noNoise_mean,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode='mean')
 
     Plot spectrograms
@@ -653,7 +650,7 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
 #%%
 def median_equalizer (Sxx, display=False, savefig=None, **kwargs): 
     """ 
-    Median equalizer : remove background noise in a spectrogram 
+    Remove background noise in spectrogram using median equalizer.
      
     Parameters 
     ---------- 
@@ -720,8 +717,8 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     .. [1] This function has been proposed first by Carol BEDOYA <carol.bedoya@pg.canterbury.ac.nz> 
        Adapted by S. Haupert Oct 9, 2018 for Python 
        
-    Examples:
-    ---------
+    Examples
+    --------
     
     Load audio recording and convert it into spectrogram
     
@@ -734,12 +731,13 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     
     Remove stationnary noise from the spectrogram 
     
-    >>> Sxx_noNoise = maad.rois.median_equalizer(Sxx)
+    >>> Sxx_noNoise = maad.sound.median_equalizer(Sxx)
     >>> Sxx_dB_noNoise =  maad.util.power2dB(Sxx_noNoise) 
 
     Plot both spectrograms
     
     >>> import matplotlib.pyplot as plt 
+    >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
     >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
     >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)

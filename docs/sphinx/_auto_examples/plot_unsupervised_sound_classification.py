@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Use unsupervised learning to classify sounds in a recording
-=============================================================
+Use unsupervised learning to classify sounds
+============================================
 
 Unsupervised learning algorithms search for structures or patterns in a dataset without requiring labels. In the context of ecoacoustics, this approach can be usefull to draw inferences when manual labelling is inaccesible or too expensive. For example, unsupervised learning can be used to estimate the animal acoustic diversity [1], combine human-reasoning and automated procedures to build reference libraries, and find hidden structures in the soundscapes. 
 
@@ -11,7 +11,7 @@ In this example, we will use unsupervised learning to automatically annotate mul
 Note: To execute this example you will need to have instaled the Python packages
 matplotlib, scikit-image and scikit-learn.
 """
-
+# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_unsupervised_sound_classification_004.png'
 import numpy as np
 import matplotlib.pyplot as plt
 from maad import sound, features, rois

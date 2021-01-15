@@ -9,8 +9,8 @@
     .. _sphx_glr__auto_examples_plot_unsupervised_sound_classification.py:
 
 
-Use unsupervised learning to classify sounds in a recording
-=============================================================
+Use unsupervised learning to classify sounds
+============================================
 
 Unsupervised learning algorithms search for structures or patterns in a dataset without requiring labels. In the context of ecoacoustics, this approach can be usefull to draw inferences when manual labelling is inaccesible or too expensive. For example, unsupervised learning can be used to estimate the animal acoustic diversity [1], combine human-reasoning and automated procedures to build reference libraries, and find hidden structures in the soundscapes. 
 
@@ -22,7 +22,7 @@ matplotlib, scikit-image and scikit-learn.
 
 .. code-block:: default
 
-
+    # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_unsupervised_sound_classification_004.png'
     import numpy as np
     import matplotlib.pyplot as plt
     from maad import sound, features, rois
@@ -158,7 +158,7 @@ The shape audio features have 26 dimensions. To facilitate the clustering proces
       return f(*args, **kwds)
     [t-SNE] Computing 37 nearest neighbors...
     [t-SNE] Indexed 187 samples in 0.000s...
-    [t-SNE] Computed neighbors for 187 samples in 0.004s...
+    [t-SNE] Computed neighbors for 187 samples in 0.002s...
     [t-SNE] Computed conditional probabilities for sample 187 / 187
     [t-SNE] Mean sigma: 0.044609
     [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
@@ -244,7 +244,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  4.754 seconds)
+   **Total running time of the script:** ( 1 minutes  5.656 seconds)
 
 
 .. _sphx_glr_download__auto_examples_plot_unsupervised_sound_classification.py:

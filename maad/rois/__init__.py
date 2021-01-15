@@ -3,7 +3,7 @@
 Segmentation methods
 ====================
 
-Collection of functions to find regions of interest in audio and spectrograms.
+The module ``rois`` has a collection of functions to segment and find regions of interest in audio and spectrograms.
 
 Temporal
 ----------

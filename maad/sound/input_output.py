@@ -34,13 +34,13 @@ def load(filename, channel='left', detrend=True, verbose=False,
     Parameters
     ----------
     filename : string 
-        name or path of the .wav file to load      
+        Name or path of the audio file
     channel : {`'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
     detrend : boolean, optional, default is True
         Subtract the DC value.
     verbose : boolean, optional, default is False
-        print messages into the consol or terminal if verbose is True
+        Print messages into the console or terminal if verbose is True
     display : boolean, optional, default is False
         Display the signal if True
     savefig : string, optional, default is None

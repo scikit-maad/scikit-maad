@@ -24,7 +24,7 @@ and the Université Paris Saclay respectively. Python functions were added by
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Getting Started
 
    install
@@ -41,7 +41,7 @@ and the Université Paris Saclay respectively. Python functions were added by
    util
    
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Example Gallery
 
    _auto_examples/index

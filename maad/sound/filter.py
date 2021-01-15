@@ -29,7 +29,7 @@ from maad.util import plot2D
 def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass', 
                      rp=None, rs=None):
     """
-    Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.
+    Use a lowpass, highpass, bandpass or bandstop filter to process a 1d signal with an iir filter.
         
     Parameters
     ----------
@@ -103,10 +103,10 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
 #%%
 def fir_filter(x, kernel, axis=0):
     """
-    Filter a signal using a 1d Finite impulse filter.
+    Filter a signal using a 1d finite impulse response filter.
     
     This function uses a digital filter based on convolution of 1d kernel over a vector 
-    or along an axis of a matrix
+    or along an axis of a matrix.
     
     Parameters
     ----------
@@ -152,15 +152,15 @@ def fir_filter(x, kernel, axis=0):
     Load and display the spectrogram of a sound waveform
     
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
-    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(w,fs)
+    >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
-                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                      'figsize':(4,13),
-                      'title':'Power spectrogram density (PSD)',
-                      'xlabel':'Time [sec]',
-                      'ylabel':'Frequency [Hz]',
+                      'extent': ext,
+                      'figsize': (4,13),
+                      'title': 'Power spectrogram density (PSD)',
+                      'xlabel': 'Time [sec]',
+                      'ylabel': 'Frequency [Hz]',
                       }
     >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)
     
@@ -168,7 +168,7 @@ def fir_filter(x, kernel, axis=0):
     
     >>> w_filtered = maad.sound.fir_filter(w, kernel=(('gaussian', 2), 5))
     >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
-    >>> Lxx_filtered = maad.util.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL
+    >>> Lxx_filtered = maad.spl.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL
     >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
     
     Smooth the spectrogram, frequency by frequency (blurr)
@@ -259,7 +259,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
 #%%
 def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs): 
     """ 
-    Smooth a spectrogram with a gaussian filter 
+    Smooth a spectrogram with a gaussian filter.
      
     Parameters 
     ---------- 
@@ -267,12 +267,12 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
         Spectrogram (or image) 
      
     std : scalar, optional, default is 1 
-        Standard deviation of the gaussian kernel used to smooth the image 
+        Standard deviation of the gaussian kernel used to smooth the spectrogram.
         The larger is the number, the smoother will be the image and the longer 
-        it takes. Standard values should fall between 0.5 to 3 
+        it takes. Standard values should fall between 0.5 and 3.
     
     verbose : boolean, optional, default is False 
-        print messages
+        Print messages
     
     display : boolean, optional, default is False 
         Display the signal if True 
@@ -328,8 +328,8 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
     ------- 
     im_out: smothed or blurred image  
     
-    Examples:
-    ---------
+    Examples
+    --------
     
     Load audio recording and convert it into spectrogram
     
@@ -342,9 +342,9 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
     
     Smooth the spectrogram
     
-    >>> Sxx_dB_std05 = maad.rois.smooth(Sxx_dB, std=0.5)
-    >>> Sxx_dB_std10 = maad.rois.smooth(Sxx_dB, std=1)
-    >>> Sxx_dB_std15 = maad.rois.smooth(Sxx_dB, std=1.5)
+    >>> Sxx_dB_std05 = maad.sound.smooth(Sxx_dB, std=0.5)
+    >>> Sxx_dB_std10 = maad.sound.smooth(Sxx_dB, std=1)
+    >>> Sxx_dB_std15 = maad.sound.smooth(Sxx_dB, std=1.5)
     
     Plot spectrograms
     

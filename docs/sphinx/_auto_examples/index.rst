@@ -4,11 +4,8 @@
 
 .. _sphx_glr__auto_examples:
 
-Example gallery
-=======================
-
-This gallery is intended to illustrate how to use some of the soundscape analyses 
-that can be performed with scikit-maad.
+Gallery
+=======
 
 
 .. raw:: html
@@ -55,27 +52,6 @@ that can be performed with scikit-maad.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Unsupervised learning algorithms search for structures or patterns in a dataset without requiri...">
-
-.. only:: html
-
- .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
-     :alt: Use unsupervised learning to classify sounds in a recording
-
-     :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/plot_unsupervised_sound_classification
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows different ways to remove background noise directly from the spectrogram. We ...">
 
 .. only:: html
@@ -94,6 +70,27 @@ that can be performed with scikit-maad.
    :hidden:
 
    /_auto_examples/plot_remove_background
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Unsupervised learning algorithms search for structures or patterns in a dataset without requiri...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
+     :alt: Use unsupervised learning to classify sounds
+
+     :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/plot_unsupervised_sound_classification
 
 .. raw:: html
 
