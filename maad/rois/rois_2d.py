@@ -517,47 +517,30 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     Examples 
     -------- 
     
-    Load audio recording and convert it into spectrogram
+    Load audio recording compute the spectrogram in dB.
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)   
-    
-    Convert linear spectrogram into dB
-    
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)           
     >>> Sxx_dB = maad.util.power2dB(Sxx) +96
     
     Smooth the spectrogram
     
     >>> Sxx_dB_blurred = maad.sound.smooth(Sxx_dB)
     
-    Detection of the acoustic signature => creation of a mask
+     Using image binarization, detect isolated region in the time-frequency domain with high density of energy, i.e. regions of interest (ROIs).
     
     >>> im_bin = maad.rois.create_mask(Sxx_dB_blurred, bin_std=1.5, bin_per=0.5, mode='relative')
     
-    Select rois from the mask
+    Select ROIs from the binary mask.
     
     >>> im_rois, df_rois = maad.rois.select_rois(im_bin, display=True)
     
-    We can observe that we detect as ROI background noise and also that we merge
-    all together several ROIs. A solution consits in subtracting the background
-    noise before finding ROIs.
+    We detected the background noise as a ROI, and that multiple ROIs are mixed in a single region. To have better results, it is adviced to preprocess the spectrogram to remove the background noise before creating the mask.
     
     >>> Sxx_noNoise = maad.sound.median_equalizer(Sxx)
-    
-    Convert linear spectrogram into dB
-    
-    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise) 
-    
-    Smooth the spectrogram
-    
-    >>> Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)
-    
-    Detection of the acoustic signature => creation of a mask
-    
+    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise)     
+    >>> Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)        
     >>> im_bin2 = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
-    
-    Select rois from the mask
-    
     >>> im_rois2, df_rois2 = maad.rois.select_rois(im_bin2, display=True)
     
     """ 
@@ -649,7 +632,9 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
 #%%
 def overlay_rois (im_ref, rois, savefig=None, **kwargs): 
     """ 
-    Overlay bounding box on the original spectrogram 
+    Display bounding boxes with time-frequency regions of interest over a spectrogram.
+    
+    Regions of interest (ROIs) must be provided. They can be loaded as manual annotations or computed using automated methods (see the example section).
      
     Parameters 
     ---------- 
@@ -711,7 +696,7 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     Examples 
     -------- 
     
-    Load audio recording and convert it into spectrogram
+    Load audio recording and compute the spectrogram.
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))   
@@ -720,22 +705,19 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     
     >>> Sxx_noNoise = maad.sound.median_equalizer(Sxx)
     
-    Convert linear spectrogram into dB
+    Convert linear spectrogram into dB and smooth.
     
-    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise) 
-    
-    Smooth the spectrogram
-    
+    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise)         
     >>> Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)
     
     Detection of the acoustic signature => creation of a mask
     
     >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
     
-    Select rois from the mask and display bounding box over the spectrogram without noise
+    Select rois from the mask and display bounding box over the spectrogram without noise.
     
     >>> import numpy as np
-    >>> im_rois, df_rois = maad.rois.select_rois(im_bin)  
+    >>> im_rois, df_rois = maad.rois.select_rois(im_bin, min_roi=100)  
     >>> maad.rois.overlay_rois (Sxx_noNoise_dB, df_rois, extent=ext,vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60) 
         
     """        
@@ -830,14 +812,14 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     return ax, fig 
  
 #%%
-def rois_to_imblobs(im_blobs, rois): 
+def rois_to_imblobs(im_zeros, rois): 
     """  
-    Add 1 corresponding to rois to im_blobs which is an empty matrix 
+    Take a matrix full of zeros and add ones in delimited regions defined by rois.
  
     Parameters 
     ---------- 
-    im_blobs : ndarray 
-        matrix full of zeros with the size to the image where the rois come from 
+    im_zeros : ndarray 
+        matrix full of zeros with the size to the image where the rois come from.
      
     rois : DataFrame 
         rois must have the columns names:((min_y, min_x, max_y, max_x) which 
@@ -848,6 +830,15 @@ def rois_to_imblobs(im_blobs, rois):
     im_blobs : ndarray 
         matrix with 1 corresponding to the rois and 0 elsewhere 
  
+    Examples
+    --------
+    >>> from maad import rois, util
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> im_zeros = np.zeros((100,300))
+    >>> df_rois = pd.DataFrame({'min_y': [10, 40], 'min_x': [10, 200], 'max_y': [60, 80], 'max_x': [110, 250]})
+    >>> im_blobs = rois.rois_to_imblobs(im_zeros, df_rois)
+    >>> util.plot2D(im_blobs)
     """ 
     # Check format of the input data 
     if type(rois) is not pd.core.frame.DataFrame : 
@@ -860,9 +851,9 @@ def rois_to_imblobs(im_blobs, rois):
     rois_bbox = rois[['min_y', 'min_x', 'max_y', 'max_x']] 
     # roi to image blob 
     for min_y, min_x, max_y, max_x in rois_bbox.values: 
-        im_blobs[int(min_y):int(max_y+1), int(min_x):int(max_x+1)] = 1 
+        im_zeros[int(min_y):int(max_y+1), int(min_x):int(max_x+1)] = 1 
      
-    im_blobs = im_blobs.astype(int) 
+    im_blobs = im_zeros.astype(int) 
      
     return im_blobs 
 

@@ -4,8 +4,53 @@
 
 .. _sphx_glr__auto_examples:
 
-Gallery
-=======
+Example gallery
+===============
+
+This gallery is intended to present examples on how to use scikit-maad to analyse audio recordings.
+
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr__auto_examples_1_basic:
+
+Basic examples
+--------------
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In an audio signal, regions of interest are usually regions with high density of energy. The fu...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/1_basic/images/thumb/sphx_glr_plot_find_rois_simple_thumb.png
+     :alt: Simple audio segmentation
+
+     :ref:`sphx_glr__auto_examples_1_basic_plot_find_rois_simple.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/1_basic/plot_find_rois_simple
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr__auto_examples_2_advanced:
+
+Advanced examples
+-----------------
 
 
 .. raw:: html
@@ -14,10 +59,10 @@ Gallery
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_nmf_and_false_color_spectrogram_thumb.png
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_nmf_and_false_color_spectrogram_thumb.png
      :alt: Signal decomposition and false-color spectrograms
 
-     :ref:`sphx_glr__auto_examples_plot_nmf_and_false_color_spectrogram.py`
+     :ref:`sphx_glr__auto_examples_2_advanced_plot_nmf_and_false_color_spectrogram.py`
 
 .. raw:: html
 
@@ -27,7 +72,7 @@ Gallery
 .. toctree::
    :hidden:
 
-   /_auto_examples/plot_nmf_and_false_color_spectrogram
+   /_auto_examples/2_advanced/plot_nmf_and_false_color_spectrogram
 
 .. raw:: html
 
@@ -35,10 +80,10 @@ Gallery
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_using_shape_features_thumb.png
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_using_shape_features_thumb.png
      :alt: Using wavelets to characterize the time-frequency shape of sounds
 
-     :ref:`sphx_glr__auto_examples_using_shape_features.py`
+     :ref:`sphx_glr__auto_examples_2_advanced_using_shape_features.py`
 
 .. raw:: html
 
@@ -48,7 +93,7 @@ Gallery
 .. toctree::
    :hidden:
 
-   /_auto_examples/using_shape_features
+   /_auto_examples/2_advanced/using_shape_features
 
 .. raw:: html
 
@@ -56,10 +101,10 @@ Gallery
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_remove_background_thumb.png
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_remove_background_thumb.png
      :alt: Remove background noise from audio with signal processing tools
 
-     :ref:`sphx_glr__auto_examples_plot_remove_background.py`
+     :ref:`sphx_glr__auto_examples_2_advanced_plot_remove_background.py`
 
 .. raw:: html
 
@@ -69,7 +114,7 @@ Gallery
 .. toctree::
    :hidden:
 
-   /_auto_examples/plot_remove_background
+   /_auto_examples/2_advanced/plot_remove_background
 
 .. raw:: html
 
@@ -77,10 +122,10 @@ Gallery
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
      :alt: Use unsupervised learning to classify sounds
 
-     :ref:`sphx_glr__auto_examples_plot_unsupervised_sound_classification.py`
+     :ref:`sphx_glr__auto_examples_2_advanced_plot_unsupervised_sound_classification.py`
 
 .. raw:: html
 
@@ -90,7 +135,7 @@ Gallery
 .. toctree::
    :hidden:
 
-   /_auto_examples/plot_unsupervised_sound_classification
+   /_auto_examples/2_advanced/plot_unsupervised_sound_classification
 
 .. raw:: html
 
@@ -98,10 +143,10 @@ Gallery
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_compare_auto_and_manual_rois_selection_thumb.png
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_compare_auto_and_manual_rois_selection_thumb.png
      :alt: Find Regions of interest (ROIs) in a spectrogram
 
-     :ref:`sphx_glr__auto_examples_plot_compare_auto_and_manual_rois_selection.py`
+     :ref:`sphx_glr__auto_examples_2_advanced_plot_compare_auto_and_manual_rois_selection.py`
 
 .. raw:: html
 
@@ -111,7 +156,7 @@ Gallery
 .. toctree::
    :hidden:
 
-   /_auto_examples/plot_compare_auto_and_manual_rois_selection
+   /_auto_examples/2_advanced/plot_compare_auto_and_manual_rois_selection
 
 .. raw:: html
 
@@ -119,10 +164,10 @@ Gallery
 
 .. only:: html
 
- .. figure:: /_auto_examples/images/thumb/sphx_glr_plot_extract_alpha_indices_thumb.png
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_extract_alpha_indices_thumb.png
      :alt: Extract ecoacoustics alpha indices from audio recording
 
-     :ref:`sphx_glr__auto_examples_plot_extract_alpha_indices.py`
+     :ref:`sphx_glr__auto_examples_2_advanced_plot_extract_alpha_indices.py`
 
 .. raw:: html
 
@@ -132,7 +177,7 @@ Gallery
 .. toctree::
    :hidden:
 
-   /_auto_examples/plot_extract_alpha_indices
+   /_auto_examples/2_advanced/plot_extract_alpha_indices
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

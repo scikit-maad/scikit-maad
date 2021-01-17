@@ -34,7 +34,7 @@ from sklearn.decomposition import NMF
 
 #%%
 # First, load and audio file and compute the spectrogram.
-s, fs = sound.load('../data/spinetail.wav')
+s, fs = sound.load('../../data/spinetail.wav')
 Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
 
 Sxx_db = power2dB(Sxx, db_range=70)

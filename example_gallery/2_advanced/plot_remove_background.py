@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 # The linear spectrogram is then transformed into dB. The dB range is  96dB 
 # which is the maximum dB range value for a 16bits audio recording. We add
 # 96dB in order to get have only positive values in the spectrogram
-s, fs = load('../data/tropical_forest_morning.wav')
+s, fs = load('../../data/tropical_forest_morning.wav')
 #s, fs = load('../data/cold_forest_night.wav')
 Sxx, tn, fn, ext = spectrogram(s, fs, fcrop=[0,20000], tcrop=[0,60])
 Sxx_dB = power2dB(Sxx, db_range=96) + 96

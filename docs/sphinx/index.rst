@@ -10,7 +10,7 @@ Welcome to scikit-maad's documentation!
 ecoacoustics datasets** in Python 3. This package was designed to bring 
 flexibility to (1) **find regions of interest**, and (2) to compute **acoustic 
 features** in audio recordings. This workflow opens the possibility to analyze audio and use 
-powerfull **machine learning**, allowing to identify key patterns in all kind of soundscapes.
+powerful **machine learning**, allowing to identify key patterns in all kinds of soundscapes.
 
 
 About the authors
@@ -19,7 +19,7 @@ About the authors
 This work started in 2016 at the Museum National d'Histoire Naturelle (MNHN) 
 in Paris, France. It was initiated by **Juan Sebastian Ulloa**, supervised by 
 **Jérôme Sueur** and **Thierry Aubin** at the Muséum National d'Histoire Naturelle 
-and the Université Paris Saclay respectively. Python functions were added by 
+and the Université Paris-Saclay respectively. Python functions were added by 
 **Sylvain Haupert**, **Juan Felipe Latorre**, and **Juan Sebastian Ulloa**.
 
 

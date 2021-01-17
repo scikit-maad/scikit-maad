@@ -25,7 +25,7 @@ from maad.util import power2dB, plot2D, format_features, read_audacity_annot
 
 #%%
 # First, load and audio file and compute the power spectrogram.
-s, fs = sound.load('../data/cold_forest_daylight.wav')
+s, fs = sound.load('../../data/cold_forest_daylight.wav')
 
 t0 = 0
 t1 = 20
@@ -95,7 +95,7 @@ ax0, fig0 = features.overlay_centroid(Sxx_db, df_centroid, savefig=None,
 # Audacity software.
 # Each acoustic signature is manually selected and labeled. All similar acoustic 
 # signatures are labeled with the same name
-df_rois_GT = read_audacity_annot('../data/cold_forest_daylight_label.txt')  ## annotations using Audacity
+df_rois_GT = read_audacity_annot('../../data/cold_forest_daylight_label.txt')  ## annotations using Audacity
 
 # drop rows with frequency and time outside of tn and fn
 df_rois_GT = df_rois_GT[(df_rois_GT.min_t >= tn.min()) & 

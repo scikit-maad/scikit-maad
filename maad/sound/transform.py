@@ -65,22 +65,24 @@ def envelope (s, mode='fast', Nt=32):
     array([0.06588196, 0.11301711, 0.09201435, ..., 0.18053983, 0.18351906,
        0.10258595])
     
-    compute the time vector for the vector wave
+    Compute the time vector for the vector wave.
     
     >>> import numpy as np
     >>> t = np.arange(0,len(s),1)/fs
     
-    compute the time vector for the vector env_fast
+    Compute the time vector for the vector env_fast.
+    
     >>> t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)
     
-    plot 0.1s of the envelope and 0.1s of the abs(s)
+    Plot 0.1s of the envelope and 0.1s of the abs(s).
     
     >>> import matplotlib.pyplot as plt
-    >>> fig1, ax1 = plt.subplots()
-    >>> ax1.plot(t[t<0.1], abs(s[t<0.1]), label='abs(s)')
-    >>> ax1.plot(t[t<0.1], env_hilbert[t<0.1], label='env(s) - hilbert option')
-    >>> ax1.plot(t_env_fast[t_env_fast<0.1], env_fast[t_env_fast<0.1], label='env(s) - fast option')
+    >>> fig1, ax1 = plt.subplots(figsize=(10,4))
+    >>> ax1.plot(t[t<0.1], abs(s[t<0.1]), label='abs(s)', lw=0.7)
+    >>> ax1.plot(t[t<0.1], env_hilbert[t<0.1], label='env(s) - hilbert option', lw=0.7)
+    >>> ax1.plot(t_env_fast[t_env_fast<0.1], env_fast[t_env_fast<0.1], label='env(s) - fast option', lw=0.7)
     >>> ax1.set_xlabel('Time [sec]')
+    >>> ax1.set_ylabel('Amplitude')
     >>> ax1.legend()
     """
     if mode == 'fast' :

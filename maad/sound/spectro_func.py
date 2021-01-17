@@ -157,7 +157,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     
+    >>> fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     
     
     Compute mean power spectrogram
     
@@ -181,7 +181,7 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
     energy => power x time
     
     >>> E3 = sum(S_power_mean*len(s)) 
-    >>>  maad.util.power2dB(E3)
+    >>> maad.util.power2dB(E3)
     44.93083283875093
     
     """
@@ -295,8 +295,9 @@ def spectrogram (x, fs, window='hann', nperseg=1024, noverlap=None,
 def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
     """
     Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave
-    spectrum (1d) or Spectrogram (2d)
-    Better to work with PSD (amplitude²) for energy conservation
+    spectrum (1d) or Spectrogram (2d).
+    
+    Our advice is to work with PSD (amplitude²) for energy conservation.
 
     Parameters
     ----------
@@ -388,7 +389,7 @@ def intoOctave (X, fn, thirdOctave=True, display=False, **kwargs):
 #%%
 def avg_power_spectro (Sxx_power) :
     """
-    Computes the average of a power spectrogram along the time axis
+    Computes the average of a power spectrogram along the time axis.
     
     Parameters
     ----------
@@ -412,7 +413,7 @@ def avg_power_spectro (Sxx_power) :
 #%%
 def avg_amplitude_spectro (Sxx_ampli) :
     """
-    Computes the average of an amplitude spectrogram along the time axis
+    Computes the average of an amplitude spectrogram along the time axis.
     
     Parameters
     ----------

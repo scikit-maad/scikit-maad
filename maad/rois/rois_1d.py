@@ -99,7 +99,7 @@ def _energy_windowed(s, wl=512, fs=None):
 def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
                   savefilename='rois.csv', **kwargs):
     """
-    Find region of interest using simple known estimates of signal length and frequency limits.
+    Find region of interest using known estimates of signal length and frequency limits.
     
     The general approach is based on continous wavelet transform following a three step process
     
@@ -129,7 +129,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     Returns
     -------
     rois : pandas DataFrame
-        an object with temporal and frequencial limits of regions of interest            
+        an table with temporal and frequencial limits of regions of interest            
     
     References
     ----------
