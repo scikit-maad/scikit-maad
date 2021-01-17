@@ -320,10 +320,17 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     -------- 
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import filter_bank_2d_nodc, filter_multires 
-    >>> s, fs = load('./data/spinetail.wav') 
-    >>> Sxx, dt, df, ext = spectrogram(s, fs, db_range=100, display=True) 
+    >>> from maad import util
+    >>> s, fs = load('../data/spinetail.wav') 
+    >>> Sxx, dt, df, ext = spectrogram(s, fs) 
+    >>> Sxx_db = util.power2dB(Sxx, db_range=80) + 80
+    >>> util.plot2D(Sxx_db, **{'extension':ext})
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2) 
-    >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2) 
+    >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
+    
+    Plot one of the resulting spectrograms.
+    
+    >>> util.plot2D(Sxx_out[5], **{'extension':ext})
      
     """     
  
@@ -369,7 +376,8 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
     cosine function. Spatial frequency is inversely proportional to the 
     wavelength of the harmonic and to the standard deviation of a Gaussian 
     kernel. The bandwidth is also inversely proportional to the standard 
-    deviation [1-3]. These filters have been used to classify textures in images and can be applied to characterize spectrograms to classify sounds [4, 5]. 
+    deviation [1]_. These filters have been used to classify textures in images [4]_ and 
+    can be applied to characterize spectrograms to classify sounds [5]_.
      
     Parameters 
     ---------- 
@@ -412,17 +420,20 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
     .. [4] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
     .. [5] Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026
 
-     
+    
+    See also
+    --------
+    filter_multires, opt_shape_presets, shape_features
+    
     Examples 
     -------- 
-    It is possible to load presets to build the filter bank using predefined  
-    parameters with the function maad.features.opt_shape_presets 
+    Build a filter bank using predefined parameters with the function maad.features.opt_shape_presets.
  
     >>> from maad.features import filter_bank_2d_nodc, opt_shape_presets 
     >>> opt = opt_shape_presets(resolution='med') 
     >>> params, kernels = filter_bank_2d_nodc(opt['frequency'], opt['ntheta'], opt['bandwidth'], opt['gamma'], display=True) 
  
-    Alternatively, custom parameters can be provided to define the filter bank 
+    Alternatively, custom parameters can be provided to define the filter bank.
  
     >>> from maad.features import filter_bank_2d_nodc 
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True) 
@@ -450,7 +461,7 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
 #%%
 def opt_shape_presets(resolution, opt_shape=None): 
     """  
-    Set parameters for multiresolution analysis using presets or custom parameters 
+    Set parameters for multiresolution analysis using presets or custom parameters.
      
     Parameters 
     ---------- 
@@ -467,23 +478,37 @@ def opt_shape_presets(resolution, opt_shape=None):
     ------- 
     opt_shape: dict 
         A valid dictionary with shape settings 
+        
+    See also
+    --------
+    filter_bank_2d_nodc, filter_multires, shape_features
          
     Examples 
     -------- 
-    Get parameters to analyse at low shape resolution 
+    Get parameters to analyse at low, med and high shape resolutions.
      
     >>> from maad.features import opt_shape_presets 
     >>> opt_shape_presets('low') 
+    {'ntheta': 2,
+     'bandwidth': 0.8,
+     'frequency': (0.35, 0.5),
+     'gamma': 2,
+     'npyr': 4}
     
-    Get parameters to analyse at med shape resolution 
-     
-    >>> from maad.features import opt_shape_presets 
     >>> opt_shape_presets('med') 
-         
-    Get parameters to analyse at high shape resolution 
-     
-    >>> from maad.features import opt_shape_presets 
-    >>> opt_shape_presets('high') 
+    {'ntheta': 4,
+     'bandwidth': 0.8,
+     'frequency': (0.35, 0.5),
+     'gamma': 2,
+     'npyr': 6}
+    
+    >>> opt_shape_presets('high')
+    {'ntheta': 8,
+     'bandwidth': 0.8,
+     'frequency': (0.35, 0.5),
+     'gamma': 2,
+     'npyr': 6}
+    
     """ 
     # Factory presets 
     opt_shape_low = dict(ntheta=2,  
@@ -535,7 +560,7 @@ def opt_shape_presets(resolution, opt_shape=None):
 #%%
 def plot_shape(shape, params, row=0, display_values=False): 
     """ 
-    Plot shape features in a bidimensional plot 
+    Plot shape features in a bidimensional plot.
      
     Parameters 
     ---------- 
@@ -671,11 +696,13 @@ def shape_features(Sxx, resolution='low', rois=None):
     
     The shape coefficient can be visualized using ``plot_shape``. Note that these
     coefficient allow to disciminate between the two vocalization types found in the
-    audio file.
+    audio file, the spinetail song and the background calls.
     
     >>> shape_crer, shape_sp = shape.groupby('label')
-    >>> ax = plot_shape(shape_crer[1].mean(), params) 
-    >>> ax = plot_shape(shape_sp[1].mean(), params) 
+    >>> ax1 = plot_shape(shape_crer[1].mean(), params) 
+    >>> ax1.set_title('Spinetail song')
+    >>> ax2 = plot_shape(shape_sp[1].mean(), params) 
+    >>> ax2.set_title('Background call')
     """     
  
     # Check input data and unpack settings 
@@ -738,7 +765,7 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  
     using 2D Gabor filters. Contrary to ``shape_features``, this function 
     delivers the raw response of the spectrogram to each filter of the filter 
-    bank. 
+    bank. This function can be used to have access to spectrograms filtered by the filterbank.
      
     Parameters 
     ---------- 
@@ -769,8 +796,7 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     Examples
     --------
     
-    This function can be used to have access to spectrograms filtered by a 2D
-    Gabor filter bank.
+    Scatter the spectrogram acoustic components using 2D Gabor filters.
 
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features_raw
@@ -779,8 +805,10 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) 
     >>> Sxx_db = power2dB(Sxx, db_range=80)
     >>> shape_raw, params = shape_features_raw(Sxx_db, resolution='low')
-    >>> plot2D(shape_raw[13], **{'extent':(tn[0], tn[-1], fn[0], fn[-1])})
-    >>> plot2D(shape_raw[14], **{'extent':(tn[0], tn[-1], fn[0], fn[-1])})
+    >>> plot2D(shape_raw[0], **{'extent':ext, 'title': 'High-frequency vertical component'})
+    >>> plot2D(shape_raw[13], **{'extent':ext, 'title': 'Low-frequency vertical components'})
+    >>> plot2D(shape_raw[2], **{'extent':ext, 'title': 'High-frequency horizontal components'})
+    >>> plot2D(shape_raw[15], **{'extent':ext, 'title': 'Low-frequency horizontal components'})
     """     
      
     # unpack settings 
@@ -1028,7 +1056,7 @@ def all_shape_features(s, fs, rois, resolution='low',
                           display=False, **kwargs): 
     """ 
     Computes shape and central frequency features from signal at specified 
-    time-frequency limits defined by regions of interest (ROIs) 
+    time-frequency limits defined by regions of interest (ROIs).
      
     Parameters 
     ---------- 
@@ -1100,10 +1128,10 @@ def all_shape_features(s, fs, rois, resolution='low',
     -------- 
     >>> from maad.util import read_audacity_annot 
     >>> from maad.sound import load 
-    >>> from maad.features import compute_all_features 
-    >>> s, fs = load('./data/spinetail.wav')
-    >>> rois = read_audacity_annot('./data/spinetail.txt')
-    >>> features = compute_all_features(s, fs, rois, resolution='low',display=True) 
+    >>> from maad.features import all_shape_features 
+    >>> s, fs = load('../data/spinetail.wav')
+    >>> rois = read_audacity_annot('../data/spinetail.txt')
+    >>> features = all_shape_features(s, fs, rois, resolution='low', display=True)
     >>> features
         label      min_t     ...       duration_x  bandwidth_y
         0     SP   0.101385     ...              0.0          0.0
@@ -1118,13 +1146,14 @@ def all_shape_features(s, fs, rois, resolution='low',
         9   CRER  11.329756     ...              0.0          0.0
         10    SP  11.773314     ...              0.0          0.0
         ....
-    >>> np.asarray(list(features)).T
-        array(['label', 'min_t', 'min_f', 'max_t', 'max_f', 'min_y', 'min_x',
-       'max_y', 'max_x', 'shp_001', 'shp_002', 'shp_003', 'shp_004',
-       'shp_005', 'shp_006', 'shp_007', 'shp_008', 'shp_009', 'shp_010',
-       'shp_011', 'shp_012', 'shp_013', 'shp_014', 'shp_015', 'shp_016',
-       'centroid_y', 'centroid_x', 'duration_x', 'bandwidth_y',
-       'centroid_f', 'centroid_t'], dtype='<U11')
+    >>> features.columns
+    Index(['label', 'min_t', 'min_f', 'max_t', 'max_f', 'min_y', 'min_x', 'max_y',
+           'max_x', 'shp_001', 'shp_002', 'shp_003', 'shp_004', 'shp_005',
+           'shp_006', 'shp_007', 'shp_008', 'shp_009', 'shp_010', 'shp_011',
+           'shp_012', 'shp_013', 'shp_014', 'shp_015', 'shp_016', 'centroid_y',
+           'centroid_x', 'duration_x', 'bandwidth_y', 'area_xy', 'centroid_f',
+           'centroid_t', 'duration_t', 'bandwidth_f', 'area_tf'],
+          dtype='object')
     """    
    
     # Spectro computing

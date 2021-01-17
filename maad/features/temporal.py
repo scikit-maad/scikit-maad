@@ -22,9 +22,10 @@ from maad.util import moments
 # public functions
 # =============================================================================
 #%%
-def audio_moments (s):
+def audio_moments(s):
     """
-    Computes the first 4th moments of an audio
+    Computes the first 4th moments of an audio signal:
+        
     - mean
     - variance
     - skewness
@@ -62,7 +63,13 @@ def audio_moments (s):
 #%%
 def zero_crossing_rate(s, fs):
     """
-    Compute the Zero Crossing Rate of an audio signal.
+    Compute the zero crossing rate feature of an audio signal.
+    
+    The zero-crossing rate is the rate of sign-changes along a signal, i.e., 
+    the rate at which the signal changes from positive to zero to negative or 
+    from negative to zero to positive. This feature has been used widely 
+    in speech recognition and music information retrieval, 
+    being a key feature to classify percussive sounds [1]_.
     
     Parameters
     ----------
@@ -76,14 +83,10 @@ def zero_crossing_rate(s, fs):
     zcr : float   
         number of zero crossing /s
 
-    Note
-    ----
-    From wikipedia :
-    The zero-crossing rate is the rate of sign-changes along a signal, i.e., 
-    the rate at which the signal changes from positive to zero to negative or 
-    from negative to zero to positive.[1] This feature has been used heavily 
-    in both speech recognition and music information retrieval, 
-    being a key feature to classify percussive sounds.
+    Reference
+    ---------
+    .. [1] https://en.wikipedia.org/wiki/Zero-crossing_rate
+
     
     """
     zero_crosses = np.nonzero(np.diff(s > 0))[0]
