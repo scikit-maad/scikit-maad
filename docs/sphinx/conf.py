@@ -23,8 +23,8 @@ copyright = '2020, scikit-maad development team.'
 author = 'scikit-maad development team'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.4'
-version = '0.1.4'
+release = '1.1'
+version = '1.1'
 
 # -- General configuration ---------------------------------------------------
 

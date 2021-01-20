@@ -448,7 +448,7 @@ def roughness (x, norm=None, axis=0) :
 #=============================================================================
 def audio_median (s, mode ='fast', Nt=512) :
     """
-    Computes the median of the envelope of an audio signal 
+    Computes the median of the envelope of an audio signal.
 
     Parameters
     ----------
@@ -472,7 +472,7 @@ def audio_median (s, mode ='fast', Nt=512) :
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
-    >>> med = maad.features.audio_median (s)
+    >>> med = maad.features.audio_median(s)
     >>> print(med)
     0.007934564717486147
     
@@ -487,7 +487,7 @@ def audio_median (s, mode ='fast', Nt=512) :
 #=============================================================================
 def audio_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
     """
-    Computes the median of the envelope of an audio signal 
+    Computes the entropy of the envelope of an audio signal.
 
     Parameters
     ----------
@@ -525,11 +525,10 @@ def audio_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
     
     Notes
     -----
-    Entropy is a measure of ENERGY dispersal => square the amplitude.      
-    Temporal entropy => value<0.7 indicates a brief concentration of energy
-                     (few miliseconds)
-                     value close 1 indicates no peak events but rather 
-                     smooth sound or noise.
+    The entropy of an audio signal is a measure of energy dispersion. In the temporal domain, 
+    values below 0.7 indicate a brief concentration of energy (few miliseconds), while 
+    values close 1 indicate low concentration of energy, no peaks, smooth and constant 
+    background noise.
 
     Examples
     --------
@@ -554,7 +553,9 @@ def audio_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
 #=============================================================================
 def acousticRichnessIndex (Ht_array, M_array):
     """
-    Acoustic richness index : AR
+    Compute the acoustic richness index of an audio file. This acoustic index was first
+    described in [1]_. The present version was translated from the R software package 
+    Seewave [2]_.
     
     Parameters
     ----------
@@ -570,8 +571,10 @@ def acousticRichnessIndex (Ht_array, M_array):
         
     References
     ----------
-    Described in [Depraetere & al. 2012]
-    Ported from SEEWAVE R package
+    .. [1] Depraetere, M., Pavoine, S., Jiguet, F., Gasc, A., Duvail, S., & Sueur, J. (2012). Monitoring animal diversity using acoustic indices: Implementation in a temperate woodland. Ecological Indicators, 13, 46–54.
+    .. [2] Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound analysis and synthesis. Bioacoustics, 18, 213–226.
+
+
     """    
     if len(Ht_array) != len(M_array) : 
         print ("warning : Ht_array and M_array must have the same length")
@@ -584,12 +587,12 @@ def acousticRichnessIndex (Ht_array, M_array):
 
 def audio_activity (s, dB_threshold=3, mode='fast', Nt=512):
     """
-    Acoustic Activity :
+    Compute the acoustic activity index from an audio signal.
     
-    for each frequency bin :
-    - ACTfract : proportion (fraction) of points above the threshold 
-    - ACTcount : number of points above the threshold
-    - ACTmean : mean value (in dB) of the portion of the signal above the threhold
+    Three values are computed with this function:
+        - ACTfract : proportion (fraction) of points above the threshold 
+        - ACTcount : number of points above the threshold
+        - ACTmean : mean value (in dB) of the portion of the signal above the threhold
     
     Parameters
     ----------
@@ -618,8 +621,6 @@ def audio_activity (s, dB_threshold=3, mode='fast', Nt=512):
         
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
@@ -658,7 +659,9 @@ def audio_activity (s, dB_threshold=3, mode='fast', Nt=512):
 def audio_events (s, fs, dB_threshold=3, rejectDuration=None, 
                   mode='fast', Nt=512, display=False, **kwargs):
     """
-    Acoustic events :
+    Compute the acoustic event index from an audio signal.
+    
+    Four values are computed with this function:
         - EVNtFraction : Fraction: events duration over total duration
         - EVNmean : mean events duration (s)
         - EVNcount : number of events per s
@@ -705,8 +708,6 @@ def audio_events (s, fs, dB_threshold=3, rejectDuration=None,
 
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
@@ -764,7 +765,7 @@ def audio_events (s, fs, dB_threshold=3, rejectDuration=None,
 def frequency_entropy (X, compatibility="QUT") :
     """
     Computes the spectral entropy of a power spectral density (1d) or power
-    spectrogram density (2d)
+    spectrogram density (2d).
 
     Parameters
     ----------
@@ -797,10 +798,10 @@ def frequency_entropy (X, compatibility="QUT") :
     
     Notes
     -----
-    FREQUENCY ENTROPY => low value indicates concentration of energy around a
-                narrow frequency band. 
-                WARNING : if the DC value is not removed before processing
-                the large peak at f=0Hz (DC) will lower the entropy...
+    The spectral entropy of a signal measures the energy dispersion along frequencies. Low values 
+    indicates a concentration of energy around a narrow frequency band. 
+    If the DC value is not removed before processing the large peak at f=0Hz will 
+    lower the entropy of the signal.
 
     Examples
     --------
@@ -851,7 +852,7 @@ def frequency_entropy (X, compatibility="QUT") :
 def numberOfPeaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200, 
                   slopes=(1,1), display=False, **kwargs):
     """
-    Counts the number of major frequency peaks obtained on a mean spectrum.
+    Count the number of frequency peaks on a mean spectrum.
     
     Parameters
     ----------
@@ -878,24 +879,27 @@ def numberOfPeaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     display: boolean, optional, default is False
         if True, display the mean spectrum with the detected peaks
         
-    Return
-    ------
+    Returns
+    -------
     NBPeaks : integer
         Number of detected peaks on the mean spectrum
     
-    Reference :
-    -----------
+    References
+    ----------
     Gasc, A. & al (2013). Biodiversity sampling using a global acoustic 
     approach: contrasting sites with microendemics in New Caledonia. 
     PloS one, 8(5), e65311.
     
-    Inspired by the function fpeaks from Seewave
+    Inspired by the function `fpeaks` from the R package Seewave.
+    Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound 
+    analysis and synthesis. Bioacoustics, 18, 213–226.
+
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
-    >>> maad.features.numberOfPeaks(Sxx_power, fn, slopes=6, min_freq_dist=100) 
+    >>> maad.features.numberOfPeaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) 
     14
 
     """
@@ -975,7 +979,7 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
     ----------
     Sxx : ndarray of floats
         Spectrogram (2d). 
-        Recommanded to work with PSD to be consistent with energy conservation
+        It is recommended to work with PSD to be consistent with energy conservation
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1007,8 +1011,8 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
     ----------
     Credit : Towsey 2017
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
     >>> EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = maad.features.spectral_entropy(Sxx_power, fn, flim=(2000,10000)) 
@@ -1089,7 +1093,7 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
 def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,10000), 
                    flim_HF=(10000,20000)):
     """
-    Spectral Activity Cover
+    Compute the spectral activity cover index.
         
     Parameters
     ----------
@@ -1119,8 +1123,6 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
         
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
@@ -1158,12 +1160,12 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
 
 def spectral_activity (Sxx_dB, dB_threshold=6):
     """
-    Acoustic Activity :
+    Compute the acoustic activity on a spectrogram.
     
-    for each frequency bin :
-    - ACTfract : proportion (fraction) of points above the threshold 
-    - ACTcount : number of points above the threshold
-    - ACTmean : mean value (in dB) of the portion of the signal above the threhold
+    The function computes for each frequency bin:
+        - ACTfract : proportion (fraction) of points above the threshold 
+        - ACTcount : number of points above the threshold
+        - ACTmean : mean value (in dB) of the portion of the signal above the threhold
     
     Parameters
     ----------
@@ -1185,13 +1187,11 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
         
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
@@ -1215,8 +1215,11 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
 def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None, 
                      display=False, **kwargs):
     """
-    Spectral Acoustic events :
-        - EVNspFraction : Fraction: events duration over total duration
+    Compute the spectral acoustic events from a spectrogram.
+    
+    This function computes:
+        
+        - EVNspFraction : Fraction of events duration over total duration
         - EVNspmean : mean events duration (s)
         - EVNspcount : number of events per s
         - EVNsp : binary vector or matrix with 1 corresponding to event position
@@ -1255,17 +1258,15 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
     References 
     ----------
-    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-    from natural recordings of the environment.
     Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
     from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
-    >>> Sxx_noNoise= maad.rois.median_equalizer(Sxx_power) 
+    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)  
     >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %np.mean(EVNspFract_per_bin))
