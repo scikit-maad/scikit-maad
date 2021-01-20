@@ -1325,8 +1325,8 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 def acousticComplexityIndex(Sxx):
     
     """
-    Acoustic Complexity Index : ACI
-    
+    Compute the Acoustic Complexity Index (ACI) from a spectrogram [1]_.
+        
     Parameters
     ----------
     Sxx : ndarray of floats
@@ -1334,18 +1334,16 @@ def acousticComplexityIndex(Sxx):
     
     Returns
     -------    
-    ACI_xx : 2d ndarray of scalars
+    ACI_xx: 2d ndarray of scalars
         Acoustic Complexity Index of the spectrogram
     
-    ACI_per_bin : 1d ndarray of scalars
+    ACI_per_bin: 1d ndarray of scalars
         ACI value for each frequency bin
         sum(ACI_xx,axis=1)
         
-    ACI_sum : scalar
+    ACI_sum: scalar
         Sum of ACI value per frequency bin (Common definition)
         sum(ACI_per_bin)
-        
-    ACI_mean ; scalar
     
     Notes
     -----   
@@ -1360,14 +1358,13 @@ def acousticComplexityIndex(Sxx):
         
     References
     ----------
-    Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
+    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
     activity of an avian community: the Acoustic Complexity Index (ACI). 
     Ecological Indicators, 11, 868-873.
     
-    Ported from the Seewave R package.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
     >>> _, _ , ACI  = maad.features.acousticComplexityIndex(Sxx)
@@ -1386,7 +1383,9 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
                             dB_threshold=-50, index="shannon"):
     
     """
-    Acoustic Diversity Index : ADI
+    Compute the Acoustic Diversity Index (ADI) from a spectrogram [1]_.
+    
+    The diversity can be computed using Shannon, Simpson, or the inverse Simpson diversity index.
     
     Parameters
     ----------
@@ -1422,16 +1421,19 @@ def acousticDiversityIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     Notes
     -----
-    See acousticEvenessIndex
-    AEI and ADI are negatively correlated
+    The Acoustic Eveness Index (AEI) and the Acoustic Diversity Index (ADI) are negatively correlated.
+    
+    See also
+    --------
+    acousticEvenessIndex
     
     References
     ----------
-    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
     A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
     >>> ADI  = maad.features.acousticDiversityIndex(Sxx,fn)
@@ -1475,7 +1477,7 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
                           dB_threshold=-50):
     
     """
-    Acoustic Eveness Index : AEI
+    Compute the Acoustic Eveness Index (AEI) from a spectrogram [1]_.
     
     Parameters
     ----------
@@ -1505,16 +1507,19 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
         
     Notes
     -----
-    See acousticDiversityIndex
-    AEI and ADI are negatively correlated
+    The Acoustic Eveness Index (AEI) and the Acoustic Diversity Index (ADI) are negatively correlated.
+    
+    See also
+    --------
+    acousticDiversityIndex
         
     References 
     ----------
-    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
     A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
     >>> AEI  = maad.features.acousticEvenessIndex(Sxx,fn)
@@ -1550,7 +1555,7 @@ def acousticEvenessIndex (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
 def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
                      R_compatible = 'soundecology'):
     """
-    Compute the Normalized Difference Soundscape Index from a power spectrogram.
+    Compute the Normalized Difference Soundscape Index from a power spectrogram [1]_.
         
     Parameters
     ----------
@@ -1583,14 +1588,14 @@ def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
     
     References
     ----------
-    Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
+    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
     The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive 
     for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
     
-    Inspired by Seewave and soundecology R package
+    Inspired by Seewave and soundecology R packages.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscapeIndex(Sxx_power,fn)
@@ -1632,7 +1637,7 @@ def soundscapeIndex (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
 #=============================================================================
 def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'):
     """
-    Bioacoustics Index
+    Compute the Bioacoustics Index from a spectrogram [1]_.
     
     Parameters
     ----------
@@ -1653,7 +1658,7 @@ def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'
     
     References 
     ----------
-    References: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
+    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
     invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
     remote sensing. Ecological Applications 17: 2137-2144.
     
@@ -1661,10 +1666,10 @@ def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'
     
     Notes
     -----    
-    Soundecology compatible version
-    - average of dB value
-    - remove negative value in order to get positive values only
-    - dividing by the frequency resolution df instead of multiplication
+    Soundecology compatible version:
+        - average of dB value
+        - remove negative value in order to get positive values only
+        - dividing by the frequency resolution df instead of multiplication
     
     Examples :
     ----------
@@ -1720,7 +1725,7 @@ def bioacousticsIndex (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'
 def audio_LEQ (s, fs, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1): 
     """
     Computes the Equivalent Continuous Sound level (Leq) of an audio signal 
-    in the time domain
+    in the time domain.
 
     Parameters
     ----------
@@ -1765,7 +1770,7 @@ def audio_LEQ (s, fs, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1):
 def spectral_LEQ (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6): 
     """
     Computes the Equivalent Continuous Sound level (Leq) from a power spectrum 
-    (1d) or power spectrogram (2d)
+    (1d) or power spectrogram (2d).
 
     Parameters
     ----------
@@ -1818,13 +1823,14 @@ def spectral_LEQ (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6):
 
 def more_entropy(x, order=3, axis=0) :
     """
+    Compute the entropy of an audio signal using multiple methods.
     
-    Compute more types of entropy :
-        -Havrda
-        -Renyi
-        -paired Shannon
-        -gamma
-        -Gini Simpson
+    There are currently five types supported:
+        - Havrda
+        - Renyi
+        - paired Shannon
+        - gamma
+        - Gini Simpson
         
     Parameters
     ----------
@@ -1839,8 +1845,8 @@ def more_entropy(x, order=3, axis=0) :
         In case of x is a matrix, select the row (axis=0) or the columns (axis=1)
         of the matrix to compute the entropies.  
     
-    Returns :
-    ---------
+    Returns
+    -------
     H_Havrda, H_Renyi, H_pairedShannon, H_gamma, H_GiniSimpson : scalars
         Compute different entropies. See the reference to understand how to
         compute them.
@@ -1851,8 +1857,8 @@ def more_entropy(x, order=3, axis=0) :
     Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
     Old Dominion University, DOI: 10.25777/qgak-sf09
     
-    Examples :
-    ----------
+    Examples
+    --------
     
     in time domain
     
@@ -1905,7 +1911,7 @@ def more_entropy(x, order=3, axis=0) :
 
 def frequency_raoQ (S_power, fn, bin_step=1000):
     """
-    Compute Rao quadratic entropy on a power spectrum (1d)
+    Compute Rao's quadratic entropy [1]_ on a power spectrum (1d).
         
     Parameters
     ----------
@@ -1916,15 +1922,21 @@ def frequency_raoQ (S_power, fn, bin_step=1000):
     bin_step : scalar, optional, default is 1000
         Frequency step in Hz
     
-    Returns :
-    ---------
+    Returns
+    -------
     RAOQ : scalar
         Rao quadratic entropy  
         
-    Examples :
-    ----------
+    References
+    ---------
+    .. [1] Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). 
+    Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
+    Old Dominion University, DOI: 10.25777/qgak-sf09
+
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
-    >>> Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power) 
     >>> maad.features.frequency_raoQ(S_power, fn)
     0.10556621228886422
@@ -1947,7 +1959,7 @@ def frequency_raoQ (S_power, fn, bin_step=1000):
 
 def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     """
-    Time frequency spectrogram derivation : tfsd
+    Compute the Time frequency derivation index (tfsd) from a spectrogram.
         
     Parameters
     ----------
@@ -1980,15 +1992,15 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
        
     References 
     ----------
-    [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). 
+    .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). 
     Modeling soundscape pleasantness using perceptual assessments and acoustic measurements 
     along paths in urban context. Acta Acustica united with Acustica,
-    [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). 
+    .. [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). 
     Estimation of the perceived time of presence of sources in urban acoustic environments 
     using deep learning techniques. Acta Acustica united with Acustica,
     
-    Examples :
-    ----------
+    Examples
+    --------
     
     During the day
     
@@ -2075,12 +2087,12 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
 #=============================================================================
 def acousticGradientIndex(Sxx, dt, order=1, norm='per_bin', display=False):
     """
-    Acoustic Gradient Index : AGI
+    Compute the Acoustic Gradient Index (AGI) from a raw spectrogram.
     
-    !!! Must be calculated on raw spectrogram (background noise must remain)
+    This index must be computed on a raw spectrogram (background noise must remain).
     
-    Parameters :
-    ------------
+    Parameters
+    ----------
     Sxx : ndarray of floats
         2d : Spectrogram 
     dt : float
@@ -2090,8 +2102,8 @@ def acousticGradientIndex(Sxx, dt, order=1, norm='per_bin', display=False):
         ('global' mode) or by the median value per frequency bin 
         ('per_bin')
         
-    Returns :
-    ---------    
+    Returns
+    -------
     AGI_xx : 2d ndarray of scalars
         Acoustic Gradient Index of the spectrogram
     AGI_per_bin : 1d ndarray of scalars
@@ -2105,8 +2117,8 @@ def acousticGradientIndex(Sxx, dt, order=1, norm='per_bin', display=False):
         frequency bin)
         mean(AGI_per_bin)
     
-    Examples :
-    ----------
+    Examples
+    --------
     
     During the day
     
@@ -2184,8 +2196,10 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
                           min_roi=25, max_roi=512*10000, 
                           display=False, **kwargs):
     """
-    Find regions of interest (ROI) and compute their number and their cover 
-    of the spectrogram
+    Compute an acoustic activity index based on the regions of interested detected on a spectrogram.
+    
+    The function first find regions of interest (ROI) and then compute the number and cover area 
+    on the spectrogram.
     
     Parameters
     ----------
@@ -2231,8 +2245,8 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
         Percentage of spectrogram cover. The higher is the cover percentage, 
         the higher is the acoustic richness expected.
         
-    Examples :
-    ---------- 
+    Examples
+    -------- 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
@@ -2309,7 +2323,7 @@ def regionOfInterestIndex(Sxx_dB_noNoise, tn, fn,
 #=============================================================================
 def all_audio_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
     """
-    Computes the indices in audio domain
+    Compute 16 temporal domain acoustic indices.
 
     Parameters
     ----------
@@ -2510,7 +2524,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                       flim_hi=[10000,20000], 
                       verbose=False, display=False, **kwargs):
     """
-    Computes the indices in spectral (spectrum (1d) or spectrogram (2d)) domain
+    Computes the acoustic indices in spectral (spectrum (1d) or spectrogram (2d)) domain.
 
     Parameters
     ----------
