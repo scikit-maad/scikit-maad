@@ -118,3 +118,5 @@ pending_fixes.txt
 /docs/sphinx/_build
 
 Architecture_20210107.docx
+
+.vscode/
