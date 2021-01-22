@@ -7,6 +7,7 @@ Ensemble of functions that facilitate data visualization.
 import numpy as np 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+import matplotlib.patches as mpatches 
 import pandas as pd
 from skimage.io import imsave 
 import colorsys
@@ -17,10 +18,386 @@ import sys
 _MIN_ = sys.float_info.min
 
 
-#### Importation from internal modules
+# Importation from internal modules
 from maad.util import linear_scale
 
-#=============================================================================
+#%%
+def plot_shape(shape, params, row=0, display_values=False): 
+    """ 
+    Plot shape features in a bidimensional plot.
+     
+    Parameters 
+    ---------- 
+    shape: 1D array, pd.Series or pd.DataFrame 
+        Shape features computed with shape_features function. 
+     
+    params: pd.DataFrame 
+        Pandas dataframe returned by maad.features_rois.shape_features 
+     
+    row: int 
+        Observation to be visualized 
+     
+    display_values: bool 
+        Set to True to display the coefficient values. Default is False. 
+     
+    Returns 
+    ------- 
+    ax: matplotlib.axes 
+        Axes of the figure 
+         
+    Examples 
+    -------- 
+    >>> from maad.sound import load, spectrogram 
+    >>> from maad.features import shape_features, plot_shape 
+    >>> import numpy as np 
+    >>> s, fs = load('../data/spinetail.wav') 
+    >>> Sxx, ts, f, ext = spectrogram(s, fs) 
+    >>> shape, params = shape_features(np.log10(Sxx), resolution='high') 
+    >>> plot_shape(shape, params) 
+ 
+    """ 
+ 
+    # compute shape of matrix 
+    dirs_size = params.theta.unique().shape[0] 
+    scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size 
+    # reshape feature vector 
+    idx = params.sort_values(['theta','pyr_level','scale']).index 
+     
+    if isinstance(shape, pd.DataFrame): 
+        shape_plt = shape.iloc[:,shape.columns.str.startswith('shp')] 
+        shape_plt = np.reshape(shape_plt.iloc[row,idx].values, (dirs_size, scale_size)) 
+    elif isinstance(shape, pd.Series): 
+        shape_plt = shape.iloc[shape.index.str.startswith('shp')] 
+        shape_plt = np.reshape(shape_plt.iloc[idx].values, (dirs_size, scale_size)) 
+    elif isinstance(shape, np.ndarray): 
+        shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size)) 
+ 
+     
+    unique_scale = params.scale[idx] * 2**params.pyr_level[idx] 
+    # get textlab 
+    textlab = shape_plt 
+    textlab = np.round(textlab,2) 
+     
+    # plot figure 
+    fig = plt.figure(figsize=(8,6)) 
+    ax = fig.add_subplot(111) 
+    ax.imshow(shape_plt, aspect='auto', origin='lower', interpolation='None', cmap='viridis') 
+    if display_values:     
+        for (j,i),label in np.ndenumerate(textlab): 
+            ax.text(i,j,label,ha='center',va='center') 
+         
+    yticklab = np.round(params.theta.unique(),1) 
+    xticklab = np.reshape(unique_scale.values,  
+                          (dirs_size, scale_size)) 
+    ax.set_xticks(np.arange(scale_size)) 
+    ax.set_xticklabels(np.round(xticklab,1)[0,:]) 
+    ax.set_yticks(np.arange(dirs_size)) 
+    ax.set_yticklabels(yticklab) 
+    ax.set_xlabel('Scale') 
+    ax.set_ylabel('Theta') 
+    plt.show() 
+     
+    return ax 
+ 
+#%%
+def overlay_centroid (im_ref, centroid, savefig=None, **kwargs): 
+    """ 
+    Overlay centroids on the original spectrogram 
+     
+    Parameters 
+    ---------- 
+    Sxx :  2D array 
+        Spectrogram 
+               
+    centroid: pandas DataFrame 
+        DataFrame with centroid descriptors (centroid_f, centroid_t) 
+        Do format_features(rois,tn,fn) before using overlay_centroid to be sure that 
+        the format of the DataFrame is correct 
+             
+    savefig : string, optional, default is None 
+        Root filename (with full path) is required to save the figures. Postfix 
+        is added to the root filename. 
+         
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+            
+        - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
+            Postfix of the figure filename 
+         
+        - figsize : tuple of integers, optional, default: (4,10) 
+            width, height in inches.   
+         
+        - title : string, optional, default : 'Spectrogram' 
+            title of the figure 
+         
+        - xlabel : string, optional, default : 'Time [s]' 
+            label of the horizontal axis 
+         
+        - ylabel : string, optional, default : 'Amplitude [AU]' 
+            label of the vertical axis 
+         
+        - cmap : string or Colormap object, optional, default is 'gray' 
+            See https://matplotlib.org/examples/color/colormaps_reference.html 
+            in order to get all the  existing colormaps 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
+            'viridis'... 
+         
+        - vmin, vmax : scalar, optional, default: None 
+            `vmin` and `vmax` are used in conjunction with norm to normalize 
+            luminance data.  Note if you pass a `norm` instance, your 
+            settings for `vmin` and `vmax` will be ignored. 
+                 
+        - dpi : integer, optional, default is 96 
+            Dot per inch.  
+            For printed version, choose high dpi (i.e. dpi=300) => slow 
+            For screen version, choose low dpi (i.e. dpi=96) => fast 
+         
+        - format : string, optional, default is 'png' 
+            Format to save the figure  
+         
+        ... and more, see matplotlib  
+ 
+    Returns 
+    ------- 
+    ax  
+        axis object (see matplotlib) 
+    fig  
+        figure object (see matplotlib) 
+ 
+    Example 
+    -------- 
+    """ 
+    # Check format of the input data 
+    if type(centroid) is not pd.core.frame.DataFrame : 
+        raise TypeError('Rois must be of type pandas DataFrame')   
+         
+    if not(('centroid_t' and 'centroid_f') in centroid)  : 
+            raise TypeError('Array must be a Pandas DataFrame with column names:(centroid_t, centroid_f). Check example in documentation.')   
+     
+    ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
+    xlabel =kwargs.pop('xlabel','Time [sec]')  
+    title  =kwargs.pop('title','ROIs Overlay') 
+    cmap   =kwargs.pop('cmap','gray')  
+    ext=kwargs.pop('ext',None)
+        
+    if ext is not None : 
+        xlabel = 'frequency [Hz]' 
+        figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
+    else: 
+        xlabel = 'pseudofrequency [points]'
+        figsize=kwargs.pop('figsize',(4, 13)) 
+
+    vmin=kwargs.pop('vmin',0)  
+    vmax=kwargs.pop('vmax',1)  
+    ax =kwargs.pop('ax',None)  
+    fig=kwargs.pop('fig',None)  
+    color=kwargs.pop('color','firebrick')  
+    ms=kwargs.pop('ms',2) 
+    marker=kwargs.pop('marker','o')
+         
+    if (ax is None) and (fig is None): 
+        ax, fig = plot2D (im_ref, extent=ext, now=False, figsize=figsize, title=title,  
+                         ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
+                         cmap=cmap, **kwargs) 
+     
+    ax.plot(centroid.centroid_t, centroid.centroid_f, marker, ms=ms, color=color) 
+     
+    fig.canvas.draw() 
+     
+    # SAVE FIGURE 
+    if savefig is not None :  
+        dpi   =kwargs.pop('dpi',96) 
+        format=kwargs.pop('format','png')  
+        filename=kwargs.pop('filename','_spectro_overlaycentroid')                 
+        filename = savefig+filename+'.'+format 
+        fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
+                    **kwargs)  
+     
+    return ax, fig 
+ 
+#%%
+def overlay_rois (im_ref, rois, savefig=None, **kwargs): 
+    """ 
+    Display bounding boxes with time-frequency regions of interest over a spectrogram.
+    
+    Regions of interest (ROIs) must be provided. They can be loaded as manual annotations or computed using automated methods (see the example section).
+     
+    Parameters 
+    ---------- 
+    im_ref : 2d ndarray of scalars 
+        Spectrogram (or image) 
+ 
+    rois_bbox : list of tuple (min_y,min_x,max_y,max_x) 
+        Contains the bounding box of each ROI 
+ 
+         
+    savefig : string, optional, default is None 
+        Root filename (with full path) is required to save the figures. Postfix 
+        is added to the root filename. 
+         
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+            
+        - savefilename : str, optional, default :'_spectro_overlayrois.png' 
+            Postfix of the figure filename 
+         
+        - figsize : tuple of integers, optional, default: (4,10) 
+            width, height in inches.   
+         
+        - title : string, optional, default : 'Spectrogram' 
+            title of the figure 
+         
+        - xlabel : string, optional, default : 'Time [s]' 
+            label of the horizontal axis 
+         
+        - ylabel : string, optional, default : 'Amplitude [AU]' 
+            label of the vertical axis 
+         
+        - cmap : string or Colormap object, optional, default is 'gray' 
+            See https://matplotlib.org/examples/color/colormaps_reference.html 
+            in order to get all the  existing colormaps 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
+            'viridis'... 
+         
+        - vmin, vmax : scalar, optional, default: None 
+            `vmin` and `vmax` are used in conjunction with norm to normalize 
+            luminance data.  Note if you pass a `norm` instance, your 
+            settings for `vmin` and `vmax` will be ignored. 
+         
+        - dpi : integer, optional, default is 96 
+            Dot per inch.  
+            For printed version, choose high dpi (i.e. dpi=300) => slow 
+            For screen version, choose low dpi (i.e. dpi=96) => fast 
+         
+        - format : string, optional, default is 'png' 
+            Format to save the figure  
+         
+        ... and more, see matplotlib  
+ 
+    Returns 
+    ------- 
+    ax : axis object (see matplotlib) 
+         
+    fig : figure object (see matplotlib) 
+    
+    Examples 
+    -------- 
+    
+    Load audio recording and compute the spectrogram.
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))   
+
+    Subtract the background noise before finding ROIs.
+    
+    >>> Sxx_noNoise = maad.sound.median_equalizer(Sxx)
+    
+    Convert linear spectrogram into dB and smooth.
+    
+    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise)         
+    >>> Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)
+    
+    Detection of the acoustic signature => creation of a mask
+    
+    >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
+    
+    Select rois from the mask and display bounding box over the spectrogram without noise.
+    
+    >>> import numpy as np
+    >>> im_rois, df_rois = maad.rois.select_rois(im_bin, min_roi=100)  
+    >>> maad.util.overlay_rois (Sxx_noNoise_dB, df_rois, extent=ext,vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60) 
+        
+    """        
+     
+    # Check format of the input data 
+    if type(rois) is not pd.core.frame.DataFrame: 
+        raise TypeError('Rois must be of type pandas DataFrame.')    
+    if not(('min_y' and 'min_x' and 'max_y' and 'max_x') in rois): 
+        raise TypeError('Array must be a Pandas DataFrame with column names: min_y, min_x, max_y, max_x. Check example in documentation.')     
+     
+    ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
+    xlabel =kwargs.pop('xlabel','Time [sec]')  
+    title  =kwargs.pop('title','ROIs Overlay') 
+    cmap   =kwargs.pop('cmap','gray')  
+    vmin=kwargs.pop('vmin',np.percentile(im_ref,0.05))  
+    vmax=kwargs.pop('vmax',np.percentile(im_ref,0.95))   
+    ax =kwargs.pop('ax',None)  
+    fig=kwargs.pop('fig',None)  
+    extent=kwargs.pop('extent',None)
+        
+    if extent is not None : 
+        xlabel = 'frequency [Hz]' 
+        figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
+    else: 
+        xlabel = 'pseudofrequency [points]'
+        figsize=kwargs.pop('figsize',(4, 13)) 
+    
+         
+    if (ax is None) and (fig is None): 
+        ax, fig = plot2D (im_ref,extent=extent,now=False, figsize=figsize,title=title,  
+                         ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
+                         cmap=cmap, **kwargs) 
+ 
+    # Convert pixels into time and frequency values 
+    y_len, x_len = im_ref.shape 
+    xmin, xmax = ax.get_xlim() 
+    ymin, ymax = ax.get_ylim()  
+    x_scaling = (xmax-xmin) / x_len 
+    y_scaling = (ymax-ymin) / y_len 
+     
+    # test if rois has a label column     
+    if 'label' in rois : 
+        # select the label column 
+        rois_label = rois.label.values 
+        uniqueLabels = np.unique(np.array(rois_label)) 
+    else:  
+        uniqueLabels = [] 
+                 
+    # if only one label or no label in rois 
+    if (len(uniqueLabels)<=1) : 
+        for index, row in rois.iterrows(): 
+            y0 = row['min_y'] 
+            x0 = row['min_x'] 
+            y1 = row['max_y'] 
+            x1 = row['max_x'] 
+            rect = mpatches.Rectangle((x0*x_scaling+xmin, y0*y_scaling+ymin),  
+                                      (x1-x0)*x_scaling,  
+                                      (y1-y0)*y_scaling, 
+                                      fill=False, edgecolor='yellow', linewidth=1)   
+            # draw the rectangle 
+            ax.add_patch(rect)                 
+    else : 
+        # Colormap 
+        color = rand_cmap(len(uniqueLabels)+1,first_color_black=False)  
+        cc = 0 
+        for index, row in rois.iterrows(): 
+            cc = cc+1 
+            y0 = row['min_y'] 
+            x0 = row['min_x'] 
+            y1 = row['max_y'] 
+            x1 = row['max_x'] 
+            for index, name in enumerate(uniqueLabels): 
+                if row['label'] in name: ii = index 
+            rect = mpatches.Rectangle((x0*x_scaling+xmin, y0*y_scaling+ymin),  
+                                      (x1-x0)*x_scaling,  
+                                      (y1-y0)*y_scaling, 
+                                      fill=False, edgecolor=color(ii), linewidth=1)   
+            # draw the rectangle 
+            ax.add_patch(rect) 
+ 
+    fig.canvas.draw() 
+     
+    # SAVE FIGURE 
+    if savefig is not None :  
+        dpi   =kwargs.pop('dpi',96) 
+        format=kwargs.pop('format','png')  
+        filename=kwargs.pop('filename','_spectro_overlayrois')                 
+        filename = savefig+filename+'.'+format 
+        fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
+                    **kwargs)  
+        
+    return ax, fig 
+ 
+
+#%%
 def plot1D(x, y, ax=None, **kwargs):
     """
     plot a signal s

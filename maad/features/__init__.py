@@ -16,8 +16,6 @@ Spectro-temporal features
     opt_shape_presets
     filter_multires
     filter_bank_2d_nodc
-    plot_shape
-    overlay_centroid
     centroid_features
     all_shape_features
 
@@ -76,9 +74,7 @@ from .shape import (filter_multires,
                           opt_shape_presets,
                           shape_features,
                           shape_features_raw,
-                          plot_shape,
                           centroid_features,
-                          overlay_centroid,
                           all_shape_features)
 
 from .spectral import (spectral_moments)
@@ -121,9 +117,7 @@ __all__ = [
            'opt_shape_presets',
            'shape_features',
            'shape_features_raw',
-           'plot_shape',
            'centroid_features',
-           'overlay_centroid',
            'all_shape_features',
            # spectral
            'spectral_moments',

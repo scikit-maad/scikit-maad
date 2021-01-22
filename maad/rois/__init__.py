@@ -19,14 +19,12 @@ Spectro-temporal
     
     create_mask
     select_rois
-    overlay_rois
     rois_to_imblobs
 
 """
 
 from .rois_2d import (create_mask,
                      select_rois,
-                     overlay_rois,
                      rois_to_imblobs)
 
 from .rois_1d import (find_rois_cwt)
@@ -34,7 +32,6 @@ from .rois_1d import (find_rois_cwt)
 __all__ = [ # rois 2d
            'create_mask',
            'select_rois',
-           'overlay_rois',
            'rois_to_imblobs',
            # rois 1d
            'find_rois_cwt']

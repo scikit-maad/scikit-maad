@@ -25,8 +25,8 @@ from skimage import transform, measure
 from scipy import ndimage 
 
 # Import internal modules
-from maad.util import plot2D, format_features 
-from maad.rois import rois_to_imblobs, overlay_rois  
+from maad.util import format_features, overlay_rois, plot_shape, overlay_centroid
+from maad.rois import rois_to_imblobs
 from maad.sound import spectrogram 
  
 #%%
@@ -558,84 +558,6 @@ def opt_shape_presets(resolution, opt_shape=None):
     return opt_shape 
  
 #%%
-def plot_shape(shape, params, row=0, display_values=False): 
-    """ 
-    Plot shape features in a bidimensional plot.
-     
-    Parameters 
-    ---------- 
-    shape: 1D array, pd.Series or pd.DataFrame 
-        Shape features computed with shape_features function. 
-     
-    params: pd.DataFrame 
-        Pandas dataframe returned by maad.features_rois.shape_features 
-     
-    row: int 
-        Observation to be visualized 
-     
-    display_values: bool 
-        Set to True to display the coefficient values. Default is False. 
-     
-    Returns 
-    ------- 
-    ax: matplotlib.axes 
-        Axes of the figure 
-         
-    Examples 
-    -------- 
-    >>> from maad.sound import load, spectrogram 
-    >>> from maad.features import shape_features, plot_shape 
-    >>> import numpy as np 
-    >>> s, fs = load('../data/spinetail.wav') 
-    >>> Sxx, ts, f, ext = spectrogram(s, fs) 
-    >>> shape, params = shape_features(np.log10(Sxx), resolution='high') 
-    >>> plot_shape(shape, params) 
- 
-    """ 
- 
-    # compute shape of matrix 
-    dirs_size = params.theta.unique().shape[0] 
-    scale_size = np.unique(params.freq).size * np.unique(params.pyr_level).size 
-    # reshape feature vector 
-    idx = params.sort_values(['theta','pyr_level','scale']).index 
-     
-    if isinstance(shape, pd.DataFrame): 
-        shape_plt = shape.iloc[:,shape.columns.str.startswith('shp')] 
-        shape_plt = np.reshape(shape_plt.iloc[row,idx].values, (dirs_size, scale_size)) 
-    elif isinstance(shape, pd.Series): 
-        shape_plt = shape.iloc[shape.index.str.startswith('shp')] 
-        shape_plt = np.reshape(shape_plt.iloc[idx].values, (dirs_size, scale_size)) 
-    elif isinstance(shape, np.ndarray): 
-        shape_plt = np.reshape(shape_plt[idx], (dirs_size, scale_size)) 
- 
-     
-    unique_scale = params.scale[idx] * 2**params.pyr_level[idx] 
-    # get textlab 
-    textlab = shape_plt 
-    textlab = np.round(textlab,2) 
-     
-    # plot figure 
-    fig = plt.figure(figsize=(8,6)) 
-    ax = fig.add_subplot(111) 
-    ax.imshow(shape_plt, aspect='auto', origin='lower', interpolation='None', cmap='viridis') 
-    if display_values:     
-        for (j,i),label in np.ndenumerate(textlab): 
-            ax.text(i,j,label,ha='center',va='center') 
-         
-    yticklab = np.round(params.theta.unique(),1) 
-    xticklab = np.reshape(unique_scale.values,  
-                          (dirs_size, scale_size)) 
-    ax.set_xticks(np.arange(scale_size)) 
-    ax.set_xticklabels(np.round(xticklab,1)[0,:]) 
-    ax.set_yticks(np.arange(dirs_size)) 
-    ax.set_yticklabels(yticklab) 
-    ax.set_xlabel('Scale') 
-    ax.set_ylabel('Theta') 
-    plt.show() 
-     
-    return ax 
- 
-#%%
 def shape_features(Sxx, resolution='low', rois=None): 
     """ 
     Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.
@@ -665,7 +587,7 @@ def shape_features(Sxx, resolution='low', rois=None):
         
     See Also
     --------
-    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.features.plot_shape
+    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.util.plot_shape
     
     References
     ----------
@@ -679,8 +601,8 @@ def shape_features(Sxx, resolution='low', rois=None):
     Get shape features from the whole power spectrogram 
  
     >>> from maad.sound import load, spectrogram 
-    >>> from maad.features import shape_features, plot_shape 
-    >>> from maad.util import format_features, power2dB
+    >>> from maad.features import shape_features
+    >>> from maad.util import format_features, power2dB, plot_shape 
     >>> s, fs = load('../data/spinetail.wav')
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True) 
     >>> Sxx_db = power2dB(Sxx, db_range=100)
@@ -791,7 +713,7 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     See also
     --------
     maad.features.shape_features, maad.features.opt_shape_presets, 
-    maad.features.filter_bank_2d_nodc, maad.features.plot_shape
+    maad.features.filter_bank_2d_nodc, maad.util.plot_shape
     
     Examples
     --------
@@ -862,9 +784,8 @@ def centroid_features(Sxx, rois=None, im_rois=None):
     Get centroid from the whole power spectrogram 
  
     >>> from maad.sound import load, spectrogram
-    >>> from maad.rois import overlay_rois
     >>> from maad.features import centroid_features
-    >>> from maad.util import linear2dB, format_features
+    >>> from maad.util import linear2dB, format_features, overlay_rois
      
     Load audio and compute spectrogram 
      
@@ -934,122 +855,6 @@ def centroid_features(Sxx, rois=None, im_rois=None):
         centroid = rois.join(pd.DataFrame(centroid, index=rois.index))  
 
     return centroid 
- 
-#%%
-def overlay_centroid (im_ref, centroid, savefig=None, **kwargs): 
-    """ 
-    Overlay centroids on the original spectrogram 
-     
-    Parameters 
-    ---------- 
-    Sxx :  2D array 
-        Spectrogram 
-               
-    centroid: pandas DataFrame 
-        DataFrame with centroid descriptors (centroid_f, centroid_t) 
-        Do format_features(rois,tn,fn) before using overlay_centroid to be sure that 
-        the format of the DataFrame is correct 
-             
-    savefig : string, optional, default is None 
-        Root filename (with full path) is required to save the figures. Postfix 
-        is added to the root filename. 
-         
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
-            
-        - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
-            Postfix of the figure filename 
-         
-        - figsize : tuple of integers, optional, default: (4,10) 
-            width, height in inches.   
-         
-        - title : string, optional, default : 'Spectrogram' 
-            title of the figure 
-         
-        - xlabel : string, optional, default : 'Time [s]' 
-            label of the horizontal axis 
-         
-        - ylabel : string, optional, default : 'Amplitude [AU]' 
-            label of the vertical axis 
-         
-        - cmap : string or Colormap object, optional, default is 'gray' 
-            See https://matplotlib.org/examples/color/colormaps_reference.html 
-            in order to get all the  existing colormaps 
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
-            'viridis'... 
-         
-        - vmin, vmax : scalar, optional, default: None 
-            `vmin` and `vmax` are used in conjunction with norm to normalize 
-            luminance data.  Note if you pass a `norm` instance, your 
-            settings for `vmin` and `vmax` will be ignored. 
-                 
-        - dpi : integer, optional, default is 96 
-            Dot per inch.  
-            For printed version, choose high dpi (i.e. dpi=300) => slow 
-            For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
-        - format : string, optional, default is 'png' 
-            Format to save the figure  
-         
-        ... and more, see matplotlib  
- 
-    Returns 
-    ------- 
-    ax  
-        axis object (see matplotlib) 
-    fig  
-        figure object (see matplotlib) 
- 
-    Example 
-    -------- 
-    """ 
-    # Check format of the input data 
-    if type(centroid) is not pd.core.frame.DataFrame : 
-        raise TypeError('Rois must be of type pandas DataFrame')   
-         
-    if not(('centroid_t' and 'centroid_f') in centroid)  : 
-            raise TypeError('Array must be a Pandas DataFrame with column names:(centroid_t, centroid_f). Check example in documentation.')   
-     
-    ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
-    xlabel =kwargs.pop('xlabel','Time [sec]')  
-    title  =kwargs.pop('title','ROIs Overlay') 
-    cmap   =kwargs.pop('cmap','gray')  
-    ext=kwargs.pop('ext',None)
-        
-    if ext is not None : 
-        xlabel = 'frequency [Hz]' 
-        figsize=kwargs.pop('figsize', (4, 0.33*(ext[1]-ext[0])))
-    else: 
-        xlabel = 'pseudofrequency [points]'
-        figsize=kwargs.pop('figsize',(4, 13)) 
-
-    vmin=kwargs.pop('vmin',0)  
-    vmax=kwargs.pop('vmax',1)  
-    ax =kwargs.pop('ax',None)  
-    fig=kwargs.pop('fig',None)  
-    color=kwargs.pop('color','firebrick')  
-    ms=kwargs.pop('ms',2) 
-    marker=kwargs.pop('marker','o')
-         
-    if (ax is None) and (fig is None): 
-        ax, fig = plot2D (im_ref, extent=ext, now=False, figsize=figsize, title=title,  
-                         ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
-                         cmap=cmap, **kwargs) 
-     
-    ax.plot(centroid.centroid_t, centroid.centroid_f, marker, ms=ms, color=color) 
-     
-    fig.canvas.draw() 
-     
-    # SAVE FIGURE 
-    if savefig is not None :  
-        dpi   =kwargs.pop('dpi',96) 
-        format=kwargs.pop('format','png')  
-        filename=kwargs.pop('filename','_spectro_overlaycentroid')                 
-        filename = savefig+filename+'.'+format 
-        fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
-                    **kwargs)  
-     
-    return ax, fig 
- 
  
 #%%     
 def all_shape_features(s, fs, rois, resolution='low',  

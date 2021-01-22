@@ -30,14 +30,14 @@ _MIN_ = sys.float_info.min
 # Import internal modules
 from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
                        skewness, kurtosis, format_features, intoBins, entropy, 
-                       linear_scale, plot1D, plot2D)
+                       linear_scale, plot1D, plot2D, overlay_rois)
 from maad.spl import wav2Leq, PSD2Leq, power2dBSPL
 from maad.features import (centroid_features, zero_crossing_rate, audio_moments, 
                            spectral_moments)
 from maad.sound import (envelope, smooth, audio_SNR, intoOctave, 
                         avg_amplitude_spectro, avg_power_spectro, spectral_SNR, 
                         median_equalizer)
-from maad.rois import select_rois, create_mask, overlay_rois
+from maad.rois import select_rois, create_mask
 
 #%%
 # =============================================================================

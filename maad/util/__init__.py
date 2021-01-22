@@ -15,9 +15,12 @@ Visualization
     save_figlist
     plot1D
     plot2D
+    overlay_rois
+    overlay_centroid
     plot_features_map
     plot_features
     plot_correlation_map
+    plot_shape
     false_Color_Spectro
 
 Mathematical
@@ -84,9 +87,12 @@ from .visualization import (rand_cmap,
                            save_figlist,
                            plot1D,
                            plot2D,
+                           overlay_rois,
+                           overlay_centroid,
                            plot_features_map,
                            plot_features,
                            plot_correlation_map,
+                           plot_shape,
                            false_Color_Spectro)
 
 from .math_func import (running_mean,
@@ -122,9 +128,12 @@ __all__ = [
            'save_figlist',
            'plot1D',
            'plot2D',
+           'overlay_rois',
+           'overlay_centroid',
            'plot_features_map',
            'plot_features',
            'plot_correlation_map',
+           'plot_shape',
            'false_Color_Spectro',
            # math_func       
            'running_mean',

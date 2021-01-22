@@ -42,7 +42,7 @@ def read_audacity_annot (audacity_filename):
     >>> Sxx_db = power2dB(Sxx_power) + 96
     >>> df_rois = read_audacity_annot('../data/cold_forest_daylight_label.txt') 
     >>> df_rois = format_features(df_rois, tn, fn)
-    >>> rois.overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
+    >>> maad.utils.overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
     
     """
     # read file with tab delimiter
