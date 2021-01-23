@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.sound.fir_filter &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.sound.fir_filter &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -194,9 +193,9 @@
 <dl class="py function">
 <dt id="maad.sound.fir_filter">
 <code class="sig-prename descclassname">maad.sound.</code><code class="sig-name descname">fir_filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">kernel</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/filter.html#fir_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.fir_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter a signal using a 1d Finite impulse filter.</p>
+<dd><p>Filter a signal using a 1d finite impulse response filter.</p>
 <p>This function uses a digital filter based on convolution of 1d kernel over a vector 
-or along an axis of a matrix</p>
+or along an axis of a matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -244,15 +243,15 @@ axis = 1 : horizontal</p>
 <p class="rubric">Examples</p>
 <p>Load and display the spectrogram of a sound waveform</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Lxx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
 <span class="go">                  &#39;vmin&#39;:0,</span>
-<span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
-<span class="go">                  &#39;figsize&#39;:(4,13),</span>
-<span class="go">                  &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
-<span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
-<span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="go">                  &#39;extent&#39;: ext,</span>
+<span class="go">                  &#39;figsize&#39;: (4,13),</span>
+<span class="go">                  &#39;title&#39;: &#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="go">                  &#39;xlabel&#39;: &#39;Time [sec]&#39;,</span>
+<span class="go">                  &#39;ylabel&#39;: &#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Lxx</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 </pre></div>
@@ -260,7 +259,7 @@ axis = 1 : horizontal</p>
 <p>Smooth the waveform (lowpass)</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w_filtered</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">fir_filter</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">5</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power_filtered</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w_filtered</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx_filtered</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power_filtered</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx_filtered</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power_filtered</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Lxx_filtered</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>

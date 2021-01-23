@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.shape &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.shape &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -194,8 +193,8 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span> 
 
 <span class="c1"># Import internal modules</span>
-<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">format_features</span> 
-<span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">rois_to_imblobs</span><span class="p">,</span> <span class="n">overlay_rois</span>  
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">overlay_rois</span><span class="p">,</span> <span class="n">plot_shape</span><span class="p">,</span> <span class="n">overlay_centroid</span>
+<span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">rois_to_imblobs</span>
 <span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">spectrogram</span> 
  
 <span class="c1">#%%</span>
@@ -489,10 +488,17 @@
 <span class="sd">    -------- </span>
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import filter_bank_2d_nodc, filter_multires </span>
-<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx, dt, df, ext = spectrogram(s, fs, db_range=100, display=True) </span>
+<span class="sd">    &gt;&gt;&gt; from maad import util</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;../data/spinetail.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx, dt, df, ext = spectrogram(s, fs) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db = util.power2dB(Sxx, db_range=80) + 80</span>
+<span class="sd">    &gt;&gt;&gt; util.plot2D(Sxx_db, **{&#39;extension&#39;:ext})</span>
 <span class="sd">    &gt;&gt;&gt; params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_out = filter_multires(Sxx, kernels, npyr=2) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_out = filter_multires(Sxx, kernels, npyr=2)</span>
+<span class="sd">    </span>
+<span class="sd">    Plot one of the resulting spectrograms.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; util.plot2D(Sxx_out[5], **{&#39;extension&#39;:ext})</span>
 <span class="sd">     </span>
 <span class="sd">    &quot;&quot;&quot;</span>     
  
@@ -538,7 +544,8 @@
 <span class="sd">    cosine function. Spatial frequency is inversely proportional to the </span>
 <span class="sd">    wavelength of the harmonic and to the standard deviation of a Gaussian </span>
 <span class="sd">    kernel. The bandwidth is also inversely proportional to the standard </span>
-<span class="sd">    deviation [1-3]. These filters have been used to classify textures in images and can be applied to characterize spectrograms to classify sounds [4, 5]. </span>
+<span class="sd">    deviation [1]_. These filters have been used to classify textures in images [4]_ and </span>
+<span class="sd">    can be applied to characterize spectrograms to classify sounds [5]_.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -581,17 +588,20 @@
 <span class="sd">    .. [4] Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</span>
 <span class="sd">    .. [5] Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., &amp; Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026</span>
 
-<span class="sd">     </span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    filter_multires, opt_shape_presets, shape_features</span>
+<span class="sd">    </span>
 <span class="sd">    Examples </span>
 <span class="sd">    -------- </span>
-<span class="sd">    It is possible to load presets to build the filter bank using predefined  </span>
-<span class="sd">    parameters with the function maad.features.opt_shape_presets </span>
+<span class="sd">    Build a filter bank using predefined parameters with the function maad.features.opt_shape_presets.</span>
 <span class="sd"> </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import filter_bank_2d_nodc, opt_shape_presets </span>
 <span class="sd">    &gt;&gt;&gt; opt = opt_shape_presets(resolution=&#39;med&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; params, kernels = filter_bank_2d_nodc(opt[&#39;frequency&#39;], opt[&#39;ntheta&#39;], opt[&#39;bandwidth&#39;], opt[&#39;gamma&#39;], display=True) </span>
 <span class="sd"> </span>
-<span class="sd">    Alternatively, custom parameters can be provided to define the filter bank </span>
+<span class="sd">    Alternatively, custom parameters can be provided to define the filter bank.</span>
 <span class="sd"> </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import filter_bank_2d_nodc </span>
 <span class="sd">    &gt;&gt;&gt; params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True) </span>
@@ -619,7 +629,7 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="opt_shape_presets"><a class="viewcode-back" href="../../_autosummary/generated/features.opt_shape_presets.html#features.shape.opt_shape_presets">[docs]</a><span class="k">def</span> <span class="nf">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="n">opt_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;  </span>
-<span class="sd">    Set parameters for multiresolution analysis using presets or custom parameters </span>
+<span class="sd">    Set parameters for multiresolution analysis using presets or custom parameters.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -636,23 +646,37 @@
 <span class="sd">    ------- </span>
 <span class="sd">    opt_shape: dict </span>
 <span class="sd">        A valid dictionary with shape settings </span>
+<span class="sd">        </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    filter_bank_2d_nodc, filter_multires, shape_features</span>
 <span class="sd">         </span>
 <span class="sd">    Examples </span>
 <span class="sd">    -------- </span>
-<span class="sd">    Get parameters to analyse at low shape resolution </span>
+<span class="sd">    Get parameters to analyse at low, med and high shape resolutions.</span>
 <span class="sd">     </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import opt_shape_presets </span>
 <span class="sd">    &gt;&gt;&gt; opt_shape_presets(&#39;low&#39;) </span>
+<span class="sd">    {&#39;ntheta&#39;: 2,</span>
+<span class="sd">     &#39;bandwidth&#39;: 0.8,</span>
+<span class="sd">     &#39;frequency&#39;: (0.35, 0.5),</span>
+<span class="sd">     &#39;gamma&#39;: 2,</span>
+<span class="sd">     &#39;npyr&#39;: 4}</span>
 <span class="sd">    </span>
-<span class="sd">    Get parameters to analyse at med shape resolution </span>
-<span class="sd">     </span>
-<span class="sd">    &gt;&gt;&gt; from maad.features import opt_shape_presets </span>
 <span class="sd">    &gt;&gt;&gt; opt_shape_presets(&#39;med&#39;) </span>
-<span class="sd">         </span>
-<span class="sd">    Get parameters to analyse at high shape resolution </span>
-<span class="sd">     </span>
-<span class="sd">    &gt;&gt;&gt; from maad.features import opt_shape_presets </span>
-<span class="sd">    &gt;&gt;&gt; opt_shape_presets(&#39;high&#39;) </span>
+<span class="sd">    {&#39;ntheta&#39;: 4,</span>
+<span class="sd">     &#39;bandwidth&#39;: 0.8,</span>
+<span class="sd">     &#39;frequency&#39;: (0.35, 0.5),</span>
+<span class="sd">     &#39;gamma&#39;: 2,</span>
+<span class="sd">     &#39;npyr&#39;: 6}</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; opt_shape_presets(&#39;high&#39;)</span>
+<span class="sd">    {&#39;ntheta&#39;: 8,</span>
+<span class="sd">     &#39;bandwidth&#39;: 0.8,</span>
+<span class="sd">     &#39;frequency&#39;: (0.35, 0.5),</span>
+<span class="sd">     &#39;gamma&#39;: 2,</span>
+<span class="sd">     &#39;npyr&#39;: 6}</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span> 
     <span class="c1"># Factory presets </span>
     <span class="n">opt_shape_low</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
@@ -702,84 +726,6 @@
     <span class="k">return</span> <span class="n">opt_shape</span> </div>
  
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="plot_shape"><a class="viewcode-back" href="../../_autosummary/generated/features.plot_shape.html#features.shape.plot_shape">[docs]</a><span class="k">def</span> <span class="nf">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_values</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> 
-    <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Plot shape features in a bidimensional plot </span>
-<span class="sd">     </span>
-<span class="sd">    Parameters </span>
-<span class="sd">    ---------- </span>
-<span class="sd">    shape: 1D array, pd.Series or pd.DataFrame </span>
-<span class="sd">        Shape features computed with shape_features function. </span>
-<span class="sd">     </span>
-<span class="sd">    params: pd.DataFrame </span>
-<span class="sd">        Pandas dataframe returned by maad.features_rois.shape_features </span>
-<span class="sd">     </span>
-<span class="sd">    row: int </span>
-<span class="sd">        Observation to be visualized </span>
-<span class="sd">     </span>
-<span class="sd">    display_values: bool </span>
-<span class="sd">        Set to True to display the coefficient values. Default is False. </span>
-<span class="sd">     </span>
-<span class="sd">    Returns </span>
-<span class="sd">    ------- </span>
-<span class="sd">    ax: matplotlib.axes </span>
-<span class="sd">        Axes of the figure </span>
-<span class="sd">         </span>
-<span class="sd">    Examples </span>
-<span class="sd">    -------- </span>
-<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
-<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features, plot_shape </span>
-<span class="sd">    &gt;&gt;&gt; import numpy as np </span>
-<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;../data/spinetail.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx, ts, f, ext = spectrogram(s, fs) </span>
-<span class="sd">    &gt;&gt;&gt; shape, params = shape_features(np.log10(Sxx), resolution=&#39;high&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; plot_shape(shape, params) </span>
-<span class="sd"> </span>
-<span class="sd">    &quot;&quot;&quot;</span> 
- 
-    <span class="c1"># compute shape of matrix </span>
-    <span class="n">dirs_size</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">theta</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
-    <span class="n">scale_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">pyr_level</span><span class="p">)</span><span class="o">.</span><span class="n">size</span> 
-    <span class="c1"># reshape feature vector </span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span><span class="s1">&#39;pyr_level&#39;</span><span class="p">,</span><span class="s1">&#39;scale&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span> 
-     
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span> 
-        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="n">shape</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;shp&#39;</span><span class="p">)]</span> 
-        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_plt</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span> 
-        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">shape</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;shp&#39;</span><span class="p">)]</span> 
-        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_plt</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span> 
-        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_plt</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
- 
-     
-    <span class="n">unique_scale</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">params</span><span class="o">.</span><span class="n">pyr_level</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> 
-    <span class="c1"># get textlab </span>
-    <span class="n">textlab</span> <span class="o">=</span> <span class="n">shape_plt</span> 
-    <span class="n">textlab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">textlab</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 
-     
-    <span class="c1"># plot figure </span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> 
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">shape_plt</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span> 
-    <span class="k">if</span> <span class="n">display_values</span><span class="p">:</span>     
-        <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">),</span><span class="n">label</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">textlab</span><span class="p">):</span> 
-            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span> 
-         
-    <span class="n">yticklab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">theta</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span><span class="mi">1</span><span class="p">)</span> 
-    <span class="n">xticklab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">unique_scale</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>  
-                          <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">scale_size</span><span class="p">))</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xticklab</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,:])</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dirs_size</span><span class="p">))</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">yticklab</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Scale&#39;</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Theta&#39;</span><span class="p">)</span> 
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
-     
-    <span class="k">return</span> <span class="n">ax</span> </div>
- 
-<span class="c1">#%%</span>
 <div class="viewcode-block" id="shape_features"><a class="viewcode-back" href="../../_autosummary/generated/features.shape_features.html#features.shape.shape_features">[docs]</a><span class="k">def</span> <span class="nf">shape_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.</span>
@@ -809,7 +755,7 @@
 <span class="sd">        </span>
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.features.plot_shape</span>
+<span class="sd">    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.util.plot_shape</span>
 <span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -823,8 +769,8 @@
 <span class="sd">    Get shape features from the whole power spectrogram </span>
 <span class="sd"> </span>
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
-<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features, plot_shape </span>
-<span class="sd">    &gt;&gt;&gt; from maad.util import format_features, power2dB</span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import format_features, power2dB, plot_shape </span>
 <span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;../data/spinetail.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_db = power2dB(Sxx, db_range=100)</span>
@@ -840,11 +786,13 @@
 <span class="sd">    </span>
 <span class="sd">    The shape coefficient can be visualized using ``plot_shape``. Note that these</span>
 <span class="sd">    coefficient allow to disciminate between the two vocalization types found in the</span>
-<span class="sd">    audio file.</span>
+<span class="sd">    audio file, the spinetail song and the background calls.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; shape_crer, shape_sp = shape.groupby(&#39;label&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape_crer[1].mean(), params) </span>
-<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape_sp[1].mean(), params) </span>
+<span class="sd">    &gt;&gt;&gt; ax1 = plot_shape(shape_crer[1].mean(), params) </span>
+<span class="sd">    &gt;&gt;&gt; ax1.set_title(&#39;Spinetail song&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax2 = plot_shape(shape_sp[1].mean(), params) </span>
+<span class="sd">    &gt;&gt;&gt; ax2.set_title(&#39;Background call&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>     
  
     <span class="c1"># Check input data and unpack settings </span>
@@ -907,7 +855,7 @@
 <span class="sd">    Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  </span>
 <span class="sd">    using 2D Gabor filters. Contrary to ``shape_features``, this function </span>
 <span class="sd">    delivers the raw response of the spectrogram to each filter of the filter </span>
-<span class="sd">    bank. </span>
+<span class="sd">    bank. This function can be used to have access to spectrograms filtered by the filterbank.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -933,13 +881,12 @@
 <span class="sd">    See also</span>
 <span class="sd">    --------</span>
 <span class="sd">    maad.features.shape_features, maad.features.opt_shape_presets, </span>
-<span class="sd">    maad.features.filter_bank_2d_nodc, maad.features.plot_shape</span>
+<span class="sd">    maad.features.filter_bank_2d_nodc, maad.util.plot_shape</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    </span>
-<span class="sd">    This function can be used to have access to spectrograms filtered by a 2D</span>
-<span class="sd">    Gabor filter bank.</span>
+<span class="sd">    Scatter the spectrogram acoustic components using 2D Gabor filters.</span>
 
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import shape_features_raw</span>
@@ -948,8 +895,10 @@
 <span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_db = power2dB(Sxx, db_range=80)</span>
 <span class="sd">    &gt;&gt;&gt; shape_raw, params = shape_features_raw(Sxx_db, resolution=&#39;low&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[13], **{&#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1])})</span>
-<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[14], **{&#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1])})</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[0], **{&#39;extent&#39;:ext, &#39;title&#39;: &#39;High-frequency vertical component&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[13], **{&#39;extent&#39;:ext, &#39;title&#39;: &#39;Low-frequency vertical components&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[2], **{&#39;extent&#39;:ext, &#39;title&#39;: &#39;High-frequency horizontal components&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[15], **{&#39;extent&#39;:ext, &#39;title&#39;: &#39;Low-frequency horizontal components&#39;})</span>
 <span class="sd">    &quot;&quot;&quot;</span>     
      
     <span class="c1"># unpack settings </span>
@@ -1003,9 +952,8 @@
 <span class="sd">    Get centroid from the whole power spectrogram </span>
 <span class="sd"> </span>
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram</span>
-<span class="sd">    &gt;&gt;&gt; from maad.rois import overlay_rois</span>
 <span class="sd">    &gt;&gt;&gt; from maad.features import centroid_features</span>
-<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB, format_features</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB, format_features, overlay_rois</span>
 <span class="sd">     </span>
 <span class="sd">    Load audio and compute spectrogram </span>
 <span class="sd">     </span>
@@ -1076,128 +1024,12 @@
 
     <span class="k">return</span> <span class="n">centroid</span> </div>
  
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="overlay_centroid"><a class="viewcode-back" href="../../_autosummary/generated/features.overlay_centroid.html#features.shape.overlay_centroid">[docs]</a><span class="k">def</span> <span class="nf">overlay_centroid</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">centroid</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
-    <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Overlay centroids on the original spectrogram </span>
-<span class="sd">     </span>
-<span class="sd">    Parameters </span>
-<span class="sd">    ---------- </span>
-<span class="sd">    Sxx :  2D array </span>
-<span class="sd">        Spectrogram </span>
-<span class="sd">               </span>
-<span class="sd">    centroid: pandas DataFrame </span>
-<span class="sd">        DataFrame with centroid descriptors (centroid_f, centroid_t) </span>
-<span class="sd">        Do format_features(rois,tn,fn) before using overlay_centroid to be sure that </span>
-<span class="sd">        the format of the DataFrame is correct </span>
-<span class="sd">             </span>
-<span class="sd">    savefig : string, optional, default is None </span>
-<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
-<span class="sd">        is added to the root filename. </span>
-<span class="sd">         </span>
-<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
-<span class="sd">            </span>
-<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_overlaycentroid.png&#39; </span>
-<span class="sd">            Postfix of the figure filename </span>
-<span class="sd">         </span>
-<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
-<span class="sd">            width, height in inches.   </span>
-<span class="sd">         </span>
-<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
-<span class="sd">            title of the figure </span>
-<span class="sd">         </span>
-<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
-<span class="sd">            label of the horizontal axis </span>
-<span class="sd">         </span>
-<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
-<span class="sd">            label of the vertical axis </span>
-<span class="sd">         </span>
-<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
-<span class="sd">            in order to get all the  existing colormaps </span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
-<span class="sd">            &#39;viridis&#39;... </span>
-<span class="sd">         </span>
-<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
-<span class="sd">                 </span>
-<span class="sd">        - dpi : integer, optional, default is 96 </span>
-<span class="sd">            Dot per inch.  </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
-<span class="sd">         </span>
-<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
-<span class="sd">            Format to save the figure  </span>
-<span class="sd">         </span>
-<span class="sd">        ... and more, see matplotlib  </span>
-<span class="sd"> </span>
-<span class="sd">    Returns </span>
-<span class="sd">    ------- </span>
-<span class="sd">    ax  </span>
-<span class="sd">        axis object (see matplotlib) </span>
-<span class="sd">    fig  </span>
-<span class="sd">        figure object (see matplotlib) </span>
-<span class="sd"> </span>
-<span class="sd">    Example </span>
-<span class="sd">    -------- </span>
-<span class="sd">    &quot;&quot;&quot;</span> 
-    <span class="c1"># Check format of the input data </span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">centroid</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="p">:</span> 
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame&#39;</span><span class="p">)</span>   
-         
-    <span class="k">if</span> <span class="ow">not</span><span class="p">((</span><span class="s1">&#39;centroid_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">centroid</span><span class="p">)</span>  <span class="p">:</span> 
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Array must be a Pandas DataFrame with column names:(centroid_t, centroid_f). Check example in documentation.&#39;</span><span class="p">)</span>   
-     
-    <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
-    <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
-    <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;ROIs Overlay&#39;</span><span class="p">)</span> 
-    <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
-    <span class="n">ext</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ext&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="n">ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
-        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-    <span class="k">else</span><span class="p">:</span> 
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
-        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
-
-    <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  
-    <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  
-    <span class="n">ax</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
-    <span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fig&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
-    <span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="s1">&#39;firebrick&#39;</span><span class="p">)</span>  
-    <span class="n">ms</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 
-    <span class="n">marker</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;marker&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
-         
-    <span class="k">if</span> <span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span> 
-        <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
-                         <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>  
-                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
-     
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">centroid_t</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">centroid_f</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> 
-     
-    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> 
-     
-    <span class="c1"># SAVE FIGURE </span>
-    <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
-        <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span> 
-        <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>  
-        <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_overlaycentroid&#39;</span><span class="p">)</span>                 
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> 
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
-     
-    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> </div>
- 
- 
 <span class="c1">#%%     </span>
 <div class="viewcode-block" id="all_shape_features"><a class="viewcode-back" href="../../_autosummary/generated/features.all_shape_features.html#features.shape.all_shape_features">[docs]</a><span class="k">def</span> <span class="nf">all_shape_features</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span>  
                           <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Computes shape and central frequency features from signal at specified </span>
-<span class="sd">    time-frequency limits defined by regions of interest (ROIs) </span>
+<span class="sd">    time-frequency limits defined by regions of interest (ROIs).</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -1269,10 +1101,10 @@
 <span class="sd">    -------- </span>
 <span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot </span>
 <span class="sd">    &gt;&gt;&gt; from maad.sound import load </span>
-<span class="sd">    &gt;&gt;&gt; from maad.features import compute_all_features </span>
-<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; features = compute_all_features(s, fs, rois, resolution=&#39;low&#39;,display=True) </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import all_shape_features </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;../data/spinetail.txt&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; features = all_shape_features(s, fs, rois, resolution=&#39;low&#39;, display=True)</span>
 <span class="sd">    &gt;&gt;&gt; features</span>
 <span class="sd">        label      min_t     ...       duration_x  bandwidth_y</span>
 <span class="sd">        0     SP   0.101385     ...              0.0          0.0</span>
@@ -1287,13 +1119,14 @@
 <span class="sd">        9   CRER  11.329756     ...              0.0          0.0</span>
 <span class="sd">        10    SP  11.773314     ...              0.0          0.0</span>
 <span class="sd">        ....</span>
-<span class="sd">    &gt;&gt;&gt; np.asarray(list(features)).T</span>
-<span class="sd">        array([&#39;label&#39;, &#39;min_t&#39;, &#39;min_f&#39;, &#39;max_t&#39;, &#39;max_f&#39;, &#39;min_y&#39;, &#39;min_x&#39;,</span>
-<span class="sd">       &#39;max_y&#39;, &#39;max_x&#39;, &#39;shp_001&#39;, &#39;shp_002&#39;, &#39;shp_003&#39;, &#39;shp_004&#39;,</span>
-<span class="sd">       &#39;shp_005&#39;, &#39;shp_006&#39;, &#39;shp_007&#39;, &#39;shp_008&#39;, &#39;shp_009&#39;, &#39;shp_010&#39;,</span>
-<span class="sd">       &#39;shp_011&#39;, &#39;shp_012&#39;, &#39;shp_013&#39;, &#39;shp_014&#39;, &#39;shp_015&#39;, &#39;shp_016&#39;,</span>
-<span class="sd">       &#39;centroid_y&#39;, &#39;centroid_x&#39;, &#39;duration_x&#39;, &#39;bandwidth_y&#39;,</span>
-<span class="sd">       &#39;centroid_f&#39;, &#39;centroid_t&#39;], dtype=&#39;&lt;U11&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; features.columns</span>
+<span class="sd">    Index([&#39;label&#39;, &#39;min_t&#39;, &#39;min_f&#39;, &#39;max_t&#39;, &#39;max_f&#39;, &#39;min_y&#39;, &#39;min_x&#39;, &#39;max_y&#39;,</span>
+<span class="sd">           &#39;max_x&#39;, &#39;shp_001&#39;, &#39;shp_002&#39;, &#39;shp_003&#39;, &#39;shp_004&#39;, &#39;shp_005&#39;,</span>
+<span class="sd">           &#39;shp_006&#39;, &#39;shp_007&#39;, &#39;shp_008&#39;, &#39;shp_009&#39;, &#39;shp_010&#39;, &#39;shp_011&#39;,</span>
+<span class="sd">           &#39;shp_012&#39;, &#39;shp_013&#39;, &#39;shp_014&#39;, &#39;shp_015&#39;, &#39;shp_016&#39;, &#39;centroid_y&#39;,</span>
+<span class="sd">           &#39;centroid_x&#39;, &#39;duration_x&#39;, &#39;bandwidth_y&#39;, &#39;area_xy&#39;, &#39;centroid_f&#39;,</span>
+<span class="sd">           &#39;centroid_t&#39;, &#39;duration_t&#39;, &#39;bandwidth_f&#39;, &#39;area_tf&#39;],</span>
+<span class="sd">          dtype=&#39;object&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
    
     <span class="c1"># Spectro computing</span>

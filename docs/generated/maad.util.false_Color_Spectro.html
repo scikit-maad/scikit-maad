@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.false_Color_Spectro &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.false_Color_Spectro &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -40,7 +39,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="maad.util.running_mean" href="maad.util.running_mean.html" />
-    <link rel="prev" title="maad.util.plot_correlation_map" href="maad.util.plot_correlation_map.html" /> 
+    <link rel="prev" title="maad.util.plot_shape" href="maad.util.plot_shape.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -107,9 +106,12 @@
 <li class="toctree-l3"><a class="reference internal" href="maad.util.save_figlist.html">maad.util.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot1D.html">maad.util.plot1D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot2D.html">maad.util.plot2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_rois.html">maad.util.overlay_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_centroid.html">maad.util.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features_map.html">maad.util.plot_features_map</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features.html">maad.util.plot_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_correlation_map.html">maad.util.plot_correlation_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_shape.html">maad.util.plot_shape</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.false_Color_Spectro</a></li>
 </ul>
 </li>
@@ -193,10 +195,10 @@
 <h1>maad.util.false_Color_Spectro<a class="headerlink" href="#maad-util-false-color-spectro" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.util.false_Color_Spectro">
-<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">false_Color_Spectro</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">indices</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">plim</span><span class="o">=</span><span class="default_value">1, 99</span></em>, <em class="sig-param"><span class="n">reverseLUT</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">permut</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">unit</span><span class="o">=</span><span class="default_value">'minutes'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#false_Color_Spectro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.false_Color_Spectro" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create False Color Spectrogram from indices obtained by MAAD
+<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">false_Color_Spectro</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">indices</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">plim</span><span class="o">=</span><span class="default_value">(1, 99)</span></em>, <em class="sig-param"><span class="n">reverseLUT</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">permut</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">unit</span><span class="o">=</span><span class="default_value">'minutes'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#false_Color_Spectro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.false_Color_Spectro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create False Color Spectrogram from indices obtained by MAAD.
 Only indices than can be computed bin per bin (ie frequency per frequency)
-are used to create False Color Spectro. They are called xxx_per_bin</p>
+are used to create False Color Spectro. They are called xxx_per_bin.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -274,7 +276,7 @@ single false color spectro with 3 colors : R, G, B</p>
         <a href="maad.util.running_mean.html" class="btn btn-neutral float-right" title="maad.util.running_mean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="maad.util.plot_correlation_map.html" class="btn btn-neutral float-left" title="maad.util.plot_correlation_map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="maad.util.plot_shape.html" class="btn btn-neutral float-left" title="maad.util.plot_shape" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

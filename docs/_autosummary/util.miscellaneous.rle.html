@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>util.miscellaneous.rle &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>util.miscellaneous.rle &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,18 +172,42 @@
 <dl class="py function">
 <dt id="util.miscellaneous.rle">
 <code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">rle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#rle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.rle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run-Length encoding (RLE)</p>
-<dl class="simple">
-<dt>Wikipedia :</dt><dd><p>Run-length encoding (RLE) is a form of lossless data compression in 
-which runs of data (sequences in which the same data value occurs in 
-many consecutive data elements) are stored as a single data value and 
-count, rather than as the original run. This is most useful on data 
-that contains many such runs. Consider, for example, simple graphic 
-images such as icons, line drawings, Conway’s Game of Life, and 
-animations. It is not useful with files that don’t have many runs 
-as it could greatly increase the file size.</p>
+<dd><p>Compute the Run-Length encoding (RLE) of a vector.</p>
+<p>Run-length encoding is a lossless data compression in which runs of data 
+(sequences in which the same data value occurs in many consecutive data elements) 
+are stored as a single data value and count. This is useful on data 
+that contains many repeated values, for example, simple graphic 
+images such as icons, line drawings, and animations. It is not useful with files that 
+don’t have many runs as it could greatly increase the file size <a class="reference internal" href="#rbac7e20c18dd-1" id="id1">[1]</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">1D array</span></dt><dd><p>vector with numbers (ndarray or list)</p>
 </dd>
 </dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>lengths, values</strong><span class="classifier">1D array</span></dt><dd><p>2 vectors that stores values (in values) and the number of times each
+value is repeated (in lengths).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="rbac7e20c18dd-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Run-length_encoding">https://en.wikipedia.org/wiki/Run-length_encoding</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5]</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">rle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">length</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">rle</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;length:&#39;</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="s1">&#39;- values:&#39;</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="go">length: [3 2 4 1 1] - values: [1 2 3 4 5]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

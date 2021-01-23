@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.alpha_indices &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.alpha_indices &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -199,14 +198,14 @@
 <span class="c1"># Import internal modules</span>
 <span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="p">(</span><span class="n">rle</span><span class="p">,</span> <span class="n">index_bw</span><span class="p">,</span> <span class="n">amplitude2dB</span><span class="p">,</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">dB2power</span><span class="p">,</span> <span class="n">mean_dB</span><span class="p">,</span>
                        <span class="n">skewness</span><span class="p">,</span> <span class="n">kurtosis</span><span class="p">,</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">intoBins</span><span class="p">,</span> <span class="n">entropy</span><span class="p">,</span> 
-                       <span class="n">linear_scale</span><span class="p">,</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">)</span>
+                       <span class="n">linear_scale</span><span class="p">,</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">overlay_rois</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">maad.spl</span> <span class="kn">import</span> <span class="n">wav2Leq</span><span class="p">,</span> <span class="n">PSD2Leq</span><span class="p">,</span> <span class="n">power2dBSPL</span>
 <span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="p">(</span><span class="n">centroid_features</span><span class="p">,</span> <span class="n">zero_crossing_rate</span><span class="p">,</span> <span class="n">audio_moments</span><span class="p">,</span> 
                            <span class="n">spectral_moments</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="p">(</span><span class="n">envelope</span><span class="p">,</span> <span class="n">smooth</span><span class="p">,</span> <span class="n">audio_SNR</span><span class="p">,</span> <span class="n">intoOctave</span><span class="p">,</span> 
                         <span class="n">avg_amplitude_spectro</span><span class="p">,</span> <span class="n">avg_power_spectro</span><span class="p">,</span> <span class="n">spectral_SNR</span><span class="p">,</span> 
                         <span class="n">median_equalizer</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">select_rois</span><span class="p">,</span> <span class="n">create_mask</span><span class="p">,</span> <span class="n">overlay_rois</span>
+<span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">select_rois</span><span class="p">,</span> <span class="n">create_mask</span>
 
 <span class="c1">#%%</span>
 <span class="c1"># =============================================================================</span>
@@ -500,7 +499,11 @@
 <div class="viewcode-block" id="surfaceRoughness"><a class="viewcode-back" href="../../../generated/maad.features.surfaceRoughness.html#maad.features.surfaceRoughness">[docs]</a><span class="k">def</span> <span class="nf">surfaceRoughness</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">norm</span> <span class="o">=</span><span class="s1">&#39;global&#39;</span><span class="p">):</span>
     
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Surface Roughness </span>
+<span class="sd">    Compute the surface roughness index of a signal (1D) or a spectrogram (2D).</span>
+<span class="sd">    </span>
+<span class="sd">    Surface roughness is quantified by the deviations in the direction of the normal </span>
+<span class="sd">    vector of a real surface from its ideal form. If these deviations are large, </span>
+<span class="sd">    the surface is rough; if they are small, the surface is smooth [1]_.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -522,9 +525,9 @@
 <span class="sd">        if x is a vector =&gt; Root mean squared of deviationn of x.</span>
 <span class="sd">        if x is a matrix =&gt; Root mean squared of deviation of each line of x.</span>
 <span class="sd">    </span>
-<span class="sd">    Reference</span>
-<span class="sd">    ---------</span>
-<span class="sd">    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Wikipedia, https://en.wikipedia.org/wiki/Surface_roughness</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="c1"># force to be ndarray</span>
@@ -617,7 +620,7 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="audio_median"><a class="viewcode-back" href="../../../generated/maad.features.audio_median.html#maad.features.audio_median">[docs]</a><span class="k">def</span> <span class="nf">audio_median</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the median of the envelope of an audio signal </span>
+<span class="sd">    Computes the median of the envelope of an audio signal.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -641,7 +644,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/spinetail.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; med = maad.features.audio_median (s)</span>
+<span class="sd">    &gt;&gt;&gt; med = maad.features.audio_median(s)</span>
 <span class="sd">    &gt;&gt;&gt; print(med)</span>
 <span class="sd">    0.007934564717486147</span>
 <span class="sd">    </span>
@@ -656,7 +659,7 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="audio_entropy"><a class="viewcode-back" href="../../../generated/maad.features.audio_entropy.html#maad.features.audio_entropy">[docs]</a><span class="k">def</span> <span class="nf">audio_entropy</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">compatibility</span><span class="o">=</span><span class="s2">&quot;QUT&quot;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the median of the envelope of an audio signal </span>
+<span class="sd">    Computes the entropy of the envelope of an audio signal.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -664,15 +667,12 @@
 <span class="sd">        Audio to process (wav)</span>
 <span class="sd">    compatibility : string {&#39;QUT&#39;, &#39;seewave&#39;}, default is &#39;QUT&#39;</span>
 <span class="sd">        Select the way to compute the temporal entropy.</span>
-<span class="sd">            - QUT : entropy of the envelope²</span>
+<span class="sd">            - QUT : entropy of the squared envelope</span>
 <span class="sd">            - seewave : entropy of the envelope</span>
 <span class="sd">    mode : str, optional, default is &quot;fast&quot;</span>
-<span class="sd">        Select the mode to compute the envelope of the audio waveform</span>
-<span class="sd">        - &quot;fast&quot; : The sound is first divided into frames (2d) using the </span>
-<span class="sd">            function _wave2timeframes(s), then the max of each frame gives a </span>
-<span class="sd">            good approximation of the envelope.</span>
-<span class="sd">        - &quot;Hilbert&quot; : estimation of the envelope from the Hilbert transform. </span>
-<span class="sd">            The method is slow</span>
+<span class="sd">        Select the mode to compute the envelope of the audio waveform.</span>
+<span class="sd">            - &quot;fast&quot; : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.</span>
+<span class="sd">            - &quot;Hilbert&quot; : estimation of the envelope from the Hilbert transform. The method is slow</span>
 <span class="sd">    Nt : integer, optional, default is 512</span>
 <span class="sd">        Size of each frame. The largest, the highest is the approximation.</span>
 <span class="sd">   </span>
@@ -683,22 +683,21 @@
 <span class="sd">       </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Seewave : http://rug.mnhn.fr/seewave/</span>
+<span class="sd">    1. Seewave : http://rug.mnhn.fr/seewave/</span>
 <span class="sd">    Sueur, J., Aubin, T., &amp; Simonis, C. (2008). Seewave, a free modular tool </span>
 <span class="sd">    for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.</span>
 <span class="sd">     </span>
-<span class="sd">    QUT : https://github.com/QutEcoacoustics/audio-analysis/</span>
+<span class="sd">    2. QUT : https://github.com/QutEcoacoustics/audio-analysis/</span>
 <span class="sd">    Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, &amp; Paul Roe. </span>
 <span class="sd">    (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). </span>
 <span class="sd">    Zenodo. http://doi.org/10.5281/zenodo.1188744</span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    Entropy is a measure of ENERGY dispersal =&gt; square the amplitude.      </span>
-<span class="sd">    Temporal entropy =&gt; value&lt;0.7 indicates a brief concentration of energy</span>
-<span class="sd">                     (few miliseconds)</span>
-<span class="sd">                     value close 1 indicates no peak events but rather </span>
-<span class="sd">                     smooth sound or noise.</span>
+<span class="sd">    The entropy of an audio signal is a measure of energy dispersion. In the temporal domain, </span>
+<span class="sd">    values below 0.7 indicate a brief concentration of energy (few miliseconds), while </span>
+<span class="sd">    values close 1 indicate low concentration of energy, no peaks, smooth and constant </span>
+<span class="sd">    background noise.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -723,7 +722,9 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="acousticRichnessIndex"><a class="viewcode-back" href="../../../generated/maad.features.acousticRichnessIndex.html#maad.features.acousticRichnessIndex">[docs]</a><span class="k">def</span> <span class="nf">acousticRichnessIndex</span> <span class="p">(</span><span class="n">Ht_array</span><span class="p">,</span> <span class="n">M_array</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic richness index : AR</span>
+<span class="sd">    Compute the acoustic richness index of an audio file. This acoustic index was first</span>
+<span class="sd">    described in [1]_. The present version was translated from the R software package </span>
+<span class="sd">    Seewave [2]_.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -739,8 +740,10 @@
 <span class="sd">        </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Described in [Depraetere &amp; al. 2012]</span>
-<span class="sd">    Ported from SEEWAVE R package</span>
+<span class="sd">    .. [1] Depraetere, M., Pavoine, S., Jiguet, F., Gasc, A., Duvail, S., &amp; Sueur, J. (2012). Monitoring animal diversity using acoustic indices: Implementation in a temperate woodland. Ecological Indicators, 13, 46–54.</span>
+<span class="sd">    .. [2] Sueur, J., Aubin, T., &amp; Simonis, C. (2008). Seewave: A free modular tool for sound analysis and synthesis. Bioacoustics, 18, 213–226.</span>
+
+
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ht_array</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">M_array</span><span class="p">)</span> <span class="p">:</span> 
         <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;warning : Ht_array and M_array must have the same length&quot;</span><span class="p">)</span>
@@ -753,12 +756,12 @@
 
 <div class="viewcode-block" id="audio_activity"><a class="viewcode-back" href="../../../generated/maad.features.audio_activity.html#maad.features.audio_activity">[docs]</a><span class="k">def</span> <span class="nf">audio_activity</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic Activity :</span>
+<span class="sd">    Compute the acoustic activity index from an audio signal.</span>
 <span class="sd">    </span>
-<span class="sd">    for each frequency bin :</span>
-<span class="sd">    - ACTfract : proportion (fraction) of points above the threshold </span>
-<span class="sd">    - ACTcount : number of points above the threshold</span>
-<span class="sd">    - ACTmean : mean value (in dB) of the portion of the signal above the threhold</span>
+<span class="sd">    Three values are computed with this function:</span>
+<span class="sd">        - ACTfract : proportion (fraction) of points above the threshold </span>
+<span class="sd">        - ACTcount : number of points above the threshold</span>
+<span class="sd">        - ACTmean : mean value (in dB) of the portion of the signal above the threhold</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -787,8 +790,6 @@
 <span class="sd">        </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
-<span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
 <span class="sd">    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
 <span class="sd">    </span>
@@ -827,7 +828,9 @@
 <div class="viewcode-block" id="audio_events"><a class="viewcode-back" href="../../../generated/maad.features.audio_events.html#maad.features.audio_events">[docs]</a><span class="k">def</span> <span class="nf">audio_events</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">rejectDuration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                   <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic events :</span>
+<span class="sd">    Compute the acoustic event index from an audio signal.</span>
+<span class="sd">    </span>
+<span class="sd">    Four values are computed with this function:</span>
 <span class="sd">        - EVNtFraction : Fraction: events duration over total duration</span>
 <span class="sd">        - EVNmean : mean events duration (s)</span>
 <span class="sd">        - EVNcount : number of events per s</span>
@@ -874,8 +877,6 @@
 
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
-<span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
 <span class="sd">    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
 <span class="sd">    </span>
@@ -933,7 +934,7 @@
 <div class="viewcode-block" id="frequency_entropy"><a class="viewcode-back" href="../../../generated/maad.features.frequency_entropy.html#maad.features.frequency_entropy">[docs]</a><span class="k">def</span> <span class="nf">frequency_entropy</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">compatibility</span><span class="o">=</span><span class="s2">&quot;QUT&quot;</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral entropy of a power spectral density (1d) or power</span>
-<span class="sd">    spectrogram density (2d)</span>
+<span class="sd">    spectrogram density (2d).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -966,10 +967,10 @@
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    FREQUENCY ENTROPY =&gt; low value indicates concentration of energy around a</span>
-<span class="sd">                narrow frequency band. </span>
-<span class="sd">                WARNING : if the DC value is not removed before processing</span>
-<span class="sd">                the large peak at f=0Hz (DC) will lower the entropy...</span>
+<span class="sd">    The spectral entropy of a signal measures the energy dispersion along frequencies. Low values </span>
+<span class="sd">    indicates a concentration of energy around a narrow frequency band. </span>
+<span class="sd">    If the DC value is not removed before processing the large peak at f=0Hz will </span>
+<span class="sd">    lower the entropy of the signal.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -1020,7 +1021,7 @@
 <div class="viewcode-block" id="numberOfPeaks"><a class="viewcode-back" href="../../../generated/maad.features.numberOfPeaks.html#maad.features.numberOfPeaks">[docs]</a><span class="k">def</span> <span class="nf">numberOfPeaks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;dB&#39;</span><span class="p">,</span> <span class="n">min_peak_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_freq_dist</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> 
                   <span class="n">slopes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Counts the number of major frequency peaks obtained on a mean spectrum.</span>
+<span class="sd">    Count the number of frequency peaks on a mean spectrum.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1047,24 +1048,27 @@
 <span class="sd">    display: boolean, optional, default is False</span>
 <span class="sd">        if True, display the mean spectrum with the detected peaks</span>
 <span class="sd">        </span>
-<span class="sd">    Return</span>
-<span class="sd">    ------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    NBPeaks : integer</span>
 <span class="sd">        Number of detected peaks on the mean spectrum</span>
 <span class="sd">    </span>
-<span class="sd">    Reference :</span>
-<span class="sd">    -----------</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Gasc, A. &amp; al (2013). Biodiversity sampling using a global acoustic </span>
 <span class="sd">    approach: contrasting sites with microendemics in New Caledonia. </span>
 <span class="sd">    PloS one, 8(5), e65311.</span>
 <span class="sd">    </span>
-<span class="sd">    Inspired by the function fpeaks from Seewave</span>
+<span class="sd">    Inspired by the function `fpeaks` from the R package Seewave.</span>
+<span class="sd">    Sueur, J., Aubin, T., &amp; Simonis, C. (2008). Seewave: A free modular tool for sound </span>
+<span class="sd">    analysis and synthesis. Bioacoustics, 18, 213–226.</span>
+
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  </span>
-<span class="sd">    &gt;&gt;&gt; maad.features.numberOfPeaks(Sxx_power, fn, slopes=6, min_freq_dist=100) </span>
+<span class="sd">    &gt;&gt;&gt; maad.features.numberOfPeaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) </span>
 <span class="sd">    14</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1144,7 +1148,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    Sxx : ndarray of floats</span>
 <span class="sd">        Spectrogram (2d). </span>
-<span class="sd">        Recommanded to work with PSD to be consistent with energy conservation</span>
+<span class="sd">        It is recommended to work with PSD to be consistent with energy conservation</span>
 <span class="sd">    </span>
 <span class="sd">    fn : 1d ndarray of floats</span>
 <span class="sd">        frequency vector</span>
@@ -1176,8 +1180,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    Credit : Towsey 2017</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  </span>
 <span class="sd">    &gt;&gt;&gt; EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = maad.features.spectral_entropy(Sxx_power, fn, flim=(2000,10000)) </span>
@@ -1258,7 +1262,7 @@
 <div class="viewcode-block" id="spectral_cover"><a class="viewcode-back" href="../../../generated/maad.features.spectral_cover.html#maad.features.spectral_cover">[docs]</a><span class="k">def</span> <span class="nf">spectral_cover</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">flim_LF</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="n">flim_MF</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">10000</span><span class="p">),</span> 
                    <span class="n">flim_HF</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span><span class="mi">20000</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Spectral Activity Cover</span>
+<span class="sd">    Compute the spectral activity cover index.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1288,8 +1292,6 @@
 <span class="sd">        </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
-<span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
 <span class="sd">    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
 <span class="sd">    </span>
@@ -1327,12 +1329,12 @@
 
 <div class="viewcode-block" id="spectral_activity"><a class="viewcode-back" href="../../../generated/maad.features.spectral_activity.html#maad.features.spectral_activity">[docs]</a><span class="k">def</span> <span class="nf">spectral_activity</span> <span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic Activity :</span>
+<span class="sd">    Compute the acoustic activity on a spectrogram.</span>
 <span class="sd">    </span>
-<span class="sd">    for each frequency bin :</span>
-<span class="sd">    - ACTfract : proportion (fraction) of points above the threshold </span>
-<span class="sd">    - ACTcount : number of points above the threshold</span>
-<span class="sd">    - ACTmean : mean value (in dB) of the portion of the signal above the threhold</span>
+<span class="sd">    The function computes for each frequency bin:</span>
+<span class="sd">        - ACTfract : proportion (fraction) of points above the threshold </span>
+<span class="sd">        - ACTcount : number of points above the threshold</span>
+<span class="sd">        - ACTmean : mean value (in dB) of the portion of the signal above the threhold</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1354,13 +1356,11 @@
 <span class="sd">        </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
-<span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
 <span class="sd">    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  </span>
@@ -1384,8 +1384,11 @@
 <div class="viewcode-block" id="spectral_events"><a class="viewcode-back" href="../../../generated/maad.features.spectral_events.html#maad.features.spectral_events">[docs]</a><span class="k">def</span> <span class="nf">spectral_events</span> <span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">rejectDuration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                      <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Spectral Acoustic events :</span>
-<span class="sd">        - EVNspFraction : Fraction: events duration over total duration</span>
+<span class="sd">    Compute the spectral acoustic events from a spectrogram.</span>
+<span class="sd">    </span>
+<span class="sd">    This function computes:</span>
+<span class="sd">        </span>
+<span class="sd">        - EVNspFraction : Fraction of events duration over total duration</span>
 <span class="sd">        - EVNspmean : mean events duration (s)</span>
 <span class="sd">        - EVNspcount : number of events per s</span>
 <span class="sd">        - EVNsp : binary vector or matrix with 1 corresponding to event position</span>
@@ -1424,17 +1427,15 @@
 
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived </span>
-<span class="sd">    from natural recordings of the environment.</span>
 <span class="sd">    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived </span>
 <span class="sd">    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise= maad.rois.median_equalizer(Sxx_power) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)</span>
 <span class="sd">    &gt;&gt;&gt; EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)  </span>
 <span class="sd">    &gt;&gt;&gt; print(&#39;Mean proportion of spectrogram with event s: %2.2f%%&#39; %np.mean(EVNspFract_per_bin))</span>
@@ -1493,8 +1494,8 @@
 <div class="viewcode-block" id="acousticComplexityIndex"><a class="viewcode-back" href="../../../generated/maad.features.acousticComplexityIndex.html#maad.features.acousticComplexityIndex">[docs]</a><span class="k">def</span> <span class="nf">acousticComplexityIndex</span><span class="p">(</span><span class="n">Sxx</span><span class="p">):</span>
     
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic Complexity Index : ACI</span>
-<span class="sd">    </span>
+<span class="sd">    Compute the Acoustic Complexity Index (ACI) from a spectrogram [1]_.</span>
+<span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Sxx : ndarray of floats</span>
@@ -1502,18 +1503,16 @@
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------    </span>
-<span class="sd">    ACI_xx : 2d ndarray of scalars</span>
+<span class="sd">    ACI_xx: 2d ndarray of scalars</span>
 <span class="sd">        Acoustic Complexity Index of the spectrogram</span>
 <span class="sd">    </span>
-<span class="sd">    ACI_per_bin : 1d ndarray of scalars</span>
+<span class="sd">    ACI_per_bin: 1d ndarray of scalars</span>
 <span class="sd">        ACI value for each frequency bin</span>
 <span class="sd">        sum(ACI_xx,axis=1)</span>
 <span class="sd">        </span>
-<span class="sd">    ACI_sum : scalar</span>
+<span class="sd">    ACI_sum: scalar</span>
 <span class="sd">        Sum of ACI value per frequency bin (Common definition)</span>
 <span class="sd">        sum(ACI_per_bin)</span>
-<span class="sd">        </span>
-<span class="sd">    ACI_mean ; scalar</span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----   </span>
@@ -1528,14 +1527,13 @@
 <span class="sd">        </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing </span>
+<span class="sd">    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing </span>
 <span class="sd">    activity of an avian community: the Acoustic Complexity Index (ACI). </span>
 <span class="sd">    Ecological Indicators, 11, 868-873.</span>
 <span class="sd">    </span>
-<span class="sd">    Ported from the Seewave R package.</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode=&#39;amplitude&#39;)  </span>
 <span class="sd">    &gt;&gt;&gt; _, _ , ACI  = maad.features.acousticComplexityIndex(Sxx)</span>
@@ -1554,7 +1552,9 @@
                             <span class="n">dB_threshold</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;shannon&quot;</span><span class="p">):</span>
     
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic Diversity Index : ADI</span>
+<span class="sd">    Compute the Acoustic Diversity Index (ADI) from a spectrogram [1]_.</span>
+<span class="sd">    </span>
+<span class="sd">    The diversity can be computed using Shannon, Simpson, or the inverse Simpson diversity index.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1590,16 +1590,19 @@
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    See acousticEvenessIndex</span>
-<span class="sd">    AEI and ADI are negatively correlated</span>
+<span class="sd">    The Acoustic Eveness Index (AEI) and the Acoustic Diversity Index (ADI) are negatively correlated.</span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    acousticEvenessIndex</span>
 <span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. </span>
+<span class="sd">    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. </span>
 <span class="sd">    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode=&#39;amplitude&#39;)  </span>
 <span class="sd">    &gt;&gt;&gt; ADI  = maad.features.acousticDiversityIndex(Sxx,fn)</span>
@@ -1643,7 +1646,7 @@
                           <span class="n">dB_threshold</span><span class="o">=-</span><span class="mi">50</span><span class="p">):</span>
     
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic Eveness Index : AEI</span>
+<span class="sd">    Compute the Acoustic Eveness Index (AEI) from a spectrogram [1]_.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1673,16 +1676,19 @@
 <span class="sd">        </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    See acousticDiversityIndex</span>
-<span class="sd">    AEI and ADI are negatively correlated</span>
+<span class="sd">    The Acoustic Eveness Index (AEI) and the Acoustic Diversity Index (ADI) are negatively correlated.</span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    acousticDiversityIndex</span>
 <span class="sd">        </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. </span>
+<span class="sd">    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. </span>
 <span class="sd">    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode=&#39;amplitude&#39;)  </span>
 <span class="sd">    &gt;&gt;&gt; AEI  = maad.features.acousticEvenessIndex(Sxx,fn)</span>
@@ -1718,7 +1724,7 @@
 <div class="viewcode-block" id="soundscapeIndex"><a class="viewcode-back" href="../../../generated/maad.features.soundscapeIndex.html#maad.features.soundscapeIndex">[docs]</a><span class="k">def</span> <span class="nf">soundscapeIndex</span> <span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">flim_bioPh</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">10000</span><span class="p">),</span><span class="n">flim_antroPh</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> 
                      <span class="n">R_compatible</span> <span class="o">=</span> <span class="s1">&#39;soundecology&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the Normalized Difference Soundscape Index from a power spectrogram.</span>
+<span class="sd">    Compute the Normalized Difference Soundscape Index from a power spectrogram [1]_.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1751,14 +1757,14 @@
 <span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. </span>
+<span class="sd">    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. </span>
 <span class="sd">    The Remote Environmental Assessment Laboratory&#39;s Acoustic Library: An Archive </span>
 <span class="sd">    for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.</span>
 <span class="sd">    </span>
-<span class="sd">    Inspired by Seewave and soundecology R package</span>
+<span class="sd">    Inspired by Seewave and soundecology R packages.</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  </span>
 <span class="sd">    &gt;&gt;&gt; NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscapeIndex(Sxx_power,fn)</span>
@@ -1800,7 +1806,7 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="bioacousticsIndex"><a class="viewcode-back" href="../../../generated/maad.features.bioacousticsIndex.html#maad.features.bioacousticsIndex">[docs]</a><span class="k">def</span> <span class="nf">bioacousticsIndex</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">flim</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">),</span> <span class="n">R_compatible</span> <span class="o">=</span><span class="s1">&#39;soundecology&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Bioacoustics Index</span>
+<span class="sd">    Compute the Bioacoustics Index from a spectrogram [1]_.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1821,7 +1827,7 @@
 <span class="sd">    </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    References: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic </span>
+<span class="sd">    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic </span>
 <span class="sd">    invasion resistance in Hawaii: bioacoustics, field surveys, and airborne </span>
 <span class="sd">    remote sensing. Ecological Applications 17: 2137-2144.</span>
 <span class="sd">    </span>
@@ -1829,10 +1835,10 @@
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----    </span>
-<span class="sd">    Soundecology compatible version</span>
-<span class="sd">    - average of dB value</span>
-<span class="sd">    - remove negative value in order to get positive values only</span>
-<span class="sd">    - dividing by the frequency resolution df instead of multiplication</span>
+<span class="sd">    Soundecology compatible version:</span>
+<span class="sd">        - average of dB value</span>
+<span class="sd">        - remove negative value in order to get positive values only</span>
+<span class="sd">        - dividing by the frequency resolution df instead of multiplication</span>
 <span class="sd">    </span>
 <span class="sd">    Examples :</span>
 <span class="sd">    ----------</span>
@@ -1888,7 +1894,7 @@
 <div class="viewcode-block" id="audio_LEQ"><a class="viewcode-back" href="../../../generated/maad.features.audio_LEQ.html#maad.features.audio_LEQ">[docs]</a><span class="k">def</span> <span class="nf">audio_LEQ</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Equivalent Continuous Sound level (Leq) of an audio signal </span>
-<span class="sd">    in the time domain</span>
+<span class="sd">    in the time domain.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1933,7 +1939,7 @@
 <div class="viewcode-block" id="spectral_LEQ"><a class="viewcode-back" href="../../../generated/maad.features.spectral_LEQ.html#maad.features.spectral_LEQ">[docs]</a><span class="k">def</span> <span class="nf">spectral_LEQ</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Equivalent Continuous Sound level (Leq) from a power spectrum </span>
-<span class="sd">    (1d) or power spectrogram (2d)</span>
+<span class="sd">    (1d) or power spectrogram (2d).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1986,13 +1992,14 @@
 
 <div class="viewcode-block" id="more_entropy"><a class="viewcode-back" href="../../../generated/maad.features.more_entropy.html#maad.features.more_entropy">[docs]</a><span class="k">def</span> <span class="nf">more_entropy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the entropy of an audio signal using multiple methods.</span>
 <span class="sd">    </span>
-<span class="sd">    Compute more types of entropy :</span>
-<span class="sd">        -Havrda</span>
-<span class="sd">        -Renyi</span>
-<span class="sd">        -paired Shannon</span>
-<span class="sd">        -gamma</span>
-<span class="sd">        -Gini Simpson</span>
+<span class="sd">    There are currently five types supported:</span>
+<span class="sd">        - Havrda</span>
+<span class="sd">        - Renyi</span>
+<span class="sd">        - paired Shannon</span>
+<span class="sd">        - gamma</span>
+<span class="sd">        - Gini Simpson</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2007,22 +2014,29 @@
 <span class="sd">        In case of x is a matrix, select the row (axis=0) or the columns (axis=1)</span>
 <span class="sd">        of the matrix to compute the entropies.  </span>
 <span class="sd">    </span>
-<span class="sd">    Returns :</span>
-<span class="sd">    ---------</span>
-<span class="sd">    H_Havrda, H_Renyi, H_pairedShannon, H_gamma, H_GiniSimpson : scalars</span>
-<span class="sd">        Compute different entropies. See the reference to understand how to</span>
-<span class="sd">        compute them.</span>
-<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H_Havrda : scalar</span>
+<span class="sd">        Havrda entropy</span>
+<span class="sd">    H_Renyi : scalar</span>
+<span class="sd">        Renyi entropy</span>
+<span class="sd">    H_pairedShannon : scalar</span>
+<span class="sd">        Paired Shannon entropy</span>
+<span class="sd">    H_gamma : scalar</span>
+<span class="sd">        Gamma entropy</span>
+<span class="sd">    H_GiniSimpson : scalar</span>
+<span class="sd">        Gini Simpson entropy</span>
+<span class="sd">        </span>
 <span class="sd">    References</span>
-<span class="sd">    ---------</span>
-<span class="sd">    Zhao, Yueqin. &quot;Rao&#39;s Quadratic Entropy and Some New Applications&quot; (2010). </span>
+<span class="sd">    ----------</span>
+<span class="sd">    1. Zhao, Yueqin. &quot;Rao&#39;s Quadratic Entropy and Some New Applications&quot; (2010). </span>
 <span class="sd">    Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, </span>
 <span class="sd">    Old Dominion University, DOI: 10.25777/qgak-sf09</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
-<span class="sd">    in time domain</span>
+<span class="sd">    Compute entropy in time domain.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/spinetail.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; env = maad.sound.envelope(s)</span>
@@ -2030,7 +2044,7 @@
 <span class="sd">    &gt;&gt;&gt; print(&#39;Ht_Havrda: %2.2f / Ht_Renyi: %2.2f / Ht_pairedShannon: %2.2f / Ht_gamma: %2.0f / Ht_GiniSimpson: %2.2f&#39; % (Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson))</span>
 <span class="sd">    Ht_Havrda: 0.33 / Ht_Renyi: 7.20 / Ht_pairedShannon: 9.04 / Ht_gamma: 24223924 / Ht_GiniSimpson: 1.00</span>
 <span class="sd">    </span>
-<span class="sd">    in frequency domain</span>
+<span class="sd">    Compute entropy in spectral domain.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)</span>
 <span class="sd">    &gt;&gt;&gt; S_power = maad.sound.avg_power_spectro(Sxx_power)</span>
@@ -2073,7 +2087,7 @@
 
 <div class="viewcode-block" id="frequency_raoQ"><a class="viewcode-back" href="../../../generated/maad.features.frequency_raoQ.html#maad.features.frequency_raoQ">[docs]</a><span class="k">def</span> <span class="nf">frequency_raoQ</span> <span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">bin_step</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute Rao quadratic entropy on a power spectrum (1d)</span>
+<span class="sd">    Compute Rao&#39;s quadratic entropy on a power spectrum (1d).</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2084,15 +2098,20 @@
 <span class="sd">    bin_step : scalar, optional, default is 1000</span>
 <span class="sd">        Frequency step in Hz</span>
 <span class="sd">    </span>
-<span class="sd">    Returns :</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    RAOQ : scalar</span>
 <span class="sd">        Rao quadratic entropy  </span>
 <span class="sd">        </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    References</span>
+<span class="sd">    ---------</span>
+<span class="sd">    </span>
+<span class="sd">    1. Zhao, Yueqin. &quot;Rao&#39;s Quadratic Entropy and Some New Applications&quot; (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/spinetail.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)</span>
 <span class="sd">    &gt;&gt;&gt; S_power = maad.sound.avg_power_spectro(Sxx_power) </span>
 <span class="sd">    &gt;&gt;&gt; maad.features.frequency_raoQ(S_power, fn)</span>
 <span class="sd">    0.10556621228886422</span>
@@ -2115,7 +2134,7 @@
 
 <div class="viewcode-block" id="tfsd"><a class="viewcode-back" href="../../../generated/maad.features.tfsd.html#maad.features.tfsd">[docs]</a><span class="k">def</span> <span class="nf">tfsd</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">flim</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="mi">8000</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;thirdOctave&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Time frequency spectrogram derivation : tfsd</span>
+<span class="sd">    Compute the Time frequency derivation index (tfsd) from a spectrogram.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2148,15 +2167,15 @@
 <span class="sd">       </span>
 <span class="sd">    References </span>
 <span class="sd">    ----------</span>
-<span class="sd">    [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., &amp; Lavandier, C. (2017). </span>
+<span class="sd">    .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., &amp; Lavandier, C. (2017). </span>
 <span class="sd">    Modeling soundscape pleasantness using perceptual assessments and acoustic measurements </span>
 <span class="sd">    along paths in urban context. Acta Acustica united with Acustica,</span>
-<span class="sd">    [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., &amp; Petiot, J. F. (2019). </span>
+<span class="sd">    .. [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., &amp; Petiot, J. F. (2019). </span>
 <span class="sd">    Estimation of the perceived time of presence of sources in urban acoustic environments </span>
 <span class="sd">    using deep learning techniques. Acta Acustica united with Acustica,</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    During the day</span>
 <span class="sd">    </span>
@@ -2243,12 +2262,12 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="acousticGradientIndex"><a class="viewcode-back" href="../../../generated/maad.features.acousticGradientIndex.html#maad.features.acousticGradientIndex">[docs]</a><span class="k">def</span> <span class="nf">acousticGradientIndex</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;per_bin&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Acoustic Gradient Index : AGI</span>
+<span class="sd">    Compute the Acoustic Gradient Index (AGI) from a raw spectrogram.</span>
 <span class="sd">    </span>
-<span class="sd">    !!! Must be calculated on raw spectrogram (background noise must remain)</span>
+<span class="sd">    This index must be computed on a raw spectrogram (background noise must remain).</span>
 <span class="sd">    </span>
-<span class="sd">    Parameters :</span>
-<span class="sd">    ------------</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    Sxx : ndarray of floats</span>
 <span class="sd">        2d : Spectrogram </span>
 <span class="sd">    dt : float</span>
@@ -2258,8 +2277,8 @@
 <span class="sd">        (&#39;global&#39; mode) or by the median value per frequency bin </span>
 <span class="sd">        (&#39;per_bin&#39;)</span>
 <span class="sd">        </span>
-<span class="sd">    Returns :</span>
-<span class="sd">    ---------    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    AGI_xx : 2d ndarray of scalars</span>
 <span class="sd">        Acoustic Gradient Index of the spectrogram</span>
 <span class="sd">    AGI_per_bin : 1d ndarray of scalars</span>
@@ -2273,8 +2292,8 @@
 <span class="sd">        frequency bin)</span>
 <span class="sd">        mean(AGI_per_bin)</span>
 <span class="sd">    </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    During the day</span>
 <span class="sd">    </span>
@@ -2352,8 +2371,10 @@
                           <span class="n">min_roi</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">max_roi</span><span class="o">=</span><span class="mi">512</span><span class="o">*</span><span class="mi">10000</span><span class="p">,</span> 
                           <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find regions of interest (ROI) and compute their number and their cover </span>
-<span class="sd">    of the spectrogram</span>
+<span class="sd">    Compute an acoustic activity index based on the regions of interested detected on a spectrogram.</span>
+<span class="sd">    </span>
+<span class="sd">    The function first find regions of interest (ROI) and then compute the number and cover area </span>
+<span class="sd">    on the spectrogram.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2399,8 +2420,8 @@
 <span class="sd">        Percentage of spectrogram cover. The higher is the cover percentage, </span>
 <span class="sd">        the higher is the acoustic richness expected.</span>
 <span class="sd">        </span>
-<span class="sd">    Examples :</span>
-<span class="sd">    ---------- </span>
+<span class="sd">    Examples</span>
+<span class="sd">    -------- </span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) </span>
@@ -2477,7 +2498,7 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="all_audio_alpha_indices"><a class="viewcode-back" href="../../../generated/maad.features.all_audio_alpha_indices.html#maad.features.all_audio_alpha_indices">[docs]</a><span class="k">def</span> <span class="nf">all_audio_alpha_indices</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the indices in audio domain</span>
+<span class="sd">    Compute 16 temporal domain acoustic indices.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2678,7 +2699,7 @@
                       <span class="n">flim_hi</span><span class="o">=</span><span class="p">[</span><span class="mi">10000</span><span class="p">,</span><span class="mi">20000</span><span class="p">],</span> 
                       <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the indices in spectral (spectrum (1d) or spectrogram (2d)) domain</span>
+<span class="sd">    Computes the acoustic indices in spectral (spectrum (1d) or spectrogram (2d)) domain.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

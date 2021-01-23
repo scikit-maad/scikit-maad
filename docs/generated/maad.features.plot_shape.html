@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.plot_shape &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.plot_shape &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,15 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.features.overlay_centroid" href="maad.features.overlay_centroid.html" />
-    <link rel="prev" title="maad.features.filter_bank_2d_nodc" href="maad.features.filter_bank_2d_nodc.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -95,27 +92,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../features.html">Acoustic features</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../features.html#spectro-temporal-features">Spectro-temporal features</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="maad.features.shape_features.html">maad.features.shape_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.shape_features_raw.html">maad.features.shape_features_raw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.opt_shape_presets.html">maad.features.opt_shape_presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.filter_multires.html">maad.features.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.filter_bank_2d_nodc.html">maad.features.filter_bank_2d_nodc</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.features.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.overlay_centroid.html">maad.features.overlay_centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.centroid_features.html">maad.features.centroid_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.all_shape_features.html">maad.features.all_shape_features</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#alpha-acoustic-indices">Alpha acoustic indices</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#temporal-features">Temporal features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#spectral-features">Spectral features</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
@@ -168,8 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../features.html">Acoustic features</a> &raquo;</li>
-        
       <li>maad.features.plot_shape</li>
     
     
@@ -191,42 +169,6 @@
             
   <div class="section" id="maad-features-plot-shape">
 <h1>maad.features.plot_shape<a class="headerlink" href="#maad-features-plot-shape" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="maad.features.plot_shape">
-<code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">plot_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">params</span></em>, <em class="sig-param"><span class="n">row</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">display_values</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/shape.html#plot_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.plot_shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot shape features in a bidimensional plot</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>shape: 1D array, pd.Series or pd.DataFrame</strong></dt><dd><p>Shape features computed with shape_features function.</p>
-</dd>
-<dt><strong>params: pd.DataFrame</strong></dt><dd><p>Pandas dataframe returned by maad.features_rois.shape_features</p>
-</dd>
-<dt><strong>row: int</strong></dt><dd><p>Observation to be visualized</p>
-</dd>
-<dt><strong>display_values: bool</strong></dt><dd><p>Set to True to display the coefficient values. Default is False.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>ax: matplotlib.axes</dt><dd><p>Axes of the figure</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">shape_features</span><span class="p">,</span> <span class="n">plot_shape</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Sxx</span><span class="p">),</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span> 
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -234,15 +176,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.features.overlay_centroid.html" class="btn btn-neutral float-right" title="maad.features.overlay_centroid" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.features.filter_bank_2d_nodc.html" class="btn btn-neutral float-left" title="maad.features.filter_bank_2d_nodc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.linear_scale &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.linear_scale &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -199,8 +198,8 @@
 <dl class="py function">
 <dt id="maad.util.linear_scale">
 <code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">linear_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">minval</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">maxval</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/miscellaneous.html#linear_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.linear_scale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Program to scale the values of a vector or matrix from a user specified 
-minimum to a user specified maximum</p>
+<dd><p>Scale the values of a vector or matrix from a user specified 
+minimum to a user specified maximum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -229,8 +228,8 @@ on each column (axis=0), on each row (axis=1)</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
-Adapted by S. Haupert Dec 12, 2017 for Python</p>
+<p>Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB, adapted by S. Haupert 
+Dec 12, 2017 for Python</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear_scale</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>

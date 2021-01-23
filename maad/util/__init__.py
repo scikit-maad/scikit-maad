@@ -139,7 +139,6 @@ __all__ = [
            'running_mean',
            'get_unimode',
            'entropy',
-           'psd',
            'rms',
            'kurtosis',
            'skewness',

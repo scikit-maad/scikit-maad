@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sound.spectral_subtraction &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>sound.spectral_subtraction &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -203,7 +202,7 @@
                       <span class="n">llambda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
                       <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Remove the background noise using spectral subtraction </span>
+<span class="sd">    Remove background noise using spectral subtraction.</span>
 <span class="sd"> </span>
 <span class="sd">    Based on the spectrum of the A posteriori noise profile.   </span>
 <span class="sd">    It computes an atenuation map in the time-frequency domain.  </span>
@@ -304,8 +303,8 @@
 <span class="sd">       error short-time spectral amplitude estimator, IEEE. Transactions in </span>
 <span class="sd">       Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.   </span>
 
-<span class="sd">    Examples:</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    Load audio recording and convert it into spectrogram</span>
 <span class="sd">    </span>
@@ -505,8 +504,8 @@
 <span class="sd">    BGNxx : 2d ndarray of scalar </span>
 <span class="sd">        Noise map</span>
 <span class="sd">    </span>
-<span class="sd">    Examples:</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    Load audio recording and convert it into spectrogram</span>
 <span class="sd">    </span>
@@ -524,6 +523,7 @@
 <span class="sd">    Plot both spectrograms</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2) = plt.subplots(2, 1)</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title=&#39;Without stationary noise&#39;,vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)</span>
@@ -625,7 +625,7 @@
                                   <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Get the noisy profile along the defined axis and remove this profile from</span>
-<span class="sd">    the spectrogram</span>
+<span class="sd">    the spectrogram.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -698,12 +698,6 @@
 <span class="sd">             </span>
 <span class="sd">        ... and more, see matplotlib    </span>
 <span class="sd">        </span>
-<span class="sd">    Reference:</span>
-<span class="sd">    ---------</span>
-<span class="sd">    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from</span>
-<span class="sd">    Natural Recordings of the Environment. Queensland University of Technology,</span>
-<span class="sd">    Brisbane</span>
-<span class="sd">                       </span>
 <span class="sd">    Returns </span>
 <span class="sd">    ------- </span>
 <span class="sd">    Sxx_out : 2d ndarray of scalar </span>
@@ -711,9 +705,18 @@
 <span class="sd">        </span>
 <span class="sd">    noise_profile : 1d ndarray of scalar</span>
 <span class="sd">        Noise profile</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from</span>
+<span class="sd">    Natural Recordings of the Environment. Queensland University of Technology,</span>
+<span class="sd">    Brisbane</span>
+<span class="sd">                       </span>
 <span class="sd">        </span>
-<span class="sd">    Examples:</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    Load audio recording and convert it into spectrogram</span>
 <span class="sd">    </span>
@@ -724,17 +727,10 @@
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
 <span class="sd">    </span>
-<span class="sd">    Remove stationnary noise from the spectrogram </span>
-<span class="sd">    - with mode &#39;ale&quot;</span>
+<span class="sd">    Remove stationnary noise from the spectrogram with modes &#39;ale&#39;, &#39;median&#39;, and &#39;mean&#39;.</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_ale,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;ale&#39;)</span>
-<span class="sd">    </span>
-<span class="sd">    - with mode &#39;median&quot;</span>
-<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_ale,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;ale&#39;)    </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_med,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;median&#39;)</span>
-<span class="sd">    </span>
-<span class="sd">    - with mode &#39;mean&quot;</span>
-<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_mean,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;mean&#39;)</span>
 
 <span class="sd">    Plot spectrograms</span>
@@ -822,7 +818,7 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="median_equalizer"><a class="viewcode-back" href="../../_autosummary/sound.spectral_subtraction.median_equalizer.html#sound.median_equalizer">[docs]</a><span class="k">def</span> <span class="nf">median_equalizer</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Median equalizer : remove background noise in a spectrogram </span>
+<span class="sd">    Remove background noise in spectrogram using median equalizer.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -889,8 +885,8 @@
 <span class="sd">    .. [1] This function has been proposed first by Carol BEDOYA &lt;carol.bedoya@pg.canterbury.ac.nz&gt; </span>
 <span class="sd">       Adapted by S. Haupert Oct 9, 2018 for Python </span>
 <span class="sd">       </span>
-<span class="sd">    Examples:</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    Load audio recording and convert it into spectrogram</span>
 <span class="sd">    </span>
@@ -903,12 +899,13 @@
 <span class="sd">    </span>
 <span class="sd">    Remove stationnary noise from the spectrogram </span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise = maad.rois.median_equalizer(Sxx)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_noNoise = maad.sound.median_equalizer(Sxx)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise =  maad.util.power2dB(Sxx_noNoise) </span>
 
 <span class="sd">    Plot both spectrograms</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2) = plt.subplots(2, 1)</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title=&#39;Without stationary noise&#39;,vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)</span>

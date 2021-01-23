@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.miscellaneous &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.miscellaneous &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -191,11 +190,10 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
 
-<span class="c1">#=============================================================================</span>
-
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../../generated/maad.util.index_bw.html#features.alpha_indices.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Select all the index coresponding to the selected frequency band</span>
+<span class="sd">    Select all the index coresponding to a selected frequency band.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -251,10 +249,10 @@
         <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">index</span></div>
 
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="intoBins"><a class="viewcode-back" href="../../../generated/maad.util.intoBins.html#features.alpha_indices.intoBins">[docs]</a><span class="k">def</span> <span class="nf">intoBins</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bin_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Transform a vector or a matrix into bins </span>
+<span class="sd">    Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -339,40 +337,42 @@
     
     <span class="k">return</span> <span class="n">xbin</span><span class="p">,</span> <span class="n">bins</span></div>
 
-<span class="c1">#=============================================================================</span>
-       
+<span class="c1">#%%    </span>
 <div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../../generated/maad.util.rle.html#features.alpha_indices.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run-Length encoding (RLE)   </span>
+<span class="sd">    Compute the Run-Length encoding (RLE) of a vector.</span>
 <span class="sd">    </span>
-<span class="sd">    Wikipedia :</span>
-<span class="sd">        Run-length encoding (RLE) is a form of lossless data compression in </span>
-<span class="sd">        which runs of data (sequences in which the same data value occurs in </span>
-<span class="sd">        many consecutive data elements) are stored as a single data value and </span>
-<span class="sd">        count, rather than as the original run. This is most useful on data </span>
-<span class="sd">        that contains many such runs. Consider, for example, simple graphic </span>
-<span class="sd">        images such as icons, line drawings, Conway&#39;s Game of Life, and </span>
-<span class="sd">        animations. It is not useful with files that don&#39;t have many runs </span>
-<span class="sd">        as it could greatly increase the file size. </span>
+<span class="sd">    Run-length encoding is a lossless data compression in which runs of data </span>
+<span class="sd">    (sequences in which the same data value occurs in many consecutive data elements) </span>
+<span class="sd">    are stored as a single data value and count. This is useful on data </span>
+<span class="sd">    that contains many repeated values, for example, simple graphic </span>
+<span class="sd">    images such as icons, line drawings, and animations. It is not useful with files that </span>
+<span class="sd">    don&#39;t have many runs as it could greatly increase the file size [1]_. </span>
 <span class="sd">    </span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    x : 1D array</span>
 <span class="sd">        vector with numbers (ndarray or list)</span>
 <span class="sd">        </span>
-<span class="sd">    Returns:</span>
+<span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    lengths, values : 1D array</span>
 <span class="sd">        2 vectors that stores values (in values) and the number of times each</span>
-<span class="sd">        value is repeated (in lengths)</span>
-<span class="sd">        </span>
-<span class="sd">        ex : RLE compression of the vector [111122333345] </span>
-<span class="sd">            =&gt; lengths = [4 2 4 1 1] and values = [1 2 3 4 5]</span>
-<span class="sd">            </span>
-<span class="sd">    References:</span>
-<span class="sd">    -----------</span>
-<span class="sd">    Transcription of the function rle from R</span>
+<span class="sd">        value is repeated (in lengths).</span>
+<span class="sd">                    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://en.wikipedia.org/wiki/Run-length_encoding</span>
 <span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5]</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import rle</span>
+<span class="sd">    &gt;&gt;&gt; length, values = rle([1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;length:&#39;, length, &#39;- values:&#39;, values)</span>
+<span class="sd">    length: [3 2 4 1 1] - values: [1 2 3 4 5]</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span><span class="mi">1</span> <span class="p">:</span> 
@@ -385,12 +385,11 @@
         <span class="n">values</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">values</span></div>
 
-<span class="c1">#=============================================================================</span>
-
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../../generated/maad.util.linear_scale.html#features.alpha_indices.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Program to scale the values of a vector or matrix from a user specified </span>
-<span class="sd">    minimum to a user specified maximum</span>
+<span class="sd">    Scale the values of a vector or matrix from a user specified </span>
+<span class="sd">    minimum to a user specified maximum.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -415,17 +414,18 @@
 <span class="sd">    y : array-like</span>
 <span class="sd">        numpy.array like with numbers  or dataframe</span>
 <span class="sd">        </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB, adapted by S. Haupert </span>
+<span class="sd">    Dec 12, 2017 for Python</span>
+
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.linear_scale(a, 0, 1)</span>
 <span class="sd">        array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
-<span class="sd">        </span>
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</span>
-<span class="sd">    Adapted by S. Haupert Dec 12, 2017 for Python</span>
-<span class="sd">    </span>
+<span class="sd">            </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># if x is a list, convert x into ndarray </span>
@@ -445,13 +445,11 @@
     <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">minval</span><span class="p">;</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
-
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="amplitude2dB"><a class="viewcode-back" href="../../../generated/maad.util.amplitude2dB.html#features.alpha_indices.amplitude2dB">[docs]</a><span class="k">def</span> <span class="nf">amplitude2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform amplitude data (signal, scalar) into decibel scale within the </span>
-<span class="sd">    dB range (db_range).</span>
-<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    dB range (db_range). A gain (db_gain) could be added at the end.    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -498,12 +496,11 @@
         
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="power2dB"><a class="viewcode-back" href="../../../generated/maad.util.power2dB.html#features.alpha_indices.power2dB">[docs]</a><span class="k">def</span> <span class="nf">power2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform power (amplitude²) signal or scalar into decibel scale </span>
-<span class="sd">    within the dB range (db_range).</span>
-<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    within the dB range (db_range). A gain (db_gain) can be added at the end.    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -550,7 +547,7 @@
         
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="dB2amplitude"><a class="viewcode-back" href="../../../generated/maad.util.dB2amplitude.html#features.alpha_indices.dB2amplitude">[docs]</a><span class="k">def</span> <span class="nf">dB2amplitude</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform data in dB scale into amplitude</span>
@@ -580,7 +577,7 @@
 
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="dB2power"><a class="viewcode-back" href="../../../generated/maad.util.dB2power.html#features.alpha_indices.dB2power">[docs]</a><span class="k">def</span> <span class="nf">dB2power</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform data in dB scale into power (amplitude²)</span>
@@ -609,10 +606,10 @@
      
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="add_dB"><a class="viewcode-back" href="../../../generated/maad.util.add_dB.html#features.alpha_indices.add_dB">[docs]</a><span class="k">def</span> <span class="nf">add_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    add dB values </span>
+<span class="sd">    Computes an addition on decibel values.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -634,7 +631,7 @@
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
-<span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(Sxx_power,gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; L = maad.spl.power2dBSPL(Sxx_power,gain=42)</span>
 <span class="sd">    &gt;&gt;&gt; L_sum = maad.util.add_dB(L, axis=1)  </span>
 <span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;Spectrum (PSD)&#39;,</span>
 <span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
@@ -682,10 +679,10 @@
         
     <span class="k">return</span> <span class="n">L_sum</span></div>
 
-<span class="c1">#=============================================================================</span>
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="mean_dB"><a class="viewcode-back" href="../../../generated/maad.util.mean_dB.html#features.alpha_indices.mean_dB">[docs]</a><span class="k">def</span> <span class="nf">mean_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the average of dB values</span>
+<span class="sd">    Compute the average of decibel values.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -760,11 +757,10 @@
     
     <span class="k">return</span> <span class="n">e_mean</span></div>
 
-<span class="c1">#=============================================================================</span>
-
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../../generated/maad.util.shift_bit_length.html#features.alpha_indices.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    find the closest power of 2 that is superior or equal to the number x</span>
+<span class="sd">    Find the closest power of 2 that is superior or equal to the number x.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -783,11 +779,10 @@
     <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#=============================================================================</span>
-    
+<span class="c1">#%% </span>
 <div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../../generated/maad.util.nearest_idx.html#features.alpha_indices.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Find nearest value on array and return index</span>
+<span class="sd">    Find nearest value on array and return its index.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -811,16 +806,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># be sure it&#39;s ndarray</span>
     <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
-    
     <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">idx</span></div>
 
-<span class="c1">#=============================================================================</span>
-
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="get_df_single_row"><a class="viewcode-back" href="../../../generated/maad.util.get_df_single_row.html#features.alpha_indices.get_df_single_row">[docs]</a><span class="k">def</span> <span class="nf">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract a single row from a dataframe keeping the DataFrame type </span>
-<span class="sd">    (instead of becoming a Series)</span>
+<span class="sd">    (instead of becoming a Series).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -847,7 +840,6 @@
 <span class="sd">                  (&#39;insect&#39;, 4, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
 <span class="sd">                  (&#39;mammal&#39;, 2, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
 <span class="sd">                  (&#39;frog&#39;, 3, &#39;Yes&#39;,&quot;LA&quot; ) ]</span>
-<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; df = pd.DataFrame(species, </span>
 <span class="sd">                          columns = [&#39;category&#39;,</span>
 <span class="sd">                                     &#39;abundance&#39;,</span>
@@ -901,22 +893,24 @@
     
     <span class="k">return</span> <span class="n">df_out</span></div>
     
-
+<span class="c1">#%%</span>
 <div class="viewcode-block" id="format_features"><a class="viewcode-back" href="../../../generated/maad.util.format_features.html#features.alpha_indices.format_features">[docs]</a><span class="k">def</span> <span class="nf">format_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Format features such as bounding box coordinates and centroids coordinates</span>
-<span class="sd">    to predifined format : time-frequency =&gt; pixels or pixels to time-frequency</span>
-<span class="sd">    units </span>
+<span class="sd">    to predifined format : time-frequency to pixels or pixels to time-frequency</span>
+<span class="sd">    units.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas DataFrame</span>
 <span class="sd">        df with bounding box coordinates and/or centroids coordinates       </span>
-<span class="sd">        array must have a valid input format with column names</span>
+<span class="sd">        array must have a valid input format with column names.</span>
+<span class="sd">        </span>
 <span class="sd">        - bounding box: min_y, min_x, max_y, max_x</span>
 <span class="sd">        - time frequency: min_f, min_t, max_f, max_t</span>
 <span class="sd">        - centroid tf : centroid_f, centroid_t</span>
 <span class="sd">        - centroid pixels : centroid_y, centroid_x</span>
+<span class="sd">        </span>
 <span class="sd">    tn : ndarray</span>
 <span class="sd">        vector with temporal indices, output from the spectrogram function (in seconds)</span>
 <span class="sd">    fn: ndarray</span>
@@ -928,17 +922,17 @@
 <span class="sd">        df with bounding box coordinates and/or centroids coordinates in pixels</span>
 <span class="sd">        and time-frequency units</span>
 <span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Use this function after using functions such as ``maad.rois.select_rois``, </span>
+<span class="sd">    ``maad.features.centroid_features``, ``maad.util.read_audacity_annot``, or before using </span>
+<span class="sd">    functions such as ``maad.util.overlay_rois``, ``maad.util.overlay_centroid`` in order to </span>
+<span class="sd">    format the coordinates into pixels and/or time-frequency units.</span>
+
 <span class="sd">    See also</span>
 <span class="sd">    --------</span>
 <span class="sd">    select_rois, centroid_features, read_audacity_annot, overlay_rois, </span>
 <span class="sd">    overlay_centroid</span>
-<span class="sd">    </span>
-<span class="sd">    Note</span>
-<span class="sd">    ----</span>
-<span class="sd">    Use this function after using MAAD functions such as select_rois, </span>
-<span class="sd">    centroid_features, read_audacity_annot or before using MAAD functions such</span>
-<span class="sd">    as overlay_rois, overlay_centroid in order to format the coordinates</span>
-<span class="sd">    into pixels and/or time-frequency units</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check format of the input data</span>

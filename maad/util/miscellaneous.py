@@ -22,11 +22,10 @@ import warnings
 import sys
 _MIN_ = sys.float_info.min
 
-#=============================================================================
-
+#%%
 def index_bw (fn, bw):
     """
-    Select all the index coresponding to the selected frequency band
+    Select all the index coresponding to a selected frequency band.
     
     Parameters
     ----------
@@ -82,10 +81,10 @@ def index_bw (fn, bw):
         index = [bool(x) for x in index]
     return index
 
-#=============================================================================
+#%%
 def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
     """ 
-    Transform a vector or a matrix into bins 
+    Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.
     
     Parameters
     ----------
@@ -170,40 +169,42 @@ def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
     
     return xbin, bins
 
-#=============================================================================
-       
+#%%    
 def rle(x):
     """
-    Run-Length encoding (RLE)   
+    Compute the Run-Length encoding (RLE) of a vector.
     
-    Wikipedia :
-        Run-length encoding (RLE) is a form of lossless data compression in 
-        which runs of data (sequences in which the same data value occurs in 
-        many consecutive data elements) are stored as a single data value and 
-        count, rather than as the original run. This is most useful on data 
-        that contains many such runs. Consider, for example, simple graphic 
-        images such as icons, line drawings, Conway's Game of Life, and 
-        animations. It is not useful with files that don't have many runs 
-        as it could greatly increase the file size. 
+    Run-length encoding is a lossless data compression in which runs of data 
+    (sequences in which the same data value occurs in many consecutive data elements) 
+    are stored as a single data value and count. This is useful on data 
+    that contains many repeated values, for example, simple graphic 
+    images such as icons, line drawings, and animations. It is not useful with files that 
+    don't have many runs as it could greatly increase the file size [1]_. 
     
-    Parameters:
-    -----------
+    Parameters
+    ----------
     x : 1D array
         vector with numbers (ndarray or list)
         
-    Returns:
+    Returns
     -------
     lengths, values : 1D array
         2 vectors that stores values (in values) and the number of times each
-        value is repeated (in lengths)
-        
-        ex : RLE compression of the vector [111122333345] 
-            => lengths = [4 2 4 1 1] and values = [1 2 3 4 5]
-            
-    References:
-    -----------
-    Transcription of the function rle from R
+        value is repeated (in lengths).
+                    
+    References
+    ----------
+    .. [1] https://en.wikipedia.org/wiki/Run-length_encoding
     
+    Examples
+    --------
+    RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5]
+    
+    >>> from maad.util import rle
+    >>> length, values = rle([1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5])
+    >>> print('length:', length, '- values:', values)
+    length: [3 2 4 1 1] - values: [1 2 3 4 5]
+
     """
     x = np.asarray(x)
     if x.ndim >1 : 
@@ -216,12 +217,11 @@ def rle(x):
         values = x[i]
     return lengths, values
 
-#=============================================================================
-
+#%%
 def linear_scale(x, minval= 0.0, maxval=1.0, axis=0):
     """ 
-    Program to scale the values of a vector or matrix from a user specified 
-    minimum to a user specified maximum
+    Scale the values of a vector or matrix from a user specified 
+    minimum to a user specified maximum.
     
     Parameters
     ----------
@@ -246,17 +246,18 @@ def linear_scale(x, minval= 0.0, maxval=1.0, axis=0):
     y : array-like
         numpy.array like with numbers  or dataframe
         
+    References
+    ----------
+    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB, adapted by S. Haupert 
+    Dec 12, 2017 for Python
+
+
     Examples
     --------
     >>> a = np.array([1,2,3,4,5])
     >>> maad.util.linear_scale(a, 0, 1)
         array([0.  , 0.25, 0.5 , 0.75, 1.  ])
-        
-    References
-    ----------
-    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB
-    Adapted by S. Haupert Dec 12, 2017 for Python
-    
+            
     """
 
     # if x is a list, convert x into ndarray 
@@ -276,13 +277,11 @@ def linear_scale(x, minval= 0.0, maxval=1.0, axis=0):
     y = y + minval;
     return y
 
-
-#=============================================================================
+#%%
 def amplitude2dB (x, db_range=None, db_gain=0):
     """
     Transform amplitude data (signal, scalar) into decibel scale within the 
-    dB range (db_range).
-    A gain (db_gain) could be added at the end.    
+    dB range (db_range). A gain (db_gain) could be added at the end.    
     
     Parameters
     ----------
@@ -329,12 +328,11 @@ def amplitude2dB (x, db_range=None, db_gain=0):
         
     return y
 
-#=============================================================================
+#%%
 def power2dB (x, db_range=None, db_gain=0):
     """
     Transform power (amplitude²) signal or scalar into decibel scale 
-    within the dB range (db_range).
-    A gain (db_gain) could be added at the end.    
+    within the dB range (db_range). A gain (db_gain) can be added at the end.    
     
     Parameters
     ----------
@@ -381,7 +379,7 @@ def power2dB (x, db_range=None, db_gain=0):
         
     return y
 
-#=============================================================================
+#%%
 def dB2amplitude (x, db_gain=0):
     """
     Transform data in dB scale into amplitude
@@ -411,7 +409,7 @@ def dB2amplitude (x, db_gain=0):
 
     return y
 
-#=============================================================================
+#%%
 def dB2power (x, db_gain=0):
     """
     Transform data in dB scale into power (amplitude²)
@@ -440,10 +438,10 @@ def dB2power (x, db_gain=0):
      
     return y
 
-#=============================================================================
+#%%
 def add_dB(*argv, axis=0): 
     """
-    add dB values 
+    Computes an addition on decibel values.
         
     Parameters
     ----------
@@ -465,7 +463,7 @@ def add_dB(*argv, axis=0):
     
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> L = maad.util.power2dBSPL(Sxx_power,gain=42)
+    >>> L = maad.spl.power2dBSPL(Sxx_power,gain=42)
     >>> L_sum = maad.util.add_dB(L, axis=1)  
     >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
@@ -513,10 +511,10 @@ def add_dB(*argv, axis=0):
         
     return L_sum
 
-#=============================================================================
+#%%
 def mean_dB(*argv, axis=0): 
     """
-    Compute the average of dB values
+    Compute the average of decibel values.
         
     Parameters
     ----------
@@ -591,11 +589,10 @@ def mean_dB(*argv, axis=0):
     
     return e_mean
 
-#=============================================================================
-
+#%%
 def shift_bit_length(x):
     """
-    find the closest power of 2 that is superior or equal to the number x
+    Find the closest power of 2 that is superior or equal to the number x.
     
     Parameters
     ----------
@@ -614,11 +611,10 @@ def shift_bit_length(x):
     y = 1<<(x-1).bit_length()
     return y
 
-#=============================================================================
-    
+#%% 
 def nearest_idx(array,value):
     """ 
-    Find nearest value on array and return index
+    Find nearest value on array and return its index.
     
     Parameters
     ----------
@@ -642,16 +638,14 @@ def nearest_idx(array,value):
     """
     # be sure it's ndarray
     array = np.asarray(array)
-    
     idx = (np.abs(array-value)).argmin()
     return idx
 
-#=============================================================================
-
+#%%
 def get_df_single_row (df, index, mode='iloc'):
     """
     Extract a single row from a dataframe keeping the DataFrame type 
-    (instead of becoming a Series)
+    (instead of becoming a Series).
     
     Parameters
     ----------
@@ -678,7 +672,6 @@ def get_df_single_row (df, index, mode='iloc'):
                   ('insect', 4, 'No','NYC' ) ,
                   ('mammal', 2, 'No','NYC' ) ,
                   ('frog', 3, 'Yes',"LA" ) ]
-    
     >>> df = pd.DataFrame(species, 
                           columns = ['category',
                                      'abundance',
@@ -732,22 +725,24 @@ def get_df_single_row (df, index, mode='iloc'):
     
     return df_out
     
-
+#%%
 def format_features(df, tn, fn):
     """ 
     Format features such as bounding box coordinates and centroids coordinates
-    to predifined format : time-frequency => pixels or pixels to time-frequency
-    units 
+    to predifined format : time-frequency to pixels or pixels to time-frequency
+    units.
     
     Parameters
     ----------
     df : pandas DataFrame
         df with bounding box coordinates and/or centroids coordinates       
-        array must have a valid input format with column names
+        array must have a valid input format with column names.
+        
         - bounding box: min_y, min_x, max_y, max_x
         - time frequency: min_f, min_t, max_f, max_t
         - centroid tf : centroid_f, centroid_t
         - centroid pixels : centroid_y, centroid_x
+        
     tn : ndarray
         vector with temporal indices, output from the spectrogram function (in seconds)
     fn: ndarray
@@ -759,17 +754,17 @@ def format_features(df, tn, fn):
         df with bounding box coordinates and/or centroids coordinates in pixels
         and time-frequency units
     
+    Notes
+    -----
+    Use this function after using functions such as ``maad.rois.select_rois``, 
+    ``maad.features.centroid_features``, ``maad.util.read_audacity_annot``, or before using 
+    functions such as ``maad.util.overlay_rois``, ``maad.util.overlay_centroid`` in order to 
+    format the coordinates into pixels and/or time-frequency units.
+
     See also
     --------
     select_rois, centroid_features, read_audacity_annot, overlay_rois, 
     overlay_centroid
-    
-    Note
-    ----
-    Use this function after using MAAD functions such as select_rois, 
-    centroid_features, read_audacity_annot or before using MAAD functions such
-    as overlay_rois, overlay_centroid in order to format the coordinates
-    into pixels and/or time-frequency units
     
     """
     # Check format of the input data

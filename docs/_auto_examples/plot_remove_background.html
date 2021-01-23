@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Remove background noise from audio with signal processing tools &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>Remove background noise from audio with signal processing tools &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,15 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Find Regions of interest (ROIs) in a spectrogram" href="plot_compare_auto_and_manual_rois_selection.html" />
-    <link rel="prev" title="Use unsupervised learning to classify sounds in a recording" href="plot_unsupervised_sound_classification.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -103,16 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Example gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds in a recording</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Remove background noise from audio with signal processing tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_compare_auto_and_manual_rois_selection.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_extract_alpha_indices.html">Extract ecoacoustics alpha indices from audio recording</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
 </ul>
 
             
@@ -158,8 +147,6 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="index.html">Example gallery</a> &raquo;</li>
         
       <li>Remove background noise from audio with signal processing tools</li>
     
@@ -227,7 +214,7 @@ which is the maximum dB range value for a 16bits audio recording. We add
 <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Original sharpness : </span><span class="si">%2.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sharpness</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="original" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_001.png" />
+<img alt="original" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_0012.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   if now: plt.show()
@@ -246,7 +233,7 @@ Original sharpness : 2.247
        <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X1</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X1</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="remove_background" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_002.png" />
+<img alt="remove_background" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_0022.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>---- test remove_background -----
 duration 0.144 s
@@ -266,7 +253,7 @@ sharpness : 1.706
        <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X2</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="median_equalizer" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_003.png" />
+<img alt="median_equalizer" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_0032.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>---- test median_equalizer -----
 duration 0.085 s
@@ -285,7 +272,7 @@ sharpness : 1.502
        <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X3</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X3</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="remove_background_morpho" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_004.png" />
+<img alt="remove_background_morpho" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_0042.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>//miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
   return f(*args, **kwds)
@@ -309,7 +296,7 @@ sharpness : 1.093
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="remove_background_along_axis" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_005.png" />
+<img alt="remove_background_along_axis" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_remove_background_0052.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>---- test remove_background_along_axis -----
 duration 0.029 s
@@ -333,15 +320,6 @@ sharpness : 1.166
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="plot_compare_auto_and_manual_rois_selection.html" class="btn btn-neutral float-right" title="Find Regions of interest (ROIs) in a spectrogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="plot_unsupervised_sound_classification.html" class="btn btn-neutral float-left" title="Use unsupervised learning to classify sounds in a recording" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

@@ -331,7 +331,11 @@ def _raoQ (p, bins):
 def surfaceRoughness (x, norm ='global'):
     
     """
-    Surface Roughness 
+    Compute the surface roughness index of a signal (1D) or a spectrogram (2D).
+    
+    Surface roughness is quantified by the deviations in the direction of the normal 
+    vector of a real surface from its ideal form. If these deviations are large, 
+    the surface is rough; if they are small, the surface is smooth [1]_.
     
     Parameters
     ----------
@@ -353,9 +357,9 @@ def surfaceRoughness (x, norm ='global'):
         if x is a vector => Root mean squared of deviationn of x.
         if x is a matrix => Root mean squared of deviation of each line of x.
     
-    Reference
-    ---------
-    see wikipedia : https://en.wikipedia.org/wiki/Surface_roughness
+    References
+    ----------
+    .. [1] Wikipedia, https://en.wikipedia.org/wiki/Surface_roughness
     
     """    
     # force to be ndarray
@@ -495,15 +499,12 @@ def audio_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
         Audio to process (wav)
     compatibility : string {'QUT', 'seewave'}, default is 'QUT'
         Select the way to compute the temporal entropy.
-            - QUT : entropy of the envelope²
+            - QUT : entropy of the squared envelope
             - seewave : entropy of the envelope
     mode : str, optional, default is "fast"
-        Select the mode to compute the envelope of the audio waveform
-        - "fast" : The sound is first divided into frames (2d) using the 
-            function _wave2timeframes(s), then the max of each frame gives a 
-            good approximation of the envelope.
-        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
-            The method is slow
+        Select the mode to compute the envelope of the audio waveform.
+            - "fast" : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.
+            - "Hilbert" : estimation of the envelope from the Hilbert transform. The method is slow.
     Nt : integer, optional, default is 512
         Size of each frame. The largest, the highest is the approximation.
    
@@ -514,11 +515,11 @@ def audio_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
        
     References
     ----------
-    Seewave : http://rug.mnhn.fr/seewave/
+    1. Seewave : http://rug.mnhn.fr/seewave/
     Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool 
     for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
      
-    QUT : https://github.com/QutEcoacoustics/audio-analysis/
+    2. QUT : https://github.com/QutEcoacoustics/audio-analysis/
     Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. 
     (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). 
     Zenodo. http://doi.org/10.5281/zenodo.1188744
@@ -1847,20 +1848,27 @@ def more_entropy(x, order=3, axis=0) :
     
     Returns
     -------
-    H_Havrda, H_Renyi, H_pairedShannon, H_gamma, H_GiniSimpson : scalars
-        Compute different entropies. See the reference to understand how to
-        compute them.
-    
+    H_Havrda : scalar
+        Havrda entropy
+    H_Renyi : scalar
+        Renyi entropy
+    H_pairedShannon : scalar
+        Paired Shannon entropy
+    H_gamma : scalar
+        Gamma entropy
+    H_GiniSimpson : scalar
+        Gini Simpson entropy
+        
     References
-    ---------
-    Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). 
+    ----------
+    1. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). 
     Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
     Old Dominion University, DOI: 10.25777/qgak-sf09
     
     Examples
     --------
     
-    in time domain
+    Compute entropy in time domain.
     
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> env = maad.sound.envelope(s)
@@ -1868,7 +1876,7 @@ def more_entropy(x, order=3, axis=0) :
     >>> print('Ht_Havrda: %2.2f / Ht_Renyi: %2.2f / Ht_pairedShannon: %2.2f / Ht_gamma: %2.0f / Ht_GiniSimpson: %2.2f' % (Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson))
     Ht_Havrda: 0.33 / Ht_Renyi: 7.20 / Ht_pairedShannon: 9.04 / Ht_gamma: 24223924 / Ht_GiniSimpson: 1.00
     
-    in frequency domain
+    Compute entropy in spectral domain.
     
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power)
@@ -1930,7 +1938,7 @@ def frequency_raoQ (S_power, fn, bin_step=1000):
     References
     ---------
     
-    .. [1] Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09
+    1. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09
 
     Examples
     --------

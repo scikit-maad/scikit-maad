@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.sound.filter &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.sound.filter &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -198,7 +197,7 @@
 <div class="viewcode-block" id="select_bandwidth"><a class="viewcode-back" href="../../../generated/maad.sound.select_bandwidth.html#rois.rois_1d.select_bandwidth">[docs]</a><span class="k">def</span> <span class="nf">select_bandwidth</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fcut</span><span class="p">,</span> <span class="n">forder</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span><span class="s1">&#39;butter&#39;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> 
                      <span class="n">rp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.</span>
+<span class="sd">    Use a lowpass, highpass, bandpass or bandstop filter to process a 1d signal with an iir filter.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -272,10 +271,10 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="fir_filter"><a class="viewcode-back" href="../../../generated/maad.sound.fir_filter.html#rois.rois_1d.fir_filter">[docs]</a><span class="k">def</span> <span class="nf">fir_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filter a signal using a 1d Finite impulse filter.</span>
+<span class="sd">    Filter a signal using a 1d finite impulse response filter.</span>
 <span class="sd">    </span>
 <span class="sd">    This function uses a digital filter based on convolution of 1d kernel over a vector </span>
-<span class="sd">    or along an axis of a matrix</span>
+<span class="sd">    or along an axis of a matrix.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -321,15 +320,15 @@
 <span class="sd">    Load and display the spectrogram of a sound waveform</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
-<span class="sd">    &gt;&gt;&gt; Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = maad.sound.spectrogram(w,fs)</span>
+<span class="sd">    &gt;&gt;&gt; Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL</span>
 <span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Lxx.max(),</span>
 <span class="sd">                      &#39;vmin&#39;:0,</span>
-<span class="sd">                      &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
-<span class="sd">                      &#39;figsize&#39;:(4,13),</span>
-<span class="sd">                      &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
-<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
-<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      &#39;extent&#39;: ext,</span>
+<span class="sd">                      &#39;figsize&#39;: (4,13),</span>
+<span class="sd">                      &#39;title&#39;: &#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;: &#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;: &#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
 <span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)</span>
 <span class="sd">    </span>
@@ -337,7 +336,7 @@
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; w_filtered = maad.sound.fir_filter(w, kernel=((&#39;gaussian&#39;, 2), 5))</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)</span>
-<span class="sd">    &gt;&gt;&gt; Lxx_filtered = maad.util.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL</span>
+<span class="sd">    &gt;&gt;&gt; Lxx_filtered = maad.spl.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL</span>
 <span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    Smooth the spectrogram, frequency by frequency (blurr)</span>
@@ -428,7 +427,7 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="smooth"><a class="viewcode-back" href="../../../generated/maad.sound.smooth.html#rois.rois_1d.smooth">[docs]</a><span class="k">def</span> <span class="nf">smooth</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Smooth a spectrogram with a gaussian filter </span>
+<span class="sd">    Smooth a spectrogram with a gaussian filter.</span>
 <span class="sd">     </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
@@ -436,12 +435,12 @@
 <span class="sd">        Spectrogram (or image) </span>
 <span class="sd">     </span>
 <span class="sd">    std : scalar, optional, default is 1 </span>
-<span class="sd">        Standard deviation of the gaussian kernel used to smooth the image </span>
+<span class="sd">        Standard deviation of the gaussian kernel used to smooth the spectrogram.</span>
 <span class="sd">        The larger is the number, the smoother will be the image and the longer </span>
-<span class="sd">        it takes. Standard values should fall between 0.5 to 3 </span>
+<span class="sd">        it takes. Standard values should fall between 0.5 and 3.</span>
 <span class="sd">    </span>
 <span class="sd">    verbose : boolean, optional, default is False </span>
-<span class="sd">        print messages</span>
+<span class="sd">        Print messages</span>
 <span class="sd">    </span>
 <span class="sd">    display : boolean, optional, default is False </span>
 <span class="sd">        Display the signal if True </span>
@@ -497,8 +496,8 @@
 <span class="sd">    ------- </span>
 <span class="sd">    im_out: smothed or blurred image  </span>
 <span class="sd">    </span>
-<span class="sd">    Examples:</span>
-<span class="sd">    ---------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    </span>
 <span class="sd">    Load audio recording and convert it into spectrogram</span>
 <span class="sd">    </span>
@@ -511,9 +510,9 @@
 <span class="sd">    </span>
 <span class="sd">    Smooth the spectrogram</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_dB_std05 = maad.rois.smooth(Sxx_dB, std=0.5)</span>
-<span class="sd">    &gt;&gt;&gt; Sxx_dB_std10 = maad.rois.smooth(Sxx_dB, std=1)</span>
-<span class="sd">    &gt;&gt;&gt; Sxx_dB_std15 = maad.rois.smooth(Sxx_dB, std=1.5)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_std05 = maad.sound.smooth(Sxx_dB, std=0.5)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_std10 = maad.sound.smooth(Sxx_dB, std=1)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_std15 = maad.sound.smooth(Sxx_dB, std=1.5)</span>
 <span class="sd">    </span>
 <span class="sd">    Plot spectrograms</span>
 <span class="sd">    </span>

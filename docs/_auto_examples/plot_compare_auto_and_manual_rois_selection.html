@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Find Regions of interest (ROIs) in a spectrogram &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>Find Regions of interest (ROIs) in a spectrogram &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,15 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Extract ecoacoustics alpha indices from audio recording" href="plot_extract_alpha_indices.html" />
-    <link rel="prev" title="Remove background noise from audio with signal processing tools" href="plot_remove_background.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -103,19 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Example gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds in a recording</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Find Regions of interest (ROIs) in a spectrogram</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="plot_extract_alpha_indices.html">Extract ecoacoustics alpha indices from audio recording</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
 </ul>
 
             
@@ -161,8 +147,6 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="index.html">Example gallery</a> &raquo;</li>
         
       <li>Find Regions of interest (ROIs) in a spectrogram</li>
     
@@ -223,7 +207,7 @@ scikit-image, scikit-learn and pandas Python packages.</p>
 <span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dB_max</span></a><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="Spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_001.png" />
+<img alt="Spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0012.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   if now: plt.show()
@@ -277,13 +261,13 @@ than the second threshold value.</p>
 </pre></div>
 </div>
 <ul class="sphx-glr-horizontal">
-<li><img alt="Spectrogram without stationnary noise" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_002.png" />
+<li><img alt="Spectrogram without stationnary noise" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0022.png" />
 </li>
-<li><img alt="Orignal Spectrogram, Blurred Spectrogram (std=0.5)" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_003.png" />
+<li><img alt="Orignal Spectrogram, Blurred Spectrogram (std=0.5)" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0032.png" />
 </li>
-<li><img alt="Selected ROIs" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_004.png" />
+<li><img alt="Selected ROIs" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0042.png" />
 </li>
-<li><img alt="ROIs Overlay" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_005.png" />
+<li><img alt="ROIs Overlay" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0052.png" />
 </li>
 </ul>
 <p>Let’s compare with the manual annotation (Ground Truth GT) obtained with
@@ -317,7 +301,7 @@ signatures are labeled with the same name</p>
 <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Number of different ROIs : </span><span class="si">%2.0f</span><span class="s1">&#39;</span> <span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df_rois_GT</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])))</span>
 </pre></div>
 </div>
-<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_006.png" />
+<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0062.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Total number of ROIs : 49
 Number of different ROIs :  5
@@ -356,7 +340,7 @@ by KMeans</p>
                                          <span class="s1">&#39;fig&#39;</span><span class="p">:</span><span class="n">fig2</span><span class="p">,</span> <span class="s1">&#39;ax&#39;</span><span class="p">:</span><span class="n">ax2</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_007.png" />
+<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0072.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>//miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
   return f(*args, **kwds)
@@ -397,7 +381,7 @@ To extract</p>
                                          <span class="s1">&#39;ms&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;fig&#39;</span><span class="p">:</span><span class="n">fig3</span><span class="p">,</span> <span class="s1">&#39;ax&#39;</span><span class="p">:</span><span class="n">ax3</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_008.png" />
+<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0082.png" />
 <p>Prepare the features in order to have zero mean and same variance</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_centroid_WAV</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">FEATURES</span></a><span class="p">])</span>
 
@@ -416,7 +400,7 @@ To extract</p>
                                          <span class="s1">&#39;ms&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;fig&#39;</span><span class="p">:</span><span class="n">fig4</span><span class="p">,</span> <span class="s1">&#39;ax&#39;</span><span class="p">:</span><span class="n">ax4</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_009.png" />
+<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_0092.png" />
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
@@ -442,15 +426,6 @@ Brisbane</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="plot_extract_alpha_indices.html" class="btn btn-neutral float-right" title="Extract ecoacoustics alpha indices from audio recording" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="plot_remove_background.html" class="btn btn-neutral float-left" title="Remove background noise from audio with signal processing tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

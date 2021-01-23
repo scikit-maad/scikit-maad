@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.all_shape_features &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.all_shape_features &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -174,7 +173,7 @@
 <dt id="features.all_shape_features">
 <code class="sig-prename descclassname">features.</code><code class="sig-name descname">all_shape_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">rois</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/features/shape.html#all_shape_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.all_shape_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes shape and central frequency features from signal at specified 
-time-frequency limits defined by regions of interest (ROIs)</p>
+time-frequency limits defined by regions of interest (ROIs).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -266,10 +265,10 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">read_audacity_annot</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">compute_all_features</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.txt&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="n">compute_all_features</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">all_shape_features</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.txt&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="n">all_shape_features</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">features</span>
 <span class="go">    label      min_t     ...       duration_x  bandwidth_y</span>
 <span class="go">    0     SP   0.101385     ...              0.0          0.0</span>
@@ -284,13 +283,14 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
 <span class="go">    9   CRER  11.329756     ...              0.0          0.0</span>
 <span class="go">    10    SP  11.773314     ...              0.0          0.0</span>
 <span class="go">    ....</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">features</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
-<span class="go">    array([&#39;label&#39;, &#39;min_t&#39;, &#39;min_f&#39;, &#39;max_t&#39;, &#39;max_f&#39;, &#39;min_y&#39;, &#39;min_x&#39;,</span>
-<span class="go">   &#39;max_y&#39;, &#39;max_x&#39;, &#39;shp_001&#39;, &#39;shp_002&#39;, &#39;shp_003&#39;, &#39;shp_004&#39;,</span>
-<span class="go">   &#39;shp_005&#39;, &#39;shp_006&#39;, &#39;shp_007&#39;, &#39;shp_008&#39;, &#39;shp_009&#39;, &#39;shp_010&#39;,</span>
-<span class="go">   &#39;shp_011&#39;, &#39;shp_012&#39;, &#39;shp_013&#39;, &#39;shp_014&#39;, &#39;shp_015&#39;, &#39;shp_016&#39;,</span>
-<span class="go">   &#39;centroid_y&#39;, &#39;centroid_x&#39;, &#39;duration_x&#39;, &#39;bandwidth_y&#39;,</span>
-<span class="go">   &#39;centroid_f&#39;, &#39;centroid_t&#39;], dtype=&#39;&lt;U11&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">Index([&#39;label&#39;, &#39;min_t&#39;, &#39;min_f&#39;, &#39;max_t&#39;, &#39;max_f&#39;, &#39;min_y&#39;, &#39;min_x&#39;, &#39;max_y&#39;,</span>
+<span class="go">       &#39;max_x&#39;, &#39;shp_001&#39;, &#39;shp_002&#39;, &#39;shp_003&#39;, &#39;shp_004&#39;, &#39;shp_005&#39;,</span>
+<span class="go">       &#39;shp_006&#39;, &#39;shp_007&#39;, &#39;shp_008&#39;, &#39;shp_009&#39;, &#39;shp_010&#39;, &#39;shp_011&#39;,</span>
+<span class="go">       &#39;shp_012&#39;, &#39;shp_013&#39;, &#39;shp_014&#39;, &#39;shp_015&#39;, &#39;shp_016&#39;, &#39;centroid_y&#39;,</span>
+<span class="go">       &#39;centroid_x&#39;, &#39;duration_x&#39;, &#39;bandwidth_y&#39;, &#39;area_xy&#39;, &#39;centroid_f&#39;,</span>
+<span class="go">       &#39;centroid_t&#39;, &#39;duration_t&#39;, &#39;bandwidth_f&#39;, &#39;area_tf&#39;],</span>
+<span class="go">      dtype=&#39;object&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.tfsd &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.tfsd &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -211,8 +210,8 @@
 <h1>maad.features.tfsd<a class="headerlink" href="#maad-features-tfsd" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.features.tfsd">
-<code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">tfsd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">flim</span><span class="o">=</span><span class="default_value">2000, 8000</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'thirdOctave'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/alpha_indices.html#tfsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.tfsd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Time frequency spectrogram derivation : tfsd</p>
+<code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">tfsd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">flim</span><span class="o">=</span><span class="default_value">(2000, 8000)</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'thirdOctave'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/alpha_indices.html#tfsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.tfsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Time frequency derivation index (tfsd) from a spectrogram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -245,12 +244,31 @@ With the default configuration, a TFSD &gt; 0.3 indicates a very important
 presence time of the vocalizations in the signal. 
 The TFSD is always greater than 0.</p>
 <p class="rubric">References</p>
-<p>[1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., &amp; Lavandier, C. (2017). 
-Modeling soundscape pleasantness using perceptual assessments and acoustic measurements 
+<dl class="citation">
+<dt class="label" id="rc302934b69fd-1"><span class="brackets">1</span></dt>
+<dd><p>Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., &amp; Lavandier, C. (2017).</p>
+</dd>
+</dl>
+<p>Modeling soundscape pleasantness using perceptual assessments and acoustic measurements 
 along paths in urban context. Acta Acustica united with Acustica,
-[2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., &amp; Petiot, J. F. (2019). 
+.. [Rc302934b69fd-2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., &amp; Petiot, J. F. (2019). 
 Estimation of the perceived time of presence of sources in urban acoustic environments 
 using deep learning techniques. Acta Acustica united with Acustica,</p>
+<p class="rubric">Examples</p>
+<p>During the day</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">tfsd</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">)</span>  
+<span class="go">0.5002113200343906</span>
+</pre></div>
+</div>
+<p>During the night</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_night.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">tfsd</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">)</span>  
+<span class="go">0.012818445992714088</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

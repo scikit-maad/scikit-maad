@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.spectral_entropy &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.spectral_entropy &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -220,7 +219,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>Spectrogram (2d). 
-Recommanded to work with PSD to be consistent with energy conservation</p>
+It is recommended to work with PSD to be consistent with energy conservation</p>
 </dd>
 <dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
 </dd>
@@ -251,6 +250,14 @@ biophony bandwidth</p>
 </dl>
 <p class="rubric">References</p>
 <p>Credit : Towsey 2017</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EAS</span><span class="p">,</span> <span class="n">ECU</span><span class="p">,</span> <span class="n">ECV</span><span class="p">,</span> <span class="n">EPS</span><span class="p">,</span> <span class="n">EPS_KURT</span><span class="p">,</span> <span class="n">EPS_SKEW</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">spectral_entropy</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">flim</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="mi">10000</span><span class="p">))</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;EAS: </span><span class="si">%2.2f</span><span class="s1"> / ECU: </span><span class="si">%2.2f</span><span class="s1"> / ECV: </span><span class="si">%2.2f</span><span class="s1"> / EPS: </span><span class="si">%2.2f</span><span class="s1"> / EPS_KURT: </span><span class="si">%2.2f</span><span class="s1"> / EPS_SKEW: </span><span class="si">%2.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">EAS</span><span class="p">,</span> <span class="n">ECU</span><span class="p">,</span> <span class="n">ECV</span><span class="p">,</span> <span class="n">EPS</span><span class="p">,</span> <span class="n">EPS_KURT</span><span class="p">,</span> <span class="n">EPS_SKEW</span><span class="p">))</span>
+<span class="go">EAS: 0.27 / ECU: 0.49 / ECV: 0.24 / EPS: 1.00 / EPS_KURT: 17.58 / EPS_SKEW: 3.55</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Utilities &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>Utilities &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -107,9 +106,12 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.save_figlist.html">maad.util.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.plot1D.html">maad.util.plot1D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.plot2D.html">maad.util.plot2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.util.overlay_rois.html">maad.util.overlay_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.util.overlay_centroid.html">maad.util.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.plot_features_map.html">maad.util.plot_features_map</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.plot_features.html">maad.util.plot_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.plot_correlation_map.html">maad.util.plot_correlation_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.util.plot_shape.html">maad.util.plot_shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/maad.util.false_Color_Spectro.html">maad.util.false_Color_Spectro</a></li>
 </ul>
 </li>
@@ -235,25 +237,34 @@
 <td><p>Crop a spectrogram (or an image) in time (horizontal X axis) and frequency (vertical y axis)</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.save_figlist.html#maad.util.save_figlist" title="maad.util.save_figlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_figlist</span></code></a>(fname, figlist)</p></td>
-<td><p>Save a list of figures to file.</p></td>
+<td><p>Save a list of figures or spectrograms to disk.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.plot1D.html#maad.util.plot1D" title="maad.util.plot1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot1D</span></code></a>(x, y[, ax])</p></td>
-<td><p>plot a signal s</p></td>
+<td><p>Plot the waveform or spectrum of an audio signal.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.plot2D.html#maad.util.plot2D" title="maad.util.plot2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot2D</span></code></a>(im[, ax])</p></td>
-<td><p>display an image (spectrogram, 2D binary mask, ROIS…)</p></td>
+<td><p>Display the spectrogram of an audio signal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.overlay_rois.html#maad.util.overlay_rois" title="maad.util.overlay_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_rois</span></code></a>(im_ref, rois[, savefig])</p></td>
+<td><p>Display bounding boxes with time-frequency regions of interest over a spectrogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.overlay_centroid.html#maad.util.overlay_centroid" title="maad.util.overlay_centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></a>(im_ref, centroid[, savefig])</p></td>
+<td><p>Overlay centroids on the original spectrogram</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.plot_features_map.html#maad.util.plot_features_map" title="maad.util.plot_features_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features_map</span></code></a>(df[, norm, mode])</p></td>
-<td><p>Plot features amplitude as heatmap.</p></td>
+<td><p>Plot features values on a heatmap.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.plot_features.html#maad.util.plot_features" title="maad.util.plot_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features</span></code></a>(df[, ax, norm, mode])</p></td>
-<td><p>Plot phenology of the features (ie.</p></td>
+<td><p>Plot the variation of features values (ie.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.plot_correlation_map.html#maad.util.plot_correlation_map" title="maad.util.plot_correlation_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlation_map</span></code></a>(df[, R_threshold, method])</p></td>
-<td><p>Plot the correlation map between indices in the DataFrame obtained with MAAD</p></td>
+<td><p>Plot the correlation map between indices in the DataFrame obtained with <code class="docutils literal notranslate"><span class="pre">maad</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.false_Color_Spectro.html#maad.util.false_Color_Spectro" title="maad.util.false_Color_Spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">false_Color_Spectro</span></code></a>(df[, indices, plim, …])</p></td>
-<td><p>Create False Color Spectrogram from indices obtained by MAAD Only indices than can be computed bin per bin (ie frequency per frequency) are used to create False Color Spectro.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.plot_shape.html#maad.util.plot_shape" title="maad.util.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a>(shape, params[, row, display_values])</p></td>
+<td><p>Plot shape features in a bidimensional plot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.false_Color_Spectro.html#maad.util.false_Color_Spectro" title="maad.util.false_Color_Spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">false_Color_Spectro</span></code></a>(df[, indices, plim, …])</p></td>
+<td><p>Create False Color Spectrogram from indices obtained by MAAD.</p></td>
 </tr>
 </tbody>
 </table>
@@ -267,10 +278,10 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.running_mean.html#maad.util.running_mean" title="maad.util.running_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">running_mean</span></code></a>(x, N[, mode])</p></td>
-<td><p>Compute fast running mean for a window size N</p></td>
+<td><p>Compute fast running mean for a window size N.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.get_unimode.html#maad.util.get_unimode" title="maad.util.get_unimode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_unimode</span></code></a>(X[, mode, axis, N, N_bins, verbose])</p></td>
-<td><p>Get the statistical mode or modal value which is  the most common number in the dataset.</p></td>
+<td><p>Get the statistical mode or modal value which is the most common number in the  dataset.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.entropy.html#maad.util.entropy" title="maad.util.entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy</span></code></a>(x[, axis])</p></td>
 <td><p>Compute the entropy of a vector (waveform) or matrix (spectrogram).</p></td>
@@ -299,13 +310,13 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.read_audacity_annot.html#maad.util.read_audacity_annot" title="maad.util.read_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_audacity_annot</span></code></a>(audacity_filename)</p></td>
-<td><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe with the bounding box and the label of each region of interest (ROI)</p></td>
+<td><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe with the bounding box and the label of each region of interest (ROI).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.write_audacity_annot.html#maad.util.write_audacity_annot" title="maad.util.write_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_audacity_annot</span></code></a>(fname, onset, offset)</p></td>
-<td><p>Write audio segmentation to file (Audacity format)</p></td>
+<td><p>Write audio segmentation to file (Audacity format).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.date_parser.html#maad.util.date_parser" title="maad.util.date_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_parser</span></code></a>(datadir[, dateformat, …])</p></td>
-<td><p>Parse all filenames contained in a directory and its subdirectories  Keep only filenames corresponding to extension Filenames must follow : - SM4 format (XXXX_yyyymmdd_hhmmss.wav)  - or POSIX format (for audiomoth)   The result is a panda dataframe with ‘Date’ as index and ‘File’ (with full path as column)</p></td>
+<td><p>Parse all filenames contained in a directory and its subdirectories.</p></td>
 </tr>
 </tbody>
 </table>
@@ -319,19 +330,19 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.index_bw.html#maad.util.index_bw" title="maad.util.index_bw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_bw</span></code></a>(fn, bw)</p></td>
-<td><p>Select all the index coresponding to the selected frequency band</p></td>
+<td><p>Select all the index coresponding to a selected frequency band.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.intoBins.html#maad.util.intoBins" title="maad.util.intoBins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoBins</span></code></a>(x, an, bin_step[, axis, bin_min, …])</p></td>
-<td><p>Transform a vector or a matrix into bins</p></td>
+<td><p>Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.shift_bit_length.html#maad.util.shift_bit_length" title="maad.util.shift_bit_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shift_bit_length</span></code></a>(x)</p></td>
-<td><p>find the closest power of 2 that is superior or equal to the number x</p></td>
+<td><p>Find the closest power of 2 that is superior or equal to the number x.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.rle.html#maad.util.rle" title="maad.util.rle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rle</span></code></a>(x)</p></td>
-<td><p>Run-Length encoding (RLE)</p></td>
+<td><p>Compute the Run-Length encoding (RLE) of a vector.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.linear_scale.html#maad.util.linear_scale" title="maad.util.linear_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_scale</span></code></a>(x[, minval, maxval, axis])</p></td>
-<td><p>Program to scale the values of a vector or matrix from a user specified  minimum to a user specified maximum</p></td>
+<td><p>Scale the values of a vector or matrix from a user specified  minimum to a user specified maximum.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.amplitude2dB.html#maad.util.amplitude2dB" title="maad.util.amplitude2dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplitude2dB</span></code></a>(x[, db_range, db_gain])</p></td>
 <td><p>Transform amplitude data (signal, scalar) into decibel scale within the  dB range (db_range).</p></td>
@@ -346,19 +357,19 @@
 <td><p>Transform data in dB scale into power (amplitude²) A gain (db_gain) could be added at the end.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.mean_dB.html#maad.util.mean_dB" title="maad.util.mean_dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_dB</span></code></a>(*argv[, axis])</p></td>
-<td><p>Compute the average of dB values</p></td>
+<td><p>Compute the average of decibel values.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.add_dB.html#maad.util.add_dB" title="maad.util.add_dB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dB</span></code></a>(*argv[, axis])</p></td>
-<td><p>add dB values</p></td>
+<td><p>Computes an addition on decibel values.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.nearest_idx.html#maad.util.nearest_idx" title="maad.util.nearest_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest_idx</span></code></a>(array, value)</p></td>
-<td><p>Find nearest value on array and return index</p></td>
+<td><p>Find nearest value on array and return its index.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.util.get_df_single_row.html#maad.util.get_df_single_row" title="maad.util.get_df_single_row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df_single_row</span></code></a>(df, index[, mode])</p></td>
-<td><p>Extract a single row from a dataframe keeping the DataFrame type  (instead of becoming a Series)</p></td>
+<td><p>Extract a single row from a dataframe keeping the DataFrame type  (instead of becoming a Series).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/maad.util.format_features.html#maad.util.format_features" title="maad.util.format_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_features</span></code></a>(df, tn, fn)</p></td>
-<td><p>Format features such as bounding box coordinates and centroids coordinates to predifined format : time-frequency =&gt; pixels or pixels to time-frequency units</p></td>
+<td><p>Format features such as bounding box coordinates and centroids coordinates to predifined format : time-frequency to pixels or pixels to time-frequency units.</p></td>
 </tr>
 </tbody>
 </table>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.read_audacity_annot &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.read_audacity_annot &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -189,7 +188,7 @@
 <dt id="maad.util.read_audacity_annot">
 <code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">read_audacity_annot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">audacity_filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/parser.html#read_audacity_annot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.read_audacity_annot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe
-with the bounding box and the label of each region of interest (ROI)</p>
+with the bounding box and the label of each region of interest (ROI).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -206,12 +205,15 @@ with the bounding box and the label of each region of interest (ROI)</p>
 </dl>
 <p class="rubric">References</p>
 <p><a class="reference external" href="https://manual.audacityteam.org/man/label_tracks.html">https://manual.audacityteam.org/man/label_tracks.html</a></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">read_audacity_annot</span><span class="p">,</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">overlay_rois</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">1024</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="o">+</span> <span class="mi">96</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df_rois</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight_label.txt&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df_rois</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">df_rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span><span class="o">.</span><span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="mi">96</span><span class="p">,</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="mi">96</span><span class="p">,</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>

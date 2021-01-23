@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.acousticComplexityIndex &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.acousticComplexityIndex &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,7 +172,7 @@
 <dl class="py function">
 <dt id="features.acousticComplexityIndex">
 <code class="sig-prename descclassname">features.</code><code class="sig-name descname">acousticComplexityIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/features/alpha_indices.html#acousticComplexityIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.acousticComplexityIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Acoustic Complexity Index : ACI</p>
+<dd><p>Compute the Acoustic Complexity Index (ACI) from a spectrogram <a class="reference internal" href="#r7177506f804e-1" id="id1">[1]</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -183,15 +182,14 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>ACI_xx</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Acoustic Complexity Index of the spectrogram</p>
+<dt>ACI_xx: 2d ndarray of scalars</dt><dd><p>Acoustic Complexity Index of the spectrogram</p>
 </dd>
-<dt><strong>ACI_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>ACI value for each frequency bin
+<dt>ACI_per_bin: 1d ndarray of scalars</dt><dd><p>ACI value for each frequency bin
 sum(ACI_xx,axis=1)</p>
 </dd>
-<dt><strong>ACI_sum</strong><span class="classifier">scalar</span></dt><dd><p>Sum of ACI value per frequency bin (Common definition)
+<dt>ACI_sum: scalar</dt><dd><p>Sum of ACI value per frequency bin (Common definition)
 sum(ACI_per_bin)</p>
 </dd>
-<dt>ACI_mean ; scalar</dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -205,10 +203,21 @@ continuous background noise
 ACI is high only when acoustsic activity is medium, with distinguishable sounds
 and low background noise.</p>
 <p class="rubric">References</p>
-<p>Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
-activity of an avian community: the Acoustic Complexity Index (ACI). 
+<dl class="citation">
+<dt class="label" id="r7177506f804e-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing</p>
+</dd>
+</dl>
+<p>activity of an avian community: the Acoustic Complexity Index (ACI). 
 Ecological Indicators, 11, 868-873.</p>
-<p>Ported from the Seewave R package.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="p">,</span> <span class="n">ACI</span>  <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">acousticComplexityIndex</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ACI : </span><span class="si">%2.0f</span><span class="s1"> &#39;</span> <span class="o">%</span><span class="n">ACI</span><span class="p">)</span>
+<span class="go">ACI : 306</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

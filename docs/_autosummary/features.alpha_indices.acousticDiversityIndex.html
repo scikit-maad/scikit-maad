@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.alpha_indices.acousticDiversityIndex &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.alpha_indices.acousticDiversityIndex &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,7 +172,8 @@
 <dl class="py function">
 <dt id="features.alpha_indices.acousticDiversityIndex">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acousticDiversityIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">fmax</span><span class="o">=</span><span class="default_value">20000</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">- 50</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">'shannon'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acousticDiversityIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acousticDiversityIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Acoustic Diversity Index : ADI</p>
+<dd><p>Compute the Acoustic Diversity Index (ADI) from a spectrogram <a class="reference internal" href="#r58ba6a3d62cf-1" id="id1">[1]</a>.</p>
+<p>The diversity can be computed using Shannon, Simpson, or the inverse Simpson diversity index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -206,12 +206,29 @@ of scores)</p>
 </dl>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="features.alpha_indices.acousticEvenessIndex.html#features.alpha_indices.acousticEvenessIndex" title="features.alpha_indices.acousticEvenessIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticEvenessIndex</span></code></a></dt><dd></dd>
+</dl>
+</div>
 <p class="rubric">Notes</p>
-<p>See acousticEvenessIndex
-AEI and ADI are negatively correlated</p>
+<p>The Acoustic Eveness Index (AEI) and the Acoustic Diversity Index (ADI) are negatively correlated.</p>
 <p class="rubric">References</p>
-<p>Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
-A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</p>
+<dl class="citation">
+<dt class="label" id="r58ba6a3d62cf-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011.</p>
+</dd>
+</dl>
+<p>A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ADI</span>  <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">acousticDiversityIndex</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">fn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ADI : </span><span class="si">%2.2f</span><span class="s1"> &#39;</span> <span class="o">%</span><span class="n">ADI</span><span class="p">)</span>
+<span class="go">ADI : 2.45 </span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Remove background noise from audio with signal processing tools &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Remove background noise from audio with signal processing tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_auto_examples/advanced/plot_remove_background.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-plot-remove-background-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="remove-background-noise-from-audio-with-signal-processing-tools">
+<span id="sphx-glr-auto-examples-advanced-plot-remove-background-py"></span><h1>Remove background noise from audio with signal processing tools<a class="headerlink" href="#remove-background-noise-from-audio-with-signal-processing-tools" title="Permalink to this headline">¶</a></h1>
+<p>This example shows different ways to remove background noise directly from
+the spectrogram.
+We use the sharpness metric to have a quantitative estimation of how well is
+the noise reduction. This metric gives partial information. Other metrics
+should be use in complement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_path = &#39;../_images/sphx_glr_remove_background.png&#39;</span>
+
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">power2dB</span>
+<span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="p">(</span><span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span><span class="p">,</span>
+                       <span class="n">remove_background</span><span class="p">,</span> <span class="n">median_equalizer</span><span class="p">,</span>
+                       <span class="n">remove_background_morpho</span><span class="p">,</span>
+                       <span class="n">remove_background_along_axis</span><span class="p">,</span> <span class="n">sharpness</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">default_timer</span> <span class="k">as</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<p>First, we load the audio file and take its spectrogram.
+The linear spectrogram is then transformed into dB. The dB range is  96dB
+which is the maximum dB range value for a 16bits audio recording. We add
+96dB in order to get have only positive values in the spectrogram</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;../../data/tropical_forest_morning.wav&#39;</span><span class="p">)</span>
+<span class="c1">#s, fs = load(&#39;../data/cold_forest_night.wav&#39;)</span>
+<span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20000</span><span class="p">],</span> <span class="n">tcrop</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">])</span>
+<span class="n">Sxx_dB</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span> <span class="o">+</span> <span class="mi">96</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/sound/input_output.py:109: WavFileWarning: Chunk (non-data) not understood, skipping it.
+  fs, s = wavfile.read(filename)
+</pre></div>
+</div>
+<p>We plot the original spectrogram.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">,</span>
+       <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Original sharpness : </span><span class="si">%2.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sharpness</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="original" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_remove_background_0011.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  if now: plt.show()
+Original sharpness : 2.247
+</pre></div>
+</div>
+<p>Test the function “remove_background”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span>
+<span class="n">X1</span><span class="p">,</span> <span class="n">noise_profile1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">remove_background</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- test remove_background -----&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration </span><span class="si">%2.3f</span><span class="s2"> s&quot;</span> <span class="o">%</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;sharpness : </span><span class="si">%2.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sharpness</span><span class="p">(</span><span class="n">X1</span><span class="p">))</span>
+
+<span class="n">plot2D</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;remove_background&#39;</span><span class="p">,</span>
+       <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X1</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X1</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="remove_background" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_remove_background_0021.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>---- test remove_background -----
+duration 0.127 s
+sharpness : 1.706
+</pre></div>
+</div>
+<p>Test the function “median_equalizer”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- test median_equalizer -----&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration </span><span class="si">%2.3f</span><span class="s2"> s&quot;</span> <span class="o">%</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;sharpness : </span><span class="si">%2.3f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">sharpness</span><span class="p">(</span><span class="n">X2</span><span class="p">))</span>
+
+<span class="n">plot2D</span><span class="p">(</span><span class="n">X2</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;median_equalizer&#39;</span><span class="p">,</span>
+       <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X2</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="median_equalizer" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_remove_background_0031.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>---- test median_equalizer -----
+duration 0.089 s
+sharpness : 1.502
+</pre></div>
+</div>
+<p>Test the function “remove_background_morpho”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span>
+<span class="n">X3</span><span class="p">,</span> <span class="n">noise_profile3</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">remove_background_morpho</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- test remove_background_morpho -----&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration </span><span class="si">%2.3f</span><span class="s2"> s&quot;</span> <span class="o">%</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;sharpness : </span><span class="si">%2.3f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">sharpness</span><span class="p">(</span><span class="n">X3</span><span class="p">))</span>
+
+<span class="n">plot2D</span><span class="p">(</span><span class="n">X3</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;remove_background_morpho&#39;</span><span class="p">,</span>
+       <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X3</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X3</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="remove_background_morpho" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_remove_background_0041.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>//miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
+  return f(*args, **kwds)
+---- test remove_background_morpho -----
+duration 1.339 s
+sharpness : 1.093
+</pre></div>
+</div>
+<p>Test the function “remove_background_along_axis”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span>
+<span class="n">X4</span><span class="p">,</span> <span class="n">noise_profile4</span> <span class="o">=</span> <span class="n">remove_background_along_axis</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#X4 = power2dB(X4)</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/timeit.html#timeit.default_timer" title="timeit.default_timer" class="sphx-glr-backref-module-timeit sphx-glr-backref-type-py-function"><span class="n">timer</span></a><span class="p">()</span> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- test remove_background_along_axis -----&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;duration </span><span class="si">%2.3f</span><span class="s2"> s&quot;</span> <span class="o">%</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">elapsed_time</span></a><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;sharpness : </span><span class="si">%2.3f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">sharpness</span><span class="p">(</span><span class="n">X4</span><span class="p">))</span>
+
+<span class="n">plot2D</span><span class="p">(</span><span class="n">X4</span><span class="p">,</span>  <span class="n">extent</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;remove_background_along_axis&#39;</span><span class="p">,</span>
+       <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X4</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X4</span><span class="p">)</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="remove_background_along_axis" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_remove_background_0051.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>---- test remove_background_along_axis -----
+duration 0.029 s
+sharpness : 1.166
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.016 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-plot-remove-background-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a44fed44d498e69e60d6f6117a0eabda/plot_remove_background.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_remove_background.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8bca07facd5c69579b42ae45806b34dd/plot_remove_background.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_remove_background.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

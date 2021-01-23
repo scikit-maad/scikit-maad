@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>util.date_parser &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>util.date_parser &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,12 +172,16 @@
 <dl class="py function">
 <dt id="util.date_parser">
 <code class="sig-prename descclassname">util.</code><code class="sig-name descname">date_parser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datadir</span></em>, <em class="sig-param"><span class="n">dateformat</span><span class="o">=</span><span class="default_value">'SM4'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">'.wav'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/util/parser.html#date_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.date_parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse all filenames contained in a directory and its subdirectories 
-Keep only filenames corresponding to extension
-Filenames must follow :
-- SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
-- or POSIX format (for audiomoth)  
-The result is a panda dataframe with ‘Date’ as index and ‘File’ (with full path as column)</p>
+<dd><p>Parse all filenames contained in a directory and its subdirectories.</p>
+<p>Keeps only filenames corresponding to extension.
+Filenames must follow :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>SM4 format (XXXX_yyyymmdd_hhmmss.wav)</p></li>
+<li><p>or POSIX format (for audiomoth)</p></li>
+</ul>
+</div></blockquote>
+<p>The result is a panda dataframe with ‘Date’ as index and ‘File’ (with full path as column)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">

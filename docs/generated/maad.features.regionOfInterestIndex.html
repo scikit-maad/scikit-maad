@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.regionOfInterestIndex &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.regionOfInterestIndex &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -212,8 +211,9 @@
 <dl class="py function">
 <dt id="maad.features.regionOfInterestIndex">
 <code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">regionOfInterestIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_dB_noNoise</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">smooth_param1</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">mask_mode</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">mask_param1</span><span class="o">=</span><span class="default_value">6</span></em>, <em class="sig-param"><span class="n">mask_param2</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">min_roi</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">max_roi</span><span class="o">=</span><span class="default_value">5120000</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/alpha_indices.html#regionOfInterestIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.regionOfInterestIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find regions of interest (ROI) and compute their number and their cover 
-of the spectrogram</p>
+<dd><p>Compute an acoustic activity index based on the regions of interested detected on a spectrogram.</p>
+<p>The function first find regions of interest (ROI) and then compute the number and cover area 
+on the spectrogram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -264,6 +264,18 @@ the higher is the acoustic richness expected.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise</span><span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB_noNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_noNoise</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ROItotal</span><span class="p">,</span> <span class="n">ROIcover</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">regionOfInterestIndex</span><span class="p">(</span><span class="n">Sxx_dB_noNoise</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The total number of ROIs found in the spectrogram is </span><span class="si">%2.0f</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">ROItotal</span><span class="p">)</span>
+<span class="go">The total number of ROIs found in the spectrogram is 265</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The percentage of spectrogram covered by ROIs is </span><span class="si">%2.0f%%</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">ROIcover</span><span class="p">)</span>
+<span class="go">The percentage of spectrogram covered by ROIs is 12%</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

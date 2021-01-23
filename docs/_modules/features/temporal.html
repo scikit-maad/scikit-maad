@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.temporal &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.temporal &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -191,13 +190,9 @@
 <span class="c1"># public functions</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="audio_moments"><a class="viewcode-back" href="../../_autosummary/generated/features.audio_moments.html#features.temporal.audio_moments">[docs]</a><span class="k">def</span> <span class="nf">audio_moments</span> <span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="audio_moments"><a class="viewcode-back" href="../../_autosummary/generated/features.audio_moments.html#features.temporal.audio_moments">[docs]</a><span class="k">def</span> <span class="nf">audio_moments</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the first 4th moments of an audio</span>
-<span class="sd">    - mean</span>
-<span class="sd">    - variance</span>
-<span class="sd">    - skewness</span>
-<span class="sd">    - kurtosis</span>
+<span class="sd">    Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -231,7 +226,13 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="zero_crossing_rate"><a class="viewcode-back" href="../../_autosummary/generated/features.zero_crossing_rate.html#features.temporal.zero_crossing_rate">[docs]</a><span class="k">def</span> <span class="nf">zero_crossing_rate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the Zero Crossing Rate of an audio signal.</span>
+<span class="sd">    Compute the zero crossing rate feature of an audio signal.</span>
+<span class="sd">    </span>
+<span class="sd">    The zero-crossing rate is the rate of sign-changes along a signal, i.e., </span>
+<span class="sd">    the rate at which the signal changes from positive to zero to negative or </span>
+<span class="sd">    from negative to zero to positive. This feature has been used widely </span>
+<span class="sd">    in speech recognition and music information retrieval, </span>
+<span class="sd">    being a key feature to classify percussive sounds [1]_.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -245,14 +246,10 @@
 <span class="sd">    zcr : float   </span>
 <span class="sd">        number of zero crossing /s</span>
 
-<span class="sd">    Note</span>
-<span class="sd">    ----</span>
-<span class="sd">    From wikipedia :</span>
-<span class="sd">    The zero-crossing rate is the rate of sign-changes along a signal, i.e., </span>
-<span class="sd">    the rate at which the signal changes from positive to zero to negative or </span>
-<span class="sd">    from negative to zero to positive.[1] This feature has been used heavily </span>
-<span class="sd">    in both speech recognition and music information retrieval, </span>
-<span class="sd">    being a key feature to classify percussive sounds.</span>
+<span class="sd">    Reference</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. [1] https://en.wikipedia.org/wiki/Zero-crossing_rate</span>
+
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zero_crosses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Extract ecoacoustics alpha indices from audio recording &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>Extract ecoacoustics alpha indices from audio recording &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,14 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Find Regions of interest (ROIs) in a spectrogram" href="plot_compare_auto_and_manual_rois_selection.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -63,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -102,16 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Example gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds in a recording</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_compare_auto_and_manual_rois_selection.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Extract ecoacoustics alpha indices from audio recording</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
 </ul>
 
             
@@ -157,8 +147,6 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="index.html">Example gallery</a> &raquo;</li>
         
       <li>Extract ecoacoustics alpha indices from audio recording</li>
     
@@ -713,7 +701,7 @@ set the threshold to 0.75 for instance.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_correlation_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">,</span> <span class="n">R_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="plot extract alpha indices" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_extract_alpha_indices_001.png" />
+<img alt="plot extract alpha indices" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_extract_alpha_indices_0012.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:789: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
@@ -740,11 +728,11 @@ For a better view, we seperate spectral and audio indices.</p>
 </pre></div>
 </div>
 <ul class="sphx-glr-horizontal">
-<li><img alt="plot extract alpha indices" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_extract_alpha_indices_002.png" />
+<li><img alt="plot extract alpha indices" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_extract_alpha_indices_0022.png" />
 </li>
-<li><img alt="plot extract alpha indices" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_extract_alpha_indices_003.png" />
+<li><img alt="plot extract alpha indices" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_extract_alpha_indices_0032.png" />
 </li>
-<li><img alt="plot extract alpha indices" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_extract_alpha_indices_004.png" />
+<li><img alt="plot extract alpha indices" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_extract_alpha_indices_0042.png" />
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
@@ -766,7 +754,7 @@ For a better view, we seperate spectral and audio indices.</p>
                                    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="False Color Spectro   [R:AUDIO_KURT; G:EVNspCount; B:AUDIO_MEAN]" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_extract_alpha_indices_005.png" />
+<img alt="False Color Spectro   [R:AUDIO_KURT; G:EVNspCount; B:AUDIO_MEAN]" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_extract_alpha_indices_0052.png" />
 <p># Save date as .CSV
 # save df_indices
 save_csv = ‘indices.csv’
@@ -790,13 +778,6 @@ df_indices_per_bin.to_csv(path_or_buf=os.path.join(“../data/indices/”,’<a 
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="plot_compare_auto_and_manual_rois_selection.html" class="btn btn-neutral float-left" title="Find Regions of interest (ROIs) in a spectrogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

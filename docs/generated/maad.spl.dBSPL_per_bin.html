@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.spl.dBSPL_per_bin &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.dBSPL_per_bin &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,13 +32,14 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.spl.active_distance" href="maad.spl.active_distance.html" />
+    <link rel="prev" title="maad.spl.attenuation_dB" href="maad.spl.attenuation_dB.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -62,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -93,11 +94,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../spl.html">Sound pressure level</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../spl.html#conversion-to-sound-pressure-level-spl">Conversion to sound pressure level (SPL)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spl.html#attenuation-and-active-distance">Attenuation and active distance</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.attenuation_dB.html">maad.spl.attenuation_dB</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.spl.dBSPL_per_bin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.active_distance.html">maad.spl.active_distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.pressure_at_r0.html">maad.spl.pressure_at_r0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.dBSPL_at_r0.html">maad.spl.dBSPL_at_r0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.apply_attenuation.html">maad.spl.apply_attenuation</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
@@ -149,6 +162,8 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
+          <li><a href="../spl.html">Sound pressure level</a> &raquo;</li>
+        
       <li>maad.spl.dBSPL_per_bin</li>
     
     
@@ -174,7 +189,7 @@
 <dt id="maad.spl.dBSPL_per_bin">
 <code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">dBSPL_per_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">L</span></em>, <em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/active_space.html#dBSPL_per_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.dBSPL_per_bin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to spread the sound pressure level (Energy in dB) along a frequency 
-vector (bins)</p>
+vector (bins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -201,6 +216,15 @@ number of bins</p>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.spl.active_distance.html" class="btn btn-neutral float-right" title="maad.spl.active_distance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.spl.attenuation_dB.html" class="btn btn-neutral float-left" title="maad.spl.attenuation_dB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

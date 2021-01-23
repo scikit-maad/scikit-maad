@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>util.parser &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>util.parser &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -188,7 +187,7 @@
 <div class="viewcode-block" id="read_audacity_annot"><a class="viewcode-back" href="../../_autosummary/util.parser.read_audacity_annot.html#util.read_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">read_audacity_annot</span> <span class="p">(</span><span class="n">audacity_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read audacity annotations file (or labeling file) and return a Pandas Dataframe</span>
-<span class="sd">    with the bounding box and the label of each region of interest (ROI)</span>
+<span class="sd">    with the bounding box and the label of each region of interest (ROI).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -204,14 +203,16 @@
 <span class="sd">    ----------</span>
 <span class="sd">    https://manual.audacityteam.org/man/label_tracks.html  </span>
 <span class="sd">    </span>
-<span class="sd">    Examples:</span>
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import power2dB, read_audacity_annot, format_features, overlay_rois</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_db = power2dB(Sxx_power) + 96</span>
 <span class="sd">    &gt;&gt;&gt; df_rois = read_audacity_annot(&#39;../data/cold_forest_daylight_label.txt&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; df_rois = format_features(df_rois, tn, fn)</span>
-<span class="sd">    &gt;&gt;&gt; rois.overlay_rois(Sxx_db, df_rois, **{&#39;vmin&#39;:0,&#39;vmax&#39;:96,&#39;extent&#39;:ext})</span>
+<span class="sd">    &gt;&gt;&gt; overlay_rois(Sxx_db, df_rois, **{&#39;vmin&#39;:0,&#39;vmax&#39;:96,&#39;extent&#39;:ext})</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># read file with tab delimiter</span>
@@ -238,7 +239,7 @@
 <span class="c1">#=============================================================================</span>
 <div class="viewcode-block" id="write_audacity_annot"><a class="viewcode-back" href="../../_autosummary/util.parser.write_audacity_annot.html#util.write_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">write_audacity_annot</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Write audio segmentation to file (Audacity format)</span>
+<span class="sd">    Write audio segmentation to file (Audacity format).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -318,11 +319,13 @@
 
 <div class="viewcode-block" id="date_parser"><a class="viewcode-back" href="../../_autosummary/util.parser.date_parser.html#util.date_parser">[docs]</a><span class="k">def</span> <span class="nf">date_parser</span> <span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">dateformat</span> <span class="o">=</span><span class="s2">&quot;SM4&quot;</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span><span class="s1">&#39;.wav&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse all filenames contained in a directory and its subdirectories </span>
-<span class="sd">    Keep only filenames corresponding to extension</span>
+<span class="sd">    Parse all filenames contained in a directory and its subdirectories.</span>
+<span class="sd">    </span>
+<span class="sd">    Keeps only filenames corresponding to extension.</span>
 <span class="sd">    Filenames must follow :</span>
-<span class="sd">    - SM4 format (XXXX_yyyymmdd_hhmmss.wav) </span>
-<span class="sd">    - or POSIX format (for audiomoth)  </span>
+<span class="sd">        - SM4 format (XXXX_yyyymmdd_hhmmss.wav) </span>
+<span class="sd">        - or POSIX format (for audiomoth)  </span>
+<span class="sd">    </span>
 <span class="sd">    The result is a panda dataframe with &#39;Date&#39; as index and &#39;File&#39; (with full path as column) </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>

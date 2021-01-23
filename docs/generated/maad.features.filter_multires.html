@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.filter_multires &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.filter_multires &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -105,8 +104,6 @@
 <li class="toctree-l3"><a class="reference internal" href="maad.features.opt_shape_presets.html">maad.features.opt_shape_presets</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.features.filter_multires</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.features.filter_bank_2d_nodc.html">maad.features.filter_bank_2d_nodc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.plot_shape.html">maad.features.plot_shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.overlay_centroid.html">maad.features.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.features.centroid_features.html">maad.features.centroid_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.features.all_shape_features.html">maad.features.all_shape_features</a></li>
 </ul>
@@ -219,10 +216,17 @@ transformation to downscale the input spectrogram.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">filter_bank_2d_nodc</span><span class="p">,</span> <span class="n">filter_multires</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;./data/spinetail.wav&#39;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">util</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span> <span class="o">+</span> <span class="mi">80</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extension&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span> <span class="n">ntheta</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Plot one of the resulting spectrograms.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extension&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>

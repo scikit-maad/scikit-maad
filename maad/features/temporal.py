@@ -24,12 +24,7 @@ from maad.util import moments
 #%%
 def audio_moments(s):
     """
-    Computes the first 4th moments of an audio signal:
-        
-    - mean
-    - variance
-    - skewness
-    - kurtosis
+    Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.
     
     Parameters
     ----------

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.sound.transform &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.sound.transform &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -234,22 +233,24 @@
 <span class="sd">    array([0.06588196, 0.11301711, 0.09201435, ..., 0.18053983, 0.18351906,</span>
 <span class="sd">       0.10258595])</span>
 <span class="sd">    </span>
-<span class="sd">    compute the time vector for the vector wave</span>
+<span class="sd">    Compute the time vector for the vector wave.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; t = np.arange(0,len(s),1)/fs</span>
 <span class="sd">    </span>
-<span class="sd">    compute the time vector for the vector env_fast</span>
+<span class="sd">    Compute the time vector for the vector env_fast.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)</span>
 <span class="sd">    </span>
-<span class="sd">    plot 0.1s of the envelope and 0.1s of the abs(s)</span>
+<span class="sd">    Plot 0.1s of the envelope and 0.1s of the abs(s).</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">    &gt;&gt;&gt; fig1, ax1 = plt.subplots()</span>
-<span class="sd">    &gt;&gt;&gt; ax1.plot(t[t&lt;0.1], abs(s[t&lt;0.1]), label=&#39;abs(s)&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ax1.plot(t[t&lt;0.1], env_hilbert[t&lt;0.1], label=&#39;env(s) - hilbert option&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ax1.plot(t_env_fast[t_env_fast&lt;0.1], env_fast[t_env_fast&lt;0.1], label=&#39;env(s) - fast option&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; fig1, ax1 = plt.subplots(figsize=(10,4))</span>
+<span class="sd">    &gt;&gt;&gt; ax1.plot(t[t&lt;0.1], abs(s[t&lt;0.1]), label=&#39;abs(s)&#39;, lw=0.7)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.plot(t[t&lt;0.1], env_hilbert[t&lt;0.1], label=&#39;env(s) - hilbert option&#39;, lw=0.7)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.plot(t_env_fast[t_env_fast&lt;0.1], env_fast[t_env_fast&lt;0.1], label=&#39;env(s) - fast option&#39;, lw=0.7)</span>
 <span class="sd">    &gt;&gt;&gt; ax1.set_xlabel(&#39;Time [sec]&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.set_ylabel(&#39;Amplitude&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; ax1.legend()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fast&#39;</span> <span class="p">:</span>

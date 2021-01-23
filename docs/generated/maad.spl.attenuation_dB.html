@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.spl.attenuation_dB &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.attenuation_dB &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,13 +32,14 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.spl.dBSPL_per_bin" href="maad.spl.dBSPL_per_bin.html" />
+    <link rel="prev" title="maad.spl.PSD2Leq" href="maad.spl.PSD2Leq.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -62,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -93,11 +94,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../spl.html">Sound pressure level</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../spl.html#conversion-to-sound-pressure-level-spl">Conversion to sound pressure level (SPL)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spl.html#attenuation-and-active-distance">Attenuation and active distance</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.spl.attenuation_dB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.dBSPL_per_bin.html">maad.spl.dBSPL_per_bin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.active_distance.html">maad.spl.active_distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.pressure_at_r0.html">maad.spl.pressure_at_r0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.dBSPL_at_r0.html">maad.spl.dBSPL_at_r0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.apply_attenuation.html">maad.spl.apply_attenuation</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
@@ -149,6 +162,8 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
+          <li><a href="../spl.html">Sound pressure level</a> &raquo;</li>
+        
       <li>maad.spl.attenuation_dB</li>
     
     
@@ -173,8 +188,8 @@
 <dl class="py function">
 <dt id="maad.spl.attenuation_dB">
 <code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">attenuation_dB</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">r</span></em>, <em class="sig-param"><span class="n">r0</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">rh</span><span class="o">=</span><span class="default_value">60</span></em>, <em class="sig-param"><span class="n">pa</span><span class="o">=</span><span class="default_value">101325</span></em>, <em class="sig-param"><span class="n">a0</span><span class="o">=</span><span class="default_value">0.002</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/active_space.html#attenuation_dB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.attenuation_dB" title="Permalink to this definition">¶</a></dt>
-<dd><p>get attenuation in dB taking into account the geometric, atmospheric 
-and habitat attenuation contributions</p>
+<dd><p>Compute the attenuation in decibels taking into account the geometric, atmospheric 
+and habitat attenuation contributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -196,8 +211,8 @@ and habitat attenuation contributions</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>Asum_dB</strong><span class="classifier">scalar or array-like (vector (1D) or matrix (2D))</span></dt><dd><p>Global attenuation in dB taking into account the geometric, atmospheric 
-and habitat attenuation
+<dt><strong>Asum_dB</strong><span class="classifier">scalar or array-like (vector (1D) or matrix (2D))</span></dt><dd><p>Global attenuation in decibel taking into account the geometric, atmospheric 
+and habitat attenuation.
 =&gt; subtract Asum_dB from the reference acoustic pressure L0 in dB 
 (or sound pressure level (SPL)) measuread at distance r0 for each 
 frequency and distance to estimate the pressure after attenuation taking 
@@ -217,6 +232,15 @@ columns :distances</p>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.spl.dBSPL_per_bin.html" class="btn btn-neutral float-right" title="maad.spl.dBSPL_per_bin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.spl.PSD2Leq.html" class="btn btn-neutral float-left" title="maad.spl.PSD2Leq" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.plot2D &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.plot2D &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,14 +32,13 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.util.plot_features_map" href="maad.util.plot_features_map.html" />
+    <link rel="next" title="maad.util.overlay_rois" href="maad.util.overlay_rois.html" />
     <link rel="prev" title="maad.util.plot1D" href="maad.util.plot1D.html" /> 
 </head>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -107,9 +106,12 @@
 <li class="toctree-l3"><a class="reference internal" href="maad.util.save_figlist.html">maad.util.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot1D.html">maad.util.plot1D</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.plot2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_rois.html">maad.util.overlay_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_centroid.html">maad.util.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features_map.html">maad.util.plot_features_map</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features.html">maad.util.plot_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_correlation_map.html">maad.util.plot_correlation_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_shape.html">maad.util.plot_shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.false_Color_Spectro.html">maad.util.false_Color_Spectro</a></li>
 </ul>
 </li>
@@ -194,7 +196,9 @@
 <dl class="py function">
 <dt id="maad.util.plot2D">
 <code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">plot2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#plot2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.plot2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>display an image (spectrogram, 2D binary mask, ROIS…)</p>
+<dd><p>Display the spectrogram of an audio signal.</p>
+<p>The spectrogram should be previously computed using the function 
+<code class="docutils literal notranslate"><span class="pre">maad.sound.spectrogram</span></code>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -290,7 +294,7 @@ the last image</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">power2dBSPL</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># convert into dB SPL</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Lxx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
 <span class="go">                  &#39;vmin&#39;:0,</span>
 <span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
@@ -313,7 +317,7 @@ the last image</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="maad.util.plot_features_map.html" class="btn btn-neutral float-right" title="maad.util.plot_features_map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="maad.util.overlay_rois.html" class="btn btn-neutral float-right" title="maad.util.overlay_rois" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="maad.util.plot1D.html" class="btn btn-neutral float-left" title="maad.util.plot1D" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -35,7 +35,7 @@ def read_audacity_annot (audacity_filename):
     ----------
     https://manual.audacityteam.org/man/label_tracks.html  
     
-    Examples:
+    Examples
     --------
     >>> from maad import sound
     >>> from maad.util import power2dB, read_audacity_annot, format_features, overlay_rois
@@ -71,7 +71,7 @@ def read_audacity_annot (audacity_filename):
 #=============================================================================
 def write_audacity_annot(fname, onset, offset):
     """ 
-    Write audio segmentation to file (Audacity format)
+    Write audio segmentation to file (Audacity format).
     
     Parameters
     ----------

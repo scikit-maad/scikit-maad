@@ -174,12 +174,3 @@ fcs, triplet = false_Color_Spectro(df_indices_per_bin,
                                    permut=False,
                                    display=True,
                                    figsize=(5,9))
-
-#%%
-## Save date as .CSV
-## save df_indices
-#save_csv = 'indices.csv'
-#df_indices.to_csv(path_or_buf=os.path.join("../data/indices/",save_csv),sep=',',mode='w',header=True, index=True)
-## save df_indices_per_bin (for future false color spectro)
-#df_indices_per_bin.to_csv(path_or_buf=os.path.join("../data/indices/",'per_bin_'+save_csv),sep=',',mode='w',header=True, index=True)
-

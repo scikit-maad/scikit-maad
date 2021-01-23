@@ -6,14 +6,14 @@ Segmentation methods
 The module ``rois`` has a collection of functions to segment and find regions of interest in audio and spectrograms.
 
 Temporal
-----------
+--------
 .. autosummary::
     :toctree: generated/
 
     find_rois_cwt
     
 Spectro-temporal
----------------
+----------------
 .. autosummary::
     :toctree: generated/
     

@@ -1,0 +1,176 @@
+.. only:: html
+
+    .. note::
+        :class: sphx-glr-download-link-note
+
+        Click :ref:`here <sphx_glr_download__auto_examples_basic_plot_find_rois_simple.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr__auto_examples_basic_plot_find_rois_simple.py:
+
+
+Segment audio using predetermined temporal length and frequency limits
+======================================================================
+
+In an audio signal, regions of interest are usually regions with high density of energy. The function find_rois_cwt allows finding regions of interest in the signal giving very simple and intuitive parameters: temporal length and frequency limits. This segmentation can be seen as a coarse detection process, the starting point of more advanced classification methods.
+
+The following sound example as two main different soundtypes in the foreground:
+
+- An accelerating trill between 4.5 and 8 kHz lasting approximately 2 seconds
+- A fast descending chirp between 8 and 12 kHz lasting 0.1 approximately seconds
+
+
+.. code-block:: default
+
+
+    from maad import sound
+    from maad.rois import find_rois_cwt
+    from maad.util import power2dB, plot2D
+
+
+    s, fs = sound.load('../../data/spinetail.wav')
+    Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
+    Sxx_db = power2dB(Sxx, db_range=100) + 100
+    plot2D(Sxx_db, **{'extent':ext})
+
+
+
+
+.. image:: /_auto_examples/basic/images/sphx_glr_plot_find_rois_simple_001.png
+    :alt: Spectrogram
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      if now: plt.show()
+
+
+
+
+Detect the accelerating trill
+-----------------------------
+The accelerating trill is the song of a small neotropical bird, Cranioleuca erythrops. This song can be detected on the recording using the function find_rois_cwt and setting frequency limits flims=(4500,8000) and temporal length of signal tlen=2.
+
+
+.. code-block:: default
+
+
+    _ = find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True, figsize=(13,6))
+
+
+
+
+.. image:: /_auto_examples/basic/images/sphx_glr_plot_find_rois_simple_002.png
+    :alt: plot find rois simple
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/rois/rois_1d.py:209: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
+
+
+
+
+Detect the fast descending chirp
+--------------------------------
+Alternatively, the fast descending chirp (unknown species) can be segmented in the recording by changing the detection parameters.
+
+
+.. code-block:: default
+
+
+    df = find_rois_cwt(s, fs, flims=(8000,12000), tlen=0.1, th=0.001, display=True, figsize=(13,6))
+
+
+
+
+.. image:: /_auto_examples/basic/images/sphx_glr_plot_find_rois_simple_003.png
+    :alt: plot find rois simple
+    :class: sphx-glr-single-img
+
+
+
+
+
+The segmentation results are returned as a dataframe with temporal segmentation given by the function and using the frequency limits defined by the user.
+
+
+.. code-block:: default
+
+
+    print(df)
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+         min_f     min_t    max_f     max_t
+    0   8000.0   0.18576  12000.0   0.26993
+    1   8000.0   1.30612  12000.0   1.39900
+    2   8000.0   2.83574  12000.0   2.91701
+    3   8000.0   3.02730  12000.0   3.10857
+    4   8000.0   6.40871  12000.0   6.49288
+    5   8000.0   8.05152  12000.0   8.14150
+    6   8000.0   9.04417  12000.0   9.12544
+    7   8000.0  10.11519  12000.0  10.20517
+    8   8000.0  11.90023  12000.0  11.99601
+    9   8000.0  12.75356  12000.0  12.84934
+    10  8000.0  15.50222  12000.0  15.59220
+    11  8000.0  15.68508  12000.0  15.77215
+    12  8000.0  16.31202  12000.0  16.40490
+    13  8000.0  17.29016  12000.0  17.38014
+    14  8000.0  18.27701  12000.0  18.37279
+    15  8000.0  19.22032  12000.0  19.31610
+
+
+
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  1.079 seconds)
+
+
+.. _sphx_glr_download__auto_examples_basic_plot_find_rois_simple.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-python
+
+     :download:`Download Python source code: plot_find_rois_simple.py <plot_find_rois_simple.py>`
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+     :download:`Download Jupyter notebook: plot_find_rois_simple.ipynb <plot_find_rois_simple.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

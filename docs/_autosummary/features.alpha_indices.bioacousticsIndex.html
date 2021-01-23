@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.alpha_indices.bioacousticsIndex &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.alpha_indices.bioacousticsIndex &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -172,8 +171,8 @@
 <h1>features.alpha_indices.bioacousticsIndex<a class="headerlink" href="#features-alpha-indices-bioacousticsindex" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="features.alpha_indices.bioacousticsIndex">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">bioacousticsIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">flim</span><span class="o">=</span><span class="default_value">2000, 15000</span></em>, <em class="sig-param"><span class="n">R_compatible</span><span class="o">=</span><span class="default_value">'soundecology'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#bioacousticsIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.bioacousticsIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bioacoustics Index</p>
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">bioacousticsIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">flim</span><span class="o">=</span><span class="default_value">(2000, 15000)</span></em>, <em class="sig-param"><span class="n">R_compatible</span><span class="o">=</span><span class="default_value">'soundecology'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#bioacousticsIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.bioacousticsIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Bioacoustics Index from a spectrogram <a class="reference internal" href="#rff9605423a17-1" id="id1">[1]</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -196,13 +195,21 @@ Otherwise, the result is specific to maad</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Soundecology compatible version
-- average of dB value
-- remove negative value in order to get positive values only
-- dividing by the frequency resolution df instead of multiplication</p>
+<dl class="simple">
+<dt>Soundecology compatible version:</dt><dd><ul class="simple">
+<li><p>average of dB value</p></li>
+<li><p>remove negative value in order to get positive values only</p></li>
+<li><p>dividing by the frequency resolution df instead of multiplication</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">References</p>
-<p>References: Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
-invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
+<dl class="citation">
+<dt class="label" id="rff9605423a17-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic</p>
+</dd>
+</dl>
+<p>invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
 remote sensing. Ecological Applications 17: 2137-2144.</p>
 <p>Ported and modified from the soundecology R package.</p>
 </dd></dl>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.rois.overlay_rois &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.rois.overlay_rois &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,15 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.rois.rois_to_imblobs" href="maad.rois.rois_to_imblobs.html" />
-    <link rel="prev" title="maad.rois.select_rois" href="maad.rois.select_rois.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -95,19 +92,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../rois.html">Segmentation methods</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../rois.html#temporal">Temporal</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../rois.html#spectro-temporal">Spectro-temporal</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="maad.rois.create_mask.html">maad.rois.create_mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.rois.select_rois.html">maad.rois.select_rois</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.rois.overlay_rois</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.rois.rois_to_imblobs.html">maad.rois.rois_to_imblobs</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
@@ -161,8 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../rois.html">Segmentation methods</a> &raquo;</li>
-        
       <li>maad.rois.overlay_rois</li>
     
     
@@ -184,115 +169,6 @@
             
   <div class="section" id="maad-rois-overlay-rois">
 <h1>maad.rois.overlay_rois<a class="headerlink" href="#maad-rois-overlay-rois" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="maad.rois.overlay_rois">
-<code class="sig-prename descclassname">maad.rois.</code><code class="sig-name descname">overlay_rois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_ref</span></em>, <em class="sig-param"><span class="n">rois</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_2d.html#overlay_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.overlay_rois" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overlay bounding box on the original spectrogram</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>im_ref</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
-</dd>
-<dt><strong>rois_bbox</strong><span class="classifier">list of tuple (min_y,min_x,max_y,max_x)</span></dt><dd><p>Contains the bounding box of each ROI</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix 
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>savefilename<span class="classifier">str, optional, default :’_spectro_overlayrois.png’ </span></dt><dd><p>Postfix of the figure filename</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’ </span></dt><dd><p>title of the figure</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’ </span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’ </span></dt><dd><p>label of the vertical axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’ </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a> 
-in order to get all the  existing colormaps 
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,  
-‘viridis’…</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>vmin, vmax<span class="classifier">scalar, optional, default: None </span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize 
-luminance data.  Note if you pass a <cite>norm</cite> instance, your 
-settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>dpi<span class="classifier">integer, optional, default is 96 </span></dt><dd><p>Dot per inch.  
-For printed version, choose high dpi (i.e. dpi=300) =&gt; slow 
-For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>format<span class="classifier">string, optional, default is ‘png’ </span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>… and more, see matplotlib</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>ax</strong><span class="classifier">axis object (see matplotlib)</span></dt><dd></dd>
-<dt><strong>fig</strong><span class="classifier">figure object (see matplotlib)</span></dt><dd></dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>Load audio recording and convert it into spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000</span><span class="p">))</span>   
-</pre></div>
-</div>
-<p>Subtract the background noise before finding ROIs.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Convert linear spectrogram into dB</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise_dB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_noNoise</span><span class="p">)</span> 
-</pre></div>
-</div>
-<p>Smooth the spectrogram</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise_dB_blurred</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_noNoise_dB</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Detection of the acoustic signature =&gt; creation of a mask</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im_bin</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">create_mask</span><span class="p">(</span><span class="n">Sxx_noNoise_dB_blurred</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">)</span> 
-</pre></div>
-</div>
-<p>Select rois from the mask and display bounding box over the spectrogram without noise</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">im_rois</span><span class="p">,</span> <span class="n">df_rois</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">select_rois</span><span class="p">(</span><span class="n">im_bin</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">overlay_rois</span> <span class="p">(</span><span class="n">Sxx_noNoise_dB</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Sxx_noNoise_dB</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Sxx_noNoise_dB</span><span class="p">)</span><span class="o">+</span><span class="mi">60</span><span class="p">)</span> 
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -300,15 +176,6 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.rois.rois_to_imblobs.html" class="btn btn-neutral float-right" title="maad.rois.rois_to_imblobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.rois.select_rois.html" class="btn btn-neutral float-left" title="maad.rois.select_rois" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

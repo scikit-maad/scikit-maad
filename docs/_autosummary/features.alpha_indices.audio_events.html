@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.alpha_indices.audio_events &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.alpha_indices.audio_events &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,8 +172,9 @@
 <dl class="py function">
 <dt id="features.alpha_indices.audio_events">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">audio_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">rejectDuration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'fast'</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">512</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#audio_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.audio_events" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Acoustic events :</dt><dd><ul class="simple">
+<dd><p>Compute the acoustic event index from an audio signal.</p>
+<dl class="simple">
+<dt>Four values are computed with this function:</dt><dd><ul class="simple">
 <li><p>EVNtFraction : Fraction: events duration over total duration</p></li>
 <li><p>EVNmean : mean events duration (s)</p></li>
 <li><p>EVNcount : number of events per s</p></li>
@@ -233,9 +233,7 @@ good approximation of the envelope.</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-from natural recordings of the environment.
-Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+<p>Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
 from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>

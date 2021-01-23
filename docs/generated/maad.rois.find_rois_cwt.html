@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.rois.find_rois_cwt &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.rois.find_rois_cwt &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -184,7 +183,7 @@
 <dl class="py function">
 <dt id="maad.rois.find_rois_cwt">
 <code class="sig-prename descclassname">maad.rois.</code><code class="sig-name descname">find_rois_cwt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">flims</span></em>, <em class="sig-param"><span class="n">tlen</span></em>, <em class="sig-param"><span class="n">th</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_df</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefilename</span><span class="o">=</span><span class="default_value">'rois.csv'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/rois/rois_1d.html#find_rois_cwt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.rois.find_rois_cwt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find region of interest using simple known estimates of signal length and frequency limits.</p>
+<dd><p>Find region of interest using known estimates of signal length and frequency limits.</p>
 <p>The general approach is based on continous wavelet transform following a three step process</p>
 <ol class="arabic simple">
 <li><p>Filter the signal with a bandpass sinc filter</p></li>
@@ -212,7 +211,7 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>an object with temporal and frequencial limits of regions of interest</p>
+<dt><strong>rois</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>an table with temporal and frequencial limits of regions of interest</p>
 </dd>
 </dl>
 </dd>

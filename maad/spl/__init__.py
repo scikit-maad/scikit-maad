@@ -6,8 +6,8 @@ Sound pressure level
 The module ``spl`` is a collection of functions used to describe the physics of acoustic waves.
 
 
-Conversion SPL
---------------
+Conversion to sound pressure level (SPL)
+----------------------------------------
 .. autosummary::
     :toctree: generated/
     
@@ -33,6 +33,7 @@ Attenuation and active distance
     active_distance
     pressure_at_r0
     L0_at_r0
+    dBSPL_at_r0
     apply_attenuation
 
 """

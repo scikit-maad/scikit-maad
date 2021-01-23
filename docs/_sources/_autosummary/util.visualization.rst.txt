@@ -1,4 +1,4 @@
-util.visualization
+﻿util.visualization
 ==================
 
 .. automodule:: util.visualization
@@ -17,11 +17,14 @@ util.visualization
    
       crop_image
       false_Color_Spectro
+      overlay_centroid
+      overlay_rois
       plot1D
       plot2D
       plot_correlation_map
       plot_features
       plot_features_map
+      plot_shape
       rand_cmap
       save_figlist
    

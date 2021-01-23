@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.rois.rois_2d &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.rois.rois_2d &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -181,7 +180,6 @@
 <span class="c1"># Load the modules</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Import external modules </span>
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span> 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">iqr</span> 
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">measure</span>
@@ -686,47 +684,30 @@
 <span class="sd">    Examples </span>
 <span class="sd">    -------- </span>
 <span class="sd">    </span>
-<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    Load audio recording compute the spectrogram in dB.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)   </span>
-<span class="sd">    </span>
-<span class="sd">    Convert linear spectrogram into dB</span>
-<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)           </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
 <span class="sd">    </span>
 <span class="sd">    Smooth the spectrogram</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_blurred = maad.sound.smooth(Sxx_dB)</span>
 <span class="sd">    </span>
-<span class="sd">    Detection of the acoustic signature =&gt; creation of a mask</span>
+<span class="sd">     Using image binarization, detect isolated region in the time-frequency domain with high density of energy, i.e. regions of interest (ROIs).</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; im_bin = maad.rois.create_mask(Sxx_dB_blurred, bin_std=1.5, bin_per=0.5, mode=&#39;relative&#39;)</span>
 <span class="sd">    </span>
-<span class="sd">    Select rois from the mask</span>
+<span class="sd">    Select ROIs from the binary mask.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; im_rois, df_rois = maad.rois.select_rois(im_bin, display=True)</span>
 <span class="sd">    </span>
-<span class="sd">    We can observe that we detect as ROI background noise and also that we merge</span>
-<span class="sd">    all together several ROIs. A solution consits in subtracting the background</span>
-<span class="sd">    noise before finding ROIs.</span>
+<span class="sd">    We detected the background noise as a ROI, and that multiple ROIs are mixed in a single region. To have better results, it is adviced to preprocess the spectrogram to remove the background noise before creating the mask.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_noNoise = maad.sound.median_equalizer(Sxx)</span>
-<span class="sd">    </span>
-<span class="sd">    Convert linear spectrogram into dB</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise) </span>
-<span class="sd">    </span>
-<span class="sd">    Smooth the spectrogram</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)</span>
-<span class="sd">    </span>
-<span class="sd">    Detection of the acoustic signature =&gt; creation of a mask</span>
-<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise)     </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)        </span>
 <span class="sd">    &gt;&gt;&gt; im_bin2 = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode=&#39;relative&#39;) </span>
-<span class="sd">    </span>
-<span class="sd">    Select rois from the mask</span>
-<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; im_rois2, df_rois2 = maad.rois.select_rois(im_bin2, display=True)</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span> 
@@ -816,197 +797,14 @@
     <span class="k">return</span> <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois</span> </div>
  
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="overlay_rois"><a class="viewcode-back" href="../../../generated/maad.rois.overlay_rois.html#maad.rois.overlay_rois">[docs]</a><span class="k">def</span> <span class="nf">overlay_rois</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
-    <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Overlay bounding box on the original spectrogram </span>
-<span class="sd">     </span>
-<span class="sd">    Parameters </span>
-<span class="sd">    ---------- </span>
-<span class="sd">    im_ref : 2d ndarray of scalars </span>
-<span class="sd">        Spectrogram (or image) </span>
-<span class="sd"> </span>
-<span class="sd">    rois_bbox : list of tuple (min_y,min_x,max_y,max_x) </span>
-<span class="sd">        Contains the bounding box of each ROI </span>
-<span class="sd"> </span>
-<span class="sd">         </span>
-<span class="sd">    savefig : string, optional, default is None </span>
-<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
-<span class="sd">        is added to the root filename. </span>
-<span class="sd">         </span>
-<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
-<span class="sd">            </span>
-<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_overlayrois.png&#39; </span>
-<span class="sd">            Postfix of the figure filename </span>
-<span class="sd">         </span>
-<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
-<span class="sd">            width, height in inches.   </span>
-<span class="sd">         </span>
-<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
-<span class="sd">            title of the figure </span>
-<span class="sd">         </span>
-<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
-<span class="sd">            label of the horizontal axis </span>
-<span class="sd">         </span>
-<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
-<span class="sd">            label of the vertical axis </span>
-<span class="sd">         </span>
-<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
-<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
-<span class="sd">            in order to get all the  existing colormaps </span>
-<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
-<span class="sd">            &#39;viridis&#39;... </span>
-<span class="sd">         </span>
-<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
-<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
-<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
-<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
-<span class="sd">         </span>
-<span class="sd">        - dpi : integer, optional, default is 96 </span>
-<span class="sd">            Dot per inch.  </span>
-<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
-<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
-<span class="sd">         </span>
-<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
-<span class="sd">            Format to save the figure  </span>
-<span class="sd">         </span>
-<span class="sd">        ... and more, see matplotlib  </span>
-<span class="sd"> </span>
-<span class="sd">    Returns </span>
-<span class="sd">    ------- </span>
-<span class="sd">    ax : axis object (see matplotlib) </span>
-<span class="sd">         </span>
-<span class="sd">    fig : figure object (see matplotlib) </span>
-<span class="sd">    </span>
-<span class="sd">    Examples </span>
-<span class="sd">    -------- </span>
-<span class="sd">    </span>
-<span class="sd">    Load audio recording and convert it into spectrogram</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))   </span>
-
-<span class="sd">    Subtract the background noise before finding ROIs.</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise = maad.sound.median_equalizer(Sxx)</span>
-<span class="sd">    </span>
-<span class="sd">    Convert linear spectrogram into dB</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise) </span>
-<span class="sd">    </span>
-<span class="sd">    Smooth the spectrogram</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)</span>
-<span class="sd">    </span>
-<span class="sd">    Detection of the acoustic signature =&gt; creation of a mask</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode=&#39;relative&#39;) </span>
-<span class="sd">    </span>
-<span class="sd">    Select rois from the mask and display bounding box over the spectrogram without noise</span>
-<span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; im_rois, df_rois = maad.rois.select_rois(im_bin)  </span>
-<span class="sd">    &gt;&gt;&gt; maad.rois.overlay_rois (Sxx_noNoise_dB, df_rois, extent=ext,vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60) </span>
-<span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>        
-     
-    <span class="c1"># Check format of the input data </span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span> 
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame.&#39;</span><span class="p">)</span>    
-    <span class="k">if</span> <span class="ow">not</span><span class="p">((</span><span class="s1">&#39;min_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">rois</span><span class="p">):</span> 
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Array must be a Pandas DataFrame with column names: min_y, min_x, max_y, max_x. Check example in documentation.&#39;</span><span class="p">)</span>     
-     
-    <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
-    <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
-    <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;ROIs Overlay&#39;</span><span class="p">)</span> 
-    <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
-    <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span><span class="mf">0.05</span><span class="p">))</span>  
-    <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span><span class="mf">0.95</span><span class="p">))</span>   
-    <span class="n">ax</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
-    <span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fig&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
-    <span class="n">extent</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
-        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-    <span class="k">else</span><span class="p">:</span> 
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
-        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
-    
-         
-    <span class="k">if</span> <span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span> 
-        <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
-                         <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>  
-                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
- 
-    <span class="c1"># Convert pixels into time and frequency values </span>
-    <span class="n">y_len</span><span class="p">,</span> <span class="n">x_len</span> <span class="o">=</span> <span class="n">im_ref</span><span class="o">.</span><span class="n">shape</span> 
-    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span> 
-    <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>  
-    <span class="n">x_scaling</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">x_len</span> 
-    <span class="n">y_scaling</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="n">y_len</span> 
-     
-    <span class="c1"># test if rois has a label column     </span>
-    <span class="k">if</span> <span class="s1">&#39;label&#39;</span> <span class="ow">in</span> <span class="n">rois</span> <span class="p">:</span> 
-        <span class="c1"># select the label column </span>
-        <span class="n">rois_label</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">values</span> 
-        <span class="n">uniqueLabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rois_label</span><span class="p">))</span> 
-    <span class="k">else</span><span class="p">:</span>  
-        <span class="n">uniqueLabels</span> <span class="o">=</span> <span class="p">[]</span> 
-                 
-    <span class="c1"># if only one label or no label in rois </span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">uniqueLabels</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> 
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span> 
-            <span class="n">y0</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">]</span> 
-            <span class="n">x0</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;min_x&#39;</span><span class="p">]</span> 
-            <span class="n">y1</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;max_y&#39;</span><span class="p">]</span> 
-            <span class="n">x1</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;max_x&#39;</span><span class="p">]</span> 
-            <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">x0</span><span class="o">*</span><span class="n">x_scaling</span><span class="o">+</span><span class="n">xmin</span><span class="p">,</span> <span class="n">y0</span><span class="o">*</span><span class="n">y_scaling</span><span class="o">+</span><span class="n">ymin</span><span class="p">),</span>  
-                                      <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="n">x_scaling</span><span class="p">,</span>  
-                                      <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="n">y_scaling</span><span class="p">,</span> 
-                                      <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   
-            <span class="c1"># draw the rectangle </span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>                 
-    <span class="k">else</span> <span class="p">:</span> 
-        <span class="c1"># Colormap </span>
-        <span class="n">color</span> <span class="o">=</span> <span class="n">rand_cmap</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">uniqueLabels</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">first_color_black</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
-        <span class="n">cc</span> <span class="o">=</span> <span class="mi">0</span> 
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span> 
-            <span class="n">cc</span> <span class="o">=</span> <span class="n">cc</span><span class="o">+</span><span class="mi">1</span> 
-            <span class="n">y0</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">]</span> 
-            <span class="n">x0</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;min_x&#39;</span><span class="p">]</span> 
-            <span class="n">y1</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;max_y&#39;</span><span class="p">]</span> 
-            <span class="n">x1</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;max_x&#39;</span><span class="p">]</span> 
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">uniqueLabels</span><span class="p">):</span> 
-                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span> <span class="n">ii</span> <span class="o">=</span> <span class="n">index</span> 
-            <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">x0</span><span class="o">*</span><span class="n">x_scaling</span><span class="o">+</span><span class="n">xmin</span><span class="p">,</span> <span class="n">y0</span><span class="o">*</span><span class="n">y_scaling</span><span class="o">+</span><span class="n">ymin</span><span class="p">),</span>  
-                                      <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="n">x_scaling</span><span class="p">,</span>  
-                                      <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="n">y_scaling</span><span class="p">,</span> 
-                                      <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">(</span><span class="n">ii</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   
-            <span class="c1"># draw the rectangle </span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span> 
- 
-    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> 
-     
-    <span class="c1"># SAVE FIGURE </span>
-    <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
-        <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span> 
-        <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>  
-        <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_overlayrois&#39;</span><span class="p">)</span>                 
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> 
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
-        
-    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> </div>
- 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="rois_to_imblobs"><a class="viewcode-back" href="../../../generated/maad.rois.rois_to_imblobs.html#maad.rois.rois_to_imblobs">[docs]</a><span class="k">def</span> <span class="nf">rois_to_imblobs</span><span class="p">(</span><span class="n">im_blobs</span><span class="p">,</span> <span class="n">rois</span><span class="p">):</span> 
+<div class="viewcode-block" id="rois_to_imblobs"><a class="viewcode-back" href="../../../generated/maad.rois.rois_to_imblobs.html#maad.rois.rois_to_imblobs">[docs]</a><span class="k">def</span> <span class="nf">rois_to_imblobs</span><span class="p">(</span><span class="n">im_zeros</span><span class="p">,</span> <span class="n">rois</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;  </span>
-<span class="sd">    Add 1 corresponding to rois to im_blobs which is an empty matrix </span>
+<span class="sd">    Take a matrix full of zeros and add ones in delimited regions defined by rois.</span>
 <span class="sd"> </span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ---------- </span>
-<span class="sd">    im_blobs : ndarray </span>
-<span class="sd">        matrix full of zeros with the size to the image where the rois come from </span>
+<span class="sd">    im_zeros : ndarray </span>
+<span class="sd">        matrix full of zeros with the size to the image where the rois come from.</span>
 <span class="sd">     </span>
 <span class="sd">    rois : DataFrame </span>
 <span class="sd">        rois must have the columns names:((min_y, min_x, max_y, max_x) which </span>
@@ -1017,6 +815,15 @@
 <span class="sd">    im_blobs : ndarray </span>
 <span class="sd">        matrix with 1 corresponding to the rois and 0 elsewhere </span>
 <span class="sd"> </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import rois, util</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; im_zeros = np.zeros((100,300))</span>
+<span class="sd">    &gt;&gt;&gt; df_rois = pd.DataFrame({&#39;min_y&#39;: [10, 40], &#39;min_x&#39;: [10, 200], &#39;max_y&#39;: [60, 80], &#39;max_x&#39;: [110, 250]})</span>
+<span class="sd">    &gt;&gt;&gt; im_blobs = rois.rois_to_imblobs(im_zeros, df_rois)</span>
+<span class="sd">    &gt;&gt;&gt; util.plot2D(im_blobs)</span>
 <span class="sd">    &quot;&quot;&quot;</span> 
     <span class="c1"># Check format of the input data </span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="p">:</span> 
@@ -1029,9 +836,9 @@
     <span class="n">rois_bbox</span> <span class="o">=</span> <span class="n">rois</span><span class="p">[[</span><span class="s1">&#39;min_y&#39;</span><span class="p">,</span> <span class="s1">&#39;min_x&#39;</span><span class="p">,</span> <span class="s1">&#39;max_y&#39;</span><span class="p">,</span> <span class="s1">&#39;max_x&#39;</span><span class="p">]]</span> 
     <span class="c1"># roi to image blob </span>
     <span class="k">for</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span> <span class="ow">in</span> <span class="n">rois_bbox</span><span class="o">.</span><span class="n">values</span><span class="p">:</span> 
-        <span class="n">im_blobs</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_y</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">max_y</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_x</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">max_x</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span> 
+        <span class="n">im_zeros</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_y</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">max_y</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_x</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">max_x</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span> 
      
-    <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">im_blobs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> 
+    <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">im_zeros</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> 
      
     <span class="k">return</span> <span class="n">im_blobs</span> </div>
 

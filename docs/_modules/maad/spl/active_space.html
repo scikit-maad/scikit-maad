@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.spl.active_space &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.spl.active_space &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -653,8 +652,8 @@
 <span class="c1"># =============================================================================</span>
 <div class="viewcode-block" id="attenuation_dB"><a class="viewcode-back" href="../../../generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB">[docs]</a><span class="k">def</span> <span class="nf">attenuation_dB</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">rh</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="mi">101325</span><span class="p">,</span> <span class="n">a0</span><span class="o">=</span><span class="mf">0.002</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">  get attenuation in dB taking into account the geometric, atmospheric </span>
-<span class="sd">  and habitat attenuation contributions</span>
+<span class="sd">  Compute the attenuation in decibels taking into account the geometric, atmospheric </span>
+<span class="sd">  and habitat attenuation contributions.</span>
 <span class="sd">  </span>
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -676,8 +675,8 @@
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
 <span class="sd">  Asum_dB : scalar or array-like (vector (1D) or matrix (2D))</span>
-<span class="sd">      Global attenuation in dB taking into account the geometric, atmospheric </span>
-<span class="sd">      and habitat attenuation</span>
+<span class="sd">      Global attenuation in decibel taking into account the geometric, atmospheric </span>
+<span class="sd">      and habitat attenuation.</span>
 <span class="sd">      =&gt; subtract Asum_dB from the reference acoustic pressure L0 in dB </span>
 <span class="sd">      (or sound pressure level (SPL)) measuread at distance r0 for each </span>
 <span class="sd">      frequency and distance to estimate the pressure after attenuation taking </span>
@@ -735,7 +734,7 @@
 <div class="viewcode-block" id="dBSPL_per_bin"><a class="viewcode-back" href="../../../generated/maad.spl.dBSPL_per_bin.html#maad.spl.dBSPL_per_bin">[docs]</a><span class="k">def</span> <span class="nf">dBSPL_per_bin</span> <span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="p">:</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Function to spread the sound pressure level (Energy in dB) along a frequency </span>
-<span class="sd">  vector (bins)   </span>
+<span class="sd">  vector (bins).</span>
 <span class="sd">  </span>
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -769,7 +768,7 @@
 <div class="viewcode-block" id="active_distance"><a class="viewcode-back" href="../../../generated/maad.spl.active_distance.html#maad.spl.active_distance">[docs]</a><span class="k">def</span> <span class="nf">active_distance</span> <span class="p">(</span><span class="n">L_bkg</span><span class="p">,</span> <span class="n">L0</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delta_r</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">rh</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="mi">101325</span><span class="p">,</span> 
                      <span class="n">a0</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">  Find the active distance also known as detection range or active space </span>
+<span class="sd">  Compute the active distance also known as detection range or active space.</span>
 <span class="sd">  </span>
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -859,7 +858,7 @@
   <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Estimate the pressure p0 at distance r0 from pressure p measured at </span>
 <span class="sd">    distance r. This function takes into account the geometric, atmospheric </span>
-<span class="sd">    and habitat attenuations</span>
+<span class="sd">    and habitat attenuations.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -929,11 +928,12 @@
   <span class="k">return</span> <span class="n">p0</span>  </div>
 
 <span class="c1">#%%</span>
-<span class="k">def</span> <span class="nf">dBSPL_at_r0</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">rh</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="mi">101325</span><span class="p">,</span> <span class="n">a0</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="dBSPL_at_r0"><a class="viewcode-back" href="../../../generated/maad.spl.dBSPL_at_r0.html#maad.spl.dBSPL_at_r0">[docs]</a><span class="k">def</span> <span class="nf">dBSPL_at_r0</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">rh</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="mi">101325</span><span class="p">,</span> <span class="n">a0</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">pRef</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">)</span> <span class="p">:</span>
   <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Estimate the sound pressure level L0 (dB SPL) at distance r0 from sound pressure</span>
 <span class="sd">    level L measured at distance r.</span>
-<span class="sd">    This function takes into account the geometric, atmospheric and habitat attenuations</span>
+<span class="sd">    </span>
+<span class="sd">    This function takes into account the geometric, atmospheric and habitat attenuations.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -971,15 +971,14 @@
   <span class="c1"># Transform the pressure into dB SPL</span>
   <span class="n">L0</span> <span class="o">=</span> <span class="n">pressure2dBSPL</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">pRef</span><span class="p">)</span>
   
-  <span class="k">return</span> <span class="n">L0</span>  
+  <span class="k">return</span> <span class="n">L0</span>  </div>
 
 <span class="c1"># #************* apply attenuation</span>
 <div class="viewcode-block" id="apply_attenuation"><a class="viewcode-back" href="../../../generated/maad.spl.apply_attenuation.html#maad.spl.apply_attenuation">[docs]</a><span class="k">def</span> <span class="nf">apply_attenuation</span> <span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">rh</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="mi">101325</span><span class="p">,</span> <span class="n">a0</span><span class="o">=</span><span class="mf">0.002</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">  Apply attenuation of a temporal signal p0 after propagation between the </span>
 <span class="sd">  reference distance r0 and the final distance r taken into account the </span>
-<span class="sd">  geometric, atmospheric and habitat attenuation contributions</span>
-<span class="sd">  </span>
+<span class="sd">  geometric, atmospheric and habitat attenuation contributions.</span>
 <span class="sd">  </span>
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -1005,10 +1004,9 @@
 <span class="sd">  p :  array-like (vector 1d)</span>
 <span class="sd">      temporal signal (time domain) after attenuation</span>
 <span class="sd">  </span>
-<span class="sd">  Examples:</span>
-<span class="sd">  ---------</span>
-<span class="sd">  </span>
-<span class="sd">  Prepare the Spine Tail sound (Sound level @1m = 80dB SPL)</span>
+<span class="sd">  Examples</span>
+<span class="sd">  --------</span>
+<span class="sd">  Prepare the spinetail sound (Sound level @1m = 80dB SPL).</span>
 <span class="sd">  </span>
 <span class="sd">  &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/spinetail.wav&#39;) </span>
 <span class="sd">  &gt;&gt;&gt; p0 = maad.spl.wav2pressure(wave=w, gain=42)</span>
@@ -1019,13 +1017,13 @@
 <span class="sd">  &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx_power, db_range=96) + 96</span>
 <span class="sd">  &gt;&gt;&gt; Sxx_dB_noise = maad.util.power2dB(Sxx_power_noise, db_range=96) + 96</span>
 <span class="sd">  </span>
-<span class="sd">  Get the sound level of the Spine Tail(song between 4900Hz and 7500Hz)</span>
+<span class="sd">  Get the sound level of the spinetail song (sound between 4900-7500 Hz).</span>
 <span class="sd">  </span>
 <span class="sd">  &gt;&gt;&gt; p0_sig_4900_7500 = maad.sound.select_bandwidth(p0_sig,fs,fcut=[4900,7300],forder=10, ftype=&#39;bandpass&#39;)</span>
 <span class="sd">  &gt;&gt;&gt; L = maad.spl.pressure2Leq(p0_sig_4900_7500, fs) </span>
 <span class="sd">  &gt;&gt;&gt; print (&#39;Sound Level measured : %2.2fdB SPL&#39; %L)</span>
 <span class="sd">  </span>
-<span class="sd">  Estimate maximum distance from the source</span>
+<span class="sd">  Estimate maximum distance from the source.</span>
 <span class="sd">  </span>
 <span class="sd">  &gt;&gt;&gt; r = maad.spl.active_distance(L, 85, f=(7500+4900)/2) </span>
 <span class="sd">  </span>
@@ -1035,7 +1033,7 @@
 <span class="sd">  &gt;&gt;&gt; fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1,5, sharex=True, figsize=(15,3))</span>
 <span class="sd">  &gt;&gt;&gt; maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, vmin=0, vmax=70, figsize=[3,3])</span>
 
-<span class="sd">  Compute the audio attenuation at 10m</span>
+<span class="sd">  Compute the audio attenuation at 10m.</span>
 <span class="sd">  </span>
 <span class="sd">  &gt;&gt;&gt; p_att = maad.spl.apply_attenuation(p0_sig, fs, r0=5, r =10)</span>
 <span class="sd">  &gt;&gt;&gt; Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)</span>
@@ -1053,14 +1051,14 @@
 <span class="sd">  &gt;&gt;&gt; Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)</span>
 <span class="sd">  &gt;&gt;&gt; Sxx_dB_att_80m = maad.util.power2dB(Sxx_power_att,db_range=96) + 96 </span>
 <span class="sd">  </span>
-<span class="sd">  add noise</span>
+<span class="sd">  Add noise to the signal.</span>
 <span class="sd">  </span>
 <span class="sd">  &gt;&gt;&gt; Sxx_dB_att_10m = maad.util.add_dB(Sxx_dB_att_10m,Sxx_dB_noise) - 3 </span>
 <span class="sd">  &gt;&gt;&gt; Sxx_dB_att_20m = maad.util.add_dB(Sxx_dB_att_20m,Sxx_dB_noise) - 3 </span>
 <span class="sd">  &gt;&gt;&gt; Sxx_dB_att_40m = maad.util.add_dB(Sxx_dB_att_40m,Sxx_dB_noise) - 3 </span>
 <span class="sd">  &gt;&gt;&gt; Sxx_dB_att_80m = maad.util.add_dB(Sxx_dB_att_80m,Sxx_dB_noise) - 3 </span>
 <span class="sd">    </span>
-<span class="sd">  plot attenuated spectrogram</span>
+<span class="sd">  Plot attenuated spectrogram.</span>
 <span class="sd">  </span>
 <span class="sd">  &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_att_10m, ax=ax2, extent=ext, vmin=0, vmax=70, figsize=[3,3])</span>
 <span class="sd">  &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_att_20m, ax=ax3, extent=ext, vmin=0, vmax=70, figsize=[3,3])</span>

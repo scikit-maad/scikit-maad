@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.zero_crossing_rate &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.zero_crossing_rate &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -187,7 +186,12 @@
 <dl class="py function">
 <dt id="maad.features.zero_crossing_rate">
 <code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">zero_crossing_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/temporal.html#zero_crossing_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.zero_crossing_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Zero Crossing Rate of an audio signal.</p>
+<dd><p>Compute the zero crossing rate feature of an audio signal.</p>
+<p>The zero-crossing rate is the rate of sign-changes along a signal, i.e., 
+the rate at which the signal changes from positive to zero to negative or 
+from negative to zero to positive. This feature has been used widely 
+in speech recognition and music information retrieval, 
+being a key feature to classify percussive sounds <a href="#id2"><span class="problematic" id="id1">[1]_</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">

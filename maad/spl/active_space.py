@@ -484,8 +484,8 @@ def _attenuation_factor (f, r, r0, t=20, rh=60, pa=101325, a0=0.002) :
 # =============================================================================
 def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.002):
   """ 
-  get attenuation in dB taking into account the geometric, atmospheric 
-  and habitat attenuation contributions
+  Compute the attenuation in decibels taking into account the geometric, atmospheric 
+  and habitat attenuation contributions.
   
   Parameters
   ----------
@@ -507,8 +507,8 @@ def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.002):
   Returns
   -------
   Asum_dB : scalar or array-like (vector (1D) or matrix (2D))
-      Global attenuation in dB taking into account the geometric, atmospheric 
-      and habitat attenuation
+      Global attenuation in decibel taking into account the geometric, atmospheric 
+      and habitat attenuation.
       => subtract Asum_dB from the reference acoustic pressure L0 in dB 
       (or sound pressure level (SPL)) measuread at distance r0 for each 
       frequency and distance to estimate the pressure after attenuation taking 
@@ -566,7 +566,7 @@ def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.002):
 def dBSPL_per_bin (L, f) :
   """
   Function to spread the sound pressure level (Energy in dB) along a frequency 
-  vector (bins)   
+  vector (bins).
   
   Parameters
   ----------
@@ -600,7 +600,7 @@ def dBSPL_per_bin (L, f) :
 def active_distance (L_bkg, L0, f, r0= 1, delta_r=1, t=20, rh=60, pa=101325, 
                      a0=0.002, rmax=10000):
   """ 
-  Find the active distance also known as detection range or active space 
+  Compute the active distance also known as detection range or active space.
   
   Parameters
   ----------
@@ -690,7 +690,7 @@ def pressure_at_r0 (f, r, p, r0=1, t=20, rh=60, pa=101325, a0=0.002) :
   """ 
     Estimate the pressure p0 at distance r0 from pressure p measured at 
     distance r. This function takes into account the geometric, atmospheric 
-    and habitat attenuations
+    and habitat attenuations.
 
   Parameters
   ----------
@@ -764,7 +764,8 @@ def dBSPL_at_r0 (f, r, L, r0=1, t=20, rh=60, pa=101325, a0=0.002, pRef=10e-6) :
   """ 
     Estimate the sound pressure level L0 (dB SPL) at distance r0 from sound pressure
     level L measured at distance r.
-    This function takes into account the geometric, atmospheric and habitat attenuations
+    
+    This function takes into account the geometric, atmospheric and habitat attenuations.
 
   Parameters
   ----------
@@ -809,8 +810,7 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   """ 
   Apply attenuation of a temporal signal p0 after propagation between the 
   reference distance r0 and the final distance r taken into account the 
-  geometric, atmospheric and habitat attenuation contributions
-  
+  geometric, atmospheric and habitat attenuation contributions.
   
   Parameters
   ----------
@@ -838,7 +838,7 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   
   Examples
   --------
-  Prepare the Spine Tail sound (Sound level @1m = 80dB SPL)
+  Prepare the spinetail sound (Sound level @1m = 80dB SPL).
   
   >>> w, fs = maad.sound.load('../data/spinetail.wav') 
   >>> p0 = maad.spl.wav2pressure(wave=w, gain=42)
@@ -849,13 +849,13 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   >>> Sxx_dB = maad.util.power2dB(Sxx_power, db_range=96) + 96
   >>> Sxx_dB_noise = maad.util.power2dB(Sxx_power_noise, db_range=96) + 96
   
-  Get the sound level of the Spine Tail(song between 4900Hz and 7500Hz)
+  Get the sound level of the spinetail song (sound between 4900-7500 Hz).
   
   >>> p0_sig_4900_7500 = maad.sound.select_bandwidth(p0_sig,fs,fcut=[4900,7300],forder=10, ftype='bandpass')
   >>> L = maad.spl.pressure2Leq(p0_sig_4900_7500, fs) 
   >>> print ('Sound Level measured : %2.2fdB SPL' %L)
   
-  Estimate maximum distance from the source
+  Estimate maximum distance from the source.
   
   >>> r = maad.spl.active_distance(L, 85, f=(7500+4900)/2) 
   
@@ -865,7 +865,7 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   >>> fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1,5, sharex=True, figsize=(15,3))
   >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, vmin=0, vmax=70, figsize=[3,3])
 
-  Compute the audio attenuation at 10m
+  Compute the audio attenuation at 10m.
   
   >>> p_att = maad.spl.apply_attenuation(p0_sig, fs, r0=5, r =10)
   >>> Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)
@@ -883,14 +883,14 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   >>> Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)
   >>> Sxx_dB_att_80m = maad.util.power2dB(Sxx_power_att,db_range=96) + 96 
   
-  add noise
+  Add noise to the signal.
   
   >>> Sxx_dB_att_10m = maad.util.add_dB(Sxx_dB_att_10m,Sxx_dB_noise) - 3 
   >>> Sxx_dB_att_20m = maad.util.add_dB(Sxx_dB_att_20m,Sxx_dB_noise) - 3 
   >>> Sxx_dB_att_40m = maad.util.add_dB(Sxx_dB_att_40m,Sxx_dB_noise) - 3 
   >>> Sxx_dB_att_80m = maad.util.add_dB(Sxx_dB_att_80m,Sxx_dB_noise) - 3 
     
-  plot attenuated spectrogram
+  Plot attenuated spectrogram.
   
   >>> maad.util.plot2D(Sxx_dB_att_10m, ax=ax2, extent=ext, vmin=0, vmax=70, figsize=[3,3])
   >>> maad.util.plot2D(Sxx_dB_att_20m, ax=ax3, extent=ext, vmin=0, vmax=70, figsize=[3,3])

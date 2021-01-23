@@ -29,10 +29,10 @@ _MIN_ = sys.float_info.min
 # -------------------       Functions               ---------------------------
 ****************************************************************************"""
 
-##### wav2volt
+#%%
 def wav2volt (wave, Vadc=2): 
     """
-    convert in Volt
+    Convert an audio signal amplitude to Volts.
     
     Parameters
     ----------
@@ -62,10 +62,10 @@ def wav2volt (wave, Vadc=2):
     volt =wave * Vadc
     return volt
 
-##### volt2pressure
+#%%
 def volt2pressure(volt, gain, sensitivity=-35, dBref=94):  
     """
-    convert volt to instantaneous sound pressure (p [Pa])
+    Convert Volts to instantaneous sound pressure (p [Pa]).
     
     Parameters
     ----------
@@ -111,10 +111,10 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
     p = volt * coeff / 10**(gain/20)
     return p
 
-#####  wav2pressure 
+#%%
 def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94): 
     """
-    convert wave to instantaneous sound pressure (p [Pa])
+    Convert wave amplitude to instantaneous sound pressure (p [Pa]).
     
     Parameters
     ----------
@@ -164,10 +164,10 @@ def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
     p = volt2pressure(v, gain, sensitivity, dBref)
     return p
 
-#####  pressure2dBSPL
+#%%
 def pressure2dBSPL (p, pRef=20e-6): 
     """
-    convert sound pressure (p [Pa]) to sound pressure level (L [dB])
+    Convert sound pressure (p [Pa]) to sound pressure level (L [dB]).
     
     Parameters
     ----------
@@ -210,10 +210,10 @@ def pressure2dBSPL (p, pRef=20e-6):
     L = 20*log10(p/pRef) 
     return L
 
-#####  dBSPL2pressure
+#%%
 def dBSPL2pressure (L, pRef=20e-6): 
     """
-    convert sound pressure level (L [dB]) to sound pressure (p [Pa])
+    Convert sound pressure level (L [dB]) to sound pressure (p [Pa]).
     
     Parameters
     ----------
@@ -245,10 +245,10 @@ def dBSPL2pressure (L, pRef=20e-6):
     p = 10**(L/20)*pRef
     return p
 
-#####  wav2dBSPL
+#%%
 def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
-    convert wave to instantaneous sound pressure level (L [dB SPL])
+    Convert wave amplitude to instantaneous sound pressure level (L [dB SPL]).
     
     Parameters
     ----------
@@ -304,9 +304,10 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     L = pressure2dBSPL(p_abs, pRef)
     return L
 
+#%%
 def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
-    convert signal (amplitude) to instantaneous sound pressure level (L [dB SPL])
+    Convert signal (amplitude) to instantaneous sound pressure level (L [dB SPL]).
     
     Parameters
     ----------
@@ -346,10 +347,10 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     return L
 
 
-#####  power2dBSPL
+#%%
 def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
-    convert power (amplitude²) to sound pressure level (L [dB])
+    Convert power (amplitude²) to sound pressure level (L [dB]).
     
     Parameters
     ----------
@@ -370,11 +371,12 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
         
     Examples
     --------
+    >>> import numpy as np
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode='psd')  
-    >>> S_power_mean = mean(Sxx_power, axis=1)
+    >>> S_power_mean = np.mean(Sxx_power, axis=1)
     
-    Get instantaneous sound pressure level (L)
+    Get instantaneous sound pressure level (L).
     
     >>> maad.spl.power2dBSPL(S_power_mean, gain=42)    
     array([41.56456034, 45.44257539, 43.17154534, 41.50665519, 38.08392914,
@@ -395,10 +397,10 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     return L
 
 ################################## Leq ########################################
-# wav2Leq
+#%%
 def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94): 
     """
-    convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL])
+    Convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL]).
     
     Parameters
     ----------
@@ -459,11 +461,11 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     Leq = 20*log10(volt_RMS) - sensitivity + dBref - gain
     return Leq
 
-#####  pressure2Leq
+#%%
 def pressure2Leq (p, fs, dt=1, pRef = 20e-6): 
     """
-    convert pressure vector (p [Pa]) to Equivalent Continuous Sound Pressure 
-    level (Leq [dB SPL])
+    Convert pressure vector (p [Pa]) to Equivalent Continuous Sound Pressure 
+    level (Leq [dB SPL]).
     
     Parameters
     ----------
@@ -511,10 +513,10 @@ def pressure2Leq (p, fs, dt=1, pRef = 20e-6):
     Leq = 20*log10(p_RMS/pRef)
     return Leq
 
-#####  PSD2Leq
+#%%
 def PSD2Leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     """
-    convert Power spectral density (PSD, amplitude²) into 
+    Convert Power spectral density (PSD, amplitude²) into 
     Equivalent Continuous Sound pressure level (Leq [dB SPL])
     
     Parameters

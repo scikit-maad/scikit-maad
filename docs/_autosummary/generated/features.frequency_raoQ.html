@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.frequency_raoQ &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.frequency_raoQ &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,8 +172,8 @@
 <dl class="py function">
 <dt id="features.frequency_raoQ">
 <code class="sig-prename descclassname">features.</code><code class="sig-name descname">frequency_raoQ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">S_power</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/features/alpha_indices.html#frequency_raoQ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.frequency_raoQ" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute Rao quadratic entropy on a power spectrum (1d)</p>
-<dl class="field-list simple">
+<dd><p>Compute Rao’s quadratic entropy on a power spectrum (1d).</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>S_power</strong><span class="classifier">ndarray of floats</span></dt><dd><p>Spectrum (1d)</p>
@@ -185,7 +184,30 @@
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>RAOQ</strong><span class="classifier">scalar</span></dt><dd><p>Rao quadratic entropy</p>
+</dd>
+<dt>References</dt><dd></dd>
 </dl>
+<blockquote>
+<div></div></blockquote>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Zhao, Yueqin. “Rao’s Quadratic Entropy and Some New Applications” (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09</dt><dd></dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S_power</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">avg_power_spectro</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">frequency_raoQ</span><span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+<span class="go">0.10556621228886422</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

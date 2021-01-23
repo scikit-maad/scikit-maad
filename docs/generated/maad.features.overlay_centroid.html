@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.features.overlay_centroid &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.features.overlay_centroid &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,15 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.features.centroid_features" href="maad.features.centroid_features.html" />
-    <link rel="prev" title="maad.features.plot_shape" href="maad.features.plot_shape.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -95,27 +92,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../features.html">Acoustic features</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../features.html#spectro-temporal-features">Spectro-temporal features</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="maad.features.shape_features.html">maad.features.shape_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.shape_features_raw.html">maad.features.shape_features_raw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.opt_shape_presets.html">maad.features.opt_shape_presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.filter_multires.html">maad.features.filter_multires</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.filter_bank_2d_nodc.html">maad.features.filter_bank_2d_nodc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.plot_shape.html">maad.features.plot_shape</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.features.overlay_centroid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.centroid_features.html">maad.features.centroid_features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.all_shape_features.html">maad.features.all_shape_features</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#alpha-acoustic-indices">Alpha acoustic indices</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#temporal-features">Temporal features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#spectral-features">Spectral features</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
@@ -168,8 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../features.html">Acoustic features</a> &raquo;</li>
-        
       <li>maad.features.overlay_centroid</li>
     
     
@@ -191,91 +169,6 @@
             
   <div class="section" id="maad-features-overlay-centroid">
 <h1>maad.features.overlay_centroid<a class="headerlink" href="#maad-features-overlay-centroid" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="maad.features.overlay_centroid">
-<code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">overlay_centroid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_ref</span></em>, <em class="sig-param"><span class="n">centroid</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/shape.html#overlay_centroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.overlay_centroid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overlay centroids on the original spectrogram</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>Sxx</strong><span class="classifier">2D array</span></dt><dd><p>Spectrogram</p>
-</dd>
-<dt><strong>centroid: pandas DataFrame</strong></dt><dd><p>DataFrame with centroid descriptors (centroid_f, centroid_t) 
-Do format_features(rois,tn,fn) before using overlay_centroid to be sure that 
-the format of the DataFrame is correct</p>
-</dd>
-<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix 
-is added to the root filename.</p>
-</dd>
-<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>savefilename<span class="classifier">str, optional, default :’_spectro_overlaycentroid.png’ </span></dt><dd><p>Postfix of the figure filename</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’ </span></dt><dd><p>title of the figure</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’ </span></dt><dd><p>label of the horizontal axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’ </span></dt><dd><p>label of the vertical axis</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’ </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a> 
-in order to get all the  existing colormaps 
-examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,  
-‘viridis’…</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>vmin, vmax<span class="classifier">scalar, optional, default: None </span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize 
-luminance data.  Note if you pass a <cite>norm</cite> instance, your 
-settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>dpi<span class="classifier">integer, optional, default is 96 </span></dt><dd><p>Dot per inch.  
-For printed version, choose high dpi (i.e. dpi=300) =&gt; slow 
-For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>format<span class="classifier">string, optional, default is ‘png’ </span></dt><dd><p>Format to save the figure</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>… and more, see matplotlib</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>ax</dt><dd><p>axis object (see matplotlib)</p>
-</dd>
-<dt>fig</dt><dd><p>figure object (see matplotlib)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -283,15 +176,6 @@ For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.features.centroid_features.html" class="btn btn-neutral float-right" title="maad.features.centroid_features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.features.plot_shape.html" class="btn btn-neutral float-left" title="maad.features.plot_shape" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

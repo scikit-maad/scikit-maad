@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>util.miscellaneous.format_features &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>util.miscellaneous.format_features &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -174,17 +173,19 @@
 <dt id="util.miscellaneous.format_features">
 <code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">format_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">tn</span></em>, <em class="sig-param"><span class="n">fn</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#format_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.format_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format features such as bounding box coordinates and centroids coordinates
-to predifined format : time-frequency =&gt; pixels or pixels to time-frequency
-units</p>
+to predifined format : time-frequency to pixels or pixels to time-frequency
+units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>df</strong><span class="classifier">pandas DataFrame</span></dt><dd><p>df with bounding box coordinates and/or centroids coordinates       
-array must have a valid input format with column names
-- bounding box: min_y, min_x, max_y, max_x
-- time frequency: min_f, min_t, max_f, max_t
-- centroid tf : centroid_f, centroid_t
-- centroid pixels : centroid_y, centroid_x</p>
+array must have a valid input format with column names.</p>
+<ul class="simple">
+<li><p>bounding box: min_y, min_x, max_y, max_x</p></li>
+<li><p>time frequency: min_f, min_t, max_f, max_t</p></li>
+<li><p>centroid tf : centroid_f, centroid_t</p></li>
+<li><p>centroid pixels : centroid_y, centroid_x</p></li>
+</ul>
 </dd>
 <dt><strong>tn</strong><span class="classifier">ndarray</span></dt><dd><p>vector with temporal indices, output from the spectrogram function (in seconds)</p>
 </dd>
@@ -207,6 +208,11 @@ and time-frequency units</p>
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></dt><dd></dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<p>Use this function after using functions such as <code class="docutils literal notranslate"><span class="pre">maad.rois.select_rois</span></code>, 
+<code class="docutils literal notranslate"><span class="pre">maad.features.centroid_features</span></code>, <code class="docutils literal notranslate"><span class="pre">maad.util.read_audacity_annot</span></code>, or before using 
+functions such as <code class="docutils literal notranslate"><span class="pre">maad.util.overlay_rois</span></code>, <code class="docutils literal notranslate"><span class="pre">maad.util.overlay_centroid</span></code> in order to 
+format the coordinates into pixels and/or time-frequency units.</p>
 </dd></dl>
 
 </div>

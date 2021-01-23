@@ -24,13 +24,8 @@ from maad.util import moments
 #%%
 def spectral_moments (X, axis=None):
     """
-    Computes the first 4th moments of an amplitude spectrum (1d) or
-    spectrogram (2d) 
-    
-    - mean
-    - variance
-    - skewness
-    - kurtosis
+    Computes the first 4th moments of an amplitude spectrum (1d) or spectrogram (2d), 
+    mean, variance, skewness, kurtosis.
     
     Parameters
     ----------

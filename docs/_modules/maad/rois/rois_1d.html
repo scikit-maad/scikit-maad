@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.rois.rois_1d &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.rois.rois_1d &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -268,7 +267,7 @@
 <div class="viewcode-block" id="find_rois_cwt"><a class="viewcode-back" href="../../../generated/maad.rois.find_rois_cwt.html#maad.rois.find_rois_cwt">[docs]</a><span class="k">def</span> <span class="nf">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">flims</span><span class="p">,</span> <span class="n">tlen</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_df</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
                   <span class="n">savefilename</span><span class="o">=</span><span class="s1">&#39;rois.csv&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find region of interest using simple known estimates of signal length and frequency limits.</span>
+<span class="sd">    Find region of interest using known estimates of signal length and frequency limits.</span>
 <span class="sd">    </span>
 <span class="sd">    The general approach is based on continous wavelet transform following a three step process</span>
 <span class="sd">    </span>
@@ -298,7 +297,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    rois : pandas DataFrame</span>
-<span class="sd">        an object with temporal and frequencial limits of regions of interest            </span>
+<span class="sd">        an table with temporal and frequencial limits of regions of interest            </span>
 <span class="sd">    </span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>

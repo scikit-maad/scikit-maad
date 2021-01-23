@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.save_figlist &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.save_figlist &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -107,9 +106,12 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.save_figlist</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot1D.html">maad.util.plot1D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot2D.html">maad.util.plot2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_rois.html">maad.util.overlay_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_centroid.html">maad.util.overlay_centroid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features_map.html">maad.util.plot_features_map</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features.html">maad.util.plot_features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.plot_correlation_map.html">maad.util.plot_correlation_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_shape.html">maad.util.plot_shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.false_Color_Spectro.html">maad.util.false_Color_Spectro</a></li>
 </ul>
 </li>
@@ -194,21 +196,18 @@
 <dl class="py function">
 <dt id="maad.util.save_figlist">
 <code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">save_figlist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">figlist</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#save_figlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.save_figlist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save a list of figures to file.</p>
+<dd><p>Save a list of figures or spectrograms to disk.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>fname: string</strong></dt><dd><p>suffix name to save the figure. Extension indicates the format 
-of the image</p>
+<dt><strong>fname: string</strong></dt><dd><p>Suffix string add to the filename. The extension should be specified since it 
+indicates the image format.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>Nothing</dt><dd></dd>
 </dl>
-</dd>
-</dl>
+<p class="rubric">Notes</p>
+<p>This function does not return any variable.</p>
 </dd></dl>
 
 </div>

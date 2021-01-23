@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Use unsupervised learning to classify sounds in a recording &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>Use unsupervised learning to classify sounds &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,15 +32,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Remove background noise from audio with signal processing tools" href="plot_remove_background.html" />
-    <link rel="prev" title="Using wavelets to characterize the time-frequency shape of sounds" href="using_shape_features.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -103,23 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Example gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Use unsupervised learning to classify sounds in a recording</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#find-regions-of-interest">1. Find regions of interest</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#compute-acoustic-features">2. Compute acoustic features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#reduce-the-dimensionality-of-the-features">3. Reduce the dimensionality of the features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cluster-the-rois-into-homogeneous-groups">4. Cluster the ROIs into homogeneous groups.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_compare_auto_and_manual_rois_selection.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_extract_alpha_indices.html">Extract ecoacoustics alpha indices from audio recording</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
 </ul>
 
             
@@ -166,9 +148,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html">Example gallery</a> &raquo;</li>
-        
-      <li>Use unsupervised learning to classify sounds in a recording</li>
+      <li>Use unsupervised learning to classify sounds</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -191,13 +171,14 @@
 <p class="admonition-title">Note</p>
 <p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-unsupervised-sound-classification-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="use-unsupervised-learning-to-classify-sounds-in-a-recording">
-<span id="sphx-glr-auto-examples-plot-unsupervised-sound-classification-py"></span><h1>Use unsupervised learning to classify sounds in a recording<a class="headerlink" href="#use-unsupervised-learning-to-classify-sounds-in-a-recording" title="Permalink to this headline">¶</a></h1>
+<div class="sphx-glr-example-title section" id="use-unsupervised-learning-to-classify-sounds">
+<span id="sphx-glr-auto-examples-plot-unsupervised-sound-classification-py"></span><h1>Use unsupervised learning to classify sounds<a class="headerlink" href="#use-unsupervised-learning-to-classify-sounds" title="Permalink to this headline">¶</a></h1>
 <p>Unsupervised learning algorithms search for structures or patterns in a dataset without requiring labels. In the context of ecoacoustics, this approach can be usefull to draw inferences when manual labelling is inaccesible or too expensive. For example, unsupervised learning can be used to estimate the animal acoustic diversity [1], combine human-reasoning and automated procedures to build reference libraries, and find hidden structures in the soundscapes.</p>
 <p>In this example, we will use unsupervised learning to automatically annotate multiple sounds in an audio recording.  The process follows four main steps. We will (i) find sounds that can be delimited in time and frequency, here defined as regions of interest (ROIs), (ii) characterize ROIs by features in the time-frequency domain using 2D wavelets [2], (iii) use t-SNE, a dimensionality reduction algorithm, to reduce the dimensionality of the data [3], and (iv) a automatically form homogenous groups using DBSCAN [4]. We will use a real audio file recorded with an omnidirectional microphone. This audio has a poor signal-to-noise ratio, which is typical of automated audio recordings.</p>
 <p>Note: To execute this example you will need to have instaled the Python packages
 matplotlib, scikit-image and scikit-learn.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_path = &#39;../_images/sphx_glr_plot_unsupervised_sound_classification_004.png&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">rois</span>
 <span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">format_features</span>
@@ -213,7 +194,7 @@ matplotlib, scikit-image and scikit-learn.</p>
 <span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="Spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_001.png" />
+<img alt="Spectrogram" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_0012.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   if now: plt.show()
@@ -232,7 +213,7 @@ matplotlib, scikit-image and scikit-learn.</p>
 <span class="n">ax0</span><span class="p">,</span> <span class="n">fig0</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_002.png" />
+<img alt="ROIs Overlay" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_0022.png" />
 </div>
 <div class="section" id="compute-acoustic-features">
 <h2>2. Compute acoustic features<a class="headerlink" href="#compute-acoustic-features" title="Permalink to this headline">¶</a></h2>
@@ -263,13 +244,13 @@ matplotlib, scikit-image and scikit-learn.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;tsne dim 2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="plot unsupervised sound classification" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_003.png" />
+<img alt="plot unsupervised sound classification" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_0032.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>//miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
   return f(*args, **kwds)
 [t-SNE] Computing 37 nearest neighbors...
 [t-SNE] Indexed 187 samples in 0.000s...
-[t-SNE] Computed neighbors for 187 samples in 0.004s...
+[t-SNE] Computed neighbors for 187 samples in 0.002s...
 [t-SNE] Computed conditional probabilities for sample 187 / 187
 [t-SNE] Mean sigma: 0.044609
 [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
@@ -304,9 +285,9 @@ Number of soundtypes found: 5
 </pre></div>
 </div>
 <ul class="sphx-glr-horizontal">
-<li><img alt="plot unsupervised sound classification" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_004.png" />
+<li><img alt="plot unsupervised sound classification" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_0042.png" />
 </li>
-<li><img alt="ROIs Overlay" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_005.png" />
+<li><img alt="ROIs Overlay" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_unsupervised_sound_classification_0052.png" />
 </li>
 </ul>
 </div>
@@ -318,7 +299,7 @@ Number of soundtypes found: 5
 <li><p>Maaten, L. van der, &amp; Hinton, G. (2008). Visualizing data using t-SNE. Journal of Machine Learning Research, 9(Nov), 2579–2605.</p></li>
 <li><p>Ester, M., Kriegel, H.-P., Sander, J., &amp; Xu, X. (1996). A density-based algorithm for discovering clusters in large spatial databases with noise. Proceedings of the 2nd International Conference on Knowledge Discovery and Data Mining, 96(34), 226–231.</p></li>
 </ol>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  4.754 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  5.656 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-unsupervised-sound-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8723a78a30fd464b4e2eae8d861454c0/plot_unsupervised_sound_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_unsupervised_sound_classification.py</span></code></a></p>
@@ -336,15 +317,6 @@ Number of soundtypes found: 5
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="plot_remove_background.html" class="btn btn-neutral float-right" title="Remove background noise from audio with signal processing tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="using_shape_features.html" class="btn btn-neutral float-left" title="Using wavelets to characterize the time-frequency shape of sounds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

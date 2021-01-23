@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.alpha_indices.spectral_activity &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.alpha_indices.spectral_activity &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -173,11 +172,15 @@
 <dl class="py function">
 <dt id="features.alpha_indices.spectral_activity">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_dB</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">6</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_activity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_activity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Acoustic Activity :</p>
-<p>for each frequency bin :
-- ACTfract : proportion (fraction) of points above the threshold 
-- ACTcount : number of points above the threshold
-- ACTmean : mean value (in dB) of the portion of the signal above the threhold</p>
+<dd><p>Compute the acoustic activity on a spectrogram.</p>
+<dl class="simple">
+<dt>The function computes for each frequency bin:</dt><dd><ul class="simple">
+<li><p>ACTfract : proportion (fraction) of points above the threshold</p></li>
+<li><p>ACTcount : number of points above the threshold</p></li>
+<li><p>ACTmean : mean value (in dB) of the portion of the signal above the threhold</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -201,10 +204,19 @@ background noise</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Towsey, Michael W. (2013) Noise removal from wave-forms and spectrograms derived 
-from natural recordings of the environment.
-Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
+<p>Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
 from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_noNoise</span><span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB_noNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_noNoise</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ACTspfract_per_bin</span><span class="p">,</span> <span class="n">ACTspcount_per_bin</span><span class="p">,</span> <span class="n">ACTspmean_per_bin</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">spectral_activity</span><span class="p">(</span><span class="n">Sxx_dB_noNoise</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean proportion of spectrogram above threshold : </span><span class="si">%2.2f%%</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ACTspfract_per_bin</span><span class="p">))</span>
+<span class="go">Mean proportion of spectrogram above threshold : 0.07%</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

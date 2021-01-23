@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sound &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>sound &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -199,28 +198,28 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.fir_filter.html#sound.fir_filter" title="sound.fir_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir_filter</span></code></a>(x, kernel[, axis])</p></td>
-<td><p>Filter a signal using a 1d Finite impulse filter.</p></td>
+<td><p>Filter a signal using a 1d finite impulse response filter.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.sinc.html#sound.sinc" title="sound.sinc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sinc</span></code></a>(s, cutoff, fs[, atten, transition_bw, …])</p></td>
 <td><p>Filter 1D signal with a Kaiser-windowed filter.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.smooth.html#sound.smooth" title="sound.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a>(Sxx[, std, verbose, display, savefig])</p></td>
-<td><p>Smooth a spectrogram with a gaussian filter</p></td>
+<td><p>Smooth a spectrogram with a gaussian filter.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.select_bandwidth.html#sound.select_bandwidth" title="sound.select_bandwidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_bandwidth</span></code></a>(x, fs, fcut, forder[, …])</p></td>
-<td><p>Select a lowpass, highpass, bandpass or bandstop a 1d signal with an iir filter.</p></td>
+<td><p>Use a lowpass, highpass, bandpass or bandstop filter to process a 1d signal with an iir filter.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background.html#sound.remove_background" title="sound.remove_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background</span></code></a>(Sxx[, gauss_win, …])</p></td>
-<td><p>Remove the background noise using spectral subtraction</p></td>
+<td><p>Remove background noise using spectral subtraction.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.remove_background_morpho.html#sound.remove_background_morpho" title="sound.remove_background_morpho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_morpho</span></code></a>(Sxx[, q, display, …])</p></td>
 <td><p>Remove background noise in a spectrogram using mathematical morphology tool.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background_along_axis.html#sound.remove_background_along_axis" title="sound.remove_background_along_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_along_axis</span></code></a>(Sxx[, mode, …])</p></td>
-<td><p>Get the noisy profile along the defined axis and remove this profile from the spectrogram</p></td>
+<td><p>Get the noisy profile along the defined axis and remove this profile from the spectrogram.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.median_equalizer.html#sound.median_equalizer" title="sound.median_equalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">median_equalizer</span></code></a>(Sxx[, display, savefig])</p></td>
-<td><p>Median equalizer : remove background noise in a spectrogram</p></td>
+<td><p>Remove background noise in spectrogram using median equalizer.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.wave2frames.html#sound.wave2frames" title="sound.wave2frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wave2frames</span></code></a>(s[, Nt])</p></td>
 <td><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of length Nt.</p></td>
@@ -240,13 +239,13 @@
 <td><p>Compute a spectrogram using the short-time Fourier transform from an audio signal.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.avg_power_spectro.html#sound.avg_power_spectro" title="sound.avg_power_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_power_spectro</span></code></a>(Sxx_power)</p></td>
-<td><p>Computes the average of a power spectrogram along the time axis</p></td>
+<td><p>Computes the average of a power spectrogram along the time axis.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.avg_amplitude_spectro.html#sound.avg_amplitude_spectro" title="sound.avg_amplitude_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_amplitude_spectro</span></code></a>(Sxx_ampli)</p></td>
-<td><p>Computes the average of an amplitude spectrogram along the time axis</p></td>
+<td><p>Computes the average of an amplitude spectrogram along the time axis.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.intoOctave.html#sound.intoOctave" title="sound.intoOctave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoOctave</span></code></a>(X, fn[, thirdOctave, display])</p></td>
-<td><p>Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave spectrum (1d) or Spectrogram (2d) Better to work with PSD (amplitude²) for energy conservation</p></td>
+<td><p>Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave spectrum (1d) or Spectrogram (2d).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="sound.envelope.html#module-sound.envelope" title="sound.envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">envelope</span></code></a>(s[, mode, Nt])</p></td>
 <td><p>Calcul the envelope of a sound waveform (1d)</p></td>

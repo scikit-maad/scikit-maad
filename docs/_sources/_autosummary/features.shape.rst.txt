@@ -1,4 +1,4 @@
-features.shape
+﻿features.shape
 ==============
 
 .. automodule:: features.shape
@@ -20,8 +20,6 @@ features.shape
       filter_bank_2d_nodc
       filter_multires
       opt_shape_presets
-      overlay_centroid
-      plot_shape
       shape_features
       shape_features_raw
    

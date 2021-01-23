@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.shape_features_raw &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>features.shape_features_raw &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -176,7 +175,7 @@
 <dd><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  
 using 2D Gabor filters. Contrary to <code class="docutils literal notranslate"><span class="pre">shape_features</span></code>, this function 
 delivers the raw response of the spectrogram to each filter of the filter 
-bank.</p>
+bank. This function can be used to have access to spectrograms filtered by the filterbank.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -206,12 +205,11 @@ shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</p>
 <p class="admonition-title">See also</p>
 <dl class="simple">
 <dt><a class="reference internal" href="../../generated/maad.features.shape_features.html#maad.features.shape_features" title="maad.features.shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.shape_features</span></code></a>, <a class="reference internal" href="../../generated/maad.features.opt_shape_presets.html#maad.features.opt_shape_presets" title="maad.features.opt_shape_presets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.opt_shape_presets</span></code></a></dt><dd></dd>
-<dt><a class="reference internal" href="../../generated/maad.features.filter_bank_2d_nodc.html#maad.features.filter_bank_2d_nodc" title="maad.features.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.filter_bank_2d_nodc</span></code></a>, <a class="reference internal" href="../../generated/maad.features.plot_shape.html#maad.features.plot_shape" title="maad.features.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.plot_shape</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="../../generated/maad.features.filter_bank_2d_nodc.html#maad.features.filter_bank_2d_nodc" title="maad.features.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.features.filter_bank_2d_nodc</span></code></a>, <a class="reference internal" href="../../generated/maad.util.plot_shape.html#maad.util.plot_shape" title="maad.util.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maad.util.plot_shape</span></code></a></dt><dd></dd>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>This function can be used to have access to spectrograms filtered by a 2D
-Gabor filter bank.</p>
+<p>Scatter the spectrogram acoustic components using 2D Gabor filters.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">shape_features_raw</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">plot2D</span>
@@ -219,8 +217,10 @@ Gabor filter bank.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shape_raw</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features_raw</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot2D</span><span class="p">(</span><span class="n">shape_raw</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:(</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot2D</span><span class="p">(</span><span class="n">shape_raw</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:(</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot2D</span><span class="p">(</span><span class="n">shape_raw</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;High-frequency vertical component&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot2D</span><span class="p">(</span><span class="n">shape_raw</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Low-frequency vertical components&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot2D</span><span class="p">(</span><span class="n">shape_raw</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;High-frequency horizontal components&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot2D</span><span class="p">(</span><span class="n">shape_raw</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Low-frequency horizontal components&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>

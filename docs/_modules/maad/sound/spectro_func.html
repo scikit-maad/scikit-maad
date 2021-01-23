@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.sound.spectro_func &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.sound.spectro_func &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -62,7 +61,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -326,7 +325,7 @@
 <span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     </span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     </span>
 <span class="sd">    </span>
 <span class="sd">    Compute mean power spectrogram</span>
 <span class="sd">    </span>
@@ -350,7 +349,7 @@
 <span class="sd">    energy =&gt; power x time</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; E3 = sum(S_power_mean*len(s)) </span>
-<span class="sd">    &gt;&gt;&gt;  maad.util.power2dB(E3)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.power2dB(E3)</span>
 <span class="sd">    44.93083283875093</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -464,8 +463,9 @@
 <div class="viewcode-block" id="intoOctave"><a class="viewcode-back" href="../../../generated/maad.sound.intoOctave.html#features.alpha_indices.intoOctave">[docs]</a><span class="k">def</span> <span class="nf">intoOctave</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">thirdOctave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave</span>
-<span class="sd">    spectrum (1d) or Spectrogram (2d)</span>
-<span class="sd">    Better to work with PSD (amplitude²) for energy conservation</span>
+<span class="sd">    spectrum (1d) or Spectrogram (2d).</span>
+<span class="sd">    </span>
+<span class="sd">    Our advice is to work with PSD (amplitude²) for energy conservation.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -557,7 +557,7 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="avg_power_spectro"><a class="viewcode-back" href="../../../generated/maad.sound.avg_power_spectro.html#features.alpha_indices.avg_power_spectro">[docs]</a><span class="k">def</span> <span class="nf">avg_power_spectro</span> <span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the average of a power spectrogram along the time axis</span>
+<span class="sd">    Computes the average of a power spectrogram along the time axis.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -581,7 +581,7 @@
 <span class="c1">#%%</span>
 <div class="viewcode-block" id="avg_amplitude_spectro"><a class="viewcode-back" href="../../../generated/maad.sound.avg_amplitude_spectro.html#features.alpha_indices.avg_amplitude_spectro">[docs]</a><span class="k">def</span> <span class="nf">avg_amplitude_spectro</span> <span class="p">(</span><span class="n">Sxx_ampli</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the average of an amplitude spectrogram along the time axis</span>
+<span class="sd">    Computes the average of an amplitude spectrogram along the time axis.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

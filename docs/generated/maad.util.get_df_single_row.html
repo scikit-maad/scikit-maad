@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.util.get_df_single_row &mdash; scikit-maad 0.1.4 documentation</title>
+  <title>maad.util.get_df_single_row &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.1.4
+                1.1
               </div>
             
           
@@ -200,7 +199,7 @@
 <dt id="maad.util.get_df_single_row">
 <code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">get_df_single_row</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">index</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'iloc'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/miscellaneous.html#get_df_single_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.get_df_single_row" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract a single row from a dataframe keeping the DataFrame type 
-(instead of becoming a Series)</p>
+(instead of becoming a Series).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -227,9 +226,7 @@
 <span class="go">              (&#39;insect&#39;, 4, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
 <span class="go">              (&#39;mammal&#39;, 2, &#39;No&#39;,&#39;NYC&#39; ) ,</span>
 <span class="go">              (&#39;frog&#39;, 3, &#39;Yes&#39;,&quot;LA&quot; ) ]</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> 
 <span class="go">                      columns = [&#39;category&#39;,</span>
 <span class="go">                                 &#39;abundance&#39;,</span>
 <span class="go">                                 &#39;presence&#39;,</span>

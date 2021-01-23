@@ -843,23 +843,19 @@ def plot_features_map (df, norm=True, mode='24h', **kwargs) :
             - otherwise, the timeline is the timeline of the dataframe
             
     **kwargs
-        SPECIFIC TO THIS FUNCTION
-        - ftime : Time format to display as x label 
-            by default '%Y-%m-%d'
-            see https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior
+        Specific to this function:
+        
+        - ftime : Time format to display as x label by default '%Y-%m-%d'(see https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior)
             
-        SPECIFIC TO MATPLOTLIB    
-        - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
+        Specific to matplotlib:
+            
+        - figsize : tuple of integers, optional, default: (4,10) width, height in inches.  
         
-        - title : string, optional, default : 'Spectrogram'
-            title of the figure
+        - title : string, optional, default : 'Spectrogram' title of the figure
         
-        - xlabel : string, optional, default : 'Time [s]'
-            label of the horizontal axis
-        
-        - ylabel : string, optional, default : 'Amplitude [AU]'
-            label of the vertical axis
+        - xlabel : string, optional, default : 'Time [s]' label of the horizontal axis
+
+        - ylabel : string, optional, default : 'Amplitude [AU]' label of the vertical axis
             
         - xticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should 
@@ -1070,7 +1066,7 @@ def plot_features (df, ax=None, norm=True, mode='24h', **kwargs) :
 def plot_correlation_map (df, R_threshold=0.75, method ='spearman', **kwargs) :
     """
     Plot the correlation map between indices in the DataFrame obtained
-    with MAAD
+    with ``maad``.
         
     Parameters
     ----------
