@@ -30,7 +30,7 @@ scikit-image, scikit-learn and pandas Python packages.
     import numpy as np
     import pandas as pd
     from maad import sound, rois, features
-    from maad.util import power2dB, plot2D, format_features, read_audacity_annot
+    from maad.util import power2dB, plot2D, format_features, read_audacity_annot, overlay_rois, overlay_centroid
 
 
 
@@ -74,7 +74,7 @@ First, load and audio file and compute the power spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:657: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
 
 
@@ -122,14 +122,14 @@ than the second threshold value.
     df_rois = format_features(df_rois, tn, fn)
 
     # overlay bounding box on the original spectrogram
-    ax0, fig0 = rois.overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
+    ax0, fig0 = overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
     # Compute and visualize centroids
     df_centroid = features.centroid_features(Sxx_db, df_rois, im_rois)
     df_centroid = format_features(df_centroid, tn, fn)
-    ax0, fig0 = features.overlay_centroid(Sxx_db, df_centroid, savefig=None,
-                                          **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':4, 
-                                             'marker':'+', 'fig':fig0, 'ax':ax0})
+    ax0, fig0 = overlay_centroid(Sxx_db, df_centroid, savefig=None,
+                                 **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':4, 
+                                    'marker':'+', 'fig':fig0, 'ax':ax0})
 
 
 
@@ -186,15 +186,15 @@ signatures are labeled with the same name
     df_rois_GT = format_features(df_rois_GT, tn, fn)
 
     # overlay bounding box on the original spectrogram
-    ax1, fig1 = rois.overlay_rois(Sxx_db, df_rois_GT, **{'vmin':0,'vmax':dB_max,'extent':ext})
+    ax1, fig1 = overlay_rois(Sxx_db, df_rois_GT, **{'vmin':0,'vmax':dB_max,'extent':ext})
     
     # Compute and visualize centroids
     df_centroid_GT = features.centroid_features(Sxx_db, df_rois_GT)
     df_centroid_GT = format_features(df_centroid_GT, tn, fn)
-    ax1, fig1 = features.overlay_centroid(Sxx_db, df_centroid_GT, savefig=None, 
-                                          **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                             'ms':2, 'marker':'+','color':'blue',
-                                             'fig':fig1, 'ax':ax1})
+    ax1, fig1 = overlay_centroid(Sxx_db, df_centroid_GT, savefig=None, 
+                                 **{'vmin':0,'vmax':dB_max,'extent':ext,
+                                    'ms':2, 'marker':'+','color':'blue',
+                                    'fig':fig1, 'ax':ax1})
 
     # print informations about the rois
     print ('Total number of ROIs : %2.0f' %len(df_rois_GT))
@@ -251,10 +251,10 @@ by KMeans
 
     # overlay color bounding box corresponding to the label, and centroids
     # on the original spectrogram
-    ax2, fig2 = rois.overlay_rois(Sxx_db, df_centroid, **{'vmin':0,'vmax':dB_max,'extent':ext})
-    ax2, fig2 = features.overlay_centroid(Sxx_db, df_centroid, savefig=None, 
-                                          **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':2, 
-                                             'fig':fig2, 'ax':ax2})
+    ax2, fig2 = overlay_rois(Sxx_db, df_centroid, **{'vmin':0,'vmax':dB_max,'extent':ext})
+    ax2, fig2 = overlay_centroid(Sxx_db, df_centroid, savefig=None, 
+                                 **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':2, 
+                                    'fig':fig2, 'ax':ax2})
 
 
 
@@ -299,12 +299,12 @@ To extract
     df_rois_WAV = format_features(df_rois_WAV, tn, fn)
     df_centroid_WAV = features.centroid_features(Sxx_db, df_rois_WAV)
 
-    ax3, fig3 = rois.overlay_rois(Sxx_db, df_rois_WAV, **{'vmin':0,'vmax':dB_max,
+    ax3, fig3 = overlay_rois(Sxx_db, df_rois_WAV, **{'vmin':0,'vmax':dB_max,
                                                           'extent':ext})
     df_centroid_WAV = format_features(df_centroid_WAV, tn, fn)
-    ax3, fig3 = features.overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
-                                          **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                             'ms':2, 'fig':fig3, 'ax':ax3})
+    ax3, fig3 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
+                                 **{'vmin':0,'vmax':dB_max,'extent':ext,
+                                    'ms':2, 'fig':fig3, 'ax':ax3})
 
 
 
@@ -332,11 +332,11 @@ Prepare the features in order to have zero mean and same variance
 
     # overlay color bounding box corresponding to the label, and centroids
     # on the original spectrogram
-    ax4, fig4 = rois.overlay_rois(Sxx_db, df_centroid_WAV, **{'vmin':0,'vmax':dB_max,
+    ax4, fig4 = overlay_rois(Sxx_db, df_centroid_WAV, **{'vmin':0,'vmax':dB_max,
                                                               'extent':ext})
-    ax4, fig4 = features.overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
-                                          **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                             'ms':2,'fig':fig4, 'ax':ax4})
+    ax4, fig4 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
+                                 **{'vmin':0,'vmax':dB_max,'extent':ext,
+                                    'ms':2,'fig':fig4, 'ax':ax4})
 
 
 
@@ -358,7 +358,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.430 seconds)
+   **Total running time of the script:** ( 0 minutes  3.609 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_compare_auto_and_manual_rois_selection.py:

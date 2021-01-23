@@ -400,7 +400,7 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
 #%%
 def plot1D(x, y, ax=None, **kwargs):
     """
-    plot a signal s
+    Plot the waveform or spectrum of an audio signal. 
     
     Parameters
     ----------
@@ -469,7 +469,7 @@ def plot1D(x, y, ax=None, **kwargs):
     
     Convert spectrogram into dB SPL
     
-    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) 
+    >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) 
        
     Plot the spectrum at t = 7s
     
@@ -529,7 +529,10 @@ def plot1D(x, y, ax=None, **kwargs):
 
 def plot2D(im,ax=None,**kwargs):
     """
-    display an image (spectrogram, 2D binary mask, ROIS...)
+    Display the spectrogram of an audio signal. 
+    
+    The spectrogram should be previously computed using the function 
+    ``maad.sound.spectrogram``.
     
     Parameters
     ----------
@@ -590,7 +593,7 @@ def plot2D(im,ax=None,**kwargs):
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
@@ -766,7 +769,7 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> Lxx = maad.util.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
@@ -775,7 +778,6 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
                       'ylabel':'Frequency [Hz]',
                       }
     >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
-    
     >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,10000), tcrop=(0,30))
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
@@ -803,17 +805,17 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
 #=============================================================================
 def save_figlist(fname, figlist):
     """
-    Save a list of figures to file.
+    Save a list of figures or spectrograms to disk.
     
     Parameters
     ----------
     fname: string
-        suffix name to save the figure. Extension indicates the format 
-        of the image
+        Suffix string add to the filename. The extension should be specified since it 
+        indicates the image format.
 
-    Returns
-    -------
-    Nothing
+    Notes
+    -----
+    This function does not return any variable.
         
     """
     for i, fig in enumerate(figlist):
@@ -823,9 +825,9 @@ def save_figlist(fname, figlist):
 #=============================================================================
 def plot_features_map (df, norm=True, mode='24h', **kwargs) :
     """
-    Plot features amplitude as heatmap.
-    Features are on the vertical axis
-    Timeline is on the horizontal axis
+    Plot features values on a heatmap.
+    
+    The plot has the features the vertical axis and the time on the horizontal axis.
     
     Parameters
     ----------
@@ -949,8 +951,8 @@ def plot_features_map (df, norm=True, mode='24h', **kwargs) :
 
 def plot_features (df, ax=None, norm=True, mode='24h', **kwargs) : 
     """
-    Plot phenology of the features (ie. indices) in the DataFrame obtained 
-    with MAAD
+    Plot the variation of features values (ie. indices) in the DataFrame obtained 
+    with ``maad.features``.
             
     Parameters
     ----------
@@ -1172,9 +1174,9 @@ def false_Color_Spectro (df, indices=None, plim=(1,99), reverseLUT=False,
                          permut=False, unit='minutes', verbose=False,
                          display=False, savefig=None, **kwargs) :
     """
-    Create False Color Spectrogram from indices obtained by MAAD
+    Create False Color Spectrogram from indices obtained by MAAD.
     Only indices than can be computed bin per bin (ie frequency per frequency)
-    are used to create False Color Spectro. They are called xxx_per_bin
+    are used to create False Color Spectro. They are called xxx_per_bin.
         
     Parameters
     ----------

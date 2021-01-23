@@ -19,7 +19,7 @@ from pathlib import Path # in order to be Windows/linux/MacOS compatible
 def read_audacity_annot (audacity_filename):
     """
     Read audacity annotations file (or labeling file) and return a Pandas Dataframe
-    with the bounding box and the label of each region of interest (ROI)
+    with the bounding box and the label of each region of interest (ROI).
     
     Parameters
     ----------
@@ -37,12 +37,14 @@ def read_audacity_annot (audacity_filename):
     
     Examples:
     --------
+    >>> from maad import sound
+    >>> from maad.util import power2dB, read_audacity_annot, format_features, overlay_rois
     >>> s, fs = sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
     >>> Sxx_db = power2dB(Sxx_power) + 96
     >>> df_rois = read_audacity_annot('../data/cold_forest_daylight_label.txt') 
     >>> df_rois = format_features(df_rois, tn, fn)
-    >>> maad.utils.overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
+    >>> overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
     
     """
     # read file with tab delimiter
@@ -149,11 +151,13 @@ def _date_from_filename (filename):
 
 def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     """
-    Parse all filenames contained in a directory and its subdirectories 
-    Keep only filenames corresponding to extension
+    Parse all filenames contained in a directory and its subdirectories.
+    
+    Keeps only filenames corresponding to extension.
     Filenames must follow :
-    - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
-    - or POSIX format (for audiomoth)  
+        - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
+        - or POSIX format (for audiomoth)  
+    
     The result is a panda dataframe with 'Date' as index and 'File' (with full path as column) 
     
     Parameters

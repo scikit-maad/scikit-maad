@@ -16,7 +16,6 @@
       :nosignatures:
    
       create_mask
-      overlay_rois
       rois_to_imblobs
       select_rois
    

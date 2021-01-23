@@ -33,7 +33,7 @@ from maad.util import linear_scale
 
 def running_mean(x, N, mode="nearest"):
     """
-    Compute fast running mean for a window size N
+    Compute fast running mean for a window size N.
     
     Parameters
     ----------
@@ -83,8 +83,8 @@ def running_mean(x, N, mode="nearest"):
 #%%
 def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
     """
-    Get the statistical mode or modal value which is 
-    the most common number in the dataset.
+    Get the statistical mode or modal value which is the most common number in the 
+    dataset.
     
     Parameters
     ----------
@@ -228,9 +228,9 @@ def rms(s):
     
     Examples
     --------
-    >>> from maad import sound, features
+    >>> from maad import sound, util
     >>> s, fs = sound.load('../data/spinetail.wav')
-    >>> rms = features.rms(s)
+    >>> rms_value = util.rms(s)
     
     """
     return np.sqrt(np.mean(s**2))

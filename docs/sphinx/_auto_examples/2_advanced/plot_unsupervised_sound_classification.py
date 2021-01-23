@@ -15,7 +15,7 @@ matplotlib, scikit-image and scikit-learn.
 import numpy as np
 import matplotlib.pyplot as plt
 from maad import sound, features, rois
-from maad.util import power2dB, plot2D, format_features
+from maad.util import power2dB, plot2D, format_features, overlay_rois
 
 #%%
 # Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
@@ -40,7 +40,7 @@ im_rois, df_rois = rois.select_rois(im_mask, min_roi=50, max_roi=None)
 
 # Format ROIs and visualize the bounding box on the audio spectrogram.
 df_rois = format_features(df_rois, tn, fn)
-ax0, fig0 = rois.overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':60, 'extent':ext})
+ax0, fig0 = overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':60, 'extent':ext})
 
 #%% 
 # 2. Compute acoustic features
@@ -91,7 +91,7 @@ ax.set_ylabel('tsne dim 2')
 
 # Overlay bounding box on the original spectrogram
 df_rois['label'] = cluster.labels_.astype(str)
-ax0, fig0 = rois.overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':60, 'extent':ext})
+ax0, fig0 = overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':60, 'extent':ext})
 
 
 #%% 

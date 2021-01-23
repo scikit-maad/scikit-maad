@@ -1911,7 +1911,7 @@ def more_entropy(x, order=3, axis=0) :
 
 def frequency_raoQ (S_power, fn, bin_step=1000):
     """
-    Compute Rao's quadratic entropy [1]_ on a power spectrum (1d).
+    Compute Rao's quadratic entropy on a power spectrum (1d).
         
     Parameters
     ----------
@@ -1929,9 +1929,8 @@ def frequency_raoQ (S_power, fn, bin_step=1000):
         
     References
     ---------
-    .. [1] Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). 
-    Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
-    Old Dominion University, DOI: 10.25777/qgak-sf09
+    
+    .. [1] Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09
 
     Examples
     --------
