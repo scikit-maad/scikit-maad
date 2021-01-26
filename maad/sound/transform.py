@@ -99,8 +99,8 @@ def envelope (s, mode='fast', Nt=32):
     return env
 
 #%%
-def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None,
-        display=False):
+def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None, 
+        flims=None, display=False):
     """ 
     Estimate the power spectral density of 1D signal using Welch's or periodogram methods. 
     
@@ -123,6 +123,11 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         Temporal limits to compute the power spectral density in seconds (s)
         If None, estimates for the complete signal will be computed.
         Default is 'None'
+    flims: tuple of ints or floats
+        Spectral limits to compute the power spectral density in Hertz (Hz)
+        If None, estimates from 0 to fs/2 will be computed.
+        Default is 'None'
+
     
     Returns
     -------
@@ -140,6 +145,11 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     >>> from maad import sound
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> psd, f_idx = sound.psd(s, fs, nperseg=512, display=True)
+    
+    Specify temporal and spectral limits.
+    
+    >>> psd, f_idx = sound.psd(s, fs, nperseg=2056, tlims=(5.3, 7.9), flims=(2000, 12000), display=True)
+    
     """
     
     if tlims is not None:
@@ -163,6 +173,9 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
     index_names = ['psd_' + str(idx).zfill(3) for idx in range(1,len(psd_s)+1)]
     psd_s = pd.Series(psd_s, index=index_names)
     f_idx = pd.Series(f_idx, index=index_names)
+    if flims is not None:
+        psd_s = psd_s[(f_idx>=flims[0]) & (f_idx<=flims[1])]
+        f_idx = f_idx[(f_idx>=flims[0]) & (f_idx<=flims[1])]
     
     if display:
         fig, ax = plt.subplots(figsize=(9,5))
