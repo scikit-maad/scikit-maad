@@ -276,8 +276,9 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
      
     References 
     ---------- 
-    .. [1] from MATLAB: Threshold estimation (from Oliveira et al, 2015) 
-       Adapted by S. Haupert Dec 12, 2017 
+    .. [1] J. Canny. A computational approach to edge detection. IEEE 
+    Transactions on Pattern Analysis and Machine Intelligence. 1986; vol. 8, 
+    pp.679-698. DOI:10.1109/TPAMI.1986.4767851 
     """ 
      
     # binarisation  
@@ -356,9 +357,11 @@ def create_mask(im, mode_bin = 'relative',
         Spectrogram (or image) 
  
     mode_bin : string in {'relative', 'absolute'}, optional, default is 'relative' 
-        if 'relative', a relative double threshold is performed 
-        if 'absolute', an double threshold with absolute value is performed 
-        
+        if 'absolute' [1] , a double threshold with absolute value is performed 
+        with two parameters (see \*\*kwargs section)
+        if 'relative' [2], a relative double threshold is performed with two 
+        parameters (see \*\*kwargs section)
+
     verbose : boolean, optional, default is False
         print messages
          
@@ -373,16 +376,44 @@ def create_mask(im, mode_bin = 'relative',
         as the plt.plot and savefig functions. 
         All the input arguments required or optional in the signature of the 
         functions above can be passed as kwargs : 
-         
-        - double_threshold_abs(im, bin_h=0.7, bin_l=0.2, display=False, savefig=None, \*\*kwargs) 
-         
-        - double_threshold_rel (im, bin_std=5, bin_per=0.5, display=False, savefig=None, \*\*kwargs) 
+        
+        if 'absolute' [1] 
+        - bin_h : scalar, optional, default is 0.7 
+        Set the first threshold. Value higher than this value are set to 1,  
+        the others are set to 0. They are the seeds for the second step 
+        - bin_l: scalar, optional, defautl is 0.2 
+        Set the second threshold. Value higher than this value and connected 
+        to the seeds or to other pixels connected to the seeds (6-connectivity)
+        are set to 1, the other remains 0  
+        
+        if 'relative' [2] :
+        - bin_std :  scalar, optional, default is 6 
+        bin_std is needed to compute the threshold1. 
+        This threshold is not an absolute value but depends on values that are 
+        similar to 75th percentile (pseudo_mean) and a sort of std value of 
+        the image.  
+        threshold1 = "pseudo_mean" + "std" * bin_std    
+        Value higher than threshold1 are set to 1, they are the seeds for  
+        the second step. The others are set to 0.  
+        - bin_per: scalar, optional, defautl is 0.5 
+        Set how much the second threshold is lower than the first 
+        threshold value. From 0 to 1. ex: 0.1 = 10 %. 
+        threshold2 = threshold1 (1-bin_per)   
+        Value higher than threshold2 and connected (6-connectivity) to the  
+        seeds are set to 1, the other remains 0 
             
         ... and more, see matplotlib    
  
     Returns 
     ------- 
     im_bin: binary image 
+    
+    References
+    ----------
+    .. [1] J. Canny. A computational approach to edge detection. IEEE 
+    Transactions on Pattern Analysis and Machine Intelligence. 1986; vol. 8, 
+    pp.679-698. DOI:10.1109/TPAMI.1986.4767851 
+    .. [2] from MATLAB: Threshold estimation (Oliveira et al, 2015) 
      
     Examples 
     -------- 
