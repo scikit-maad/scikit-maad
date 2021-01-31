@@ -20,7 +20,7 @@ import sys
 _MIN_ = sys.float_info.min 
  
 # Import internal modules 
-from maad.util import (plot2D, rand_cmap)
+from maad.util import (plot2d, rand_cmap)
 
 #%%
 #**************************************************************************** 
@@ -178,7 +178,7 @@ def _double_threshold_rel (im, bin_std=6, bin_per=0.5,
                 xlabel = 'pseudofrequency [points]'
                 figsize=kwargs.pop('figsize',(4, 13)) 
              
-            _, fig = plot2D (im_out, extent=extent, figsize=figsize,title=title,  
+            _, fig = plot2d (im_out, extent=extent, figsize=figsize,title=title,  
                              ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                              cmap=cmap, **kwargs) 
             # SAVE FIGURE 
@@ -326,7 +326,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13)) 
          
-        _, fig = plot2D (im_out, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2d (im_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -439,8 +439,8 @@ def create_mask(im, mode_bin = 'relative',
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2D(im_bin, ax=ax2, extent=ext, title='mask)')
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
+    >>> maad.util.plot2d(im_bin, ax=ax2, extent=ext, title='mask)')
     >>> fig.set_size_inches(13,8)
     >>> fig.tight_layout() 
     
@@ -645,7 +645,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         randcmap = rand_cmap(len(rois_label)) 
         cmap   =kwargs.pop('cmap',randcmap)  
          
-        _, fig = plot2D (im_rois, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2d (im_rois, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
@@ -686,7 +686,7 @@ def rois_to_imblobs(im_zeros, rois):
     >>> im_zeros = np.zeros((100,300))
     >>> df_rois = pd.DataFrame({'min_y': [10, 40], 'min_x': [10, 200], 'max_y': [60, 80], 'max_x': [110, 250]})
     >>> im_blobs = rois.rois_to_imblobs(im_zeros, df_rois)
-    >>> util.plot2D(im_blobs)
+    >>> util.plot2d(im_blobs)
     """ 
     # Check format of the input data 
     if type(rois) is not pd.core.frame.DataFrame : 
