@@ -45,7 +45,7 @@ Metrics
 .. autosummary::
     :toctree: generated/
     
-    audio_SNR
+    temporal_SNR
     spectral_SNR
     sharpness
 
