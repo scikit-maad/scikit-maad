@@ -11,7 +11,7 @@ Input and output
     :toctree: generated/
 
     load
-    loadSpectro
+    load_spectrogram
 
 Preprocess audio
 -----------------
@@ -52,7 +52,7 @@ Metrics
 """
 
 from .input_output import (load,
-                           loadSpectro)
+                           load_spectrogram)
 
 from .filter import (select_bandwidth,
                      fir_filter,
@@ -74,14 +74,14 @@ from .spectro_func import (spectrogram,
                            avg_amplitude_spectro,
                            intoOctave)
                           
-from .metrics import (audio_SNR,
+from .metrics import (temporal_SNR,
                       spectral_SNR,
                       sharpness)
 
 __all__ = [
         # io.py
         'load',
-        'loadSpectro',
+        'load_spectrogram',
         # filter.py
         'select_bandwidth',
         'fir_filter',
@@ -103,6 +103,6 @@ __all__ = [
         'avg_amplitude_spectro',
         'intoOctave',
         # metrics.py
-        'audio_SNR',
+        'temporal_SNR',
         'spectral_SNR',
         'sharpness']

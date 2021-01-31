@@ -155,7 +155,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     return s_out, fs
 
 #%%
-def loadSpectro(filename, fs, duration, flipud = True,
+def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
                 verbose=False, display=False, **kwargs): 
     """ 
     Load an image from a file or an URL 
@@ -170,7 +170,10 @@ def loadSpectro(filename, fs, duration, flipud = True,
      
     duration : scalar 
         Duration of the audiogram (in s) 
-     
+        
+    flims : list of 2 scalars [min, max], optional, default is None
+        flims corresponds to the min and max boundary frequency values
+        
     flipud : boolean, optional, default is True 
         Vertical flip of the matrix (image) 
         
@@ -224,17 +227,24 @@ def loadSpectro(filename, fs, duration, flipud = True,
     Sxx : ndarray 
         The different color bands/channels are stored in the 
         third dimension, such that a gray-image is MxN, an 
-        RGB-image MxNx3 and an RGBA-image MxNx4. 
-         
+        RGB-image MxNx3 and an RGBA-image MxNx4.    
+    tn : 1d ndarray of floats
+        time vector (horizontal x-axis)    
+    fn : 1d ndarray of floats
+        Frequency vector (vertical y-axis)    
     extent : list of scalars [left, right, bottom, top]
-        The location, in data-coordinates, of the lower-left and 
-        upper-right corners.
-         
-    dt : scalar 
-        Time resolution of the spectrogram (horizontal x-axis) 
-         
-    df : scalar 
-        Frequency resolution of the spectrogram (vertical y-axis) 
+        The location, in data-coordinates, of the lower-left and
+        upper-right corners. 
+        
+    Examples
+    --------
+    >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename='https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png',
+                                          flims=[0,15000],
+                                          duration = 10
+                                          )
+    >>> import matplotlib.pyplot as plt
+    >>> maad.util.plot2D(Sxx,extent=ext)
+    
     """ 
     
     if verbose :
@@ -252,11 +262,21 @@ def loadSpectro(filename, fs, duration, flipud = True,
     Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0) 
              
     # Get the resolution 
-    df = fs/(Sxx.shape[0]-1) 
+    if flims is None :
+        df = fs/(Sxx.shape[0]-1) 
+    else:
+        df = (flims[1]-flims[0]) / (Sxx.shape[0]-1)
     dt = duration/(Sxx.shape[1]-1) 
+    
+    # create the vectors
+    if flims is None :
+        fn = np.arange(0,fs/2,df) 
+    else:
+        fn = np.arange(flims[0],flims[1],df)  
+    tn = np.arange(0,Sxx.shape[1],1) * dt
      
     # Extent 
-    extent = [0, duration, 0, fs/2] 
+    extent = [tn[0], tn[-1], fn[0], fn[-1]] 
      
     # flip the image vertically 
     if flipud: Sxx = np.flip(Sxx, 0) 
@@ -275,4 +295,4 @@ def loadSpectro(filename, fs, duration, flipud = True,
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
      
-    return Sxx, extent, dt, df 
+    return Sxx, tn, fn, extent 
