@@ -156,6 +156,15 @@ def sharpness (Sxx) :
     -------
     sharpness : scalar
         sharpness of the spectrogram (or image)
+        
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
+    >>> sharp = maad.sound.sharpness(Sxx_power)
+    >>> sharp
+    1.1930709869950632e-05
+    
     """
     
     Gt = np.gradient(Sxx, edge_order=1, axis=1)

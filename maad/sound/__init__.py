@@ -36,7 +36,7 @@ Transform audio
     spectrogram
     avg_power_spectro
     avg_amplitude_spectro
-    intoOctave
+    linear_to_octave
     envelope
     psd
 
@@ -72,7 +72,7 @@ from .transform import (envelope,
 from .spectro_func import (spectrogram,
                            avg_power_spectro,
                            avg_amplitude_spectro,
-                           intoOctave)
+                           linear_to_octave)
                           
 from .metrics import (temporal_SNR,
                       spectral_SNR,
@@ -101,7 +101,7 @@ __all__ = [
         'spectrogram',
         'avg_power_spectro',
         'avg_amplitude_spectro',
-        'intoOctave',
+        'linear_to_octave',
         # metrics.py
         'temporal_SNR',
         'spectral_SNR',
