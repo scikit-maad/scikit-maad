@@ -30,7 +30,7 @@ setup(
       name = 'scikit-maad',
       version = version.__version__,  # Specified at maad/version.py file
       #packages = find_namespace_packages(include=['maad.*']),
-      packages = find_packages(),z
+      packages = find_packages(),
       author = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
       author_email = 'jseb.ulloa@gmail.com, sylvain.haupert@mnhn.fr',
       maintainer = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
@@ -55,6 +55,7 @@ setup(
         Programming Language :: Python :: 3.5
         Programming Language :: Python :: 3.6
         Programming Language :: Python :: 3.7
+        Programming Language :: Python :: 3.8
         Topic :: Scientific/Engineering :: Artificial Intelligence 
         """).strip().splitlines()
        )
