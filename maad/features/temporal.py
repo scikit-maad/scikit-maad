@@ -22,7 +22,7 @@ from maad.util import moments
 # public functions
 # =============================================================================
 #%%
-def audio_moments(s):
+def temporal_moments(s):
     """
     Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.
     
@@ -45,7 +45,7 @@ def audio_moments(s):
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
-    >>> sm, sv, ss, sk = maad.features.audio_moments (s)
+    >>> sm, sv, ss, sk = maad.features.temporal_moments (s)
     >>> print('mean: %2.2f / var: %2.5f / skewness: %2.4f / kurtosis: %2.2f' % (sm, sv, ss, sk))
     mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71
     
@@ -82,6 +82,12 @@ def zero_crossing_rate(s, fs):
     ---------
     .. [1] https://en.wikipedia.org/wiki/Zero-crossing_rate
 
+    Examples
+    --------
+    >>> from maad import sound, features
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> features.zero_crossing_rate(s,fs)
+    10500.397192384766    
     
     """
     zero_crosses = np.nonzero(np.diff(s > 0))[0]

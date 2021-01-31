@@ -24,32 +24,32 @@ Alpha acoustic indices
 .. autosummary::
     :toctree: generated/
         
-    audio_median
-    audio_entropy
-    acousticRichnessIndex
-    audio_activity
-    audio_events
-    acousticComplexityIndex
+    temporal_median
+    temporal_entropy
+    acoustic_richness_index
+    temporal_activity
+    temporal_events
+    acoustic_complexity_index
     frequency_entropy
-    numberOfPeaks
+    number_of_peaks
     spectral_entropy
     spectral_activity
     spectral_events
     spectral_cover
-    soundscapeIndex
-    bioacousticsIndex
-    acousticDiversityIndex
-    acousticEvenessIndex
+    soundscape_index
+    bioacoustics_index
+    acoustic_diversity_index
+    acoustic_eveness_index
     roughness
-    audio_LEQ
-    spectral_LEQ
-    surfaceRoughness
+    temporal_leq
+    spectral_leq
+    surface_roughness
     tfsd
     more_entropy
-    acousticGradientIndex
-    frequency_raoQ
-    regionOfInterestIndex
-    all_audio_alpha_indices
+    acoustic_gradient_index
+    frequency_raoq
+    region_of_interest_index
+    all_temporal_alpha_indices
     all_spectral_alpha_indices
 
 Temporal features
@@ -57,7 +57,7 @@ Temporal features
 .. autosummary::
     :toctree: generated/
     
-    audio_moments
+    temporal_moments
     zero_crossing_rate
     
 Spectral features
@@ -79,35 +79,35 @@ from .shape import (filter_multires,
 
 from .spectral import (spectral_moments)
 
-from .temporal import (audio_moments,
+from .temporal import (temporal_moments,
                        zero_crossing_rate)
 
-from .alpha_indices import (audio_median,
-                            audio_entropy,
-                            acousticRichnessIndex,
-                            audio_activity,
-                            audio_events,
-                            acousticComplexityIndex,
+from .alpha_indices import (temporal_median,
+                            temporal_entropy,
+                            acoustic_richness_index,
+                            temporal_activity,
+                            temporal_events,
+                            acoustic_complexity_index,
                             frequency_entropy,
-                            numberOfPeaks,
+                            number_of_peaks,
                             spectral_entropy,
                             spectral_activity,
                             spectral_events,
                             spectral_cover,
-                            soundscapeIndex,
-                            bioacousticsIndex,
-                            acousticDiversityIndex,
-                            acousticEvenessIndex,
+                            soundscape_index,
+                            bioacoustics_index,
+                            acoustic_diversity_index,
+                            acoustic_eveness_index,
                             roughness,
-                            audio_LEQ,
-                            spectral_LEQ,
-                            surfaceRoughness,
+                            temporal_leq,
+                            spectral_leq,
+                            surface_roughness,
                             tfsd,
                             more_entropy,
-                            acousticGradientIndex,
-                            frequency_raoQ,
-                            regionOfInterestIndex,
-                            all_audio_alpha_indices,
+                            acoustic_gradient_index,
+                            frequency_raoq,
+                            region_of_interest_index,
+                            all_temporal_alpha_indices,
                             all_spectral_alpha_indices)
 
 __all__ = [
@@ -122,35 +122,35 @@ __all__ = [
            # spectral
            'spectral_moments',
            # temporal
-           'audio_moments',
+           'temporal_moments',
            'zero_crossing_rate',
            # alpha_indices
-           'audio_moments',
-           'audio_median',
-           'audio_entropy',
-           'acousticRichnessIndex',
-           "audio_activity",
-           "audio_events",
-           "acousticComplexityIndex",
+           'temporal_moments',
+           'temporal_median',
+           'temporal_entropy',
+           'acoustic_richness_index',
+           "temporal_activity",
+           "temporal_events",
+           "acoustic_complexity_index",
            "frequency_entropy",
-           "numberOfPeaks",
+           "number_of_peaks",
            "spectral_entropy",
            "spectral_moments",
            "spectral_activity",
            "spectral_events",
            'spectral_cover',
-           "soundscapeIndex",
-           'bioacousticsIndex',
-           "acousticDiversityIndex",
-           "acousticEvenessIndex",
+           "soundscape_index",
+           'bioacoustics_index',
+           "acoustic_diversity_index",
+           "acoustic_eveness_index",
            "roughness",
-           'audio_LEQ',
-           'spectral_LEQ',
-           "surfaceRoughness",
+           'temporal_leq',
+           'spectral_leq',
+           "surface_roughness",
            "tfsd",
            "more_entropy",
-           "acousticGradientIndex",
-           "frequency_raoQ",
-           "regionOfInterestIndex",
-           'all_audio_alpha_indices',
+           "acoustic_gradient_index",
+           "frequency_raoq",
+           "region_of_interest_index",
+           'all_temporal_alpha_indices',
            'all_spectral_alpha_indices']

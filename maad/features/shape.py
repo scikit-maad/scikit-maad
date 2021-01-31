@@ -324,13 +324,13 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     >>> s, fs = load('../data/spinetail.wav') 
     >>> Sxx, dt, df, ext = spectrogram(s, fs) 
     >>> Sxx_db = util.power2dB(Sxx, db_range=80) + 80
-    >>> util.plot2D(Sxx_db, **{'extension':ext})
+    >>> util.plot2d(Sxx_db, **{'extension':ext})
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2) 
     >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
     
     Plot one of the resulting spectrograms.
     
-    >>> util.plot2D(Sxx_out[5], **{'extension':ext})
+    >>> util.plot2d(Sxx_out[5], **{'extension':ext})
      
     """     
  
@@ -722,15 +722,15 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
 
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features_raw
-    >>> from maad.util import power2dB, plot2D
+    >>> from maad.util import power2dB, plot2d
     >>> s, fs = load('../data/spinetail.wav')
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) 
     >>> Sxx_db = power2dB(Sxx, db_range=80)
     >>> shape_raw, params = shape_features_raw(Sxx_db, resolution='low')
-    >>> plot2D(shape_raw[0], **{'extent':ext, 'title': 'High-frequency vertical component'})
-    >>> plot2D(shape_raw[13], **{'extent':ext, 'title': 'Low-frequency vertical components'})
-    >>> plot2D(shape_raw[2], **{'extent':ext, 'title': 'High-frequency horizontal components'})
-    >>> plot2D(shape_raw[15], **{'extent':ext, 'title': 'Low-frequency horizontal components'})
+    >>> plot2d(shape_raw[0], **{'extent':ext, 'title': 'High-frequency vertical component'})
+    >>> plot2d(shape_raw[13], **{'extent':ext, 'title': 'Low-frequency vertical components'})
+    >>> plot2d(shape_raw[2], **{'extent':ext, 'title': 'High-frequency horizontal components'})
+    >>> plot2d(shape_raw[15], **{'extent':ext, 'title': 'Low-frequency horizontal components'})
     """     
      
     # unpack settings 
@@ -785,27 +785,30 @@ def centroid_features(Sxx, rois=None, im_rois=None):
  
     >>> from maad.sound import load, spectrogram
     >>> from maad.features import centroid_features
-    >>> from maad.util import linear2dB, format_features, overlay_rois
+    >>> from maad.util import (power2dB, format_features, overlay_rois, plot2d,
+                               overlay_centroid)
      
     Load audio and compute spectrogram 
      
-    >>> s, fs = load('./data/spinetail.wav') 
+    >>> s, fs = load('../data/spinetail.wav') 
     >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) 
-    >>> Sxx = linear2dB(Sxx, db_range=80)
+    >>> Sxx = power2dB(Sxx, db_range=80)
      
     Load annotations and plot
     
     >>> from maad.util import read_audacity_annot
-    >>> rois = read_audacity_annot('./data/spinetail.txt') 
+    >>> rois = read_audacity_annot('../data/spinetail.txt') 
     >>> rois = format_features(rois, tn, fn) 
-    >>> ax, fig = plot2D (Sxx, extent=ext)
-    >>> ax, fig = overlay_rois(Sxx, ext, rois, ax=ax, fig=fig)
+    >>> ax, fig = plot2d (Sxx, extent=ext)
+    >>> ax, fig = overlay_rois(Sxx,rois, extent=ext, ax=ax, fig=fig)
     
-    Compute the centroid of each rois and format to get results in the 
-    temporal and spectral domain.
+    Compute the centroid of each rois, format to get results in the 
+    temporal and spectral domain and overlay the centroids.
      
     >>> centroid = centroid_features(Sxx, rois) 
     >>> centroid = format_features(centroid, tn, fn)
+    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
+    
     """     
      
     # Check input data 
