@@ -18,7 +18,7 @@ from scipy.io import wavfile
 from skimage.io import imread 
 
 # Import internal modules
-from maad.util import plot1D, plot2D, linear_scale
+from maad.util import plot1d, plot2d, linear_scale
 
 #%%
 # =============================================================================
@@ -93,10 +93,10 @@ def load(filename, channel='left', detrend=True, verbose=False,
     >>> tn = np.arange(0,len(s))/fs
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax0, ax1) = plt.subplots(2,1, sharex=True, squeeze=True)
-    >>> ax0, _ = maad.util.plot1D(tn,s,ax=ax0, figtitle='ground level')
+    >>> ax0, _ = maad.util.plot1d(tn,s,ax=ax0, figtitle='ground level')
     >>> ax0.set_ylim((-0.075,0.0751))
     >>> s, fs = maad.sound.load("../data/tropical_forest_morning.wav", channel='right')
-    >>> ax1, _ = maad.util.plot1D(tn,s,ax=ax1, figtitle='canopy level')
+    >>> ax1, _ = maad.util.plot1d(tn,s,ax=ax1, figtitle='canopy level')
     >>> ax1.set_ylim((-0.075,0.075))
     >>> fig.tight_layout()
     """
@@ -140,7 +140,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     # DISPLAY
     if display : 
         figtitle=kwargs.pop('figtitle', 'Orignal sound')        
-        _, fig = plot1D(tn, s_out, figtitle=figtitle, **kwargs)
+        _, fig = plot1d(tn, s_out, figtitle=figtitle, **kwargs)
         # SAVE FIGURE
         if savefig is not None : 
             dpi=kwargs.pop('dpi', 96) 
@@ -243,7 +243,7 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
                                           duration = 10
                                           )
     >>> import matplotlib.pyplot as plt
-    >>> maad.util.plot2D(Sxx,extent=ext)
+    >>> maad.util.plot2d(Sxx,extent=ext)
     
     """ 
     
@@ -291,7 +291,7 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         vmin=kwargs.pop('vmin',Sxx.min())  
         vmax=kwargs.pop('vmax',Sxx.max())  
          
-        _, fig = plot2D (Sxx, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2d (Sxx, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
      

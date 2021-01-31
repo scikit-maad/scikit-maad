@@ -45,8 +45,8 @@ Metrics
 .. autosummary::
     :toctree: generated/
     
-    temporal_SNR
-    spectral_SNR
+    temporal_snr
+    spectral_snr
     sharpness
 
 """
@@ -74,8 +74,8 @@ from .spectro_func import (spectrogram,
                            avg_amplitude_spectro,
                            linear_to_octave)
                           
-from .metrics import (temporal_SNR,
-                      spectral_SNR,
+from .metrics import (temporal_snr,
+                      spectral_snr,
                       sharpness)
 
 __all__ = [
@@ -103,6 +103,6 @@ __all__ = [
         'avg_amplitude_spectro',
         'linear_to_octave',
         # metrics.py
-        'temporal_SNR',
-        'spectral_SNR',
+        'temporal_snr',
+        'spectral_snr',
         'sharpness']

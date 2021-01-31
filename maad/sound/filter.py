@@ -20,7 +20,7 @@ from scipy.signal import (sosfiltfilt, convolve, iirfilter, get_window,
 from skimage import filters
 
 # Import internal modules 
-from maad.util import plot2D
+from maad.util import plot2d
 
 #%%
 # =============================================================================
@@ -84,14 +84,14 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig1, ax1 = maad.util.plot2D(Sxx_dB, **fig_kwargs)
+    >>> fig1, ax1 = maad.util.plot2d(Sxx_dB, **fig_kwargs)
     
     Filter the waveform : keep the bandwidth between 6-10kHz
     
     >>> w_filtered = maad.sound.select_bandwidth(w,fs,fcut=(6000,10000), forder=5, fname ='butter', ftype='bandpass')
     >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
     >>> Sxx_dB_filtered = maad.util.power2dB(Sxx_power_filtered) # convert into dB 
-    >>> maad.util.plot2D(Sxx_dB_filtered, **fig_kwargs)
+    >>> maad.util.plot2d(Sxx_dB_filtered, **fig_kwargs)
     
     """
     sos = iirfilter(N=forder, Wn=np.asarray(fcut)/(fs/2), btype=ftype,ftype=fname, rp=rp, 
@@ -162,19 +162,19 @@ def fir_filter(x, kernel, axis=0):
                       'xlabel': 'Time [sec]',
                       'ylabel': 'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)
+    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)
     
     Smooth the waveform (lowpass)
     
     >>> w_filtered = maad.sound.fir_filter(w, kernel=(('gaussian', 2), 5))
     >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
     >>> Lxx_filtered = maad.spl.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL
-    >>> fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)
+    >>> fig, ax = maad.util.plot2d(Lxx_filtered,**fig_kwargs)
     
     Smooth the spectrogram, frequency by frequency (blurr)
     
     >>> Lxx_blurr = maad.sound.fir_filter(Lxx, kernel=(('gaussian', 1), 5), axis=1)
-    >>> fig, ax = maad.util.plot2D(Lxx_blurr,**fig_kwargs)
+    >>> fig, ax = maad.util.plot2d(Lxx_blurr,**fig_kwargs)
     
     """
     if isinstance(kernel,tuple) :
@@ -242,9 +242,9 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     >>> s_filt_4_8kHz = maad.sound.sinc(s, cutoff=[4500,8000], fs=fs, atten=80, transition_bw=0.8)
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax0, ax1,ax2) = plt.subplots(3,1, sharex=True, squeeze=True)
-    >>> maad.util.plot1D(tn,s,ax=ax0, figtitle='original')
-    >>> maad.util.plot1D(tn,s_filt_7_12kHz,ax=ax1, figtitle='Kaiser-windowed filter 7-12kHz')
-    >>> maad.util.plot1D(tn,s_filt_4_8kHz,ax=ax2, figtitle='Kaiser-windowed filter 4.5-8kHz')
+    >>> maad.util.plot1d(tn,s,ax=ax0, figtitle='original')
+    >>> maad.util.plot1d(tn,s_filt_7_12kHz,ax=ax1, figtitle='Kaiser-windowed filter 7-12kHz')
+    >>> maad.util.plot1d(tn,s_filt_4_8kHz,ax=ax2, figtitle='Kaiser-windowed filter 4.5-8kHz')
     >>> fig.tight_layout()
     
     """
@@ -350,10 +350,10 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2D(Sxx_dB_std05, ax=ax2, extent=ext, title='smooth (std=0.5)', vmin=10, vmax=70)
-    >>> maad.util.plot2D(Sxx_dB_std10, ax=ax3, extent=ext, title='smooth (std=1)', vmin=10, vmax=70)
-    >>> maad.util.plot2D(Sxx_dB_std15, ax=ax4, extent=ext, title='smooth (std=1.5)', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB_std05, ax=ax2, extent=ext, title='smooth (std=0.5)', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB_std10, ax=ax3, extent=ext, title='smooth (std=1)', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB_std15, ax=ax4, extent=ext, title='smooth (std=1.5)', vmin=10, vmax=70)
     >>> fig.set_size_inches(7,9)
     >>> fig.tight_layout() 
     
@@ -384,11 +384,11 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
         
          
         fig, (ax1, ax2) = plt.subplots(2, 1)
-        plot2D (Sxx, ax=ax1, extent=extent, figsize=figsize,
+        plot2d (Sxx, ax=ax1, extent=extent, figsize=figsize,
                 title=('Orignal Spectrogram'),  
                 ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                 cmap=cmap, **kwargs)
-        plot2D (Sxx_out, ax=ax2, extent=extent, figsize=figsize,
+        plot2d (Sxx_out, ax=ax2, extent=extent, figsize=figsize,
                 title='Blurred Spectrogram (std='+str(std)+')',  
                 ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                 cmap=cmap, **kwargs) 

@@ -22,7 +22,7 @@ from maad.util import power2dB, mean_dB, get_unimode, running_mean
 # =============================================================================
 # public functions
 # =============================================================================
-def temporal_SNR (s, mode ='fast', Nt=512) :
+def temporal_snr (s, mode ='fast', Nt=512) :
     """
     Compute the signal to noise ratio (SNR) of an audio signal in the time domain.
 
@@ -58,7 +58,7 @@ def temporal_SNR (s, mode ='fast', Nt=512) :
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
-    >>> _,_,snr = maad.sound.temporal_SNR(s)
+    >>> _,_,snr = maad.sound.temporal_snr(s)
     >>> snr
     1.5744987447774665
 
@@ -77,7 +77,7 @@ def temporal_SNR (s, mode ='fast', Nt=512) :
     return ENRt, BGNt, SNRt
 
 #%%
-def spectral_SNR (Sxx_power) :
+def spectral_snr (Sxx_power) :
     """
     Compute the signal to noise ratio (SNR) of an audio from its spectrogram
     in the time-frequency domain.
@@ -118,7 +118,7 @@ def spectral_SNR (Sxx_power) :
     --------
     >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
-    >>> _, _, snr, _, _, _ = maad.sound.spectral_SNR(Sxx_power)
+    >>> _, _, snr, _, _, _ = maad.sound.spectral_snr(Sxx_power)
     >>> snr
     4.084065436435541
     

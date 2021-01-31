@@ -13,8 +13,8 @@ Visualization
     rand_cmap
     crop_image
     save_figlist
-    plot1D
-    plot2D
+    plot1d
+    plot2d
     overlay_rois
     overlay_centroid
     plot_features_map
@@ -51,7 +51,7 @@ Miscellaneous
     :toctree: generated/
     
     index_bw
-    intoBins
+    into_bins
     shift_bit_length
     rle
     linear_scale
@@ -68,7 +68,7 @@ Miscellaneous
 """
 
 from .miscellaneous import (index_bw,
-                           intoBins,
+                           into_bins,
                            shift_bit_length,
                            rle,
                            linear_scale,
@@ -85,8 +85,8 @@ from .miscellaneous import (index_bw,
 from .visualization import (rand_cmap,
                            crop_image,
                            save_figlist,
-                           plot1D,
-                           plot2D,
+                           plot1d,
+                           plot2d,
                            overlay_rois,
                            overlay_centroid,
                            plot_features_map,
@@ -109,7 +109,7 @@ from .parser import (read_audacity_annot,
 __all__ = [
            # miscellaneous 
            'index_bw',
-           'intoBins',
+           'into_bins',
            'shift_bit_length',
            'rle',
            'linear_scale',
@@ -126,8 +126,8 @@ __all__ = [
            'rand_cmap',
            'crop_image',
            'save_figlist',
-           'plot1D',
-           'plot2D',
+           'plot1d',
+           'plot2d',
            'overlay_rois',
            'overlay_centroid',
            'plot_features_map',

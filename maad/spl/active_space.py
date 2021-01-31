@@ -863,7 +863,7 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   
   >>> import matplotlib.pyplot as plt
   >>> fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1,5, sharex=True, figsize=(15,3))
-  >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, vmin=0, vmax=70, figsize=[3,3])
+  >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, vmin=0, vmax=70, figsize=[3,3])
 
   Compute the audio attenuation at 10m.
   
@@ -892,10 +892,10 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
     
   Plot attenuated spectrogram.
   
-  >>> maad.util.plot2D(Sxx_dB_att_10m, ax=ax2, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-  >>> maad.util.plot2D(Sxx_dB_att_20m, ax=ax3, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-  >>> maad.util.plot2D(Sxx_dB_att_40m, ax=ax4, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-  >>> maad.util.plot2D(Sxx_dB_att_80m, ax=ax5, extent=ext, vmin=0, vmax=70, figsize=[3,3])     
+  >>> maad.util.plot2d(Sxx_dB_att_10m, ax=ax2, extent=ext, vmin=0, vmax=70, figsize=[3,3])
+  >>> maad.util.plot2d(Sxx_dB_att_20m, ax=ax3, extent=ext, vmin=0, vmax=70, figsize=[3,3])
+  >>> maad.util.plot2d(Sxx_dB_att_40m, ax=ax4, extent=ext, vmin=0, vmax=70, figsize=[3,3])
+  >>> maad.util.plot2d(Sxx_dB_att_80m, ax=ax5, extent=ext, vmin=0, vmax=70, figsize=[3,3])     
   
   """
   

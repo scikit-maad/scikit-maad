@@ -244,21 +244,25 @@ def skewness (x, axis=None):
     ----------
     x : ndarray of floats 
         1d signal or 2d matrix
-        
     axis : integer, optional, default is None
         select the axis to compute the kurtosis
         The default is to compute the mean of the flattened array.
                             
     Returns
     -------    
-    ku : float or ndarray of floats
+    sk : float or ndarray of floats
         skewness of x 
-        
         if x is a 1d vector => single value
-        
         if x is a 2d matrix => array of values corresponding to the number of
         points in the other axis
-        
+    
+    Examples
+    --------
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> util.skewness(s)
+    -0.006547980427883208
+    
     """
     if isinstance(x, (np.ndarray)) == True:
         if axis is None:
@@ -300,11 +304,17 @@ def kurtosis (x, axis=None):
     -------    
     ku : float or ndarray of floats
         kurtosis of x 
-        
         if x is a 1d vector => single value
-        
         if x is a 2d matrix => array of values corresponding to the number of
         points in the other axis
+        
+    Examples
+    --------
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> util.kurtosis(s)
+    24.711610834321217        
+        
     """
     if isinstance(x, (np.ndarray)) == True:
         if axis is None:

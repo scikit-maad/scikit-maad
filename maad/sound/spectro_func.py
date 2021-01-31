@@ -17,7 +17,7 @@ import numpy as np
 import scipy as sp
 
 # Import internal modules
-from maad.util import (plot1D, plot2D, crop_image, power2dB, amplitude2dB)
+from maad.util import (plot1d, plot2d, crop_image, power2dB, amplitude2dB)
 
 # %%
 # =============================================================================
@@ -158,7 +158,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2D(Sxx_dB,**fig_kwargs)     
+    >>> fig, ax = maad.util.plot2d(Sxx_dB,**fig_kwargs)     
 
     Compute mean power spectrogram
 
@@ -279,7 +279,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
         vmin = kwargs.pop('vmin', -db_range)
         vmax = kwargs.pop('vmax', Sxx_disp.max())
 
-        _, fig = plot2D(Sxx_disp, extent=extent, figsize=figsize, title=title,
+        _, fig = plot2d(Sxx_disp, extent=extent, figsize=figsize, title=title,
                         ylabel=ylabel, xlabel=xlabel, vmin=vmin, vmax=vmax,
                         cmap=cmap, **kwargs)
         # SAVE FIGURE
@@ -382,14 +382,14 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
                           'xlabel': xlabel,
                           'ylabel': 'Frequency [Hz]',
                           }
-            plot2D(X_octave_dB, **fig_kwargs)
+            plot2d(X_octave_dB, **fig_kwargs)
         elif np.ndim(X_octave_dB) == 1:
             fig_kwargs = {
                 'title': 'Octave Spectrum',
                 'xlabel': kwargs.pop('xlabel', 'Frequency [Hz]'),
                 'ylabel': kwargs.pop('ylabel', 'Amplitude [dB]'),
             }
-            plot1D(bin_octave, X_octave_dB, **fig_kwargs)
+            plot1d(bin_octave, X_octave_dB, **fig_kwargs)
 
     return X_octave, bin_octave
 

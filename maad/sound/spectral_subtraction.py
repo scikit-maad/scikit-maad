@@ -23,7 +23,7 @@ import sys
 _MIN_ = sys.float_info.min
 
 # Import internal modules 
-from maad.util import (plot1D, plot2D, running_mean, 
+from maad.util import (plot1d, plot2d, running_mean, 
                        get_unimode, mean_dB, power2dB)
 
 #%%
@@ -157,8 +157,8 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
     >>> import matplotlib.pyplot as plt 
     >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()
        
@@ -232,19 +232,19 @@ def remove_background (Sxx, gauss_win=50, gauss_std = 25, beta1=1, beta2=1,
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13))  
         
-        _, fig = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2d (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
         fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
         fig2.set_size_inches((5,4))
-        ax1,_ = plot1D(fn, mean_profile, ax=ax1, legend='Original profile',
+        ax1,_ = plot1d(fn, mean_profile, ax=ax1, legend='Original profile',
                        color = 'b',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
-        ax1,_ = plot1D(fn, np.mean(BGNxx, axis=1), ax =ax1, legend='Noise profile',
+        ax1,_ = plot1d(fn, np.mean(BGNxx, axis=1), ax =ax1, legend='Noise profile',
                        color = 'r',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
-        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, color = 'k', 
+        ax2,_ = plot1d(fn, np.mean(Sxx_out,axis=1), ax=ax2, color = 'k', 
                        legend='Denoized profile', 
                        xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
         fig2.tight_layout()  
@@ -357,8 +357,8 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     >>> import matplotlib.pyplot as plt 
     >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()     
     
@@ -378,9 +378,9 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise_q25), vmax=np.median(Sxx_dB_noNoise_q25)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise_q50), vmax=np.median(Sxx_dB_noNoise_q50)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise_q75), vmax=np.median(Sxx_dB_noNoise_q75)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise_q25), vmax=np.median(Sxx_dB_noNoise_q25)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise_q50), vmax=np.median(Sxx_dB_noNoise_q50)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise_q75), vmax=np.median(Sxx_dB_noNoise_q75)+40)
     >>> fig.set_size_inches(15,9)
     >>> fig.tight_layout()     
         
@@ -417,23 +417,23 @@ def remove_background_morpho (Sxx, q =0.1, display=False, savefig=None, **kwargs
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13))  
         
-        _, fig = plot2D (BGNxx, extent=extent, figsize=figsize,title='Noise map',  
+        _, fig = plot2d (BGNxx, extent=extent, figsize=figsize,title='Noise map',  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
-        _, fig = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2d (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
         fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
         fig2.set_size_inches((5,4))
-        ax1,_ = plot1D(fn, np.mean(Sxx,axis=1), ax=ax1, legend='Original profile', 
+        ax1,_ = plot1d(fn, np.mean(Sxx,axis=1), ax=ax1, legend='Original profile', 
                        color = 'b',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
-        ax1,_ = plot1D(fn, np.mean(BGNxx,1), ax =ax1, legend='Noise profile', 
+        ax1,_ = plot1d(fn, np.mean(BGNxx,1), ax =ax1, legend='Noise profile', 
                        color = 'r',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
-        ax2,_ = plot1D(fn, np.mean(Sxx_out,axis=1), ax=ax2, color = 'k', 
+        ax2,_ = plot1d(fn, np.mean(Sxx_out,axis=1), ax=ax2, color = 'k', 
                        legend='Denoized profile', 
                        xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
         fig2.tight_layout()     
@@ -570,10 +570,10 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
     >>> import matplotlib.pyplot as plt 
     >>> import numpy as np
     >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise_ale), vmax=np.median(Sxx_dB_noNoise_ale)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise_med), vmax=np.median(Sxx_dB_noNoise_med)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise_ale), vmax=np.median(Sxx_dB_noNoise_ale)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise_med), vmax=np.median(Sxx_dB_noNoise_med)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)
     >>> fig.set_size_inches(8,10)
     >>> fig.tight_layout()   
     
@@ -616,19 +616,19 @@ def remove_background_along_axis (Sxx, mode ='median', axis=1, N=25, N_bins=50,
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13))  
             
-        _, fig1 = plot2D (Sxx_out, extent=extent, figsize=figsize,title=title,  
+        _, fig1 = plot2d (Sxx_out, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         
         fig2, (ax1, ax2) = plt.subplots(2, sharex=True)
         fig2.set_size_inches((5,4))
-        ax1,_ = plot1D(fn, mean_dB(Sxx,axis=axis), ax=ax1, legend='Original profile',
+        ax1,_ = plot1d(fn, mean_dB(Sxx,axis=axis), ax=ax1, legend='Original profile',
                        color = 'b',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='') 
-        ax1,_ = plot1D(fn, noise_profile, ax =ax1, legend='Noise profile', 
+        ax1,_ = plot1d(fn, noise_profile, ax =ax1, legend='Noise profile', 
                        color = 'r',
                        xlabel = '', ylabel = 'Amplitude [dB]', figtitle='')
-        ax2,_ = plot1D(fn, mean_dB(Sxx_out,axis=axis), ax=ax2, color = 'k', 
+        ax2,_ = plot1d(fn, mean_dB(Sxx_out,axis=axis), ax=ax2, color = 'k', 
                        legend='Denoized profile', 
                        xlabel = xlabel, ylabel = 'Amplitude [dB]', figtitle='') 
         fig2.tight_layout()
@@ -739,8 +739,8 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
     >>> import matplotlib.pyplot as plt 
     >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2D(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout() 
        
@@ -781,7 +781,7 @@ def median_equalizer (Sxx, display=False, savefig=None, **kwargs):
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',np.max(Sxx_out_dB)) 
          
-        _, fig = plot2D (Sxx_out_dB, extent=extent, figsize=figsize,title=title,  
+        _, fig = plot2d (Sxx_out_dB, extent=extent, figsize=figsize,title=title,  
                          ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 

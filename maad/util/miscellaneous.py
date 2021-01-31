@@ -55,7 +55,7 @@ def index_bw (fn, bw):
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> maad.util.plot2D(Sxx_dB,**fig_kwargs)
+    >>> maad.util.plot2d(Sxx_dB,**fig_kwargs)
     >>> Sxx_dB_crop = Sxx_dB[maad.util.index_bw(fn, bw)]
     >>> fn_crop = fn[maad.util.index_bw(fn, bw)]
     >>> fig_kwargs = {'vmax': Sxx_dB.max(),
@@ -66,7 +66,7 @@ def index_bw (fn, bw):
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> maad.util.plot2D(Sxx_dB_crop,**fig_kwargs)
+    >>> maad.util.plot2d(Sxx_dB_crop,**fig_kwargs)
     
     """
     # select the indices corresponding to the frequency bins range
@@ -82,7 +82,7 @@ def index_bw (fn, bw):
     return index
 
 #%%
-def intoBins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
+def into_bins (x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
     """ 
     Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.
     
@@ -198,12 +198,12 @@ def rle(x):
     
     Examples
     --------
-    RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5]
-    
+    RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 5]
+     
     >>> from maad.util import rle
-    >>> length, values = rle([1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5])
+    >>> length, values = rle([1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 5])
     >>> print('length:', length, '- values:', values)
-    length: [3 2 4 1 1] - values: [1 2 3 4 5]
+    length: [3 2 4 1 2] - values: [1 2 3 4 5]
 
     """
     x = np.asarray(x)
@@ -213,7 +213,7 @@ def rle(x):
         n = len(x)
         states = x[1:] != x[:-1]
         i = np.r_[np.where(states)[0], n-1]
-        lengths = np.r_[i[0], diff(i)]
+        lengths = np.r_[i[0]+1, diff(i)]
         values = x[i]
     return lengths, values
 
@@ -469,7 +469,7 @@ def add_dB(*argv, axis=0):
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
                       }
-    >>> fig, ax = maad.util.plot1D(fn, L_sum.transpose(), **fig_kwargs)
+    >>> fig, ax = maad.util.plot1d(fn, L_sum.transpose(), **fig_kwargs)
 
     Example with single values
     
@@ -542,7 +542,7 @@ def mean_dB(*argv, axis=0):
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
                       }
-    >>> fig, ax = maad.util.plot1D(fn, L_mean.transpose(), **fig_kwargs)
+    >>> fig, ax = maad.util.plot1d(fn, L_mean.transpose(), **fig_kwargs)
 
     Example with single values
     

@@ -16,13 +16,13 @@ The following sound example as two main different soundtypes in the foreground:
 
 from maad import sound
 from maad.rois import find_rois_cwt
-from maad.util import power2dB, plot2D
+from maad.util import power2dB, plot2d
 
 
 s, fs = sound.load('../../data/spinetail.wav')
 Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
 Sxx_db = power2dB(Sxx, db_range=100) + 100
-plot2D(Sxx_db, **{'figsize':(4,10), 'extent':ext})
+plot2d(Sxx_db, **{'figsize':(4,10), 'extent':ext})
 
 #%% 
 # Detect the accelerating trill

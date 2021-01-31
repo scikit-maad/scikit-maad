@@ -163,8 +163,37 @@ def overlay_centroid (im_ref, centroid, savefig=None, **kwargs):
     fig  
         figure object (see matplotlib) 
  
-    Example 
-    -------- 
+    Examples
+    --------
+ 
+    Get centroid from the whole power spectrogram 
+ 
+    >>> from maad.sound import load, spectrogram
+    >>> from maad.features import centroid_features
+    >>> from maad.util import (power2dB, format_features, overlay_rois, plot2d,
+                               overlay_centroid)
+     
+    Load audio and compute spectrogram 
+     
+    >>> s, fs = load('../data/spinetail.wav') 
+    >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) 
+    >>> Sxx = power2dB(Sxx, db_range=80)
+     
+    Load annotations and plot
+    
+    >>> from maad.util import read_audacity_annot
+    >>> rois = read_audacity_annot('../data/spinetail.txt') 
+    >>> rois = format_features(rois, tn, fn) 
+    >>> ax, fig = plot2d (Sxx, extent=ext)
+    >>> ax, fig = overlay_rois(Sxx,rois, extent=ext, ax=ax, fig=fig)
+    
+    Compute the centroid of each rois, format to get results in the 
+    temporal and spectral domain and overlay the centroids.
+     
+    >>> centroid = centroid_features(Sxx, rois) 
+    >>> centroid = format_features(centroid, tn, fn)
+    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
+    
     """ 
     # Check format of the input data 
     if type(centroid) is not pd.core.frame.DataFrame : 
@@ -195,7 +224,7 @@ def overlay_centroid (im_ref, centroid, savefig=None, **kwargs):
     marker=kwargs.pop('marker','o')
          
     if (ax is None) and (fig is None): 
-        ax, fig = plot2D (im_ref, extent=ext, now=False, figsize=figsize, title=title,  
+        ax, fig = plot2d (im_ref, extent=ext, now=False, figsize=figsize, title=title,  
                          ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
                          cmap=cmap, **kwargs) 
      
@@ -332,7 +361,7 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
     
          
     if (ax is None) and (fig is None): 
-        ax, fig = plot2D (im_ref,extent=extent,now=False, figsize=figsize,title=title,  
+        ax, fig = plot2d (im_ref,extent=extent,now=False, figsize=figsize,title=title,  
                          ylabel=ylabel,xlabel=xlabel,vmin=vmin,vmax=vmax,  
                          cmap=cmap, **kwargs) 
  
@@ -398,7 +427,7 @@ def overlay_rois (im_ref, rois, savefig=None, **kwargs):
  
 
 #%%
-def plot1D(x, y, ax=None, **kwargs):
+def plot1d(x, y, ax=None, **kwargs):
     """
     Plot the waveform or spectrum of an audio signal. 
     
@@ -464,7 +493,14 @@ def plot1D(x, y, ax=None, **kwargs):
         
     Examples
     --------
+    >>> import numpy as np    
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    
+    Plot the audiogram
+    
+    >>> tn = np.arange(0,len(s))/fs
+    >>> fig, ax = maad.util.plot1d(tn,s)
+    
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     
     Convert spectrogram into dB SPL
@@ -480,7 +516,7 @@ def plot1D(x, y, ax=None, **kwargs):
                       'linewidth': 0.5
                       }
     
-    >>> fig, ax = maad.util.plot1D(fn, Lxx[:,index], **fig_kwargs)
+    >>> fig, ax = maad.util.plot1d(fn, Lxx[:,index], **fig_kwargs)
     """  
 
     figsize=kwargs.pop('figsize', (4, 10))
@@ -527,7 +563,7 @@ def plot1D(x, y, ax=None, **kwargs):
 
 #=============================================================================
 
-def plot2D(im,ax=None,**kwargs):
+def plot2d(im,ax=None,**kwargs):
     """
     Display the spectrogram of an audio signal. 
     
@@ -601,7 +637,7 @@ def plot2D(im,ax=None,**kwargs):
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
+    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)      
         
     """ 
    
@@ -777,7 +813,7 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)      
+    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)      
     >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,10000), tcrop=(0,30))
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
@@ -786,7 +822,7 @@ def crop_image (im, tn, fn, fcrop=None, tcrop=None):
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2D(Lxx_crop,**fig_kwargs)  
+    >>> fig, ax = maad.util.plot2d(Lxx_crop,**fig_kwargs)  
     """
     
     if tcrop is not None : 

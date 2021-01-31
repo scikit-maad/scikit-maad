@@ -19,9 +19,9 @@ Conversion to sound pressure level (SPL)
     power2dBSPL
     amplitude2dBSPL
     wav2dBSPL
-    wav2Leq
-    pressure2Leq
-    PSD2Leq
+    wav2leq
+    pressure2leq
+    psd2leq
     
 Attenuation and active distance
 -------------------------------
@@ -46,9 +46,9 @@ from .conversion_SPL import (wav2volt,
                         power2dBSPL,
                         amplitude2dBSPL,
                         wav2dBSPL,
-                        wav2Leq,
-                        pressure2Leq,
-                        PSD2Leq)
+                        wav2leq,
+                        pressure2leq,
+                        psd2leq)
 
 from .active_space import (attenuation_dB,
                            dBSPL_per_bin,
@@ -67,9 +67,9 @@ __all__ = [
            'power2dBSPL',
            'amplitude2dBSPL',
            'wav2dBSPL',
-           'wav2Leq',
-           'pressure2Leq',
-           'PSD2Leq'
+           'wav2leq',
+           'pressure2leq',
+           'psd2leq'
            #active_space
            'attenuation_dB',
            'dBSPL_per_bin',

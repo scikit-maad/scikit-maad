@@ -290,7 +290,7 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
         
     Get equivalent sound pressure level (Leq) from the dedicated function
         
-    >>> Leq = maad.spl.wav2Leq(w, fs, gain=42, dt=1)
+    >>> Leq = maad.spl.wav2leq(w, fs, gain=42, dt=1)
     >>> Leq_mean = maad.util.mean_dB(Leq)
     >>> Leq_mean
         54.575482584140005   
@@ -398,7 +398,7 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 
 ################################## Leq ########################################
 #%%
-def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94): 
+def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94): 
     """
     Convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL]).
     
@@ -436,7 +436,7 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     Examples
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
-    >>> Leq = maad.spl.wav2Leq (w, fs, gain=42)  
+    >>> Leq = maad.spl.wav2leq (w, fs, gain=42)  
     >>> maad.util.mean_dB(Leq)
         54.575482584140005
     """    
@@ -462,7 +462,7 @@ def wav2Leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     return Leq
 
 #%%
-def pressure2Leq (p, fs, dt=1, pRef = 20e-6): 
+def pressure2leq (p, fs, dt=1, pRef = 20e-6): 
     """
     Convert pressure vector (p [Pa]) to Equivalent Continuous Sound Pressure 
     level (Leq [dB SPL]).
@@ -489,7 +489,7 @@ def pressure2Leq (p, fs, dt=1, pRef = 20e-6):
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> p = maad.spl.wav2pressure(wave=w, gain=42)
-    >>> Leq = maad.spl.pressure2Leq (p, fs)
+    >>> Leq = maad.spl.pressure2leq (p, fs)
     >>> maad.util.mean_dB(Leq)
         54.55488267086038
         
@@ -514,7 +514,7 @@ def pressure2Leq (p, fs, dt=1, pRef = 20e-6):
     return Leq
 
 #%%
-def PSD2Leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
+def psd2leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     """
     Convert Power spectral density (PSD, amplitude²) into 
     Equivalent Continuous Sound pressure level (Leq [dB SPL])
@@ -549,7 +549,7 @@ def PSD2Leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs)
     >>> S_power_mean = maad.sound.avg_power_spectro(Sxx_power) 
-    >>> maad.spl.PSD2Leq(S_power_mean, gain=42)
+    >>> maad.spl.psd2leq(S_power_mean, gain=42)
         53.55842473963429
         
     """  
@@ -607,11 +607,11 @@ if __name__ == "__main__":
     wav = wav - mean(wav)
     # wav -> pressure -> Leq
     p = wav2pressure(wav, gain=G, Vadc=VADC, sensitivity=S, dBref=94)
-    Leq = pressure2Leq(p, fs, dt=deltaT)
+    Leq = pressure2leq(p, fs, dt=deltaT)
     print('Leq from volt', maad.util.mean_dB(Leq))
     
     # wav -> Leq
-    wav_Leq2 = wav2Leq(wav, f=fs, gain=G, Vadc=VADC, dt=deltaT, sensitivity=S, dBref = 94) 
+    wav_Leq2 = wav2leq(wav, f=fs, gain=G, Vadc=VADC, dt=deltaT, sensitivity=S, dBref = 94) 
     print('Leq from wav', maad.util.mean_dB(wav_Leq2))
         
     # Power Density Spectrum : PSD
@@ -619,7 +619,7 @@ if __name__ == "__main__":
     from numpy import fft
     P = abs(fft.fft(p)/len(p))**2
     # average Leq from PSD
-    P_Leq3  = PSD2Leq(P, G)
+    P_Leq3  = psd2leq(P, G)
     print('Leq from PSD',P_Leq3)
        
     ########################################################################
@@ -633,7 +633,7 @@ if __name__ == "__main__":
     # Sxx_power to S_power
     S_power = mean(Sxx_power,axis=1)
     # average Leq from S_power
-    P_Leq5  = PSD2Leq(S_power, G)
+    P_Leq5  = psd2leq(S_power, G)
     print('Leq from Sxx_power spectrogram',P_Leq5)
 
     # total energy from S_power
