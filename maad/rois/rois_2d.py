@@ -357,9 +357,9 @@ def create_mask(im, mode_bin = 'relative',
         Spectrogram (or image) 
  
     mode_bin : string in {'relative', 'absolute'}, optional, default is 'relative' 
-        if 'absolute' [1] , a double threshold with absolute value is performed 
+        if 'absolute' [1]_ , a double threshold with absolute value is performed 
         with two parameters (see \*\*kwargs section)
-        if 'relative' [2], a relative double threshold is performed with two 
+        if 'relative' [2]_, a relative double threshold is performed with two 
         parameters (see \*\*kwargs section)
 
     verbose : boolean, optional, default is False
@@ -377,7 +377,7 @@ def create_mask(im, mode_bin = 'relative',
         All the input arguments required or optional in the signature of the 
         functions above can be passed as kwargs : 
         
-        if 'absolute' [1] 
+        if 'absolute' [1]_ 
         - bin_h : scalar, optional, default is 0.7 
         Set the first threshold. Value higher than this value are set to 1,  
         the others are set to 0. They are the seeds for the second step 
@@ -386,7 +386,7 @@ def create_mask(im, mode_bin = 'relative',
         to the seeds or to other pixels connected to the seeds (6-connectivity)
         are set to 1, the other remains 0  
         
-        if 'relative' [2] :
+        if 'relative' [2]_ :
         - bin_std :  scalar, optional, default is 6 
         bin_std is needed to compute the threshold1. 
         This threshold is not an absolute value but depends on values that are 
