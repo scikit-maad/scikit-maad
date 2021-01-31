@@ -298,7 +298,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 # %%
 
 
-def intoOctave(X, fn, thirdOctave=True, display=False, **kwargs):
+def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
     """
     Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave
     spectrum (1d) or Spectrogram (2d).
@@ -329,7 +329,7 @@ def intoOctave(X, fn, thirdOctave=True, display=False, **kwargs):
     --------
     >>> w, fs = maad.sound.load('../data/guyana_tropical_forest.wav') 
     >>> Sxx_power,tn,fn, ext = maad.sound.spectrogram (w, fs, nperseg=8192)
-    >>> maad.sound.intoOctave(Sxx_power, fn, display=True, extent=ext, vmin=-50)
+    >>> maad.sound.linear_to_octave(Sxx_power, fn, display=True, extent=ext, vmin=-50)
     """
 
     # define the third octave or octave frequency vector in Hz.
