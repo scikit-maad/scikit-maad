@@ -173,4 +173,4 @@ fcs, triplet = false_Color_Spectro(df_indices_per_bin,
                                    unit='hours',
                                    permut=False,
                                    display=True,
-                                   figsize=(5,9))
+                                   figsize=(4,7))
