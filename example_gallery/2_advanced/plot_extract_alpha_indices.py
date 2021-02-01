@@ -19,14 +19,14 @@ from maad.util import (date_parser, plot_correlation_map,
                        plot_features_map, plot_features, false_Color_Spectro)
 
 #%%
-SPECTRAL_FEATURES=['SPEC_MEAN','SPEC_VAR','SPEC_SKEW','SPEC_KURT','NBPEAKS','LEQf', 
+SPECTRAL_FEATURES=['MEANf','VARf','SKEWf','KURTf','NBPEAKS','LEQf', 
 'ENRf','BGNf','SNRf','Hf', 'EAS','ECU','ECV','EPS','EPS_KURT','EPS_SKEW','ACI',
 'NDSI','rBA','AnthroEnergy','BioEnergy','BI','ROU','ADI','AEI','LFC','MFC','HFC',
 'ACTspFract','ACTspCount','ACTspMean', 'EVNspFract','EVNspMean','EVNspCount',
 'TFSD','H_Havrda','H_Renyi','H_pairedShannon', 'H_gamma', 'H_GiniSimpson','RAOQ',
 'AGI','ROItotal','ROIcover']
 
-AUDIO_FEATURES=['ZCR','AUDIO_MEAN', 'AUDIO_VAR', 'AUDIO_SKEW', 'AUDIO_KURT',
+TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
                'LEQt','BGNt', 'SNRt','MED', 'Ht','ACTtFraction', 'ACTtCount', 
                'ACTtMean','EVNtFraction', 'EVNtMean', 'EVNtCount']
 
@@ -78,7 +78,7 @@ for index, row in df.iterrows() :
 
     # compute all the audio indices and store them into a DataFrame
     # dB_threshold and rejectDuration are used to select audio events.
-    df_audio_ind = features.all_audio_alpha_indices(wave, fs, 
+    df_audio_ind = features.all_temporal_alpha_indices(wave, fs, 
                                           gain = G, sensibility = S,
                                           dB_threshold = 3, rejectDuration = 0.01,
                                           verbose = False, display = False)
@@ -148,7 +148,7 @@ fig, ax = plot_correlation_map(df_indices, R_threshold=0)
 # a 24h cycle consists in plotting heatmaps of indices 
 # For a better view, we seperate spectral and audio indices.
 plot_features_map(df_indices[SPECTRAL_FEATURES], mode='24h')
-plot_features_map(df_indices[AUDIO_FEATURES], mode='24h')
+plot_features_map(df_indices[TEMPORAL_FEATURES], mode='24h')
 
 # A more classical way to analyse variations of indices consists in plotting
 # graphs. We choose to normalize rescale their value between 0 to 1 in order to
@@ -166,9 +166,9 @@ fig, ax[2,1] = plot_features(df_indices[['ROItotal']],norm=True,mode='24h', ax=a
 #%%
 # Create false color spectrograms with 3 indices
 fcs, triplet = false_Color_Spectro(df_indices_per_bin,
-                                   indices = ['AUDIO_KURT_per_bin',
-                                             'EVNspCount_per_bin',
-                                             'AUDIO_MEAN_per_bin'],
+                                   indices = ['KURTt_per_bin',
+                                              'EVNspCount_per_bin',
+                                              'MEANt_per_bin'],
                                    reverseLUT=False,
                                    unit='hours',
                                    permut=False,
