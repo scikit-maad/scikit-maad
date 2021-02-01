@@ -337,7 +337,23 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     See also:
     ---------
     power2dBSPL
-        
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx_amplitude,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode='amplitude')  
+    >>> S_amplitude_mean = np.mean(Sxx_amplitude, axis=1)
+    
+    Get instantaneous sound pressure level (L).
+    
+    >>> maad.spl.amplitude2dBSPL(S_amplitude_mean, gain=42)    
+    array([39.56422048, 44.37117437, 41.95705677, 39.60547011, 36.43237323,
+           33.24966066, 31.44139953, 30.4473799 , 28.91589639, 27.26962076,
+           26.7722199 , 26.27328293, 25.69373328, 24.73880674, 23.85828781,
+           ...
+           -6.30767022, -6.46481481, -6.49907112, -6.52754376, -6.52476444,
+           -6.73617834, -6.75685948])
     """       
     # force to be ndarray
     s = np.asarray(s)

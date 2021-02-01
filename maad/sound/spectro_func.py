@@ -129,7 +129,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 
     Notes
     -----
-    This function take care of the energy conservation which is crucial 
+    This function takes care of the energy conservation which is crucial 
     when working in with sound pressure level (dB SPL)
 
     Examples

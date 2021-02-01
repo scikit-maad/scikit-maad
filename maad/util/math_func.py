@@ -367,6 +367,14 @@ def moments (X, axis=None):
         skewness of X
     kurt : float
         kurtosis of X
+
+    Examples
+    --------
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> mean, var, skew, kurt = util.moments(s)
+    >>> print ('mean:%2.4f / var:%2.4f / skew:%2.4f / kurt:%2.4f' %(mean, var, skew, kurt)) 
+    mean:-0.0000 / var:0.0012 / skew:-0.0065 / kurt:24.7116    
     """
     # force P to be ndarray
     X = np.asarray(X)
@@ -392,6 +400,15 @@ def entropy (x, axis=0):
     -------
     H : float or ndarray of floats
         entropy of x
+        
+    Examples
+    --------
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> H = util.entropy(s)
+    >>> print ('Entropy is %2.4f' %H) 
+    Entropy is 0.9998 
+        
     """
     if isinstance(x, (np.ndarray)) == True:
         if x.ndim > axis:

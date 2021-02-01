@@ -6,6 +6,7 @@
 #
 # License: New BSD License
 
+#%%
 # =============================================================================
 # Load the modules
 # =============================================================================
@@ -16,6 +17,68 @@ import os
 from datetime import datetime
 from pathlib import Path # in order to be Windows/linux/MacOS compatible
 
+
+#%%
+# =============================================================================
+# Private functions
+# =============================================================================
+def _date_from_filename (filename):
+    """
+    Extract date and time from the filename. Return a datetime object
+    
+    Parameters
+    ----------
+    filename : string
+    The filename must follow this format :
+    XXXX_yyyymmdd_hhmmss.wav
+    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
+    mm : minutes / ss : seconds
+            
+    Returns
+    -------
+    date : object datetime
+        This object contains the date of creation of the file extracted from
+        the filename postfix. 
+    """
+    # date by default
+    date = datetime(1900,1,1,0,0,0,0)
+    # test if it is possible to extract the recording date from the filename
+    if filename[-19:-15].isdigit(): 
+        yy=int(filename[-19:-15])
+    else:
+        return date
+    if filename[-15:-13].isdigit(): 
+        mm=int(filename[-15:-13])
+    else:
+        return date
+    if filename[-13:-11].isdigit(): 
+        dd=int(filename[-13:-11])
+    else:
+        return date
+    if filename[-10:-8].isdigit(): 
+        HH=int(filename[-10:-8])
+    else:
+        return date
+    if filename[-8:-6].isdigit(): 
+        MM=int(filename[-8:-6])
+    else:
+        return date
+    if filename[-6:-4].isdigit(): 
+        SS=int(filename[-6:-4])
+    else:
+        return date
+
+    # extract date and time from the filename
+    date = datetime(year=yy, month=mm, day=dd, hour=HH, minute=MM, second=SS, 
+                    microsecond=0)
+    
+    return date
+
+
+#%%
+# =============================================================================
+# Public functions
+# =============================================================================
 def read_audacity_annot (audacity_filename):
     """
     Read audacity annotations file (or labeling file) and return a Pandas Dataframe
@@ -68,8 +131,9 @@ def read_audacity_annot (audacity_filename):
 
     return tab_out
 
-#=============================================================================
-def write_audacity_annot(fname, onset, offset):
+#%%
+
+def write_audacity_annot(fname, df_rois):
     """ 
     Write audio segmentation to file (Audacity format).
     
@@ -77,77 +141,68 @@ def write_audacity_annot(fname, onset, offset):
     ----------
     fname: str
         filename to save the segmentation
-    onset: int, float array_like
-        output of a detection method (e.g. find_rois_1d)
-    offset: int, float array_like
-        output of a detection method (e.g. find_rois_1d)
+    df_rois: pandas dataframe
+        Dataframe containing the coordinates corresponding to sound signatures
+        In case of only temporal annotations : df_rois must contain at least
+        the columns 'mint_t', 'max_t' 
+        In case of bounding box (temporal eand frequency limits) :: df_rois 
+        must contain at least the columns 'min_t', 'max_t', 'min_f', 'max_f'
             
     Returns
     -------
-    Returns a csv file
+    df_to_save
+        Dataframe that has been saved
+    
+    Examples
+    --------
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(s, fs)
+    >>> Sxx_db = maad.util.power2dB(Sxx_power) + 96
+    >>> Sxx_power_noNoise= maad.sound.median_equalizer(Sxx_power)
+    >>> Sxx_db_noNoise = maad.util.power2dB(Sxx_power_noNoise)
+    >>> Sxx_db_noNoise_smooth = maad.sound.smooth(Sxx_db_noNoise, std=0.5)
+    >>> im_mask = maad.rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin ='relative', 
+                                        bin_std=8, bin_per=0.5)
+    >>> im_rois, df_rois = maad.rois.select_rois(im_mask, min_roi=25, max_roi=None)
+    >>> df_rois = maad.util.format_features(df_rois, tn, fn)
+    
+    Change path to save the file containing the labels position
+    
+    >>> df_to_save = maad.util.write_audacity_annot('save.txt', df_rois)
+    
+    Import the wav file then the label file in Audacity
+    
     """
-    if onset.size==0:
-        print(fname, '< No detection found')
+    if df_rois.size==0:
+        print(fname, '> No detection found')
         df = pd.DataFrame(data=None)
         df.to_csv(fname, sep=',',header=False, index=False)
     else:
-        label = range(len(onset))
-        rois_tf = pd.DataFrame({'t_begin':onset, 't_end':offset, 'xlabel':label})
-        rois_tf.to_csv(fname, index=False, header=False, sep='\t') 
-
-#=============================================================================
-
-def _date_from_filename (filename):
-    """
-    Extract date and time from the filename. Return a datetime object
+        # if there is no label, create a vector with incremental values
+        if 'label' not in df_rois :
+            label = np.arange(0,len(df_rois))
+        # if no frequency coordinates, only temporal annotations
+        if ('min_f' not in df_rois) or ('max_f' not in df_rois) :
+            df_to_save = pd.DataFrame({'min_t':df_rois.min_t, 
+                                    'max_t':df_rois.max_t, 
+                                    'label':label})
+        elif ('min_f' in df_rois) and ('max_f'  in df_rois) :
+            df_to_save_odd = pd.DataFrame({'index': np.arange(0,len(df_rois)*2,2),
+                                        'min_t':df_rois.min_t, 
+                                        'max_t':df_rois.max_t, 
+                                        'label':df_rois.label})
+            df_to_save_even = pd.DataFrame({'index': np.arange(1,len(df_rois)*2,2),
+                                         'min_t':'\\', 
+                                         'max_t':df_rois.min_f, 
+                                         'label':df_rois.max_f})
+            df_to_save = pd.concat([df_to_save_odd,df_to_save_even])
+            df_to_save = df_to_save.set_index('index')
+            df_to_save = df_to_save.sort_index()
+        df_to_save.to_csv(fname, index=False, header=False, sep='\t') 
     
-    Parameters
-    ----------
-    filename : string
-    The filename must follow this format :
-    XXXX_yyyymmdd_hhmmss.wav
-    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /
-    mm : minutes / ss : seconds
-            
-    Returns
-    -------
-    date : object datetime
-        This object contains the date of creation of the file extracted from
-        the filename postfix. 
-    """
-    # date by default
-    date = datetime(1900,1,1,0,0,0,0)
-    # test if it is possible to extract the recording date from the filename
-    if filename[-19:-15].isdigit(): 
-        yy=int(filename[-19:-15])
-    else:
-        return date
-    if filename[-15:-13].isdigit(): 
-        mm=int(filename[-15:-13])
-    else:
-        return date
-    if filename[-13:-11].isdigit(): 
-        dd=int(filename[-13:-11])
-    else:
-        return date
-    if filename[-10:-8].isdigit(): 
-        HH=int(filename[-10:-8])
-    else:
-        return date
-    if filename[-8:-6].isdigit(): 
-        MM=int(filename[-8:-6])
-    else:
-        return date
-    if filename[-6:-4].isdigit(): 
-        SS=int(filename[-6:-4])
-    else:
-        return date
+    return df_to_save
 
-    # extract date and time from the filename
-    date = datetime(year=yy, month=mm, day=dd, hour=HH, minute=MM, second=SS, 
-                    microsecond=0)
-    
-    return date
+#%%
 
 def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     """

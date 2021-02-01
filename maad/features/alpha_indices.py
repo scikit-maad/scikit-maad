@@ -2752,13 +2752,13 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     df_per_bin_indices +=[LTS.tolist()]
     
     """**************************** 4 spectrum moments *********************""" 
-    SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT = spectral_moments(S_amplitude)
-    df_spectral_indices += [SPEC_MEAN, SPEC_VAR, SPEC_SKEW, SPEC_KURT]
+    MEANf, VARf, SKEWf, KURTf = spectral_moments(S_amplitude)
+    df_spectral_indices += [MEANf, VARf, SKEWf, KURTf]
     if verbose :
-        print("SPEC_MEAN %2.5f" % SPEC_MEAN)
-        print("SPEC_VAR %2.5f" % SPEC_VAR)
-        print("SPEC_SKEW %2.5f" % SPEC_SKEW)
-        print("SPEC_KURT %2.5f" % SPEC_KURT)
+        print("MEANf %2.5f" % MEANf)
+        print("VARf %2.5f" % VARf)
+        print("SKEWf %2.5f" % SKEWf)
+        print("KURTf %2.5f" % KURTf)
      
     """*********************** 4 audio moments per bin ********************""" 
     MEANt_per_bin, VARt_per_bin, SKEWt_per_bin, KURTt_per_bin = spectral_moments(Sxx_amplitude, axis=1) 
@@ -3004,10 +3004,10 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print("ROIcover %2.3f" % ROIcover)
         
     df_spectral_indices = pd.DataFrame([df_spectral_indices], 
-                                    columns=['SPEC_MEAN', 
-                                             'SPEC_VAR', 
-                                             'SPEC_SKEW', 
-                                             'SPEC_KURT', 
+                                    columns=['MEANf', 
+                                             'VARf', 
+                                             'SKEWf', 
+                                             'KURTf', 
                                              'NBPEAKS', 
                                              'LEQf', 
                                              'ENRf', 

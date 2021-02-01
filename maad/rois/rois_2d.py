@@ -642,11 +642,12 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
             xlabel = 'pseudofrequency [points]'
             figsize=kwargs.pop('figsize',(4, 13)) 
          
-        randcmap = rand_cmap(len(rois_label)) 
-        cmap   =kwargs.pop('cmap',randcmap)  
+        # randcmap = rand_cmap(len(rois_label)) 
+        # cmap   =kwargs.pop('cmap',randcmap)  
+        cmap   =kwargs.pop('cmap','tab20') 
          
         _, fig = plot2d (im_rois, extent=extent, figsize=figsize,title=title,  
-                         ylabel = ylabel, xlabel = xlabel, 
+                         ylabel = ylabel, xlabel = xlabel,
                          cmap=cmap, **kwargs) 
         # SAVE FIGURE 
         if savefig is not None :  

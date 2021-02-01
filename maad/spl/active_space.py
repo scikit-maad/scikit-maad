@@ -515,6 +515,27 @@ def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.002):
       into account 3 types of attenuation
       rows : frequencies
       columns :distances
+      
+  Examples
+  --------
+  >>> import numpy as np
+  >>> fn = np.arange(500,10500,500)
+  >>> r = np.arange(10,110)
+  >>> r0 = 1
+  >>> Asum_dB, df_att = maad.spl.attenuation_dB(fn,r,r0)
+  
+  For 2kHz @50m, the attenuation is mainly drive by geometric attenuation
+  
+  >>> df_att[(df_att.f==2000) & (df_att.r==50)]
+              f   r  Ageo_dB   Aatm_dB   Ahab_dB    Asum_dB
+      310  2000  50  33.9794  0.454776  1.702434  36.13661
+  
+  For 10Hz @100m, the attenuation due to the atmosphere and the habitat is no
+  negligible
+      
+  >>> df_att[(df_att.f==10000) & (df_att.r==100)]
+                f   r  Ageo_dB   Aatm_dB   Ahab_dB    Asum_dB
+      1990  10000  100    40.0  13.335002  17.198061  70.533063
   """
   # make sure it's array
   f = np.asarray(f)  
@@ -552,7 +573,7 @@ def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.002):
           'Ageo_dB':Ageo_dB.flatten(), 
           'Aatm_dB':Aatm_dB.flatten(), 
           'Ahab_dB':Ahab_dB.flatten(), 
-          'Afull_dB':Asum_dB.flatten()}
+          'Asum_dB':Asum_dB.flatten()}
   df_att = pd.DataFrame(data, columns = ['f', 
                                          'r', 
                                          'Ageo_dB', 
@@ -580,6 +601,26 @@ def dBSPL_per_bin (L, f) :
   L_per_bin :  array-like (vector (1D))
       sound pressure level in dB with values corresponding to the frequency's 
       number of bins 
+  
+  Examples
+  --------
+  Spread 80dB SPL from 2kHz to 5kHz with 1kHz step
+  
+  >>> maad.spl.dBSPL_per_bin(80,[2000,3000,4000,5000])
+  array([73.97940009, 73.97940009, 73.97940009, 73.97940009])
+  
+  Spread 80dB SPL from 2kHz to 10kHz with 1kHz step
+  
+  >>> maad.spl.dBSPL_per_bin(80,[2000,3000,4000,5000,6000,7000,8000,9000,10000])
+  array([70.45757491, 70.45757491, 70.45757491, 70.45757491, 70.45757491,
+       70.45757491, 70.45757491, 70.45757491, 70.45757491])
+  
+  Spread 80dB SPL from 2kHz to 5kHz with 0.5kHz step
+  
+  >>> maad.spl.dBSPL_per_bin(80,[2000,2500,3000,3500,4000,4500,5000])
+  array([71.5490196, 71.5490196, 71.5490196, 71.5490196, 71.5490196,
+       71.5490196, 71.5490196])  
+  
   """
   # test if f is a scalar
   if not hasattr(f, "__len__") : 
@@ -638,6 +679,46 @@ def active_distance (L_bkg, L0, f, r0= 1, delta_r=1, t=20, rh=60, pa=101325,
   The maximum detection range is limited by the background or ambient sound also
   called noise as this background sound prevent signal to go further is the 
   signal level is below the noise level.
+  
+  Examples
+  --------
+  Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
+  with a background noise of 50dB SPL
+    
+  >>> f, r = maad.spl.active_distance (L_bkg=50, L0=90, f=2000) 
+  >>> print('Max active distance is %2.1fm' %r)
+  Max active distance is 70.0m
+  
+  Estimation of the active distance for an initial sound of 90dB SPL @10kHz 
+  with a background noise of 50dB SPL
+    
+  >>> f, r = maad.spl.active_distance (L_bkg=50, L0=90, f=10000) 
+  >>> print('Max active distance is %2.1fm' %r)
+  Max active distance is 32.0m
+  
+  Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
+  with a background noise of 30dB SPL
+    
+  >>> f, r = maad.spl.active_distance (L_bkg=30, L0=90, f=2000) 
+  >>> print('Max active distance is %2.1fm' %r)
+  Max active distance is 263.0m
+  
+  Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
+  with a background noise of 30dB SPL, in tropical rain forest atmosphere 
+  (t=30, rh=99)
+    
+  >>> f, r = maad.spl.active_distance(L_bkg=30,L0=90,f=2000,t=30,rh=99) 
+  >>> print('Max active distance is %2.1fm' %r)
+  Max active distance is 247.0m
+  
+  Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
+  with a background noise of 30dB SPL, in cold dry forest atmosphere 
+  (t=5, rh=40)
+    
+  >>> f, r = maad.spl.active_distance(L_bkg=30,L0=90,f=2000,t=5,rh=40) 
+  >>> print('Max active distance is %2.1fm' %r)
+  Max active distance is 225.0m
+  
   """
     
   # test if f is a scalar
@@ -716,7 +797,33 @@ def pressure_at_r0 (f, r, p, r0=1, t=20, rh=60, pa=101325, a0=0.002) :
   p0 : scalar or array-like
       estimated pressure at distance r0.
       This is a scalar if p is a scalar or a vector if p and r are vectors or 
-      a matrix if p, 
+      a matrix if p and r are matrix 
+
+  Examples
+  --------
+  Estimation of L0, knowing L=50dB SPL @60m @100Hz
+  
+  >>> p = maad.spl.dBSPL2pressure(50)
+  >>> p0 = maad.spl.pressure_at_r0(100,60,p)
+  >>> L0 = maad.spl.pressure2dBSPL(p0)
+  >>> L0
+  85.68036510289447
+  
+  Estimation of L0, knowing L=50dB SPL @60m @10000Hz
+  
+  >>> p0 = maad.spl.pressure_at_r0(10000,100,p)
+  >>> L0 = maad.spl.pressure2dBSPL(p0)
+  >>> L0
+  120.53306313162624
+  
+  Estimation of L0, knowing L=50dB SPL @10m @100Hz
+  
+  >>> p = maad.spl.dBSPL2pressure(50)
+  >>> p0 = maad.spl.pressure_at_r0(100,10,p)
+  >>> L0 = maad.spl.pressure2dBSPL(p0)
+  >>> L0
+  70.01789933655922
+      
   """
   # if vectors, test if r and L have same length 
   if (hasattr(r, "__len__") and hasattr(p, "__len__")) :
@@ -750,13 +857,7 @@ def pressure_at_r0 (f, r, p, r0=1, t=20, rh=60, pa=101325, a0=0.002) :
       # reshape the array when dimensions are 1
       if p0.ndim ==1:
           if p0.shape[0] == 1:
-              p0 = p0[0]
-         
-#          else:
-#              p0 = p0[0][:]
-#          elif p0.shape[1] == 1:
-#              p0 = p0[:,0]
-  
+              p0 = p0[0]  
   return p0  
 
 #%%
@@ -805,7 +906,7 @@ def dBSPL_at_r0 (f, r, L, r0=1, t=20, rh=60, pa=101325, a0=0.002, pRef=10e-6) :
   
   return L0  
 
-# #************* apply attenuation
+#%%
 def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   """ 
   Apply attenuation of a temporal signal p0 after propagation between the 
@@ -838,7 +939,7 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   
   Examples
   --------
-  Prepare the spinetail sound (Sound level @1m = 80dB SPL).
+  Prepare the spinetail sound (Sound level @1m = 85dB SPL).
   
   >>> w, fs = maad.sound.load('../data/spinetail.wav') 
   >>> p0 = maad.spl.wav2pressure(wave=w, gain=42)
@@ -852,7 +953,7 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.002):
   Get the sound level of the spinetail song (sound between 4900-7500 Hz).
   
   >>> p0_sig_4900_7500 = maad.sound.select_bandwidth(p0_sig,fs,fcut=[4900,7300],forder=10, ftype='bandpass')
-  >>> L = maad.spl.pressure2Leq(p0_sig_4900_7500, fs) 
+  >>> L = maad.spl.pressure2leq(p0_sig_4900_7500, fs) 
   >>> print ('Sound Level measured : %2.2fdB SPL' %L)
   
   Estimate maximum distance from the source.

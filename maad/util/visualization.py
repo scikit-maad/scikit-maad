@@ -614,7 +614,11 @@ def plot2d(im,ax=None,**kwargs):
         - now : boolean, optional, default : True
             if True, display now. Cannot display multiple images. 
             To display mutliple images, set now=False until the last call for 
-            the last image      
+            the last image    
+        - interpolation : list of string [None, 'none', 'nearest', 'bilinear', 
+           'bicubic', 'spline16','spline36', 'hanning', 'hamming', 'hermite', 
+           'kaiser', 'quadric','catrom', 'gaussian', 'bessel', 'mitchell', 
+           'sinc', 'lanczos'], optional, default : None
             
         ... and more, see matplotlib
         
@@ -637,7 +641,7 @@ def plot2d(im,ax=None,**kwargs):
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)      
+    >>> fig, ax = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)      
         
     """ 
    
@@ -672,8 +676,8 @@ def plot2d(im,ax=None,**kwargs):
         fig = ax.get_figure()
 
     # display image
-    _im = ax.imshow(im, extent=extent, interpolation='none', origin='lower', 
-                    vmin =vmin, vmax=vmax, cmap=cmap)
+    _im = ax.imshow(im, extent=extent, origin='lower', cmap=cmap, vmin=vmin, 
+                    vmax=vmax, **kwargs)
     plt.colorbar(_im, ax=ax)
 
     # set the parameters of the subplot
@@ -934,6 +938,20 @@ def plot_features_map (df, norm=True, mode='24h', **kwargs) :
         The Figure instance 
     ax : Axis
         The Axis instance   
+       
+    Examples
+    --------
+    see plot_extract_alpha_indices.py advanced example for a complete example
+    
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> np.random.seed(2021)
+    >>> M = np.random.rand(24, 7)
+    >>> df = pd.DataFrame(M)
+    >>> indices = ['A','B','C','D','E','F','G']
+    >>> df.columns = indices
+    >>> df.index =pd.date_range(start=pd.Timestamp('00:00:00'), end=pd.Timestamp('23:00:00'), freq='1H')
+    >>> maad.util.plot_features_map(df) 
     """
 
     if isinstance(df, pd.DataFrame) == False :
@@ -1053,6 +1071,21 @@ def plot_features (df, ax=None, norm=True, mode='24h', **kwargs) :
         The Figure instance 
     ax : Axis
         The Axis instance
+        
+    Examples
+    --------
+    see plot_extract_alpha_indices.py advanced example for a complete example
+    
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> np.random.seed(2021)
+    >>> M = np.random.rand(24, 2)
+    >>> df = pd.DataFrame(M)
+    >>> indices = ['A','B']
+    >>> df.columns = indices
+    >>> df.index =pd.date_range(start=pd.Timestamp('00:00:00'), end=pd.Timestamp('23:00:00'), freq='1H')
+    >>> maad.util.plot_features(df) 
+        
     """
     if isinstance(df, pd.DataFrame) == False :
         raise TypeError ('df must be a Pandas Dataframe')
@@ -1169,6 +1202,19 @@ def plot_correlation_map (df, R_threshold=0.75, method ='spearman', **kwargs) :
         The Figure instance 
     ax : Axis
         The Axis instance
+        
+    Examples
+    --------
+    see plot_extract_alpha_indices.py advanced example for a complete example
+    
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> np.random.seed(2021)
+    >>> M = np.random.rand(10, 10)
+    >>> df = pd.DataFrame(M)
+    >>> indices = ['A','B','C','D','E','F','G','H','I','J']
+    >>> df.columns = indices
+    >>> maad.util.plot_correlation_map(df, R_threshold=0)
     """
     # Correlation matrix
     corr_matrix = df.corr(method)
@@ -1269,6 +1315,34 @@ def false_Color_Spectro (df, indices=None, plim=(1,99), reverseLUT=False,
             
     triplet : list
         List of triplet of indices corresponding to each false color spectro
+        
+    Examples
+    --------
+    see plot_extract_alpha_indices.py advanced example for a complete example 
+    
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> A_per_bin = [[0.5,0.4,0.3,0.2,0.1],
+                     [0.3,0.3,0.3,0.3,0.3],
+                     [0.5,0.5,0.3,0.0,0.0],
+                     [0.2,0.2,0.3,0.0,0.0],
+                     [0.0,0.0,0.3,0.0,0.0]]
+    >>> B_per_bin = [[0.5,0.5,0.5,0.5,0.5],
+                     [0.5,0.5,0.5,0.5,0.5],
+                     [0.5,0.5,0.2,0.0,0.0],
+                     [0.5,0.2,0.1,0.0,0.0],
+                     [0.5,0.2,0.0,0.0,0.0]]
+    >>> C_per_bin = [[0.0,0.7,0.0,0.5,0.5],
+                     [0.7,0.2,0.0,0.5,0.5],
+                     [0.5,0.5,0.7,0.2,0.2],
+                     [0.0,0.7,0.0,0.2,0.2],
+                     [0.7,0.2,0.0,0.2,0.2]]   
+    >>> df = pd.DataFrame([A_per_bin,B_per_bin,C_per_bin])
+    >>> df = df.T
+    >>> df.columns = ['A_per_bin','B_per_bin','C_per_bin']
+    >>> df.index = pd.date_range('20200101', periods=len(df))
+    >>> maad.util.false_Color_Spectro (df, display=True ,unit='days', figsize=[3,3])
+    
     """
     # sort dataframe by date
     df = df.sort_index(axis=0)
@@ -1287,7 +1361,9 @@ def false_Color_Spectro (df, indices=None, plim=(1,99), reverseLUT=False,
             fn = df['frequencies'].iloc[0]
         # drop frequencies
         df = df.drop(columns='frequencies')
-
+    else :
+        fn = np.arange(0,len(df))
+            
     # Set the list of indices if indices is None
     if indices is None :
         indices = list(df)
@@ -1386,7 +1462,7 @@ def false_Color_Spectro (df, indices=None, plim=(1,99), reverseLUT=False,
             plt.rcParams.update({'font.size': 10})
             plt.rcParams.update({'font.family' : 'serif'})
             fig=plt.figure(facecolor='white', **fig_kwargs)
-            plt.imshow(false_color_image[tt], aspect='auto', origin='lower', interpolation='none', extent=(fn[0], deltaT.value/normT, 0, fn[-1]))
+            plt.imshow(false_color_image[tt], aspect='auto', origin='lower', extent=(fn[0], deltaT.value/normT, 0, fn[-1]), **kwargs)
             plt.xlabel(xlabel)
             plt.ylabel('Frequency (Hz)')
             plt.title('False Color Spectro ' + '\n'
