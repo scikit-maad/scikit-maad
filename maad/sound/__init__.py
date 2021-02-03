@@ -12,7 +12,8 @@ Input and output
 
     load
     load_spectrogram
-
+    write
+    
 Preprocess audio
 -----------------
 .. autosummary::
@@ -39,6 +40,8 @@ Transform audio
     linear_to_octave
     envelope
     psd
+    resample
+    slice_audio
 
 Metrics
 -------
@@ -52,7 +55,8 @@ Metrics
 """
 
 from .input_output import (load,
-                           load_spectrogram)
+                           load_spectrogram,
+                           write)
 
 from .filter import (select_bandwidth,
                      fir_filter,
@@ -67,7 +71,9 @@ from .spectral_subtraction import (remove_background,
 from .trim import wave2frames
 
 from .transform import (envelope,
-                        psd)
+                        psd,
+                        resample,
+                        slice_audio)
 
 from .spectro_func import (spectrogram,
                            avg_power_spectro,
@@ -82,6 +88,7 @@ __all__ = [
         # io.py
         'load',
         'load_spectrogram',
+        'write',
         # filter.py
         'select_bandwidth',
         'fir_filter',
@@ -97,6 +104,8 @@ __all__ = [
         # envelope_func.py
         'envelope',
         'psd',
+        'resample',
+        'slice_audio',
         # spectro_func.py
         'spectrogram',
         'avg_power_spectro',

@@ -17,6 +17,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import hilbert
 from scipy.signal import periodogram, welch
+import scipy
+import resampy
 
 # import internal modules
 from maad.sound import wave2frames
@@ -184,4 +186,111 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         ax.set_ylabel('Amplitude')
         
     return psd_s, f_idx
+#%%
+def resample(data, sr, target_sr, res_type = 'kaiser_best', **kwargs):
+    """
+    Changes the sample rate of a time series.
 
+    Parameters
+    ----------
+    data : np.ndarray 
+        Mono or stereo signal as NumPy array.
+
+    sr : int
+        Time series sampling rate. 
+
+    target_sr : int
+        Target sampling rate.
+
+    res_type : str, optional
+        Resample method. By default 'kaiser_best', is a high-quality method.
+        `res_type='kaiser_fast'` is a faster method.
+        `res_type='sinc_window'` is an advanced and custom method of resampling. 
+        `res_type='scipy'` is a Fourier transforms method based.
+
+    kwargs : additional keyword arguments
+        If `res_type='sinc_window'`, additional keyword arguments to pass to
+        `resampy.resample`.
+
+    Returns
+    -------
+    res_data : np.ndarray 
+        Resampling time series.
+
+    See Also
+    --------
+    resampy.resample
+    scipy.signal.resample
+    
+    Examples
+    --------
+    Resample a time series from sample rate of 44100 to 55550.
+    >>> import numpy as np
+    >>> sr = 44100; T = 2.0; target_sr = 2*sr
+    >>> t = np.linspace(0, T, int(T*sr))
+    >>> data = np.sin(2. * np.pi * 440. *t)
+    >>> data_resample = maad.sound.resample(data, sr, target_sr, 'kaiser_fast')
+    >>> data.shape, data_resample.shape
+    ((88200,), (111100,))
+    """
+    if sr == target_sr:
+        return data
+    
+    ratio = float(target_sr) / sr
+    n_samples = int(np.ceil(data.shape[-1] * ratio))
+
+    if res_type == 'scipy':
+        res_data = scipy.signal.resample(data, n_samples, axis = -1)
+    
+    else:
+        res_data = resampy.resample(data, sr, target_sr, filter=res_type, axis=-1, **kwargs)
+    return np.ascontiguousarray(res_data, dtype=data.dtype)
+
+#%%
+def slice_audio(data, sr, min_t, max_t, pad=False, pad_constant=0):
+    """
+    Slices a time series, from a initial time `min_t` to an ending time `max_t`.  
+    If the target duration `duration =` is larger than the original duration and `pad = TRue`, 
+    the time series is padded with a constant value `pad_constant = 0`.
+
+    Parameters
+    ----------
+    data : np.ndarray 
+        Mono or stereo signal as NumPy array.
+
+    sr : int
+        Time series sampling rate.
+
+    min_t : float
+        Initial time. If initial time `min_t < 0` and `pad=True`, this time is added to the 
+        beginning of the data slice.
+
+    max_t : float
+        Ending time of the data slice.
+        
+    pad : bool, optional
+        If true, the time series is padded with a constant value `pad_constant`. Default is False.
+        
+    pad_constant : 
+        It is the constant with which the time series is padded. 
+        
+    Returns
+    -------
+    data_slice : np.ndarray 
+        Time series with duration `duration = max_t - min_t`.
+
+    See Also
+    --------
+    numpy.pad
+    
+    Examples
+    --------
+    Pad a time series from 2 seconds to 5 seconds.
+    >>> import numpy as np
+    >>> sr = 44100; T = 2.0
+    >>> t = np.linspace(0, T, int(T*sr))
+    >>> data = np.sin(2. * np.pi * 440. *t)
+    >>> data_slice = maad.sound.slice_wav(data, sr, min_t = 0., max_t = 5., pad=True)
+    >>> data_slice.shape[-1]/sr
+    5.0
+    """
