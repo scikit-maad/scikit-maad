@@ -294,3 +294,63 @@ def slice_audio(data, sr, min_t, max_t, pad=False, pad_constant=0):
     >>> data_slice.shape[-1]/sr
     5.0
     """
+    
+    min_lim = min_t * sr
+    max_lim = max_t * sr
+    duration = max_t - min_t
+    
+    if pad:
+        
+        if data.ndim == 1:
+            
+            if (duration * sr) > data.shape[-1]:
+                up_lim = int(max_t * sr - data.shape[-1])
+                if min_t <=0:
+                    low_lim = int(abs(min_t) * sr) 
+                    data_slice = np.pad(data, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                else:
+                    low_lim = int(0.0) 
+                    data_slice = np.pad(data, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                    data_slice = data_slice[int(min_lim):]
+            else:
+                data_slice = data[int(min_lim): int(max_lim)]
+        
+        else:
+            
+            data_slice = np.empty((data.shape[0], int(duration * sr)))
+            for i, chanel in enumerate(data):
+                if (duration * sr) > chanel.shape[-1]:
+                    up_lim = int(max_t * sr - chanel.shape[-1])
+                    
+                    if min_t <=0:
+                        low_lim = int(abs(min_t) * sr) 
+                        data_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                    else:
+                        low_lim = int(0.0) 
+                        data_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                        data_slice = data_slice[int(min_lim):]
+                else:
+                    data_slice[i] = data[i][int(min_lim): int(max_lim)]
+                    
+        return data_slice
+    
+    else:
+        
+        if min_t < 0:
+            raise ValueError("t_min must be >= 0.")
+        
+        if data.ndim == 1:
+            if (duration * sr) > data.shape[-1]:
+                raise ValueError("Target duration is longer than original duration.")
+            else:
+                data_slice = data[int(min_lim): int(max_lim)]
+        else:   
+            
+            data_slice = np.empty((data.shape[0], int(duration * sr)))
+            for i, chanel in enumerate(data):
+                if (duration * sr) > chanel.shape[-1]:
+                    raise ValueError("Target duration is longer than original duration.")
+                else:
+                    data_slice[i] = data[i][int(min_lim): int(max_lim)]                
+        
+        return data_slice
