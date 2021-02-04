@@ -1,6 +1,6 @@
-﻿maad.features.frequency\_raoQ
+﻿maad.features.frequency\_raoq
 =============================
 
 .. currentmodule:: maad.features
 
-.. autofunction:: frequency_raoQ
+.. autofunction:: frequency_raoq

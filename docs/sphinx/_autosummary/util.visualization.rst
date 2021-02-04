@@ -19,8 +19,8 @@
       false_Color_Spectro
       overlay_centroid
       overlay_rois
-      plot1D
-      plot2D
+      plot1d
+      plot2d
       plot_correlation_map
       plot_features
       plot_features_map

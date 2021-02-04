@@ -1,4 +1,4 @@
-util.miscellaneous
+﻿util.miscellaneous
 ==================
 
 .. automodule:: util.miscellaneous
@@ -22,7 +22,7 @@ util.miscellaneous
       format_features
       get_df_single_row
       index_bw
-      intoBins
+      into_bins
       linear_scale
       mean_dB
       nearest_idx

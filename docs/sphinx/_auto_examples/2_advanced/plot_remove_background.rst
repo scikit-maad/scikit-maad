@@ -23,7 +23,7 @@ should be use in complement.
 
     # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_remove_background.png'
 
-    from maad.util import plot2D, power2dB
+    from maad.util import plot2d, power2dB
     from maad.sound import (load, spectrogram, 
                            remove_background, median_equalizer, 
                            remove_background_morpho, 
@@ -64,7 +64,7 @@ which is the maximum dB range value for a 16bits audio recording. We add
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/sound/input_output.py:109: WavFileWarning: Chunk (non-data) not understood, skipping it.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/sound/input_output.py:110: WavFileWarning: Chunk (non-data) not understood, skipping it.
       fs, s = wavfile.read(filename)
 
 
@@ -75,7 +75,7 @@ We plot the original spectrogram.
 
 .. code-block:: default
 
-    plot2D(Sxx_dB, extent=ext, title='original',
+    plot2d(Sxx_dB, extent=ext, title='original',
            vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
 
     print ("Original sharpness : %2.3f" % sharpness(Sxx_dB))
@@ -94,9 +94,9 @@ We plot the original spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
-    Original sharpness : 2.247
+    Original sharpness : 1.885
 
 
 
@@ -113,7 +113,7 @@ Test the function "remove_background"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" % sharpness(X1))
 
-    plot2D(X1, extent=ext, title='remove_background',
+    plot2d(X1, extent=ext, title='remove_background',
            vmin=np.median(X1), vmax=np.median(X1)+40)
 
 
@@ -131,8 +131,8 @@ Test the function "remove_background"
  .. code-block:: none
 
     ---- test remove_background -----
-    duration 0.124 s
-    sharpness : 1.706
+    duration 0.143 s
+    sharpness : 1.434
 
 
 
@@ -150,7 +150,7 @@ Test the function "median_equalizer"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" %sharpness(X2))
 
-    plot2D(X2,extent=ext, title='median_equalizer',
+    plot2d(X2,extent=ext, title='median_equalizer',
            vmin=np.median(X2), vmax=np.median(X2)+40)
 
 
@@ -168,8 +168,8 @@ Test the function "median_equalizer"
  .. code-block:: none
 
     ---- test median_equalizer -----
-    duration 0.085 s
-    sharpness : 1.502
+    duration 0.226 s
+    sharpness : 1.500
 
 
 
@@ -186,7 +186,7 @@ Test the function "remove_background_morpho"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" %sharpness(X3))
 
-    plot2D(X3, extent=ext, title='remove_background_morpho',
+    plot2d(X3, extent=ext, title='remove_background_morpho',
            vmin=np.median(X3), vmax=np.median(X3)+40)
 
 
@@ -206,8 +206,8 @@ Test the function "remove_background_morpho"
     //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
       return f(*args, **kwds)
     ---- test remove_background_morpho -----
-    duration 1.265 s
-    sharpness : 1.093
+    duration 1.518 s
+    sharpness : 0.885
 
 
 
@@ -225,7 +225,7 @@ Test the function "remove_background_along_axis"
     print("duration %2.3f s" % elapsed_time)
     print ("sharpness : %2.3f" %sharpness(X4))
 
-    plot2D(X4,  extent=ext, title='remove_background_along_axis',
+    plot2d(X4,  extent=ext, title='remove_background_along_axis',
            vmin=np.median(X4), vmax=np.median(X4)+40)
 
     plt.tight_layout()
@@ -244,8 +244,8 @@ Test the function "remove_background_along_axis"
  .. code-block:: none
 
     ---- test remove_background_along_axis -----
-    duration 0.029 s
-    sharpness : 1.166
+    duration 0.257 s
+    sharpness : 0.984
 
 
 
@@ -253,7 +253,7 @@ Test the function "remove_background_along_axis"
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.747 seconds)
+   **Total running time of the script:** ( 0 minutes  5.127 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_remove_background.py:

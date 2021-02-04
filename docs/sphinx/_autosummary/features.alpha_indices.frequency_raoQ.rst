@@ -1,6 +1,6 @@
-features.alpha\_indices.frequency\_raoQ
+features.alpha\_indices.frequency\_raoq
 =======================================
 
 .. currentmodule:: features.alpha_indices
 
-.. autofunction:: frequency_raoQ
+.. autofunction:: frequency_raoq

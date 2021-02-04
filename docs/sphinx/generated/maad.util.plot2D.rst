@@ -1,6 +1,6 @@
-﻿maad.util.plot2D
+﻿maad.util.plot2d
 ================
 
 .. currentmodule:: maad.util
 
-.. autofunction:: plot2D
+.. autofunction:: plot2d

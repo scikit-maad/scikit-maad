@@ -1,6 +1,6 @@
-﻿util.plot1D
+﻿util.plot1d
 ===========
 
 .. currentmodule:: util
 
-.. autofunction:: plot1D
+.. autofunction:: plot1d

@@ -41,7 +41,7 @@ Transform audio
     envelope
     psd
     resample
-    slice_audio
+    trim
 
 Metrics
 -------
@@ -68,12 +68,12 @@ from .spectral_subtraction import (remove_background,
                                    remove_background_along_axis,
                                    median_equalizer)
 
-from .trim import wave2frames
+from .trim_func import wave2frames
 
 from .transform import (envelope,
                         psd,
                         resample,
-                        slice_audio)
+                        trim)
 
 from .spectro_func import (spectrogram,
                            avg_power_spectro,
@@ -99,13 +99,13 @@ __all__ = [
         'remove_background_morpho',
         'remove_background_along_axis',
         'median_equalizer',
-        # trim.py
+        # trim_func.py
         'wave2frames',
-        # envelope_func.py
+        # transform.py
         'envelope',
         'psd',
         'resample',
-        'slice_audio',
+        'trim',
         # spectro_func.py
         'spectrogram',
         'avg_power_spectro',

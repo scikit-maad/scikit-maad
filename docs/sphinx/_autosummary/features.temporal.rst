@@ -1,4 +1,4 @@
-features.temporal
+﻿features.temporal
 =================
 
 .. automodule:: features.temporal
@@ -15,7 +15,7 @@ features.temporal
       :toctree:
       :nosignatures:
    
-      audio_moments
+      temporal_moments
       zero_crossing_rate
    
    

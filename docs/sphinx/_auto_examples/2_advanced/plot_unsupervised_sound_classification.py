@@ -15,7 +15,7 @@ matplotlib, scikit-image and scikit-learn.
 import numpy as np
 import matplotlib.pyplot as plt
 from maad import sound, features, rois
-from maad.util import power2dB, plot2D, format_features, overlay_rois
+from maad.util import power2dB, plot2d, format_features, overlay_rois
 
 #%%
 # Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
@@ -26,7 +26,7 @@ s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 db_max=70  # used to define the range of the spectrogram
 Sxx, tn, fn, ext = sound.spectrogram(s_filt, fs, nperseg=1024, noverlap=512)
 Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
-plot2D(Sxx_db, **{'extent':ext})
+plot2d(Sxx_db, **{'extent':ext})
 
 #%%
 # 1. Find regions of interest

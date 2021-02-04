@@ -5,8 +5,8 @@
 
 Computation times
 =================
-**00:01.134** total execution time for **_auto_examples_1_basic** files:
+**00:01.212** total execution time for **_auto_examples_1_basic** files:
 
 +------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr__auto_examples_1_basic_plot_find_rois_simple.py` (``plot_find_rois_simple.py``) | 00:01.134 | 0.0 MB |
+| :ref:`sphx_glr__auto_examples_1_basic_plot_find_rois_simple.py` (``plot_find_rois_simple.py``) | 00:01.212 | 0.0 MB |
 +------------------------------------------------------------------------------------------------+-----------+--------+

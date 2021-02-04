@@ -36,7 +36,7 @@ scikit-image and scikit-learn Python packages.
     import numpy as np
     import matplotlib.pyplot as plt
     from maad import sound, features
-    from maad.util import power2dB, plot2D
+    from maad.util import power2dB, plot2d
     from skimage import transform
     from sklearn.preprocessing import MinMaxScaler
     from sklearn.decomposition import NMF
@@ -73,7 +73,7 @@ First, load and audio file and compute the spectrogram.
 
     Sxx_db = power2dB(Sxx, db_range=70)
     Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, multichannel=False)
-    plot2D(Sxx_db, **{'figsize':(4,10),'extent':(tn[0], tn[-1], fn[0], fn[-1])})
+    plot2d(Sxx_db, **{'figsize':(4,10),'extent':(tn[0], tn[-1], fn[0], fn[-1])})
 
 
 
@@ -89,7 +89,7 @@ First, load and audio file and compute the spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:280: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
 
 
@@ -194,7 +194,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.423 seconds)
+   **Total running time of the script:** ( 0 minutes  1.431 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_nmf_and_false_color_spectrogram.py:

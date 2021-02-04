@@ -239,7 +239,9 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         
     Examples
     --------
-    >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename='https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png',
+    
+    >>> xenocanto_link = 'https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png'
+    >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename= xenocanto_link,
                                           flims=[0,15000],
                                           duration = 10
                                           )
@@ -298,7 +300,7 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
      
     return Sxx, tn, fn, extent 
 #%%
-def write(filename, sr, data):
+def write(filename, fs, data):
     """
     Write a NumPy array as a WAV file with the Scipy method. [1]_ 
 
@@ -306,7 +308,7 @@ def write(filename, sr, data):
     ----------
     filename : string or open file handle
         Name of output wav file.
-    sr : int
+    fs : int
         Sample rate (samples/sec).
     data : ndarray
         Mono or stereo signal as NumPy array.
@@ -342,13 +344,22 @@ def write(filename, sr, data):
 
     Examples
     --------
-    Write a 440Hz sine wave, sampled at 44100Hz.
+    
+    Synthesize a 440Hz sine wave at 44100 Hz and write it to disk.
+    
     >>> import numpy as np
-    >>> sr = 44100; T = 2.0
-    >>> t = np.linspace(0, T, int(T*sr))
+    >>> fs = 44100; T = 2.0
+    >>> t = np.linspace(0, T, int(T*fs))
     >>> data = np.sin(2. * np.pi * 440. *t)
-    >>> maad.sound.write('example.wav', sr, data)
+    >>> maad.sound.write('example.wav', fs, data)
+    
+    Open an audio file, filter a frequency band and write to disk.
+    
+    >>> from maad import sound
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s_filt = sound.sinc(s, (3000, 10000), fs)
+    >>> sound.write('spinetail_filtered.wav', fs, s_filt)
     """
     if data.ndim > 1:
         data = data.T
-    write_wav(filename, sr, np.asfortranarray(data))
+    write_wav(filename, fs, np.asfortranarray(data))

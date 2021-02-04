@@ -76,27 +76,6 @@ Advanced examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@author:">
-
-.. only:: html
-
- .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_using_shape_features_thumb.png
-     :alt: Using wavelets to characterize the time-frequency shape of sounds
-
-     :ref:`sphx_glr__auto_examples_2_advanced_using_shape_features.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/2_advanced/using_shape_features
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows different ways to remove background noise directly from the spectrogram. We ...">
 
 .. only:: html
@@ -136,6 +115,27 @@ Advanced examples
    :hidden:
 
    /_auto_examples/2_advanced/plot_unsupervised_sound_classification
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="When sound travels in air (or in water), initial acoustic signature may change  regarding dista...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_sound_degradation_due_to_attenuation_thumb.png
+     :alt: Simulation of sound degradation due to geometric, atmospheric and habitat attenuation
+
+     :ref:`sphx_glr__auto_examples_2_advanced_plot_sound_degradation_due_to_attenuation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/2_advanced/plot_sound_degradation_due_to_attenuation
 
 .. raw:: html
 

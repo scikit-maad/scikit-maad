@@ -187,19 +187,19 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         
     return psd_s, f_idx
 #%%
-def resample(data, sr, target_sr, res_type = 'kaiser_best', **kwargs):
+def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
     """
-    Changes the sample rate of a time series.
+    Changes the sample rate of an audio file or any time series.
 
     Parameters
     ----------
-    data : np.ndarray 
+    s : np.ndarray 
         Mono or stereo signal as NumPy array.
 
-    sr : int
+    fs : int
         Time series sampling rate. 
 
-    target_sr : int
+    target_fs : int
         Target sampling rate.
 
     res_type : str, optional
@@ -224,49 +224,51 @@ def resample(data, sr, target_sr, res_type = 'kaiser_best', **kwargs):
     
     Examples
     --------
-    Resample a time series from sample rate of 44100 to 55550.
-    >>> import numpy as np
-    >>> sr = 44100; T = 2.0; target_sr = 2*sr
-    >>> t = np.linspace(0, T, int(T*sr))
-    >>> data = np.sin(2. * np.pi * 440. *t)
-    >>> data_resample = maad.sound.resample(data, sr, target_sr, 'kaiser_fast')
-    >>> data.shape, data_resample.shape
-    ((88200,), (111100,))
-    """
-    if sr == target_sr:
-        return data
     
-    ratio = float(target_sr) / sr
-    n_samples = int(np.ceil(data.shape[-1] * ratio))
+    Resample an audio file from sample rate of 44100 kHz to 22050.
+    
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s_resamp = sound.resample(s, fs, target_fs=fs/2)
+    >>> print('Number of samples - original audio:', s.shape[0], '\n'
+    ...       'Number of samples - resampled audio:', s_resamp.shape[0])
+    >>> _ = sound.spectrogram(s, fs, display=True)
+    >>> _ = sound.spectrogram(s_resamp, fs/2, display=True)
+
+    """
+    if fs == target_fs:
+        return s
+    
+    ratio = float(target_fs) / fs
+    n_samples = int(np.ceil(s.shape[-1] * ratio))
 
     if res_type == 'scipy':
-        res_data = scipy.signal.resample(data, n_samples, axis = -1)
+        res_data = scipy.signal.resample(s, n_samples, axis = -1)
     
     else:
-        res_data = resampy.resample(data, sr, target_sr, filter=res_type, axis=-1, **kwargs)
-    return np.ascontiguousarray(res_data, dtype=data.dtype)
+        res_data = resampy.resample(s, fs, target_fs, filter=res_type, axis=-1, **kwargs)
+    return np.ascontiguousarray(res_data, dtype=s.dtype)
 
 #%%
-def slice_audio(data, sr, min_t, max_t, pad=False, pad_constant=0):
+def trim(s, fs, min_t, max_t, pad=False, pad_constant=0):
     """
     Slices a time series, from a initial time `min_t` to an ending time `max_t`.  
-    If the target duration `duration =` is larger than the original duration and `pad = TRue`, 
+    If the target duration `duration =` is larger than the original duration and `pad = True`, 
     the time series is padded with a constant value `pad_constant = 0`.
 
     Parameters
     ----------
-    data : np.ndarray 
+    s : np.ndarray 
         Mono or stereo signal as NumPy array.
 
-    sr : int
+    fs : int
         Time series sampling rate.
 
     min_t : float
         Initial time. If initial time `min_t < 0` and `pad=True`, this time is added to the 
-        beginning of the data slice.
+        beginning of the audio slice.
 
     max_t : float
-        Ending time of the data slice.
+        Ending time of the audio slice.
         
     pad : bool, optional
         If true, the time series is padded with a constant value `pad_constant`. Default is False.
@@ -276,7 +278,7 @@ def slice_audio(data, sr, min_t, max_t, pad=False, pad_constant=0):
         
     Returns
     -------
-    data_slice : np.ndarray 
+    s_slice : np.ndarray 
         Time series with duration `duration = max_t - min_t`.
 
     See Also
@@ -285,72 +287,73 @@ def slice_audio(data, sr, min_t, max_t, pad=False, pad_constant=0):
     
     Examples
     --------
-    Pad a time series from 2 seconds to 5 seconds.
-    >>> import numpy as np
-    >>> sr = 44100; T = 2.0
-    >>> t = np.linspace(0, T, int(T*sr))
-    >>> data = np.sin(2. * np.pi * 440. *t)
-    >>> data_slice = maad.sound.slice_wav(data, sr, min_t = 0., max_t = 5., pad=True)
-    >>> data_slice.shape[-1]/sr
-    5.0
-    """
     
-    min_lim = min_t * sr
-    max_lim = max_t * sr
+    Slice an audio file from 5 to 8 seconds.
+    
+    >>> from maad import sound
+    >>> s, fs = sound.load('../data/spinetail.wav') 
+    >>> s_slice = sound.trim(s, fs, min_t = 5, max_t = 8)
+    >>> _ = sound.spectrogram(s_slice, fs, display=True, figsize=(4,6))
+    >>> s_slice.shape[0]/fs
+    3.0
+    """
+
+    min_lim = min_t * fs
+    max_lim = max_t * fs
     duration = max_t - min_t
     
     if pad:
         
-        if data.ndim == 1:
+        if s.ndim == 1:
             
-            if (duration * sr) > data.shape[-1]:
-                up_lim = int(max_t * sr - data.shape[-1])
+            if (duration * fs) > s.shape[-1]:
+                up_lim = int(max_t * fs - s.shape[-1])
                 if min_t <=0:
-                    low_lim = int(abs(min_t) * sr) 
-                    data_slice = np.pad(data, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                    low_lim = int(abs(min_t) * fs) 
+                    s_slice = np.pad(s, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
                 else:
                     low_lim = int(0.0) 
-                    data_slice = np.pad(data, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
-                    data_slice = data_slice[int(min_lim):]
+                    s_slice = np.pad(s, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                    s_slice = s_slice[int(min_lim):]
             else:
-                data_slice = data[int(min_lim): int(max_lim)]
+                s_slice = s[int(min_lim): int(max_lim)]
         
         else:
             
-            data_slice = np.empty((data.shape[0], int(duration * sr)))
-            for i, chanel in enumerate(data):
-                if (duration * sr) > chanel.shape[-1]:
-                    up_lim = int(max_t * sr - chanel.shape[-1])
+            s_slice = np.empty((s.shape[0], int(duration * fs)))
+            for i, chanel in enumerate(s):
+                if (duration * fs) > chanel.shape[-1]:
+                    up_lim = int(max_t * fs - chanel.shape[-1])
                     
                     if min_t <=0:
-                        low_lim = int(abs(min_t) * sr) 
-                        data_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                        low_lim = int(abs(min_t) * fs) 
+                        s_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
                     else:
                         low_lim = int(0.0) 
-                        data_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
-                        data_slice = data_slice[int(min_lim):]
+                        s_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                        s_slice = s_slice[int(min_lim):]
                 else:
-                    data_slice[i] = data[i][int(min_lim): int(max_lim)]
+                    s_slice[i] = s[i][int(min_lim): int(max_lim)]
                     
-        return data_slice
+        return s_slice
     
     else:
         
         if min_t < 0:
             raise ValueError("t_min must be >= 0.")
         
-        if data.ndim == 1:
-            if (duration * sr) > data.shape[-1]:
+        if s.ndim == 1:
+            if (duration * fs) > s.shape[-1]:
                 raise ValueError("Target duration is longer than original duration.")
             else:
-                data_slice = data[int(min_lim): int(max_lim)]
+                s_slice = s[int(min_lim): int(max_lim)]
         else:   
             
-            data_slice = np.empty((data.shape[0], int(duration * sr)))
-            for i, chanel in enumerate(data):
-                if (duration * sr) > chanel.shape[-1]:
+            s_slice = np.empty((s.shape[0], int(duration * fs)))
+            for i, chanel in enumerate(s):
+                if (duration * fs) > chanel.shape[-1]:
                     raise ValueError("Target duration is longer than original duration.")
                 else:
-                    data_slice[i] = data[i][int(min_lim): int(max_lim)]                
+                    s_slice[i] = s[i][int(min_lim): int(max_lim)]                
         
-        return data_slice
+        return s_slice

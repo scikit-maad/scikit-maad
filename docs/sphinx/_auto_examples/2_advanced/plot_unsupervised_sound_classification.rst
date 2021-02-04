@@ -26,7 +26,7 @@ matplotlib, scikit-image and scikit-learn.
     import numpy as np
     import matplotlib.pyplot as plt
     from maad import sound, features, rois
-    from maad.util import power2dB, plot2D, format_features, overlay_rois
+    from maad.util import power2dB, plot2d, format_features, overlay_rois
 
 
 
@@ -47,7 +47,7 @@ Start by loading an example audio file. Ambient noise will be removed with a low
     db_max=70  # used to define the range of the spectrogram
     Sxx, tn, fn, ext = sound.spectrogram(s_filt, fs, nperseg=1024, noverlap=512)
     Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
-    plot2D(Sxx_db, **{'extent':ext})
+    plot2d(Sxx_db, **{'extent':ext})
 
 
 
@@ -63,7 +63,7 @@ Start by loading an example audio file. Ambient noise will be removed with a low
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:657: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
 
 
@@ -157,8 +157,8 @@ The shape audio features have 26 dimensions. To facilitate the clustering proces
     //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
       return f(*args, **kwds)
     [t-SNE] Computing 37 nearest neighbors...
-    [t-SNE] Indexed 187 samples in 0.001s...
-    [t-SNE] Computed neighbors for 187 samples in 0.003s...
+    [t-SNE] Indexed 187 samples in 0.000s...
+    [t-SNE] Computed neighbors for 187 samples in 0.002s...
     [t-SNE] Computed conditional probabilities for sample 187 / 187
     [t-SNE] Mean sigma: 0.044609
     [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
@@ -244,7 +244,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  6.104 seconds)
+   **Total running time of the script:** ( 1 minutes  5.787 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_unsupervised_sound_classification.py:

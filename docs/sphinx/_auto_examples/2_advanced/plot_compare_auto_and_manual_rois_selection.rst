@@ -30,7 +30,8 @@ scikit-image, scikit-learn and pandas Python packages.
     import numpy as np
     import pandas as pd
     from maad import sound, rois, features
-    from maad.util import power2dB, plot2D, format_features, read_audacity_annot, overlay_rois, overlay_centroid
+    from maad.util import (power2dB, plot2d, format_features, read_audacity_annot, 
+                           overlay_rois, overlay_centroid)
 
 
 
@@ -58,7 +59,7 @@ First, load and audio file and compute the power spectrogram.
     # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
     # range when quantification bit is 16bits and display the result
     Sxx_db = power2dB(Sxx_power) + dB_max
-    plot2D(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
+    plot2d(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
 
 
@@ -74,7 +75,7 @@ First, load and audio file and compute the power spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:657: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       if now: plt.show()
 
 
@@ -214,8 +215,8 @@ signatures are labeled with the same name
 
  .. code-block:: none
 
-    Total number of ROIs : 49
-    Number of different ROIs :  5
+    Total number of ROIs : 159
+    Number of different ROIs :  8
 
 
 
@@ -358,7 +359,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.609 seconds)
+   **Total running time of the script:** ( 0 minutes  14.543 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_compare_auto_and_manual_rois_selection.py:

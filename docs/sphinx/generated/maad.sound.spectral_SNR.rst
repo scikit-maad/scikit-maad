@@ -1,6 +1,6 @@
-﻿maad.sound.spectral\_SNR
+﻿maad.sound.spectral\_snr
 ========================
 
 .. currentmodule:: maad.sound
 
-.. autofunction:: spectral_SNR
+.. autofunction:: spectral_snr
