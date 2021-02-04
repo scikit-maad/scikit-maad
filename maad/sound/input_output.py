@@ -346,6 +346,7 @@ def write(filename, sr, data):
     >>> import numpy as np
     >>> sr = 44100; T = 2.0
     >>> t = np.linspace(0, T, int(T*sr))
+    >>> data = np.sin(2. * np.pi * 440. *t)
     >>> maad.sound.write('example.wav', sr, data)
     """
     if data.ndim > 1:
