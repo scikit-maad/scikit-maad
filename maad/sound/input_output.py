@@ -239,9 +239,9 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         
     Examples
     --------
-    
     >>> xenocanto_link = 'https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png'
     >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename= xenocanto_link,
+                                          fs=44100,            
                                           flims=[0,15000],
                                           duration = 10
                                           )
