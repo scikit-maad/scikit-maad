@@ -524,7 +524,7 @@ def plot1d(x, y, ax=None, **kwargs):
     edgecolor=kwargs.pop('edgecolor', 'k')
     linewidth=kwargs.pop('linewidth', 0.5)
     color=kwargs.pop('color', 'k')
-    title=kwargs.pop('figtitle', 'Audiogram')
+    title=kwargs.pop('figtitle', '')
     xlabel=kwargs.pop('xlabel', 'Time [s]')
     ylabel=kwargs.pop('ylabel', 'Amplitude [AU]')
     legend=kwargs.pop('legend', None)
@@ -553,7 +553,7 @@ def plot1d(x, y, ax=None, **kwargs):
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.axis('tight')
-    ax.grid(True)
+    ax.grid(True, linewidth=0.3)
     if legend is not None: ax.legend()
     
     # Display the figure now
@@ -561,8 +561,55 @@ def plot1d(x, y, ax=None, **kwargs):
 
     return ax, fig
 
-#=============================================================================
+#%%
+def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
+    """
+    Plot audio waveform.
+    
+    Parameters
+    ----------
+    s : 1d ndarray
+        Audio signal.
+    fs : int
+        Sampling rate of audio signal.
+    tlims : tuple, optional
+        Minimum and maximum temporal limits for the display. The default is None.
+    ax : matplotlib.axes, optional
+        Pre-existing axes for the plot. The default is None.
+    **kwargs : matplotlib figure properties
+        Other keyword arguments that are passed down to matplotlib.axes.
 
+    Returns
+    -------
+    ax : matplotlib.axes
+        The matplotlib axes associated to plot.
+        
+    Examples
+    --------
+    
+    >>> from maad import sound
+    >>> from maad.util import plot_wave
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> ax = plot_wave(s, fs)
+    
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> fig, ax = plt.subplots(2,1)
+    >>> plot_wave(s, fs, ax=ax[0], xlabel='', figtitle='Spinetail')
+    >>> plot_wave(s, fs, tlims=(5,8), ax=ax[1])    
+    """
+
+    if tlims is not None:
+        s = sound.trim(s, fs, tlims[0], tlims[1])
+        t = np.linspace(0, s.shape[0]/fs, s.shape[0])
+        t = t + tlims[0]  # add minimum value
+    else:
+        t = np.linspace(0, s.shape[0]/fs, s.shape[0])    
+        
+    fig, ax = util.plot1d(t, s, ax, **kwargs)
+    return ax
+
+
+#%%
 def plot2d(im,ax=None,**kwargs):
     """
     Display the spectrogram of an audio signal. 
