@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.patches as mpatches 
+from matplotlib.axes import Axes
 import pandas as pd
 from skimage.io import imsave 
 import colorsys
@@ -18,6 +19,17 @@ _MIN_ = sys.float_info.min
 
 # Importation from internal modules
 from maad.util import linear_scale, power2dB
+
+#%%
+def _check_axes(axes):
+    '''Check if "axes" is an instance of an axis object. If not, use `gca`.'''
+    if axes is None:
+        import matplotlib.pyplot as plt
+        axes = plt.gca()
+    elif not isinstance(axes, Axes):
+        raise ValueError("`axes` must be an instance of matplotlib.axes.Axes. "
+                         "Found type(axes)={}".format(type(axes)))
+    return axes
 
 #%%
 def plot_shape(shape, params, row=0, display_values=False): 
@@ -607,7 +619,7 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     else:
         t = np.linspace(0, s.shape[0]/fs, s.shape[0])    
         
-    fig, ax = plot1d(t, s, ax, **kwargs)
+    ax, fig = plot1d(t, s, ax, **kwargs)
     return ax
 
 #%%
@@ -643,7 +655,7 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, **kwargs):
 
     See also
     --------
-    maad.sound.psd
+    maad.sound.psd, maad.util.plot_wave
     
     Examples
     --------
@@ -659,9 +671,10 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, **kwargs):
     
     >>> import matplotlib.pyplot as plt
     >>> s, fs = sound.load('../data/spinetail.wav')
-    >>> pxx, f_idx = sound.psd(s, fs, nperseg=1024)
-    >>> fig, ax = plt.subplots(2,1, figsize=(10,4))
-    >>> util.plot_spectrum(pxx, f_idx, ax=ax[0], log_scale=False)
+    >>> s_slice = sound.trim(s, fs, 5, 8)
+    >>> pxx, f_idx = sound.psd(s_slice, fs, nperseg=1024)
+    >>> fig, ax = plt.subplots(2,1, figsize=(10,6))
+    >>> util.plot_wave(s_slice, fs, ax=ax[0])
     >>> util.plot_spectrum(pxx, f_idx, ax=ax[1], log_scale=True)
     
     """
