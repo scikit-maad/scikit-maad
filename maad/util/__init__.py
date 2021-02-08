@@ -14,6 +14,8 @@ Visualization
     crop_image
     save_figlist
     plot1d
+    plot_wave
+    plot_spectrum
     plot2d
     overlay_rois
     overlay_centroid
@@ -86,6 +88,8 @@ from .visualization import (rand_cmap,
                            crop_image,
                            save_figlist,
                            plot1d,
+                           plot_wave,
+                           plot_spectrum,
                            plot2d,
                            overlay_rois,
                            overlay_centroid,
@@ -127,6 +131,8 @@ __all__ = [
            'crop_image',
            'save_figlist',
            'plot1d',
+           'plot_wave',
+           'plot_spectrum',
            'plot2d',
            'overlay_rois',
            'overlay_centroid',

@@ -12,14 +12,12 @@ import pandas as pd
 from skimage.io import imsave 
 import colorsys
 from ast import literal_eval
-
 # min value
 import sys
 _MIN_ = sys.float_info.min
 
-
 # Importation from internal modules
-from maad.util import linear_scale
+from maad.util import linear_scale, power2dB
 
 #%%
 def plot_shape(shape, params, row=0, display_values=False): 
@@ -573,7 +571,8 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     fs : int
         Sampling rate of audio signal.
     tlims : tuple, optional
-        Minimum and maximum temporal limits for the display. The default is None.
+        Minimum and maximum temporal limits for the display (min_t, max_t). 
+        The default is None.
     ax : matplotlib.axes, optional
         Pre-existing axes for the plot. The default is None.
     **kwargs : matplotlib figure properties
@@ -587,27 +586,100 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     Examples
     --------
     
+    Plot a waveform of an audio signal.
     >>> from maad import sound
     >>> from maad.util import plot_wave
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> ax = plot_wave(s, fs)
     
+    Use `plot_wave` with predifined matplotlib axes.
+    >>> import matplotlib.pyplot as plt
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> fig, ax = plt.subplots(2,1)
     >>> plot_wave(s, fs, ax=ax[0], xlabel='', figtitle='Spinetail')
-    >>> plot_wave(s, fs, tlims=(5,8), ax=ax[1])    
+    >>> plot_wave(s, fs, tlims=(5,8), ax=ax[1])
     """
 
     if tlims is not None:
-        s = sound.trim(s, fs, tlims[0], tlims[1])
+        s = s[int(tlims[0]*fs): int(tlims[1]*fs)]
         t = np.linspace(0, s.shape[0]/fs, s.shape[0])
         t = t + tlims[0]  # add minimum value
     else:
         t = np.linspace(0, s.shape[0]/fs, s.shape[0])    
         
-    fig, ax = util.plot1d(t, s, ax, **kwargs)
+    fig, ax = plot1d(t, s, ax, **kwargs)
     return ax
 
+#%%
+def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, **kwargs):
+    """
+    Plot power spectral density estimate (PSD).
+    
+    Parameters
+    ----------
+    pxx : 1d ndarray
+        Power spectral density estimate computed with `maad.sound.psd`.
+        
+    f_idx : 1d ndarray
+        Index of frequencies associated with the PSD.
+    
+    ax : matplotlib.axes, optional
+        Pre-existing axes for the plot. The default is None.
+        
+    flims : tuple, optional
+        Minimum and maximum spectral limits for the display (min_f, max_f). 
+        Default is None.
+
+    log_scale : bool, optional
+        Use a logarithmic scale to display amplitude values. The default is False.
+
+    **kwargs : matplotlib figure properties
+            Other keyword arguments that are passed down to matplotlib.axes.
+
+    Returns
+    -------
+    ax : matplotlib.axes
+        The matplotlib axes associated to plot.
+
+    See also
+    --------
+    maad.sound.psd
+    
+    Examples
+    --------
+    
+    Plot a spectrum of an audio signal.
+    
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> pxx, f_idx = sound.psd(s, fs, nperseg=1024)
+    >>> util.plot_spectrum(pxx, f_idx)
+    
+    Use `plot_spectrum` with predifined matplotlib axes.
+    
+    >>> import matplotlib.pyplot as plt
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> pxx, f_idx = sound.psd(s, fs, nperseg=1024)
+    >>> fig, ax = plt.subplots(2,1, figsize=(10,4))
+    >>> util.plot_spectrum(pxx, f_idx, ax=ax[0], log_scale=False)
+    >>> util.plot_spectrum(pxx, f_idx, ax=ax[1], log_scale=True)
+    
+    """
+    ylabel=kwargs.pop('ylabel', 'Amplitude')
+    xlabel=kwargs.pop('xlabel', 'Frequency [KHz]')
+    
+    if log_scale==True:
+        pxx = power2dB(pxx)
+
+    if flims is not None:
+            pxx = pxx[(f_idx>=flims[0]) & (f_idx<=flims[1])]
+            f_idx = f_idx[(f_idx>=flims[0]) & (f_idx<=flims[1])]
+
+    amp_min = pxx.min()
+    ax, fig = plot1d(f_idx, pxx, ax=ax, ylabel=ylabel, xlabel=xlabel, **kwargs)
+    ax.fill_between(f_idx, amp_min, pxx, alpha=0.3, fc='grey')
+    
+    return ax
 
 #%%
 def plot2d(im,ax=None,**kwargs):

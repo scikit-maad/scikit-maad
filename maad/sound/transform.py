@@ -101,42 +101,64 @@ def envelope (s, mode='fast', Nt=32):
     return env
 
 #%%
-def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=None, 
-        flims=None, display=False):
+def psd(s, fs, nperseg=256, noverlap=None, method='welch', window='hanning', nfft=None, 
+        tlims=None, flims=None, as_pandas_series=False, display=False):
     """ 
-    Estimate the power spectral density of 1D signal using Welch's or periodogram methods. 
+    Estimate the power spectral density of 1D signal.
+    
+    The estimates can be computed using two methods: Welch or periodogram. Welch's method
+    divides the signal into segments, computes the power spectral density for each 
+    segment and then takes the average between segments. The periodogram method computes
+    the power spectral density of the input signal using a defined window 
+    (Hanning window by default).
     
     Parameters
     ----------
     s: 1D array 
         Input signal to process 
+    
     fs: float, optional
         Sampling frequency of audio signal
+    
     nperseg: int, optional
         Length of segment for 'welch' method, default is 256
+    
+    noverlap: int, optional
+        Overlap between segments for Welch's method. If None, noverlap = nperseg/2.
+    
     window : string, default is 'hanning
         Name of the window used for the short fourier transform.
+    
     nfft: int, optional
         Length of FFT for periodogram method. If None, length of signal will be used.
         Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.
+    
     method: {'welch', 'periodogram'}
         Method used to estimate the power spectral density of the signal
+    
     tlims: tuple of ints or floats
         Temporal limits to compute the power spectral density in seconds (s)
         If None, estimates for the complete signal will be computed.
         Default is 'None'
+    
     flims: tuple of ints or floats
         Spectral limits to compute the power spectral density in Hertz (Hz)
         If None, estimates from 0 to fs/2 will be computed.
         Default is 'None'
+    
+    as_pandas_series: bool
+        Return data as a pandas.Series. This is usefull when computing multiple features
+        over a signal. Default is False.
+        
 
     
     Returns
     -------
-    psd: pandas Series
-        Estimate of power spectral density
+    pxx: pandas Series
+        Power spectral density estimate.
+    
     f_idx: pandas Series
-        Index of sample frequencies
+        Index of sample frequencies.
     
     Notes
     -----
@@ -161,31 +183,32 @@ def psd(s, fs, nperseg=256, method='welch', window='hanning', nfft=None, tlims=N
         except:
             raise Exception('length of tlims tuple should be 2')
     
-    
     if method=='welch':
-        f_idx, psd_s = welch(s, fs, window, nperseg, nfft)
+        f_idx, pxx = welch(s, fs, window, nperseg, noverlap, nfft)
     
     elif method=='periodogram':
-        f_idx, psd_s = periodogram(s, fs, window, nfft, scaling='spectrum')
+        f_idx, pxx = periodogram(s, fs, window, nfft, scaling='spectrum')
         
     else:
         raise Exception("Invalid method. Method should be 'welch' or 'periodogram' ")
         
-
-    index_names = ['psd_' + str(idx).zfill(3) for idx in range(1,len(psd_s)+1)]
-    psd_s = pd.Series(psd_s, index=index_names)
-    f_idx = pd.Series(f_idx, index=index_names)
     if flims is not None:
-        psd_s = psd_s[(f_idx>=flims[0]) & (f_idx<=flims[1])]
+        pxx = pxx[(f_idx>=flims[0]) & (f_idx<=flims[1])]
         f_idx = f_idx[(f_idx>=flims[0]) & (f_idx<=flims[1])]
-    
+
+    if as_pandas_series==True:
+        index_names = ['psd_' + str(idx).zfill(3) for idx in range(1,len(pxx)+1)]
+        pxx = pd.Series(pxx, index=index_names)
+        f_idx = pd.Series(f_idx, index=index_names)
+        
     if display:
         fig, ax = plt.subplots(figsize=(9,5))
-        ax.plot(f_idx, psd_s)
+        ax.plot(f_idx, pxx)
         ax.set_xlabel('Frequency (kHz)')
         ax.set_ylabel('Amplitude')
         
-    return psd_s, f_idx
+    return pxx, f_idx
+
 #%%
 def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
     """
