@@ -17,6 +17,7 @@ Visualization
     plot_wave
     plot_spectrum
     plot2d
+    plot_spectrogram
     overlay_rois
     overlay_centroid
     plot_features_map
@@ -91,6 +92,7 @@ from .visualization import (rand_cmap,
                            plot_wave,
                            plot_spectrum,
                            plot2d,
+                           plot_spectrogram,
                            overlay_rois,
                            overlay_centroid,
                            plot_features_map,
@@ -134,6 +136,7 @@ __all__ = [
            'plot_wave',
            'plot_spectrum',
            'plot2d',
+           'plot_spectrogram',
            'overlay_rois',
            'overlay_centroid',
            'plot_features_map',
