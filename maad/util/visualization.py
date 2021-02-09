@@ -672,7 +672,7 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
 
 
 #%%
-def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, **kwargs):
+def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, **kwargs):
     """
     Plot power spectral density estimate (PSD).
     
@@ -693,7 +693,10 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, **kwargs):
 
     log_scale : bool, optional
         Use a logarithmic scale to display amplitude values. The default is False.
-
+    
+    fill : bool, optional
+        Fill the area between the curve and the minimum value.
+        
     **kwargs : matplotlib figure properties
             Other keyword arguments that are passed down to matplotlib.axes.
 
@@ -739,7 +742,8 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, **kwargs):
 
     amp_min = pxx.min()
     ax, fig = plot1d(f_idx, pxx, ax=ax, ylabel=ylabel, xlabel=xlabel, **kwargs)
-    ax.fill_between(f_idx, amp_min, pxx, alpha=0.3, fc="grey")
+    if fill:
+        ax.fill_between(f_idx, amp_min, pxx, alpha=0.3, fc="grey")
 
     return ax
 
