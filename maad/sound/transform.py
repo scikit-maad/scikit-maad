@@ -184,7 +184,7 @@ def psd(s, fs, nperseg=256, noverlap=None, method='welch', window='hanning', nff
             raise Exception('length of tlims tuple should be 2')
     
     if method=='welch':
-        f_idx, pxx = welch(s, fs, window, nperseg, noverlap, nfft)
+        f_idx, pxx = welch(s, fs, window, nperseg, noverlap, nfft, scaling='spectrum')
     
     elif method=='periodogram':
         f_idx, pxx = periodogram(s, fs, window, nfft, scaling='spectrum')

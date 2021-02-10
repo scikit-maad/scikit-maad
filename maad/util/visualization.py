@@ -951,6 +951,8 @@ def plot_spectrogram(Sxx, extent, db_range=96, gain=0, log_scale=True,
     """
     if log_scale:
         Sxx_db = power2dB(Sxx, db_range, gain)
+    else :
+        Sxx_db = Sxx
     
     ax, fig = plot2d(Sxx_db, extent=extent, colorbar=colorbar, 
                      interpolation=interpolation, **kwargs)
