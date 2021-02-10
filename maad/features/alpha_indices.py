@@ -925,7 +925,6 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
     >>> maad.features.number_of_peaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) 
-    14
 
     """
     # Force to be an array
@@ -940,6 +939,8 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     # if mode is "dB", convert into dB
     if mode == 'dB' :
         S = amplitude2dB(S)
+        if min_peak_val is not None :
+            min_peak_val = amplitude2dB(min_peak_val)
 
     # Find peaks
     min_pix_distance = min_freq_dist/(fn[1]-fn[0])
