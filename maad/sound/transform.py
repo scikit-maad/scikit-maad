@@ -22,6 +22,7 @@ import resampy
 
 # import internal modules
 from maad.sound import wave2frames
+from maad.util import plot_spectrum
 
 #%%
 # =============================================================================
@@ -101,10 +102,10 @@ def envelope (s, mode='fast', Nt=32):
     return env
 
 #%%
-def psd(s, fs, nperseg=256, noverlap=None, method='welch', window='hanning', nfft=None, 
-        tlims=None, flims=None, as_pandas_series=False, display=False):
+def psd(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', method='welch', 
+        tlims=None, flims=None, scaling='spectrum', as_pandas_series=False, display=False):
     """ 
-    Estimate the power spectral density of 1D signal.
+    Estimate the power spectral density or power spectrum of 1D signal.
     
     The estimates can be computed using two methods: Welch or periodogram. Welch's method
     divides the signal into segments, computes the power spectral density for each 
@@ -145,6 +146,10 @@ def psd(s, fs, nperseg=256, noverlap=None, method='welch', window='hanning', nff
         Spectral limits to compute the power spectral density in Hertz (Hz)
         If None, estimates from 0 to fs/2 will be computed.
         Default is 'None'
+        
+    scaling: {'spectrum', 'density'}, optional
+        Choose between power spectrum (units V**2) or power spectral density (units V**2/Hz) scaling.
+        Defaults to 'spectrum'.
     
     as_pandas_series: bool
         Return data as a pandas.Series. This is usefull when computing multiple features
@@ -184,10 +189,10 @@ def psd(s, fs, nperseg=256, noverlap=None, method='welch', window='hanning', nff
             raise Exception('length of tlims tuple should be 2')
     
     if method=='welch':
-        f_idx, pxx = welch(s, fs, window, nperseg, noverlap, nfft, scaling='spectrum')
+        f_idx, pxx = welch(s, fs, window, nperseg, noverlap, nfft, scaling=scaling)
     
     elif method=='periodogram':
-        f_idx, pxx = periodogram(s, fs, window, nfft, scaling='spectrum')
+        f_idx, pxx = periodogram(s, fs, window, nfft, scaling=scaling)
         
     else:
         raise Exception("Invalid method. Method should be 'welch' or 'periodogram' ")
@@ -202,11 +207,8 @@ def psd(s, fs, nperseg=256, noverlap=None, method='welch', window='hanning', nff
         f_idx = pd.Series(f_idx, index=index_names)
         
     if display:
-        fig, ax = plt.subplots(figsize=(9,5))
-        ax.plot(f_idx, pxx)
-        ax.set_xlabel('Frequency (kHz)')
-        ax.set_ylabel('Amplitude')
-        
+        plot_spectrum(pxx, f_idx)
+
     return pxx, f_idx
 
 #%%

@@ -222,7 +222,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
         )
 
     ylabel = kwargs.pop("ylabel", "Frequency [Hz]")
-    xlabel = kwargs.pop("xlabel", "Time [sec]")
+    xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
     cmap = kwargs.pop("cmap", "gray")
     ext = kwargs.pop("ext", None)
@@ -374,7 +374,7 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
         )
 
     ylabel = kwargs.pop("ylabel", "Frequency [Hz]")
-    xlabel = kwargs.pop("xlabel", "Time [sec]")
+    xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
     cmap = kwargs.pop("cmap", "gray")
     vmin = kwargs.pop("vmin", np.percentile(im_ref, 0.05))
@@ -730,11 +730,12 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     >>> util.plot_spectrum(pxx, f_idx, ax=ax[1], log_scale=True)
     
     """
-    ylabel = kwargs.pop("ylabel", "Amplitude")
-    xlabel = kwargs.pop("xlabel", "Frequency [KHz]")
+    ylabel = kwargs.pop("ylabel", "Amplitude [AU]")
+    xlabel = kwargs.pop("xlabel", "Frequency [Hz]")
 
     if log_scale == True:
         pxx = power2dB(pxx)
+        ylabel = 'Amplitude [dB]'
 
     if flims is not None:
         pxx = pxx[(f_idx >= flims[0]) & (f_idx <= flims[1])]
@@ -824,7 +825,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
                       'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'title':'Power spectrogram density (PSD) in dB SPL',
-                      'xlabel':'Time [sec]',
+                      'xlabel':'Time [s]',
                       'ylabel':'Frequency [Hz]',
                       }
     >>> fig, ax = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)      
@@ -834,7 +835,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
     # matplotlib parameters
     title = kwargs.pop("title", "")
     ylabel = kwargs.pop("ylabel", "Frequency [Hz]")
-    xlabel = kwargs.pop("xlabel", "Time [sec]")
+    xlabel = kwargs.pop("xlabel", "Time [s]")
     xticks = kwargs.pop("xticks", None)
     yticks = kwargs.pop("yticks", None)
     cmap = kwargs.pop("cmap", "gray")
@@ -1098,7 +1099,7 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
                       'vmin':0,
                       'extent':(tn[0], tn[-1], fn[0], fn[-1]),
                       'title':'Power spectrogram density (PSD)',
-                      'xlabel':'Time [sec]',
+                      'xlabel':'Time [s]',
                       'ylabel':'Frequency [Hz]',
                       }
     >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)      
@@ -1107,7 +1108,7 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
                       'vmin':0,
                       'extent':(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),
                       'title':'Crop of the power spectrogram density (PSD)',
-                      'xlabel':'Time [sec]',
+                      'xlabel':'Time [s]',
                       'ylabel':'Frequency [Hz]',
                       }
     >>> fig, ax = maad.util.plot2d(Lxx_crop,**fig_kwargs)  
