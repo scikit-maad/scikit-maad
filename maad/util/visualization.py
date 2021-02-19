@@ -228,10 +228,10 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     ext = kwargs.pop("ext", None)
 
     if ext is not None:
-        xlabel = "frequency [Hz]"
         figsize = kwargs.pop("figsize", (4, 0.33 * (ext[1] - ext[0])))
     else:
-        xlabel = "pseudofrequency [points]"
+        ylabel = "pseudofrequency [points]"
+        xlabel = "pseudotime [points]"
         figsize = kwargs.pop("figsize", (4, 13))
 
     vmin = kwargs.pop("vmin", 0)
@@ -384,10 +384,10 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
     extent = kwargs.pop("extent", None)
 
     if extent is not None:
-        xlabel = "frequency [Hz]"
         figsize = kwargs.pop("figsize", (4, 0.33 * (extent[1] - extent[0])))
     else:
-        xlabel = "pseudofrequency [points]"
+        xlabel = "pseudoTime [points]"
+        ylabel = "pseudoFrequency [points]"
         figsize = kwargs.pop("figsize", (4, 13))
 
     if (ax is None) and (fig is None):
