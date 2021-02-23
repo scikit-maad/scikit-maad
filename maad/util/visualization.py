@@ -679,7 +679,7 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     Parameters
     ----------
     pxx : 1d ndarray
-        Power spectral density estimate computed with `maad.sound.psd`.
+        Power spectral density estimate computed with `maad.sound.spectrum`.
         
     f_idx : 1d ndarray
         Index of frequencies associated with the PSD.
@@ -707,7 +707,7 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
 
     See also
     --------
-    maad.sound.psd, maad.util.plot_wave
+    maad.sound.spectrum, maad.util.plot_wave
     
     Examples
     --------
@@ -716,7 +716,7 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     
     >>> from maad import sound, util
     >>> s, fs = sound.load('../data/spinetail.wav')
-    >>> pxx, f_idx = sound.psd(s, fs, nperseg=1024)
+    >>> pxx, f_idx = sound.spectrum(s, fs, nperseg=1024)
     >>> util.plot_spectrum(pxx, f_idx)
     
     Use `plot_spectrum` with predifined matplotlib axes.
@@ -724,7 +724,7 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     >>> import matplotlib.pyplot as plt
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> s_slice = sound.trim(s, fs, 5, 8)
-    >>> pxx, f_idx = sound.psd(s_slice, fs, nperseg=1024)
+    >>> pxx, f_idx = sound.spectrum(s_slice, fs, nperseg=1024)
     >>> fig, ax = plt.subplots(2,1, figsize=(10,6))
     >>> util.plot_wave(s_slice, fs, ax=ax[0])
     >>> util.plot_spectrum(pxx, f_idx, ax=ax[1], log_scale=True)

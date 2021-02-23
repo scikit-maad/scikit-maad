@@ -39,7 +39,7 @@ Transform audio
     avg_amplitude_spectro
     linear_to_octave
     envelope
-    psd
+    spectrum
     resample
     trim
 
@@ -71,7 +71,7 @@ from .spectral_subtraction import (remove_background,
 from .trim_func import wave2frames
 
 from .transform import (envelope,
-                        psd,
+                        spectrum,
                         resample,
                         trim)
 
@@ -103,7 +103,7 @@ __all__ = [
         'wave2frames',
         # transform.py
         'envelope',
-        'psd',
+        'spectrum',
         'resample',
         'trim',
         # spectro_func.py

@@ -102,7 +102,7 @@ def envelope (s, mode='fast', Nt=32):
     return env
 
 #%%
-def psd(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', method='welch', 
+def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', method='welch', 
         tlims=None, flims=None, scaling='spectrum', as_pandas_series=False, display=False):
     """ 
     Estimate the power spectral density or power spectrum of 1D signal.
@@ -173,11 +173,12 @@ def psd(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', method='
     --------
     >>> from maad import sound
     >>> s, fs = sound.load('../data/spinetail.wav')
-    >>> psd, f_idx = sound.psd(s, fs, nperseg=512, display=True)
+    >>> spec, f_idx = sound.spectrum(s, fs, nperseg=512, display=True)
     
-    Specify temporal and spectral limits.
+    Specify temporal and spectral limits to get spectral characteristics of the 
+    spinetail's song.
     
-    >>> psd, f_idx = sound.psd(s, fs, nperseg=2056, tlims=(5.3, 7.9), flims=(2000, 12000), display=True)
+    >>> spec, f_idx = sound.spectrum(s, fs, nperseg=2056, tlims=(5.3, 7.9), flims=(2000, 12000), display=True)
     
     """
     
