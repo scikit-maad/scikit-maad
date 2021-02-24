@@ -193,6 +193,19 @@
 <dt><a class="reference internal" href="sound.spectro_func.avg_power_spectro.html#sound.spectro_func.avg_power_spectro" title="sound.spectro_func.avg_power_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_power_spectro</span></code></a></dt><dd></dd>
 </dl>
 </div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/guyana_tropical_forest.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_amplitude</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;amplitude&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute mean amplitude spectrogram</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S_amplitude_mean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">avg_amplitude_spectro</span><span class="p">(</span><span class="n">Sxx_amplitude</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S_amplitude_mean</span>
+<span class="go">array([0.0170679 , 0.03027875, 0.01700528, 0.01023559, 0.00816183,</span>
+<span class="go">   0.00677965, 0.0059974 , 0.00575212, 0.00700752, 0.00926279,</span>
+<span class="go">   ...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

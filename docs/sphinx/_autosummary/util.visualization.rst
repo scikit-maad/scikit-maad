@@ -25,6 +25,9 @@
       plot_features
       plot_features_map
       plot_shape
+      plot_spectrogram
+      plot_spectrum
+      plot_wave
       rand_cmap
       save_figlist
    

@@ -72,14 +72,14 @@ First, load and audio file and compute the spectrogram.
     Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
 
     Sxx_db = power2dB(Sxx, db_range=70)
-    Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, multichannel=False)
-    plot2d(Sxx_db, **{'figsize':(4,10),'extent':(tn[0], tn[-1], fn[0], fn[-1])})
+    Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, multichannel=False)  # rescale for faster computation
+    plot2d(Sxx_db, **{'figsize':(4,10),'extent':ext})
 
 
 
 
 .. image:: /_auto_examples/2_advanced/images/sphx_glr_plot_nmf_and_false_color_spectrogram_001.png
-    :alt: Spectrogram
+    :alt: plot nmf and false color spectrogram
     :class: sphx-glr-single-img
 
 
@@ -89,8 +89,8 @@ First, load and audio file and compute the spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      if now: plt.show()
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:891: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -194,7 +194,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.431 seconds)
+   **Total running time of the script:** ( 0 minutes  1.454 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_nmf_and_false_color_spectrogram.py:

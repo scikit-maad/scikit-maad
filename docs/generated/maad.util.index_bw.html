@@ -38,7 +38,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.util.intoBins" href="maad.util.intoBins.html" />
+    <link rel="next" title="maad.util.into_bins" href="maad.util.into_bins.html" />
     <link rel="prev" title="maad.util.date_parser" href="maad.util.date_parser.html" /> 
 </head>
 
@@ -105,7 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../util.html#parser">Parser</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../util.html#miscellaneous">Miscellaneous</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.index_bw</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.intoBins.html">maad.util.intoBins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.into_bins.html">maad.util.into_bins</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.shift_bit_length.html">maad.util.shift_bit_length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.rle.html">maad.util.rle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.linear_scale.html">maad.util.linear_scale</a></li>
@@ -229,7 +229,7 @@ if tupple of two values : min frequency and max frequency to select</p>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB_crop</span> <span class="o">=</span> <span class="n">Sxx_dB</span><span class="p">[</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fn_crop</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Sxx_dB</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
@@ -240,7 +240,7 @@ if tupple of two values : min frequency and max frequency to select</p>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_dB_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -255,7 +255,7 @@ if tupple of two values : min frequency and max frequency to select</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="maad.util.intoBins.html" class="btn btn-neutral float-right" title="maad.util.intoBins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="maad.util.into_bins.html" class="btn btn-neutral float-right" title="maad.util.into_bins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="maad.util.date_parser.html" class="btn btn-neutral float-left" title="maad.util.date_parser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

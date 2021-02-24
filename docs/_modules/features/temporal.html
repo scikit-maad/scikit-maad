@@ -190,7 +190,7 @@
 <span class="c1"># public functions</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="audio_moments"><a class="viewcode-back" href="../../_autosummary/generated/features.audio_moments.html#features.temporal.audio_moments">[docs]</a><span class="k">def</span> <span class="nf">audio_moments</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="temporal_moments"><a class="viewcode-back" href="../../_autosummary/generated/features.temporal_moments.html#features.temporal.temporal_moments">[docs]</a><span class="k">def</span> <span class="nf">temporal_moments</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.</span>
 <span class="sd">    </span>
@@ -213,7 +213,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/spinetail.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; sm, sv, ss, sk = maad.features.audio_moments (s)</span>
+<span class="sd">    &gt;&gt;&gt; sm, sv, ss, sk = maad.features.temporal_moments (s)</span>
 <span class="sd">    &gt;&gt;&gt; print(&#39;mean: %2.2f / var: %2.5f / skewness: %2.4f / kurtosis: %2.2f&#39; % (sm, sv, ss, sk))</span>
 <span class="sd">    mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71</span>
 <span class="sd">    </span>
@@ -250,6 +250,12 @@
 <span class="sd">    ---------</span>
 <span class="sd">    .. [1] https://en.wikipedia.org/wiki/Zero-crossing_rate</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound, features</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; features.zero_crossing_rate(s,fs)</span>
+<span class="sd">    10500.397192384766    </span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zero_crosses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>

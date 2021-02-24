@@ -184,9 +184,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span> 
 <span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span> 
+<span class="kn">from</span> <span class="nn">scipy.io.wavfile</span> <span class="kn">import</span> <span class="n">write</span> <span class="k">as</span> <span class="n">write_wav</span>
 
 <span class="c1"># Import internal modules</span>
-<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">linear_scale</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot1d</span><span class="p">,</span> <span class="n">plot2d</span><span class="p">,</span> <span class="n">linear_scale</span>
 
 <span class="c1">#%%</span>
 <span class="c1"># =============================================================================</span>
@@ -261,10 +262,10 @@
 <span class="sd">    &gt;&gt;&gt; tn = np.arange(0,len(s))/fs</span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">    &gt;&gt;&gt; fig, (ax0, ax1) = plt.subplots(2,1, sharex=True, squeeze=True)</span>
-<span class="sd">    &gt;&gt;&gt; ax0, _ = maad.util.plot1D(tn,s,ax=ax0, figtitle=&#39;ground level&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax0, _ = maad.util.plot1d(tn,s,ax=ax0, figtitle=&#39;ground level&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; ax0.set_ylim((-0.075,0.0751))</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&quot;../data/tropical_forest_morning.wav&quot;, channel=&#39;right&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ax1, _ = maad.util.plot1D(tn,s,ax=ax1, figtitle=&#39;canopy level&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax1, _ = maad.util.plot1d(tn,s,ax=ax1, figtitle=&#39;canopy level&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; ax1.set_ylim((-0.075,0.075))</span>
 <span class="sd">    &gt;&gt;&gt; fig.tight_layout()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -308,7 +309,7 @@
     <span class="c1"># DISPLAY</span>
     <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
         <span class="n">figtitle</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figtitle&#39;</span><span class="p">,</span> <span class="s1">&#39;Orignal sound&#39;</span><span class="p">)</span>        
-        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot1D</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="n">figtitle</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="n">figtitle</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># SAVE FIGURE</span>
         <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
             <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span> 
@@ -323,7 +324,7 @@
     <span class="k">return</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">fs</span></div>
 
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="loadSpectro"><a class="viewcode-back" href="../../_autosummary/sound.input_output.loadSpectro.html#sound.loadSpectro">[docs]</a><span class="k">def</span> <span class="nf">loadSpectro</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">flipud</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="load_spectrogram"><a class="viewcode-back" href="../../_autosummary/sound.input_output.load_spectrogram.html#sound.load_spectrogram">[docs]</a><span class="k">def</span> <span class="nf">load_spectrogram</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">flims</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">flipud</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Load an image from a file or an URL </span>
@@ -338,7 +339,10 @@
 <span class="sd">     </span>
 <span class="sd">    duration : scalar </span>
 <span class="sd">        Duration of the audiogram (in s) </span>
-<span class="sd">     </span>
+<span class="sd">        </span>
+<span class="sd">    flims : list of 2 scalars [min, max], optional, default is None</span>
+<span class="sd">        flims corresponds to the min and max boundary frequency values</span>
+<span class="sd">        </span>
 <span class="sd">    flipud : boolean, optional, default is True </span>
 <span class="sd">        Vertical flip of the matrix (image) </span>
 <span class="sd">        </span>
@@ -392,17 +396,26 @@
 <span class="sd">    Sxx : ndarray </span>
 <span class="sd">        The different color bands/channels are stored in the </span>
 <span class="sd">        third dimension, such that a gray-image is MxN, an </span>
-<span class="sd">        RGB-image MxNx3 and an RGBA-image MxNx4. </span>
-<span class="sd">         </span>
+<span class="sd">        RGB-image MxNx3 and an RGBA-image MxNx4.    </span>
+<span class="sd">    tn : 1d ndarray of floats</span>
+<span class="sd">        time vector (horizontal x-axis)    </span>
+<span class="sd">    fn : 1d ndarray of floats</span>
+<span class="sd">        Frequency vector (vertical y-axis)    </span>
 <span class="sd">    extent : list of scalars [left, right, bottom, top]</span>
-<span class="sd">        The location, in data-coordinates, of the lower-left and </span>
-<span class="sd">        upper-right corners.</span>
-<span class="sd">         </span>
-<span class="sd">    dt : scalar </span>
-<span class="sd">        Time resolution of the spectrogram (horizontal x-axis) </span>
-<span class="sd">         </span>
-<span class="sd">    df : scalar </span>
-<span class="sd">        Frequency resolution of the spectrogram (vertical y-axis) </span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; xenocanto_link = &#39;https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png&#39;</span>
+<span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename= xenocanto_link,</span>
+<span class="sd">                                          fs=44100,            </span>
+<span class="sd">                                          flims=[0,15000],</span>
+<span class="sd">                                          duration = 10</span>
+<span class="sd">                                          )</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx,extent=ext)</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span> 
     
     <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
@@ -420,11 +433,21 @@
     <span class="n">Sxx</span> <span class="o">=</span> <span class="n">linear_scale</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> 
              
     <span class="c1"># Get the resolution </span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">flims</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">flims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">flims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">duration</span><span class="o">/</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+    
+    <span class="c1"># create the vectors</span>
+    <span class="k">if</span> <span class="n">flims</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">df</span><span class="p">)</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">flims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">flims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">df</span><span class="p">)</span>  
+    <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
      
     <span class="c1"># Extent </span>
-    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span> 
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> 
      
     <span class="c1"># flip the image vertically </span>
     <span class="k">if</span> <span class="n">flipud</span><span class="p">:</span> <span class="n">Sxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> 
@@ -439,11 +462,75 @@
         <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">Sxx</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>  
         <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">Sxx</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>  
          
-        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
                          <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
                          <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
      
-    <span class="k">return</span> <span class="n">Sxx</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span> </div>
+    <span class="k">return</span> <span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">extent</span> </div>
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="write"><a class="viewcode-back" href="../../_autosummary/sound.input_output.write.html#sound.write">[docs]</a><span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write a NumPy array as a WAV file with the Scipy method. [1]_ </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string or open file handle</span>
+<span class="sd">        Name of output wav file.</span>
+<span class="sd">    fs : int</span>
+<span class="sd">        Sample rate (samples/sec).</span>
+<span class="sd">    data : ndarray</span>
+<span class="sd">        Mono or stereo signal as NumPy array.</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    scipy.io.wavfile.write</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The data-type determines the bits-per-sample and PCM/float.</span>
+
+<span class="sd">    Common data types: [2]_</span>
+
+<span class="sd">    =====================  ===========  ===========  =============</span>
+<span class="sd">         WAV format            Min          Max       NumPy dtype</span>
+<span class="sd">    =====================  ===========  ===========  =============</span>
+<span class="sd">    32-bit floating-point  -1.0         +1.0         float32</span>
+<span class="sd">    32-bit PCM             -2147483648  +2147483647  int32</span>
+<span class="sd">    16-bit PCM             -32768       +32767       int16</span>
+<span class="sd">    8-bit PCM              0            255          uint8</span>
+<span class="sd">    =====================  ===========  ===========  =============</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] The SciPy community, &quot;scipy.io.wavfile.write&quot;, v1.6.0.</span>
+<span class="sd">       https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.write.html</span>
+<span class="sd">       </span>
+<span class="sd">    .. [2] IBM Corporation and Microsoft Corporation, &quot;Multimedia Programming</span>
+<span class="sd">       Interface and Data Specifications 1.0&quot;, section &quot;Data Format of the</span>
+<span class="sd">       Samples&quot;, August 1991</span>
+<span class="sd">       http://www.tactilemedia.com/info/MCI_Control_Info.html</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Synthesize a 440Hz sine wave at 44100 Hz and write it to disk.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; fs = 44100; T = 2.0</span>
+<span class="sd">    &gt;&gt;&gt; t = np.linspace(0, T, int(T*fs))</span>
+<span class="sd">    &gt;&gt;&gt; data = np.sin(2. * np.pi * 440. *t)</span>
+<span class="sd">    &gt;&gt;&gt; maad.sound.write(&#39;example.wav&#39;, fs, data)</span>
+<span class="sd">    </span>
+<span class="sd">    Open an audio file, filter a frequency band and write to disk.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; s_filt = sound.sinc(s, (3000, 10000), fs)</span>
+<span class="sd">    &gt;&gt;&gt; sound.write(&#39;spinetail_filtered.wav&#39;, fs, s_filt)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">write_wav</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

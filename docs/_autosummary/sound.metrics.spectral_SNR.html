@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sound.metrics.spectral_SNR &mdash; scikit-maad 1.1 documentation</title>
+  <title>sound.metrics.spectral_snr &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -148,7 +148,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>sound.metrics.spectral_SNR</li>
+      <li>sound.metrics.spectral_snr</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -168,10 +168,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="sound-metrics-spectral-snr">
-<h1>sound.metrics.spectral_SNR<a class="headerlink" href="#sound-metrics-spectral-snr" title="Permalink to this headline">¶</a></h1>
+<h1>sound.metrics.spectral_snr<a class="headerlink" href="#sound-metrics-spectral-snr" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="sound.metrics.spectral_SNR">
-<code class="sig-prename descclassname">sound.metrics.</code><code class="sig-name descname">spectral_SNR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/metrics.html#spectral_SNR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.metrics.spectral_SNR" title="Permalink to this definition">¶</a></dt>
+<dt id="sound.metrics.spectral_snr">
+<code class="sig-prename descclassname">sound.metrics.</code><code class="sig-name descname">spectral_snr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/metrics.html#spectral_snr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.metrics.spectral_snr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the signal to noise ratio (SNR) of an audio from its spectrogram
 in the time-frequency domain.</p>
 <dl class="field-list simple">
@@ -213,7 +213,7 @@ Queensland University of Technology, Brisbane.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/guyana_tropical_forest.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectral_SNR</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectral_snr</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">snr</span>
 <span class="go">4.084065436435541</span>
 </pre></div>

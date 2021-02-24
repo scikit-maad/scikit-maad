@@ -1,6 +1,6 @@
-﻿maad.spl.PSD2Leq
+﻿maad.spl.psd2leq
 ================
 
 .. currentmodule:: maad.spl
 
-.. autofunction:: PSD2Leq
+.. autofunction:: psd2leq

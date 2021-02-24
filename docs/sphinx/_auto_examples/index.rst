@@ -41,6 +41,27 @@ Basic examples
    :hidden:
 
    /_auto_examples/1_basic/plot_find_rois_simple
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An audio signal can be represented in both, temporal and spectral domains.  These representatio...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/1_basic/images/thumb/sphx_glr_plot_audio_representation_thumb.png
+     :alt: Audio representation
+
+     :ref:`sphx_glr__auto_examples_1_basic_plot_audio_representation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/1_basic/plot_audio_representation
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
@@ -115,27 +136,6 @@ Advanced examples
    :hidden:
 
    /_auto_examples/2_advanced/plot_unsupervised_sound_classification
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="When sound travels in air (or in water), initial acoustic signature may change  regarding dista...">
-
-.. only:: html
-
- .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_sound_degradation_due_to_attenuation_thumb.png
-     :alt: Simulation of sound degradation due to geometric, atmospheric and habitat attenuation
-
-     :ref:`sphx_glr__auto_examples_2_advanced_plot_sound_degradation_due_to_attenuation.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/2_advanced/plot_sound_degradation_due_to_attenuation
 
 .. raw:: html
 

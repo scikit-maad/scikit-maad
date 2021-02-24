@@ -169,29 +169,6 @@
             
   <div class="section" id="sound-trim-wave2frames">
 <h1>sound.trim.wave2frames<a class="headerlink" href="#sound-trim-wave2frames" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="sound.trim.wave2frames">
-<code class="sig-prename descclassname">sound.trim.</code><code class="sig-name descname">wave2frames</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/trim.html#wave2frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.trim.wave2frames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of
-length Nt.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>s</strong><span class="classifier">1d ndarray of floats (already divided by the number of bits)</span></dt><dd><p>Vector containing the sound waveform</p>
-</dd>
-<dt><strong>Nt</strong><span class="classifier">int, optional, default is 512</span></dt><dd><p>Number of points per frame</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>timeframes</strong><span class="classifier">2d ndarray of floats</span></dt><dd><p>Matrix containing K frames (row) with Nt points (column), K*N &lt;= length (s)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 

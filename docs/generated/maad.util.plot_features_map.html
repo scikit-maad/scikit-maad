@@ -104,8 +104,9 @@
 <li class="toctree-l3"><a class="reference internal" href="maad.util.rand_cmap.html">maad.util.rand_cmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.crop_image.html">maad.util.crop_image</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.save_figlist.html">maad.util.save_figlist</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.plot1D.html">maad.util.plot1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.plot2D.html">maad.util.plot2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_wave.html">maad.util.plot_wave</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_spectrum.html">maad.util.plot_spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_spectrogram.html">maad.util.plot_spectrogram</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_rois.html">maad.util.overlay_rois</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_centroid.html">maad.util.overlay_centroid</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.plot_features_map</a></li>
@@ -284,6 +285,19 @@ the last image</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>see plot_extract_alpha_indices.py advanced example for a complete example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2021</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">indices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;00:00:00&#39;</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;23:00:00&#39;</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;1H&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot_features_map</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> 
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

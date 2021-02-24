@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.sound.spectral_SNR &mdash; scikit-maad 1.1 documentation</title>
+  <title>maad.sound.spectral_snr &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -37,9 +37,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.sound.sharpness" href="maad.sound.sharpness.html" />
-    <link rel="prev" title="maad.sound.audio_SNR" href="maad.sound.audio_SNR.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,19 +92,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../sound.html">Sound processing</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../sound.html#input-and-output">Input and output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sound.html#preprocess-audio">Preprocess audio</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sound.html#transform-audio">Transform audio</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../sound.html#metrics">Metrics</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="maad.sound.audio_SNR.html">maad.sound.audio_SNR</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.sound.spectral_SNR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.sound.sharpness.html">maad.sound.sharpness</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
@@ -161,9 +148,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../sound.html">Sound processing</a> &raquo;</li>
-        
-      <li>maad.sound.spectral_SNR</li>
+      <li>maad.sound.spectral_snr</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -183,10 +168,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="maad-sound-spectral-snr">
-<h1>maad.sound.spectral_SNR<a class="headerlink" href="#maad-sound-spectral-snr" title="Permalink to this headline">¶</a></h1>
+<h1>maad.sound.spectral_snr<a class="headerlink" href="#maad-sound-spectral-snr" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="maad.sound.spectral_SNR">
-<code class="sig-prename descclassname">maad.sound.</code><code class="sig-name descname">spectral_SNR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/metrics.html#spectral_SNR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.spectral_SNR" title="Permalink to this definition">¶</a></dt>
+<dt id="maad.sound.spectral_snr">
+<code class="sig-prename descclassname">maad.sound.</code><code class="sig-name descname">spectral_snr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_power</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/metrics.html#spectral_snr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.spectral_snr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the signal to noise ratio (SNR) of an audio from its spectrogram
 in the time-frequency domain.</p>
 <dl class="field-list simple">
@@ -228,7 +213,7 @@ Queensland University of Technology, Brisbane.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/guyana_tropical_forest.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectral_SNR</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectral_snr</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">snr</span>
 <span class="go">4.084065436435541</span>
 </pre></div>
@@ -242,15 +227,6 @@ Queensland University of Technology, Brisbane.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.sound.sharpness.html" class="btn btn-neutral float-right" title="maad.sound.sharpness" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.sound.audio_SNR.html" class="btn btn-neutral float-left" title="maad.sound.audio_SNR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

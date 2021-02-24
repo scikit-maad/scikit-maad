@@ -1,4 +1,4 @@
-sound.input\_output
+﻿sound.input\_output
 ===================
 
 .. automodule:: sound.input_output
@@ -16,7 +16,8 @@ sound.input\_output
       :nosignatures:
    
       load
-      loadSpectro
+      load_spectrogram
+      write
    
    
 

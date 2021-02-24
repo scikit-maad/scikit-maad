@@ -107,7 +107,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#basic-examples">Basic examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#advanced-examples">Advanced examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Find Regions of interest (ROIs) in a spectrogram</a><ul>
@@ -205,7 +204,8 @@ scikit-image, scikit-learn and pandas Python packages.</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">features</span>
-<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">read_audacity_annot</span><span class="p">,</span> <span class="n">overlay_rois</span><span class="p">,</span> <span class="n">overlay_centroid</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="p">(</span><span class="n">power2dB</span><span class="p">,</span> <span class="n">plot2d</span><span class="p">,</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">read_audacity_annot</span><span class="p">,</span>
+                       <span class="n">overlay_rois</span><span class="p">,</span> <span class="n">overlay_centroid</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>First, load and audio file and compute the power spectrogram.</p>
@@ -223,12 +223,12 @@ scikit-image, scikit-learn and pandas Python packages.</p>
 <span class="c1"># Convert the power spectrogram into dB, add dB_max which is the maximum decibel</span>
 <span class="c1"># range when quantification bit is 16bits and display the result</span>
 <span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="o">+</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dB_max</span></a>
-<span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dB_max</span></a><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
+<span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dB_max</span></a><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">:</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">})</span>
 </pre></div>
 </div>
 <img alt="Spectrogram" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:657: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   if now: plt.show()
 </pre></div>
 </div>
@@ -322,8 +322,8 @@ signatures are labeled with the same name</p>
 </div>
 <img alt="ROIs Overlay" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_006.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Total number of ROIs : 49
-Number of different ROIs :  5
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Total number of ROIs : 159
+Number of different ROIs :  8
 </pre></div>
 </div>
 <p>Now we cluster the ROIS depending on 3 ROIS features :
@@ -422,7 +422,7 @@ To extract</p>
 Brisbane</p>
 </dd>
 </dl>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.609 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  14.543 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-2-advanced-plot-compare-auto-and-manual-rois-selection-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/39192036aeb6236e157d37e452e0f4f4/plot_compare_auto_and_manual_rois_selection.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_compare_auto_and_manual_rois_selection.py</span></code></a></p>

@@ -1,6 +1,6 @@
-features.alpha\_indices.spectral\_LEQ
+features.alpha\_indices.spectral\_leq
 =====================================
 
 .. currentmodule:: features.alpha_indices
 
-.. autofunction:: spectral_LEQ
+.. autofunction:: spectral_leq

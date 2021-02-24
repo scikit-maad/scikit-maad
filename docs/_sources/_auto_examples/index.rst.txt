@@ -41,6 +41,27 @@ Basic examples
    :hidden:
 
    /_auto_examples/1_basic/plot_find_rois_simple
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An audio signal can be represented in both, temporal and spectral domains.  These representatio...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/1_basic/images/thumb/sphx_glr_plot_audio_representation_thumb.png
+     :alt: Audio representation
+
+     :ref:`sphx_glr__auto_examples_1_basic_plot_audio_representation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/1_basic/plot_audio_representation
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
@@ -73,27 +94,6 @@ Advanced examples
    :hidden:
 
    /_auto_examples/2_advanced/plot_nmf_and_false_color_spectrogram
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@author:">
-
-.. only:: html
-
- .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_using_shape_features_thumb.png
-     :alt: Using wavelets to characterize the time-frequency shape of sounds
-
-     :ref:`sphx_glr__auto_examples_2_advanced_using_shape_features.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /_auto_examples/2_advanced/using_shape_features
 
 .. raw:: html
 

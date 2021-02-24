@@ -1,6 +1,6 @@
-﻿features.frequency\_raoQ
+﻿features.frequency\_raoq
 ========================
 
 .. currentmodule:: features
 
-.. autofunction:: frequency_raoQ
+.. autofunction:: frequency_raoq

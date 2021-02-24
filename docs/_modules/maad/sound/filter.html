@@ -188,7 +188,7 @@
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">filters</span>
 
 <span class="c1"># Import internal modules </span>
-<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot2D</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot2d</span>
 
 <span class="c1">#%%</span>
 <span class="c1"># =============================================================================</span>
@@ -252,14 +252,14 @@
 <span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; fig1, ax1 = maad.util.plot2D(Sxx_dB, **fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; fig1, ax1 = maad.util.plot2d(Sxx_dB, **fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    Filter the waveform : keep the bandwidth between 6-10kHz</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; w_filtered = maad.sound.select_bandwidth(w,fs,fcut=(6000,10000), forder=5, fname =&#39;butter&#39;, ftype=&#39;bandpass&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_filtered = maad.util.power2dB(Sxx_power_filtered) # convert into dB </span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_filtered, **fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_filtered, **fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sos</span> <span class="o">=</span> <span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">forder</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fcut</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="n">ftype</span><span class="p">,</span><span class="n">ftype</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">rp</span><span class="p">,</span> 
@@ -330,19 +330,19 @@
 <span class="sd">                      &#39;xlabel&#39;: &#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;: &#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    Smooth the waveform (lowpass)</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; w_filtered = maad.sound.fir_filter(w, kernel=((&#39;gaussian&#39;, 2), 5))</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)</span>
 <span class="sd">    &gt;&gt;&gt; Lxx_filtered = maad.spl.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL</span>
-<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx_filtered,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2d(Lxx_filtered,**fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    Smooth the spectrogram, frequency by frequency (blurr)</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; Lxx_blurr = maad.sound.fir_filter(Lxx, kernel=((&#39;gaussian&#39;, 1), 5), axis=1)</span>
-<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2D(Lxx_blurr,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2d(Lxx_blurr,**fig_kwargs)</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)</span> <span class="p">:</span>
@@ -410,9 +410,9 @@
 <span class="sd">    &gt;&gt;&gt; s_filt_4_8kHz = maad.sound.sinc(s, cutoff=[4500,8000], fs=fs, atten=80, transition_bw=0.8)</span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">    &gt;&gt;&gt; fig, (ax0, ax1,ax2) = plt.subplots(3,1, sharex=True, squeeze=True)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot1D(tn,s,ax=ax0, figtitle=&#39;original&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot1D(tn,s_filt_7_12kHz,ax=ax1, figtitle=&#39;Kaiser-windowed filter 7-12kHz&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot1D(tn,s_filt_4_8kHz,ax=ax2, figtitle=&#39;Kaiser-windowed filter 4.5-8kHz&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot1d(tn,s,ax=ax0, figtitle=&#39;original&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot1d(tn,s_filt_7_12kHz,ax=ax1, figtitle=&#39;Kaiser-windowed filter 7-12kHz&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot1d(tn,s_filt_4_8kHz,ax=ax2, figtitle=&#39;Kaiser-windowed filter 4.5-8kHz&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; fig.tight_layout()</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -518,10 +518,10 @@
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
 <span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=10, vmax=70)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_std05, ax=ax2, extent=ext, title=&#39;smooth (std=0.5)&#39;, vmin=10, vmax=70)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_std10, ax=ax3, extent=ext, title=&#39;smooth (std=1)&#39;, vmin=10, vmax=70)</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_std15, ax=ax4, extent=ext, title=&#39;smooth (std=1.5)&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_std05, ax=ax2, extent=ext, title=&#39;smooth (std=0.5)&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_std10, ax=ax3, extent=ext, title=&#39;smooth (std=1)&#39;, vmin=10, vmax=70)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_std15, ax=ax4, extent=ext, title=&#39;smooth (std=1.5)&#39;, vmin=10, vmax=70)</span>
 <span class="sd">    &gt;&gt;&gt; fig.set_size_inches(7,9)</span>
 <span class="sd">    &gt;&gt;&gt; fig.tight_layout() </span>
 <span class="sd">    </span>
@@ -552,11 +552,11 @@
         
          
         <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+        <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
                 <span class="n">title</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Orignal Spectrogram&#39;</span><span class="p">),</span>  
                 <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
                 <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+        <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
                 <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Blurred Spectrogram (std=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">std</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="p">,</span>  
                 <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
                 <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 

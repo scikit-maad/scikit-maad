@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>maad.spl.pressure2Leq &mdash; scikit-maad 1.1 documentation</title>
+  <title>maad.spl.pressure2leq &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -37,9 +37,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.spl.PSD2Leq" href="maad.spl.PSD2Leq.html" />
-    <link rel="prev" title="maad.spl.wav2Leq" href="maad.spl.wav2Leq.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,28 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../spl.html">Sound pressure level</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../spl.html#conversion-to-sound-pressure-level-spl">Conversion to sound pressure level (SPL)</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2volt.html">maad.spl.wav2volt</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.volt2pressure.html">maad.spl.volt2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2pressure.html">maad.spl.wav2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.pressure2dBSPL.html">maad.spl.pressure2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.dBSPL2pressure.html">maad.spl.dBSPL2pressure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.power2dBSPL.html">maad.spl.power2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.amplitude2dBSPL.html">maad.spl.amplitude2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2dBSPL.html">maad.spl.wav2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2Leq.html">maad.spl.wav2Leq</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.spl.pressure2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.PSD2Leq.html">maad.spl.PSD2Leq</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../spl.html#attenuation-and-active-distance">Attenuation and active distance</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
@@ -167,9 +148,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../spl.html">Sound pressure level</a> &raquo;</li>
-        
-      <li>maad.spl.pressure2Leq</li>
+      <li>maad.spl.pressure2leq</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -189,10 +168,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="maad-spl-pressure2leq">
-<h1>maad.spl.pressure2Leq<a class="headerlink" href="#maad-spl-pressure2leq" title="Permalink to this headline">¶</a></h1>
+<h1>maad.spl.pressure2leq<a class="headerlink" href="#maad-spl-pressure2leq" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="maad.spl.pressure2Leq">
-<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">pressure2Leq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/conversion_SPL.html#pressure2Leq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.pressure2Leq" title="Permalink to this definition">¶</a></dt>
+<dt id="maad.spl.pressure2leq">
+<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">pressure2leq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/conversion_SPL.html#pressure2leq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.pressure2leq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert pressure vector (p [Pa]) to Equivalent Continuous Sound Pressure 
 level (Leq [dB SPL]).</p>
 <dl class="field-list simple">
@@ -217,7 +196,7 @@ level (Leq [dB SPL]).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">wav2pressure</span><span class="p">(</span><span class="n">wave</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Leq</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">pressure2Leq</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Leq</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">pressure2leq</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dB</span><span class="p">(</span><span class="n">Leq</span><span class="p">)</span>
 <span class="go">    54.55488267086038</span>
 </pre></div>
@@ -231,15 +210,6 @@ level (Leq [dB SPL]).</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.spl.PSD2Leq.html" class="btn btn-neutral float-right" title="maad.spl.PSD2Leq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.spl.wav2Leq.html" class="btn btn-neutral float-left" title="maad.spl.wav2Leq" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

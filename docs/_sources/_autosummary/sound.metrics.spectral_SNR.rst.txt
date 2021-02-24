@@ -1,6 +1,6 @@
-sound.metrics.spectral\_SNR
+sound.metrics.spectral\_snr
 ===========================
 
 .. currentmodule:: sound.metrics
 
-.. autofunction:: spectral_SNR
+.. autofunction:: spectral_snr

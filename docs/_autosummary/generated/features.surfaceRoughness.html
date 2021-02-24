@@ -169,43 +169,6 @@
             
   <div class="section" id="features-surfaceroughness">
 <h1>features.surfaceRoughness<a class="headerlink" href="#features-surfaceroughness" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.surfaceRoughness">
-<code class="sig-prename descclassname">features.</code><code class="sig-name descname">surfaceRoughness</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">'global'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/features/alpha_indices.html#surfaceRoughness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.surfaceRoughness" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the surface roughness index of a signal (1D) or a spectrogram (2D).</p>
-<p>Surface roughness is quantified by the deviations in the direction of the normal 
-vector of a real surface from its ideal form. If these deviations are large, 
-the surface is rough; if they are small, the surface is smooth <a class="reference internal" href="#rd9380bd93d69-1" id="id1">[1]</a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>vector (1d) or matrix (2d)</p>
-</dd>
-<dt><strong>norm</strong><span class="classifier">string, optional, default is ‘global’</span></dt><dd><p>Determine if the ROUGHNESS is normalized by the sum of the whole data
-(‘global’ mode) or by the sum of horizontal line for each line
-(‘per_bin’)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>Ra</strong><span class="classifier">scalar or 1d ndarray of scalars</span></dt><dd><p>if x is a vector =&gt; Arithmetical mean deviation of x.
-if x is a matrix =&gt; Arithmetical mean deviation of each line of x.</p>
-</dd>
-<dt><strong>Rq</strong><span class="classifier">scalar or 1d ndarray of scalars</span></dt><dd><p>if x is a vector =&gt; Root mean squared of deviationn of x.
-if x is a matrix =&gt; Root mean squared of deviation of each line of x.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="rd9380bd93d69-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Wikipedia, <a class="reference external" href="https://en.wikipedia.org/wiki/Surface_roughness">https://en.wikipedia.org/wiki/Surface_roughness</a></p>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 

@@ -14,7 +14,7 @@ should be use in complement.
 """
 # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_remove_background.png'
 
-from maad.util import plot2D, power2dB
+from maad.util import plot2d, power2dB
 from maad.sound import (load, spectrogram, 
                        remove_background, median_equalizer, 
                        remove_background_morpho, 
@@ -37,7 +37,7 @@ Sxx_dB = power2dB(Sxx, db_range=96) + 96
 
 #%%
 # We plot the original spectrogram.
-plot2D(Sxx_dB, extent=ext, title='original',
+plot2d(Sxx_dB, extent=ext, title='original',
        vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
 
 print ("Original sharpness : %2.3f" % sharpness(Sxx_dB))
@@ -51,7 +51,7 @@ print("---- test remove_background -----")
 print("duration %2.3f s" % elapsed_time)
 print ("sharpness : %2.3f" % sharpness(X1))
 
-plot2D(X1, extent=ext, title='remove_background',
+plot2d(X1, extent=ext, title='remove_background',
        vmin=np.median(X1), vmax=np.median(X1)+40)
 
 #%%
@@ -64,7 +64,7 @@ print("---- test median_equalizer -----")
 print("duration %2.3f s" % elapsed_time)
 print ("sharpness : %2.3f" %sharpness(X2))
 
-plot2D(X2,extent=ext, title='median_equalizer',
+plot2d(X2,extent=ext, title='median_equalizer',
        vmin=np.median(X2), vmax=np.median(X2)+40)
 
 #%%
@@ -76,7 +76,7 @@ print("---- test remove_background_morpho -----")
 print("duration %2.3f s" % elapsed_time)
 print ("sharpness : %2.3f" %sharpness(X3))
 
-plot2D(X3, extent=ext, title='remove_background_morpho',
+plot2d(X3, extent=ext, title='remove_background_morpho',
        vmin=np.median(X3), vmax=np.median(X3)+40)
 
 #%%
@@ -89,7 +89,7 @@ print("---- test remove_background_along_axis -----")
 print("duration %2.3f s" % elapsed_time)
 print ("sharpness : %2.3f" %sharpness(X4))
 
-plot2D(X4,  extent=ext, title='remove_background_along_axis',
+plot2d(X4,  extent=ext, title='remove_background_along_axis',
        vmin=np.median(X4), vmax=np.median(X4)+40)
 
 plt.tight_layout()

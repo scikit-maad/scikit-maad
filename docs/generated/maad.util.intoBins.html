@@ -37,9 +37,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.util.shift_bit_length" href="maad.util.shift_bit_length.html" />
-    <link rel="prev" title="maad.util.index_bw" href="maad.util.index_bw.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,34 +92,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../util.html">Utilities</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../util.html#visualization">Visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util.html#mathematical">Mathematical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util.html#parser">Parser</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../util.html#miscellaneous">Miscellaneous</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="maad.util.index_bw.html">maad.util.index_bw</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.intoBins</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.shift_bit_length.html">maad.util.shift_bit_length</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.rle.html">maad.util.rle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.linear_scale.html">maad.util.linear_scale</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.amplitude2dB.html">maad.util.amplitude2dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.power2dB.html">maad.util.power2dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.dB2amplitude.html">maad.util.dB2amplitude</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.dB2power.html">maad.util.dB2power</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.mean_dB.html">maad.util.mean_dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.add_dB.html">maad.util.add_dB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.nearest_idx.html">maad.util.nearest_idx</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.get_df_single_row.html">maad.util.get_df_single_row</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.util.format_features.html">maad.util.format_features</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Example Gallery</span></p>
 <ul>
@@ -172,8 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../util.html">Utilities</a> &raquo;</li>
-        
       <li>maad.util.intoBins</li>
     
     
@@ -195,48 +169,6 @@
             
   <div class="section" id="maad-util-intobins">
 <h1>maad.util.intoBins<a class="headerlink" href="#maad-util-intobins" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="maad.util.intoBins">
-<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">intoBins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">an</span></em>, <em class="sig-param"><span class="n">bin_step</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">bin_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bin_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/miscellaneous.html#intoBins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.intoBins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>1D or 2D array.</p>
-</dd>
-<dt><strong>an :1d ndarray of floats</strong></dt><dd><p>Vector containing the positions of each value. 
-In case of 2D matrix, this vector corresponds to the horizontal (row)
-or vertical (columns) units</p>
-</dd>
-<dt><strong>bin_step</strong><span class="classifier">scalar</span></dt><dd><p>Determine the width of each bin.</p>
-</dd>
-<dt><strong>axis</strong><span class="classifier">integer, optional, default is 0</span></dt><dd><p>Determine  along which axis the transformation is done.
-In case of matrix :
-axis = 0 =&gt; transformation is done on column</p>
-<p>axis = 1 =&gt; transformation is done on row</p>
-</dd>
-<dt><strong>bin_min</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>This minimum value corresponds to the start of the first bin. 
-By default, the minimum value is the first value of an.</p>
-</dd>
-<dt><strong>bin_max</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>This maximum value corresponds to end of the last bin. 
-By default, the maximum value is the last value of an.</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, defualt is False</span></dt><dd><p>Display the result of the tranformation : an histogram
-In case of matrix, the mean histogram is shown.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>xbins</strong><span class="classifier">array-like</span></dt><dd><p>1D or 2D array which correspond to the data after being transformed into bins</p>
-</dd>
-<dt><strong>bin</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Vector containing the positions of each bin</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -244,15 +176,6 @@ In case of matrix, the mean histogram is shown.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.util.shift_bit_length.html" class="btn btn-neutral float-right" title="maad.util.shift_bit_length" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.util.index_bw.html" class="btn btn-neutral float-left" title="maad.util.index_bw" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

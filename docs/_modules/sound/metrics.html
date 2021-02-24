@@ -190,7 +190,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># public functions</span>
 <span class="c1"># =============================================================================</span>
-<div class="viewcode-block" id="audio_SNR"><a class="viewcode-back" href="../../_autosummary/sound.metrics.audio_SNR.html#sound.audio_SNR">[docs]</a><span class="k">def</span> <span class="nf">audio_SNR</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="temporal_snr"><a class="viewcode-back" href="../../_autosummary/sound.metrics.temporal_snr.html#sound.temporal_snr">[docs]</a><span class="k">def</span> <span class="nf">temporal_snr</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the signal to noise ratio (SNR) of an audio signal in the time domain.</span>
 
@@ -226,7 +226,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; _,_,snr = maad.sound.audio_SNR(s)</span>
+<span class="sd">    &gt;&gt;&gt; _,_,snr = maad.sound.temporal_snr(s)</span>
 <span class="sd">    &gt;&gt;&gt; snr</span>
 <span class="sd">    1.5744987447774665</span>
 
@@ -245,7 +245,7 @@
     <span class="k">return</span> <span class="n">ENRt</span><span class="p">,</span> <span class="n">BGNt</span><span class="p">,</span> <span class="n">SNRt</span></div>
 
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="spectral_SNR"><a class="viewcode-back" href="../../_autosummary/sound.metrics.spectral_SNR.html#sound.spectral_SNR">[docs]</a><span class="k">def</span> <span class="nf">spectral_SNR</span> <span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="spectral_snr"><a class="viewcode-back" href="../../_autosummary/sound.metrics.spectral_SNR.html#sound.spectral_snr">[docs]</a><span class="k">def</span> <span class="nf">spectral_snr</span> <span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the signal to noise ratio (SNR) of an audio from its spectrogram</span>
 <span class="sd">    in the time-frequency domain.</span>
@@ -286,7 +286,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  </span>
-<span class="sd">    &gt;&gt;&gt; _, _, snr, _, _, _ = maad.sound.spectral_SNR(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; _, _, snr, _, _, _ = maad.sound.spectral_snr(Sxx_power)</span>
 <span class="sd">    &gt;&gt;&gt; snr</span>
 <span class="sd">    4.084065436435541</span>
 <span class="sd">    </span>
@@ -324,6 +324,15 @@
 <span class="sd">    -------</span>
 <span class="sd">    sharpness : scalar</span>
 <span class="sd">        sharpness of the spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  </span>
+<span class="sd">    &gt;&gt;&gt; sharp = maad.sound.sharpness(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; sharp</span>
+<span class="sd">    1.1930709869950632e-05</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">Gt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">edge_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

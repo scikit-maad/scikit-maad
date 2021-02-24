@@ -25,19 +25,17 @@ The following sound example as two main different soundtypes in the foreground:
 
     from maad import sound
     from maad.rois import find_rois_cwt
-    from maad.util import power2dB, plot2d
-
+    from maad.util import plot_spectrogram
 
     s, fs = sound.load('../../data/spinetail.wav')
     Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
-    Sxx_db = power2dB(Sxx, db_range=100) + 100
-    plot2d(Sxx_db, **{'figsize':(4,10), 'extent':ext})
+    plot_spectrogram(Sxx, extent=ext, db_range=60, gain=20, figsize=(4,10))
 
 
 
 
 .. image:: /_auto_examples/1_basic/images/sphx_glr_plot_find_rois_simple_001.png
-    :alt: Spectrogram
+    :alt: plot find rois simple
     :class: sphx-glr-single-img
 
 
@@ -47,8 +45,8 @@ The following sound example as two main different soundtypes in the foreground:
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      if now: plt.show()
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:891: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -145,7 +143,7 @@ The segmentation results are returned as a dataframe with temporal segmentation 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.212 seconds)
+   **Total running time of the script:** ( 0 minutes  1.289 seconds)
 
 
 .. _sphx_glr_download__auto_examples_1_basic_plot_find_rois_simple.py:

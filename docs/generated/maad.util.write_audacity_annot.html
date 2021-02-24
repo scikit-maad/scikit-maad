@@ -186,25 +186,46 @@
 <h1>maad.util.write_audacity_annot<a class="headerlink" href="#maad-util-write-audacity-annot" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.util.write_audacity_annot">
-<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">write_audacity_annot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">onset</span></em>, <em class="sig-param"><span class="n">offset</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/parser.html#write_audacity_annot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.write_audacity_annot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">write_audacity_annot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">df_rois</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/parser.html#write_audacity_annot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.write_audacity_annot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write audio segmentation to file (Audacity format).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fname: str</strong></dt><dd><p>filename to save the segmentation</p>
 </dd>
-<dt><strong>onset: int, float array_like</strong></dt><dd><p>output of a detection method (e.g. find_rois_1d)</p>
-</dd>
-<dt><strong>offset: int, float array_like</strong></dt><dd><p>output of a detection method (e.g. find_rois_1d)</p>
+<dt><strong>df_rois: pandas dataframe</strong></dt><dd><p>Dataframe containing the coordinates corresponding to sound signatures
+In case of only temporal annotations : df_rois must contain at least
+the columns ‘mint_t’, ‘max_t’ 
+In case of bounding box (temporal eand frequency limits) :: df_rois 
+must contain at least the columns ‘min_t’, ‘max_t’, ‘min_f’, ‘max_f’</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>Returns a csv file</dt><dd></dd>
+<dt>df_to_save</dt><dd><p>Dataframe that has been saved</p>
+</dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="o">+</span> <span class="mi">96</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power_noNoise</span><span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">median_equalizer</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db_noNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power_noNoise</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_db_noNoise_smooth</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_db_noNoise</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">im_mask</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">create_mask</span><span class="p">(</span><span class="n">im</span><span class="o">=</span><span class="n">Sxx_db_noNoise_smooth</span><span class="p">,</span> <span class="n">mode_bin</span> <span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> 
+<span class="go">                                    bin_std=8, bin_per=0.5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">im_rois</span><span class="p">,</span> <span class="n">df_rois</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">select_rois</span><span class="p">(</span><span class="n">im_mask</span><span class="p">,</span> <span class="n">min_roi</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">max_roi</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_rois</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">format_features</span><span class="p">(</span><span class="n">df_rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Change path to save the file containing the labels position</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df_to_save</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">write_audacity_annot</span><span class="p">(</span><span class="s1">&#39;save.txt&#39;</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Import the wav file then the label file in Audacity</p>
 </dd></dl>
 
 </div>

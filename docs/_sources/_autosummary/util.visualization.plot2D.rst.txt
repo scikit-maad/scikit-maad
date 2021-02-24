@@ -1,6 +1,6 @@
-util.visualization.plot2D
+util.visualization.plot2d
 =========================
 
 .. currentmodule:: util.visualization
 
-.. autofunction:: plot2D
+.. autofunction:: plot2d

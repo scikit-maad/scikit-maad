@@ -169,60 +169,6 @@
             
   <div class="section" id="features-acousticevenessindex">
 <h1>features.acousticEvenessIndex<a class="headerlink" href="#features-acousticevenessindex" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.acousticEvenessIndex">
-<code class="sig-prename descclassname">features.</code><code class="sig-name descname">acousticEvenessIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">fmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">fmax</span><span class="o">=</span><span class="default_value">20000</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">- 50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/features/alpha_indices.html#acousticEvenessIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.acousticEvenessIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Acoustic Eveness Index (AEI) from a spectrogram <a class="reference internal" href="#r68d0cb90a915-1" id="id1">[1]</a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>Sxx: ndarray of floats</strong></dt><dd><p>2d : Spectrogram</p>
-</dd>
-<dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
-</dd>
-<dt><strong>fmin</strong><span class="classifier">scalar, optional, default is 0</span></dt><dd><p>Minimum frequency in Hz</p>
-</dd>
-<dt><strong>fmax</strong><span class="classifier">scalar, optional, default is 20000</span></dt><dd><p>Maximum frequency in Hz</p>
-</dd>
-<dt><strong>bin_step</strong><span class="classifier">scalar, optional, default is 500</span></dt><dd><p>Frequency step in Hz</p>
-</dd>
-<dt><strong>dB_threshold</strong><span class="classifier">scalar, optional, default is -50</span></dt><dd><p>Threshold to compute the score (ie. the number of data &gt; threshold,
-normalized by the length)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>AEI</strong><span class="classifier">scalar</span></dt><dd><p>Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="features.acousticDiversityIndex.html#features.acousticDiversityIndex" title="features.acousticDiversityIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticDiversityIndex</span></code></a></dt><dd></dd>
-</dl>
-</div>
-<p class="rubric">Notes</p>
-<p>The Acoustic Eveness Index (AEI) and the Acoustic Diversity Index (ADI) are negatively correlated.</p>
-<p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r68d0cb90a915-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011.</p>
-</dd>
-</dl>
-<p>A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">AEI</span>  <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">acousticEvenessIndex</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">fn</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;AEI : </span><span class="si">%2.2f</span><span class="s1"> &#39;</span> <span class="o">%</span><span class="n">AEI</span><span class="p">)</span>
-<span class="go">AEI : 0.56    </span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 

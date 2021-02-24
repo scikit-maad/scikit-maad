@@ -1,4 +1,4 @@
-sound.spectro\_func
+﻿sound.spectro\_func
 ===================
 
 .. automodule:: sound.spectro_func
@@ -17,7 +17,7 @@ sound.spectro\_func
    
       avg_amplitude_spectro
       avg_power_spectro
-      intoOctave
+      linear_to_octave
       spectrogram
    
    

@@ -37,14 +37,14 @@ example, we will see how to compute these indices and show basics post-processin
 
 .. code-block:: default
 
-    SPECTRAL_FEATURES=['SPEC_MEAN','SPEC_VAR','SPEC_SKEW','SPEC_KURT','NBPEAKS','LEQf', 
+    SPECTRAL_FEATURES=['MEANf','VARf','SKEWf','KURTf','NBPEAKS','LEQf', 
     'ENRf','BGNf','SNRf','Hf', 'EAS','ECU','ECV','EPS','EPS_KURT','EPS_SKEW','ACI',
     'NDSI','rBA','AnthroEnergy','BioEnergy','BI','ROU','ADI','AEI','LFC','MFC','HFC',
     'ACTspFract','ACTspCount','ACTspMean', 'EVNspFract','EVNspMean','EVNspCount',
     'TFSD','H_Havrda','H_Renyi','H_pairedShannon', 'H_gamma', 'H_GiniSimpson','RAOQ',
     'AGI','ROItotal','ROIcover']
 
-    AUDIO_FEATURES=['ZCR','AUDIO_MEAN', 'AUDIO_VAR', 'AUDIO_SKEW', 'AUDIO_KURT',
+    TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
                    'LEQt','BGNt', 'SNRt','MED', 'Ht','ACTtFraction', 'ACTtCount', 
                    'ACTtMean','EVNtFraction', 'EVNtMean', 'EVNtCount']
 
@@ -221,7 +221,7 @@ LOAD SOUND AND PREPROCESS SOUND
 
         # compute all the audio indices and store them into a DataFrame
         # dB_threshold and rejectDuration are used to select audio events.
-        df_audio_ind = features.all_audio_alpha_indices(wave, fs, 
+        df_audio_ind = features.all_temporal_alpha_indices(wave, fs, 
                                               gain = G, sensibility = S,
                                               dB_threshold = 3, rejectDuration = 0.01,
                                               verbose = False, display = False)
@@ -605,7 +605,7 @@ set the threshold to 0.75 for instance.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1168: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1246: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -619,7 +619,7 @@ For a better view, we seperate spectral and audio indices.
 .. code-block:: default
 
     plot_features_map(df_indices[SPECTRAL_FEATURES], mode='24h')
-    plot_features_map(df_indices[AUDIO_FEATURES], mode='24h')
+    plot_features_map(df_indices[TEMPORAL_FEATURES], mode='24h')
 
     # A more classical way to analyse variations of indices consists in plotting
     # graphs. We choose to normalize rescale their value between 0 to 1 in order to
@@ -665,9 +665,9 @@ For a better view, we seperate spectral and audio indices.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:946: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:996: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1065: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1130: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -679,19 +679,19 @@ Create false color spectrograms with 3 indices
 .. code-block:: default
 
     fcs, triplet = false_Color_Spectro(df_indices_per_bin,
-                                       indices = ['AUDIO_KURT_per_bin',
-                                                 'EVNspCount_per_bin',
-                                                 'AUDIO_MEAN_per_bin'],
+                                       indices = ['KURTt_per_bin',
+                                                  'EVNspCount_per_bin',
+                                                  'MEANt_per_bin'],
                                        reverseLUT=False,
                                        unit='hours',
                                        permut=False,
                                        display=True,
-                                       figsize=(5,9))
+                                       figsize=(4,7))
 
 
 
 .. image:: /_auto_examples/2_advanced/images/sphx_glr_plot_extract_alpha_indices_005.png
-    :alt: False Color Spectro   [R:AUDIO_KURT; G:EVNspCount; B:AUDIO_MEAN]
+    :alt: False Color Spectro   [R:KURTt; G:EVNspCount; B:MEANt]
     :class: sphx-glr-single-img
 
 
@@ -701,7 +701,7 @@ Create false color spectrograms with 3 indices
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  26.453 seconds)
+   **Total running time of the script:** ( 0 minutes  25.247 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_extract_alpha_indices.py:

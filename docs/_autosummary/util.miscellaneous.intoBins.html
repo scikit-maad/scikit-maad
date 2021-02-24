@@ -169,48 +169,6 @@
             
   <div class="section" id="util-miscellaneous-intobins">
 <h1>util.miscellaneous.intoBins<a class="headerlink" href="#util-miscellaneous-intobins" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="util.miscellaneous.intoBins">
-<code class="sig-prename descclassname">util.miscellaneous.</code><code class="sig-name descname">intoBins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">an</span></em>, <em class="sig-param"><span class="n">bin_step</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">bin_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bin_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/util/miscellaneous.html#intoBins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.miscellaneous.intoBins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>x</strong><span class="classifier">array-like</span></dt><dd><p>1D or 2D array.</p>
-</dd>
-<dt><strong>an :1d ndarray of floats</strong></dt><dd><p>Vector containing the positions of each value. 
-In case of 2D matrix, this vector corresponds to the horizontal (row)
-or vertical (columns) units</p>
-</dd>
-<dt><strong>bin_step</strong><span class="classifier">scalar</span></dt><dd><p>Determine the width of each bin.</p>
-</dd>
-<dt><strong>axis</strong><span class="classifier">integer, optional, default is 0</span></dt><dd><p>Determine  along which axis the transformation is done.
-In case of matrix :
-axis = 0 =&gt; transformation is done on column</p>
-<p>axis = 1 =&gt; transformation is done on row</p>
-</dd>
-<dt><strong>bin_min</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>This minimum value corresponds to the start of the first bin. 
-By default, the minimum value is the first value of an.</p>
-</dd>
-<dt><strong>bin_max</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>This maximum value corresponds to end of the last bin. 
-By default, the maximum value is the last value of an.</p>
-</dd>
-<dt><strong>display</strong><span class="classifier">boolean, optional, defualt is False</span></dt><dd><p>Display the result of the tranformation : an histogram
-In case of matrix, the mean histogram is shown.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>xbins</strong><span class="classifier">array-like</span></dt><dd><p>1D or 2D array which correspond to the data after being transformed into bins</p>
-</dd>
-<dt><strong>bin</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>Vector containing the positions of each bin</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 

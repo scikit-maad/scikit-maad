@@ -172,7 +172,9 @@
 <dl class="py function">
 <dt id="features.alpha_indices.spectral_cover">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_cover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">flim_LF</span><span class="o">=</span><span class="default_value">(0, 1000)</span></em>, <em class="sig-param"><span class="n">flim_MF</span><span class="o">=</span><span class="default_value">(1000, 10000)</span></em>, <em class="sig-param"><span class="n">flim_HF</span><span class="o">=</span><span class="default_value">(10000, 20000)</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_cover" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the spectral activity cover index.</p>
+<dd><p>Compute the proportion (cover) of the spectrogram above a threshold for 
+three bandwidths : low frequency band (LF), medium frequency band (MF) and 
+high frequency band (HF).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -194,18 +196,25 @@ background noise</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>LFC :scalar</dt><dd><p>Proportion of the LF bandwith of the spectrogram with activity above the threshold</p>
+<dt>LFC :scalar</dt><dd><p>Proportion of the LF bandwidth of the spectrogram with activity above 
+the threshold</p>
 </dd>
-<dt>MFC: scalar</dt><dd><p>Proportion of the MF bandwith of the spectrogram with activity above the threshold</p>
+<dt>MFC: scalar</dt><dd><p>Proportion of the MF bandwidth of the spectrogram with activity above 
+the threshold</p>
 </dd>
-<dt>HFC: scalar</dt><dd><p>Proportion of the HF bandwith of the spectrogram with activity above the threshold</p>
+<dt>HFC: scalar</dt><dd><p>Proportion of the HF bandwidth of the spectrogram with activity above 
+the threshold</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
+<dl class="citation">
+<dt class="label" id="r764a2b9b901e-1"><span class="brackets">1</span></dt>
+<dd><p>Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived</p>
+</dd>
+</dl>
+<p>from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</p>
 </dd></dl>
 
 </div>

@@ -183,8 +183,11 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.load.html#sound.load" title="sound.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(filename[, channel, detrend, verbose, …])</p></td>
 <td><p>Load an audio file (stereo or mono).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.loadSpectro.html#sound.loadSpectro" title="sound.loadSpectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadSpectro</span></code></a>(filename, fs, duration[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.load_spectrogram.html#sound.load_spectrogram" title="sound.load_spectrogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_spectrogram</span></code></a>(filename, fs, duration[, …])</p></td>
 <td><p>Load an image from a file or an URL</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.write.html#sound.write" title="sound.write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code></a>(filename, fs, data)</p></td>
+<td><p>Write a NumPy array as a WAV file with the Scipy method.</p></td>
 </tr>
 </tbody>
 </table>
@@ -244,14 +247,20 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.avg_amplitude_spectro.html#sound.avg_amplitude_spectro" title="sound.avg_amplitude_spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_amplitude_spectro</span></code></a>(Sxx_ampli)</p></td>
 <td><p>Computes the average of an amplitude spectrogram along the time axis.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.intoOctave.html#sound.intoOctave" title="sound.intoOctave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoOctave</span></code></a>(X, fn[, thirdOctave, display])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.linear_to_octave.html#sound.linear_to_octave" title="sound.linear_to_octave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_to_octave</span></code></a>(X, fn[, thirdOctave, display])</p></td>
 <td><p>Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave spectrum (1d) or Spectrogram (2d).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="sound.envelope.html#module-sound.envelope" title="sound.envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">envelope</span></code></a>(s[, mode, Nt])</p></td>
 <td><p>Calcul the envelope of a sound waveform (1d)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.psd.html#sound.psd" title="sound.psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psd</span></code></a>(s, fs[, nperseg, method, window, nfft, …])</p></td>
-<td><p>Estimate the power spectral density of 1D signal using Welch’s or periodogram methods.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.spectrum.html#sound.spectrum" title="sound.spectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrum</span></code></a>(s, fs[, nperseg, noverlap, nfft, …])</p></td>
+<td><p>Estimate the power spectral density or power spectrum of 1D signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.resample.html#sound.resample" title="sound.resample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resample</span></code></a>(s, fs, target_fs[, res_type])</p></td>
+<td><p>Changes the sample rate of an audio file or any time series.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.trim.html#module-sound.trim" title="sound.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trim</span></code></a>(s, fs, min_t, max_t[, pad, pad_constant])</p></td>
+<td><p>Slices a time series, from a initial time <cite>min_t</cite> to an ending time <cite>max_t</cite>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -264,10 +273,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.audio_SNR.html#sound.audio_SNR" title="sound.audio_SNR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_SNR</span></code></a>(s[, mode, Nt])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.temporal_snr.html#sound.temporal_snr" title="sound.temporal_snr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_snr</span></code></a>(s[, mode, Nt])</p></td>
 <td><p>Compute the signal to noise ratio (SNR) of an audio signal in the time domain.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.spectral_SNR.html#sound.spectral_SNR" title="sound.spectral_SNR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_SNR</span></code></a>(Sxx_power)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.spectral_SNR.html#sound.spectral_snr" title="sound.spectral_snr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_snr</span></code></a>(Sxx_power)</p></td>
 <td><p>Compute the signal to noise ratio (SNR) of an audio from its spectrogram in the time-frequency domain.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.sharpness.html#sound.sharpness" title="sound.sharpness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sharpness</span></code></a>(Sxx)</p></td>
@@ -298,8 +307,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="sound.spectro_func.html#module-sound.spectro_func" title="sound.spectro_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.spectro_func</span></code></a></p></td>
 <td><p>Collection of functions transform an audio signal into spectrogram and  manipulate spectrograms.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="sound.trim.html#module-sound.trim" title="sound.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.trim</span></code></a></p></td>
-<td><p>Collection of functions to trim audio signals.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="sound.trim.html#module-sound.trim" title="sound.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sound.trim</span></code></a>(s, fs, min_t, max_t[, pad, …])</p></td>
+<td><p>Slices a time series, from a initial time <cite>min_t</cite> to an ending time <cite>max_t</cite>.</p></td>
 </tr>
 </tbody>
 </table>

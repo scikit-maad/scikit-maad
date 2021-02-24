@@ -171,7 +171,7 @@
 <h1>sound.spectro_func.spectrogram<a class="headerlink" href="#sound-spectro-func-spectrogram" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="sound.spectro_func.spectrogram">
-<code class="sig-prename descclassname">sound.spectro_func.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hann'</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">noverlap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tcrop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'psd'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/spectro_func.html#spectrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.spectro_func.spectrogram" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sound.spectro_func.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hann'</span></em>, <em class="sig-param"><span class="n">nperseg</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">noverlap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">flims</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tlims</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'psd'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sound/spectro_func.html#spectrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sound.spectro_func.spectrogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a spectrogram using the short-time Fourier transform from an audio signal.</p>
 <dl class="simple">
 <dt>The function can compute diferent outputs according to the parameter ‘mode’:</dt><dd><ul class="simple">
@@ -210,8 +210,8 @@ If None, noverlap = nperseg // 2.</p>
 - ‘amplitude’ : module of the stft (sqrt(psd))
 - ‘complex’ : real and imaginary part of the stft</p>
 </dd>
-<dt><strong>fcrop, tcrop</strong><span class="classifier">list of 2 scalars [min, max], optional, default is None</span></dt><dd><p>fcrop corresponds to the min and max boundary frequency values
-tcrop corresponds to the min and max boundary time values</p>
+<dt><strong>flims, tlims</strong><span class="classifier">list of 2 scalars [min, max], optional, default is None</span></dt><dd><p>flims corresponds to the min and max boundary frequency values
+tlims corresponds to the min and max boundary time values</p>
 </dd>
 <dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages into the consol or terminal if verbose is True</p>
 </dd>
@@ -305,7 +305,7 @@ upper-right corners.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>This function take care of the energy conservation which is crucial 
+<p>This function takes care of the energy conservation which is crucial 
 when working in with sound pressure level (dB SPL)</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../data/guyana_tropical_forest.wav&quot;</span><span class="p">)</span>
@@ -332,7 +332,7 @@ when working in with sound pressure level (dB SPL)</p>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>     
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>     
 </pre></div>
 </div>
 <p>Compute mean power spectrogram</p>

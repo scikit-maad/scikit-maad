@@ -173,14 +173,16 @@
 <dt id="features.alpha_indices.spectral_activity">
 <code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">spectral_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx_dB</span></em>, <em class="sig-param"><span class="n">dB_threshold</span><span class="o">=</span><span class="default_value">6</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#spectral_activity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.spectral_activity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the acoustic activity on a spectrogram.</p>
-<dl class="simple">
-<dt>The function computes for each frequency bin:</dt><dd><ul class="simple">
+<p>Acoustic activity corresponds to the portion of the spectrogram above a 
+threshold frequency per frequency along time axis <a href="#id2"><span class="problematic" id="id1">[1]_</span></a>
+The function computes for each frequency bin:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>ACTfract : proportion (fraction) of points above the threshold</p></li>
 <li><p>ACTcount : number of points above the threshold</p></li>
 <li><p>ACTmean : mean value (in dB) of the portion of the signal above the threhold</p></li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">

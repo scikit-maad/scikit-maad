@@ -169,60 +169,6 @@
             
   <div class="section" id="features-alpha-indices-numberofpeaks">
 <h1>features.alpha_indices.numberOfPeaks<a class="headerlink" href="#features-alpha-indices-numberofpeaks" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.alpha_indices.numberOfPeaks">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">numberOfPeaks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'dB'</span></em>, <em class="sig-param"><span class="n">min_peak_val</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_freq_dist</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">slopes</span><span class="o">=</span><span class="default_value">(1, 1)</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#numberOfPeaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.numberOfPeaks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Count the number of frequency peaks on a mean spectrum.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>X</strong><span class="classifier">ndarray of floats (1d) or (2d)</span></dt><dd><p>Amplitude spectrum (1d) or spectrogram (2d). If spectrogram, the mean
-spectrum will be computed before finding peaks</p>
-</dd>
-<dt><strong>fn</strong><span class="classifier">1d ndarray of floats</span></dt><dd><p>frequency vector</p>
-</dd>
-<dt><strong>mode</strong><span class="classifier">string {dB, linear}, optional, default is dB</span></dt><dd><p>select if the amplitude spectrum is converted into dB</p>
-</dd>
-<dt><strong>min_peak_val</strong><span class="classifier">scalar, optional, default is None</span></dt><dd><p>amplitude threshold parameter. Only peaks above this threshold will be 
-considered.</p>
-</dd>
-<dt><strong>min_freq_dist: scalar, optional, default is 200</strong></dt><dd><p>frequency threshold parameter (in Hz). 
-If the frequency difference of two successive peaks is less than this threshold, 
-then the peak of highest amplitude will be kept only.</p>
-</dd>
-<dt><strong>slopes</strong><span class="classifier">tupple of two values, optional, default is (1,1)</span></dt><dd><p>slope parameter, tupple of float of length 2 corresponding to left and 
-right slopes, one or both could be set to None.
-Refers to the amplitude slopes of the peak. 
-The first value is the left slope and the second value is the right slope. 
-Only peaks with higher slopes than threshold values will be kept.</p>
-</dd>
-<dt><strong>display: boolean, optional, default is False</strong></dt><dd><p>if True, display the mean spectrum with the detected peaks</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>NBPeaks</strong><span class="classifier">integer</span></dt><dd><p>Number of detected peaks on the mean spectrum</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>Gasc, A. &amp; al (2013). Biodiversity sampling using a global acoustic 
-approach: contrasting sites with microendemics in New Caledonia. 
-PloS one, 8(5), e65311.</p>
-<p>Inspired by the function <cite>fpeaks</cite> from the R package Seewave.
-Sueur, J., Aubin, T., &amp; Simonis, C. (2008). Seewave: A free modular tool for sound 
-analysis and synthesis. Bioacoustics, 18, 213–226.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">numberOfPeaks</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">slopes</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">min_freq_dist</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-<span class="go">14</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 

@@ -1,6 +1,6 @@
-﻿maad.spl.wav2Leq
+﻿maad.spl.wav2leq
 ================
 
 .. currentmodule:: maad.spl
 
-.. autofunction:: wav2Leq
+.. autofunction:: wav2leq

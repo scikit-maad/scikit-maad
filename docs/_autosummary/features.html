@@ -212,64 +212,64 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.audio_median.html#features.audio_median" title="features.audio_median"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_median</span></code></a>(s[, mode, Nt])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.temporal_median.html#features.temporal_median" title="features.temporal_median"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_median</span></code></a>(s[, mode, Nt])</p></td>
 <td><p>Computes the median of the envelope of an audio signal.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.audio_entropy.html#features.audio_entropy" title="features.audio_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_entropy</span></code></a>(s[, compatibility, mode, Nt])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.temporal_entropy.html#features.temporal_entropy" title="features.temporal_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_entropy</span></code></a>(s[, compatibility, mode, Nt])</p></td>
 <td><p>Computes the entropy of the envelope of an audio signal.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acousticRichnessIndex.html#features.acousticRichnessIndex" title="features.acousticRichnessIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticRichnessIndex</span></code></a>(Ht_array, M_array)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acoustic_richness_index.html#features.acoustic_richness_index" title="features.acoustic_richness_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_richness_index</span></code></a>(Ht_array, M_array)</p></td>
 <td><p>Compute the acoustic richness index of an audio file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.audio_activity.html#features.audio_activity" title="features.audio_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_activity</span></code></a>(s[, dB_threshold, mode, Nt])</p></td>
-<td><p>Compute the acoustic activity index from an audio signal.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.temporal_activity.html#features.temporal_activity" title="features.temporal_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_activity</span></code></a>(s[, dB_threshold, mode, Nt])</p></td>
+<td><p>Compute the acoustic activity index in temporal domain.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.audio_events.html#features.audio_events" title="features.audio_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_events</span></code></a>(s, fs[, dB_threshold, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.temporal_events.html#features.temporal_events" title="features.temporal_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_events</span></code></a>(s, fs[, dB_threshold, …])</p></td>
 <td><p>Compute the acoustic event index from an audio signal.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.acousticComplexityIndex.html#features.acousticComplexityIndex" title="features.acousticComplexityIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticComplexityIndex</span></code></a>(Sxx)</p></td>
-<td><p>Compute the Acoustic Complexity Index (ACI) from a spectrogram <a class="reference internal" href="generated/features.acousticComplexityIndex.html#r7177506f804e-1" id="id1"><span>[R7177506f804e-1]</span></a>.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.acoustic_complexity_index.html#features.acoustic_complexity_index" title="features.acoustic_complexity_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_complexity_index</span></code></a>(Sxx)</p></td>
+<td><p>Compute the Acoustic Complexity Index (ACI) from a spectrogram <a class="reference internal" href="generated/features.acoustic_complexity_index.html#rded82d3af942-1" id="id1"><span>[Rded82d3af942-1]</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/features.frequency_entropy.html#features.frequency_entropy" title="features.frequency_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_entropy</span></code></a>(X[, compatibility])</p></td>
 <td><p>Computes the spectral entropy of a power spectral density (1d) or power spectrogram density (2d).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.numberOfPeaks.html#features.numberOfPeaks" title="features.numberOfPeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numberOfPeaks</span></code></a>(X, fn[, mode, min_peak_val, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.number_of_peaks.html#features.number_of_peaks" title="features.number_of_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_peaks</span></code></a>(X, fn[, mode, min_peak_val, …])</p></td>
 <td><p>Count the number of frequency peaks on a mean spectrum.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_entropy.html#features.spectral_entropy" title="features.spectral_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_entropy</span></code></a>(Sxx, fn[, flim, display])</p></td>
-<td><p>Spectral entropy : EAS, ECU, ECV, EPS,</p></td>
+<td><p>Compute different entropies based on the average spectrum, its variance,  and its maxima <a href="#id8"><span class="problematic" id="id2">[1]_</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/features.spectral_activity.html#features.spectral_activity" title="features.spectral_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_activity</span></code></a>(Sxx_dB[, dB_threshold])</p></td>
 <td><p>Compute the acoustic activity on a spectrogram.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_events.html#features.spectral_events" title="features.spectral_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_events</span></code></a>(Sxx_dB, dt[, dB_threshold, …])</p></td>
-<td><p>Compute the spectral acoustic events from a spectrogram.</p></td>
+<td><p>Compute acoustic events from a spectrogram <a class="reference internal" href="generated/features.spectral_events.html#r788f6d5a1f73-1" id="id3"><span>[R788f6d5a1f73-1]</span></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/features.spectral_cover.html#features.spectral_cover" title="features.spectral_cover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_cover</span></code></a>(Sxx, fn[, dB_threshold, …])</p></td>
-<td><p>Compute the spectral activity cover index.</p></td>
+<td><p>Compute the proportion (cover) of the spectrogram above a threshold for  three bandwidths : low frequency band (LF), medium frequency band (MF) and  high frequency band (HF).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.soundscapeIndex.html#features.soundscapeIndex" title="features.soundscapeIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soundscapeIndex</span></code></a>(Sxx_power, fn[, flim_bioPh, …])</p></td>
-<td><p>Compute the Normalized Difference Soundscape Index from a power spectrogram <a class="reference internal" href="generated/features.soundscapeIndex.html#rd6d7377bd9db-1" id="id2"><span>[Rd6d7377bd9db-1]</span></a>.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.soundscape_index.html#features.soundscape_index" title="features.soundscape_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soundscape_index</span></code></a>(Sxx_power, fn[, …])</p></td>
+<td><p>Compute the Normalized Difference Soundscape Index from a power spectrogram <a class="reference internal" href="generated/features.soundscape_index.html#r627cc875dcb3-1" id="id4"><span>[R627cc875dcb3-1]</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.bioacousticsIndex.html#features.bioacousticsIndex" title="features.bioacousticsIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bioacousticsIndex</span></code></a>(Sxx, fn[, flim, R_compatible])</p></td>
-<td><p>Compute the Bioacoustics Index from a spectrogram <a class="reference internal" href="generated/features.bioacousticsIndex.html#r68e9ff56996f-1" id="id3"><span>[R68e9ff56996f-1]</span></a>.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.bioacoustics_index.html#features.bioacoustics_index" title="features.bioacoustics_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bioacoustics_index</span></code></a>(Sxx, fn[, flim, R_compatible])</p></td>
+<td><p>Compute the Bioacoustics Index from a spectrogram <a class="reference internal" href="generated/features.bioacoustics_index.html#r77f09c1ef53e-1" id="id5"><span>[R77f09c1ef53e-1]</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acousticDiversityIndex.html#features.acousticDiversityIndex" title="features.acousticDiversityIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticDiversityIndex</span></code></a>(Sxx, fn[, fmin, …])</p></td>
-<td><p>Compute the Acoustic Diversity Index (ADI) from a spectrogram <a class="reference internal" href="generated/features.acousticDiversityIndex.html#r95c40ed17853-1" id="id4"><span>[R95c40ed17853-1]</span></a>.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acoustic_diversity_index.html#features.acoustic_diversity_index" title="features.acoustic_diversity_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_diversity_index</span></code></a>(Sxx, fn[, fmin, …])</p></td>
+<td><p>Compute the Acoustic Diversity Index (ADI) from a spectrogram <a class="reference internal" href="generated/features.acoustic_diversity_index.html#r0b5871a5ed69-1" id="id6"><span>[R0b5871a5ed69-1]</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.acousticEvenessIndex.html#features.acousticEvenessIndex" title="features.acousticEvenessIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticEvenessIndex</span></code></a>(Sxx, fn[, fmin, fmax, …])</p></td>
-<td><p>Compute the Acoustic Eveness Index (AEI) from a spectrogram <a class="reference internal" href="generated/features.acousticEvenessIndex.html#r68d0cb90a915-1" id="id5"><span>[R68d0cb90a915-1]</span></a>.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.acoustic_eveness_index.html#features.acoustic_eveness_index" title="features.acoustic_eveness_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_eveness_index</span></code></a>(Sxx, fn[, fmin, …])</p></td>
+<td><p>Compute the Acoustic Eveness Index (AEI) from a spectrogram <a class="reference internal" href="generated/features.acoustic_eveness_index.html#r644361236068-1" id="id7"><span>[R644361236068-1]</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/features.roughness.html#features.roughness" title="features.roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roughness</span></code></a>(x[, norm, axis])</p></td>
 <td><p>Computes the roughness (depends on the number of peaks and their amplitude) of a vector or matrix x (i.e.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.audio_LEQ.html#features.audio_LEQ" title="features.audio_LEQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_LEQ</span></code></a>(s, fs, gain[, Vadc, sensitivity, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.temporal_leq.html#features.temporal_leq" title="features.temporal_leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_leq</span></code></a>(s, fs, gain[, Vadc, …])</p></td>
 <td><p>Computes the Equivalent Continuous Sound level (Leq) of an audio signal  in the time domain.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_LEQ.html#features.spectral_LEQ" title="features.spectral_LEQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_LEQ</span></code></a>(X, gain[, Vadc, sensitivity, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_LEQ.html#features.spectral_leq" title="features.spectral_leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_leq</span></code></a>(X, gain[, Vadc, sensitivity, …])</p></td>
 <td><p>Computes the Equivalent Continuous Sound level (Leq) from a power spectrum  (1d) or power spectrogram (2d).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.surfaceRoughness.html#features.surfaceRoughness" title="features.surfaceRoughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surfaceRoughness</span></code></a>(x[, norm])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.surface_roughness.html#features.surface_roughness" title="features.surface_roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surface_roughness</span></code></a>(x[, norm])</p></td>
 <td><p>Compute the surface roughness index of a signal (1D) or a spectrogram (2D).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/features.tfsd.html#features.tfsd" title="features.tfsd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tfsd</span></code></a>(Sxx, fn, tn[, flim, mode, display])</p></td>
@@ -278,16 +278,16 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/features.more_entropy.html#features.more_entropy" title="features.more_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">more_entropy</span></code></a>(x[, order, axis])</p></td>
 <td><p>Compute the entropy of an audio signal using multiple methods.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acousticGradientIndex.html#features.acousticGradientIndex" title="features.acousticGradientIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acousticGradientIndex</span></code></a>(Sxx, dt[, order, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acoustic_gradient_index.html#features.acoustic_gradient_index" title="features.acoustic_gradient_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_gradient_index</span></code></a>(Sxx, dt[, order, …])</p></td>
 <td><p>Compute the Acoustic Gradient Index (AGI) from a raw spectrogram.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.frequency_raoQ.html#features.frequency_raoQ" title="features.frequency_raoQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_raoQ</span></code></a>(S_power, fn[, bin_step])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.frequency_raoQ.html#features.frequency_raoq" title="features.frequency_raoq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_raoq</span></code></a>(S_power, fn[, bin_step])</p></td>
 <td><p>Compute Rao’s quadratic entropy on a power spectrum (1d).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.regionOfInterestIndex.html#features.regionOfInterestIndex" title="features.regionOfInterestIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regionOfInterestIndex</span></code></a>(Sxx_dB_noNoise, tn, fn)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.region_of_interest_index.html#features.region_of_interest_index" title="features.region_of_interest_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">region_of_interest_index</span></code></a>(Sxx_dB_noNoise, tn, fn)</p></td>
 <td><p>Compute an acoustic activity index based on the regions of interested detected on a spectrogram.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/features.all_audio_alpha_indices.html#features.all_audio_alpha_indices" title="features.all_audio_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_audio_alpha_indices</span></code></a>(s, fs[, verbose, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.all_temporal_alpha_indices.html#features.all_temporal_alpha_indices" title="features.all_temporal_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_temporal_alpha_indices</span></code></a>(s, fs[, verbose, …])</p></td>
 <td><p>Compute 16 temporal domain acoustic indices.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/features.all_spectral_alpha_indices.html#features.all_spectral_alpha_indices" title="features.all_spectral_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_spectral_alpha_indices</span></code></a>(Sxx_power, tn, fn)</p></td>
@@ -304,7 +304,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.audio_moments.html#features.audio_moments" title="features.audio_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_moments</span></code></a>(s)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.temporal_moments.html#features.temporal_moments" title="features.temporal_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_moments</span></code></a>(s)</p></td>
 <td><p>Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/features.zero_crossing_rate.html#features.zero_crossing_rate" title="features.zero_crossing_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_crossing_rate</span></code></a>(s, fs)</p></td>

@@ -1,4 +1,4 @@
-sound.trim
+﻿sound.trim
 ==========
 
 .. automodule:: sound.trim
@@ -8,14 +8,6 @@ sound.trim
    
 
    
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:
-      :nosignatures:
-   
-      wave2frames
    
    
 

@@ -1,4 +1,4 @@
-sound.metrics
+﻿sound.metrics
 =============
 
 .. automodule:: sound.metrics
@@ -15,9 +15,9 @@ sound.metrics
       :toctree:
       :nosignatures:
    
-      audio_SNR
       sharpness
-      spectral_SNR
+      spectral_snr
+      temporal_snr
    
    
 

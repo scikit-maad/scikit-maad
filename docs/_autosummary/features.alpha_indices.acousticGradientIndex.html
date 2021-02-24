@@ -169,60 +169,6 @@
             
   <div class="section" id="features-alpha-indices-acousticgradientindex">
 <h1>features.alpha_indices.acousticGradientIndex<a class="headerlink" href="#features-alpha-indices-acousticgradientindex" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.alpha_indices.acousticGradientIndex">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">acousticGradientIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">'per_bin'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#acousticGradientIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.acousticGradientIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Acoustic Gradient Index (AGI) from a raw spectrogram.</p>
-<p>This index must be computed on a raw spectrogram (background noise must remain).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>Sxx</strong><span class="classifier">ndarray of floats</span></dt><dd><p>2d : Spectrogram</p>
-</dd>
-<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>Time resolution in seconds.</p>
-</dd>
-<dt><strong>norm</strong><span class="classifier">string, optional, default is ‘per_bin’</span></dt><dd><p>Determine if the AGI is normalized by the global meaian value 
-(‘global’ mode) or by the median value per frequency bin 
-(‘per_bin’)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>AGI_xx</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Acoustic Gradient Index of the spectrogram</p>
-</dd>
-<dt><strong>AGI_per_bin</strong><span class="classifier">1d ndarray of scalars</span></dt><dd><p>AGI value for each frequency bin
-sum(AGI_xx,axis=1)</p>
-</dd>
-<dt><strong>AGI_sum</strong><span class="classifier">scalar</span></dt><dd><p>Sum of AGI value per frequency bin (Common definition)
-sum(AGI_per_bin)</p>
-</dd>
-<dt>AGI_mean ; scalar</dt><dd><p>average AGI value per frequency bin (independant of the number of 
-frequency bin)
-mean(AGI_per_bin)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>During the day</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">AGI_mean</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">acousticGradientIndex</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">AGI_mean</span>
-<span class="go">5.026112548525072</span>
-</pre></div>
-</div>
-<p>During the night</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_night.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">AGI_mean</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">acousticGradientIndex</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">AGI_mean</span>
-<span class="go">1.45631461307782  </span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 

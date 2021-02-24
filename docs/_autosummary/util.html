@@ -189,31 +189,40 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/util.save_figlist.html#util.save_figlist" title="util.save_figlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_figlist</span></code></a>(fname, figlist)</p></td>
 <td><p>Save a list of figures or spectrograms to disk.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot1D.html#util.plot1D" title="util.plot1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot1D</span></code></a>(x, y[, ax])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot1D.html#util.plot1d" title="util.plot1d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot1d</span></code></a>(x, y[, ax])</p></td>
 <td><p>Plot the waveform or spectrum of an audio signal.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot2D.html#util.plot2D" title="util.plot2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot2D</span></code></a>(im[, ax])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot_wave.html#util.plot_wave" title="util.plot_wave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_wave</span></code></a>(s, fs[, tlims, ax])</p></td>
+<td><p>Plot audio waveform.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_spectrum.html#util.plot_spectrum" title="util.plot_spectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_spectrum</span></code></a>(pxx, f_idx[, ax, flims, …])</p></td>
+<td><p>Plot power spectral density estimate (PSD).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot2D.html#util.plot2d" title="util.plot2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot2d</span></code></a>(im[, ax, colorbar])</p></td>
 <td><p>Display the spectrogram of an audio signal.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.overlay_rois.html#util.overlay_rois" title="util.overlay_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_rois</span></code></a>(im_ref, rois[, savefig])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_spectrogram.html#util.plot_spectrogram" title="util.plot_spectrogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_spectrogram</span></code></a>(Sxx, extent[, db_range, …])</p></td>
+<td><p>Plot spectrogram represenation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.overlay_rois.html#util.overlay_rois" title="util.overlay_rois"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_rois</span></code></a>(im_ref, rois[, savefig])</p></td>
 <td><p>Display bounding boxes with time-frequency regions of interest over a spectrogram.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.overlay_centroid.html#util.overlay_centroid" title="util.overlay_centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></a>(im_ref, centroid[, savefig])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.overlay_centroid.html#util.overlay_centroid" title="util.overlay_centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_centroid</span></code></a>(im_ref, centroid[, savefig])</p></td>
 <td><p>Overlay centroids on the original spectrogram</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_features_map.html#util.plot_features_map" title="util.plot_features_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features_map</span></code></a>(df[, norm, mode])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot_features_map.html#util.plot_features_map" title="util.plot_features_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features_map</span></code></a>(df[, norm, mode])</p></td>
 <td><p>Plot features values on a heatmap.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot_features.html#util.plot_features" title="util.plot_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features</span></code></a>(df[, ax, norm, mode])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_features.html#util.plot_features" title="util.plot_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_features</span></code></a>(df[, ax, norm, mode])</p></td>
 <td><p>Plot the variation of features values (ie.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_correlation_map.html#util.plot_correlation_map" title="util.plot_correlation_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlation_map</span></code></a>(df[, R_threshold, method])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot_correlation_map.html#util.plot_correlation_map" title="util.plot_correlation_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlation_map</span></code></a>(df[, R_threshold, method])</p></td>
 <td><p>Plot the correlation map between indices in the DataFrame obtained with <code class="docutils literal notranslate"><span class="pre">maad</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.plot_shape.html#util.plot_shape" title="util.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a>(shape, params[, row, display_values])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.plot_shape.html#util.plot_shape" title="util.plot_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_shape</span></code></a>(shape, params[, row, display_values])</p></td>
 <td><p>Plot shape features in a bidimensional plot.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.false_Color_Spectro.html#util.false_Color_Spectro" title="util.false_Color_Spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">false_Color_Spectro</span></code></a>(df[, indices, plim, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/util.false_Color_Spectro.html#util.false_Color_Spectro" title="util.false_Color_Spectro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">false_Color_Spectro</span></code></a>(df[, indices, plim, …])</p></td>
 <td><p>Create False Color Spectrogram from indices obtained by MAAD.</p></td>
 </tr>
 </tbody>
@@ -262,7 +271,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/util.read_audacity_annot.html#util.read_audacity_annot" title="util.read_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_audacity_annot</span></code></a>(audacity_filename)</p></td>
 <td><p>Read audacity annotations file (or labeling file) and return a Pandas Dataframe with the bounding box and the label of each region of interest (ROI).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.write_audacity_annot.html#util.write_audacity_annot" title="util.write_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_audacity_annot</span></code></a>(fname, onset, offset)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.write_audacity_annot.html#util.write_audacity_annot" title="util.write_audacity_annot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_audacity_annot</span></code></a>(fname, df_rois)</p></td>
 <td><p>Write audio segmentation to file (Audacity format).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/util.date_parser.html#util.date_parser" title="util.date_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_parser</span></code></a>(datadir[, dateformat, …])</p></td>
@@ -282,8 +291,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/util.index_bw.html#util.index_bw" title="util.index_bw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_bw</span></code></a>(fn, bw)</p></td>
 <td><p>Select all the index coresponding to a selected frequency band.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/util.intoBins.html#util.intoBins" title="util.intoBins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intoBins</span></code></a>(x, an, bin_step[, axis, bin_min, …])</p></td>
-<td><p>Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/util.into_bins.html#util.into_bins" title="util.into_bins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">into_bins</span></code></a>(x, an, bin_step[, axis, bin_min, …])</p></td>
+<td><p>Divide a vector (1D) or a matrix (2D) into multiple bins according to a  bin_step with respect of the energy</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/util.shift_bit_length.html#util.shift_bit_length" title="util.shift_bit_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shift_bit_length</span></code></a>(x)</p></td>
 <td><p>Find the closest power of 2 that is superior or equal to the number x.</p></td>

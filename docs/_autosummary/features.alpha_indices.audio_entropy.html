@@ -169,64 +169,6 @@
             
   <div class="section" id="features-alpha-indices-audio-entropy">
 <h1>features.alpha_indices.audio_entropy<a class="headerlink" href="#features-alpha-indices-audio-entropy" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.alpha_indices.audio_entropy">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">audio_entropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">compatibility</span><span class="o">=</span><span class="default_value">'QUT'</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'fast'</span></em>, <em class="sig-param"><span class="n">Nt</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#audio_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.audio_entropy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the entropy of the envelope of an audio signal.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>s</strong><span class="classifier">1D array</span></dt><dd><p>Audio to process (wav)</p>
-</dd>
-<dt><strong>compatibility</strong><span class="classifier">string {‘QUT’, ‘seewave’}, default is ‘QUT’</span></dt><dd><dl class="simple">
-<dt>Select the way to compute the temporal entropy.</dt><dd><ul class="simple">
-<li><p>QUT : entropy of the squared envelope</p></li>
-<li><p>seewave : entropy of the envelope</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt><strong>mode</strong><span class="classifier">str, optional, default is “fast”</span></dt><dd><dl class="simple">
-<dt>Select the mode to compute the envelope of the audio waveform.</dt><dd><ul class="simple">
-<li><p>“fast” : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.</p></li>
-<li><p>“Hilbert” : estimation of the envelope from the Hilbert transform. The method is slow</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt><strong>Nt</strong><span class="classifier">integer, optional, default is 512</span></dt><dd><p>Size of each frame. The largest, the highest is the approximation.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>Ht: float</dt><dd><p>Temporal entropy of the audio</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The entropy of an audio signal is a measure of energy dispersion. In the temporal domain, 
-values below 0.7 indicate a brief concentration of energy (few miliseconds), while 
-values close 1 indicate low concentration of energy, no peaks, smooth and constant 
-background noise.</p>
-<p class="rubric">References</p>
-<p>1. Seewave : <a class="reference external" href="http://rug.mnhn.fr/seewave/">http://rug.mnhn.fr/seewave/</a>
-Sueur, J., Aubin, T., &amp; Simonis, C. (2008). Seewave, a free modular tool 
-for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.</p>
-<p>2. QUT : <a class="reference external" href="https://github.com/QutEcoacoustics/audio-analysis/">https://github.com/QutEcoacoustics/audio-analysis/</a>
-Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, &amp; Paul Roe. 
-(2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). 
-Zenodo. <a class="reference external" href="http://doi.org/10.5281/zenodo.1188744">http://doi.org/10.5281/zenodo.1188744</a></p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Ht</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">audio_entropy</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Ht</span><span class="p">)</span>
-<span class="go">0.7518917279549968</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 

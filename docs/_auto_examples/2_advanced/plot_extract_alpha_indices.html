@@ -106,7 +106,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#basic-examples">Basic examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#advanced-examples">Advanced examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="plot_nmf_and_false_color_spectrogram.html">Signal decomposition and false-color spectrograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="using_shape_features.html">Using wavelets to characterize the time-frequency shape of sounds</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plot_remove_background.html">Remove background noise from audio with signal processing tools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plot_unsupervised_sound_classification.html">Use unsupervised learning to classify sounds</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plot_compare_auto_and_manual_rois_selection.html">Find Regions of interest (ROIs) in a spectrogram</a></li>
@@ -200,14 +199,14 @@ example, we will see how to compute these indices and show basics post-processin
                        <span class="n">plot_features_map</span><span class="p">,</span> <span class="n">plot_features</span><span class="p">,</span> <span class="n">false_Color_Spectro</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SPECTRAL_FEATURES</span></a><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SPEC_MEAN&#39;</span><span class="p">,</span><span class="s1">&#39;SPEC_VAR&#39;</span><span class="p">,</span><span class="s1">&#39;SPEC_SKEW&#39;</span><span class="p">,</span><span class="s1">&#39;SPEC_KURT&#39;</span><span class="p">,</span><span class="s1">&#39;NBPEAKS&#39;</span><span class="p">,</span><span class="s1">&#39;LEQf&#39;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SPECTRAL_FEATURES</span></a><span class="o">=</span><span class="p">[</span><span class="s1">&#39;MEANf&#39;</span><span class="p">,</span><span class="s1">&#39;VARf&#39;</span><span class="p">,</span><span class="s1">&#39;SKEWf&#39;</span><span class="p">,</span><span class="s1">&#39;KURTf&#39;</span><span class="p">,</span><span class="s1">&#39;NBPEAKS&#39;</span><span class="p">,</span><span class="s1">&#39;LEQf&#39;</span><span class="p">,</span>
 <span class="s1">&#39;ENRf&#39;</span><span class="p">,</span><span class="s1">&#39;BGNf&#39;</span><span class="p">,</span><span class="s1">&#39;SNRf&#39;</span><span class="p">,</span><span class="s1">&#39;Hf&#39;</span><span class="p">,</span> <span class="s1">&#39;EAS&#39;</span><span class="p">,</span><span class="s1">&#39;ECU&#39;</span><span class="p">,</span><span class="s1">&#39;ECV&#39;</span><span class="p">,</span><span class="s1">&#39;EPS&#39;</span><span class="p">,</span><span class="s1">&#39;EPS_KURT&#39;</span><span class="p">,</span><span class="s1">&#39;EPS_SKEW&#39;</span><span class="p">,</span><span class="s1">&#39;ACI&#39;</span><span class="p">,</span>
 <span class="s1">&#39;NDSI&#39;</span><span class="p">,</span><span class="s1">&#39;rBA&#39;</span><span class="p">,</span><span class="s1">&#39;AnthroEnergy&#39;</span><span class="p">,</span><span class="s1">&#39;BioEnergy&#39;</span><span class="p">,</span><span class="s1">&#39;BI&#39;</span><span class="p">,</span><span class="s1">&#39;ROU&#39;</span><span class="p">,</span><span class="s1">&#39;ADI&#39;</span><span class="p">,</span><span class="s1">&#39;AEI&#39;</span><span class="p">,</span><span class="s1">&#39;LFC&#39;</span><span class="p">,</span><span class="s1">&#39;MFC&#39;</span><span class="p">,</span><span class="s1">&#39;HFC&#39;</span><span class="p">,</span>
 <span class="s1">&#39;ACTspFract&#39;</span><span class="p">,</span><span class="s1">&#39;ACTspCount&#39;</span><span class="p">,</span><span class="s1">&#39;ACTspMean&#39;</span><span class="p">,</span> <span class="s1">&#39;EVNspFract&#39;</span><span class="p">,</span><span class="s1">&#39;EVNspMean&#39;</span><span class="p">,</span><span class="s1">&#39;EVNspCount&#39;</span><span class="p">,</span>
 <span class="s1">&#39;TFSD&#39;</span><span class="p">,</span><span class="s1">&#39;H_Havrda&#39;</span><span class="p">,</span><span class="s1">&#39;H_Renyi&#39;</span><span class="p">,</span><span class="s1">&#39;H_pairedShannon&#39;</span><span class="p">,</span> <span class="s1">&#39;H_gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;H_GiniSimpson&#39;</span><span class="p">,</span><span class="s1">&#39;RAOQ&#39;</span><span class="p">,</span>
 <span class="s1">&#39;AGI&#39;</span><span class="p">,</span><span class="s1">&#39;ROItotal&#39;</span><span class="p">,</span><span class="s1">&#39;ROIcover&#39;</span><span class="p">]</span>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">AUDIO_FEATURES</span></a><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ZCR&#39;</span><span class="p">,</span><span class="s1">&#39;AUDIO_MEAN&#39;</span><span class="p">,</span> <span class="s1">&#39;AUDIO_VAR&#39;</span><span class="p">,</span> <span class="s1">&#39;AUDIO_SKEW&#39;</span><span class="p">,</span> <span class="s1">&#39;AUDIO_KURT&#39;</span><span class="p">,</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TEMPORAL_FEATURES</span></a><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ZCR&#39;</span><span class="p">,</span><span class="s1">&#39;MEANt&#39;</span><span class="p">,</span> <span class="s1">&#39;VARt&#39;</span><span class="p">,</span> <span class="s1">&#39;SKEWt&#39;</span><span class="p">,</span> <span class="s1">&#39;KURTt&#39;</span><span class="p">,</span>
                <span class="s1">&#39;LEQt&#39;</span><span class="p">,</span><span class="s1">&#39;BGNt&#39;</span><span class="p">,</span> <span class="s1">&#39;SNRt&#39;</span><span class="p">,</span><span class="s1">&#39;MED&#39;</span><span class="p">,</span> <span class="s1">&#39;Ht&#39;</span><span class="p">,</span><span class="s1">&#39;ACTtFraction&#39;</span><span class="p">,</span> <span class="s1">&#39;ACTtCount&#39;</span><span class="p">,</span>
                <span class="s1">&#39;ACTtMean&#39;</span><span class="p">,</span><span class="s1">&#39;EVNtFraction&#39;</span><span class="p">,</span> <span class="s1">&#39;EVNtMean&#39;</span><span class="p">,</span> <span class="s1">&#39;EVNtCount&#39;</span><span class="p">]</span>
 </pre></div>
@@ -360,7 +359,7 @@ S4A03895_20190522_234500.wav
 
     <span class="c1"># compute all the audio indices and store them into a DataFrame</span>
     <span class="c1"># dB_threshold and rejectDuration are used to select audio events.</span>
-    <span class="n">df_audio_ind</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">all_audio_alpha_indices</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span>
+    <span class="n">df_audio_ind</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">all_temporal_alpha_indices</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span>
                                           <span class="n">gain</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">G</span></a><span class="p">,</span> <span class="n">sensibility</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">S</span></a><span class="p">,</span>
                                           <span class="n">dB_threshold</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rejectDuration</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
                                           <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
@@ -718,7 +717,7 @@ set the threshold to 0.75 for instance.</p>
 </div>
 <img alt="plot extract alpha indices" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_extract_alpha_indices_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1168: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1246: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
@@ -726,7 +725,7 @@ set the threshold to 0.75 for instance.</p>
 a 24h cycle consists in plotting heatmaps of indices
 For a better view, we seperate spectral and audio indices.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_features_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SPECTRAL_FEATURES</span></a><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">)</span>
-<span class="n">plot_features_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">AUDIO_FEATURES</span></a><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">)</span>
+<span class="n">plot_features_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TEMPORAL_FEATURES</span></a><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">)</span>
 
 <span class="c1"># A more classical way to analyse variations of indices consists in plotting</span>
 <span class="c1"># graphs. We choose to normalize rescale their value between 0 to 1 in order to</span>
@@ -751,26 +750,26 @@ For a better view, we seperate spectral and audio indices.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:946: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:996: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
-/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1065: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:1130: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
 <p>Create false color spectrograms with 3 indices</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fcs</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">triplet</span></a> <span class="o">=</span> <span class="n">false_Color_Spectro</span><span class="p">(</span><span class="n">df_indices_per_bin</span><span class="p">,</span>
-                                   <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AUDIO_KURT_per_bin&#39;</span><span class="p">,</span>
-                                             <span class="s1">&#39;EVNspCount_per_bin&#39;</span><span class="p">,</span>
-                                             <span class="s1">&#39;AUDIO_MEAN_per_bin&#39;</span><span class="p">],</span>
+                                   <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;KURTt_per_bin&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;EVNspCount_per_bin&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;MEANt_per_bin&#39;</span><span class="p">],</span>
                                    <span class="n">reverseLUT</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;hours&#39;</span><span class="p">,</span>
                                    <span class="n">permut</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+                                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="False Color Spectro   [R:AUDIO_KURT; G:EVNspCount; B:AUDIO_MEAN]" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_extract_alpha_indices_005.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  26.453 seconds)</p>
+<img alt="False Color Spectro   [R:KURTt; G:EVNspCount; B:MEANt]" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_extract_alpha_indices_005.png" />
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  25.247 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-2-advanced-plot-extract-alpha-indices-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/302f98e0869af282971648b57a10f45b/plot_extract_alpha_indices.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_extract_alpha_indices.py</span></code></a></p>

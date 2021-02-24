@@ -202,6 +202,14 @@ or spectrogram (2d)</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">util</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;mean:</span><span class="si">%2.4f</span><span class="s1"> / var:</span><span class="si">%2.4f</span><span class="s1"> / skew:</span><span class="si">%2.4f</span><span class="s1"> / kurt:</span><span class="si">%2.4f</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span><span class="p">))</span> 
+<span class="go">mean:-0.0000 / var:0.0012 / skew:-0.0065 / kurt:24.7116    </span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

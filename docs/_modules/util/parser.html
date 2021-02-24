@@ -174,6 +174,7 @@
 <span class="c1">#</span>
 <span class="c1"># License: New BSD License</span>
 
+<span class="c1">#%%</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Load the modules</span>
 <span class="c1"># =============================================================================</span>
@@ -184,6 +185,68 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span> <span class="c1"># in order to be Windows/linux/MacOS compatible</span>
 
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Private functions</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_date_from_filename</span> <span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract date and time from the filename. Return a datetime object</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">    The filename must follow this format :</span>
+<span class="sd">    XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">    mm : minutes / ss : seconds</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    date : object datetime</span>
+<span class="sd">        This object contains the date of creation of the file extracted from</span>
+<span class="sd">        the filename postfix. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># date by default</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># test if it is possible to extract the recording date from the filename</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">19</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">yy</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">19</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">mm</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">dd</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">HH</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">MM</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">SS</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+
+    <span class="c1"># extract date and time from the filename</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">yy</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">mm</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">dd</span><span class="p">,</span> <span class="n">hour</span><span class="o">=</span><span class="n">HH</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="n">MM</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="n">SS</span><span class="p">,</span> 
+                    <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">date</span>
+
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Public functions</span>
+<span class="c1"># =============================================================================</span>
 <div class="viewcode-block" id="read_audacity_annot"><a class="viewcode-back" href="../../_autosummary/util.parser.read_audacity_annot.html#util.read_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">read_audacity_annot</span> <span class="p">(</span><span class="n">audacity_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read audacity annotations file (or labeling file) and return a Pandas Dataframe</span>
@@ -236,8 +299,9 @@
 
     <span class="k">return</span> <span class="n">tab_out</span></div>
 
-<span class="c1">#=============================================================================</span>
-<div class="viewcode-block" id="write_audacity_annot"><a class="viewcode-back" href="../../_autosummary/util.parser.write_audacity_annot.html#util.write_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">write_audacity_annot</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="c1">#%%</span>
+
+<div class="viewcode-block" id="write_audacity_annot"><a class="viewcode-back" href="../../_autosummary/util.parser.write_audacity_annot.html#util.write_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">write_audacity_annot</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Write audio segmentation to file (Audacity format).</span>
 <span class="sd">    </span>
@@ -245,77 +309,68 @@
 <span class="sd">    ----------</span>
 <span class="sd">    fname: str</span>
 <span class="sd">        filename to save the segmentation</span>
-<span class="sd">    onset: int, float array_like</span>
-<span class="sd">        output of a detection method (e.g. find_rois_1d)</span>
-<span class="sd">    offset: int, float array_like</span>
-<span class="sd">        output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">    df_rois: pandas dataframe</span>
+<span class="sd">        Dataframe containing the coordinates corresponding to sound signatures</span>
+<span class="sd">        In case of only temporal annotations : df_rois must contain at least</span>
+<span class="sd">        the columns &#39;mint_t&#39;, &#39;max_t&#39; </span>
+<span class="sd">        In case of bounding box (temporal eand frequency limits) :: df_rois </span>
+<span class="sd">        must contain at least the columns &#39;min_t&#39;, &#39;max_t&#39;, &#39;min_f&#39;, &#39;max_f&#39;</span>
 <span class="sd">            </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Returns a csv file</span>
+<span class="sd">    df_to_save</span>
+<span class="sd">        Dataframe that has been saved</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = maad.sound.spectrogram(s, fs)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db = maad.util.power2dB(Sxx_power) + 96</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power_noNoise= maad.sound.median_equalizer(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db_noNoise = maad.util.power2dB(Sxx_power_noNoise)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db_noNoise_smooth = maad.sound.smooth(Sxx_db_noNoise, std=0.5)</span>
+<span class="sd">    &gt;&gt;&gt; im_mask = maad.rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin =&#39;relative&#39;, </span>
+<span class="sd">                                        bin_std=8, bin_per=0.5)</span>
+<span class="sd">    &gt;&gt;&gt; im_rois, df_rois = maad.rois.select_rois(im_mask, min_roi=25, max_roi=None)</span>
+<span class="sd">    &gt;&gt;&gt; df_rois = maad.util.format_features(df_rois, tn, fn)</span>
+<span class="sd">    </span>
+<span class="sd">    Change path to save the file containing the labels position</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; df_to_save = maad.util.write_audacity_annot(&#39;save.txt&#39;, df_rois)</span>
+<span class="sd">    </span>
+<span class="sd">    Import the wav file then the label file in Audacity</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">onset</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;&lt; No detection found&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">df_rois</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;&gt; No detection found&#39;</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">onset</span><span class="p">))</span>
-        <span class="n">rois_tf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;t_begin&#39;</span><span class="p">:</span><span class="n">onset</span><span class="p">,</span> <span class="s1">&#39;t_end&#39;</span><span class="p">:</span><span class="n">offset</span><span class="p">,</span> <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span><span class="n">label</span><span class="p">})</span>
-        <span class="n">rois_tf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span> </div>
-
-<span class="c1">#=============================================================================</span>
-
-<span class="k">def</span> <span class="nf">_date_from_filename</span> <span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract date and time from the filename. Return a datetime object</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filename : string</span>
-<span class="sd">    The filename must follow this format :</span>
-<span class="sd">    XXXX_yyyymmdd_hhmmss.wav</span>
-<span class="sd">    with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
-<span class="sd">    mm : minutes / ss : seconds</span>
-<span class="sd">            </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    date : object datetime</span>
-<span class="sd">        This object contains the date of creation of the file extracted from</span>
-<span class="sd">        the filename postfix. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># date by default</span>
-    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-    <span class="c1"># test if it is possible to extract the recording date from the filename</span>
-    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">19</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
-        <span class="n">yy</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">19</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">date</span>
-    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
-        <span class="n">mm</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">date</span>
-    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
-        <span class="n">dd</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">date</span>
-    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
-        <span class="n">HH</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">date</span>
-    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
-        <span class="n">MM</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">date</span>
-    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
-        <span class="n">SS</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">date</span>
-
-    <span class="c1"># extract date and time from the filename</span>
-    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">yy</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">mm</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">dd</span><span class="p">,</span> <span class="n">hour</span><span class="o">=</span><span class="n">HH</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="n">MM</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="n">SS</span><span class="p">,</span> 
-                    <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># if there is no label, create a vector with incremental values</span>
+        <span class="k">if</span> <span class="s1">&#39;label&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_rois</span> <span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">df_rois</span><span class="p">))</span>
+        <span class="c1"># if no frequency coordinates, only temporal annotations</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;min_f&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_rois</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;max_f&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_rois</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;min_t&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">min_t</span><span class="p">,</span> 
+                                    <span class="s1">&#39;max_t&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">max_t</span><span class="p">,</span> 
+                                    <span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="n">label</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;min_f&#39;</span> <span class="ow">in</span> <span class="n">df_rois</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;max_f&#39;</span>  <span class="ow">in</span> <span class="n">df_rois</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">df_to_save_odd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">df_rois</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="s1">&#39;min_t&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">min_t</span><span class="p">,</span> 
+                                        <span class="s1">&#39;max_t&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">max_t</span><span class="p">,</span> 
+                                        <span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">label</span><span class="p">})</span>
+            <span class="n">df_to_save_even</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">df_rois</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                         <span class="s1">&#39;min_t&#39;</span><span class="p">:</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> 
+                                         <span class="s1">&#39;max_t&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">min_f</span><span class="p">,</span> 
+                                         <span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="n">df_rois</span><span class="o">.</span><span class="n">max_f</span><span class="p">})</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_to_save_odd</span><span class="p">,</span><span class="n">df_to_save_even</span><span class="p">])</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df_to_save</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df_to_save</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+        <span class="n">df_to_save</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span> 
     
-    <span class="k">return</span> <span class="n">date</span>
+    <span class="k">return</span> <span class="n">df_to_save</span></div>
+
+<span class="c1">#%%</span>
 
 <div class="viewcode-block" id="date_parser"><a class="viewcode-back" href="../../_autosummary/util.parser.date_parser.html#util.date_parser">[docs]</a><span class="k">def</span> <span class="nf">date_parser</span> <span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">dateformat</span> <span class="o">=</span><span class="s2">&quot;SM4&quot;</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span><span class="s1">&#39;.wav&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

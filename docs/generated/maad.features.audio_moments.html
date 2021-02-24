@@ -37,9 +37,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.features.zero_crossing_rate" href="maad.features.zero_crossing_rate.html" />
-    <link rel="prev" title="maad.features.all_spectral_alpha_indices" href="maad.features.all_spectral_alpha_indices.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,20 +92,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../features.html">Acoustic features</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../features.html#spectro-temporal-features">Spectro-temporal features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#alpha-acoustic-indices">Alpha acoustic indices</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../features.html#temporal-features">Temporal features</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.features.audio_moments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.features.zero_crossing_rate.html">maad.features.zero_crossing_rate</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../features.html#spectral-features">Spectral features</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
 </ul>
@@ -160,8 +148,6 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../features.html">Acoustic features</a> &raquo;</li>
-        
       <li>maad.features.audio_moments</li>
     
     
@@ -183,39 +169,6 @@
             
   <div class="section" id="maad-features-audio-moments">
 <h1>maad.features.audio_moments<a class="headerlink" href="#maad-features-audio-moments" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="maad.features.audio_moments">
-<code class="sig-prename descclassname">maad.features.</code><code class="sig-name descname">audio_moments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/temporal.html#audio_moments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.features.audio_moments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>s</strong><span class="classifier">1D array</span></dt><dd><p>Audio to process</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>mean</strong><span class="classifier">float</span></dt><dd><p>mean of the audio</p>
-</dd>
-<dt><strong>var</strong><span class="classifier">float</span></dt><dd><p>variance  of the audio</p>
-</dd>
-<dt><strong>skew</strong><span class="classifier">float</span></dt><dd><p>skewness of the audio</p>
-</dd>
-<dt><strong>kurt</strong><span class="classifier">float</span></dt><dd><p>kurtosis of the audio</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span><span class="p">,</span> <span class="n">sv</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">sk</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">audio_moments</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean: </span><span class="si">%2.2f</span><span class="s1"> / var: </span><span class="si">%2.5f</span><span class="s1"> / skewness: </span><span class="si">%2.4f</span><span class="s1"> / kurtosis: </span><span class="si">%2.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">sv</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">sk</span><span class="p">))</span>
-<span class="go">mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -223,15 +176,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="maad.features.zero_crossing_rate.html" class="btn btn-neutral float-right" title="maad.features.zero_crossing_rate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="maad.features.all_spectral_alpha_indices.html" class="btn btn-neutral float-left" title="maad.features.all_spectral_alpha_indices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

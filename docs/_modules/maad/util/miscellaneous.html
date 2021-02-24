@@ -180,7 +180,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Import external modules</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">mean</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
@@ -190,25 +190,27 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../../generated/maad.util.index_bw.html#features.alpha_indices.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../../generated/maad.util.index_bw.html#maad.util.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Select all the index coresponding to a selected frequency band.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fn :  1d ndarray of scalars</span>
 <span class="sd">        Vector of frequencies</span>
-<span class="sd">        </span>
+
 <span class="sd">    bw : single value or tupple of two values</span>
 <span class="sd">        if single value : frequency to select</span>
 <span class="sd">        if tupple of two values : min frequency and max frequency to select</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    index : 1d ndarray of scalars</span>
 <span class="sd">        Vector of booleans corresponding to the selected frequency(-ies)</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
@@ -223,7 +225,7 @@
 <span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB,**fig_kwargs)</span>
 <span class="sd">    &gt;&gt;&gt; Sxx_dB_crop = Sxx_dB[maad.util.index_bw(fn, bw)]</span>
 <span class="sd">    &gt;&gt;&gt; fn_crop = fn[maad.util.index_bw(fn, bw)]</span>
 <span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Sxx_dB.max(),</span>
@@ -234,30 +236,33 @@
 <span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; maad.util.plot2D(Sxx_dB_crop,**fig_kwargs)</span>
-<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_crop,**fig_kwargs)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># select the indices corresponding to the frequency bins range</span>
-    <span class="k">if</span> <span class="n">bw</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">bw</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">)))</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="o">&gt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span> <span class="o">*</span><span class="p">(</span><span class="n">fn</span><span class="o">&lt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span> <span class="p">:</span> 
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span> <span class="o">&gt;=</span> <span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span> <span class="o">*</span> \
+            <span class="p">(</span><span class="n">fn</span> <span class="o">&lt;=</span> <span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
         <span class="n">index</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">index</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="intoBins"><a class="viewcode-back" href="../../../generated/maad.util.intoBins.html#features.alpha_indices.intoBins">[docs]</a><span class="k">def</span> <span class="nf">intoBins</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bin_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+<div class="viewcode-block" id="into_bins"><a class="viewcode-back" href="../../../generated/maad.util.into_bins.html#maad.util.into_bins">[docs]</a><span class="k">def</span> <span class="nf">into_bins</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bin_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Divide a vector (1D) or a matrix (2D) into multiple bins according to a bin_step.</span>
-<span class="sd">    </span>
+<span class="sd">    Divide a vector (1D) or a matrix (2D) into multiple bins according to a </span>
+<span class="sd">    bin_step with respect of the energy</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like</span>
-<span class="sd">        1D or 2D array.</span>
+<span class="sd">        1D or 2D array to bin</span>
 <span class="sd">    an :1d ndarray of floats </span>
 <span class="sd">        Vector containing the positions of each value. </span>
 <span class="sd">        In case of 2D matrix, this vector corresponds to the horizontal (row)</span>
@@ -268,7 +273,6 @@
 <span class="sd">        Determine  along which axis the transformation is done.</span>
 <span class="sd">        In case of matrix :</span>
 <span class="sd">        axis = 0 =&gt; transformation is done on column</span>
-<span class="sd">        </span>
 <span class="sd">        axis = 1 =&gt; transformation is done on row </span>
 <span class="sd">    bin_min : scalar, optional, default is None</span>
 <span class="sd">        This minimum value corresponds to the start of the first bin. </span>
@@ -279,118 +283,150 @@
 <span class="sd">    display : boolean, optional, defualt is False</span>
 <span class="sd">        Display the result of the tranformation : an histogram</span>
 <span class="sd">        In case of matrix, the mean histogram is shown.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    xbins :  array-like</span>
 <span class="sd">        1D or 2D array which correspond to the data after being transformed into bins</span>
 <span class="sd">    bin : 1d ndarray of floats </span>
 <span class="sd">        Vector containing the positions of each bin</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; frequency = np.arange(0,20000,100)</span>
+<span class="sd">    &gt;&gt;&gt; delta = np.random.uniform(-10,10, size=(len(frequency),))</span>
+<span class="sd">    &gt;&gt;&gt; amplitude = 0.001 * frequency + 3 + delta</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;&#39;,</span>
+<span class="sd">                  &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                  &#39;ylabel&#39;:&#39;AU&#39;,</span>
+<span class="sd">                  &#39;linewidth&#39;: 0.5,</span>
+<span class="sd">                  &#39;legend&#39; : &#39;before binning&#39;</span>
+<span class="sd">                  }</span>
+<span class="sd">    &gt;&gt;&gt; ax,fig = maad.util.plot1d(frequency,amplitude,**fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; amplitude_bin,frequency_bin = maad.util.into_bins(amplitude,frequency,bin_step=1000) </span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;figtitle&#39;:&#39;&#39;,</span>
+<span class="sd">                  &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                  &#39;ylabel&#39;:&#39;AU&#39;,</span>
+<span class="sd">                  &#39;linewidth&#39;: 0.5,</span>
+<span class="sd">                  &#39;color&#39; :&#39;red&#39;,</span>
+<span class="sd">                  &#39;legend&#39; : &#39;after binning&#39;</span>
+<span class="sd">                  }</span>
+<span class="sd">    &gt;&gt;&gt; ax,fig = maad.util.plot1d(frequency_bin, amplitude_bin, ax, **fig_kwargs)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># force x to be an ndarray</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    
+
     <span class="c1"># Test if the bin_step is larger than the resolution of an</span>
     <span class="k">if</span> <span class="n">bin_step</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">an</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">an</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;WARNING: bin step must be larger or equal than the actual resolution of x&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s1">&#39;WARNING: bin step must be larger or equal than the actual resolution of x&#39;</span><span class="p">)</span>
 
     <span class="c1"># In case the limits of the bin are not set</span>
     <span class="k">if</span> <span class="n">bin_min</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">bin_min</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">bin_max</span> <span class="o">==</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">bin_max</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">bin_max</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    
+
     <span class="c1"># Creation of the bins</span>
-    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bin_min</span><span class="p">,</span><span class="n">bin_max</span><span class="o">+</span><span class="n">bin_step</span><span class="p">,</span><span class="n">bin_step</span><span class="p">)</span>
-    
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bin_min</span><span class="p">,</span> <span class="n">bin_max</span><span class="o">+</span><span class="n">bin_step</span><span class="p">,</span> <span class="n">bin_step</span><span class="p">)</span>
+
     <span class="c1"># select the indices corresponding to the frequency bins range</span>
     <span class="n">b0</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">xbin</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-        <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">an</span><span class="o">&gt;=</span><span class="n">b0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">an</span><span class="o">&lt;</span><span class="n">b</span><span class="p">)</span> 
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">an</span> <span class="o">&gt;=</span> <span class="n">b0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">an</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">indices</span><span class="p">]))</span>
-        <span class="k">if</span> <span class="n">axis</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">indices</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="n">axis</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="n">indices</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">xbin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
         <span class="n">b0</span> <span class="o">=</span> <span class="n">b</span>
-      
+
     <span class="n">xbin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xbin</span><span class="p">)</span> <span class="o">*</span> <span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="n">bins</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    
+
     <span class="c1"># Display</span>
     <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="c1"># if xbin is a vector</span>
-        <span class="k">if</span> <span class="n">xbin</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">an</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span><span class="n">xbin</span><span class="p">,</span> <span class="n">bin_step</span><span class="o">*</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">xbin</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">xbin</span><span class="p">,</span> <span class="n">bin_step</span><span class="o">*</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># if xbin is a matrix</span>
-            <span class="k">if</span> <span class="n">axis</span><span class="o">==</span><span class="mi">0</span> <span class="p">:</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">axis</span><span class="o">==</span><span class="mi">1</span> <span class="p">:</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">an</span><span class="p">,</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span><span class="n">mean</span><span class="p">(</span><span class="n">xbin</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bin_step</span><span class="o">*</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
-    
+            <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">mean</span><span class="p">(</span><span class="n">xbin</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bin_step</span> <span class="o">*</span>
+                    <span class="mf">0.75</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">xbin</span><span class="p">,</span> <span class="n">bins</span></div>
 
-<span class="c1">#%%    </span>
-<div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../../generated/maad.util.rle.html#features.alpha_indices.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../../generated/maad.util.rle.html#maad.util.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Run-Length encoding (RLE) of a vector.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Run-length encoding is a lossless data compression in which runs of data </span>
 <span class="sd">    (sequences in which the same data value occurs in many consecutive data elements) </span>
 <span class="sd">    are stored as a single data value and count. This is useful on data </span>
 <span class="sd">    that contains many repeated values, for example, simple graphic </span>
 <span class="sd">    images such as icons, line drawings, and animations. It is not useful with files that </span>
 <span class="sd">    don&#39;t have many runs as it could greatly increase the file size [1]_. </span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : 1D array</span>
 <span class="sd">        vector with numbers (ndarray or list)</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    lengths, values : 1D array</span>
 <span class="sd">        2 vectors that stores values (in values) and the number of times each</span>
 <span class="sd">        value is repeated (in lengths).</span>
-<span class="sd">                    </span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://en.wikipedia.org/wiki/Run-length_encoding</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5]</span>
-<span class="sd">    </span>
+<span class="sd">    RLE compression of the vector [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 5]</span>
+
 <span class="sd">    &gt;&gt;&gt; from maad.util import rle</span>
-<span class="sd">    &gt;&gt;&gt; length, values = rle([1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; length, values = rle([1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 5])</span>
 <span class="sd">    &gt;&gt;&gt; print(&#39;length:&#39;, length, &#39;- values:&#39;, values)</span>
-<span class="sd">    length: [3 2 4 1 1] - values: [1 2 3 4 5]</span>
+<span class="sd">    length: [3 2 4 1 2] - values: [1 2 3 4 5]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span><span class="mi">1</span> <span class="p">:</span> 
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x must be a vector&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">states</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">states</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">diff</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">diff</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
         <span class="n">values</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">values</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../../generated/maad.util.linear_scale.html#features.alpha_indices.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../../generated/maad.util.linear_scale.html#maad.util.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Scale the values of a vector or matrix from a user specified </span>
 <span class="sd">    minimum to a user specified maximum.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like</span>
@@ -408,12 +444,12 @@
 <span class="sd">    axis : integer, optional, default : 0</span>
 <span class="sd">        select if the min,max is calculated on the entire matrix (axis=None),</span>
 <span class="sd">        on each column (axis=0), on each row (axis=1)</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : array-like</span>
 <span class="sd">        numpy.array like with numbers  or dataframe</span>
-<span class="sd">        </span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB, adapted by S. Haupert </span>
@@ -425,32 +461,34 @@
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.linear_scale(a, 0, 1)</span>
 <span class="sd">        array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
-<span class="sd">            </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># if x is a list, convert x into ndarray </span>
+    <span class="c1"># if x is a list, convert x into ndarray</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="p">:</span> 
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="c1"># avoid problems with inf and -inf values</span>
-        <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+        <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="o">!=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
         <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_min</span>
-        <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
-        <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_max</span>        
-     
+        <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_max</span>
+
     <span class="c1"># do the normalization</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="p">);</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">maxval</span><span class="o">-</span><span class="n">minval</span><span class="p">);</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">minval</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">maxval</span><span class="o">-</span><span class="n">minval</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">minval</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="amplitude2dB"><a class="viewcode-back" href="../../../generated/maad.util.amplitude2dB.html#features.alpha_indices.amplitude2dB">[docs]</a><span class="k">def</span> <span class="nf">amplitude2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="amplitude2dB"><a class="viewcode-back" href="../../../generated/maad.util.amplitude2dB.html#maad.util.amplitude2dB">[docs]</a><span class="k">def</span> <span class="nf">amplitude2dB</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform amplitude data (signal, scalar) into decibel scale within the </span>
 <span class="sd">    dB range (db_range). A gain (db_gain) could be added at the end.    </span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like or scalar</span>
@@ -461,47 +499,51 @@
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain added to the results </span>
 <span class="sd">        amplitude --&gt; 20*log10(x) + db_gain  </span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : array-like or scalar</span>
 <span class="sd">        y = 20*log10(x) + db_gain  </span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.amplitude2dB(a)</span>
 <span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
-<span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>            
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of x</span>
-    
-    <span class="c1"># Avoid zero value for log10  </span>
+
+    <span class="c1"># Avoid zero value for log10</span>
     <span class="c1"># if it&#39;s a scalar</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>  
-    <span class="k">else</span> <span class="p">:</span>     
-        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10 </span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10</span>
 
-    <span class="c1"># conversion in dB  </span>
+    <span class="c1"># conversion in dB</span>
     <span class="n">y</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log</span>
 
-    <span class="k">if</span> <span class="n">db_gain</span> <span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
-    
-    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">db_gain</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
+
+    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># set anything above db_range as 0</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># set anything less than -db_range as -db_range</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>  
-        
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>
+
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="power2dB"><a class="viewcode-back" href="../../../generated/maad.util.power2dB.html#features.alpha_indices.power2dB">[docs]</a><span class="k">def</span> <span class="nf">power2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="power2dB"><a class="viewcode-back" href="../../../generated/maad.util.power2dB.html#maad.util.power2dB">[docs]</a><span class="k">def</span> <span class="nf">power2dB</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform power (amplitude²) signal or scalar into decibel scale </span>
 <span class="sd">    within the dB range (db_range). A gain (db_gain) can be added at the end.    </span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like</span>
@@ -512,47 +554,51 @@
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain added to the results </span>
 <span class="sd">        amplitude --&gt; 20*log10(x) + db_gain  </span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : array-like or scalar</span>
 <span class="sd">        y = 10*log10(x) + db_gain  </span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1,2,3,4,5])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.power2dB(a**2)</span>
 <span class="sd">        array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
-<span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>            
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of x</span>
-    
-    <span class="c1"># Avoid zero value for log10  </span>
+
+    <span class="c1"># Avoid zero value for log10</span>
     <span class="c1"># if it&#39;s a scalar</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>  
-    <span class="k">else</span> <span class="p">:</span>     
-        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10 </span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10</span>
 
-    <span class="c1"># conversion in dB  </span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log </span>
-    
-    <span class="k">if</span> <span class="n">db_gain</span> <span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
-    
-    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="c1"># conversion in dB</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log</span>
+
+    <span class="k">if</span> <span class="n">db_gain</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
+
+    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># set anything above db_range as 0</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># set anything less than -db_range as -db_range</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>  
-        
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>
+
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="dB2amplitude"><a class="viewcode-back" href="../../../generated/maad.util.dB2amplitude.html#features.alpha_indices.dB2amplitude">[docs]</a><span class="k">def</span> <span class="nf">dB2amplitude</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="dB2amplitude"><a class="viewcode-back" href="../../../generated/maad.util.dB2amplitude.html#maad.util.dB2amplitude">[docs]</a><span class="k">def</span> <span class="nf">dB2amplitude</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform data in dB scale into amplitude</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like or scalar</span>
@@ -560,29 +606,31 @@
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain that was added to the result </span>
 <span class="sd">        --&gt; 20*log10(x) + db_gain</span>
-<span class="sd">                </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : array-like or scalar</span>
 <span class="sd">        output in amplitude unit</span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.dB2amplitude(a)</span>
 <span class="sd">        array([1., 2., 3., 4., 5.])</span>
-<span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>  
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="dB2power"><a class="viewcode-back" href="../../../generated/maad.util.dB2power.html#features.alpha_indices.dB2power">[docs]</a><span class="k">def</span> <span class="nf">dB2power</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="dB2power"><a class="viewcode-back" href="../../../generated/maad.util.dB2power.html#maad.util.dB2power">[docs]</a><span class="k">def</span> <span class="nf">dB2power</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform data in dB scale into power (amplitude²)</span>
 <span class="sd">    A gain (db_gain) could be added at the end.    </span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like or scalar</span>
@@ -590,45 +638,47 @@
 <span class="sd">    db_gain : scalar, optional, default is 0</span>
 <span class="sd">        Gain that was added to the result </span>
 <span class="sd">        --&gt; 10*log10(x) + db_gain</span>
-<span class="sd">                </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : array-like or scalar</span>
 <span class="sd">        output in power unit</span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.dB2power(a)</span>
 <span class="sd">        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        </span>
-<span class="sd">    &quot;&quot;&quot;</span>  
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> 
-     
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="add_dB"><a class="viewcode-back" href="../../../generated/maad.util.add_dB.html#features.alpha_indices.add_dB">[docs]</a><span class="k">def</span> <span class="nf">add_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="add_dB"><a class="viewcode-back" href="../../../generated/maad.util.add_dB.html#maad.util.add_dB">[docs]</a><span class="k">def</span> <span class="nf">add_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes an addition on decibel values.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    *argv : ndarray-like of floats</span>
 <span class="sd">        Arrays containing the sound waveform in dB </span>
-<span class="sd">                </span>
+
 <span class="sd">    axis : integer, optional, default is 0</span>
 <span class="sd">        if addition of multiple arrays, select the axis on which the sum is done</span>
-<span class="sd">                </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    e_sum : ndarray-like of floats</span>
 <span class="sd">        Array containing the sum of the dB values</span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Example with an audio file</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
 <span class="sd">    &gt;&gt;&gt; L = maad.spl.power2dBSPL(Sxx_power,gain=42)</span>
@@ -637,71 +687,72 @@
 <span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, L_sum.transpose(), **fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1d(fn, L_sum.transpose(), **fig_kwargs)</span>
 
 <span class="sd">    Example with single values</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; L1 = 90 # 90dB</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.add_dB(L1,L1)</span>
 <span class="sd">        93.01029995663981</span>
-<span class="sd">        </span>
+
 <span class="sd">    Example with arrays</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.add_dB(L1,L1,axis=1)</span>
 <span class="sd">        array([90.45322979, 90.45322979])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.add_dB(L1,L1,axis=0)</span>
 <span class="sd">        array([93.01029996, 83.01029996, 73.01029996])</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># force to be ndarray</span>
     <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
-    
+
     <span class="c1"># test if the 1st dim is = 1 (in case argv is a single 2d array) in order to remove this dimension</span>
-    <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,]</span>
-   
+    <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">]</span>
+
     <span class="c1"># Verify the adequation between axis number and number of dimensions of L</span>
     <span class="k">if</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
-        <span class="n">axis</span><span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span><span class="mi">1</span>
-    
+        <span class="n">axis</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="mi">1</span>
+
     <span class="c1"># dB to energy as sum has to be done with energy</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">dB2power</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
     <span class="n">e_sum</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
-    
-    
+
     <span class="c1"># test if 2 dimensions but length on 1 dimension is 1</span>
-    <span class="k">if</span> <span class="n">e_sum</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">e_sum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e_sum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> 
+    <span class="k">if</span> <span class="n">e_sum</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">e_sum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e_sum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">e_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">e_sum</span><span class="p">)</span>
-    
+
     <span class="c1"># energy=&gt;pressure to dB</span>
     <span class="n">L_sum</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">e_sum</span><span class="p">)</span>
-        
+
     <span class="k">return</span> <span class="n">L_sum</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="mean_dB"><a class="viewcode-back" href="../../../generated/maad.util.mean_dB.html#features.alpha_indices.mean_dB">[docs]</a><span class="k">def</span> <span class="nf">mean_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="mean_dB"><a class="viewcode-back" href="../../../generated/maad.util.mean_dB.html#maad.util.mean_dB">[docs]</a><span class="k">def</span> <span class="nf">mean_dB</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the average of decibel values.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    *argv : ndarray-like of floats</span>
 <span class="sd">        Arrays containing the sound waveform in dB</span>
-<span class="sd">                </span>
+
 <span class="sd">    axis : integer, optional, default is 0</span>
 <span class="sd">        if addition of multiple arrays, select the axis on which the sum is done</span>
-<span class="sd">                </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    e_mean : ndarray-like of floats</span>
 <span class="sd">        Array containing the mean of the dB values</span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Example with an audio file</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)</span>
 <span class="sd">    &gt;&gt;&gt; L = maad.util.power2dBSPL(Sxx_power,gain=42)</span>
@@ -710,92 +761,96 @@
 <span class="sd">                      &#39;xlabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="sd">                      &#39;ylabel&#39;:&#39;Power [dB]&#39;,</span>
 <span class="sd">                      }</span>
-<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1D(fn, L_mean.transpose(), **fig_kwargs)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot1d(fn, L_mean.transpose(), **fig_kwargs)</span>
 
 <span class="sd">    Example with single values</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; L1 = 90 # 90dB</span>
 <span class="sd">    &gt;&gt;&gt; L2 = 96 # 96dB</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L2)</span>
 <span class="sd">        93.96292</span>
-<span class="sd">        </span>
+
 <span class="sd">    Example with arrays</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; L1 = [90,80,70]</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1, axis=1)</span>
 <span class="sd">        array([85.68201724, 85.68201724])</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(L1,L1, axis=0)  </span>
 <span class="sd">        array([90., 80., 70.]) </span>
-<span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>    
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># force to be ndarray</span>
     <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
-    
+
     <span class="c1"># test if the 1st dim is = 1 (in case argv is a single 2d array) in order to remove this dimension</span>
-    <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,]</span>
-    
+    <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">]</span>
+
     <span class="c1"># Verify the adequation between axis number and number of dimensions of L</span>
     <span class="k">if</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
-        <span class="n">axis</span><span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span><span class="mi">1</span>
-    
+        <span class="n">axis</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="mi">1</span>
+
     <span class="c1"># dB to energy as sum has to be done with energy</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">dB2power</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
     <span class="n">e_mean</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
-    
+
     <span class="c1"># energy (power) =&gt; dB</span>
     <span class="n">e_mean</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">e_mean</span><span class="p">)</span>
-    
+
     <span class="c1"># test if 2 dimensions but length on 1 dimension is 1</span>
-    <span class="k">if</span> <span class="n">e_mean</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">e_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> 
+    <span class="k">if</span> <span class="n">e_mean</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">e_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">e_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">e_mean</span><span class="p">)</span>
-    
+
     <span class="c1"># test if it&#39;s a single value</span>
-    <span class="k">if</span> <span class="n">e_mean</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> 
+    <span class="k">if</span> <span class="n">e_mean</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">e_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">e_mean</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">e_mean</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../../generated/maad.util.shift_bit_length.html#features.alpha_indices.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../../generated/maad.util.shift_bit_length.html#maad.util.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the closest power of 2 that is superior or equal to the number x.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : scalar</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y : scalar</span>
 <span class="sd">        the closest power of 2 that is superior or equal to the number x</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.shift_bit_length(1000)</span>
 <span class="sd">        1024</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
-<span class="c1">#%% </span>
-<div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../../generated/maad.util.nearest_idx.html#features.alpha_indices.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../../generated/maad.util.nearest_idx.html#maad.util.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Find nearest value on array and return its index.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    array: ndarray-like of floats</span>
 <span class="sd">        array of values where to search the nearest values</span>
 <span class="sd">    value: float</span>
 <span class="sd">        value to be searched in array</span>
-<span class="sd">            </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    idx: int</span>
 <span class="sd">        index of nearest value on array</span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; x = np.array([1,2,3])</span>
@@ -809,29 +864,31 @@
     <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">idx</span></div>
 
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="get_df_single_row"><a class="viewcode-back" href="../../../generated/maad.util.get_df_single_row.html#features.alpha_indices.get_df_single_row">[docs]</a><span class="k">def</span> <span class="nf">get_df_single_row</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">):</span>
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="get_df_single_row"><a class="viewcode-back" href="../../../generated/maad.util.get_df_single_row.html#maad.util.get_df_single_row">[docs]</a><span class="k">def</span> <span class="nf">get_df_single_row</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;iloc&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract a single row from a dataframe keeping the DataFrame type </span>
 <span class="sd">    (instead of becoming a Series).</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas DataFrame</span>
 <span class="sd">        DataFrame with one or more rows</span>
-<span class="sd">    </span>
+
 <span class="sd">    index : interger (in case of &#39;iloc&#39;) or index (in case of loc)</span>
 <span class="sd">        index could be the row number or the row index depending on the mode</span>
-<span class="sd">    </span>
+
 <span class="sd">    mode : string, optional, default is &#39;iloc&#39;</span>
 <span class="sd">        choose between row number (&#39;iloc&#39;) or row index (&#39;loc&#39;)</span>
 <span class="sd">        (see Pandas documentation for the difference)</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    df_out : pandas DataFrame</span>
 <span class="sd">        Single row DataFrame</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
@@ -860,9 +917,9 @@
 <span class="sd">    &gt;&gt;&gt; maad.util.get_df_single_row (df, index=0, mode=&#39;iloc&#39;)</span>
 <span class="sd">          category abundance presence location</span>
 <span class="sd">        0     bird         8      Yes      NYC</span>
-<span class="sd">        </span>
+
 <span class="sd">     Now with index   </span>
-<span class="sd">        </span>
+
 <span class="sd">    &gt;&gt;&gt; df_modified=df.set_index(&quot;category&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; print(df_modified)</span>
 <span class="sd">                    abundance presence location</span>
@@ -884,33 +941,35 @@
 <span class="sd">        insect         4       No      NYC</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;iloc&#39;</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;iloc&#39;</span><span class="p">:</span>
         <span class="n">df_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;loc&#39;</span> <span class="p">:</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;loc&#39;</span><span class="p">:</span>
         <span class="n">df_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-    <span class="k">else</span> <span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span> <span class="p">(</span><span class="s1">&#39;mode must be iloc or loc, default is iloc&#39;</span><span class="p">)</span>
-    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;mode must be iloc or loc, default is iloc&#39;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">df_out</span></div>
-    
-<span class="c1">#%%</span>
-<div class="viewcode-block" id="format_features"><a class="viewcode-back" href="../../../generated/maad.util.format_features.html#features.alpha_indices.format_features">[docs]</a><span class="k">def</span> <span class="nf">format_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="format_features"><a class="viewcode-back" href="../../../generated/maad.util.format_features.html#maad.util.format_features">[docs]</a><span class="k">def</span> <span class="nf">format_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Format features such as bounding box coordinates and centroids coordinates</span>
 <span class="sd">    to predifined format : time-frequency to pixels or pixels to time-frequency</span>
 <span class="sd">    units.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas DataFrame</span>
 <span class="sd">        df with bounding box coordinates and/or centroids coordinates       </span>
 <span class="sd">        array must have a valid input format with column names.</span>
-<span class="sd">        </span>
+
 <span class="sd">        - bounding box: min_y, min_x, max_y, max_x</span>
 <span class="sd">        - time frequency: min_f, min_t, max_f, max_t</span>
 <span class="sd">        - centroid tf : centroid_f, centroid_t</span>
 <span class="sd">        - centroid pixels : centroid_y, centroid_x</span>
-<span class="sd">        </span>
+
 <span class="sd">    tn : ndarray</span>
 <span class="sd">        vector with temporal indices, output from the spectrogram function (in seconds)</span>
 <span class="sd">    fn: ndarray</span>
@@ -921,7 +980,7 @@
 <span class="sd">    df: pandas DataFrame</span>
 <span class="sd">        df with bounding box coordinates and/or centroids coordinates in pixels</span>
 <span class="sd">        and time-frequency units</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    Use this function after using functions such as ``maad.rois.select_rois``, </span>
@@ -934,102 +993,157 @@
 <span class="sd">    select_rois, centroid_features, read_audacity_annot, overlay_rois, </span>
 <span class="sd">    overlay_centroid</span>
 <span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power, tn, fn, ext = maad.sound.spectrogram(s, fs)</span>
+<span class="sd">    &gt;&gt;&gt; df_rois = maad.util.read_audacity_annot(&#39;../data/cold_forest_daylight_label.txt&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; list(df_rois)</span>
+<span class="sd">    &gt;&gt;&gt; df_rois = maad.util.format_features(df_rois, tn, fn)</span>
+<span class="sd">    &gt;&gt;&gt; list(df_rois)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check format of the input data</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame&#39;</span><span class="p">)</span>  
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame&#39;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;min_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;min_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span>
-        
-        <span class="c1"># Check that time and frequency limits are inside tn and fn limits</span>
-        <span class="c1"># df = df[(df.min_t &gt;= tn.min()) &amp; (df.max_t &lt;= tn.max()) &amp; (df.min_f &gt;= fn.min()) &amp; (df.max_f &lt;= fn.max())]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">min_t</span> <span class="o">&lt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">max_t</span> <span class="o">&gt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">min_f</span> <span class="o">&lt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">max_f</span> <span class="o">&gt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ROIs boundaries are outside time or frecuency signal limits. Clipping ROIS to valid boundaries.&#39;</span><span class="p">)</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">min_t</span> <span class="o">&lt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="s1">&#39;min_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tn</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">max_t</span> <span class="o">&gt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="s1">&#39;max_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tn</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">min_f</span> <span class="o">&lt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="s1">&#39;min_f&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">max_f</span> <span class="o">&gt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="s1">&#39;max_f&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-        
-        <span class="n">df_bbox</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>            
-            <span class="n">min_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_f&#39;</span><span class="p">])</span>
-            <span class="n">min_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_t&#39;</span><span class="p">])</span>
-            <span class="n">max_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_f&#39;</span><span class="p">])</span>
-            <span class="n">max_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_t&#39;</span><span class="p">])</span>
-            <span class="c1"># test if max &gt; min, if not, drop row form df</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">min_y</span><span class="o">&lt;=</span><span class="n">max_y</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">min_x</span><span class="o">&lt;=</span><span class="n">max_x</span><span class="p">)</span> <span class="p">:</span>
-                <span class="n">df_bbox</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span> 
-                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
-        
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_bbox</span><span class="p">,</span> 
-                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">,</span><span class="s1">&#39;min_x&#39;</span><span class="p">,</span><span class="s1">&#39;max_y&#39;</span><span class="p">,</span><span class="s1">&#39;max_x&#39;</span><span class="p">],</span> 
-                                  <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
-                        
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;min_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;min_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span> 
-        <span class="n">df_bbox</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>            
-            <span class="n">min_f</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">min_y</span><span class="p">))]</span>
-            <span class="n">min_t</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">min_x</span><span class="p">))]</span>
-            <span class="n">max_f</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">max_y</span><span class="p">))]</span>
-            <span class="n">max_t</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">max_x</span><span class="p">))]</span>
-            <span class="c1"># test if max &gt; min, if not, drop row form df</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">min_f</span><span class="o">&lt;=</span><span class="n">max_f</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">min_t</span><span class="o">&lt;=</span><span class="n">max_t</span><span class="p">)</span> <span class="p">:</span>
-                <span class="n">df_bbox</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">min_f</span><span class="p">,</span> <span class="n">min_t</span><span class="p">,</span> <span class="n">max_f</span><span class="p">,</span> <span class="n">max_t</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span> 
-                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="c1"># Do the loop twice in order to force updating coordinates and parameters</span>
+    <span class="c1"># in pixels unit (time and frequency do not change when the time and </span>
+    <span class="c1"># frequency vectors resolution change)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
 
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_bbox</span><span class="p">,</span> 
-                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_f&#39;</span><span class="p">,</span><span class="s1">&#39;min_t&#39;</span><span class="p">,</span><span class="s1">&#39;max_f&#39;</span><span class="p">,</span><span class="s1">&#39;max_t&#39;</span><span class="p">],</span> 
-                                  <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
-    
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;centroid_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;centroid_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span> 
-        <span class="n">df_centroid</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>            
-            <span class="n">centroid_f</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">centroid_y</span><span class="p">))]</span>
-            <span class="n">centroid_t</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">centroid_x</span><span class="p">))]</span>
-            <span class="n">df_centroid</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">centroid_f</span><span class="p">,</span> <span class="n">centroid_t</span><span class="p">))</span>
-            
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span> 
-                                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;centroid_f&#39;</span><span class="p">,</span><span class="s1">&#39;centroid_t&#39;</span><span class="p">],</span> 
-                                      <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> 
-        
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;centroid_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;centroid_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">)</span> <span class="p">:</span> 
-        <span class="n">df_centroid</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>            
-            <span class="n">centroid_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;centroid_f&#39;</span><span class="p">])</span>
-            <span class="n">centroid_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">])</span>
-            <span class="n">df_centroid</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">centroid_y</span><span class="p">,</span> <span class="n">centroid_x</span><span class="p">))</span>
-            
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span> 
-                                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">],</span> 
-                                      <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>     
-     
-    <span class="c1">#=============</span>
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;duration_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;duration_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_tf&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span> 
-        <span class="n">df_area</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>            
-            <span class="n">bandwidth_f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">bandwidth_y</span> <span class="o">*</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">duration_t</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">duration_x</span> <span class="o">*</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">area_tf</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">area_xy</span> <span class="o">*</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">df_area</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">duration_t</span><span class="p">,</span> <span class="n">bandwidth_f</span><span class="p">,</span> <span class="n">area_tf</span><span class="p">))</span>
-            
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_area</span><span class="p">,</span> 
-                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;duration_t&#39;</span><span class="p">,</span><span class="s1">&#39;bandwidth_f&#39;</span><span class="p">,</span> <span class="s1">&#39;area_tf&#39;</span><span class="p">],</span> 
-                                  <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> 
-        
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;duration_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_tf&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;duration_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">)</span> <span class="p">:</span> 
-        <span class="n">df_area</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>            
-            <span class="n">bandwidth_y</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;bandwidth_f&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">((</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="n">duration_x</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;duration_t&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">area_xy</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="p">((</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-            <span class="n">df_area</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">bandwidth_y</span><span class="p">,</span> <span class="n">duration_x</span><span class="p">,</span> <span class="n">area_xy</span><span class="p">))</span>
-            
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_area</span><span class="p">,</span> 
-                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;duration_x&#39;</span><span class="p">,</span><span class="s1">&#39;bandwidth_y&#39;</span><span class="p">,</span><span class="s1">&#39;area_xy&#39;</span><span class="p">],</span> 
-                                  <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>  
+        <span class="c1"># if (&#39;min_t&#39; and &#39;min_f&#39; and &#39;max_t&#39; and &#39;max_f&#39;) in df and not ((&#39;min_y&#39; and &#39;min_x&#39; and &#39;max_y&#39; and &#39;max_x&#39;) in df):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;min_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="c1"># Check that time and frequency limits are inside tn and fn limits</span>
+            <span class="c1"># df = df[(df.min_t &gt;= tn.min()) &amp; (df.max_t &lt;= tn.max()) &amp; (df.min_f &gt;= fn.min()) &amp; (df.max_f &lt;= fn.max())]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">min_t</span> <span class="o">&lt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">max_t</span> <span class="o">&gt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">min_f</span> <span class="o">&lt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">max_f</span> <span class="o">&gt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s1">&#39;ROIs boundaries are outside time or frecuency signal limits. Clipping ROIS to valid boundaries.&#39;</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">min_t</span> <span class="o">&lt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="s1">&#39;min_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tn</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">max_t</span> <span class="o">&gt;</span> <span class="n">tn</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s1">&#39;max_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tn</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">min_f</span> <span class="o">&lt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="s1">&#39;min_f&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">max_f</span> <span class="o">&gt;</span> <span class="n">fn</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s1">&#39;max_f&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+            <span class="n">df_bbox</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                <span class="n">min_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_f&#39;</span><span class="p">])</span>
+                <span class="n">min_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_t&#39;</span><span class="p">])</span>
+                <span class="n">max_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_f&#39;</span><span class="p">])</span>
+                <span class="n">max_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_t&#39;</span><span class="p">])</span>
+                <span class="c1"># test if max &gt; min, if not, drop row form df</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">min_y</span> <span class="o">&lt;=</span> <span class="n">max_y</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">min_x</span> <span class="o">&lt;=</span> <span class="n">max_x</span><span class="p">):</span>
+                    <span class="n">df_bbox</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+            <span class="c1"># check if new columns</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;min_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_bbox</span><span class="p">,</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">,</span> <span class="s1">&#39;min_x&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;max_y&#39;</span><span class="p">,</span> <span class="s1">&#39;max_x&#39;</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+            <span class="c1"># otherwise update the existing columns with new values</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_bbox</span><span class="p">,</span>
+                                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">,</span> <span class="s1">&#39;min_x&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;max_y&#39;</span><span class="p">,</span> <span class="s1">&#39;max_x&#39;</span><span class="p">]))</span>
+
+        <span class="c1"># if (&#39;min_y&#39; and &#39;min_x&#39; and &#39;max_y&#39; and &#39;max_x&#39;) in df and not ((&#39;min_t&#39; and &#39;min_f&#39; and &#39;max_t&#39; and &#39;max_f&#39;) in df):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;min_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="n">df_bbox</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">min_f</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">min_y</span><span class="p">))]</span>
+                <span class="n">min_t</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">min_x</span><span class="p">))]</span>
+                <span class="n">max_f</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">max_y</span><span class="p">))]</span>
+                <span class="n">max_t</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">max_x</span><span class="p">))]</span>
+                <span class="c1"># test if max &gt; min, if not, drop row form df</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">min_f</span> <span class="o">&lt;=</span> <span class="n">max_f</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">min_t</span> <span class="o">&lt;=</span> <span class="n">max_t</span><span class="p">):</span>
+                    <span class="n">df_bbox</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">min_f</span><span class="p">,</span> <span class="n">min_t</span><span class="p">,</span> <span class="n">max_f</span><span class="p">,</span> <span class="n">max_t</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="c1"># check if new columns</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;min_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_bbox</span><span class="p">,</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_f&#39;</span><span class="p">,</span> <span class="s1">&#39;min_t&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;max_f&#39;</span><span class="p">,</span> <span class="s1">&#39;max_t&#39;</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># if (&#39;centroid_y&#39; and &#39;centroid_x&#39;) in df and not ((&#39;centroid_f&#39; and &#39;centroid_t&#39;) in df):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;centroid_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="n">df_centroid</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">centroid_f</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">centroid_y</span><span class="p">))]</span>
+                <span class="n">centroid_t</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">centroid_x</span><span class="p">))]</span>
+                <span class="n">df_centroid</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">centroid_f</span><span class="p">,</span> <span class="n">centroid_t</span><span class="p">))</span>
                 
+            <span class="c1"># check if new columns</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;centroid_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">)</span> <span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;centroid_f&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># if (&#39;centroid_f&#39; and &#39;centroid_t&#39;) in df and not ((&#39;centroid_y&#39; and &#39;centroid_x&#39;) in df):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;centroid_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="n">df_centroid</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                <span class="n">centroid_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;centroid_f&#39;</span><span class="p">])</span>
+                <span class="n">centroid_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;centroid_t&#39;</span><span class="p">])</span>
+                <span class="n">df_centroid</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">centroid_y</span><span class="p">,</span> <span class="n">centroid_x</span><span class="p">))</span>
+
+            <span class="c1"># check if new columns</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;centroid_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">)</span> <span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+            <span class="c1"># otherwise update the existing columns with new values</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span>
+                                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">]))</span>
+                
+        <span class="c1"># =============</span>
+        <span class="c1"># if (&#39;duration_x&#39; and &#39;bandwidth_y&#39; and &#39;area_xy&#39;) in df and not ((&#39;duration_t&#39; and &#39;bandwidth_f&#39; and &#39;area_tf&#39;) in df):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;duration_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="n">df_area</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">bandwidth_f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">bandwidth_y</span> <span class="o">*</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">duration_t</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">duration_x</span> <span class="o">*</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">area_tf</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">area_xy</span> <span class="o">*</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">df_area</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">duration_t</span><span class="p">,</span> <span class="n">bandwidth_f</span><span class="p">,</span> <span class="n">area_tf</span><span class="p">))</span>
+                
+            <span class="c1"># check if new columns</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;duration_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_tf&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">)</span> <span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_area</span><span class="p">,</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;duration_t&#39;</span><span class="p">,</span>
+                                                    <span class="s1">&#39;bandwidth_f&#39;</span><span class="p">,</span> <span class="s1">&#39;area_tf&#39;</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+ 
+        <span class="c1"># if (&#39;duration_t&#39; and &#39;bandwidth_f&#39; and &#39;area_tf&#39;) in df and not ((&#39;duration_x&#39; and &#39;bandwidth_y&#39; and &#39;area_xy&#39;) in df):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;duration_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_tf&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="n">df_area</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                <span class="n">bandwidth_y</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+                    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;bandwidth_f&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">((</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="n">duration_x</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;duration_t&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">area_xy</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">]</span> <span class="o">/</span>
+                                <span class="p">((</span><span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="n">df_area</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">bandwidth_y</span><span class="p">,</span> <span class="n">duration_x</span><span class="p">,</span> <span class="n">area_xy</span><span class="p">))</span>
+
+            <span class="c1"># check if new columns</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">&#39;duration_x&#39;</span> <span class="ow">and</span> <span class="s1">&#39;bandwidth_y&#39;</span> <span class="ow">and</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">df</span><span class="p">):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_area</span><span class="p">,</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;duration_x&#39;</span><span class="p">,</span>
+                                                    <span class="s1">&#39;bandwidth_y&#39;</span><span class="p">,</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+            <span class="c1"># otherwise update the existing columns with new values</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_area</span><span class="p">,</span>
+                                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;duration_x&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;bandwidth_y&#39;</span><span class="p">,</span> <span class="s1">&#39;area_xy&#39;</span><span class="p">]))</span>
+
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
     <span class="k">return</span> <span class="n">df</span></div>
 </pre></div>
 

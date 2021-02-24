@@ -178,8 +178,10 @@
 <dd class="field-odd"><dl>
 <dt><strong>im</strong><span class="classifier">2d ndarray of scalars</span></dt><dd><p>Spectrogram (or image)</p>
 </dd>
-<dt><strong>mode_bin</strong><span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘relative’, a relative double threshold is performed 
-if ‘absolute’, an double threshold with absolute value is performed</p>
+<dt><strong>mode_bin</strong><span class="classifier">string in {‘relative’, ‘absolute’}, optional, default is ‘relative’</span></dt><dd><p>if ‘absolute’ <a class="reference internal" href="#rbe9374bf0dce-1" id="id1">[1]</a> , a double threshold with absolute value is performed 
+with two parameters (see **kwargs section)
+if ‘relative’ <span id="id2">[Rbe9374bf0dce-2]</span>, a relative double threshold is performed with two 
+parameters (see **kwargs section)</p>
 </dd>
 <dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>print messages</p>
 </dd>
@@ -191,10 +193,29 @@ is added to the root filename.</p>
 <dt><strong>**kwargs, optional. This parameter is used by the maad functions as well</strong></dt><dd><p>as the plt.plot and savefig functions. 
 All the input arguments required or optional in the signature of the 
 functions above can be passed as kwargs :</p>
-<ul class="simple">
-<li><p>double_threshold_abs(im, bin_h=0.7, bin_l=0.2, display=False, savefig=None, **kwargs)</p></li>
-<li><p>double_threshold_rel (im, bin_std=5, bin_per=0.5, display=False, savefig=None, **kwargs)</p></li>
-</ul>
+<p>if ‘absolute’ <a class="reference internal" href="#rbe9374bf0dce-1" id="id3">[1]</a> 
+- bin_h : scalar, optional, default is 0.7 
+Set the first threshold. Value higher than this value are set to 1,  
+the others are set to 0. They are the seeds for the second step 
+- bin_l: scalar, optional, defautl is 0.2 
+Set the second threshold. Value higher than this value and connected 
+to the seeds or to other pixels connected to the seeds (6-connectivity)
+are set to 1, the other remains 0</p>
+<p>if ‘relative’ <span id="id4">[Rbe9374bf0dce-2]</span> :
+- bin_std :  scalar, optional, default is 6 
+bin_std is needed to compute the threshold1. 
+This threshold is not an absolute value but depends on values that are 
+similar to 75th percentile (pseudo_mean) and a sort of std value of 
+the image.  
+threshold1 = “pseudo_mean” + “std” * bin_std    
+Value higher than threshold1 are set to 1, they are the seeds for  
+the second step. The others are set to 0.  
+- bin_per: scalar, optional, defautl is 0.5 
+Set how much the second threshold is lower than the first 
+threshold value. From 0 to 1. ex: 0.1 = 10 %. 
+threshold2 = threshold1 (1-bin_per)   
+Value higher than threshold2 and connected (6-connectivity) to the  
+seeds are set to 1, the other remains 0</p>
 <p>… and more, see matplotlib</p>
 </dd>
 </dl>
@@ -205,6 +226,17 @@ functions above can be passed as kwargs :</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="rbe9374bf0dce-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><ol class="upperalpha simple" start="10">
+<li><p>Canny. A computational approach to edge detection. IEEE</p></li>
+</ol>
+</dd>
+</dl>
+<p>Transactions on Pattern Analysis and Machine Intelligence. 1986; vol. 8, 
+pp.679-698. DOI:10.1109/TPAMI.1986.4767851 
+.. [Rbe9374bf0dce-2] from MATLAB: Threshold estimation (Oliveira et al, 2015)</p>
 <p class="rubric">Examples</p>
 <p>Load audio recording and convert it into spectrogram</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
@@ -226,8 +258,8 @@ functions above can be passed as kwargs :</p>
 <p>Plot spectrograms</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;mask)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;mask)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span> 
 </pre></div>

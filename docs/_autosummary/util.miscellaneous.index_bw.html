@@ -203,7 +203,7 @@ if tupple of two values : min frequency and max frequency to select</p>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_dB_crop</span> <span class="o">=</span> <span class="n">Sxx_dB</span><span class="p">[</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fn_crop</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Sxx_dB</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
@@ -214,7 +214,7 @@ if tupple of two values : min frequency and max frequency to select</p>
 <span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_dB_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_dB_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

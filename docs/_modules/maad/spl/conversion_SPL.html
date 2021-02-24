@@ -458,7 +458,7 @@
 <span class="sd">        </span>
 <span class="sd">    Get equivalent sound pressure level (Leq) from the dedicated function</span>
 <span class="sd">        </span>
-<span class="sd">    &gt;&gt;&gt; Leq = maad.spl.wav2Leq(w, fs, gain=42, dt=1)</span>
+<span class="sd">    &gt;&gt;&gt; Leq = maad.spl.wav2leq(w, fs, gain=42, dt=1)</span>
 <span class="sd">    &gt;&gt;&gt; Leq_mean = maad.util.mean_dB(Leq)</span>
 <span class="sd">    &gt;&gt;&gt; Leq_mean</span>
 <span class="sd">        54.575482584140005   </span>
@@ -505,7 +505,23 @@
 <span class="sd">    See also:</span>
 <span class="sd">    ---------</span>
 <span class="sd">    power2dBSPL</span>
-<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_amplitude,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode=&#39;amplitude&#39;)  </span>
+<span class="sd">    &gt;&gt;&gt; S_amplitude_mean = np.mean(Sxx_amplitude, axis=1)</span>
+<span class="sd">    </span>
+<span class="sd">    Get instantaneous sound pressure level (L).</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; maad.spl.amplitude2dBSPL(S_amplitude_mean, gain=42)    </span>
+<span class="sd">    array([39.56422048, 44.37117437, 41.95705677, 39.60547011, 36.43237323,</span>
+<span class="sd">           33.24966066, 31.44139953, 30.4473799 , 28.91589639, 27.26962076,</span>
+<span class="sd">           26.7722199 , 26.27328293, 25.69373328, 24.73880674, 23.85828781,</span>
+<span class="sd">           ...</span>
+<span class="sd">           -6.30767022, -6.46481481, -6.49907112, -6.52754376, -6.52476444,</span>
+<span class="sd">           -6.73617834, -6.75685948])</span>
 <span class="sd">    &quot;&quot;&quot;</span>       
     <span class="c1"># force to be ndarray</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -566,7 +582,7 @@
 
 <span class="c1">################################## Leq ########################################</span>
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="wav2Leq"><a class="viewcode-back" href="../../../generated/maad.spl.wav2Leq.html#maad.spl.wav2Leq">[docs]</a><span class="k">def</span> <span class="nf">wav2Leq</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">):</span> 
+<div class="viewcode-block" id="wav2leq"><a class="viewcode-back" href="../../../generated/maad.spl.wav2Leq.html#maad.spl.wav2leq">[docs]</a><span class="k">def</span> <span class="nf">wav2leq</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL]).</span>
 <span class="sd">    </span>
@@ -604,7 +620,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
-<span class="sd">    &gt;&gt;&gt; Leq = maad.spl.wav2Leq (w, fs, gain=42)  </span>
+<span class="sd">    &gt;&gt;&gt; Leq = maad.spl.wav2leq (w, fs, gain=42)  </span>
 <span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(Leq)</span>
 <span class="sd">        54.575482584140005</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
@@ -630,7 +646,7 @@
     <span class="k">return</span> <span class="n">Leq</span></div>
 
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="pressure2Leq"><a class="viewcode-back" href="../../../generated/maad.spl.pressure2Leq.html#maad.spl.pressure2Leq">[docs]</a><span class="k">def</span> <span class="nf">pressure2Leq</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span> 
+<div class="viewcode-block" id="pressure2leq"><a class="viewcode-back" href="../../../generated/maad.spl.pressure2Leq.html#maad.spl.pressure2leq">[docs]</a><span class="k">def</span> <span class="nf">pressure2leq</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert pressure vector (p [Pa]) to Equivalent Continuous Sound Pressure </span>
 <span class="sd">    level (Leq [dB SPL]).</span>
@@ -657,7 +673,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; p = maad.spl.wav2pressure(wave=w, gain=42)</span>
-<span class="sd">    &gt;&gt;&gt; Leq = maad.spl.pressure2Leq (p, fs)</span>
+<span class="sd">    &gt;&gt;&gt; Leq = maad.spl.pressure2leq (p, fs)</span>
 <span class="sd">    &gt;&gt;&gt; maad.util.mean_dB(Leq)</span>
 <span class="sd">        54.55488267086038</span>
 <span class="sd">        </span>
@@ -682,7 +698,7 @@
     <span class="k">return</span> <span class="n">Leq</span></div>
 
 <span class="c1">#%%</span>
-<div class="viewcode-block" id="PSD2Leq"><a class="viewcode-back" href="../../../generated/maad.spl.PSD2Leq.html#maad.spl.PSD2Leq">[docs]</a><span class="k">def</span> <span class="nf">PSD2Leq</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span>
+<div class="viewcode-block" id="psd2leq"><a class="viewcode-back" href="../../../generated/maad.spl.PSD2Leq.html#maad.spl.psd2leq">[docs]</a><span class="k">def</span> <span class="nf">psd2leq</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">,</span> <span class="n">pRef</span> <span class="o">=</span> <span class="mf">20e-6</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert Power spectral density (PSD, amplitude²) into </span>
 <span class="sd">    Equivalent Continuous Sound pressure level (Leq [dB SPL])</span>
@@ -717,7 +733,7 @@
 <span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
 <span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs)</span>
 <span class="sd">    &gt;&gt;&gt; S_power_mean = maad.sound.avg_power_spectro(Sxx_power) </span>
-<span class="sd">    &gt;&gt;&gt; maad.spl.PSD2Leq(S_power_mean, gain=42)</span>
+<span class="sd">    &gt;&gt;&gt; maad.spl.psd2leq(S_power_mean, gain=42)</span>
 <span class="sd">        53.55842473963429</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>  
@@ -775,11 +791,11 @@
     <span class="n">wav</span> <span class="o">=</span> <span class="n">wav</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">wav</span><span class="p">)</span>
     <span class="c1"># wav -&gt; pressure -&gt; Leq</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">wav2pressure</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="n">VADC</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">dBref</span><span class="o">=</span><span class="mi">94</span><span class="p">)</span>
-    <span class="n">Leq</span> <span class="o">=</span> <span class="n">pressure2Leq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">)</span>
+    <span class="n">Leq</span> <span class="o">=</span> <span class="n">pressure2leq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from volt&#39;</span><span class="p">,</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dB</span><span class="p">(</span><span class="n">Leq</span><span class="p">))</span>
     
     <span class="c1"># wav -&gt; Leq</span>
-    <span class="n">wav_Leq2</span> <span class="o">=</span> <span class="n">wav2Leq</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="n">VADC</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">)</span> 
+    <span class="n">wav_Leq2</span> <span class="o">=</span> <span class="n">wav2leq</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">Vadc</span><span class="o">=</span><span class="n">VADC</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">deltaT</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">dBref</span> <span class="o">=</span> <span class="mi">94</span><span class="p">)</span> 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from wav&#39;</span><span class="p">,</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dB</span><span class="p">(</span><span class="n">wav_Leq2</span><span class="p">))</span>
         
     <span class="c1"># Power Density Spectrum : PSD</span>
@@ -787,7 +803,7 @@
     <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">fft</span>
     <span class="n">P</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
     <span class="c1"># average Leq from PSD</span>
-    <span class="n">P_Leq3</span>  <span class="o">=</span> <span class="n">PSD2Leq</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+    <span class="n">P_Leq3</span>  <span class="o">=</span> <span class="n">psd2leq</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from PSD&#39;</span><span class="p">,</span><span class="n">P_Leq3</span><span class="p">)</span>
        
     <span class="c1">########################################################################</span>
@@ -801,7 +817,7 @@
     <span class="c1"># Sxx_power to S_power</span>
     <span class="n">S_power</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="c1"># average Leq from S_power</span>
-    <span class="n">P_Leq5</span>  <span class="o">=</span> <span class="n">PSD2Leq</span><span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+    <span class="n">P_Leq5</span>  <span class="o">=</span> <span class="n">psd2leq</span><span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Leq from Sxx_power spectrogram&#39;</span><span class="p">,</span><span class="n">P_Leq5</span><span class="p">)</span>
 
     <span class="c1"># total energy from S_power</span>

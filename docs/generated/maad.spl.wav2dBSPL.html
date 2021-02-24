@@ -38,7 +38,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="maad.spl.wav2Leq" href="maad.spl.wav2Leq.html" />
+    <link rel="next" title="Utilities" href="../util.html" />
     <link rel="prev" title="maad.spl.amplitude2dBSPL" href="maad.spl.amplitude2dBSPL.html" /> 
 </head>
 
@@ -108,12 +108,8 @@
 <li class="toctree-l3"><a class="reference internal" href="maad.spl.power2dBSPL.html">maad.spl.power2dBSPL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.spl.amplitude2dBSPL.html">maad.spl.amplitude2dBSPL</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.spl.wav2dBSPL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2Leq.html">maad.spl.wav2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.pressure2Leq.html">maad.spl.pressure2Leq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maad.spl.PSD2Leq.html">maad.spl.PSD2Leq</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../spl.html#attenuation-and-active-distance">Attenuation and active distance</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
@@ -231,7 +227,7 @@ ndarray-like or scalar containing the raw sound waveform</p>
 </pre></div>
 </div>
 <p>Get equivalent sound pressure level (Leq) from the dedicated function</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Leq</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">wav2Leq</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Leq</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">wav2leq</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Leq_mean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">mean_dB</span><span class="p">(</span><span class="n">Leq</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Leq_mean</span>
 <span class="go">    54.575482584140005   </span>
@@ -249,7 +245,7 @@ ndarray-like or scalar containing the raw sound waveform</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="maad.spl.wav2Leq.html" class="btn btn-neutral float-right" title="maad.spl.wav2Leq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../util.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="maad.spl.amplitude2dBSPL.html" class="btn btn-neutral float-left" title="maad.spl.amplitude2dBSPL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

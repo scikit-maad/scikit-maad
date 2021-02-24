@@ -169,19 +169,50 @@
             
   <div class="section" id="module-sound.trim">
 <span id="sound-trim"></span><h1>sound.trim<a class="headerlink" href="#module-sound.trim" title="Permalink to this headline">¶</a></h1>
-<p>Collection of functions to trim audio signals.</p>
-<p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="sound.trim.wave2frames.html#sound.trim.wave2frames" title="sound.trim.wave2frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wave2frames</span></code></a></p></td>
-<td><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of length Nt.</p></td>
-</tr>
-</tbody>
-</table>
+<p>Slices a time series, from a initial time <cite>min_t</cite> to an ending time <cite>max_t</cite>.  
+If the target duration <cite>duration =</cite> is larger than the original duration and <cite>pad = True</cite>, 
+the time series is padded with a constant value <cite>pad_constant = 0</cite>.</p>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>s<span class="classifier">np.ndarray </span></dt><dd><p>Mono or stereo signal as NumPy array.</p>
+</dd>
+<dt>fs<span class="classifier">int</span></dt><dd><p>Time series sampling rate.</p>
+</dd>
+<dt>min_t<span class="classifier">float</span></dt><dd><p>Initial time. If initial time <cite>min_t &lt; 0</cite> and <cite>pad=True</cite>, this time is added to the 
+beginning of the audio slice.</p>
+</dd>
+<dt>max_t<span class="classifier">float</span></dt><dd><p>Ending time of the audio slice.</p>
+</dd>
+<dt>pad<span class="classifier">bool, optional</span></dt><dd><p>If true, the time series is padded with a constant value <cite>pad_constant</cite>. Default is False.</p>
+</dd>
+<dt>pad_constant<span class="classifier"></span></dt><dd><p>It is the constant with which the time series is padded.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>s_slice<span class="classifier">np.ndarray </span></dt><dd><p>Time series with duration <cite>duration = max_t - min_t</cite>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p>numpy.pad</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Slice an audio file from 5 to 8 seconds.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s_slice</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">min_t</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">max_t</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s_slice</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s_slice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">fs</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 

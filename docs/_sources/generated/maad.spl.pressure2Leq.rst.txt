@@ -1,6 +1,6 @@
-﻿maad.spl.pressure2Leq
+﻿maad.spl.pressure2leq
 =====================
 
 .. currentmodule:: maad.spl
 
-.. autofunction:: pressure2Leq
+.. autofunction:: pressure2leq

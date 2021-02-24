@@ -1,4 +1,4 @@
-features.alpha\_indices
+﻿features.alpha\_indices
 =======================
 
 .. automodule:: features.alpha_indices
@@ -15,32 +15,32 @@ features.alpha\_indices
       :toctree:
       :nosignatures:
    
-      acousticComplexityIndex
-      acousticDiversityIndex
-      acousticEvenessIndex
-      acousticGradientIndex
-      acousticRichnessIndex
-      all_audio_alpha_indices
+      acoustic_complexity_index
+      acoustic_diversity_index
+      acoustic_eveness_index
+      acoustic_gradient_index
+      acoustic_richness_index
       all_spectral_alpha_indices
-      audio_LEQ
-      audio_activity
-      audio_entropy
-      audio_events
-      audio_median
-      bioacousticsIndex
+      all_temporal_alpha_indices
+      bioacoustics_index
       frequency_entropy
-      frequency_raoQ
+      frequency_raoq
       more_entropy
-      numberOfPeaks
-      regionOfInterestIndex
+      number_of_peaks
+      region_of_interest_index
       roughness
-      soundscapeIndex
-      spectral_LEQ
+      soundscape_index
       spectral_activity
       spectral_cover
       spectral_entropy
       spectral_events
-      surfaceRoughness
+      spectral_leq
+      surface_roughness
+      temporal_activity
+      temporal_entropy
+      temporal_events
+      temporal_leq
+      temporal_median
       tfsd
    
    

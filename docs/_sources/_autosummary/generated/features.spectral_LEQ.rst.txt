@@ -1,6 +1,6 @@
-﻿features.spectral\_LEQ
+﻿features.spectral\_leq
 ======================
 
 .. currentmodule:: features
 
-.. autofunction:: spectral_LEQ
+.. autofunction:: spectral_leq

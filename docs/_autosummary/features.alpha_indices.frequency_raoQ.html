@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>features.alpha_indices.frequency_raoQ &mdash; scikit-maad 1.1 documentation</title>
+  <title>features.alpha_indices.frequency_raoq &mdash; scikit-maad 1.1 documentation</title>
   
 
   
@@ -148,7 +148,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>features.alpha_indices.frequency_raoQ</li>
+      <li>features.alpha_indices.frequency_raoq</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -168,10 +168,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="features-alpha-indices-frequency-raoq">
-<h1>features.alpha_indices.frequency_raoQ<a class="headerlink" href="#features-alpha-indices-frequency-raoq" title="Permalink to this headline">¶</a></h1>
+<h1>features.alpha_indices.frequency_raoq<a class="headerlink" href="#features-alpha-indices-frequency-raoq" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="features.alpha_indices.frequency_raoQ">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">frequency_raoQ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">S_power</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#frequency_raoQ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.frequency_raoQ" title="Permalink to this definition">¶</a></dt>
+<dt id="features.alpha_indices.frequency_raoq">
+<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">frequency_raoq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">S_power</span></em>, <em class="sig-param"><span class="n">fn</span></em>, <em class="sig-param"><span class="n">bin_step</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/alpha_indices.html#frequency_raoq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.frequency_raoq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute Rao’s quadratic entropy on a power spectrum (1d).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -204,7 +204,7 @@
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S_power</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">avg_power_spectro</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">frequency_raoQ</span><span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">frequency_raoq</span><span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
 <span class="go">0.10556621228886422</span>
 </pre></div>
 </div>

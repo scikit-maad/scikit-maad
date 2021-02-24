@@ -169,39 +169,6 @@
             
   <div class="section" id="features-alpha-indices-audio-moments">
 <h1>features.alpha_indices.audio_moments<a class="headerlink" href="#features-alpha-indices-audio-moments" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="features.alpha_indices.audio_moments">
-<code class="sig-prename descclassname">features.alpha_indices.</code><code class="sig-name descname">audio_moments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/features/temporal.html#audio_moments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.alpha_indices.audio_moments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>s</strong><span class="classifier">1D array</span></dt><dd><p>Audio to process</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>mean</strong><span class="classifier">float</span></dt><dd><p>mean of the audio</p>
-</dd>
-<dt><strong>var</strong><span class="classifier">float</span></dt><dd><p>variance  of the audio</p>
-</dd>
-<dt><strong>skew</strong><span class="classifier">float</span></dt><dd><p>skewness of the audio</p>
-</dd>
-<dt><strong>kurt</strong><span class="classifier">float</span></dt><dd><p>kurtosis of the audio</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span><span class="p">,</span> <span class="n">sv</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">sk</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">audio_moments</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean: </span><span class="si">%2.2f</span><span class="s1"> / var: </span><span class="si">%2.5f</span><span class="s1"> / skewness: </span><span class="si">%2.4f</span><span class="s1"> / kurtosis: </span><span class="si">%2.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">sv</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">sk</span><span class="p">))</span>
-<span class="go">mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 

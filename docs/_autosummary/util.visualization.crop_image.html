@@ -204,19 +204,19 @@ tcrop corresponds to the min and max boundary time values</p>
 <span class="go">                  &#39;vmin&#39;:0,</span>
 <span class="go">                  &#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1]),</span>
 <span class="go">                  &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
-<span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="go">                  &#39;xlabel&#39;:&#39;Time [s]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Lxx</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>      
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Lxx</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>      
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Lxx_crop</span><span class="p">,</span> <span class="n">tn_crop</span><span class="p">,</span> <span class="n">fn_crop</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">crop_image</span><span class="p">(</span><span class="n">Lxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="mi">10000</span><span class="p">),</span> <span class="n">tcrop</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">Lxx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
 <span class="go">                  &#39;vmin&#39;:0,</span>
 <span class="go">                  &#39;extent&#39;:(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),</span>
 <span class="go">                  &#39;title&#39;:&#39;Crop of the power spectrogram density (PSD)&#39;,</span>
-<span class="go">                  &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="go">                  &#39;xlabel&#39;:&#39;Time [s]&#39;,</span>
 <span class="go">                  &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
 <span class="go">                  }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2D</span><span class="p">(</span><span class="n">Lxx_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">Lxx_crop</span><span class="p">,</span><span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>  
 </pre></div>
 </div>
 </dd></dl>

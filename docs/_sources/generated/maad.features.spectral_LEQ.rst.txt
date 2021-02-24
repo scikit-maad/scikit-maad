@@ -1,6 +1,6 @@
-﻿maad.features.spectral\_LEQ
+﻿maad.features.spectral\_leq
 ===========================
 
 .. currentmodule:: maad.features
 
-.. autofunction:: spectral_LEQ
+.. autofunction:: spectral_leq
