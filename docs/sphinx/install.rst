@@ -17,6 +17,10 @@ The simplest way to install **scikit-maad** is using **pypi**, the package insta
 
     pip install scikit-maad
 
+If you use the Conda package manager you may need to first install pip and then run the installation::
+    
+    conda install pip
+    pip install scikit-maad
 
 2. Development installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,7 +29,7 @@ You can install the development version if you want to work on the latest versio
 
     pip uninstall scikit-maad
 
-To install the latest deveopment version from source clone the master repository from `GitHub <https://github.com/scikit-maad/scikit-maad>`::
+To install the latest deveopment version from source clone the master repository from `GitHub <https://github.com/scikit-maad/scikit-maad>`_::
 
     git clone https://github.com/scikit-maad/scikit-maad.git
 
@@ -37,3 +41,9 @@ To update the installation pull the latest modifications from the repository and
     
     git pull
     python setup.py install
+    
+If you do not have git installed, download the latest ZIP version from `GitHub <https://github.com/scikit-maad/scikit-maad>`_, in the tab named **Code**, look for the link **Download ZIP**. In the download location call::
+    
+    pip install scikit-maad-production.zip
+    
+

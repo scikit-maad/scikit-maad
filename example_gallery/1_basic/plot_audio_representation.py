@@ -5,9 +5,9 @@ Audio representation
 ====================
 
 An audio signal can be represented in both, temporal and spectral domains. 
-These representations give valuable information related to the signal characteristics
-and hence are complementary. In this introductory example we will load an audio signal, 
-apply basic transformations to better understand its features.
+These representations are complementary and fundamental to understand the audio
+signal characteristics. In this introductory example we will load an audio signal, 
+apply basic transformations to better understand its features in time and frequency.
 """
 
 #%% Load an audio file and plot the waveform
@@ -25,7 +25,7 @@ util.plot_wave(s, fs)
 
 s_trim = sound.trim(s, fs, 5, 8)
 
-#%% Onced trimmed, lets compute the envelope of the signal, and the Fourier and 
+#%% Onced trimmed, lets compute the envelope of the signal, the Fourier and 
 # short-time Fourier transforms.
 env = sound.envelope(s_trim, mode='fast', Nt=128)
 pxx, fidx = sound.spectrum(s, fs, nperseg=1024, method='welch')
@@ -35,8 +35,8 @@ Sxx, tn, fn, ext = sound.spectrogram(s_trim, fs, window='hann', nperseg=1024, no
 # Finally, we can visualize the signal characteristics in the temporal and 
 # spectral domains.
 
-fig, ax = plt.subplots(4,1, figsize=(10,12))
+fig, ax = plt.subplots(4,1, figsize=(8,10))
 util.plot_wave(s_trim, fs, ax=ax[0])
-util.plot_wave(env, fs/128, ax=ax[1])
+util.plot_wave(env, fs, ax=ax[1])
 util.plot_spectrum(pxx, fidx, ax=ax[2])
 util.plot_spectrogram(Sxx, extent=ext, ax=ax[3], colorbar=False)

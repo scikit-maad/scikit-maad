@@ -97,7 +97,7 @@ def envelope (s, mode='fast', Nt=32):
         # (magnitude) 
         env = np.abs(hilbert(s))  
     else:
-        print ("WARNING : choose a mode between 'fast' and 'hilbert'")
+        raise Exception("Invalid mode. Mode should be 'fast' or 'hilbert' ")
         
     return env
 
