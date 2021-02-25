@@ -1,7 +1,13 @@
 <img src="logo_maad.png" alt="drawing" width="500"/>
 
-
 **scikit-maad** is a free, open-source and modular toolbox to **analyze ecoacoustics datasets** in Python 3. This package was designed to bring flexibility to (1) **find regions of interest**, and (2) to compute **acoustic features** in audio recordings. This workflow opens the possibility to use powerfull **machine learning** algorithms through **scikit-learn**, allowing to identify key patterns in all kind of soundscapes.
+
+[![DOI](https://zenodo.org/badge/148142520.svg)](https://zenodo.org/badge/latestdoi/148142520)
+
+## Examples and documentation
+- See [Howto notebook](./docs/howto.ipynb) in "docs" directory for detail explanations
+- See [Python scripts](./examples/) in "examples" directory for a direct approach of MAAD
+- In depth information related to the Multiresolution Analysis of Acoustic Diversity implemented in scikit-maad was published in: Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). [Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis](https://doi.org/10.1016/j.ecolind.2018.03.026). Ecological Indicators, 90, 346–355
 
 ## Installation
 scikit-maad dependencies:
