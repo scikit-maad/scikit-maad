@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sound.metrics &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>sound.metrics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sound.metrics</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Collection of metrics functions to evaluate audio preprocessing methods</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Import external modules</span>
+<span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">envelope</span><span class="p">,</span> <span class="n">avg_power_spectro</span><span class="p">,</span> <span class="n">remove_background_along_axis</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">mean_dB</span><span class="p">,</span> <span class="n">get_unimode</span><span class="p">,</span> <span class="n">running_mean</span>
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="temporal_snr"><a class="viewcode-back" href="../../_autosummary/sound.metrics.temporal_snr.html#sound.temporal_snr">[docs]</a><span class="k">def</span> <span class="nf">temporal_snr</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the signal to noise ratio (SNR) of an audio signal in the time domain.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : 1D array</span>
+<span class="sd">        Audio to process</span>
+<span class="sd">    mode : str, optional, default is `fast`</span>
+<span class="sd">        Select the mode to compute the envelope of the audio waveform</span>
+<span class="sd">        `fast` : The sound is first divided into frames (2d) using the </span>
+<span class="sd">        function _wave2timeframes(s), then the max of each frame gives a </span>
+<span class="sd">        good approximation of the envelope.</span>
+<span class="sd">        `Hilbert` : estimation of the envelope from the Hilbert transform. </span>
+<span class="sd">        The method is slow</span>
+<span class="sd">    Nt : integer, optional, default is 512</span>
+<span class="sd">        Size of each frame. The largest, the highest is the approximation.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ENRt : float</span>
+<span class="sd">        Total energy in dB computed in the time domain</span>
+<span class="sd">    BGNt : float</span>
+<span class="sd">        Estimation of the background energy (dB) computed in the time domain</span>
+<span class="sd">    SNRt: float</span>
+<span class="sd">        Signal to noise ratio (dB) computed in the time domain </span>
+<span class="sd">        SNRt = ENRt - BGNt</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
+<span class="sd">    .. [2] Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the naturalenvironment. Queensland University of Technology, Brisbane.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _,_,snr = maad.sound.temporal_snr(s)</span>
+<span class="sd">    &gt;&gt;&gt; snr</span>
+<span class="sd">    1.5744987447774665</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Envelope</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">envelope</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="n">Nt</span><span class="p">)</span>
+    <span class="c1"># linear to power dB</span>
+    <span class="n">envdB</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">env</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># total energy estimation. </span>
+    <span class="n">ENRt</span> <span class="o">=</span> <span class="n">mean_dB</span><span class="p">(</span><span class="n">envdB</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Background noise estimation</span>
+    <span class="n">BGNt</span> <span class="o">=</span> <span class="n">get_unimode</span> <span class="p">(</span><span class="n">envdB</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)</span>
+    <span class="c1"># Signal to Noise ratio estimation</span>
+    <span class="n">SNRt</span> <span class="o">=</span> <span class="n">ENRt</span> <span class="o">-</span> <span class="n">BGNt</span>
+
+    <span class="k">return</span> <span class="n">ENRt</span><span class="p">,</span> <span class="n">BGNt</span><span class="p">,</span> <span class="n">SNRt</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="spectral_snr"><a class="viewcode-back" href="../../_autosummary/sound.metrics.spectral_SNR.html#sound.spectral_snr">[docs]</a><span class="k">def</span> <span class="nf">spectral_snr</span> <span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the signal to noise ratio (SNR) of an audio from its spectrogram</span>
+<span class="sd">    in the time-frequency domain.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sxx_power : 2D array</span>
+<span class="sd">        Power spectrogram density [Matrix] to process.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ENRf : float</span>
+<span class="sd">        Total energy in dB computed in the frequency domain which corresponds</span>
+<span class="sd">        to the average of the power spectrogram then the sum of the average</span>
+<span class="sd">    BGNf : float</span>
+<span class="sd">        Estimation of the background energy (dB) computed based on the estimation</span>
+<span class="sd">        of the noise profile of the power spectrogram (2d)</span>
+<span class="sd">    SNRf: float</span>
+<span class="sd">        Signal to noise ratio (dB) computed in the frequency domain </span>
+<span class="sd">        SNRf = ENRf - BGNf</span>
+<span class="sd">    ENRf_per_bin : vector of floats</span>
+<span class="sd">        Energy in dB per frequency bin</span>
+<span class="sd">    BGNf_per_bin : vector of floats</span>
+<span class="sd">        Background (noise profile) energy in dB per frequency bin</span>
+<span class="sd">    SNRf_per_bin : vector of floats  </span>
+<span class="sd">        Signal to noise ratio per frequency bin</span>
+<span class="sd">        </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms </span>
+<span class="sd">          Derived from Natural Recordings of the Environment. </span>
+<span class="sd">          Queensland University of Technology, Brisbane.</span>
+<span class="sd">    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived </span>
+<span class="sd">          from long-duration recordings of the naturalenvironment.</span>
+<span class="sd">          Queensland University of Technology, Brisbane.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  </span>
+<span class="sd">    &gt;&gt;&gt; _, _, snr, _, _, _ = maad.sound.spectral_snr(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; snr</span>
+<span class="sd">    4.084065436435541</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># average Sxx_power along time axis</span>
+    <span class="n">ENRf_per_bin</span> <span class="o">=</span> <span class="n">avg_power_spectro</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
+    <span class="c1"># compute total energy in dB</span>
+    <span class="n">ENRf</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">ENRf_per_bin</span><span class="p">))</span>
+    <span class="c1"># Extract the noise profile (BGNf_per_bin) from the spectrogram Sxx_power</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">remove_background_along_axis</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="c1"># smooth the profile by removing spurious thin peaks (less than 5 pixels wide)</span>
+    <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">running_mean</span><span class="p">(</span><span class="n">noise_profile</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="c1"># noise_profile (energy) into dB</span>
+    <span class="n">BGNf_per_bin</span><span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">noise_profile</span><span class="p">)</span>
+    <span class="c1"># compute noise/background energy in dB</span>
+    <span class="n">BGNf</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">noise_profile</span><span class="p">))</span>
+    <span class="c1"># compute signal to noise ratio</span>
+    <span class="n">SNRf</span> <span class="o">=</span> <span class="n">ENRf</span> <span class="o">-</span> <span class="n">BGNf</span> 
+    <span class="c1"># compute SNR_per_bin</span>
+    <span class="n">SNRf_per_bin</span> <span class="o">=</span> <span class="n">ENRf_per_bin</span> <span class="o">-</span> <span class="n">ENRf_per_bin</span>
+
+    <span class="k">return</span> <span class="n">ENRf</span><span class="p">,</span> <span class="n">BGNf</span><span class="p">,</span> <span class="n">SNRf</span><span class="p">,</span> <span class="n">ENRf_per_bin</span><span class="p">,</span> <span class="n">BGNf_per_bin</span><span class="p">,</span><span class="n">SNRf_per_bin</span> </div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="sharpness"><a class="viewcode-back" href="../../_autosummary/sound.metrics.sharpness.html#sound.sharpness">[docs]</a><span class="k">def</span> <span class="nf">sharpness</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Compute the sharpness of a spectrogram</span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx : 2d ndarray of scalars </span>
+<span class="sd">        Spectrogram (or image) </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    sharpness : scalar</span>
+<span class="sd">        sharpness of the spectrogram (or image)</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  </span>
+<span class="sd">    &gt;&gt;&gt; sharp = maad.sound.sharpness(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; sharp</span>
+<span class="sd">    1.1930709869950632e-05</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">Gt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">edge_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Gf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">edge_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Gt</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span> <span class="n">Gf</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">sharpness</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">Gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">Gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">sharpness</span>   </div>
+ 
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.util.parser_func &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../../../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.util.parser_func</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.util.parser_func</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; Utilitary functions to parse or read files&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<div class="viewcode-block" id="read_audacity_annot"><a class="viewcode-back" href="../../../_autosummary/maad.util.parser_func.read_audacity_annot.html#maad.util.parser_func.read_audacity_annot">[docs]</a><span class="k">def</span> <span class="nf">read_audacity_annot</span> <span class="p">(</span><span class="n">audacity_filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read audacity annotations file (or labeling file) and return a Pandas Dataframe</span>
+<span class="sd">    with the bounding box and the label of each region of interest (ROI)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    audacity_filename : String</span>
+<span class="sd">        Path to the audacity file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tab_out : Pandas Dataframe </span>
+<span class="sd">        Colormap type used by matplotlib</span>
+<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    https://manual.audacityteam.org/man/label_tracks.html   </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># read file with tab delimiter</span>
+    <span class="n">tab_in</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">audacity_filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    
+    <span class="c1"># arrange data</span>
+    <span class="n">t_info</span> <span class="o">=</span> <span class="n">tab_in</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">tab_in</span><span class="p">),</span><span class="mi">2</span><span class="p">),:]</span>
+    <span class="n">t_info</span> <span class="o">=</span> <span class="n">t_info</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;label&#39;</span><span class="p">})</span>
+    <span class="n">t_info</span> <span class="o">=</span> <span class="n">t_info</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">f_info</span> <span class="o">=</span> <span class="n">tab_in</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">tab_in</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),:]</span>
+    <span class="n">f_info</span> <span class="o">=</span> <span class="n">f_info</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;slash&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;fmin&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;fmax&#39;</span><span class="p">})</span>
+    <span class="n">f_info</span> <span class="o">=</span> <span class="n">f_info</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># return dataframe</span>
+    <span class="n">tab_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">t_info</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">),</span> 
+                         <span class="n">t_info</span><span class="p">[</span><span class="s1">&#39;tmin&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> 
+                         <span class="n">f_info</span><span class="p">[</span><span class="s1">&#39;fmin&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> 
+                         <span class="n">t_info</span><span class="p">[</span><span class="s1">&#39;tmax&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> 
+                         <span class="n">f_info</span><span class="p">[</span><span class="s1">&#39;fmax&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)],</span>  <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tab_out</span></div>
+
+<div class="viewcode-block" id="date_from_filename"><a class="viewcode-back" href="../../../_autosummary/maad.util.parser_func.date_from_filename.html#maad.util.parser_func.date_from_filename">[docs]</a><span class="k">def</span> <span class="nf">date_from_filename</span> <span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract date and time from the filename. Return a datetime object</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        The filename must follow this format :</span>
+<span class="sd">        XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">        mm : minutes / ss : seconds</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    date : object datetime</span>
+<span class="sd">        This object contains the date of creation of the file extracted from</span>
+<span class="sd">        the filename postfix. </span>
+<span class="sd">        The filename must follow this format :</span>
+<span class="sd">        XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">        mm : minutes / ss : seconds</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># date by default</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># test if it is possible to extract the recording date from the filename</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">19</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">yy</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">19</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">mm</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">dd</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">HH</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">MM</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> 
+        <span class="n">SS</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">date</span>
+
+    <span class="c1"># extract date and time from the filename</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">yy</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">mm</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">dd</span><span class="p">,</span> <span class="n">hour</span><span class="o">=</span><span class="n">HH</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="n">MM</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="n">SS</span><span class="p">,</span> 
+                    <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">date</span></div>
+
+<div class="viewcode-block" id="date_parser"><a class="viewcode-back" href="../../../_autosummary/maad.util.parser_func.date_parser.html#maad.util.parser_func.date_parser">[docs]</a><span class="k">def</span> <span class="nf">date_parser</span> <span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">c_file</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">c_date</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># find a file in subdirectories</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subFolders</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">datadir</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;.wav&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                <span class="n">c_date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date_from_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>    
+                <span class="n">c_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>               
+                
+    <span class="c1">####### SORTED BY DATE</span>
+    <span class="c1"># create a Pandas dataframe with date as index</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;file&#39;</span><span class="p">:</span><span class="n">c_file</span><span class="p">},</span><span class="n">index</span><span class="o">=</span><span class="n">c_date</span><span class="p">)</span>
+    <span class="c1"># sort dataframe by date</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

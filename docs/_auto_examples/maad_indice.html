@@ -1,0 +1,919 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Indice - This script gives an example of how to use scikit-MAAD for ecoacoustics indices &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Indice - This script gives an example of how to use scikit-MAAD for ecoacoustics indices</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_auto_examples/maad_indice.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-maad-indice-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="indice-this-script-gives-an-example-of-how-to-use-scikit-maad-for-ecoacoustics-indices">
+<span id="sphx-glr-auto-examples-maad-indice-py"></span><h1>Indice - This script gives an example of how to use scikit-MAAD for ecoacoustics indices<a class="headerlink" href="#indice-this-script-gives-an-example-of-how-to-use-scikit-maad-for-ecoacoustics-indices" title="Permalink to this headline">¶</a></h1>
+<p>Created on Mon Aug  6 17:59:44 2018</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># Clear all the variables</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;reset -sf&#39;</span><span class="p">)</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># for csv</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">filters</span>
+
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ############## Import MAAD module</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a> <span class="c1"># in order to be wind/linux/MacOS compatible</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># change the path to the current path where the script is located</span>
+<span class="c1"># Get the current dir of the current file</span>
+<span class="n">dir_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.dirname" title="os.path.dirname" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/os.path.html#os.path.realpath" title="os.path.realpath" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span></a><span class="p">(</span><span class="s1">&#39;__file__&#39;</span><span class="p">))</span>
+<a href="https://docs.python.org/3/library/os.html#os.chdir" title="os.chdir" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">chdir</span></a><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+
+<span class="n">maad_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">os</span><span class="o">.</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">maad_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="kn">import</span> <span class="nn">maad</span>
+
+<span class="c1"># Close all the figures (like in Matlab)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------------          options              ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1"># root directory of the files</span>
+<span class="n">base_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">datadir</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_path</span> <span class="o">/</span> <span class="s2">&quot;../data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">savedir</span> <span class="o">=</span>  <span class="n">datadir</span>
+<span class="n">save_csv</span> <span class="o">=</span> <span class="s1">&#39;results_indices.csv&#39;</span>
+
+<span class="n">CHANNEL</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
+<span class="n">MODE_ENV</span> <span class="o">=</span> <span class="s1">&#39;fast&#39;</span>  <span class="c1"># &#39;fast&#39; #&#39;hilbert&#39;</span>
+
+<span class="n">Nt</span> <span class="o">=</span> <span class="mi">512</span>     <span class="c1"># frame size (in points)</span>
+<span class="n">N</span>  <span class="o">=</span> <span class="mi">1024</span>           <span class="c1"># fft size (in points)</span>
+<span class="n">NOVLP</span> <span class="o">=</span> <span class="n">N</span><span class="o">//</span><span class="mi">2</span>        <span class="c1"># N//2</span>
+<span class="n">WIN</span> <span class="o">=</span> <span class="s1">&#39;hanning&#39;</span>     <span class="c1">#&#39;boxcar&#39; hanning&#39;</span>
+
+<span class="n">dB_RANGE</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">dB_GAIN</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">FREQ_ANTHRO_MIN</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">FREQ_ANTHRO_MAX</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">FREQ_BIO_MIN</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">FREQ_BIO_MAX</span> <span class="o">=</span> <span class="mi">15000</span>
+<span class="n">FREQ_INSECT_MIN</span> <span class="o">=</span> <span class="mi">15000</span>
+<span class="n">FREQ_INSECT_MAX</span> <span class="o">=</span> <span class="mi">20000</span>
+
+<span class="n">ANTHRO_BAND</span> <span class="o">=</span> <span class="p">(</span><span class="n">FREQ_ANTHRO_MIN</span><span class="p">,</span> <span class="n">FREQ_ANTHRO_MAX</span><span class="p">)</span>
+<span class="n">BIO_BAND</span> <span class="o">=</span> <span class="p">(</span><span class="n">FREQ_BIO_MIN</span><span class="p">,</span><span class="n">FREQ_BIO_MAX</span><span class="p">)</span>
+<span class="n">INSECT_BAND</span> <span class="o">=</span> <span class="p">(</span><span class="n">FREQ_INSECT_MIN</span><span class="p">,</span><span class="n">FREQ_INSECT_MAX</span><span class="p">)</span>
+
+<span class="n">DISPLAY</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------------          end options          ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------- LOAD SOUND AND PREPROCESS SOUND    ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------- LOAD SOUND AND PREPROCESS SOUND    ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1"># parse a directory in order to get a df with date and fullfilename</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">date_parser</span><span class="p">(</span><span class="n">datadir</span><span class="p">)</span>
+
+<span class="c1"># select the files</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ##### EXAMPLES</span>
+<span class="c1"># #see https://pandas.pydata.org/pandas-docs/sdf/timeseries.html</span>
+<span class="c1"># # Returning an array containing the hours for each row in your dataframe</span>
+<span class="c1"># df.index.hour</span>
+<span class="c1"># # grab all rows where the time is between 12h and 13h,</span>
+<span class="c1"># df.between_time(&#39;12:00:00&#39;,&#39;13:00:00&#39;)</span>
+<span class="c1"># # Increment the time by 1 microsecond</span>
+<span class="c1"># df.index = df.index+ pd.Timedelta(microseconds=1)</span>
+<span class="c1"># date_selec = pd.date_range(&#39;2018-07-14&#39;, &#39;2018-07-20&#39;)</span>
+<span class="c1"># =============================================================================</span>
+
+<span class="c1">## Select data between date range</span>
+<span class="c1">#T0 = &#39;2019-03-01 00:00:00&#39;</span>
+<span class="c1">#T1 = &#39;2019-04-01 00:00:00&#39;</span>
+<span class="c1">#sub_df = df[T0:T1]</span>
+
+<span class="c1"># or keep all data</span>
+<span class="n">sub_df</span> <span class="o">=</span> <span class="n">df</span>
+
+<span class="c1"># or select a row (= a single file)</span>
+<span class="n">sub_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># define the indices&#39; lists</span>
+<span class="c1"># c_ for column_</span>
+<span class="n">N_FILE</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_df</span><span class="p">)</span>
+<span class="n">c_file</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_clipping</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_BGNt</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_SNRt</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_M</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ENT</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACTtFraction</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACTtCount</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACTtMean</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EVNtSsum</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EVNtMean</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EVNtCount</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_BGNf</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_SNRf</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EAS</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ECU</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ECV</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EPS</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_H</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACI</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_NDSI</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_rBA</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_BI</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ADI</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_AEI</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ROU</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_LFC</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_MFC</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_HFC</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACTspFraction</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACTspCount</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_ACTspMean</span> <span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EVNspSum</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EVNspMean</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_EVNspCount</span><span class="o">=</span>  <span class="p">[]</span>
+<span class="n">c_LTR</span> <span class="o">=</span>  <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sub_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">:</span>
+
+    <span class="c1"># get the full filename of the corresponding row</span>
+    <span class="n">fullfilename</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+    <span class="c1"># Save file basename</span>
+    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.split" title="os.path.split" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span></a><span class="p">(</span><span class="n">fullfilename</span><span class="p">)</span>
+    <span class="n">savefile_base</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">savefile</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">savedir</span><span class="p">,</span><span class="n">savefile_base</span><span class="p">)</span>
+
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">***********************&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;========================================================================</span>
+<span class="sd">    ===========================================================================</span>
+<span class="sd">                     Computation in the time domain</span>
+<span class="sd">    ===========================================================================</span>
+<span class="sd">    ======================================================================= &quot;&quot;&quot;</span>
+    <span class="c1">#### Load the original sound</span>
+    <span class="k">try</span> <span class="p">:</span>
+        <span class="n">wave</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">fullfilename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">CHANNEL</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># Delete the row if the file does not exist or raise a value error (i.e. no EOF)</span>
+        <span class="n">sub_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c1">#### Highpass signal (10Hz)f</span>
+    <span class="c1">#wave = iir_filter1d(wave,fs,fcut=10,forder=10,fname=&#39;butter&#39;,ftype=&#39;highpass&#39;)</span>
+
+    <span class="c1">#### Envelope (mode fast =&gt; see TOWSEY)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">envelope</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">MODE_ENV</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">Nt</span><span class="p">)</span>
+    <span class="n">envdB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>
+
+    <span class="c1"># time step</span>
+    <span class="k">if</span> <span class="n">MODE_ENV</span> <span class="o">==</span> <span class="s1">&#39;fast&#39;</span> <span class="p">:</span> <span class="n">dt_env</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="n">Nt</span>
+    <span class="k">if</span> <span class="n">MODE_ENV</span> <span class="o">==</span> <span class="s1">&#39;hilbert&#39;</span> <span class="p">:</span> <span class="n">dt_env</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span>
+
+    <span class="c1"># Time vector</span>
+    <span class="n">WAVE_DURATION</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span>
+    <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WAVE_DURATION</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+    <span class="c1">#### Background noise estimation</span>
+    <span class="sd">&quot;&quot;&quot;BGNt [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="n">BKdB_t</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_unimode</span> <span class="p">(</span><span class="n">envdB</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;ale&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">BK_t</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2linear</span><span class="p">(</span><span class="n">BKdB_t</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="n">dB_GAIN</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">)</span> <span class="c1"># transform bgn in dB back to amplitude</span>
+    <span class="n">BGNt</span> <span class="o">=</span> <span class="n">BKdB_t</span>
+
+    <span class="c1">#### Signal to Noise ratio estimation</span>
+    <span class="sd">&quot;&quot;&quot; SNRt [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="n">SNRt</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">envdB</span><span class="p">)</span> <span class="o">-</span> <span class="n">BGNt</span>
+
+    <span class="c1">#### Env in dB without noise</span>
+    <span class="n">envdBSansNoise</span> <span class="o">=</span> <span class="n">envdB</span> <span class="o">-</span> <span class="n">BKdB_t</span>
+    <span class="n">envdBSansNoise</span> <span class="p">[</span> <span class="n">envdBSansNoise</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Display the wave, the envelope and the background noise (red line),</span>
+    <span class="c1"># in linear and dB scale</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+        <span class="c1"># linear representation</span>
+        <span class="n">fig1</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span><span class="n">env</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">BK_t</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Waveform, envelope and background noise&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># dB representation</span>
+        <span class="n">fig2</span><span class="p">,</span> <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span><span class="n">envdB</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">BKdB_t</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Envelope in dB and background noise&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># dB representation</span>
+        <span class="n">fig3</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span><span class="n">envdBSansNoise</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Envelope in dB without background noise&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+
+    <span class="c1">#### Median</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        COMMENT : Result a bit different due to different Hilbert implementation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">MED</span> <span class="o">=</span> <span class="n">median</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;median </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">MED</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; =======================================================================</span>
+<span class="sd">    ENTROPY :  Entropy is a measure of ENERGY dispersal =&gt; square the amplitude.</span>
+
+<span class="sd">    TEMPORAL ENTROPY =&gt; value&lt;0.7 indicates a brief concentration of energy</span>
+<span class="sd">                     (few seconds)</span>
+<span class="sd">                     value close 1 indicates no peak events but rather</span>
+<span class="sd">                     smooth sound or noise.</span>
+<span class="sd">    ======================================================================= &quot;&quot;&quot;</span>
+    <span class="c1">#### temporal entropy from the envelope&#39;s amplitude [SUEUR] or energy [TOWSEY]</span>
+    <span class="sd">&quot;&quot;&quot; ENT [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        COMMENT : Result a bit different due to different envelope estimation</span>
+<span class="sd">        implementation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Ht</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">env</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ENT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Ht</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ht </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Ht</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;**************************** Activity *******************************&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; ACT &amp; EVN [TOWSEY] &quot;&quot;&quot;</span>
+
+    <span class="n">ACTtFraction</span><span class="p">,</span> <span class="n">ACTtCount</span><span class="p">,</span> <span class="n">ACTtMean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_activity</span> <span class="p">(</span><span class="n">envdBSansNoise</span><span class="p">,</span>
+                                                            <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">EVNtSsum</span><span class="p">,</span> <span class="n">EVNtMean</span><span class="p">,</span> <span class="n">EVNtCount</span><span class="p">,</span> <span class="n">EVNt</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_events</span> <span class="p">(</span><span class="n">envdBSansNoise</span><span class="p">,</span>
+                                                            <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                                                            <span class="n">dt</span><span class="o">=</span><span class="n">dt_env</span><span class="p">,</span> <span class="n">rejectDuration</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">ACT</span> <span class="o">=</span> <span class="n">ACTtFraction</span>
+    <span class="n">EVN</span> <span class="o">=</span> <span class="n">EVNtMean</span>
+
+    <span class="c1"># display a portion of the signal (0,20)</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+
+        <span class="n">fig3</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">env</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">env</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">EVNt</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Detected Events from the envelope without noise&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; =======================================================================</span>
+<span class="sd">    ===========================================================================</span>
+<span class="sd">                     Computation in the frequency domain</span>
+<span class="sd">    ===========================================================================</span>
+<span class="sd">    ========================================================================&quot;&quot;&quot;</span>
+
+    <span class="c1">#### spectrogram =&gt; mode : &#39;amplitude&#39; or &#39;psd&#39;</span>
+    <span class="n">PSDxx</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogramPSD</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span>
+                                         <span class="n">window</span><span class="o">=</span><span class="n">WIN</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">NOVLP</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">N</span><span class="p">,</span>
+                                         <span class="n">fcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="n">DISPLAY</span><span class="p">,</span>
+                                         <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># index of the selected bandwidth</span>
+    <span class="n">iANTHRO_BAND</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">ANTHRO_BAND</span><span class="p">)</span>
+    <span class="n">iBIO_BAND</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">BIO_BAND</span><span class="p">)</span>
+    <span class="n">iINSECT_BAND</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">index_bw</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">INSECT_BAND</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; ********************  TO CHECK    &quot;&quot;&quot;</span>
+    <span class="c1">#### Smoothing of the spectrogram (like TOWSEY)</span>
+    <span class="c1">#PSDxx = fir_filter(PSDxx,kernel=(&#39;boxcar&#39;,3), axis=1)</span>
+    <span class="c1">#PSDxx = fir_filter(PSDxx,kernel=(&#39;boxcar&#39;,3), axis=0)</span>
+    <span class="sd">&quot;&quot;&quot; ******************** END TO CHECK  &quot;&quot;&quot;</span>
+
+    <span class="c1">#### PSD spectrogram PSDxx to amplitude spectrogram Sxx</span>
+    <span class="n">Sxx</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">PSDxx</span><span class="p">)</span>
+    <span class="c1">#### Average Spectrum and PSD (better to compute the mean on the PSD)</span>
+    <span class="n">mean_PSD</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">PSDxx</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#### convert into dB</span>
+    <span class="n">SxxdB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>
+    <span class="n">PSDxxdB</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">PSDxx</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+
+    <span class="c1"># display MEAN PSD SPECTROGRAM in dB [anthropological and Biological bands]</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+        <span class="n">fig5</span><span class="p">,</span> <span class="n">ax5</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">iANTHRO_BAND</span><span class="p">],</span>
+                 <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean_PSD</span><span class="p">[</span><span class="n">iANTHRO_BAND</span><span class="p">],</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">),</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#555555&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">],</span>
+                 <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean_PSD</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">],</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">),</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#55DD00&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">iINSECT_BAND</span><span class="p">],</span>
+                 <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean_PSD</span><span class="p">[</span><span class="n">iINSECT_BAND</span><span class="p">],</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">),</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#DDDC00&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#### Noise estimation</span>
+    <span class="sd">&quot;&quot;&quot;BGNf [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        COMMENT : Result a bit different due to smoothing</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">BKdB_f</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_unimode</span> <span class="p">(</span><span class="n">PSDxxdB</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;ale&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; ********************  TO CHECK    &quot;&quot;&quot;</span>
+    <span class="c1"># smooth the noise profile</span>
+    <span class="c1">#BKdB_f = fir_filter(BKdB_f,kernel=(&#39;boxcar&#39;, 3), axis=0)</span>
+    <span class="sd">&quot;&quot;&quot; ******************** TO CHECK &quot;&quot;&quot;</span>
+    <span class="n">BGNf</span> <span class="o">=</span> <span class="n">BKdB_f</span>
+
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">iANTHRO_BAND</span><span class="p">],</span>
+                    <span class="n">BKdB_f</span><span class="p">[</span><span class="n">iANTHRO_BAND</span><span class="p">],</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">],</span>
+                    <span class="n">BKdB_f</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">],</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="n">iINSECT_BAND</span><span class="p">],</span>
+                    <span class="n">BKdB_f</span><span class="p">[</span><span class="n">iINSECT_BAND</span><span class="p">],</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Mean PSD and uniform background noise (dash)&#39;</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+
+    <span class="sd">&quot;&quot;&quot; Parseval : energy conservation from temporal domain to frequency domain &quot;&quot;&quot;</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Parseval : energy conservation from temporal domain to frequency domain&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;=&gt; if N &lt; 4096, the conservation is not preserved due to noise&#39;</span><span class="p">)</span>
+    <span class="n">energy_wav</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">wave</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;NRJ from wav : </span><span class="si">%2.5f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">energy_wav</span><span class="p">)</span>
+    <span class="n">energy_PSD</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">PSDxx</span><span class="o">/</span><span class="n">PSDxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">wave</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;NRJ from PSDxy : </span><span class="si">%2.5f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">energy_PSD</span><span class="p">)</span>
+    <span class="n">energy_PSD2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">mean_PSD</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">wave</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;NRJ from mean(PSDxy) : </span><span class="si">%2.5f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">energy_PSD2</span><span class="p">)</span>
+
+    <span class="c1">#### Signal to Noise ratio estimation</span>
+    <span class="sd">&quot;&quot;&quot; SNRf [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="n">SNRf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">PSDxxdB</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">])</span> <span class="o">-</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2linear</span><span class="p">(</span><span class="n">BKdB_f</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)),</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; Spectrogram in dB without noise &quot;&quot;&quot;</span>
+    <span class="c1"># Remove background noise (BGNf is an estimation) and negative value to zero</span>
+    <span class="n">PSDxxdB_SansNoise</span> <span class="o">=</span><span class="n">PSDxxdB</span> <span class="o">-</span> <span class="n">BKdB_f</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">PSDxxdB_SansNoise</span><span class="p">[</span><span class="n">PSDxxdB_SansNoise</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span><span class="mi">0</span>
+
+    <span class="sd">&quot;&quot;&quot; ********************  OPTION TO CHECK    &quot;&quot;&quot;</span>
+<span class="c1">#    # TOWSEY : smooth the spectro and set value lower than threshold (2dB in Towsey</span>
+<span class="c1">#    # here the threshold is evaluated as the background value) to 0</span>
+<span class="c1">#    SxxdB_SansNoise_smooth = maad.sound.fir_filter(SxxdB_SansNoise,kernel=(&#39;boxcar&#39;,3), axis=0)</span>
+<span class="c1">#    SxxdB_SansNoise_smooth = maad.sound.fir_filter(SxxdB_SansNoise_smooth,kernel=(&#39;boxcar&#39;,3), axis=1)</span>
+<span class="c1">#    thresh = filters.threshold_li(SxxdB_SansNoise_smooth)</span>
+<span class="c1">#    SxxdB_SansNoise[SxxdB_SansNoise_smooth&lt;thresh] =_MIN_</span>
+    <span class="sd">&quot;&quot;&quot; ********************  OPTION TO CHECK    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Conversion dB to linear</span>
+    <span class="n">PSDxx_SansNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">dB2linear</span><span class="p">(</span><span class="n">PSDxxdB_SansNoise</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+    <span class="n">Sxx_SansNoise</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">PSDxx_SansNoise</span><span class="p">)</span>
+
+    <span class="c1"># Conversion linear to dB for the Amplitude Spectrum</span>
+    <span class="n">SxxdB_SansNoise</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx_SansNoise</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>
+
+    <span class="c1"># display the MEAN spectrogram in dB without noise</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+        <span class="n">fig6</span><span class="p">,</span> <span class="n">ax6</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">mean</span><span class="p">(</span><span class="n">PSDxxdB_SansNoise</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">ax6</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Power Spectrum Density (PSD) in dB without uniform background noise&#39;</span><span class="p">)</span>
+        <span class="n">ax6</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">ax6</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+    <span class="c1"># display full SPECTROGRAM in dB without noise</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+        <span class="n">fig7</span><span class="p">,</span> <span class="n">ax7</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="c1"># set the paramteers of the figure</span>
+        <span class="n">fig7</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fig7</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+        <span class="n">fig7</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">fig7</span><span class="o">.</span><span class="n">set_figwidth</span> <span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+        <span class="c1"># display image</span>
+        <span class="n">_im</span> <span class="o">=</span> <span class="n">ax7</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">PSDxxdB_SansNoise</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                         <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+                         <span class="n">vmin</span> <span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">PSDxxdB_SansNoise</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">_im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax7</span><span class="p">)</span>
+        <span class="c1"># set the parameters of the subplot</span>
+        <span class="n">ax7</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Power Spectrum Density (PSD)&#39;</span><span class="p">)</span>
+        <span class="n">ax7</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+        <span class="n">ax7</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">ax7</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="n">fig7</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="c1"># Display the figure now</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="sd">&quot;&quot;&quot;******** Spectral indices from Spectrum (Amplitude or Energy) *******&quot;&quot;&quot;</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FREQUENCY ENTROPY =&gt; low value indicates concentration of energy around a</span>
+<span class="sd">                narrow frequency band.</span>
+<span class="sd">                WARNING : if the DC value is not removed before processing</span>
+<span class="sd">                the large peak at f=0Hz (DC) will lower the entropy...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#### Entropy of spectral</span>
+    <span class="sd">&quot;&quot;&quot; EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">PSDxx_SansNoise</span>
+    <span class="n">EAS</span><span class="p">,</span> <span class="n">ECU</span><span class="p">,</span> <span class="n">ECV</span><span class="p">,</span> <span class="n">EPS</span><span class="p">,</span> <span class="n">KURT</span><span class="p">,</span> <span class="n">SKEW</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">spectral_entropy</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#### temporal entropy per frequency bin</span>
+    <span class="sd">&quot;&quot;&quot; ENTsp [Towsey] &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">PSDxx_SansNoise</span>
+    <span class="n">Ht_perFreqBin</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ENTsp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Ht_perFreqBin</span>
+
+    <span class="sd">&quot;&quot;&quot; Hf and H &quot;&quot;&quot;</span>
+    <span class="n">Hf</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">mean_PSD</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hf </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Hf</span><span class="p">)</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="n">Hf</span> <span class="o">*</span> <span class="n">Ht</span>
+
+    <span class="sd">&quot;&quot;&quot;=============================================================</span>
+<span class="sd">    ECOLOGICAL INDICES :</span>
+<span class="sd">            ACI</span>
+<span class="sd">            NDSI</span>
+<span class="sd">            rBA</span>
+<span class="sd">            Bioacoustics Index</span>
+<span class="sd">    =============================================================&quot;&quot;&quot;</span>
+
+    <span class="c1">#### Acoustic complexity index =&gt; 1st derivative of the spectrogram</span>
+    <span class="c1"># BUXTON use SxxdB...</span>
+    <span class="c1"># TOWSEY and BUXTON : ACI (bioBand)</span>
+    <span class="sd">&quot;&quot;&quot; ACIsp [Towsey] &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        COMMENT :</span>
+<span class="sd">            ACI_sum gives same result as in Seewave R package when norm is &#39;per_bin&#39;</span>
+<span class="sd">            ACI_sum gives same result as in SoundEcology R package when norm is &#39;global&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">Sxx</span>
+    <span class="n">ACI_xx</span><span class="p">,</span><span class="n">ACI_per_bin</span><span class="p">,</span><span class="n">ACI_sum</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acousticComplexityIndex</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;per_bin&#39;</span> <span class="p">)</span>
+    <span class="n">ACI</span><span class="o">=</span><span class="n">ACI_sum</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ACI </span><span class="si">{seewave}</span><span class="s2"> </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">ACI</span><span class="p">)</span>
+
+    <span class="c1">#### energy repartition in the frequency bins</span>
+    <span class="c1">###### energy based the spectrum converted into freq bins if step is different to df [soundecology, SUEUR]</span>
+    <span class="c1"># NDSI is borned between [-1, 1]. Why not /2 and add 1 in order to be borned between [0,1] ?</span>
+    <span class="sd">&quot;&quot;&quot; NDSI &amp; rBA &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">PSDxx</span>
+    <span class="n">NDSI</span><span class="p">,</span> <span class="n">rBA</span><span class="p">,</span> <span class="n">AnthroEnergy</span><span class="p">,</span> <span class="n">BioEnergy</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">soundscapeIndex</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">frange_bioPh</span><span class="o">=</span><span class="n">BIO_BAND</span><span class="p">,</span>
+                                                         <span class="n">frange_antroPh</span><span class="o">=</span><span class="n">FREQ_ANTHRO_MAX</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NDSI </span><span class="si">{seewave}</span><span class="s2"> </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">NDSI</span><span class="p">)</span>
+
+    <span class="c1">###### Bioacoustics Index : the calculation in R from soundecology is weird...</span>
+    <span class="sd">&quot;&quot;&quot; BI &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; VALIDATION : almost OK (difference due to different spectrogram values...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">Sxx</span>
+    <span class="n">BI</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">bioacousticsIndex</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="n">BIO_BAND</span><span class="p">,</span> <span class="n">R_compatible</span><span class="o">=</span><span class="s1">&#39;soundecology&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BI </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">BI</span><span class="p">)</span>
+
+    <span class="c1">#### roughness</span>
+    <span class="sd">&quot;&quot;&quot; ROU &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">Sxx</span>
+    <span class="n">rough</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">roughness</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;per_bin&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ROU</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rough</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;roughness </span><span class="si">{seewave}</span><span class="s2"> </span><span class="si">%2.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ROU</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;*********** Spectral indices from the decibel spectrogram ***********&quot;&quot;&quot;</span>
+    <span class="c1">#### Score</span>
+    <span class="sd">&quot;&quot;&quot; ADI &amp; AEI &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        COMMENT :</span>
+<span class="sd">                - threshold : -50dB when norm by the max (as soundecology)</span>
+<span class="sd">                              3dB if SxxdB_SansNoise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">Sxx</span>
+<span class="c1">#    X = SxxdB_SansNoise</span>
+    <span class="n">ADI</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acousticDiversityIndex</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">FREQ_BIO_MAX</span><span class="p">,</span> <span class="n">bin_step</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                <span class="n">dB_threshold</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;shannon&quot;</span><span class="p">,</span> <span class="n">R_compatible</span><span class="o">=</span><span class="s1">&#39;soundecology&#39;</span><span class="p">)</span>
+    <span class="n">AEI</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acousticEvenessIndex</span>  <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">FREQ_BIO_MAX</span><span class="p">,</span> <span class="n">bin_step</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                <span class="n">dB_threshold</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">R_compatible</span><span class="o">=</span><span class="s1">&#39;soundecology&#39;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ADI </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">ADI</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AEI </span><span class="si">%2.5f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">AEI</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;************************** SPECTRAL COVER ***************************&quot;&quot;&quot;</span>
+    <span class="c1">#### Low frequency cover (LFC)</span>
+    <span class="sd">&quot;&quot;&quot; LFC [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">SxxdB_SansNoise</span><span class="p">[</span><span class="n">iANTHRO_BAND</span><span class="p">]</span>
+    <span class="n">lowFreqCover</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_activity</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">LFC</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">lowFreqCover</span><span class="p">)</span>
+
+    <span class="c1">#### Low frequency cover (MFC)</span>
+    <span class="sd">&quot;&quot;&quot; MFC [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">SxxdB_SansNoise</span><span class="p">[</span><span class="n">iBIO_BAND</span><span class="p">]</span>
+    <span class="n">medFreqCover</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_activity</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">MFC</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">medFreqCover</span><span class="p">)</span>
+
+    <span class="c1">#### Low frequency cover (LFC)</span>
+    <span class="sd">&quot;&quot;&quot; HFC [TOWSEY] &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">SxxdB_SansNoise</span><span class="p">[</span><span class="n">iINSECT_BAND</span><span class="p">]</span>
+    <span class="n">HighFreqCover</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_activity</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dB_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">HFC</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">HighFreqCover</span><span class="p">)</span>
+
+
+    <span class="sd">&quot;&quot;&quot;**************************** Activity *******************************&quot;&quot;&quot;</span>
+    <span class="c1"># Time resolution (in s)</span>
+    <span class="n">DELTA_T</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Minimum time duration of an event (in s)</span>
+    <span class="n">MIN_EVENT_DUR</span> <span class="o">=</span> <span class="n">DELTA_T</span> <span class="o">*</span> <span class="mi">3</span>
+    <span class="c1"># amplitude threshold in dB. 6dB is choosen because it corresponds to a</span>
+    <span class="c1"># signal that is 2x higher than the background</span>
+    <span class="n">THRESH</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">SxxdB_SansNoise</span>
+    <span class="n">ACTspFraction</span><span class="p">,</span> <span class="n">ACTspCount</span><span class="p">,</span> <span class="n">ACTspMean</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_activity</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span>
+                                                              <span class="n">dB_threshold</span><span class="o">=</span><span class="n">THRESH</span><span class="p">,</span>
+                                                              <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">EVNspSum</span><span class="p">,</span> <span class="n">EVNspMean</span><span class="p">,</span> <span class="n">EVNspCount</span><span class="p">,</span> <span class="n">EVNsp</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">ecoacoustics</span><span class="o">.</span><span class="n">acoustic_events</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span>
+                                                              <span class="n">dB_threshold</span><span class="o">=</span><span class="n">THRESH</span><span class="p">,</span>
+                                                              <span class="n">dt</span><span class="o">=</span><span class="n">DELTA_T</span><span class="p">,</span>
+                                                              <span class="n">rejectDuration</span><span class="o">=</span><span class="n">MIN_EVENT_DUR</span><span class="p">)</span>
+    <span class="c1">### fraction EVN over the total duration for each frequency bin</span>
+    <span class="n">EVNspSum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">EVNspSum</span><span class="p">)</span><span class="o">/</span><span class="n">WAVE_DURATION</span>
+    <span class="n">EVNspSum</span> <span class="o">=</span> <span class="n">EVNspSum</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="c1"># IMPORTANT : to be able to eval from csv</span>
+
+    <span class="c1"># display Number of events/s / frequency</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+        <span class="n">fig8</span><span class="p">,</span> <span class="n">ax8</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">EVNspCount</span><span class="p">)</span>
+        <span class="n">ax8</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">ax8</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;EVNspCount : Number of events/s&#39;</span><span class="p">)</span>
+
+    <span class="c1"># display EVENTS detected in the spectrogram</span>
+    <span class="k">if</span> <span class="n">DISPLAY</span> <span class="p">:</span>
+
+        <span class="n">fig9</span><span class="p">,</span> <span class="n">ax9</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="c1"># set the paramteers of the figure</span>
+        <span class="n">fig9</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fig9</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+        <span class="n">fig9</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">fig9</span><span class="o">.</span><span class="n">set_figwidth</span> <span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+
+        <span class="c1"># display image</span>
+        <span class="n">_im</span> <span class="o">=</span> <span class="n">ax9</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">EVNsp</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                         <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+                         <span class="n">vmin</span> <span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">_im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax9</span><span class="p">)</span>
+
+        <span class="c1"># set the parameters of the subplot</span>
+        <span class="n">ax9</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Events detected&#39;</span><span class="p">)</span>
+        <span class="n">ax9</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+        <span class="n">ax9</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">ax9</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+        <span class="n">fig9</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="c1"># Display the figure now</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1">########################################</span>
+    <span class="n">c_clipping</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">c_BGNt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BGNt</span><span class="p">)</span>
+    <span class="n">c_SNRt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SNRt</span><span class="p">)</span>
+    <span class="n">c_M</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MED</span><span class="p">)</span>
+    <span class="n">c_ENT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ENT</span><span class="p">)</span>
+    <span class="n">c_ACTtFraction</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACTtFraction</span><span class="p">)</span>
+    <span class="n">c_ACTtCount</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACTtCount</span><span class="p">)</span>
+    <span class="n">c_ACTtMean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACTtMean</span><span class="p">)</span>
+    <span class="n">c_EVNtSsum</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EVNtSsum</span><span class="p">)</span>
+    <span class="n">c_EVNtMean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EVNtMean</span><span class="p">)</span>
+    <span class="n">c_EVNtCount</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EVNtCount</span><span class="p">)</span>
+    <span class="n">c_BGNf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BGNf</span><span class="p">)</span>
+    <span class="n">c_SNRf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SNRf</span><span class="p">)</span>
+    <span class="n">c_EAS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EAS</span><span class="p">)</span>
+    <span class="n">c_ECU</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ECU</span><span class="p">)</span>
+    <span class="n">c_ECV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ECV</span><span class="p">)</span>
+    <span class="n">c_EPS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EPS</span><span class="p">)</span>
+    <span class="n">c_H</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+    <span class="n">c_ACI</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACI</span><span class="p">)</span>
+    <span class="n">c_NDSI</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NDSI</span><span class="p">)</span>
+    <span class="n">c_rBA</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rBA</span><span class="p">)</span>
+    <span class="n">c_BI</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BI</span><span class="p">)</span>
+    <span class="n">c_ADI</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ADI</span><span class="p">)</span>
+    <span class="n">c_AEI</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AEI</span><span class="p">)</span>
+    <span class="n">c_ROU</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ROU</span><span class="p">)</span>
+    <span class="n">c_LFC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LFC</span><span class="p">)</span>
+    <span class="n">c_MFC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MFC</span><span class="p">)</span>
+    <span class="n">c_HFC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HFC</span><span class="p">)</span>
+    <span class="n">c_ACTspFraction</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACTspFraction</span><span class="p">)</span>
+    <span class="n">c_ACTspCount</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACTspCount</span><span class="p">)</span>
+    <span class="n">c_ACTspMean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ACTspMean</span><span class="p">)</span>
+    <span class="n">c_EVNspSum</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EVNspSum</span><span class="p">)</span>
+    <span class="n">c_EVNspMean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EVNspMean</span><span class="p">)</span>
+    <span class="n">c_EVNspCount</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EVNspCount</span><span class="p">)</span>
+
+    <span class="c1"># Average the spectro along the axis of time</span>
+    <span class="n">c_LTR</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">SxxdB_SansNoise</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+<span class="c1"># =============================================================================</span>
+
+<span class="c1">####### Create the dataframe</span>
+<span class="c1"># add new columns to the pd dataframe</span>
+
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;clipping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_clipping</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;BGNt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_BGNt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;SNRt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_SNRt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;M&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_M</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ENT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ENT</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACTtFraction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACTtFraction</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACTtCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACTtCount</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACTtMean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACTtMean</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EVNtSsum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EVNtSsum</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EVNtMean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EVNtMean</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EVNtCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EVNtCount</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;BGNf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_BGNf</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;SNRf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_SNRf</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EAS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EAS</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ECU&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ECU</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ECV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ECV</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EPS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EPS</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_H</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACI</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;NDSI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_NDSI</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;rBA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_rBA</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;BI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_BI</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ADI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ADI</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;AEI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_AEI</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ROU&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ROU</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;LFC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_LFC</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;MFC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_MFC</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;HFC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_HFC</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACTspFraction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACTspFraction</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACTspCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACTspCount</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;ACTspMean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_ACTspMean</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EVNspSum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EVNspSum</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EVNspMean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EVNspMean</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;EVNspCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_EVNspCount</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;LTR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">c_LTR</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sub_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+
+<span class="c1">######## Save .CSV</span>
+<span class="n">sub_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_or_buf</span><span class="o">=</span><a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">savedir</span><span class="p">,</span><span class="n">save_csv</span><span class="p">),</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># =============================================================================</span>
+<span class="c1"># Data vizualization with pandas</span>
+<span class="c1"># ============================================================================</span>
+<span class="n">df_indices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">savedir</span><span class="p">,</span><span class="n">save_csv</span><span class="p">))</span>
+
+<span class="c1"># table with a summray of the indices value</span>
+<span class="n">df_indices</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-maad-indice-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/d435fa6eb26a6bccbadc30294eab7294/maad_indice.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">maad_indice.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/93e1058d79c0f948d0a8d46d0c535d21/maad_indice.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">maad_indice.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

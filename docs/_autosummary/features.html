@@ -1,0 +1,406 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>features &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-features">
+<span id="features"></span><h1>features<a class="headerlink" href="#module-features" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="acoustic-features">
+<h2>Acoustic features<a class="headerlink" href="#acoustic-features" title="Permalink to this headline">¶</a></h2>
+<p>The module <code class="docutils literal notranslate"><span class="pre">features</span></code> is an ensemble of functions to characterize audio signals using temporal and spectral features, and ecoacoustic indices.</p>
+<div class="section" id="spectro-temporal-features">
+<h3>Spectro-temporal features<a class="headerlink" href="#spectro-temporal-features" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.shape_features.html#features.shape_features" title="features.shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features</span></code></a>(Sxx[, resolution, rois])</p></td>
+<td><p>Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.shape_features_raw.html#features.shape_features_raw" title="features.shape_features_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_features_raw</span></code></a>(im[, resolution, opt_shape])</p></td>
+<td><p>Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions   using 2D Gabor filters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.opt_shape_presets.html#features.opt_shape_presets" title="features.opt_shape_presets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opt_shape_presets</span></code></a>(resolution[, opt_shape])</p></td>
+<td><p>Set parameters for multiresolution analysis using presets or custom parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.filter_multires.html#features.filter_multires" title="features.filter_multires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_multires</span></code></a>(Sxx, kernels[, npyr, rescale])</p></td>
+<td><p>Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid   transformation to downscale the input spectrogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.filter_bank_2d_nodc.html#features.filter_bank_2d_nodc" title="features.filter_bank_2d_nodc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_bank_2d_nodc</span></code></a>(frequency, ntheta[, …])</p></td>
+<td><p>Build an ensemble of complex 2D Gabor filters with no DC offset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.centroid_features.html#features.centroid_features" title="features.centroid_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">centroid_features</span></code></a>(Sxx[, rois, im_rois])</p></td>
+<td><p>Computes intensity centroid of a spectrogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.all_shape_features.html#features.all_shape_features" title="features.all_shape_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_shape_features</span></code></a>(s, fs, rois[, …])</p></td>
+<td><p>Computes shape and central frequency features from signal at specified  time-frequency limits defined by regions of interest (ROIs).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="alpha-acoustic-indices">
+<h3>Alpha acoustic indices<a class="headerlink" href="#alpha-acoustic-indices" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.temporal_median.html#features.temporal_median" title="features.temporal_median"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_median</span></code></a>(s[, mode, Nt])</p></td>
+<td><p>Computes the median of the envelope of an audio signal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.temporal_entropy.html#features.temporal_entropy" title="features.temporal_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_entropy</span></code></a>(s[, compatibility, mode, Nt])</p></td>
+<td><p>Computes the entropy of the envelope of an audio signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acoustic_richness_index.html#features.acoustic_richness_index" title="features.acoustic_richness_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_richness_index</span></code></a>(Ht_array, M_array)</p></td>
+<td><p>Compute the acoustic richness index of an audio file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.temporal_activity.html#features.temporal_activity" title="features.temporal_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_activity</span></code></a>(s[, dB_threshold, mode, Nt])</p></td>
+<td><p>Compute the acoustic activity index in temporal domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.temporal_events.html#features.temporal_events" title="features.temporal_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_events</span></code></a>(s, fs[, dB_threshold, …])</p></td>
+<td><p>Compute the acoustic event index from an audio signal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.acoustic_complexity_index.html#features.acoustic_complexity_index" title="features.acoustic_complexity_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_complexity_index</span></code></a>(Sxx)</p></td>
+<td><p>Compute the Acoustic Complexity Index (ACI) from a spectrogram <a class="reference internal" href="generated/features.acoustic_complexity_index.html#rded82d3af942-1" id="id1"><span>[Rded82d3af942-1]</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.frequency_entropy.html#features.frequency_entropy" title="features.frequency_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_entropy</span></code></a>(X[, compatibility])</p></td>
+<td><p>Computes the spectral entropy of a power spectral density (1d) or power spectrogram density (2d).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.number_of_peaks.html#features.number_of_peaks" title="features.number_of_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_peaks</span></code></a>(X, fn[, mode, min_peak_val, …])</p></td>
+<td><p>Count the number of frequency peaks on a mean spectrum.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_entropy.html#features.spectral_entropy" title="features.spectral_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_entropy</span></code></a>(Sxx, fn[, flim, display])</p></td>
+<td><p>Compute different entropies based on the average spectrum, its variance,  and its maxima <a href="#id8"><span class="problematic" id="id2">[1]_</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.spectral_activity.html#features.spectral_activity" title="features.spectral_activity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_activity</span></code></a>(Sxx_dB[, dB_threshold])</p></td>
+<td><p>Compute the acoustic activity on a spectrogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_events.html#features.spectral_events" title="features.spectral_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_events</span></code></a>(Sxx_dB, dt[, dB_threshold, …])</p></td>
+<td><p>Compute acoustic events from a spectrogram <a class="reference internal" href="generated/features.spectral_events.html#r788f6d5a1f73-1" id="id3"><span>[R788f6d5a1f73-1]</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.spectral_cover.html#features.spectral_cover" title="features.spectral_cover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_cover</span></code></a>(Sxx, fn[, dB_threshold, …])</p></td>
+<td><p>Compute the proportion (cover) of the spectrogram above a threshold for  three bandwidths : low frequency band (LF), medium frequency band (MF) and  high frequency band (HF).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.soundscape_index.html#features.soundscape_index" title="features.soundscape_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soundscape_index</span></code></a>(Sxx_power, fn[, …])</p></td>
+<td><p>Compute the Normalized Difference Soundscape Index from a power spectrogram <a class="reference internal" href="generated/features.soundscape_index.html#r627cc875dcb3-1" id="id4"><span>[R627cc875dcb3-1]</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.bioacoustics_index.html#features.bioacoustics_index" title="features.bioacoustics_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bioacoustics_index</span></code></a>(Sxx, fn[, flim, R_compatible])</p></td>
+<td><p>Compute the Bioacoustics Index from a spectrogram <a class="reference internal" href="generated/features.bioacoustics_index.html#r77f09c1ef53e-1" id="id5"><span>[R77f09c1ef53e-1]</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acoustic_diversity_index.html#features.acoustic_diversity_index" title="features.acoustic_diversity_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_diversity_index</span></code></a>(Sxx, fn[, fmin, …])</p></td>
+<td><p>Compute the Acoustic Diversity Index (ADI) from a spectrogram <a class="reference internal" href="generated/features.acoustic_diversity_index.html#r0b5871a5ed69-1" id="id6"><span>[R0b5871a5ed69-1]</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.acoustic_eveness_index.html#features.acoustic_eveness_index" title="features.acoustic_eveness_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_eveness_index</span></code></a>(Sxx, fn[, fmin, …])</p></td>
+<td><p>Compute the Acoustic Eveness Index (AEI) from a spectrogram <a class="reference internal" href="generated/features.acoustic_eveness_index.html#r644361236068-1" id="id7"><span>[R644361236068-1]</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.roughness.html#features.roughness" title="features.roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roughness</span></code></a>(x[, norm, axis])</p></td>
+<td><p>Computes the roughness (depends on the number of peaks and their amplitude) of a vector or matrix x (i.e.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.temporal_leq.html#features.temporal_leq" title="features.temporal_leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_leq</span></code></a>(s, fs, gain[, Vadc, …])</p></td>
+<td><p>Computes the Equivalent Continuous Sound level (Leq) of an audio signal  in the time domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_LEQ.html#features.spectral_leq" title="features.spectral_leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_leq</span></code></a>(X, gain[, Vadc, sensitivity, …])</p></td>
+<td><p>Computes the Equivalent Continuous Sound level (Leq) from a power spectrum  (1d) or power spectrogram (2d).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.surface_roughness.html#features.surface_roughness" title="features.surface_roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surface_roughness</span></code></a>(x[, norm])</p></td>
+<td><p>Compute the surface roughness index of a signal (1D) or a spectrogram (2D).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.tfsd.html#features.tfsd" title="features.tfsd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tfsd</span></code></a>(Sxx, fn, tn[, flim, mode, display])</p></td>
+<td><p>Compute the Time frequency derivation index (tfsd) from a spectrogram.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.more_entropy.html#features.more_entropy" title="features.more_entropy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">more_entropy</span></code></a>(x[, order, axis])</p></td>
+<td><p>Compute the entropy of an audio signal using multiple methods.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.acoustic_gradient_index.html#features.acoustic_gradient_index" title="features.acoustic_gradient_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acoustic_gradient_index</span></code></a>(Sxx, dt[, order, …])</p></td>
+<td><p>Compute the Acoustic Gradient Index (AGI) from a raw spectrogram.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.frequency_raoQ.html#features.frequency_raoq" title="features.frequency_raoq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_raoq</span></code></a>(S_power, fn[, bin_step])</p></td>
+<td><p>Compute Rao’s quadratic entropy on a power spectrum (1d).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.region_of_interest_index.html#features.region_of_interest_index" title="features.region_of_interest_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">region_of_interest_index</span></code></a>(Sxx_dB_noNoise, tn, fn)</p></td>
+<td><p>Compute an acoustic activity index based on the regions of interested detected on a spectrogram.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.all_temporal_alpha_indices.html#features.all_temporal_alpha_indices" title="features.all_temporal_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_temporal_alpha_indices</span></code></a>(s, fs[, verbose, …])</p></td>
+<td><p>Compute 16 temporal domain acoustic indices.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.all_spectral_alpha_indices.html#features.all_spectral_alpha_indices" title="features.all_spectral_alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_spectral_alpha_indices</span></code></a>(Sxx_power, tn, fn)</p></td>
+<td><p>Computes the acoustic indices in spectral (spectrum (1d) or spectrogram (2d)) domain.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="temporal-features">
+<h3>Temporal features<a class="headerlink" href="#temporal-features" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.temporal_moments.html#features.temporal_moments" title="features.temporal_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_moments</span></code></a>(s)</p></td>
+<td><p>Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/features.zero_crossing_rate.html#features.zero_crossing_rate" title="features.zero_crossing_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_crossing_rate</span></code></a>(s, fs)</p></td>
+<td><p>Compute the zero crossing rate feature of an audio signal.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="spectral-features">
+<h3>Spectral features<a class="headerlink" href="#spectral-features" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/features.spectral_moments.html#features.spectral_moments" title="features.spectral_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectral_moments</span></code></a>(X[, axis])</p></td>
+<td><p>Computes the first 4th moments of an amplitude spectrum (1d) or spectrogram (2d),  mean, variance, skewness, kurtosis.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.alpha_indices.html#module-features.alpha_indices" title="features.alpha_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">features.alpha_indices</span></code></a></p></td>
+<td><p>Collection of functions to compute alpha acoustic indices to chracterise audio signals.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="features.shape.html#module-features.shape" title="features.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">features.shape</span></code></a></p></td>
+<td><p>Ensemble of functions to compute acoustic descriptors from 2D spectrograms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="features.spectral.html#module-features.spectral" title="features.spectral"><code class="xref py py-obj docutils literal notranslate"><span class="pre">features.spectral</span></code></a></p></td>
+<td><p>Collection of functions to extract features from music</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="features.temporal.html#module-features.temporal" title="features.temporal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">features.temporal</span></code></a></p></td>
+<td><p>Collection of functions to extract features from music</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

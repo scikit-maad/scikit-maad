@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.transform &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.sound.transform</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.sound.transform</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Collection of functions to transform audio signals : Take the envelope</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">hilbert</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">periodogram</span><span class="p">,</span> <span class="n">welch</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">resampy</span>
+
+<span class="c1"># import internal modules</span>
+<span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">wave2frames</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot_spectrum</span>
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="envelope"><a class="viewcode-back" href="../../../generated/maad.sound.envelope.html#maad.sound.envelope">[docs]</a><span class="k">def</span> <span class="nf">envelope</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calcul the envelope of a sound waveform (1d)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : 1d ndarray of floats </span>
+<span class="sd">        Vector containing sound waveform </span>
+<span class="sd">    mode : str, optional, default is `fast`</span>
+<span class="sd">        - `fast` : The sound is first divided into frames (2d) using the </span>
+<span class="sd">            function wave2timeframes(s), then the max of each frame gives a </span>
+<span class="sd">            good approximation of the envelope.</span>
+<span class="sd">        - `Hilbert` : estimation of the envelope from the Hilbert transform. </span>
+<span class="sd">            The method is slow</span>
+<span class="sd">    Nt : integer, optional, default is `32`</span>
+<span class="sd">        Size of each frame. The largest, the highest is the approximation.</span>
+<span class="sd">                  </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------    </span>
+<span class="sd">    env : 1d ndarray of floats</span>
+<span class="sd">        Envelope of the sound</span>
+<span class="sd">        </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.</span>
+<span class="sd">    .. [2] Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the natural environment. Queensland University of Technology, Brisbane.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s,fs = maad.sound.load(&quot;../data/guyana_tropical_forest.wav&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; env_fast = maad.sound.envelope(s, mode=&#39;fast&#39;, Nt=32)</span>
+<span class="sd">    &gt;&gt;&gt; env_fast</span>
+<span class="sd">    array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,</span>
+<span class="sd">       0.26074219])</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; env_hilbert = maad.sound.envelope(s, mode=&#39;hilbert&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; env_hilbert</span>
+<span class="sd">    array([0.06588196, 0.11301711, 0.09201435, ..., 0.18053983, 0.18351906,</span>
+<span class="sd">       0.10258595])</span>
+<span class="sd">    </span>
+<span class="sd">    Compute the time vector for the vector wave.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; t = np.arange(0,len(s),1)/fs</span>
+<span class="sd">    </span>
+<span class="sd">    Compute the time vector for the vector env_fast.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)</span>
+<span class="sd">    </span>
+<span class="sd">    Plot 0.1s of the envelope and 0.1s of the abs(s).</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; fig1, ax1 = plt.subplots(figsize=(10,4))</span>
+<span class="sd">    &gt;&gt;&gt; ax1.plot(t[t&lt;0.1], abs(s[t&lt;0.1]), label=&#39;abs(s)&#39;, lw=0.7)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.plot(t[t&lt;0.1], env_hilbert[t&lt;0.1], label=&#39;env(s) - hilbert option&#39;, lw=0.7)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.plot(t_env_fast[t_env_fast&lt;0.1], env_fast[t_env_fast&lt;0.1], label=&#39;env(s) - fast option&#39;, lw=0.7)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.set_xlabel(&#39;Time [sec]&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.set_ylabel(&#39;Amplitude&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax1.legend()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fast&#39;</span> <span class="p">:</span>
+        <span class="c1"># Envelope : take the max (see M. Towsey) of each frame</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="n">wave2frames</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">frames</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span><span class="s1">&#39;hilbert&#39;</span> <span class="p">:</span>
+        <span class="c1"># Compute the hilbert transform of the waveform and take the norm </span>
+        <span class="c1"># (magnitude) </span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">hilbert</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING : choose a mode between &#39;fast&#39; and &#39;hilbert&#39;&quot;</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">env</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="spectrum"><a class="viewcode-back" href="../../../generated/maad.sound.spectrum.html#maad.sound.spectrum">[docs]</a><span class="k">def</span> <span class="nf">spectrum</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;welch&#39;</span><span class="p">,</span> 
+        <span class="n">tlims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;spectrum&#39;</span><span class="p">,</span> <span class="n">as_pandas_series</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Estimate the power spectral density or power spectrum of 1D signal.</span>
+<span class="sd">    </span>
+<span class="sd">    The estimates can be computed using two methods: Welch or periodogram. Welch&#39;s method</span>
+<span class="sd">    divides the signal into segments, computes the power spectral density for each </span>
+<span class="sd">    segment and then takes the average between segments. The periodogram method computes</span>
+<span class="sd">    the power spectral density of the input signal using a defined window </span>
+<span class="sd">    (Hanning window by default).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s: 1D array </span>
+<span class="sd">        Input signal to process </span>
+<span class="sd">    </span>
+<span class="sd">    fs: float, optional</span>
+<span class="sd">        Sampling frequency of audio signal</span>
+<span class="sd">    </span>
+<span class="sd">    nperseg: int, optional</span>
+<span class="sd">        Length of segment for &#39;welch&#39; method, default is 256</span>
+<span class="sd">    </span>
+<span class="sd">    noverlap: int, optional</span>
+<span class="sd">        Overlap between segments for Welch&#39;s method. If None, noverlap = nperseg/2.</span>
+<span class="sd">    </span>
+<span class="sd">    window : string, default is &#39;hanning</span>
+<span class="sd">        Name of the window used for the short fourier transform.</span>
+<span class="sd">    </span>
+<span class="sd">    nfft: int, optional</span>
+<span class="sd">        Length of FFT for periodogram method. If None, length of signal will be used.</span>
+<span class="sd">        Length of FFT for welch method if zero padding is desired. If None, length of nperseg will be used.</span>
+<span class="sd">    </span>
+<span class="sd">    method: {&#39;welch&#39;, &#39;periodogram&#39;}</span>
+<span class="sd">        Method used to estimate the power spectral density of the signal</span>
+<span class="sd">    </span>
+<span class="sd">    tlims: tuple of ints or floats</span>
+<span class="sd">        Temporal limits to compute the power spectral density in seconds (s)</span>
+<span class="sd">        If None, estimates for the complete signal will be computed.</span>
+<span class="sd">        Default is &#39;None&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    flims: tuple of ints or floats</span>
+<span class="sd">        Spectral limits to compute the power spectral density in Hertz (Hz)</span>
+<span class="sd">        If None, estimates from 0 to fs/2 will be computed.</span>
+<span class="sd">        Default is &#39;None&#39;</span>
+<span class="sd">        </span>
+<span class="sd">    scaling: {&#39;spectrum&#39;, &#39;density&#39;}, optional</span>
+<span class="sd">        Choose between power spectrum (units V**2) or power spectral density (units V**2/Hz) scaling.</span>
+<span class="sd">        Defaults to &#39;spectrum&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    as_pandas_series: bool</span>
+<span class="sd">        Return data as a pandas.Series. This is usefull when computing multiple features</span>
+<span class="sd">        over a signal. Default is False.</span>
+<span class="sd">        </span>
+
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pxx: pandas Series</span>
+<span class="sd">        Power spectral density estimate.</span>
+<span class="sd">    </span>
+<span class="sd">    f_idx: pandas Series</span>
+<span class="sd">        Index of sample frequencies.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This is a wrapper that uses functions from Scipy (scipy.org), in particular from the scipy.signal module.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; spec, f_idx = sound.spectrum(s, fs, nperseg=512, display=True)</span>
+<span class="sd">    </span>
+<span class="sd">    Specify temporal and spectral limits to get spectral characteristics of the </span>
+<span class="sd">    spinetail&#39;s song.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; spec, f_idx = sound.spectrum(s, fs, nperseg=2056, tlims=(5.3, 7.9), flims=(2000, 12000), display=True)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">tlims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># trim audio signal</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tlims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">fs</span><span class="p">):</span> <span class="nb">int</span><span class="p">(</span><span class="n">tlims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">fs</span><span class="p">)]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;length of tlims tuple should be 2&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">method</span><span class="o">==</span><span class="s1">&#39;welch&#39;</span><span class="p">:</span>
+        <span class="n">f_idx</span><span class="p">,</span> <span class="n">pxx</span> <span class="o">=</span> <span class="n">welch</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">)</span>
+    
+    <span class="k">elif</span> <span class="n">method</span><span class="o">==</span><span class="s1">&#39;periodogram&#39;</span><span class="p">:</span>
+        <span class="n">f_idx</span><span class="p">,</span> <span class="n">pxx</span> <span class="o">=</span> <span class="n">periodogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">nfft</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">)</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid method. Method should be &#39;welch&#39; or &#39;periodogram&#39; &quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">flims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pxx</span> <span class="o">=</span> <span class="n">pxx</span><span class="p">[(</span><span class="n">f_idx</span><span class="o">&gt;=</span><span class="n">flims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f_idx</span><span class="o">&lt;=</span><span class="n">flims</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="n">f_idx</span> <span class="o">=</span> <span class="n">f_idx</span><span class="p">[(</span><span class="n">f_idx</span><span class="o">&gt;=</span><span class="n">flims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f_idx</span><span class="o">&lt;=</span><span class="n">flims</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+    <span class="k">if</span> <span class="n">as_pandas_series</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+        <span class="n">index_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;psd_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">pxx</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">pxx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pxx</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index_names</span><span class="p">)</span>
+        <span class="n">f_idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">f_idx</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index_names</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+        <span class="n">plot_spectrum</span><span class="p">(</span><span class="n">pxx</span><span class="p">,</span> <span class="n">f_idx</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pxx</span><span class="p">,</span> <span class="n">f_idx</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="resample"><a class="viewcode-back" href="../../../generated/maad.sound.resample.html#maad.sound.resample">[docs]</a><span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">target_fs</span><span class="p">,</span> <span class="n">res_type</span> <span class="o">=</span> <span class="s1">&#39;kaiser_best&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Changes the sample rate of an audio file or any time series.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : np.ndarray </span>
+<span class="sd">        Mono or stereo signal as NumPy array.</span>
+
+<span class="sd">    fs : int</span>
+<span class="sd">        Time series sampling rate. </span>
+
+<span class="sd">    target_fs : int</span>
+<span class="sd">        Target sampling rate.</span>
+
+<span class="sd">    res_type : str, optional</span>
+<span class="sd">        Resample method. By default &#39;kaiser_best&#39;, is a high-quality method.</span>
+<span class="sd">        `res_type=&#39;kaiser_fast&#39;` is a faster method.</span>
+<span class="sd">        `res_type=&#39;sinc_window&#39;` is an advanced and custom method of resampling. </span>
+<span class="sd">        `res_type=&#39;scipy&#39;` is a Fourier transforms method based.</span>
+
+<span class="sd">    kwargs : additional keyword arguments</span>
+<span class="sd">        If `res_type=&#39;sinc_window&#39;`, additional keyword arguments to pass to</span>
+<span class="sd">        `resampy.resample`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res_data : np.ndarray </span>
+<span class="sd">        Resampling time series.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    resampy.resample</span>
+<span class="sd">    scipy.signal.resample</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Resample an audio file from sample rate of 44100 kHz to 22050.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; s_resamp = sound.resample(s, fs, target_fs=fs/2)</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;Number of samples - original audio:&#39;, s.shape[0], &#39;\n&#39;</span>
+<span class="sd">    ...       &#39;Number of samples - resampled audio:&#39;, s_resamp.shape[0])</span>
+<span class="sd">    &gt;&gt;&gt; _ = sound.spectrogram(s, fs, display=True)</span>
+<span class="sd">    &gt;&gt;&gt; _ = sound.spectrogram(s_resamp, fs/2, display=True)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fs</span> <span class="o">==</span> <span class="n">target_fs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span>
+    
+    <span class="n">ratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">target_fs</span><span class="p">)</span> <span class="o">/</span> <span class="n">fs</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">res_type</span> <span class="o">==</span> <span class="s1">&#39;scipy&#39;</span><span class="p">:</span>
+        <span class="n">res_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res_data</span> <span class="o">=</span> <span class="n">resampy</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">target_fs</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">res_type</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">res_data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="trim"><a class="viewcode-back" href="../../../generated/maad.sound.trim.html#maad.sound.trim">[docs]</a><span class="k">def</span> <span class="nf">trim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">min_t</span><span class="p">,</span> <span class="n">max_t</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_constant</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Slices a time series, from a initial time `min_t` to an ending time `max_t`.  </span>
+<span class="sd">    If the target duration `duration =` is larger than the original duration and `pad = True`, </span>
+<span class="sd">    the time series is padded with a constant value `pad_constant = 0`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : np.ndarray </span>
+<span class="sd">        Mono or stereo signal as NumPy array.</span>
+
+<span class="sd">    fs : int</span>
+<span class="sd">        Time series sampling rate.</span>
+
+<span class="sd">    min_t : float</span>
+<span class="sd">        Initial time. If initial time `min_t &lt; 0` and `pad=True`, this time is added to the </span>
+<span class="sd">        beginning of the audio slice.</span>
+
+<span class="sd">    max_t : float</span>
+<span class="sd">        Ending time of the audio slice.</span>
+<span class="sd">        </span>
+<span class="sd">    pad : bool, optional</span>
+<span class="sd">        If true, the time series is padded with a constant value `pad_constant`. Default is False.</span>
+<span class="sd">        </span>
+<span class="sd">    pad_constant : </span>
+<span class="sd">        It is the constant with which the time series is padded. </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s_slice : np.ndarray </span>
+<span class="sd">        Time series with duration `duration = max_t - min_t`.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    numpy.pad</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Slice an audio file from 5 to 8 seconds.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/spinetail.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; s_slice = sound.trim(s, fs, min_t = 5, max_t = 8)</span>
+<span class="sd">    &gt;&gt;&gt; _ = sound.spectrogram(s_slice, fs, display=True, figsize=(4,6))</span>
+<span class="sd">    &gt;&gt;&gt; s_slice.shape[0]/fs</span>
+<span class="sd">    3.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">min_lim</span> <span class="o">=</span> <span class="n">min_t</span> <span class="o">*</span> <span class="n">fs</span>
+    <span class="n">max_lim</span> <span class="o">=</span> <span class="n">max_t</span> <span class="o">*</span> <span class="n">fs</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">max_t</span> <span class="o">-</span> <span class="n">min_t</span>
+    
+    <span class="k">if</span> <span class="n">pad</span><span class="p">:</span>
+        
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">up_lim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_t</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">min_t</span> <span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">low_lim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">min_t</span><span class="p">)</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span> 
+                    <span class="n">s_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="n">low_lim</span><span class="p">,</span> <span class="n">up_lim</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="n">pad_constant</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">low_lim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span> 
+                    <span class="n">s_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="n">low_lim</span><span class="p">,</span> <span class="n">up_lim</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="n">pad_constant</span><span class="p">))</span>
+                    <span class="n">s_slice</span> <span class="o">=</span> <span class="n">s_slice</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_lim</span><span class="p">):]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s_slice</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_lim</span><span class="p">):</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_lim</span><span class="p">)]</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="n">s_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chanel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">chanel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">up_lim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_t</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">-</span> <span class="n">chanel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    
+                    <span class="k">if</span> <span class="n">min_t</span> <span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="n">low_lim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">min_t</span><span class="p">)</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span> 
+                        <span class="n">s_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">chanel</span><span class="p">,</span> <span class="p">(</span><span class="n">low_lim</span><span class="p">,</span> <span class="n">up_lim</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="n">pad_constant</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">low_lim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span> 
+                        <span class="n">s_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">chanel</span><span class="p">,</span> <span class="p">(</span><span class="n">low_lim</span><span class="p">,</span> <span class="n">up_lim</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="n">pad_constant</span><span class="p">))</span>
+                        <span class="n">s_slice</span> <span class="o">=</span> <span class="n">s_slice</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_lim</span><span class="p">):]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s_slice</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">min_lim</span><span class="p">):</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_lim</span><span class="p">)]</span>
+                    
+        <span class="k">return</span> <span class="n">s_slice</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        
+        <span class="k">if</span> <span class="n">min_t</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;t_min must be &gt;= 0.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Target duration is longer than original duration.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s_slice</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_lim</span><span class="p">):</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_lim</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>   
+            
+            <span class="n">s_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chanel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">chanel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Target duration is longer than original duration.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s_slice</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">min_lim</span><span class="p">):</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_lim</span><span class="p">)]</span>                
+        
+        <span class="k">return</span> <span class="n">s_slice</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

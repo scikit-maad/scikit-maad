@@ -1,0 +1,1047 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.util.util &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+            
+            <img src="../../../_static/logo_maad.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/maad.html">maad</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.util.util</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.util.util</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; Utilitary functions for scikit-MAAD &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">log10</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">import</span> <span class="nn">colorsys</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="index_bw"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.index_bw.html#maad.util.util.index_bw">[docs]</a><span class="k">def</span> <span class="nf">index_bw</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select the index min and max coresponding to the selected frequency band</span>
+<span class="sd">    </span>
+<span class="sd">    example :</span>
+<span class="sd">    fn = 44100</span>
+<span class="sd">    bw = (100,1000) #in Hz</span>
+<span class="sd">    X = X[index_bw(fn, bw)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># select the indices corresponding to the frequency bins range</span>
+    <span class="k">if</span> <span class="n">bw</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="c1"># index = np.arange(0,len(fn),1)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">)))</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="p">:</span>
+        <span class="c1">#index = (fn&gt;=bw[0]) *(fn&lt;=bw[1])</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="o">&gt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span> <span class="o">*</span><span class="p">(</span><span class="n">fn</span><span class="o">&lt;=</span><span class="n">fn</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span> <span class="p">:</span> 
+        <span class="c1"># index =  (abs(fn-bw)).argmin()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
+        <span class="n">index</span><span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fn</span><span class="o">-</span><span class="n">bw</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">index</span></div>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="running_mean"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.running_mean.html#maad.util.util.running_mean">[docs]</a><span class="k">def</span> <span class="nf">running_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    moving average of x over a window N</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">cumsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="p">(</span><span class="n">cumsum</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span> <span class="o">-</span> <span class="n">cumsum</span><span class="p">[:</span><span class="o">-</span><span class="n">N</span><span class="p">])</span> <span class="o">/</span> <span class="n">N</span></div>
+
+<span class="c1">#=============================================================================</span>
+
+<div class="viewcode-block" id="shift_bit_length"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.shift_bit_length.html#maad.util.util.shift_bit_length">[docs]</a><span class="k">def</span> <span class="nf">shift_bit_length</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    find the closest power of 2 that is superior or equal to the number x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+
+<span class="c1">#=============================================================================</span>
+       
+<div class="viewcode-block" id="rle"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.rle.html#maad.util.util.rle">[docs]</a><span class="k">def</span> <span class="nf">rle</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run--Length encoding    </span>
+<span class="sd">    from rle function R</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span><span class="mi">1</span> <span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x must be a vector&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">states</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">diff</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">values</span></div>
+
+<div class="viewcode-block" id="rand_cmap"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.rand_cmap.html#maad.util.util.rand_cmap">[docs]</a><span class="k">def</span> <span class="nf">rand_cmap</span><span class="p">(</span><span class="n">nlabels</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bright&#39;</span><span class="p">,</span> <span class="n">first_color_black</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">last_color_black</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a random colormap to be used together with matplotlib. Useful for segmentation tasks</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nlabels : Integer</span>
+<span class="sd">        Number of labels (size of colormap)</span>
+<span class="sd">    type : String</span>
+<span class="sd">        &#39;bright&#39; for strong colors, &#39;soft&#39; for pastel colors. Default is &#39;bright&#39;</span>
+<span class="sd">    first_color_black : Boolean</span>
+<span class="sd">        Option to use first color as black. Default is True  </span>
+<span class="sd">    last_color_black : Boolean   </span>
+<span class="sd">        Option to use last color as black, Default is False</span>
+<span class="sd">    verbose  : Boolean   </span>
+<span class="sd">        Prints the number of labels and shows the colormap. Default is False</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    random_colormap : Colormap </span>
+<span class="sd">        Colormap type used by matplotlib</span>
+
+<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adapted from https://github.com/delestro/rand_cmap author : delestro    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># initialize the random seed in order to get always the same random order</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">321</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of labels: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nlabels</span><span class="p">))</span>
+
+    <span class="c1"># Generate color map for bright colors, based on hsv</span>
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;bright&#39;</span><span class="p">:</span>
+        <span class="n">randHSVcolors</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                          <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                          <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlabels</span><span class="p">)]</span>
+
+        <span class="c1"># Convert HSV list to RGB</span>
+        <span class="n">randRGBcolors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">HSVcolor</span> <span class="ow">in</span> <span class="n">randHSVcolors</span><span class="p">:</span>
+            <span class="n">randRGBcolors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">colorsys</span><span class="o">.</span><span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">HSVcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">HSVcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">HSVcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+    <span class="c1"># Generate soft pastel colors, by limiting the RGB spectrum</span>
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;soft&#39;</span><span class="p">:</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="mf">0.6</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="mf">0.95</span>
+        <span class="n">randRGBcolors</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">),</span>
+                          <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">),</span>
+                          <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlabels</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">first_color_black</span><span class="p">:</span>
+        <span class="n">randRGBcolors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">last_color_black</span><span class="p">:</span>
+        <span class="n">randRGBcolors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            
+    <span class="n">random_colormap</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="s1">&#39;new_map&#39;</span><span class="p">,</span> <span class="n">randRGBcolors</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">nlabels</span><span class="p">)</span>
+
+   
+    <span class="c1"># Display colorbar</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span><span class="p">,</span> <span class="n">colorbar</span>
+        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nlabels</span><span class="p">,</span> <span class="n">nlabels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">nlabels</span><span class="p">)</span>
+
+        <span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">random_colormap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="s1">&#39;proportional&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">boundaries</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1i</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">random_colormap</span></div>
+
+
+<div class="viewcode-block" id="linear_scale"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.linear_scale.html#maad.util.util.linear_scale">[docs]</a><span class="k">def</span> <span class="nf">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Program to scale the values of a matrix from a user specified minimum to </span>
+<span class="sd">    a user specified maximum</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        numpy.array like with numbers</span>
+<span class="sd">    minval : scalar, optional, default : 0</span>
+<span class="sd">        This minimum value is attributed to the minimum value of the array </span>
+<span class="sd">    maxval : scalar, optional, default : 1</span>
+<span class="sd">        This maximum value is attributed to the maximum value of the array         </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : array-like</span>
+<span class="sd">        numpy.array like with numbers  </span>
+<span class="sd">        </span>
+<span class="sd">    -------</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">        a = np.array([1,2,3,4,5]);</span>
+<span class="sd">        a_out = scaledata(a,0,1);</span>
+<span class="sd">    Out: </span>
+<span class="sd">        array([0.  , 0.25, 0.5 , 0.75, 1.  ])</span>
+<span class="sd">        </span>
+<span class="sd">    References:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Program written by Aniruddha Kembhavi, July 11, 2007 for MATLAB</span>
+<span class="sd">    Adapted by S. Haupert Dec 12, 2017 for Python</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if x is a list, convert x into ndarray </span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">();</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">*</span><span class="p">(</span><span class="n">maxval</span><span class="o">-</span><span class="n">minval</span><span class="p">);</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">minval</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">y</span></div>
+
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="linear2dB"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.linear2dB.html#maad.util.util.linear2dB">[docs]</a><span class="k">def</span> <span class="nf">linear2dB</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform linear date into decibel scale within the dB range (db_range).</span>
+<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        data to rescale in dB  </span>
+<span class="sd">    mode : str, default is &#39;amplitude&#39;</span>
+<span class="sd">        select &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
+<span class="sd">    db_range : scalar, optional, default : None</span>
+<span class="sd">        if db_range is a number, anything lower than -db_range is set to </span>
+<span class="sd">        -db_range and anything larger than 0 is set to 0</span>
+<span class="sd">    db_gain : scalar, optional, default is 0</span>
+<span class="sd">        Gain added to the results </span>
+<span class="sd">        amplitude --&gt; 20*log10(x) + db_gain  </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalars</span>
+<span class="sd">        amplitude--&gt; 20*log10(x) + db_gain  </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>            
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take the absolute value of datain</span>
+    
+    <span class="c1"># Avoid zero value for log10  </span>
+    <span class="c1"># if it&#39;s a scalar</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">_MIN_</span>  
+    <span class="k">else</span> <span class="p">:</span>     
+        <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>  <span class="c1"># Avoid zero value for log10 </span>
+
+    <span class="c1"># conversion in dB  </span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># take log </span>
+    
+    <span class="k">if</span> <span class="n">db_gain</span> <span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">db_gain</span>    <span class="c1"># Add gain if needed</span>
+    
+    <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="c1"># set anything above db_range as 0</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  
+        <span class="c1"># set anything less than -db_range as -db_range</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">(</span><span class="n">db_range</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">db_range</span>  
+        
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="dB2linear"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.dB2linear.html#maad.util.util.dB2linear">[docs]</a><span class="k">def</span> <span class="nf">dB2linear</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">,</span>  <span class="n">db_gain</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform linear date into decibel scale within the dB range (db_range).</span>
+<span class="sd">    A gain (db_gain) could be added at the end.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        data in dB to rescale in linear </span>
+<span class="sd">    mode : str, default is &#39;amplitude&#39;</span>
+<span class="sd">        select &#39;amplitude&#39; or &#39;power&#39; to compute the corresponding dB</span>
+<span class="sd">    db_gain : scalar, optional, default is 0</span>
+<span class="sd">        Gain added to the results </span>
+<span class="sd">                --&gt; 20*log10(x) + db_gain</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y : scalars</span>
+<span class="sd">        --&gt; 10^(x/20 - db_gain) </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">x</span><span class="o">-</span> <span class="n">db_gain</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="get_unimode"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.get_unimode.html#maad.util.util.get_unimode">[docs]</a><span class="k">def</span> <span class="nf">get_unimode</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;ale&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    determine the statistical mode or modal value which is </span>
+<span class="sd">    the most common number in the dataset</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X :  1d or 2d ndarray of scalar</span>
+<span class="sd">        Vector or matrix </span>
+<span class="sd">                </span>
+<span class="sd">    mode : str, optional, default is &#39;ale&#39;</span>
+<span class="sd">        Select the mode to remove the noise</span>
+<span class="sd">        Possible values for mode are :</span>
+<span class="sd">        - &#39;ale&#39; : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</span>
+<span class="sd">        - &#39;median&#39; : subtract the median value</span>
+<span class="sd">        - &#39;mean&#39; : subtract the mean value (DC)</span>
+<span class="sd">    </span>
+<span class="sd">    axis : integer, default is 1</span>
+<span class="sd">        if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</span>
+<span class="sd">            </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        print messages into the consol or terminal if verbose is True</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">              </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    unimode_value : float</span>
+<span class="sd">        The most common number in the dataset</span>
+<span class="sd">    &quot;&quot;&quot;</span>         
+    <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">2</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> 
+        <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;ale&#39;</span><span class="p">:</span>
+                
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>  
+                <span class="c1"># Min and Max of the envelope (without taking into account nan)</span>
+                <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="c1"># Compute a 50-bin histogram ranging between Min and Max values</span>
+                <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">))</span>
+                
+                <span class="c1"># smooth the histogram</span>
+<span class="c1">#                kernel = (&#39;boxcar&#39;, 7)</span>
+<span class="c1">#                hist = fir_filter(hist,kernel, axis=axis)</span>
+<span class="c1">#                print(hist)</span>
+<span class="c1">#                print(len(hist))</span>
+<span class="c1">#                hist = running_mean(hist,N=7, axis=0) </span>
+                   
+                <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+                    <span class="c1"># Plot only the first histogram</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">)</span>
+                    
+                <span class="c1"># find the maximum of the peak with quadratic interpolation</span>
+                <span class="c1"># don&#39;t take into account the first 4 bins.</span>
+                <span class="n">imax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="mi">4</span><span class="p">::])</span> <span class="o">+</span> <span class="mi">4</span>
+
+<span class="c1">#                # Check the boundary</span>
+<span class="c1">#                if (imax &lt;= 4 ) :</span>
+<span class="c1">#                    bin_edges_interp = bin_edges</span>
+<span class="c1">#                    hist_interp = 4</span>
+<span class="c1">#                elif (imax &gt;= (len(hist)-2)) :</span>
+<span class="c1">#                    bin_edges_interp = bin_edges</span>
+<span class="c1">#                    hist_interp = len(hist)-2</span>
+<span class="c1">#                else :</span>
+<span class="c1">#                    f = interp1d(bin_edges[imax-2:imax+2], hist[imax-2:imax+2], kind=&#39;quadratic&#39;)</span>
+<span class="c1">#                    bin_edges_interp = np.arange(bin_edges[imax-1], bin_edges[imax+1], 0.01)</span>
+<span class="c1">#                    hist_interp = f(bin_edges_interp)   # use interpolation function returned by `interp1d`</span>
+<span class="c1">#                    if display:</span>
+<span class="c1">#                        plt.plot(bin_edges_interp,hist_interp)</span>
+<span class="c1">#                                        </span>
+<span class="c1">#                # assuming an additive noise model : noise_bckg is the max of the histogram</span>
+<span class="c1">#                # as it is an histogram, the value is </span>
+<span class="c1">#                unimode_value.append(bin_edges_interp[np.argmax(hist_interp)])</span>
+                
+                <span class="n">unimode_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">[</span><span class="n">imax</span><span class="p">])</span>
+                
+        
+            <span class="c1"># transpose the vector</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">unimode_value</span><span class="p">)</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">unimode_value</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">X</span>
+            <span class="c1"># Min and Max of the envelope (without taking into account nan)</span>
+            <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            
+            <span class="c1"># Compute a 50-bin histogram ranging between Min and Max values</span>
+            <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">))</span>
+            
+            <span class="c1"># smooth the histogram</span>
+<span class="c1">#            kernel = (&#39;boxcar&#39;, 7)</span>
+<span class="c1">#            hist = fir_filter(hist,kernel, axis=axis)</span>
+<span class="c1">#            hist = running_mean(hist,N=7, axis=axis) </span>
+            
+            <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+                <span class="c1">#n, bins, patches = plt.hist(x=s, bins=20, color=&#39;#0504aa&#39;, alpha=0.7, rwidth=0.85)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">)</span>
+                         
+            <span class="c1"># find the maximum of the peak with quadratic interpolation</span>
+            <span class="n">imax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+            
+            <span class="c1"># Check the boundary</span>
+<span class="c1">#            if (imax &lt;= 5) or (imax &gt;= len(hist)-5):</span>
+<span class="c1">#                bin_edges_interp = bin_edges</span>
+<span class="c1">#                hist_interp = imax</span>
+<span class="c1">#            else :</span>
+<span class="c1">#                f = interp1d(bin_edges[imax-2:imax+2], hist[imax-2:imax+2], kind=&#39;quadratic&#39;)</span>
+<span class="c1">#                bin_edges_interp = np.arange(bin_edges[imax-1], bin_edges[imax+1], 0.01)</span>
+<span class="c1">#                hist_interp = f(bin_edges_interp)   # use interpolation function returned by `interp1d`</span>
+<span class="c1">#            </span>
+<span class="c1">#            if display:</span>
+<span class="c1">#                plt.plot(bin_edges_interp,hist_interp)</span>
+            
+            <span class="c1"># assuming an additive noise model : noise_bckg is the max of the histogram</span>
+            <span class="c1"># as it is an histogram, the value is </span>
+<span class="c1">#            unimode_value = bin_edges_interp[np.argmax(hist_interp)]</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">imax</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;median&#39;</span><span class="p">:</span>
+        <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">median</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+        <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">unimode_value</span></div>
+
+
+<div class="viewcode-block" id="crop_image"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.crop_image.html#maad.util.util.crop_image">[docs]</a><span class="k">def</span> <span class="nf">crop_image</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">fcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Crop a spectrogram (or an image) in time (horizontal X axis) and frequency</span>
+<span class="sd">    (vertical y axis)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2d ndarray</span>
+<span class="sd">        image to be cropped</span>
+<span class="sd">    tn, fn : 1d ndarray</span>
+<span class="sd">        tn is the time vector. fn is the frequency vector. They are required </span>
+<span class="sd">        in order to know the correspondance between pixels and (time,frequency)</span>
+<span class="sd">    fcrop, tcrop : list of 2 scalars [min, max], optional, default is None</span>
+<span class="sd">        fcrop corresponds to the min and max boundary frequency values</span>
+<span class="sd">        tcrop corresponds to the min and max boundary time values</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    im : 2d ndarray</span>
+<span class="sd">        image cropped</span>
+<span class="sd">    tn, fn, 1d ndarray</span>
+<span class="sd">        new time and frequency vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">tcrop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+        <span class="n">indt</span> <span class="o">=</span> <span class="p">(</span><span class="n">tn</span><span class="o">&gt;=</span><span class="n">tcrop</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span><span class="p">(</span><span class="n">tn</span><span class="o">&lt;=</span><span class="n">tcrop</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">[:,</span> <span class="n">indt</span><span class="p">]</span>
+        <span class="c1"># redefine tn</span>
+        <span class="n">tn</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">indt</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">fcrop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+        <span class="n">indf</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="o">&gt;=</span><span class="n">fcrop</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span><span class="p">(</span><span class="n">fn</span><span class="o">&lt;=</span><span class="n">fcrop</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">[</span><span class="n">indf</span><span class="p">,</span> <span class="p">]</span>
+        <span class="c1"># redefine fn</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">indf</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
+    
+    <span class="k">return</span> <span class="n">im</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span></div>
+
+
+<div class="viewcode-block" id="plot1D"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.plot1D.html#maad.util.util.plot1D">[docs]</a><span class="k">def</span> <span class="nf">plot1D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    plot a signal s</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : 1d ndarray of integer</span>
+<span class="sd">        Vector containing the abscissa values (horizontal axis)</span>
+<span class="sd">             </span>
+<span class="sd">    y : 1d ndarray of scalar</span>
+<span class="sd">        Vector containing the ordinate values (vertical axis)  </span>
+<span class="sd">    </span>
+<span class="sd">    ax : axis, optional, default is None</span>
+<span class="sd">        Draw the signal on this specific axis. Allow multiple plots on the same</span>
+<span class="sd">        axis.</span>
+<span class="sd">            </span>
+<span class="sd">    **kwargs, optional</span>
+<span class="sd">        </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        facecolor : matplotlib color, optional, default: &#39;w&#39; (white)</span>
+<span class="sd">        the background color.  </span>
+<span class="sd">        </span>
+<span class="sd">        edgecolor : matplotlib color, optional, default: &#39;k&#39; (black)</span>
+<span class="sd">        the border color. </span>
+<span class="sd">        </span>
+<span class="sd">        linecolor : matplotlib color, optional, default: &#39;k&#39; (black)</span>
+<span class="sd">        the line color</span>
+<span class="sd">        </span>
+<span class="sd">        The following color abbreviations are supported:</span>
+<span class="sd">    </span>
+<span class="sd">        ==========  ========</span>
+<span class="sd">        character   color</span>
+<span class="sd">        ==========  ========</span>
+<span class="sd">        &#39;b&#39;         blue</span>
+<span class="sd">        &#39;g&#39;         green</span>
+<span class="sd">        &#39;r&#39;         red</span>
+<span class="sd">        &#39;c&#39;         cyan</span>
+<span class="sd">        &#39;m&#39;         magenta</span>
+<span class="sd">        &#39;y&#39;         yellow</span>
+<span class="sd">        &#39;k&#39;         black</span>
+<span class="sd">        &#39;w&#39;         white</span>
+<span class="sd">        ==========  ========</span>
+<span class="sd">        </span>
+<span class="sd">        In addition, you can specify colors in many ways, including RGB tuples </span>
+<span class="sd">        (0.2,1,0.5). See matplotlib color </span>
+<span class="sd">        </span>
+<span class="sd">        linewidth : scalar, optional, default: 0.5</span>
+<span class="sd">        width in pixels</span>
+<span class="sd">        </span>
+<span class="sd">        figtitle: string, optional, default: &#39;Audiogram&#39;</span>
+<span class="sd">        Title of the plot </span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        legend : string, optional, default : None</span>
+<span class="sd">        Legend for the plot</span>
+<span class="sd">        </span>
+<span class="sd">        now : boolean, optional, default : True</span>
+<span class="sd">        if True, display now. Cannot display multiple plots. </span>
+<span class="sd">        To display mutliple plots, set now=False until the last call for </span>
+<span class="sd">        the last plot         </span>
+<span class="sd">        </span>
+<span class="sd">        ...and more, see matplotlib</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fig : Figure</span>
+<span class="sd">        The Figure instance </span>
+<span class="sd">    ax : Axis</span>
+<span class="sd">        The Axis instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+
+    <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;facecolor&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;linewidth&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">linecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;linecolor&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figtitle&#39;</span><span class="p">,</span> <span class="s1">&#39;Audiogram&#39;</span><span class="p">)</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Time [s]&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Amplitude [AU]&#39;</span><span class="p">)</span>
+    <span class="n">legend</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;legend&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">now</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+       
+    <span class="c1"># if no ax, create a figure and a subplot associated a figure otherwise</span>
+    <span class="c1"># find the figure that belongs to ax</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="c1"># set the paramters of the figure</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_figwidth</span> <span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">facecolor</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="n">edgecolor</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    
+    <span class="c1"># plot the data on the subplot</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linewidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">linecolor</span><span class="p">)</span>
+    
+    <span class="c1"># set legend to the line</span>
+    <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+    
+    <span class="c1"># set the parameters of the subplot</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">legend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    
+    <span class="c1"># Display the figure now</span>
+    <span class="k">if</span> <span class="n">now</span> <span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="plot2D"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.plot2D.html#maad.util.util.plot2D">[docs]</a><span class="k">def</span> <span class="nf">plot2D</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    display an image (spectrogram, 2D binary mask, ROIS...)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    im : 2D numpy array </span>
+<span class="sd">        The name or path of the .wav file to load</span>
+<span class="sd">             </span>
+<span class="sd">    ax : axis, optional, default is None</span>
+<span class="sd">        Draw the image on this specific axis. Allow multiple plots on the same</span>
+<span class="sd">        axis.</span>
+<span class="sd">            </span>
+<span class="sd">    **kwargs, optional</span>
+<span class="sd">        </span>
+<span class="sd">        figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">        width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">        label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        in order to get all the  existing colormaps</span>
+<span class="sd">        examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">        &#39;viridis&#39;...</span>
+<span class="sd">        vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">        `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">        luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">        settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        now : boolean, optional, default : True</span>
+<span class="sd">        if True, display now. Cannot display multiple images. </span>
+<span class="sd">        To display mutliple images, set now=False until the last call for </span>
+<span class="sd">        the last image      </span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fig : Figure</span>
+<span class="sd">        The Figure instance </span>
+<span class="sd">    ax : Axis</span>
+<span class="sd">        The Axis instance</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+   
+    <span class="c1"># matplotlib parameters</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+    <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectrogram&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+    <span class="n">cmap</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+    <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> 
+    <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>    
+    <span class="n">ext</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>   
+    <span class="n">now</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># if no ax, create a figure and a subplot associated a figure otherwise</span>
+    <span class="c1"># find the figure that belongs to ax</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="c1"># set the paramters of the figure</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_figwidth</span> <span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+
+    <span class="c1"># display image</span>
+    <span class="n">_im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">_im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+    <span class="c1"># set the parameters of the subplot</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    
+    <span class="c1"># Display the figure now</span>
+    <span class="k">if</span> <span class="n">now</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="nearest_idx"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.nearest_idx.html#maad.util.util.nearest_idx">[docs]</a><span class="k">def</span> <span class="nf">nearest_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Find nearest value on array and return index</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        array: ndarray</span>
+<span class="sd">            array of values to search for nearest values</span>
+<span class="sd">        value: float</span>
+<span class="sd">            value to be searched in array</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        idx: int</span>
+<span class="sd">            index of nearest value on array</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; x = np.array([1,2,3])</span>
+<span class="sd">        &gt;&gt;&gt; ig.nearest_idx(x, 1.3)</span>
+<span class="sd">        [0]</span>
+<span class="sd">        &gt;&gt;&gt; ig.nearest_idx(x, 1.6)</span>
+<span class="sd">        [1]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">idx</span></div>
+
+
+<div class="viewcode-block" id="rois_to_audacity"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.rois_to_audacity.html#maad.util.util.rois_to_audacity">[docs]</a><span class="k">def</span> <span class="nf">rois_to_audacity</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">onset</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Write audio segmentation to file (Audacity format)</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname: str</span>
+<span class="sd">            filename to save the segmentation</span>
+<span class="sd">        onset: int, float array_like</span>
+<span class="sd">            output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">        offset: int, float array_like</span>
+<span class="sd">            output of a detection method (e.g. find_rois_1d)</span>
+<span class="sd">            </span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        Returns a csv file</span>
+<span class="sd">            </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">onset</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;&lt; No detection found&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">onset</span><span class="p">))</span>
+        <span class="n">rois_tf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;t_begin&#39;</span><span class="p">:</span><span class="n">onset</span><span class="p">,</span> <span class="s1">&#39;t_end&#39;</span><span class="p">:</span><span class="n">offset</span><span class="p">,</span> <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span><span class="n">label</span><span class="p">})</span>
+        <span class="n">rois_tf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span> </div>
+
+<div class="viewcode-block" id="rois_to_imblobs"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.rois_to_imblobs.html#maad.util.util.rois_to_imblobs">[docs]</a><span class="k">def</span> <span class="nf">rois_to_imblobs</span><span class="p">(</span><span class="n">im_blobs</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Add rois to im_blobs </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># roi to image blob</span>
+    <span class="k">for</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span> <span class="ow">in</span> <span class="n">rois_bbox</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">im_blobs</span><span class="p">[</span><span class="n">min_y</span><span class="p">:</span><span class="n">max_y</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_x</span><span class="p">:</span><span class="n">max_x</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">im_blobs</span></div>
+
+<div class="viewcode-block" id="normalize_2d"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.normalize_2d.html#maad.util.util.normalize_2d">[docs]</a><span class="k">def</span> <span class="nf">normalize_2d</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Normalize 2d array between two values. </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        im: 2D ndarray</span>
+<span class="sd">            Bidimensinal array to be normalized</span>
+<span class="sd">        min_value: int, float</span>
+<span class="sd">            Minimum value in normalization</span>
+<span class="sd">        max_value: int, float</span>
+<span class="sd">            Maximum value in normalization</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        im_out: 2D ndarray</span>
+<span class="sd">            Array normalized between min and max values</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># avoid problems with inf and -inf values</span>
+    <span class="n">min_im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+    <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">==</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">min_im</span>
+    <span class="n">max_im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">im</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> 
+    <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">max_im</span>
+
+    <span class="c1"># normalize between min max</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="p">(</span><span class="n">im</span> <span class="o">-</span> <span class="n">min_im</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_im</span> <span class="o">-</span> <span class="n">min_im</span><span class="p">)</span>
+    <span class="n">im_out</span> <span class="o">=</span> <span class="n">im</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_value</span> <span class="o">-</span> <span class="n">min_value</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_value</span>
+    <span class="k">return</span> <span class="n">im_out</span></div>
+
+
+<div class="viewcode-block" id="format_rois"><a class="viewcode-back" href="../../../_autosummary/maad.util.util.format_rois.html#maad.util.util.format_rois">[docs]</a><span class="k">def</span> <span class="nf">format_rois</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Setup rectangular rois to a predifined format: </span>
+<span class="sd">        time-frequency or bounding box</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rois : pandas DataFrame</span>
+<span class="sd">        array must have a valid input format with column names</span>
+<span class="sd">        - bounding box: min_y, min_x, max_y, max_x</span>
+<span class="sd">        - time frequency: min_f, min_t, max_f, max_t</span>
+<span class="sd">    ts : ndarray</span>
+<span class="sd">        vector with temporal indices, output from the spectrogram function (in seconds)</span>
+<span class="sd">    fs: ndarray</span>
+<span class="sd">        vector with frequencial indices, output from the spectrogram function (in Hz)</span>
+<span class="sd">    fmt: str</span>
+<span class="sd">        A string indicating the desired output format: &#39;bbox&#39; or &#39;tf&#39;</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rois_bbox: ndarray</span>
+<span class="sd">            array with indices of ROIs matched on spectrogram</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check format of the input data</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame or Series.&#39;</span><span class="p">)</span>    
+
+    <span class="k">elif</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;bbox&#39;</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Format must be either fmt=</span><span class="se">\&#39;</span><span class="s1">bbox</span><span class="se">\&#39;</span><span class="s1"> or fmt=</span><span class="se">\&#39;</span><span class="s1">tf</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Compute new format</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;bbox&#39;</span><span class="p">:</span>
+        <span class="n">min_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">min_f</span><span class="p">)</span>
+        <span class="n">min_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">min_t</span><span class="p">)</span>
+        <span class="n">max_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">max_f</span><span class="p">)</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">max_t</span><span class="p">)</span>
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;min_y&#39;</span><span class="p">:</span> <span class="n">min_y</span><span class="p">,</span> <span class="s1">&#39;min_x&#39;</span><span class="p">:</span> <span class="n">min_x</span><span class="p">,</span> 
+                              <span class="s1">&#39;max_y&#39;</span><span class="p">:</span> <span class="n">max_y</span><span class="p">,</span> <span class="s1">&#39;max_x&#39;</span><span class="p">:</span> <span class="n">max_x</span><span class="p">})</span>
+        
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;min_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span> 
+                              <span class="s1">&#39;min_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                              <span class="s1">&#39;max_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                              <span class="s1">&#39;max_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]})</span>
+            
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;bbox&#39;</span><span class="p">:</span>
+        <span class="n">rois_bbox</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>            
+            <span class="n">min_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_f&#39;</span><span class="p">])</span>
+            <span class="n">min_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;min_t&#39;</span><span class="p">])</span>
+            <span class="n">max_y</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_f&#39;</span><span class="p">])</span>
+            <span class="n">max_x</span> <span class="o">=</span> <span class="n">nearest_idx</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;max_t&#39;</span><span class="p">])</span>
+            <span class="n">rois_bbox</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">min_y</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">))</span>
+        
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rois_bbox</span><span class="p">,</span> 
+                                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;min_y&#39;</span><span class="p">,</span><span class="s1">&#39;min_x&#39;</span><span class="p">,</span><span class="s1">&#39;max_y&#39;</span><span class="p">,</span><span class="s1">&#39;max_x&#39;</span><span class="p">])</span>
+    
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">rois</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="ow">and</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+        <span class="n">rois_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;min_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span> 
+                                 <span class="s1">&#39;min_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                                 <span class="s1">&#39;max_f&#39;</span><span class="p">:</span> <span class="n">fs</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],</span>
+                                 <span class="s1">&#39;max_t&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">[</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]})</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois type or format not understood, please check docstring.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rois_out</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

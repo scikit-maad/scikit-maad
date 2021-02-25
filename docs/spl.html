@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sound pressure level &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="maad.spl.wav2volt" href="generated/maad.spl.wav2volt.html" />
+    <link rel="prev" title="maad.features.spectral_moments" href="generated/maad.features.spectral_moments.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Acoustic features</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sound pressure level</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#conversion-to-sound-pressure-level-spl">Conversion to sound pressure level (SPL)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.wav2volt.html">maad.spl.wav2volt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.volt2pressure.html">maad.spl.volt2pressure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.wav2pressure.html">maad.spl.wav2pressure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.pressure2dBSPL.html">maad.spl.pressure2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.dBSPL2pressure.html">maad.spl.dBSPL2pressure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.power2dBSPL.html">maad.spl.power2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.amplitude2dBSPL.html">maad.spl.amplitude2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/maad.spl.wav2dBSPL.html">maad.spl.wav2dBSPL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Sound pressure level</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/spl.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-maad.spl"></span><div class="section" id="sound-pressure-level">
+<h1>Sound pressure level<a class="headerlink" href="#sound-pressure-level" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">spl</span></code> is a collection of functions used to describe the physics of acoustic waves.</p>
+<div class="section" id="conversion-to-sound-pressure-level-spl">
+<h2>Conversion to sound pressure level (SPL)<a class="headerlink" href="#conversion-to-sound-pressure-level-spl" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.spl.wav2volt.html#maad.spl.wav2volt" title="maad.spl.wav2volt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2volt</span></code></a>(wave[, Vadc])</p></td>
+<td><p>Convert an audio signal amplitude to Volts.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.spl.volt2pressure.html#maad.spl.volt2pressure" title="maad.spl.volt2pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volt2pressure</span></code></a>(volt, gain[, sensitivity, dBref])</p></td>
+<td><p>Convert Volts to instantaneous sound pressure (p [Pa]).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.spl.wav2pressure.html#maad.spl.wav2pressure" title="maad.spl.wav2pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2pressure</span></code></a>(wave, gain[, Vadc, …])</p></td>
+<td><p>Convert wave amplitude to instantaneous sound pressure (p [Pa]).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.spl.pressure2dBSPL.html#maad.spl.pressure2dBSPL" title="maad.spl.pressure2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure2dBSPL</span></code></a>(p[, pRef])</p></td>
+<td><p>Convert sound pressure (p [Pa]) to sound pressure level (L [dB]).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.spl.dBSPL2pressure.html#maad.spl.dBSPL2pressure" title="maad.spl.dBSPL2pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dBSPL2pressure</span></code></a>(L[, pRef])</p></td>
+<td><p>Convert sound pressure level (L [dB]) to sound pressure (p [Pa]).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.spl.power2dBSPL.html#maad.spl.power2dBSPL" title="maad.spl.power2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">power2dBSPL</span></code></a>(P, gain[, Vadc, sensitivity, …])</p></td>
+<td><p>Convert power (amplitude²) to sound pressure level (L [dB]).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.spl.amplitude2dBSPL.html#maad.spl.amplitude2dBSPL" title="maad.spl.amplitude2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplitude2dBSPL</span></code></a>(s, gain[, Vadc, …])</p></td>
+<td><p>Convert signal (amplitude) to instantaneous sound pressure level (L [dB SPL]).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.spl.wav2dBSPL.html#maad.spl.wav2dBSPL" title="maad.spl.wav2dBSPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2dBSPL</span></code></a>(wave, gain[, Vadc, sensitivity, …])</p></td>
+<td><p>Convert wave amplitude to instantaneous sound pressure level (L [dB SPL]).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.spl.wav2Leq.html#maad.spl.wav2leq" title="maad.spl.wav2leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wav2leq</span></code></a>(wave, f, gain[, Vadc, dt, …])</p></td>
+<td><p>Convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL]).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/maad.spl.pressure2Leq.html#maad.spl.pressure2leq" title="maad.spl.pressure2leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure2leq</span></code></a>(p, fs[, dt, pRef])</p></td>
+<td><p>Convert pressure vector (p [Pa]) to Equivalent Continuous Sound Pressure  level (Leq [dB SPL]).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/maad.spl.PSD2Leq.html#maad.spl.psd2leq" title="maad.spl.psd2leq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psd2leq</span></code></a>(P, gain[, Vadc, sensitivity, dBref, …])</p></td>
+<td><p>Convert Power spectral density (PSD, amplitude²) into  Equivalent Continuous Sound pressure level (Leq [dB SPL])</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/maad.spl.wav2volt.html" class="btn btn-neutral float-right" title="maad.spl.wav2volt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="generated/maad.features.spectral_moments.html" class="btn btn-neutral float-left" title="maad.features.spectral_moments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>features.more_entropy &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>features.more_entropy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_autosummary/generated/features.more_entropy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="features-more-entropy">
+<h1>features.more_entropy<a class="headerlink" href="#features-more-entropy" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="features.more_entropy">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">more_entropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/features/alpha_indices.html#more_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.more_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the entropy of an audio signal using multiple methods.</p>
+<dl class="simple">
+<dt>There are currently five types supported:</dt><dd><ul class="simple">
+<li><p>Havrda</p></li>
+<li><p>Renyi</p></li>
+<li><p>paired Shannon</p></li>
+<li><p>gamma</p></li>
+<li><p>Gini Simpson</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of floats</span></dt><dd><p>vector (1d) or matrix (2d) of scalars.
+Vector could be audio recording or spectrum
+Matrix could be spectrogram</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">integer, default is 3</span></dt><dd><p>determine the order of the entropy in case of Havrda, Renyi and gamma 
+entropy. if order =2, Havrda is equal to Gini Simpson entropy</p>
+</dd>
+<dt><strong>axis</strong><span class="classifier">integer, default is 0</span></dt><dd><p>In case of x is a matrix, select the row (axis=0) or the columns (axis=1)
+of the matrix to compute the entropies.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>H_Havrda</strong><span class="classifier">scalar</span></dt><dd><p>Havrda entropy</p>
+</dd>
+<dt><strong>H_Renyi</strong><span class="classifier">scalar</span></dt><dd><p>Renyi entropy</p>
+</dd>
+<dt><strong>H_pairedShannon</strong><span class="classifier">scalar</span></dt><dd><p>Paired Shannon entropy</p>
+</dd>
+<dt><strong>H_gamma</strong><span class="classifier">scalar</span></dt><dd><p>Gamma entropy</p>
+</dd>
+<dt><strong>H_GiniSimpson</strong><span class="classifier">scalar</span></dt><dd><p>Gini Simpson entropy</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>1. Zhao, Yueqin. “Rao’s Quadratic Entropy and Some New Applications” (2010). 
+Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
+Old Dominion University, DOI: 10.25777/qgak-sf09</p>
+<p class="rubric">Examples</p>
+<p>Compute entropy in time domain.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">envelope</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ht_Havrda</span><span class="p">,</span> <span class="n">Ht_Renyi</span><span class="p">,</span> <span class="n">Ht_pairedShannon</span><span class="p">,</span> <span class="n">Ht_gamma</span><span class="p">,</span> <span class="n">Ht_GiniSimpson</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">more_entropy</span><span class="p">(</span><span class="n">env</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ht_Havrda: </span><span class="si">%2.2f</span><span class="s1"> / Ht_Renyi: </span><span class="si">%2.2f</span><span class="s1"> / Ht_pairedShannon: </span><span class="si">%2.2f</span><span class="s1"> / Ht_gamma: </span><span class="si">%2.0f</span><span class="s1"> / Ht_GiniSimpson: </span><span class="si">%2.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Ht_Havrda</span><span class="p">,</span> <span class="n">Ht_Renyi</span><span class="p">,</span> <span class="n">Ht_pairedShannon</span><span class="p">,</span> <span class="n">Ht_gamma</span><span class="p">,</span> <span class="n">Ht_GiniSimpson</span><span class="p">))</span>
+<span class="go">Ht_Havrda: 0.33 / Ht_Renyi: 7.20 / Ht_pairedShannon: 9.04 / Ht_gamma: 24223924 / Ht_GiniSimpson: 1.00</span>
+</pre></div>
+</div>
+<p>Compute entropy in spectral domain.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Sxx_power</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S_power</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">avg_power_spectro</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Hf_Havrda</span><span class="p">,</span> <span class="n">Hf_Renyi</span><span class="p">,</span> <span class="n">Hf_pairedShannon</span><span class="p">,</span> <span class="n">Hf_gamma</span><span class="p">,</span> <span class="n">Hf_GiniSimpson</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">more_entropy</span><span class="p">(</span><span class="n">S_power</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hf_Havrda: </span><span class="si">%2.2f</span><span class="s1"> / Hf_Renyi: </span><span class="si">%2.2f</span><span class="s1"> / Hf_pairedShannon: </span><span class="si">%2.2f</span><span class="s1"> / Hf_gamma: </span><span class="si">%2.0f</span><span class="s1"> / Hf_GiniSimpson: </span><span class="si">%2.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Hf_Havrda</span><span class="p">,</span> <span class="n">Hf_Renyi</span><span class="p">,</span> <span class="n">Hf_pairedShannon</span><span class="p">,</span> <span class="n">Hf_gamma</span><span class="p">,</span> <span class="n">Hf_GiniSimpson</span><span class="p">))</span>
+<span class="go">Hf_Havrda: 0.33 / Hf_Renyi: 3.23 / Hf_pairedShannon: 4.92 / Hf_gamma: 7931 / Hf_GiniSimpson: 0.97</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1023 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.spectral_subtraction &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.sound.spectral_subtraction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.sound.spectral_subtraction</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Collection of functions to remove background noise from spectrogram using</span>
+<span class="sd">spectral subtraction methods</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">morphology</span> 
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">reconstruction</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span> 
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+<span class="c1"># Import internal modules </span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="p">(</span><span class="n">plot1d</span><span class="p">,</span> <span class="n">plot2d</span><span class="p">,</span> <span class="n">running_mean</span><span class="p">,</span> 
+                       <span class="n">get_unimode</span><span class="p">,</span> <span class="n">mean_dB</span><span class="p">,</span> <span class="n">power2dB</span><span class="p">)</span>
+
+<span class="c1">#%%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="remove_background"><a class="viewcode-back" href="../../../generated/maad.sound.remove_background.html#maad.sound.remove_background">[docs]</a><span class="k">def</span> <span class="nf">remove_background</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">gauss_win</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gauss_std</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  
+                      <span class="n">llambda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+                      <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Remove background noise using spectral subtraction.</span>
+<span class="sd"> </span>
+<span class="sd">    Based on the spectrum of the A posteriori noise profile.   </span>
+<span class="sd">    It computes an atenuation map in the time-frequency domain.  </span>
+<span class="sd">    See [1]_ or [2]_ for more detail about the algorithm. </span>
+<span class="sd"> </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx : 2d ndarray of scalars </span>
+<span class="sd">        Spectrogram  </span>
+<span class="sd">         </span>
+<span class="sd">    gauss_win=50 : int, optional, default: 50 </span>
+<span class="sd">        Number of points in the gaussian window  </span>
+<span class="sd">         </span>
+<span class="sd">    gauss_std = 25 </span>
+<span class="sd">        The standard deviation, sigma used to create the gaussian window   </span>
+<span class="sd">         </span>
+<span class="sd">    beta1 : scaler, optional, default: 1       </span>
+<span class="sd">        beta1 has to be &gt;0 </span>
+<span class="sd">        Should be close to 1 </span>
+<span class="sd"> </span>
+<span class="sd">    beta2: scaler, optional, default: 1        </span>
+<span class="sd">        beta2 has to be &gt;0  </span>
+<span class="sd">        better to not change </span>
+<span class="sd">     </span>
+<span class="sd">    llambda : int, optional, default: 1        </span>
+<span class="sd">        over-subtraction factor to compensate variation of noise amplitude. </span>
+<span class="sd">        Should be close to 1 </span>
+<span class="sd">    </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        Print messages and speed</span>
+<span class="sd">         </span>
+<span class="sd">    display : boolean, optional, default is False </span>
+<span class="sd">        Display the signal if True </span>
+<span class="sd">         </span>
+<span class="sd">    savefig : string, optional, default is None </span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
+<span class="sd">        is added to the root filename. </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">             </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">         </span>
+<span class="sd">        - extent : scalars (left, right, bottom, top), optional, default: None </span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that </span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">         </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure </span>
+<span class="sd">             </span>
+<span class="sd">        ... and more, see matplotlib     </span>
+<span class="sd">                       </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    Sxx_out : 2d ndarray of scalar </span>
+<span class="sd">        Spectrogram after denoising   </span>
+<span class="sd">    noise_profile : 1d darray of scalar</span>
+<span class="sd">        noise_profile</span>
+<span class="sd">    BGNxx : 2d ndarray of scalar </span>
+<span class="sd">        Noise map</span>
+<span class="sd"> </span>
+<span class="sd">    References </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    .. [1] Steven F. Boll, &quot;Suppression of Acoustic Noise in Speech Using Spectral </span>
+<span class="sd">       Subtraction&quot;, IEEE Transactions on Signal Processing, 27(2),pp 113-120, </span>
+<span class="sd">       1979 </span>
+<span class="sd"> </span>
+<span class="sd">    .. [2] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean square  </span>
+<span class="sd">       error short-time spectral amplitude estimator, IEEE. Transactions in </span>
+<span class="sd">       Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.   </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   </span>
+<span class="sd">    </span>
+<span class="sd">    Convert linear spectrogram into dB and add 96dB (which is the maximum dB</span>
+<span class="sd">    for 16 bits wav) in order to have positive values</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) + 96</span>
+<span class="sd">    </span>
+<span class="sd">    Remove stationnary noise from the spectrogram in dB</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise, noise_profile, _ = maad.sound.remove_background(Sxx_dB)</span>
+
+<span class="sd">    Plot both spectrograms</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2) = plt.subplots(2, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title=&#39;Without stationary noise&#39;, vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)</span>
+<span class="sd">    &gt;&gt;&gt; fig.set_size_inches(15,8)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout()</span>
+<span class="sd">       </span>
+<span class="sd">    &quot;&quot;&quot;</span>   
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determine the profile of the stochastic background noise...&#39;</span><span class="p">)</span> 
+     
+    <span class="n">Nf</span><span class="p">,</span> <span class="n">Nw</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span> 
+
+    <span class="c1"># average spectrum (assumed to be ergodic) </span>
+    <span class="n">mean_profile</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+     
+    <span class="c1"># White Top Hat (to remove non uniform background) = i - opening(i) </span>
+    <span class="n">selem</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">gauss_win</span><span class="p">,</span> <span class="n">gauss_std</span><span class="p">)</span> 
+    <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">grey_opening</span><span class="p">(</span><span class="n">mean_profile</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">selem</span><span class="p">)</span> 
+ 
+    <span class="c1"># Remove the artefact at the end of the spectrum (2 highest frequencies) </span>
+    <span class="n">noise_profile</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">mean_profile</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> 
+    <span class="n">noise_profile</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_profile</span> <span class="p">[:</span><span class="mi">2</span><span class="p">]</span> 
+     
+    <span class="c1"># Create a matrix with the noise profile </span>
+    <span class="n">noise_spectro</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nw</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="n">noise_profile</span><span class="p">)</span> 
+    <span class="n">noise_spectro</span><span class="o">=</span><span class="n">noise_spectro</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> 
+    
+    <span class="c1"># snr estimate a posteriori </span>
+    <span class="n">SNR_est</span><span class="o">=</span> <span class="n">Sxx</span> <span class="o">-</span> <span class="n">noise_spectro</span>
+    <span class="c1"># to avoid dividing by 0</span>
+    <span class="n">SNR_est</span><span class="p">[</span><span class="n">SNR_est</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">noise_spectro</span><span class="p">[</span><span class="n">noise_spectro</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
+    <span class="c1"># ratio</span>
+    <span class="n">SNR_est</span><span class="o">=</span><span class="p">(</span><span class="n">Sxx</span><span class="o">/</span><span class="n">noise_spectro</span><span class="p">)</span>  
+    <span class="c1"># keep only positive values </span>
+    <span class="n">SNR_est</span><span class="o">=</span><span class="n">SNR_est</span><span class="o">*</span><span class="p">(</span><span class="n">SNR_est</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> 
+     
+    <span class="c1"># compute attenuation map </span>
+    <span class="c1"># if llambda, beta1 and beta 2 are equal to 1, it is (1 - noise_spectro) </span>
+    <span class="n">an_lk</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">llambda</span><span class="o">*</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">SNR_est</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="n">beta1</span><span class="p">))</span><span class="o">**</span><span class="n">beta2</span> 
+    <span class="n">an_lk</span><span class="o">=</span><span class="n">an_lk</span><span class="o">*</span><span class="p">(</span><span class="n">an_lk</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># keep only positive values </span>
+     
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Remove the stochastic background noise...&#39;</span><span class="p">)</span> 
+     
+    <span class="c1"># Apply the attenuation map to the STFT coefficients </span>
+    <span class="n">Sxx_out</span><span class="o">=</span><span class="n">an_lk</span><span class="o">*</span><span class="n">Sxx</span> 
+    
+    <span class="c1"># noise map BGNxx</span>
+    <span class="n">BGNxx</span> <span class="o">=</span> <span class="n">Sxx</span> <span class="o">-</span> <span class="n">Sxx_out</span>
+     
+    <span class="c1"># if nan in the image, convert nan into 0 </span>
+    <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> 
+    
+    <span class="c1"># Set negative value to 0</span>
+    <span class="n">Sxx_out</span><span class="p">[</span><span class="n">Sxx_out</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
+    
+    <span class="c1"># Display </span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>  
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Spectrogram without stationnary noise&#39;</span><span class="p">)</span> 
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">))</span>  
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">))</span> 
+        <span class="n">extent</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>  
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        
+        <span class="n">fig2</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">fig2</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">mean_profile</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Original profile&#39;</span><span class="p">,</span>
+                       <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">BGNxx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span> <span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Noise profile&#39;</span><span class="p">,</span>
+                       <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> 
+                       <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Denoized profile&#39;</span><span class="p">,</span> 
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
+        <span class="n">fig2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>  
+        
+        <span class="c1"># SAVE FIGURE </span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>             
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span>  
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span>  
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectro_after_noise_subtraction&#39;</span><span class="p">)</span>   
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span> 
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span> 
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+             
+    <span class="k">return</span> <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">noise_profile</span><span class="p">,</span> <span class="n">BGNxx</span></div>
+ 
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="remove_background_morpho"><a class="viewcode-back" href="../../../generated/maad.sound.remove_background_morpho.html#maad.sound.remove_background_morpho">[docs]</a><span class="k">def</span> <span class="nf">remove_background_morpho</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Remove background noise in a spectrogram using mathematical morphology tool.</span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx : 2D numpy array  </span>
+<span class="sd">        Original spectrogram (or image) </span>
+<span class="sd">        </span>
+<span class="sd">    q : float</span>
+<span class="sd">        Quantile which must be between  0 and 1 inclusive. The closest to one, </span>
+<span class="sd">        the finest details are kept</span>
+<span class="sd">     </span>
+<span class="sd">    display : boolean, optional, default is False </span>
+<span class="sd">        Display the signal if True </span>
+<span class="sd">         </span>
+<span class="sd">    savefig : string, optional, default is None </span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
+<span class="sd">        is added to the root filename. </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">             </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">         </span>
+<span class="sd">        - extent : scalars (left, right, bottom, top), optional, default: None </span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that </span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">         </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure </span>
+<span class="sd">             </span>
+<span class="sd">        ... and more, see matplotlib     </span>
+<span class="sd">                       </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    Sxx_out : 2d ndarray of scalar </span>
+<span class="sd">        Spectrogram after denoising   </span>
+<span class="sd">    noise_profile : 1d ndarray of scalar</span>
+<span class="sd">        Noise profile</span>
+<span class="sd">    BGNxx : 2d ndarray of scalar </span>
+<span class="sd">        Noise map</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   </span>
+<span class="sd">    </span>
+<span class="sd">    Convert linear spectrogram into dB</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
+<span class="sd">    </span>
+<span class="sd">    Remove stationnary noise from the spectrogram </span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise,_,_ = maad.sound.remove_background_morpho(Sxx_dB, q=0.5)</span>
+
+<span class="sd">    Plot both spectrograms</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2) = plt.subplots(2, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title=&#39;Without stationary noise&#39;,vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)</span>
+<span class="sd">    &gt;&gt;&gt; fig.set_size_inches(15,8)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout()     </span>
+<span class="sd">    </span>
+<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(0,20))   </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
+<span class="sd">    </span>
+<span class="sd">    Remove stationnary noise from the spectrogram with different q</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_q25,_,_ = maad.sound.remove_background_morpho(Sxx_dB, q=0.25)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_q50,_,_ = maad.sound.remove_background_morpho(Sxx_dB, q=0.5)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_q75,_,_ = maad.sound.remove_background_morpho(Sxx_dB, q=0.75)</span>
+<span class="sd">    </span>
+<span class="sd">    Plot 3 spectrograms</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2, ax3) = plt.subplots(3, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title=&#39;Without stationary noise (q=0.25)&#39;,vmin=np.median(Sxx_dB_noNoise_q25), vmax=np.median(Sxx_dB_noNoise_q25)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title=&#39;Without stationary noise (q=0.50)&#39;,vmin=np.median(Sxx_dB_noNoise_q50), vmax=np.median(Sxx_dB_noNoise_q50)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title=&#39;Without stationary noise (q=0.75)&#39;,vmin=np.median(Sxx_dB_noNoise_q75), vmax=np.median(Sxx_dB_noNoise_q75)+40)</span>
+<span class="sd">    &gt;&gt;&gt; fig.set_size_inches(15,9)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout()     </span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    
+    <span class="c1"># Use morpho math tools to estimate the background noise</span>
+    <span class="n">BGNxx</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">Sxx</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">q</span><span class="p">)),</span> <span class="n">mask</span><span class="o">=</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;dilation&#39;</span><span class="p">)</span>
+    <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx</span> <span class="o">-</span> <span class="n">BGNxx</span> 
+    
+    <span class="c1"># noise profile along time axis</span>
+    <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">BGNxx</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Set negative value to 0</span>
+    <span class="n">Sxx_out</span><span class="p">[</span><span class="n">Sxx_out</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
+    
+    <span class="c1"># Display </span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>  
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Spectrogram without stationnary noise&#39;</span><span class="p">)</span> 
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">))</span>  
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">))</span> 
+        <span class="n">extent</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> 
+        
+        <span class="n">Nf</span><span class="p">,</span> <span class="n">Nw</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span> 
+
+        <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>  
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2d</span> <span class="p">(</span><span class="n">BGNxx</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Noise map&#39;</span><span class="p">,</span>  
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        
+        <span class="n">fig2</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">fig2</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Original profile&#39;</span><span class="p">,</span> 
+                       <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">BGNxx</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span> <span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Noise profile&#39;</span><span class="p">,</span> 
+                       <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> 
+                       <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Denoized profile&#39;</span><span class="p">,</span> 
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
+        <span class="n">fig2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>     
+        
+        <span class="c1"># SAVE FIGURE </span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>             
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span>  
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span>  
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectro_after_noise_subtraction&#39;</span><span class="p">)</span>   
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span> 
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span> 
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+ 
+    <span class="k">return</span> <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">noise_profile</span><span class="p">,</span> <span class="n">BGNxx</span></div>
+ 
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="remove_background_along_axis"><a class="viewcode-back" href="../../../generated/maad.sound.remove_background_along_axis.html#maad.sound.remove_background_along_axis">[docs]</a><span class="k">def</span> <span class="nf">remove_background_along_axis</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> 
+                                  <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Get the noisy profile along the defined axis and remove this profile from</span>
+<span class="sd">    the spectrogram.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx : 2D numpy array  </span>
+<span class="sd">        Original spectrogram (or image) </span>
+<span class="sd">    </span>
+<span class="sd">    mode : str, optional, default is &#39;median&#39;</span>
+<span class="sd">        Select the mode to remove the noise</span>
+<span class="sd">        Possible values for mode are :</span>
+<span class="sd">        - &#39;ale&#39; : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</span>
+<span class="sd">        - &#39;median&#39; : subtract the median value</span>
+<span class="sd">        - &#39;mean&#39; : subtract the mean value (DC)</span>
+<span class="sd">    </span>
+<span class="sd">    axis : integer, default is 1</span>
+<span class="sd">        if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</span>
+<span class="sd">        </span>
+<span class="sd">    N : int, default is 25</span>
+<span class="sd">        length of window to compute the running mean of the noise profile</span>
+<span class="sd">        </span>
+<span class="sd">    N_bins : int (only for mode = &quot;ale&quot;), default is 50</span>
+<span class="sd">        number of bins to compute the histogram </span>
+<span class="sd">     </span>
+<span class="sd">    display : boolean, optional, default is False </span>
+<span class="sd">        Display the signal if True </span>
+<span class="sd">         </span>
+<span class="sd">    savefig : string, optional, default is None </span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
+<span class="sd">        is added to the root filename. </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">             </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">         </span>
+<span class="sd">        - extent : scalars (left, right, bottom, top), optional, default: None </span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that </span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">         </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure </span>
+<span class="sd">             </span>
+<span class="sd">        ... and more, see matplotlib    </span>
+<span class="sd">        </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    Sxx_out : 2d ndarray of scalar </span>
+<span class="sd">        Spectrogram after denoising </span>
+<span class="sd">        </span>
+<span class="sd">    noise_profile : 1d ndarray of scalar</span>
+<span class="sd">        Noise profile</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from</span>
+<span class="sd">    Natural Recordings of the Environment. Queensland University of Technology,</span>
+<span class="sd">    Brisbane</span>
+<span class="sd">                       </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   </span>
+<span class="sd">    </span>
+<span class="sd">    Convert linear spectrogram into dB</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
+<span class="sd">    </span>
+<span class="sd">    Remove stationnary noise from the spectrogram with modes &#39;ale&#39;, &#39;median&#39;, and &#39;mean&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_ale,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;ale&#39;)    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_med,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;median&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise_mean,_ = maad.sound.remove_background_along_axis(Sxx_dB, mode=&#39;mean&#39;)</span>
+
+<span class="sd">    Plot spectrograms</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title=&#39;Without stationary noise (mode = &#39;&#39;ale&#39;&#39;)&#39;,vmin=np.median(Sxx_dB_noNoise_ale), vmax=np.median(Sxx_dB_noNoise_ale)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title=&#39;Without stationary noise (mode = &#39;&#39;med&#39;&#39;)&#39;,vmin=np.median(Sxx_dB_noNoise_med), vmax=np.median(Sxx_dB_noNoise_med)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title=&#39;Without stationary noise (mode = &#39;&#39;mean&#39;&#39;)&#39;,vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)</span>
+<span class="sd">    &gt;&gt;&gt; fig.set_size_inches(8,10)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout()   </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+       
+    <span class="c1"># get the noise profile, N define the running mean size of the histogram</span>
+    <span class="c1"># in case of mode=&#39;ale&#39;</span>
+    <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">get_unimode</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="n">N_bins</span><span class="p">)</span>
+    <span class="c1"># smooth the profile by removing spurious thin peaks</span>
+    <span class="n">noise_profile</span> <span class="o">=</span> <span class="n">running_mean</span><span class="p">(</span><span class="n">noise_profile</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+    <span class="c1"># Remove horizontal noisy peaks profile (BGN_VerticalNoise is an estimation) </span>
+    <span class="c1"># and negative value to zero</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx</span> <span class="o">-</span> <span class="n">noise_profile</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx</span> <span class="o">-</span> <span class="n">noise_profile</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    
+    <span class="c1"># Set negative value to 0</span>
+    <span class="n">Sxx_out</span><span class="p">[</span><span class="n">Sxx_out</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
+    
+    <span class="c1"># Display </span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>  
+        
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Spectrogram without stationnary noise&#39;</span><span class="p">)</span> 
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">))</span>  
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">))</span>  
+        <span class="n">extent</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> 
+        
+        <span class="n">Nf</span><span class="p">,</span> <span class="n">Nw</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span> 
+        
+        <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span> 
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>  
+            
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig1</span> <span class="o">=</span> <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        
+        <span class="n">fig2</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">fig2</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">mean_dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Original profile&#39;</span><span class="p">,</span>
+                       <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
+        <span class="n">ax1</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">noise_profile</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Noise profile&#39;</span><span class="p">,</span> 
+                       <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plot1d</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">mean_dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> 
+                       <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Denoized profile&#39;</span><span class="p">,</span> 
+                       <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
+        <span class="n">fig2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        
+        <span class="c1"># SAVE FIGURE </span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>             
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span>  
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span>  
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectro_after_noise_subtraction&#39;</span><span class="p">)</span>   
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span> 
+            <span class="n">fig1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span> 
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+                
+    <span class="k">return</span> <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">noise_profile</span> </div>
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="median_equalizer"><a class="viewcode-back" href="../../../generated/maad.sound.median_equalizer.html#maad.sound.median_equalizer">[docs]</a><span class="k">def</span> <span class="nf">median_equalizer</span> <span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Remove background noise in spectrogram using median equalizer.</span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx : 2D numpy array  </span>
+<span class="sd">        Original spectrogram (or image), !!! not in dB </span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False </span>
+<span class="sd">        Display the signal if True </span>
+<span class="sd">         </span>
+<span class="sd">    savefig : string, optional, default is None </span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
+<span class="sd">        is added to the root filename. </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">             </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_after_noise_subtraction.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">         </span>
+<span class="sd">        - extent : scalars (left, right, bottom, top), optional, default: None </span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and </span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that </span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices. </span>
+<span class="sd">         </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure </span>
+<span class="sd">             </span>
+<span class="sd">        ... and more, see matplotlib     </span>
+<span class="sd">                       </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    Sxx_out : 2d ndarray of scalar </span>
+<span class="sd">        Spectrogram after denoising   </span>
+<span class="sd">     </span>
+<span class="sd">    References </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    .. [1] This function has been proposed first by Carol BEDOYA &lt;carol.bedoya@pg.canterbury.ac.nz&gt; </span>
+<span class="sd">       Adapted by S. Haupert Oct 9, 2018 for Python </span>
+<span class="sd">       </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Load audio recording and convert it into spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   </span>
+<span class="sd">    </span>
+<span class="sd">    Convert linear spectrogram into dB</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx) +96</span>
+<span class="sd">    </span>
+<span class="sd">    Remove stationnary noise from the spectrogram </span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_noNoise = maad.sound.median_equalizer(Sxx)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB_noNoise =  maad.util.power2dB(Sxx_noNoise) </span>
+
+<span class="sd">    Plot both spectrograms</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; fig, (ax1, ax2) = plt.subplots(2, 1)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title=&#39;original&#39;, vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title=&#39;Without stationary noise&#39;,vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)</span>
+<span class="sd">    &gt;&gt;&gt; fig.set_size_inches(15,8)</span>
+<span class="sd">    &gt;&gt;&gt; fig.tight_layout() </span>
+<span class="sd">       </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+     
+    <span class="n">Sxx_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sxx</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+    
+    <span class="c1"># Numerator for normalization. Test if values of norm are &lt;=0 and set them</span>
+    <span class="c1"># to the highest value in Sxx. This will ensure that the result of the </span>
+    <span class="c1"># normalization will be lower than 1</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">norm</span><span class="p">[</span><span class="n">norm</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    
+    <span class="c1"># normalization. Test if the numerator is 0</span>
+    <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="o">/</span><span class="n">norm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    
+    <span class="c1"># if the ratio is &lt; 1, set the value to 1. </span>
+    <span class="c1"># Values &lt; 1 are noise and should not be less than 1.</span>
+    <span class="c1"># When Sxx_out is converted into dB =&gt; log10(1) =&gt; 0</span>
+    <span class="n">Sxx_out</span><span class="p">[</span><span class="n">Sxx_out</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="c1"># Display </span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>  
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Spectrogram without stationnary noise&#39;</span><span class="p">)</span> 
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+        <span class="n">extent</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> 
+        
+        <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>  
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+            
+        <span class="c1"># convert into dB</span>
+        <span class="n">Sxx_out_dB</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">)</span>
+        
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Sxx_out_dB</span><span class="p">))</span> 
+         
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2d</span> <span class="p">(</span><span class="n">Sxx_out_dB</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        <span class="c1"># SAVE FIGURE </span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>             
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span>  
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span>  
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> 
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectro_after_noise_subtraction&#39;</span><span class="p">)</span>   
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span> 
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span> 
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+    
+    <span class="k">return</span> <span class="n">Sxx_out</span> </div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

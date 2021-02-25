@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.util.math_tools &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/util.html">util</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.util.math_tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.util.math_tools</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Mathematical tools for audio signal processing.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage.filters</span> <span class="kn">import</span> <span class="n">uniform_filter1d</span> <span class="c1"># for fast running mean</span>
+
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear_scale</span>
+
+<span class="c1"># min value</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">_MIN_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+<span class="c1">#=============================================================================</span>
+<span class="k">def</span> <span class="nf">running_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute fast running mean for a window size N</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x :  1d ndarray of scalars</span>
+<span class="sd">        Vector </span>
+
+<span class="sd">    mode : {&#39;reflect&#39;, &#39;constant&#39;, &#39;nearest&#39;, &#39;mirror&#39;, &#39;wrap&#39;}, optional, </span>
+<span class="sd">        The `mode` parameter determines how the input array is extended</span>
+<span class="sd">        when the filter overlaps a border. Default is &#39;nearest&#39;. Behavior</span>
+<span class="sd">        for each valid value is as follows:</span>
+<span class="sd">    </span>
+<span class="sd">        &#39;reflect&#39; (`d c b a | a b c d | d c b a`)</span>
+<span class="sd">            The input is extended by reflecting about the edge of the last</span>
+<span class="sd">            pixel.</span>
+<span class="sd">    </span>
+<span class="sd">        &#39;constant&#39; (`k k k k | a b c d | k k k k`)</span>
+<span class="sd">            The input is extended by filling all values beyond the edge with</span>
+<span class="sd">            the same constant value, defined by the `cval` parameter.</span>
+<span class="sd">    </span>
+<span class="sd">        &#39;nearest&#39; (`a a a a | a b c d | d d d d`)</span>
+<span class="sd">            The input is extended by replicating the last pixel.</span>
+<span class="sd">    </span>
+<span class="sd">        &#39;mirror&#39; (`d c b | a b c d | c b a`)</span>
+<span class="sd">            The input is extended by reflecting about the center of the last</span>
+<span class="sd">            pixel.</span>
+<span class="sd">    </span>
+<span class="sd">        &#39;wrap&#39; (`a b c d | a b c d | a b c d`)</span>
+<span class="sd">            The input is extended by wrapping around to the opposite edge.</span>
+<span class="sd">            </span>
+<span class="sd">    N : int</span>
+<span class="sd">        length of window to compute the mean</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x_mean : 1d ndarray of scalars</span>
+<span class="sd">        Vector with the same dimensions than the original variable x</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.running_mean([2, 8, 0, 4, 1, 9, 9, 0], N=3)</span>
+<span class="sd">        array([4, 3, 4, 1, 4, 6, 6, 3])</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>         
+    <span class="n">x_mean</span> <span class="o">=</span> <span class="n">uniform_filter1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x_mean</span>
+
+<span class="c1">#=============================================================================</span>
+<span class="k">def</span> <span class="nf">get_unimode</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">N_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the statistical mode or modal value which is </span>
+<span class="sd">    the most common number in the dataset.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X :  1d or 2d ndarray of scalars</span>
+<span class="sd">        Vector or matrix </span>
+<span class="sd">                </span>
+<span class="sd">    mode : str, optional, default is &#39;median&#39;</span>
+<span class="sd">        Select the mode to remove the noise</span>
+<span class="sd">        Possible values for mode are :</span>
+<span class="sd">        - &#39;ale&#39; : Adaptative Level Equalization algorithm [Lamel &amp; al. 1981]</span>
+<span class="sd">        - &#39;median&#39; : subtract the median value</span>
+<span class="sd">        - &#39;mean&#39; : subtract the mean value (DC)</span>
+<span class="sd">    </span>
+<span class="sd">    axis : integer, default is 1</span>
+<span class="sd">        if matrix, estimate the mode for each row (axis=0) or each column (axis=1)</span>
+<span class="sd">        </span>
+<span class="sd">    N : int (only for mode = &quot;ale&quot;)</span>
+<span class="sd">        length of window to compute the running mean of the histogram</span>
+<span class="sd">        </span>
+<span class="sd">    N_bins : int (only for mode = &quot;ale&quot;)</span>
+<span class="sd">        number of bins to compute the histogram</span>
+<span class="sd">            </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        print messages into the consol or terminal if verbose is True</span>
+<span class="sd">                      </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    unimode_value : float</span>
+<span class="sd">        The most common number in the dataset</span>
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ale : Adaptative Level Equalization algorithm from Lamel et al., 1981 :</span>
+<span class="sd">    L.F. Lamel, L.R. Rabiner, A.E. Rosenberg, J.G. Wilpon</span>
+<span class="sd">    An improved endpoint detector for isolated word recognition</span>
+<span class="sd">    IEEE Trans. ASSP, ASSP-29 (1981), pp. 777-785</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    This function is interesting to obtain the background noise (BGN) profile (e.g. frequency bin</span>
+<span class="sd">    by frequency bin) of a spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/cold_forest_daylight.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window=&#39;hanning&#39;,noverlap=512, nFFT=1024)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; BGN_med = maad.util.get_unimode (Sxx_dB, mode=&#39;median&#39;, axis=1)</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(fn,maad.util.mean_dB(Sxx_dB,axis=1))</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(fn,BGN_med)</span>
+<span class="sd">    </span>
+<span class="sd">    Extract the background noise from mean</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; BGN_mean = maad.util.get_unimode (Sxx_dB, mode=&#39;mean&#39;, axis=1)</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(fn,BGN_mean)</span>
+<span class="sd">    </span>
+<span class="sd">    Extract the background noise from ale (i.e. unimode)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; BGN_ale = maad.util.get_unimode (Sxx_dB, mode=&#39;ale&#39;, N=7, N_bins=100, axis=1)</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(fn,BGN_ale)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>         
+    <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">2</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> 
+        <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;ale&#39;</span><span class="p">:</span>
+                
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>  
+                <span class="c1"># Min and Max of the envelope (without taking into account nan)</span>
+                <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="c1"># Compute a 50-bin histogram ranging between Min and Max values</span>
+                <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">N_bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">))</span>
+                
+                <span class="c1"># smooth the histogram by running mean</span>
+                <span class="n">hist_smooth</span> <span class="o">=</span> <span class="n">running_mean</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+                    
+                <span class="c1"># find the maximum of the peak with quadratic interpolation</span>
+                <span class="c1"># don&#39;t take into account the first 4 bins.</span>
+                <span class="n">imax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">hist_smooth</span><span class="p">)</span> 
+               
+                <span class="n">unimode_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">[</span><span class="n">imax</span><span class="p">])</span>
+                
+            <span class="c1"># transpose the vector</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">unimode_value</span><span class="p">)</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">unimode_value</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">X</span>
+            <span class="c1"># Min and Max of the envelope (without taking into account nan)</span>
+            <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            
+            <span class="c1"># Compute a 50-bin histogram ranging between Min and Max values</span>
+            <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">N_bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">))</span>
+            
+            <span class="c1"># smooth the histogram by running mean</span>
+            <span class="n">hist_smooth</span> <span class="o">=</span> <span class="n">running_mean</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+                                                 
+            <span class="c1"># find the maximum of the peak with quadratic interpolation</span>
+            <span class="n">imax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">hist_smooth</span><span class="p">)</span>
+                        
+            <span class="c1"># assuming an additive noise model : noise_bckg is the max of the histogram</span>
+            <span class="c1"># as it is an histogram, the value is unimode_value = bin_edges_interp[np.argmax(hist_interp)]</span>
+            <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">imax</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;median&#39;</span><span class="p">:</span>
+        <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">median</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+        <span class="n">unimode_value</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">unimode_value</span>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="entropy"><a class="viewcode-back" href="../../../_autosummary/features.alpha_indices.entropy.html#features.alpha_indices.entropy">[docs]</a><span class="k">def</span> <span class="nf">entropy</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the entropy of a vector (waveform) or matrix (spectrogram).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray of floats</span>
+<span class="sd">        x is a vector (1d) or a matrix (2d)</span>
+
+<span class="sd">    axis : int, optional, default is 0</span>
+<span class="sd">        select the axis where the entropy is computed</span>
+<span class="sd">        if x is a vector, axis=0</span>
+<span class="sd">        if x is a 2d ndarray, axis=0 =&gt; rows, axis=1 =&gt; columns</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : float or ndarray of floats</span>
+<span class="sd">        entropy of x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="n">axis</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> 
+                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING: x is empty&quot;</span><span class="p">)</span> 
+                <span class="n">H</span> <span class="o">=</span> <span class="kc">None</span> 
+            <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
+            <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> <span class="c1"># case vector</span>
+                    <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># null entropy</span>
+                <span class="k">else</span> <span class="p">:</span> <span class="c1"># case matrix</span>
+                    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># null entropy</span>
+                    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># null entropy</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if datain contains negative values -&gt; rescale the signal between </span>
+                <span class="c1"># between posSitive values (for example (0,1))</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">linear_scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">maxval</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># length of datain along axis</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+                <span class="c1"># Tranform the signal into a Probability mass function (pmf)</span>
+                <span class="c1"># Sum(pmf) = 1</span>
+                <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+                    <span class="n">pmf</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>                     
+                    <span class="n">pmf</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+                <span class="n">pmf</span><span class="p">[</span><span class="n">pmf</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_MIN_</span>
+                <span class="c1">#normalized by the length : H=&gt;[0,1]</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pmf</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pmf</span><span class="p">),</span><span class="n">axis</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING :axis is greater than the dimension of the array&quot;</span><span class="p">)</span>    
+            <span class="n">H</span> <span class="o">=</span> <span class="kc">None</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING: x must be ndarray&quot;</span><span class="p">)</span>   
+        <span class="n">H</span> <span class="o">=</span> <span class="kc">None</span> 
+
+    <span class="k">return</span> <span class="n">H</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

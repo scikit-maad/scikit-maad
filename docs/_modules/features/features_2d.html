@@ -1,0 +1,1435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>features.features_2d &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>features.features_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for features.features_2d</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3 </span>
+<span class="c1"># -*- coding: utf-8 -*- </span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Ensemble of functions to compute acoustic descriptors from 2D spectrograms.</span>
+<span class="sd">&quot;&quot;&quot;</span> 
+ 
+<span class="c1"># Load required modules </span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span> <span class="k">as</span> <span class="n">ndi</span> 
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+ 
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">transform</span><span class="p">,</span> <span class="n">measure</span> 
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span> 
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">gaussian</span> 
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">linear_scale</span><span class="p">,</span> <span class="n">nearest_idx</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">format_features</span> 
+<span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">rois_to_imblobs</span><span class="p">,</span> <span class="n">overlay_rois</span>  
+<span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">spectrogram</span> 
+ 
+ 
+<span class="c1">#============================================================================ </span>
+<span class="c1">#                           PRIVATE FUNCTIONS </span>
+<span class="c1">#============================================================================ </span>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************               _gabor_kernel_nodc                   *********** </span>
+<span class="c1">#**************************************************************************** </span>
+<span class="k">def</span> <span class="nf">_gabor_kernel_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                      <span class="n">n_stds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Computes complex 2D Gabor filter kernel with no DC offset. </span>
+<span class="sd">         </span>
+<span class="sd">    Gabor kernel is a Gaussian kernel modulated by a complex harmonic function. </span>
+<span class="sd">    Harmonic function consists of an imaginary sine function and a real </span>
+<span class="sd">    cosine function. Spatial frequency is inversely proportional to the </span>
+<span class="sd">    wavelength of the harmonic and to the standard deviation of a Gaussian </span>
+<span class="sd">    kernel. The bandwidth is also inversely proportional to the standard </span>
+<span class="sd">    deviation. </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    frequency : float </span>
+<span class="sd">        Spatial frequency of the harmonic function. Specified in pixels. </span>
+<span class="sd">    theta : float, optional </span>
+<span class="sd">        Orientation in radians. If 0, the harmonic is in the x-direction. </span>
+<span class="sd">    bandwidth : float, optional </span>
+<span class="sd">        The bandwidth captured by the filter. For fixed bandwidth, `sigma_x` </span>
+<span class="sd">        and `sigma_y` will decrease with increasing frequency. This value is </span>
+<span class="sd">        ignored if `sigma_x` and `sigma_y` are set by the user. </span>
+<span class="sd">    gamma : float, optional </span>
+<span class="sd">        gamma changes the aspect ratio (ellipsoidal) of the gabor filter.  </span>
+<span class="sd">        By default, gamma=1 which means no aspect ratio (circle) </span>
+<span class="sd">         </span>
+<span class="sd">        if gamma&gt;1, the filter is larger (x-dir) </span>
+<span class="sd">         </span>
+<span class="sd">        if gamma&lt;1, the filter is higher (y-dir) </span>
+<span class="sd">         </span>
+<span class="sd">        This value is ignored if `sigma_x` and `sigma_y` are set by the user. </span>
+<span class="sd">    sigma_x, sigma_y : float, optional </span>
+<span class="sd">        Standard deviation in x- and y-directions. These directions apply to </span>
+<span class="sd">        the kernel before rotation. If `theta = pi/2`, then the kernel is </span>
+<span class="sd">        rotated 90 degrees so that `sigma_x` controls the vertical direction.    </span>
+<span class="sd">    n_stds : scalar, optional </span>
+<span class="sd">        The linear size of the kernel is n_stds (3 by default) standard </span>
+<span class="sd">        deviations </span>
+<span class="sd">    offset : float, optional </span>
+<span class="sd">        Phase offset of harmonic function in radians. </span>
+<span class="sd">     </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    g_nodc : complex 2d array </span>
+<span class="sd">        A complex gabor kernel with no DC offset </span>
+<span class="sd">     </span>
+<span class="sd">    Notes </span>
+<span class="sd">    ----- </span>
+<span class="sd">    This function is a modification of the gabor_kernel function of scikit-image. </span>
+<span class="sd">     </span>
+<span class="sd">    References </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    .. [1] http://en.wikipedia.org/wiki/Gabor_filter </span>
+<span class="sd">    .. [2] http://mplab.ucsd.edu/tutorials/gabor.pdf </span>
+<span class="sd">    .. [3] http://www.cs.rug.nl/~imaging/simplecell.html </span>
+<span class="sd">     </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+     
+     <span class="c1"># set gaussian parameters </span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">bandwidth</span> 
+    <span class="n">sigma_pref</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">**</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">**</span> <span class="n">b</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> 
+    <span class="n">sigma_y</span> <span class="o">=</span> <span class="n">sigma_pref</span> <span class="o">/</span> <span class="n">frequency</span> 
+    <span class="n">sigma_x</span> <span class="o">=</span> <span class="n">sigma_y</span> <span class="o">/</span> <span class="n">gamma</span> 
+    <span class="c1"># meshgrid </span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">n_stds</span> <span class="o">*</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span> 
+                     <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">n_stds</span> <span class="o">*</span> <span class="n">sigma_y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span> <span class="mi">1</span><span class="p">))</span> 
+    <span class="n">y0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">n_stds</span> <span class="o">*</span> <span class="n">sigma_y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span> 
+                     <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">n_stds</span> <span class="o">*</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span> <span class="mi">1</span><span class="p">))</span> 
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="n">y0</span><span class="p">:</span><span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">x0</span><span class="p">:</span><span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> 
+    <span class="c1"># rotation matrix </span>
+    <span class="n">rotx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> 
+    <span class="n">roty</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> 
+    <span class="c1"># combine gambor and  </span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex</span><span class="p">)</span> 
+    <span class="n">g</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rotx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">sigma_x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">roty</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">sigma_y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> 
+    <span class="n">g</span> <span class="o">/=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_y</span> <span class="c1"># gaussian envelope </span>
+    <span class="n">oscil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">rotx</span> <span class="o">+</span> <span class="n">offset</span><span class="p">))</span> <span class="c1"># harmonic / oscilatory function </span>
+    <span class="n">g_dc</span> <span class="o">=</span> <span class="n">g</span><span class="o">*</span><span class="n">oscil</span> 
+    <span class="c1"># remove dc component by subtracting the envelope weighted by K </span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">g_dc</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> 
+    <span class="n">g_nodc</span> <span class="o">=</span> <span class="n">g_dc</span> <span class="o">-</span> <span class="n">K</span><span class="o">*</span><span class="n">g</span> 
+  
+    <span class="k">return</span> <span class="n">g_nodc</span> 
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************               _plot_filter_bank                    *********** </span>
+<span class="c1">#**************************************************************************** </span>
+<span class="k">def</span> <span class="nf">_plot_filter_bank</span><span class="p">(</span><span class="n">kernels</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">ntheta</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Display filter bank </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    kernels: list </span>
+<span class="sd">        List of kernels from filter_bank_2d_nodc() </span>
+<span class="sd">         </span>
+<span class="sd">    frequency: 1d ndarray of scalars </span>
+<span class="sd">        Spatial frequencies used to built the Gabor filters. Values should be </span>
+<span class="sd">        in [0;1] </span>
+<span class="sd">     </span>
+<span class="sd">    ntheta: int </span>
+<span class="sd">        Number of angular steps between 0° to 90° </span>
+<span class="sd">     </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    fig : Figure </span>
+<span class="sd">        The Figure instance  </span>
+<span class="sd">    ax : Axis </span>
+<span class="sd">        The Axis instance </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+ 
+    <span class="n">ntheta</span> <span class="o">=</span> <span class="n">ntheta</span> 
+    <span class="n">nfreq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> 
+     
+    <span class="c1"># get maximum size </span>
+    <span class="n">aux</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span> 
+    <span class="k">for</span> <span class="n">kernel</span> <span class="ow">in</span> <span class="n">kernels</span><span class="p">:</span> 
+        <span class="n">aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span> 
+    <span class="n">max_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">aux</span><span class="p">)</span> 
+     
+    <span class="c1"># plot kernels </span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nfreq</span><span class="p">,</span> <span class="n">ntheta</span><span class="p">)</span> 
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> 
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> 
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">kernels</span><span class="p">):</span> 
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> 
+        <span class="n">ki</span><span class="p">,</span> <span class="n">kj</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">shape</span> 
+        <span class="n">ci</span><span class="p">,</span> <span class="n">cj</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_size</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">ki</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_size</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">kj</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> 
+        <span class="n">canvas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_size</span><span class="p">,</span><span class="n">max_size</span><span class="p">))</span> 
+        <span class="n">canvas</span><span class="p">[</span><span class="n">ci</span><span class="p">:</span><span class="n">ci</span><span class="o">+</span><span class="n">ki</span><span class="p">,</span><span class="n">cj</span><span class="p">:</span><span class="n">cj</span><span class="o">+</span><span class="n">kj</span><span class="p">]</span> <span class="o">=</span> <span class="n">canvas</span><span class="p">[</span><span class="n">ci</span><span class="p">:</span><span class="n">ci</span><span class="o">+</span><span class="n">ki</span><span class="p">,</span><span class="n">cj</span><span class="p">:</span><span class="n">cj</span><span class="o">+</span><span class="n">kj</span><span class="p">]</span> <span class="o">+</span> <span class="n">kernel</span> 
+        <span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span> 
+        <span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> 
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************               _plot_filter_results                 *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<span class="k">def</span> <span class="nf">_plot_filter_results</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">im_list</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Display the resulting spectrograms after filtering with gabor filters </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    im_ref : 2D array </span>
+<span class="sd">        Reference image </span>
+<span class="sd">    im_list : list </span>
+<span class="sd">        List of filtered images </span>
+<span class="sd">    kernels: list </span>
+<span class="sd">        List of kernels from filter_bank_2d_nodc() </span>
+<span class="sd">    m: int </span>
+<span class="sd">        number of columns </span>
+<span class="sd">    n: int </span>
+<span class="sd">        number of rows </span>
+<span class="sd">         </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    fig : Figure </span>
+<span class="sd">        The Figure instance  </span>
+<span class="sd">    ax : Axis </span>
+<span class="sd">        The Axis instance </span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+         
+    <span class="n">ncols</span> <span class="o">=</span> <span class="n">m</span>  
+    <span class="n">nrows</span> <span class="o">=</span> <span class="n">n</span> 
+     
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">gray</span><span class="p">()</span> 
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Image responses for Gabor filter kernels&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span> 
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span> 
+     
+    <span class="c1"># Plot original images </span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span> 
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;spectrogram&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span> 
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span> 
+     
+    <span class="n">params_label</span> <span class="o">=</span> <span class="p">[]</span> 
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span> 
+        <span class="n">params_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;theta=</span><span class="si">%d</span><span class="s1">,</span><span class="se">\n</span><span class="s1">f=</span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> 
+     
+    <span class="n">ii</span> <span class="o">=</span> <span class="mi">0</span> 
+    <span class="k">for</span> <span class="n">ax_row</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+        <span class="n">plotGabor</span> <span class="o">=</span> <span class="kc">True</span> 
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">ax_row</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="n">plotGabor</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span> 
+                <span class="c1"># Plot Gabor kernel </span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">params_label</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span> 
+                <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">kernels</span><span class="p">[</span><span class="n">ii</span><span class="p">]),</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span> 
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">params_label</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span> 
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span> 
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span> 
+                <span class="n">plotGabor</span> <span class="o">=</span> <span class="kc">False</span> 
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="n">im_filtered</span> <span class="o">=</span> <span class="n">im_list</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> 
+                <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im_filtered</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span> 
+                <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span> 
+                <span class="n">plotGabor</span> <span class="o">=</span> <span class="kc">True</span> 
+                <span class="n">ii</span><span class="o">=</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span>      
+         
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> 
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                    _filter_mag                     *********** </span>
+<span class="c1">#**************************************************************************** </span>
+<span class="k">def</span> <span class="nf">_filter_mag</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Normalizes the image and computes im and real part of filter response using  </span>
+<span class="sd">    the complex kernel and the modulus operation </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    im: 2D array </span>
+<span class="sd">        Input image to process  </span>
+<span class="sd">    kernel: 2D array </span>
+<span class="sd">        Complex kernel or filter </span>
+<span class="sd">             </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    im_out: Modulus operand on filtered image </span>
+<span class="sd"> </span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+     
+    <span class="n">im</span> <span class="o">=</span> <span class="p">(</span><span class="n">im</span> <span class="o">-</span> <span class="n">im</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">im</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> 
+    <span class="n">im_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ndi</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> 
+                   <span class="n">ndi</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">im_out</span> 
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                    _params_to_df                   *********** </span>
+<span class="c1">#**************************************************************************** </span>
+<span class="k">def</span> <span class="nf">_params_to_df</span><span class="p">(</span><span class="n">params_filter_bank</span><span class="p">,</span> <span class="n">npyr</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Organises parameters used in multiresolution analysis into a dataframe </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    params_filter_bank: numpy array </span>
+<span class="sd">        Output of parameters from function filter_bank_2d_nodc </span>
+<span class="sd">    npyr: int </span>
+<span class="sd">        Number of pyramids used in multiresolution analysis </span>
+<span class="sd">             </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    params_multires: pandas DataFrame </span>
+<span class="sd">        Ordered parameters for each shape feature used </span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+ 
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">params_filter_bank</span><span class="p">)</span> 
+    <span class="n">orient</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> 
+    <span class="n">orient</span> <span class="o">=</span> <span class="n">orient</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">*</span> <span class="n">npyr</span> 
+    <span class="n">pyr_level</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npyr</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span> 
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">*</span> <span class="n">npyr</span> 
+    <span class="n">nparams</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">*</span> <span class="n">npyr</span> 
+    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nparams</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;names&#39;</span><span class="p">:(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="s1">&#39;freq&#39;</span><span class="p">,</span> <span class="s1">&#39;pyr_level&#39;</span><span class="p">,</span><span class="s1">&#39;scale&#39;</span><span class="p">),</span> 
+                                               <span class="s1">&#39;formats&#39;</span><span class="p">:(</span><span class="s1">&#39;f8&#39;</span><span class="p">,</span> <span class="s1">&#39;f8&#39;</span><span class="p">,</span> <span class="s1">&#39;f8&#39;</span><span class="p">,</span><span class="s1">&#39;f8&#39;</span><span class="p">)})</span> 
+    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orient</span> 
+    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span> 
+    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span> 
+    <span class="n">params_multires</span><span class="p">[</span><span class="s1">&#39;pyr_level&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pyr_level</span> 
+    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">params_multires</span><span class="p">)</span> 
+ 
+    <span class="k">return</span> <span class="n">params_multires</span> 
+ 
+<span class="c1">#============================================================================ </span>
+<span class="c1">#                           PUBLIC FUNCTIONS </span>
+<span class="c1">#============================================================================ </span>
+     
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                    filter_multires                 *********** </span>
+<span class="c1">#**************************************************************************** </span>
+<div class="viewcode-block" id="filter_multires"><a class="viewcode-back" href="../../_autosummary/features.features_2d.filter_multires.html#features.features_2d.filter_multires">[docs]</a><span class="k">def</span> <span class="nf">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Computes 2D wavelet coefficients at multiple scales using Gaussian pyramid  </span>
+<span class="sd">    transformation to downscale the input spectrogram. </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx: list of 2D arrays </span>
+<span class="sd">        List of input spectrograms to filter </span>
+<span class="sd">    kernels: list of 2D arrays </span>
+<span class="sd">        List of 2D kernels or filters </span>
+<span class="sd">    npyr: int, optional </span>
+<span class="sd">        Number of pyramids to compute. Default is 4. </span>
+<span class="sd">    rescale: boolean, optional </span>
+<span class="sd">        Indicates if the reduced images should be rescaled. Default is True. </span>
+<span class="sd">             </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    Sxx_out: list of 2D arrays </span>
+<span class="sd">        List of spectrograms filtered by each 2D kernel </span>
+<span class="sd">     </span>
+<span class="sd">    Examples </span>
+<span class="sd">    -------- </span>
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import filter_bank_2d_nodc, filter_multires </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx, dt, df, ext = spectrogram(s, fs, db_range=100, display=True) </span>
+<span class="sd">    &gt;&gt;&gt; params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_out = filter_multires(Sxx, kernels, npyr=2) </span>
+<span class="sd">     </span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+ 
+    <span class="c1"># Downscale image using gaussian pyramid </span>
+    <span class="k">if</span> <span class="n">npyr</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: npyr should be int and larger than 2 for multiresolution&#39;</span><span class="p">)</span> 
+        <span class="n">im_pyr</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">pyramid_gaussian</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">downscale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
+                                                  <span class="n">max_layer</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">multichannel</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>  
+    <span class="k">else</span><span class="p">:</span>     
+        <span class="n">im_pyr</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">pyramid_gaussian</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">downscale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
+                                                  <span class="n">max_layer</span><span class="o">=</span><span class="n">npyr</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">multichannel</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>  
+ 
+    <span class="c1"># filter 2d array at multiple resolutions using gabor kernels </span>
+    <span class="n">im_filt</span><span class="o">=</span><span class="p">[]</span> 
+    <span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">im_pyr</span><span class="p">:</span>  <span class="c1"># for each pyramid </span>
+        <span class="k">for</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">kernels</span><span class="p">:</span>  <span class="c1"># for each kernel </span>
+            <span class="n">im_filt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_filter_mag</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">kernel</span><span class="p">))</span>  <span class="c1">#  magnitude response of filter </span>
+     
+    <span class="c1"># Rescale image using gaussian pyramid </span>
+    <span class="k">if</span> <span class="n">rescale</span><span class="p">:</span> 
+        <span class="n">dims_raw</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span> 
+        <span class="n">Sxx_out</span><span class="o">=</span><span class="p">[]</span> 
+        <span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">im_filt</span><span class="p">:</span> 
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dims_raw</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> 
+            <span class="k">if</span> <span class="n">ratio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+                <span class="n">im</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">,</span> 
+                                       <span class="n">multichannel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="k">pass</span> 
+            <span class="n">Sxx_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im</span><span class="p">)</span> 
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">pass</span> 
+ 
+    <span class="k">return</span> <span class="n">Sxx_out</span> </div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                filter_bank_2d_nodc                 *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<div class="viewcode-block" id="filter_bank_2d_nodc"><a class="viewcode-back" href="../../_autosummary/features.features_2d.filter_bank_2d_nodc.html#features.features_2d.filter_bank_2d_nodc">[docs]</a><span class="k">def</span> <span class="nf">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">ntheta</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Build an ensemble of complex 2D Gabor filters with no DC offset. </span>
+<span class="sd">    </span>
+<span class="sd">    A Gabor kernel is a Gaussian kernel modulated by a complex harmonic function. </span>
+<span class="sd">    Harmonic function consists of an imaginary sine function and a real </span>
+<span class="sd">    cosine function. Spatial frequency is inversely proportional to the </span>
+<span class="sd">    wavelength of the harmonic and to the standard deviation of a Gaussian </span>
+<span class="sd">    kernel. The bandwidth is also inversely proportional to the standard </span>
+<span class="sd">    deviation [1-3]. These filters have been used to classify textures in images and can be applied to characterize spectrograms to classify sounds [4, 5]. </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    frequency: 1d ndarray of scalars </span>
+<span class="sd">        Spatial frequencies used to built the Gabor filters. Values should be </span>
+<span class="sd">        in the range [0;1] </span>
+<span class="sd">     </span>
+<span class="sd">    ntheta: int </span>
+<span class="sd">        Number of angular steps between 0° to 90° </span>
+<span class="sd">     </span>
+<span class="sd">    bandwidth: scalar, optional, default is 1 </span>
+<span class="sd">        Spatial-frequency bandwidth of the filter. This parameters affect </span>
+<span class="sd">        the resolution of the filters. Lower bandwidth result in sharper </span>
+<span class="sd">        in filters with more details. </span>
+<span class="sd">     </span>
+<span class="sd">    gamma: scalar, optional, default is 1 </span>
+<span class="sd">        Gaussian window that modulates the continuous sine. </span>
+<span class="sd">        For ``gamma = 1``, the result is the same gaussian window in x and y direction (circle). </span>
+<span class="sd">        For ``gamma &lt;1``, the result is an increased elongation of the filter size in the y direction (elipsoid). </span>
+<span class="sd">        For ``gamma &gt;1``, the result is a reduction of the filter size in the y direction (elipsoid). </span>
+<span class="sd">     </span>
+<span class="sd">    display: bool </span>
+<span class="sd">        Display a visualization of the filter bank. Default is False. </span>
+<span class="sd"> </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    params: 2d structured array </span>
+<span class="sd">         Parameters used to calculate 2D gabor kernels.  </span>
+<span class="sd">         Params array has 4 fields (theta, freq, bandwidth, gamma) </span>
+<span class="sd">         This can be useful to interpret the result of the filtering process. </span>
+<span class="sd">             </span>
+<span class="sd">    kernels: 2d ndarray of complex values </span>
+<span class="sd">         Complex Gabor kernels </span>
+<span class="sd">    </span>
+<span class="sd">    References </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    .. [1] http://en.wikipedia.org/wiki/Gabor_filter </span>
+<span class="sd">    .. [2] http://mplab.ucsd.edu/tutorials/gabor.pdf </span>
+<span class="sd">    .. [3] http://www.cs.rug.nl/~imaging/simplecell.html </span>
+<span class="sd">    .. [4] Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</span>
+<span class="sd">    .. [5] Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., &amp; Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026</span>
+
+<span class="sd">     </span>
+<span class="sd">    Examples </span>
+<span class="sd">    -------- </span>
+<span class="sd">    It is possible to load presets to build the filter bank using predefined  </span>
+<span class="sd">    parameters with the function maad.features.opt_shape_presets </span>
+<span class="sd"> </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import filter_bank_2d_nodc, opt_shape_presets </span>
+<span class="sd">    &gt;&gt;&gt; opt = opt_shape_presets(resolution=&#39;med&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; params, kernels = filter_bank_2d_nodc(opt[&#39;frequency&#39;], opt[&#39;ntheta&#39;], opt[&#39;bandwidth&#39;], opt[&#39;gamma&#39;], display=True) </span>
+<span class="sd"> </span>
+<span class="sd">    Alternatively, custom parameters can be provided to define the filter bank </span>
+<span class="sd"> </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import filter_bank_2d_nodc </span>
+<span class="sd">    &gt;&gt;&gt; params, kernels = filter_bank_2d_nodc(frequency=(0.7, 0.5, 0.35, 0.25), ntheta=4, gamma=2, display=True) </span>
+<span class="sd"> </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+     
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ntheta</span><span class="p">)</span> 
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="n">ntheta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> 
+    <span class="n">params</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">it</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">frequency</span><span class="p">)]</span> 
+    <span class="n">kernels</span> <span class="o">=</span> <span class="p">[]</span> 
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span> 
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">_gabor_kernel_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+                                   <span class="n">theta</span><span class="o">=</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                   <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> 
+                                   <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> 
+                                   <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+                                   <span class="n">n_stds</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> 
+        <span class="n">kernels</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">kernel</span><span class="p">,</span> <span class="n">param</span><span class="p">))</span> 
+             
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>  
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">_plot_filter_bank</span><span class="p">(</span><span class="n">kernels</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">ntheta</span><span class="p">)</span> 
+             
+    <span class="k">return</span> <span class="n">params</span><span class="p">,</span> <span class="n">kernels</span>   </div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                opt_shape_presets                   *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<div class="viewcode-block" id="opt_shape_presets"><a class="viewcode-back" href="../../_autosummary/features.features_2d.opt_shape_presets.html#features.features_2d.opt_shape_presets">[docs]</a><span class="k">def</span> <span class="nf">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="n">opt_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;  </span>
+<span class="sd">    Set parameters for multiresolution analysis using presets or custom parameters </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    resolution: str </span>
+<span class="sd">        Select resolution of analysis using presets.  </span>
+<span class="sd">        Supported presets are: &#39;low&#39;, &#39;med&#39;, and &#39;high&#39;. </span>
+<span class="sd">        Select &#39;custom&#39; to select user-defined parameters using a dictionary. </span>
+<span class="sd">         </span>
+<span class="sd">    opt_shape: dict </span>
+<span class="sd">        Key and values for shape settings. </span>
+<span class="sd">        Valid keys are: &#39;ntheta&#39;, &#39;bandwidth&#39;, &#39;frequency&#39;, &#39;gamma&#39;, &#39;npyr&#39; </span>
+<span class="sd">     </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    opt_shape: dict </span>
+<span class="sd">        A valid dictionary with shape settings </span>
+<span class="sd">         </span>
+<span class="sd">    Examples </span>
+<span class="sd">    -------- </span>
+<span class="sd">     </span>
+<span class="sd">    Get parameters using predefined presets </span>
+<span class="sd">     </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import opt_shape_presets </span>
+<span class="sd">    &gt;&gt;&gt; opt = opt_shape_presets(&#39;med&#39;) </span>
+<span class="sd">         </span>
+<span class="sd">    Get parameters to analyse at high shape resolution </span>
+<span class="sd">     </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import opt_shape_presets </span>
+<span class="sd">    &gt;&gt;&gt; opt = opt_shape_presets(&#39;high&#39;) </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># Factory presets </span>
+    <span class="n">opt_shape_low</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
+                         <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>  
+                         <span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>  
+                         <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
+                         <span class="n">npyr</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> 
+    <span class="n">opt_shape_med</span> <span class="o">=</span>  <span class="nb">dict</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>  
+                          <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>  
+                          <span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>  
+                          <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
+                          <span class="n">npyr</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span> 
+    <span class="n">opt_shape_high</span> <span class="o">=</span>  <span class="nb">dict</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>  
+                           <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>  
+                           <span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>  
+                           <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  
+                           <span class="n">npyr</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span> 
+     
+    <span class="k">if</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s1">&#39;low&#39;</span><span class="p">:</span> 
+        <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_low</span> 
+     
+    <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s1">&#39;med&#39;</span><span class="p">:</span> 
+       <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_med</span> 
+         
+    <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s1">&#39;high&#39;</span><span class="p">:</span> 
+       <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_high</span> 
+     
+    <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">opt_shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># check valid values on opt_shape  </span>
+           <span class="k">if</span> <span class="nb">all</span> <span class="p">(</span><span class="n">opt</span> <span class="ow">in</span> <span class="n">opt_shape</span> <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ntheta&#39;</span><span class="p">,</span> <span class="s1">&#39;bandwidth&#39;</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;npyr&#39;</span><span class="p">)):</span> 
+               <span class="k">pass</span> 
+           <span class="k">else</span><span class="p">:</span> 
+               <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: opt_shape must have all keys-values pairs:&#39;</span><span class="p">)</span> 
+               <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ntheta, bandwidth, frequency, gamma, npyr&#39;</span><span class="p">)</span> 
+               <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting resolution to low&#39;</span><span class="p">)</span> 
+               <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_low</span> 
+ 
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: if resolution is set to custom, a valid opt_shape dictionnary should be provided.&#39;</span><span class="p">)</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting resolution to low&#39;</span><span class="p">)</span> 
+            <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_low</span> 
+    
+    <span class="k">else</span><span class="p">:</span> 
+       <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Resolution should be: &#39;low&#39;, &#39;med&#39; or &#39;high&#39;&quot;</span><span class="p">)</span> 
+       <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_low</span> 
+ 
+    <span class="k">return</span> <span class="n">opt_shape</span> </div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                   plot_shape                       *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<div class="viewcode-block" id="plot_shape"><a class="viewcode-back" href="../../_autosummary/features.features_2d.plot_shape.html#features.features_2d.plot_shape">[docs]</a><span class="k">def</span> <span class="nf">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_values</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Plot shape features in a bidimensional plot </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    shape: 1D array, pd.Series or pd.DataFrame </span>
+<span class="sd">        Shape features computed with shape_features function. </span>
+<span class="sd">     </span>
+<span class="sd">    params: pd.DataFrame </span>
+<span class="sd">        Pandas dataframe returned by maad.features_rois.shape_features </span>
+<span class="sd">     </span>
+<span class="sd">    row: int </span>
+<span class="sd">        Observation to be visualized </span>
+<span class="sd">     </span>
+<span class="sd">    display_values: bool </span>
+<span class="sd">        Set to True to display the coefficient values. Default is False. </span>
+<span class="sd">     </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    ax: matplotlib.axes </span>
+<span class="sd">        Axes of the figure </span>
+<span class="sd">         </span>
+<span class="sd">    Examples </span>
+<span class="sd">    -------- </span>
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features, plot_shape </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx, ts, f, ext = spectrogram(s, fs) </span>
+<span class="sd">    &gt;&gt;&gt; shape, params = shape_features(np.log10(Sxx), ts, f, resolution=&#39;high&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; plot_shape(shape, params) </span>
+<span class="sd"> </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+ 
+    <span class="c1"># compute shape of matrix </span>
+    <span class="n">dirs_size</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">theta</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+    <span class="n">scale_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">pyr_level</span><span class="p">)</span><span class="o">.</span><span class="n">size</span> 
+    <span class="c1"># reshape feature vector </span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span><span class="s1">&#39;pyr_level&#39;</span><span class="p">,</span><span class="s1">&#39;scale&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span> 
+     
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span> 
+        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="n">shape</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;shp&#39;</span><span class="p">)]</span> 
+        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_plt</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span> 
+        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">shape</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;shp&#39;</span><span class="p">)]</span> 
+        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_plt</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span> 
+        <span class="n">shape_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_plt</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
+ 
+     
+    <span class="n">unique_scale</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">params</span><span class="o">.</span><span class="n">pyr_level</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> 
+    <span class="c1"># get textlab </span>
+    <span class="n">textlab</span> <span class="o">=</span> <span class="n">shape_plt</span> 
+    <span class="n">textlab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">textlab</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 
+     
+    <span class="c1"># plot figure </span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> 
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">shape_plt</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">display_values</span><span class="p">:</span>     
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">),</span><span class="n">label</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">textlab</span><span class="p">):</span> 
+            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span> 
+         
+    <span class="n">yticklab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">theta</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="n">xticklab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">unique_scale</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>  
+                          <span class="p">(</span><span class="n">dirs_size</span><span class="p">,</span> <span class="n">scale_size</span><span class="p">))</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">scale_size</span><span class="p">))</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xticklab</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,:])</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dirs_size</span><span class="p">))</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">yticklab</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Scale&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Theta&#39;</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+     
+    <span class="k">return</span> <span class="n">ax</span> </div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                   shape_features                   *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<div class="viewcode-block" id="shape_features"><a class="viewcode-back" href="../../_autosummary/features.features_2d.shape_features.html#features.features_2d.shape_features">[docs]</a><span class="k">def</span> <span class="nf">shape_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Computes time-frequency shape coefficients at multiple resolutions using 2D Gabor filters.</span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx: 2D array </span>
+<span class="sd">        Input image to process  </span>
+<span class="sd">    resolution: str or dict </span>
+<span class="sd">        Specify resolution of shape descriptors. Can be: &#39;low&#39;, &#39;med&#39;, &#39;high&#39;. </span>
+<span class="sd">        Default is &#39;low&#39;. Alternatively, custom resolution can be provided  </span>
+<span class="sd">        using a dictionary with options to define the filter bank. Valid keys  </span>
+<span class="sd">        are: ntheta, bandwidth, frequency, gamma, npyr.</span>
+<span class="sd">    rois: pandas DataFrame </span>
+<span class="sd">        Regions of interest where descriptors will be computed. Array must  </span>
+<span class="sd">        have a valid input format with column names: min_t min_f, max_t, max_f. </span>
+<span class="sd">        Use format_features(rois,tn,fn) before using shape_features to be sure that </span>
+<span class="sd">        the format of the rois DataFrame is correct.</span>
+<span class="sd">             </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    shape: pandas DataFrame </span>
+<span class="sd">        Shape coefficient for each region of interest</span>
+<span class="sd">    params: 2D numpy structured array </span>
+<span class="sd">        Corresponding parameters of the 2D fileters used to compute the  </span>
+<span class="sd">        shape coefficients. Params has 4 fields (theta, freq, pyr_level, scale) </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.features.plot_shape</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    1. Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., &amp; Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026</span>
+<span class="sd">    2. Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</span>
+<span class="sd">    3. Mallat, S. (2008). A Wavelet Tour of Signal Processing: The Sparse Way. Academic Press.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples </span>
+<span class="sd">    -------- </span>
+<span class="sd"> </span>
+<span class="sd">    Get shape features from the whole power spectrogram </span>
+<span class="sd"> </span>
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features, plot_shape </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import format_features, linear2dB</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db = linear2dB(Sxx, db_range=100)</span>
+<span class="sd">    &gt;&gt;&gt; shape, params = shape_features(Sxx_db, resolution=&#39;med&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape.mean(), params) </span>
+<span class="sd">     </span>
+<span class="sd">    Or get shape features from specific regions of interest </span>
+<span class="sd">     </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; rois = format_features(rois, tn, fn) </span>
+<span class="sd">    &gt;&gt;&gt; shape, params = shape_features(Sxx_db, resolution=&#39;med&#39;, rois=rois)</span>
+<span class="sd">    </span>
+<span class="sd">    The shape coefficient can be visualized using ``plot_shape``. Note that these</span>
+<span class="sd">    coefficient allow to disciminate between the two vocalization types found in the</span>
+<span class="sd">    audio file.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; shape_crer, shape_sp = shape.groupby(&#39;label&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape_crer[1].mean(), params) </span>
+<span class="sd">    &gt;&gt;&gt; ax = plot_shape(shape_sp[1].mean(), params) </span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+ 
+    <span class="c1"># Check input data and unpack settings </span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Sxx must be a numpy 2D array&#39;</span><span class="p">)</span>   
+     
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span> 
+        <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span> 
+        <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">opt_shape</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span> 
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Resolution must be string or a dictionary. See function documentation.&#39;</span><span class="p">)</span> 
+         
+    <span class="n">npyr</span> <span class="o">=</span> <span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;npyr&#39;</span><span class="p">]</span>
+      
+    <span class="c1"># build filterbank </span>
+    <span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;ntheta&#39;</span><span class="p">],</span> 
+                                          <span class="n">bandwidth</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">],</span> 
+                                          <span class="n">frequency</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">],</span> 
+                                          <span class="n">gamma</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">])</span> 
+    <span class="c1"># filter spectrogram </span>
+    <span class="n">im_rs</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+     
+    <span class="c1"># If rois are provided get mean intensity for each ROI,  </span>
+    <span class="c1"># else compute mean intensity for the whole spectrogram </span>
+    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[]</span> 
+        <span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">im_rs</span><span class="p">:</span> 
+            <span class="n">shape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">im</span><span class="p">))</span> 
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">]</span>  <span class="c1"># for dataframe formating below</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rois</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">im_rs</span><span class="p">)))</span> 
+        <span class="n">index_pyr</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">im_rs</span><span class="p">:</span> 
+            <span class="n">index_row</span> <span class="o">=</span> <span class="mi">0</span> 
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">:</span> 
+                <span class="n">row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> 
+                <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">rois_to_imblobs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">row</span><span class="p">)</span>
+                <span class="n">roi_mean</span> <span class="o">=</span> <span class="p">(</span><span class="n">im</span> <span class="o">*</span> <span class="n">im_blobs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">im_blobs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> 
+                <span class="n">shape</span><span class="p">[</span><span class="n">index_row</span><span class="p">,</span><span class="n">index_pyr</span><span class="p">]</span><span class="o">=</span> <span class="n">roi_mean</span> 
+                <span class="n">index_row</span> <span class="o">=</span> <span class="n">index_row</span> <span class="o">+</span> <span class="mi">1</span> 
+            <span class="n">index_pyr</span> <span class="o">=</span> <span class="n">index_pyr</span> <span class="o">+</span> <span class="mi">1</span> 
+     
+    <span class="c1"># organise parameters </span>
+    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">_params_to_df</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">npyr</span><span class="p">)</span> 
+     
+    <span class="c1"># format shape into dataframe </span>
+    <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;shp_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> 
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span> 
+     
+    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">shape</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+         
+    <span class="k">return</span> <span class="n">shape</span><span class="p">,</span> <span class="n">params_multires</span> </div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                   shape_features_raw               *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<div class="viewcode-block" id="shape_features_raw"><a class="viewcode-back" href="../../_autosummary/features.features_2d.shape_features_raw.html#features.features_2d.shape_features_raw">[docs]</a><span class="k">def</span> <span class="nf">shape_features_raw</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">opt_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Computes raw shape of 2D signal (image or spectrogram) at multiple resolutions  </span>
+<span class="sd">    using 2D Gabor filters. Contrary to ``shape_features``, this function </span>
+<span class="sd">    delivers the raw response of the spectrogram to each filter of the filter </span>
+<span class="sd">    bank. </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx: 2D array </span>
+<span class="sd">        Spectrogram to be analysed </span>
+<span class="sd">    resolution:  </span>
+<span class="sd">        Resolution of analysis, i.e. number of filters used.  </span>
+<span class="sd">        Three presets are provided, &#39;low&#39;, &#39;mid&#39; and &#39;high&#39;, which control  </span>
+<span class="sd">        the number of filters. </span>
+<span class="sd">    opt_shape: dictionary (optional) </span>
+<span class="sd">        options for the filter bank (kbank_opt) and the number of scales (npyr) </span>
+<span class="sd">             </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    shape_raw: list </span>
+<span class="sd">        Raw shape response of spectrogram to every filter of the filter bank. </span>
+<span class="sd">        Every element of the list is the response to one of the filters. Detail  </span>
+<span class="sd">        of each filter are available in the ``params`` DataFrame returned. </span>
+<span class="sd">    params: pandas DataFrame </span>
+<span class="sd">        Corresponding parameters of the 2D fileters used to compute the  </span>
+<span class="sd">        shape coefficient. Params has 4 fields (theta, freq, pyr_level, scale)</span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    maad.features.shape_features, maad.features.opt_shape_presets, </span>
+<span class="sd">    maad.features.filter_bank_2d_nodc, maad.features.plot_shape</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    This function can be used to have access to spectrograms filtered by a 2D</span>
+<span class="sd">    Gabor filter bank.</span>
+
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import shape_features_raw</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_db = linear2dB(Sxx, db_range=80)</span>
+<span class="sd">    &gt;&gt;&gt; shape_raw, params = shape_features_raw(Sxx_db, resolution=&#39;low&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[13], **{&#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1])})</span>
+<span class="sd">    &gt;&gt;&gt; plot2D(shape_raw[14], **{&#39;extent&#39;:(tn[0], tn[-1], fn[0], fn[-1])})</span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+     
+    <span class="c1"># unpack settings </span>
+    <span class="n">opt_shape</span> <span class="o">=</span> <span class="n">opt_shape_presets</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="n">opt_shape</span><span class="p">)</span> 
+    <span class="n">npyr</span> <span class="o">=</span> <span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;npyr&#39;</span><span class="p">]</span> 
+    <span class="c1"># build filterbank </span>
+    <span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">ntheta</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;ntheta&#39;</span><span class="p">],</span> 
+                                          <span class="n">bandwidth</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">],</span> 
+                                          <span class="n">frequency</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">],</span> 
+                                          <span class="n">gamma</span><span class="o">=</span><span class="n">opt_shape</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">])</span> 
+    <span class="c1"># filter images </span>
+    <span class="n">shape_raw</span> <span class="o">=</span> <span class="n">filter_multires</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">npyr</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+     
+    <span class="c1"># organise parameters </span>
+    <span class="n">params_multires</span> <span class="o">=</span> <span class="n">_params_to_df</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">npyr</span><span class="p">)</span> 
+     
+    <span class="k">return</span> <span class="n">shape_raw</span><span class="p">,</span> <span class="n">params_multires</span></div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                   centroid_features                *********** </span>
+<span class="c1">#****************************************************************************  </span>
+<div class="viewcode-block" id="centroid_features"><a class="viewcode-back" href="../../_autosummary/features.features_2d.centroid_features.html#features.features_2d.centroid_features">[docs]</a><span class="k">def</span> <span class="nf">centroid_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">im_rois</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Computes intensity centroid of a spectrogram. If regions of interest </span>
+<span class="sd">    ``rois`` are provided, the centroid is computed for each region.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx :  2D array </span>
+<span class="sd">        Spectrogram </span>
+<span class="sd">    rois: pandas DataFrame, default is None </span>
+<span class="sd">        Regions of interest where descriptors will be computed. Array must  </span>
+<span class="sd">        have a valid input format with column names: ``min_t``, ``min_f``, </span>
+<span class="sd">        ``max_t``, and ``max_f``. Use the function ``maad.util.format_features``</span>
+<span class="sd">        before using centroid_features to format of the ``rois`` DataFrame </span>
+<span class="sd">        correctly.</span>
+<span class="sd">    im_rois: 2d ndarray </span>
+<span class="sd">        image with labels as values</span>
+<span class="sd">             </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    centroid: pandas DataFrame </span>
+<span class="sd">        Centroid of each region of interest.</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    maad.features.shape_features, maad.util.overlay_rois, </span>
+<span class="sd">    maad.util.format_features</span>
+<span class="sd"> </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd"> </span>
+<span class="sd">    Get centroid from the whole power spectrogram </span>
+<span class="sd"> </span>
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load, spectrogram</span>
+<span class="sd">    &gt;&gt;&gt; from maad.rois import overlay_rois</span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import centroid_features</span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import linear2dB, format_features</span>
+<span class="sd">     </span>
+<span class="sd">    Load audio and compute spectrogram </span>
+<span class="sd">     </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx = linear2dB(Sxx, db_range=80)</span>
+<span class="sd">     </span>
+<span class="sd">    Load annotations and plot</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; rois = format_features(rois, tn, fn) </span>
+<span class="sd">    &gt;&gt;&gt; ax, fig = plot2D (Sxx, extent=ext)</span>
+<span class="sd">    &gt;&gt;&gt; ax, fig = overlay_rois(Sxx, ext, rois, ax=ax, fig=fig)</span>
+<span class="sd">    </span>
+<span class="sd">    Compute the centroid of each rois and format to get results in the </span>
+<span class="sd">    temporal and spectral domain.</span>
+<span class="sd">     </span>
+<span class="sd">    &gt;&gt;&gt; centroid = centroid_features(Sxx, rois) </span>
+<span class="sd">    &gt;&gt;&gt; centroid = format_features(centroid, tn, fn)</span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+     
+    <span class="c1"># Check input data </span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Sxx must be an numpy 2D array&#39;</span><span class="p">)</span>       
+     
+    <span class="c1"># check rois </span>
+    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="ow">not</span><span class="p">((</span><span class="s1">&#39;min_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;min_f&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;max_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">rois</span><span class="p">):</span> 
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Array must be a Pandas DataFrame with column names: min_t, min_f, max_t, max_f. Check example in documentation.&#39;</span><span class="p">)</span> 
+     
+    <span class="n">centroid</span><span class="o">=</span><span class="p">[]</span> 
+    <span class="n">area</span> <span class="o">=</span> <span class="p">[]</span>   
+    <span class="k">if</span> <span class="n">rois</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">center_of_mass</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span> 
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">centroid</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> 
+        <span class="n">centroid</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">]</span> 
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;area_xy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;duration_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;bandwidth_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">im_rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="c1"># real centroid and area</span>
+            <span class="n">rprops</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">im_rois</span><span class="p">,</span> <span class="n">intensity_image</span><span class="o">=</span><span class="n">Sxx</span><span class="p">)</span>
+            <span class="n">centroid</span> <span class="o">=</span> <span class="p">[</span><span class="n">roi</span><span class="o">.</span><span class="n">weighted_centroid</span> <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">]</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="p">[</span><span class="n">roi</span><span class="o">.</span><span class="n">area</span> <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="n">rprops</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># rectangular area (overestimation) </span>
+            <span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span> <span class="o">-</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span> <span class="o">-</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="p">)</span>  
+            <span class="c1"># centroid of rectangular roi</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">:</span> 
+                <span class="n">row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> 
+                <span class="n">im_blobs</span> <span class="o">=</span> <span class="n">rois_to_imblobs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sxx</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">row</span><span class="p">)</span>     
+                <span class="n">rprops</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">im_blobs</span><span class="p">,</span> <span class="n">intensity_image</span><span class="o">=</span><span class="n">Sxx</span><span class="p">)</span>
+                <span class="n">centroid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rprops</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span><span class="o">.</span><span class="n">weighted_centroid</span><span class="p">)</span> 
+
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        
+        <span class="c1">##### duration in number of pixels </span>
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;duration_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_x</span> <span class="o">-</span><span class="n">rois</span><span class="o">.</span><span class="n">min_x</span><span class="p">)</span>  
+        <span class="c1">##### bandwidth in number of pixels </span>
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;bandwidth_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rois</span><span class="o">.</span><span class="n">max_y</span> <span class="o">-</span><span class="n">rois</span><span class="o">.</span><span class="n">min_y</span><span class="p">)</span> 
+        <span class="c1">##### area</span>
+        <span class="n">centroid</span><span class="p">[</span><span class="s1">&#39;area_xy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">area</span>      
+     
+        <span class="c1"># concat rois and centroid dataframes </span>
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">rois</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>  
+
+    <span class="k">return</span> <span class="n">centroid</span> </div>
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                   plot_centroid                  *********** </span>
+<span class="c1">#**************************************************************************** </span>
+<div class="viewcode-block" id="overlay_centroid"><a class="viewcode-back" href="../../_autosummary/features.features_2d.overlay_centroid.html#features.features_2d.overlay_centroid">[docs]</a><span class="k">def</span> <span class="nf">overlay_centroid</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">centroid</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Overlay centroids on the original spectrogram </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    Sxx :  2D array </span>
+<span class="sd">        Spectrogram </span>
+<span class="sd">               </span>
+<span class="sd">    centroid: pandas DataFrame </span>
+<span class="sd">        DataFrame with centroid descriptors (centroid_f, centroid_t) </span>
+<span class="sd">        Do format_features(rois,tn,fn) before using overlay_centroid to be sure that </span>
+<span class="sd">        the format of the DataFrame is correct </span>
+<span class="sd">             </span>
+<span class="sd">    savefig : string, optional, default is None </span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix </span>
+<span class="sd">        is added to the root filename. </span>
+<span class="sd">         </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">            </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_overlaycentroid.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">                 </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure  </span>
+<span class="sd">         </span>
+<span class="sd">        ... and more, see matplotlib  </span>
+<span class="sd"> </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    ax  </span>
+<span class="sd">        axis object (see matplotlib) </span>
+<span class="sd">    fig  </span>
+<span class="sd">        figure object (see matplotlib) </span>
+<span class="sd"> </span>
+<span class="sd">    Example </span>
+<span class="sd">    -------- </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># Check format of the input data </span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">centroid</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span> <span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Rois must be of type pandas DataFrame&#39;</span><span class="p">)</span>   
+         
+    <span class="k">if</span> <span class="ow">not</span><span class="p">((</span><span class="s1">&#39;centroid_t&#39;</span> <span class="ow">and</span> <span class="s1">&#39;centroid_f&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">centroid</span><span class="p">)</span>  <span class="p">:</span> 
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Array must be a Pandas DataFrame with column names:(centroid_t, centroid_f). Check example in documentation.&#39;</span><span class="p">)</span>   
+     
+    <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span> 
+    <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>  
+    <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;ROIs Overlay&#39;</span><span class="p">)</span> 
+    <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  
+    <span class="n">ext</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ext&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;frequency [Hz]&#39;</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ext</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudofrequency [points]&#39;</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+
+    <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  
+    <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  
+    <span class="n">ax</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
+    <span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fig&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
+    <span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="s1">&#39;firebrick&#39;</span><span class="p">)</span>  
+    <span class="n">ms</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="n">marker</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;marker&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+         
+    <span class="k">if</span> <span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span> 
+        <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>  
+                         <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>  
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+     
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">centroid_t</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">centroid_f</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> 
+     
+    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> 
+     
+    <span class="c1"># SAVE FIGURE </span>
+    <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>  
+        <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span> 
+        <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>  
+        <span class="n">filename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span><span class="s1">&#39;_spectro_overlaycentroid&#39;</span><span class="p">)</span>                 
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span> 
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> 
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+     
+    <span class="k">return</span> <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> </div>
+ 
+ 
+<span class="c1">#**************************************************************************** </span>
+<span class="c1">#*************                 compute_all_features               *********** </span>
+<span class="c1">#****************************************************************************      </span>
+<div class="viewcode-block" id="compute_all_features"><a class="viewcode-back" href="../../_autosummary/features.features_2d.compute_all_features.html#features.features_2d.compute_all_features">[docs]</a><span class="k">def</span> <span class="nf">compute_all_features</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span>  
+                          <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Computes shape and central frequency features from signal at specified </span>
+<span class="sd">    time-frequency limits defined by regions of interest (ROIs) </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    s: ndarray </span>
+<span class="sd">        Singal to be analysed </span>
+<span class="sd">    fs: int </span>
+<span class="sd">        Sampling frequency of the signal </span>
+<span class="sd">    rois: pandas DataFrame </span>
+<span class="sd">        Time frequency limits for the analysis. Columns should have at </span>
+<span class="sd">        least min_t, max_t, min_f, max_f. Can be computed with multiple </span>
+<span class="sd">        detection methods, such as find_rois_cwt </span>
+<span class="sd">    resolution: str or dict, default is &#39;med&#39; </span>
+<span class="sd">        Specify resolution of shape descriptors. Can be: &#39;low&#39;, &#39;med&#39;, &#39;high&#39;. </span>
+<span class="sd">        Default is &#39;low&#39;. Alternatively, custom resolution can be provided  </span>
+<span class="sd">        using a dictionary with options to define the filter bank. Valid keys  </span>
+<span class="sd">        are: ntheta, bandwidth, frequency, gamma, npyr         </span>
+<span class="sd">    opt_spec: dictionnary, optional </span>
+<span class="sd">        Options for the spectrogram with keys, window length &#39;nperseg&#39;, </span>
+<span class="sd">        window overlap in percentage &#39;overlap&#39; and frequency limits &#39;flims&#39; </span>
+<span class="sd">        which is a list of 2 scalars : minimum and maximum boundary frequency  </span>
+<span class="sd">        values in Hertz </span>
+<span class="sd">    display: boolean, optional, default is False </span>
+<span class="sd">        Flag. If display is True, plot results </span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions </span>
+<span class="sd">            </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_spectro_overlaycentroid.png&#39; </span>
+<span class="sd">            Postfix of the figure filename </span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10) </span>
+<span class="sd">            width, height in inches.   </span>
+<span class="sd">         </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39; </span>
+<span class="sd">            title of the figure </span>
+<span class="sd">         </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39; </span>
+<span class="sd">            label of the horizontal axis </span>
+<span class="sd">         </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39; </span>
+<span class="sd">            label of the vertical axis </span>
+<span class="sd">         </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39; </span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html </span>
+<span class="sd">            in order to get all the  existing colormaps </span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;,  </span>
+<span class="sd">            &#39;viridis&#39;... </span>
+<span class="sd">         </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None </span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize </span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your </span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored. </span>
+<span class="sd">                 </span>
+<span class="sd">        - dpi : integer, optional, default is 96 </span>
+<span class="sd">            Dot per inch.  </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow </span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast </span>
+<span class="sd">         </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39; </span>
+<span class="sd">            Format to save the figure  </span>
+<span class="sd">         </span>
+<span class="sd">        ... and more, see matplotlib</span>
+<span class="sd">        </span>
+<span class="sd">    Returns </span>
+<span class="sd">    ------- </span>
+<span class="sd">    feature_rois: pandas Dataframe </span>
+<span class="sd">        A dataframe with each column corresponding to a feature </span>
+<span class="sd">     </span>
+<span class="sd">    Examples </span>
+<span class="sd">    -------- </span>
+<span class="sd">    &gt;&gt;&gt; from maad.util import read_audacity_annot </span>
+<span class="sd">    &gt;&gt;&gt; from maad.sound import load </span>
+<span class="sd">    &gt;&gt;&gt; from maad.features import compute_all_features </span>
+<span class="sd">    &gt;&gt;&gt; s, fs = load(&#39;./data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rois = read_audacity_annot(&#39;./data/spinetail.txt&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; features = compute_all_features(s, fs, rois, resolution=&#39;low&#39;,display=True) </span>
+<span class="sd">    &gt;&gt;&gt; features</span>
+<span class="sd">        label      min_t     ...       duration_x  bandwidth_y</span>
+<span class="sd">        0     SP   0.101385     ...              0.0          0.0</span>
+<span class="sd">        1   CRER   0.506924     ...              0.0          0.0</span>
+<span class="sd">        2     SP   1.203945     ...              0.0          0.0</span>
+<span class="sd">        3     SP   2.724718     ...              0.0          0.0</span>
+<span class="sd">        4   CRER   5.221319     ...              0.0          0.0</span>
+<span class="sd">        5     SP   6.260514     ...              0.0          0.0</span>
+<span class="sd">        6     SP   7.946037     ...              0.0          0.0</span>
+<span class="sd">        7     SP   8.896519     ...              0.0          0.0</span>
+<span class="sd">        8     SP   9.973733     ...              0.0          0.0</span>
+<span class="sd">        9   CRER  11.329756     ...              0.0          0.0</span>
+<span class="sd">        10    SP  11.773314     ...              0.0          0.0</span>
+<span class="sd">        ....</span>
+<span class="sd">    &gt;&gt;&gt; np.asarray(list(features)).T</span>
+<span class="sd">        array([&#39;label&#39;, &#39;min_t&#39;, &#39;min_f&#39;, &#39;max_t&#39;, &#39;max_f&#39;, &#39;min_y&#39;, &#39;min_x&#39;,</span>
+<span class="sd">       &#39;max_y&#39;, &#39;max_x&#39;, &#39;shp_001&#39;, &#39;shp_002&#39;, &#39;shp_003&#39;, &#39;shp_004&#39;,</span>
+<span class="sd">       &#39;shp_005&#39;, &#39;shp_006&#39;, &#39;shp_007&#39;, &#39;shp_008&#39;, &#39;shp_009&#39;, &#39;shp_010&#39;,</span>
+<span class="sd">       &#39;shp_011&#39;, &#39;shp_012&#39;, &#39;shp_013&#39;, &#39;shp_014&#39;, &#39;shp_015&#39;, &#39;shp_016&#39;,</span>
+<span class="sd">       &#39;centroid_y&#39;, &#39;centroid_x&#39;, &#39;duration_x&#39;, &#39;bandwidth_y&#39;,</span>
+<span class="sd">       &#39;centroid_f&#39;, &#39;centroid_t&#39;], dtype=&#39;&lt;U11&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+   
+    <span class="c1"># Spectro computing</span>
+    <span class="n">N</span><span class="o">=</span><span class="mi">1024</span>
+    <span class="n">window</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span><span class="s1">&#39;hann&#39;</span><span class="p">)</span>
+    <span class="n">nperseg</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;nperseg&#39;</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> 
+    <span class="n">overlap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;overlap&#39;</span><span class="p">,</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>  
+    <span class="n">mode</span>    <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="s1">&#39;psd&#39;</span><span class="p">)</span>   
+    <span class="n">fcrop</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fcrop&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> 
+    <span class="n">tcrop</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tcrop&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span> 
+    <span class="c1"># Spectro display</span>
+    <span class="n">ax</span>      <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ax&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
+    <span class="n">fig</span>     <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fig&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>  
+    <span class="n">vmin</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">)</span> 
+    <span class="n">vmax</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span>
+    
+    <span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">fcrop</span><span class="p">,</span>
+                                   <span class="n">tcrop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+    
+    <span class="c1"># dB scale</span>
+    <span class="n">Sxx</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span>
+     
+    <span class="c1"># format rois to bbox </span>
+    <span class="n">rois</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span> 
+    
+    <span class="c1"># if rois becomes empty aveter format_features</span>
+    <span class="k">if</span> <span class="n">rois</span><span class="o">.</span><span class="n">empty</span> <span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;rois is empty&#39;</span><span class="p">)</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="n">rois</span>
+        <span class="k">return</span> <span class="n">features</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;number of rois : </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">rois</span><span class="p">))</span>
+     
+    <span class="c1"># Compute shape features and centroid features </span>
+    <span class="n">shape</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">rois</span><span class="p">)</span> 
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dataframe with shapes features&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        
+    <span class="n">centroid</span> <span class="o">=</span> <span class="n">centroid_features</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">rois</span><span class="p">)</span> 
+    <span class="n">centroid</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dataframe with centroids features&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">centroid</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span>
+        <span class="c1"># view bbox</span>
+        <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># view centroids</span>
+        <span class="n">overlay_centroid</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">centroid</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                         <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># plot shape</span>
+        <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span>
+    
+    <span class="c1"># combine into a single df without columns duplication</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">rois</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">centroid</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="o">~</span><span class="n">features</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()]</span>
+    
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;list of features&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
+     
+    <span class="k">return</span> <span class="n">features</span> </div>
+ 
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

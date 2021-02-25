@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Extract ecoacoustics alpha indices from audio recording &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Extract ecoacoustics alpha indices from audio recording</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_auto_examples/extract_alpha_indices.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-extract-alpha-indices-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="extract-ecoacoustics-alpha-indices-from-audio-recording">
+<span id="sphx-glr-auto-examples-extract-alpha-indices-py"></span><h1>Extract ecoacoustics alpha indices from audio recording<a class="headerlink" href="#extract-ecoacoustics-alpha-indices-from-audio-recording" title="Permalink to this headline">¶</a></h1>
+<p>In ecoacoustics, acoustics diversity is measured by single values, the so-called
+alpha indices, which compress a portion of audio into a single value. In this
+example, we will see how to compute these indices and show basics post-processing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_path = &#39;../_images/sphx_glr_extract_alpha_indices.png&#39;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">features</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="p">(</span><span class="n">date_parser</span><span class="p">,</span> <span class="n">plot_correlation_map</span><span class="p">,</span>
+                       <span class="n">plot_features_map</span><span class="p">,</span> <span class="n">plot_features</span><span class="p">,</span> <span class="n">false_Color_Spectro</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SPECTRAL_FEATURES</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SPEC_MEAN&#39;</span><span class="p">,</span><span class="s1">&#39;SPEC_VAR&#39;</span><span class="p">,</span><span class="s1">&#39;SPEC_SKEW&#39;</span><span class="p">,</span><span class="s1">&#39;SPEC_KURT&#39;</span><span class="p">,</span><span class="s1">&#39;NBPEAKS&#39;</span><span class="p">,</span><span class="s1">&#39;LEQf&#39;</span><span class="p">,</span>
+<span class="s1">&#39;ENRf&#39;</span><span class="p">,</span><span class="s1">&#39;BGNf&#39;</span><span class="p">,</span><span class="s1">&#39;SNRf&#39;</span><span class="p">,</span><span class="s1">&#39;Hf&#39;</span><span class="p">,</span> <span class="s1">&#39;EAS&#39;</span><span class="p">,</span><span class="s1">&#39;ECU&#39;</span><span class="p">,</span><span class="s1">&#39;ECV&#39;</span><span class="p">,</span><span class="s1">&#39;EPS&#39;</span><span class="p">,</span><span class="s1">&#39;EPS_KURT&#39;</span><span class="p">,</span><span class="s1">&#39;EPS_SKEW&#39;</span><span class="p">,</span><span class="s1">&#39;ACI&#39;</span><span class="p">,</span>
+<span class="s1">&#39;NDSI&#39;</span><span class="p">,</span><span class="s1">&#39;rBA&#39;</span><span class="p">,</span><span class="s1">&#39;AnthroEnergy&#39;</span><span class="p">,</span><span class="s1">&#39;BioEnergy&#39;</span><span class="p">,</span><span class="s1">&#39;BI&#39;</span><span class="p">,</span><span class="s1">&#39;ROU&#39;</span><span class="p">,</span><span class="s1">&#39;ADI&#39;</span><span class="p">,</span><span class="s1">&#39;AEI&#39;</span><span class="p">,</span><span class="s1">&#39;LFC&#39;</span><span class="p">,</span><span class="s1">&#39;MFC&#39;</span><span class="p">,</span><span class="s1">&#39;HFC&#39;</span><span class="p">,</span>
+<span class="s1">&#39;ACTspFract&#39;</span><span class="p">,</span><span class="s1">&#39;ACTspCount&#39;</span><span class="p">,</span><span class="s1">&#39;ACTspMean&#39;</span><span class="p">,</span> <span class="s1">&#39;EVNspFract&#39;</span><span class="p">,</span><span class="s1">&#39;EVNspMean&#39;</span><span class="p">,</span><span class="s1">&#39;EVNspCount&#39;</span><span class="p">,</span>
+<span class="s1">&#39;TFSD&#39;</span><span class="p">,</span><span class="s1">&#39;H_Havrda&#39;</span><span class="p">,</span><span class="s1">&#39;H_Renyi&#39;</span><span class="p">,</span><span class="s1">&#39;H_pairedShannon&#39;</span><span class="p">,</span> <span class="s1">&#39;H_gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;H_GiniSimpson&#39;</span><span class="p">,</span><span class="s1">&#39;RAOQ&#39;</span><span class="p">,</span>
+<span class="s1">&#39;AGI&#39;</span><span class="p">,</span><span class="s1">&#39;ROItotal&#39;</span><span class="p">,</span><span class="s1">&#39;ROIcover&#39;</span><span class="p">]</span>
+
+<span class="n">AUDIO_FEATURES</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ZCR&#39;</span><span class="p">,</span><span class="s1">&#39;AUDIO_MEAN&#39;</span><span class="p">,</span> <span class="s1">&#39;AUDIO_VAR&#39;</span><span class="p">,</span> <span class="s1">&#39;AUDIO_SKEW&#39;</span><span class="p">,</span> <span class="s1">&#39;AUDIO_KURT&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;LEQt&#39;</span><span class="p">,</span><span class="s1">&#39;BGNt&#39;</span><span class="p">,</span> <span class="s1">&#39;SNRt&#39;</span><span class="p">,</span><span class="s1">&#39;MED&#39;</span><span class="p">,</span> <span class="s1">&#39;Ht&#39;</span><span class="p">,</span><span class="s1">&#39;ACTtFraction&#39;</span><span class="p">,</span> <span class="s1">&#39;ACTtCount&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;ACTtMean&#39;</span><span class="p">,</span><span class="s1">&#39;EVNtFraction&#39;</span><span class="p">,</span> <span class="s1">&#39;EVNtMean&#39;</span><span class="p">,</span> <span class="s1">&#39;EVNtCount&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>First, we parse the directory /indices in order to get a df with date
+and fullfilename. As the data were collected with a SM4 audio recording device
+we set the dateformat agument to ‘SM4’ in order to be able to parse the date
+from the filename. In case of Audiomoth, the date is coded as Hex in the
+filename.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">date_parser</span><span class="p">(</span><span class="s2">&quot;../data/indices/&quot;</span><span class="p">,</span> <span class="n">dateformat</span><span class="o">=</span><span class="s1">&#39;SM4&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># remove index =&gt; Date becomes a column instead of an index. This is</span>
+<span class="c1"># required as df_audio_ind, df_spec_ind and df_spec_ind_per_bin do not have</span>
+<span class="c1"># date as index. Then we can concatenate all the dataframe.</span>
+<span class="c1">#df = df.reset_index()</span>
+</pre></div>
+</div>
+<p>LOAD SOUND AND PREPROCESS SOUND</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_indices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">df_indices_per_bin</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="p">:</span>
+
+    <span class="c1"># get the full filename of the corresponding row</span>
+    <span class="n">fullfilename</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+    <span class="c1"># Save file basename</span>
+    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.split" title="os.path.split" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span></a><span class="p">(</span><span class="n">fullfilename</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">**************************************************************&#39;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1">#### Load the original sound (16bits) and get the sampling frequency fs</span>
+    <span class="k">try</span> <span class="p">:</span>
+        <span class="n">wave</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">fullfilename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># Delete the row if the file does not exist or raise a value error (i.e. no EOF)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="sd">&quot;&quot;&quot; =======================================================================</span>
+<span class="sd">                     Computation in the time domain</span>
+<span class="sd">    ========================================================================&quot;&quot;&quot;</span>
+
+    <span class="c1"># Parameters of the audio recorder. This is not a mandatory but it allows</span>
+    <span class="c1"># to compute the sound pressure level of the audio file (dB SPL) as a</span>
+    <span class="c1"># sonometer would do.</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="o">-</span><span class="mi">35</span>         <span class="c1"># Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="mi">26</span><span class="o">+</span><span class="mi">16</span>       <span class="c1"># Amplification gain (26dB (SM4 preamplifier))</span>
+
+    <span class="c1"># compute all the audio indices and store them into a DataFrame</span>
+    <span class="c1"># dB_threshold and rejectDuration are used to select audio events.</span>
+    <span class="n">df_audio_ind</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">audio_indices</span><span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span>
+                                          <span class="n">gain</span> <span class="o">=</span> <span class="n">G</span><span class="p">,</span> <span class="n">sensibility</span> <span class="o">=</span> <span class="n">S</span><span class="p">,</span>
+                                          <span class="n">dB_threshold</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rejectDuration</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+                                          <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; =======================================================================</span>
+<span class="sd">                     Computation in the frequency domain</span>
+<span class="sd">    ========================================================================&quot;&quot;&quot;</span>
+
+    <span class="c1"># Compute the Power Spectrogram Density (PSD) : Sxx_power</span>
+    <span class="n">Sxx_power</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span> <span class="p">(</span><span class="n">wave</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span>
+                                             <span class="n">nperseg</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">1024</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span>
+                                             <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                             <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># compute all the spectral indices and store them into a DataFrame</span>
+    <span class="c1"># flim_low, flim_mid, flim_hi corresponds to the frequency limits in Hz</span>
+    <span class="c1"># that are required to compute somes indices (i.e. NDSI)</span>
+    <span class="c1"># if R_compatible is set to &#39;soundecology&#39;, then the output are similar to</span>
+    <span class="c1"># soundecology R package.</span>
+    <span class="c1"># mask_param1 and mask_param2 are two parameters to find the regions of</span>
+    <span class="c1"># interest (ROIs). These parameters need to be adapted to the dataset in</span>
+    <span class="c1"># order to select ROIs</span>
+    <span class="n">df_spec_ind</span><span class="p">,</span> <span class="n">df_spec_ind_per_bin</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">spectral_indices</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span>
+                                                    <span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span>
+                                                    <span class="n">flim_low</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1500</span><span class="p">],</span>
+                                                    <span class="n">flim_mid</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span><span class="mi">8000</span><span class="p">],</span>
+                                                    <span class="n">flim_hi</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">8000</span><span class="p">,</span><span class="mi">20000</span><span class="p">],</span>
+                                                    <span class="n">gain</span> <span class="o">=</span> <span class="n">G</span><span class="p">,</span> <span class="n">sensitivity</span> <span class="o">=</span> <span class="n">S</span><span class="p">,</span>
+                                                    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                                    <span class="n">R_compatible</span> <span class="o">=</span> <span class="s1">&#39;soundecology&#39;</span><span class="p">,</span>
+                                                    <span class="n">mask_param1</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+                                                    <span class="n">mask_param2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                                    <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot; =======================================================================</span>
+<span class="sd">                     Create a dataframe</span>
+<span class="sd">    ========================================================================&quot;&quot;&quot;</span>
+    <span class="c1"># First, we create a dataframe from row that contains the date and the</span>
+    <span class="c1"># full filename. This is done by creating a DataFrame from row (ie. TimeSeries)</span>
+    <span class="c1"># then transposing the DataFrame.</span>
+    <span class="n">df_row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">df_row</span> <span class="o">=</span><span class="n">df_row</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">df_row</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Date&#39;</span>
+    <span class="n">df_row</span> <span class="o">=</span> <span class="n">df_row</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+    <span class="c1"># add scalar indices into the df_indices dataframe</span>
+    <span class="n">df_indices</span> <span class="o">=</span> <span class="n">df_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_row</span><span class="p">,</span>
+                                              <span class="n">df_audio_ind</span><span class="p">,</span>
+                                              <span class="n">df_spec_ind</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># add vector indices into the df_indices_per_bin dataframe</span>
+    <span class="n">df_indices_per_bin</span> <span class="o">=</span> <span class="n">df_indices_per_bin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_row</span><span class="p">,</span>
+                                                              <span class="n">df_spec_ind_per_bin</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="c1"># Set back Date as index</span>
+<span class="n">df_indices</span> <span class="o">=</span> <span class="n">df_indices</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">)</span>
+<span class="n">df_indices_per_bin</span> <span class="o">=</span> <span class="n">df_indices_per_bin</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After calculating all alpha indices (in audio and spectral domain), let’s
+have a look to the data.
+First, plot correlation map of all indices. We set the R threshold to 0 in
+order to have everything. If you want to focus on highly correlated indices
+set the threshold to 0.75 for instance.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_correlation_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">,</span> <span class="n">R_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A graphical way to have a quick overview of the indices variation during
+a 24h cycle consists in plotting heatmaps of indices
+For a better view, we seperate spectral and audio indices.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_features_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[</span><span class="n">SPECTRAL_FEATURES</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">)</span>
+<span class="n">plot_features_map</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[</span><span class="n">AUDIO_FEATURES</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">)</span>
+
+<span class="c1"># A more classical way to analyse variations of indices consists in plotting</span>
+<span class="c1"># graphs. We choose to normalize rescale their value between 0 to 1 in order to</span>
+<span class="c1"># compare their trend during a 24h cycle</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_features</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[[</span><span class="s1">&#39;Hf&#39;</span><span class="p">]],</span><span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_features</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[[</span><span class="s1">&#39;AEI&#39;</span><span class="p">]],</span><span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_features</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[[</span><span class="s1">&#39;NDSI&#39;</span><span class="p">]],</span><span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_features</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[[</span><span class="s1">&#39;ACI&#39;</span><span class="p">]],</span><span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_features</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[[</span><span class="s1">&#39;MED&#39;</span><span class="p">]],</span><span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_features</span><span class="p">(</span><span class="n">df_indices</span><span class="p">[[</span><span class="s1">&#39;ROItotal&#39;</span><span class="p">]],</span><span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;24h&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Create false color spectrograms with 3 indices</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fcs</span><span class="p">,</span> <span class="n">triplet</span> <span class="o">=</span> <span class="n">false_Color_Spectro</span><span class="p">(</span><span class="n">df_indices_per_bin</span><span class="p">,</span>
+                                   <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AUDIO_KURT_per_bin&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;EVNspCount_per_bin&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;AUDIO_MEAN_per_bin&#39;</span><span class="p">],</span>
+                                   <span class="n">reverseLUT</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;hours&#39;</span><span class="p">,</span>
+                                   <span class="n">permut</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+</pre></div>
+</div>
+<p># Save date as .CSV
+# save df_indices
+save_csv = ‘indices.csv’
+df_indices.to_csv(path_or_buf=os.path.join(“../data/indices/”,save_csv),sep=’,’,mode=’w’,header=True, index=True)
+# save df_indices_per_bin (for future false color spectro)
+df_indices_per_bin.to_csv(path_or_buf=os.path.join(“../data/indices/”,’<a href="#id1"><span class="problematic" id="id2">per_bin_</span></a>’+save_csv),sep=’,’,mode=’w’,header=True, index=True)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-extract-alpha-indices-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/23cc104b44ee2d774e33cb3e940727b1/extract_alpha_indices.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">extract_alpha_indices.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/f39a6adef930ed204b5fe0776b87bb5c/extract_alpha_indices.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">extract_alpha_indices.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

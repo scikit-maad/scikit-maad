@@ -1,40 +1,37 @@
 # -*- coding: utf-8 -*-
-""" rois functions for scikit-maad
-Collection of methods to find regions of interest in 1D and 2D signals.
+"""
+Segmentation methods
+====================
+
+The module ``rois`` has a collection of functions to segment and find regions of interest in audio and spectrograms.
+
+Temporal
+--------
+.. autosummary::
+    :toctree: generated/
+
+    find_rois_cwt
+    
+Spectro-temporal
+----------------
+.. autosummary::
+    :toctree: generated/
+    
+    create_mask
+    select_rois
+    rois_to_imblobs
 
 """
 
-from .rois_2d import (load,
-                     remove_background,
-                     select_bandwidth,
-                     smooth,
-                     double_threshold_rel,
-                     double_threshold_abs,
-                     create_mask,
+from .rois_2d import (create_mask,
                      select_rois,
-                     select_rois_auto,
-                     select_rois_man,
-                     overlay_rois,
-                     find_rois_wrapper)
+                     rois_to_imblobs)
 
-from .rois_1d import (sinc,
-                      _corresp_onset_offset,
-                      _energy_windowed,
-                      find_rois_cwt)
+from .rois_1d import (find_rois_cwt)
 
-__all__ = ['load', 
-           'remove_background', 
-           'select_bandwidth',
-           'smooth',
-           'double_threshold_rel',
-           'double_threshold_abs',
+__all__ = [ # rois 2d
            'create_mask',
            'select_rois',
-           'select_rois_auto',
-           'select_rois_man',
-           'overlay_rois',
-           'find_rois_wrapper',
-           'sinc',
-           '_corresp_onset_offset',
-           '_energy_windowed',
+           'rois_to_imblobs',
+           # rois 1d
            'find_rois_cwt']

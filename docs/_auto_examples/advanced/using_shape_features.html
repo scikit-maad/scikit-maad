@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using wavelets to characterize the time-frequency shape of sounds &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Using wavelets to characterize the time-frequency shape of sounds</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_auto_examples/advanced/using_shape_features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-using-shape-features-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="using-wavelets-to-characterize-the-time-frequency-shape-of-sounds">
+<span id="sphx-glr-auto-examples-advanced-using-shape-features-py"></span><h1>Using wavelets to characterize the time-frequency shape of sounds<a class="headerlink" href="#using-wavelets-to-characterize-the-time-frequency-shape-of-sounds" title="Permalink to this headline">¶</a></h1>
+<p>&#64;author:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">spectrogram</span>
+<span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">shape_features</span><span class="p">,</span> <span class="n">plot_shape</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">read_audacity_annot</span><span class="p">,</span> <span class="n">power2dB</span>
+<span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">overlay_rois</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+
+<span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="n">rois_tf</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.txt&#39;</span><span class="p">)</span>  <span class="c1">## annotations using Audacity</span>
+<span class="n">rois_cr</span> <span class="o">=</span> <span class="n">rois_tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rois_tf</span><span class="o">.</span><span class="n">label</span><span class="o">==</span><span class="s1">&#39;CRER&#39;</span><span class="p">,]</span>
+<span class="n">rois_sp</span> <span class="o">=</span> <span class="n">rois_tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rois_tf</span><span class="o">.</span><span class="n">label</span><span class="o">==</span><span class="s1">&#39;SP&#39;</span><span class="p">,]</span>
+
+<span class="n">Sxx_power</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="n">Sxx_dB</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span> <span class="o">+</span> <span class="mi">96</span>
+
+<span class="c1"># Visualize large vocalizations</span>
+<span class="n">rois_cr</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">rois_cr</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">rois_cr</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">,</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="mi">80</span><span class="p">})</span>
+
+<span class="c1"># Visualize short vocalizations</span>
+<span class="n">rois_sp</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">rois_sp</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">rois_sp</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">,</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="mi">80</span><span class="p">})</span>
+
+<span class="c1"># Compute an visualize features</span>
+<span class="n">shape_cr</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois_cr</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape_cr</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span>
+
+<span class="n">shape_sp</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">shape_features</span><span class="p">(</span><span class="n">Sxx_dB</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;med&#39;</span><span class="p">,</span> <span class="n">rois</span><span class="o">=</span><span class="n">rois_sp</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plot_shape</span><span class="p">(</span><span class="n">shape_sp</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">params</span><span class="p">)</span>
+
+<span class="c1">######## Simple clustering with PCA</span>
+
+<span class="c1"># join both shapes dataframe</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">shape_cr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">shape_sp</span><span class="p">)</span>
+
+<span class="c1"># Standardizing the dataset</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s1">&#39;shp*&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+<span class="n">X_shape</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X_shape</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">target_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+
+<span class="c1"># Calculate PCA</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_r</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Percentage of variance explained for each components</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;explained variance ratio (first two components): </span><span class="si">%s</span><span class="s1">&#39;</span>
+      <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">))</span>
+
+<span class="c1"># Plot PCA result</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">]</span>
+<span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="k">for</span> <span class="n">color</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">)):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_r</span><span class="p">[</span><span class="n">Y</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_r</span><span class="p">[</span><span class="n">Y</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">8</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;PCA&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-using-shape-features-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fa53692dd7c78c14ba77864f3ab3a97e/using_shape_features.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">using_shape_features.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/b6f0c4d21532dd1d280c538ad309aea2/using_shape_features.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">using_shape_features.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

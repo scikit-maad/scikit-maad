@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Find Regions of interest (ROIs) in a spectrogram &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Find Regions of interest (ROIs) in a spectrogram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_auto_examples/find_rois.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-find-rois-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="find-regions-of-interest-rois-in-a-spectrogram">
+<span id="sphx-glr-auto-examples-find-rois-py"></span><h1>Find Regions of interest (ROIs) in a spectrogram<a class="headerlink" href="#find-regions-of-interest-rois-in-a-spectrogram" title="Permalink to this headline">¶</a></h1>
+<p>A spectrogram is a time-frequency (2d) representation of a audio recording.
+Each acoustic event nested in the audio recording is represented by an acoustic
+signature. When sounds does not overlap in time and frequency, it is possible
+to extract automatically the acoustic signature as a region of interest (ROI)
+by different image processing tools such as binarization, double thresholding,
+mathematical morphology tools…</p>
+<p>Dependencies: To execute this example you will need to have installed the
+scikit-image and pandas Python packages.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_path = &#39;../_images/sphx_glr_find_rois.png&#39;</span>
+
+<span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">features</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">format_features</span><span class="p">,</span> <span class="n">read_audacity_annot</span>
+</pre></div>
+</div>
+<p>First, load and audio file and compute the power spectrogram.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span>
+
+<span class="n">t0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">f0</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">dB_max</span> <span class="o">=</span> <span class="mi">96</span>
+
+<span class="n">Sxx</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+                                     <span class="n">fcrop</span><span class="o">=</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span><span class="n">f1</span><span class="p">),</span> <span class="n">tcrop</span><span class="o">=</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span><span class="n">t1</span><span class="p">))</span>
+
+<span class="c1"># Convert the power spectrogram into dB, add dB_max which is the maximum decibel</span>
+<span class="c1"># range when quantification bit is 16bits and display the result</span>
+<span class="n">Sxx_db</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx</span><span class="p">)</span> <span class="o">+</span> <span class="n">dB_max</span>
+<span class="n">plot2D</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="n">dB_max</span><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Then, relevant acoustic events are extracted directly from the power
+spectrogram based on a double thresholding technique. The result is binary
+image called a mask. Double thresholding technique is more sophisticated than
+basic thresholding based on a single value. First, a threshold selects pixels
+with high value (i.e. high acoustic energy). They should belong to an acoustic
+event. They are called seeds. From these seeds, we aggregate pixels connected
+to the seed with value higher than the second threslhold. These new pixels
+become seed and the aggregating process continue until no more new pixels are
+aggregated, meaning that there is no more connected pixels with value upper
+than the second threshold value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First we remove the stationary background in order to increase the contrast</span>
+<span class="n">Sxx_db_noNoise</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">remove_background_along_axis</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;ale&#39;</span><span class="p">,</span>
+                                                 <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                 <span class="n">ext</span><span class="o">=</span><span class="n">ext</span><span class="p">)</span>
+
+<span class="c1"># Then we smooth the spectrogram in order to facilitate the creation of masks as</span>
+<span class="c1"># small sparse details are merged if they are close to each other</span>
+<span class="n">Sxx_db_noNoise_smooth</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_db_noNoise</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># Then we create a mask (i.e. binarization of the spectrogram) by using the</span>
+<span class="c1"># double thresholding technique</span>
+<span class="n">im_mask</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">create_mask</span><span class="p">(</span><span class="n">im</span><span class="o">=</span><span class="n">Sxx_db_noNoise_smooth</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span>
+                           <span class="n">mode_bin</span> <span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> <span class="n">bin_std</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">bin_per</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Finaly, we put together pixels that belong to the same acoustic event, and</span>
+<span class="c1"># remove very small events (&lt;=25 pixel²)</span>
+<span class="n">im_rois</span><span class="p">,</span> <span class="n">df_rois</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">select_rois</span><span class="p">(</span><span class="n">im_mask</span><span class="p">,</span> <span class="n">min_roi</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">max_roi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">ext</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,(</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)))</span>
+
+<span class="c1"># format dataframe df_rois in order to convert pixels into time and frequency</span>
+<span class="n">df_rois</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">df_rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+
+<span class="c1"># overlay bounding box on the original spectrogram</span>
+<span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span>
+
+<span class="c1"># Compute and visualize centroids</span>
+<span class="n">df_centroid</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">centroid_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="n">im_rois</span><span class="p">)</span>
+<span class="n">df_centroid</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">overlay_centroid</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">df_centroid</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">96</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, we can compare with manual annotation performed with Audacity software.
+Each acoustic signature is manually selected and labeled. All similar acoustic
+signatures are labeled with the same name</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_rois</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight_label.txt&#39;</span><span class="p">)</span>  <span class="c1">## annotations using Audacity</span>
+
+<span class="c1"># format dataframe df_rois in order to convert time and frequency into pixels</span>
+<span class="n">df_rois</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">df_rois</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+
+<span class="c1"># overlay bounding box on the original spectrogram</span>
+<span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">rois</span><span class="o">.</span><span class="n">overlay_rois</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span>
+
+<span class="c1"># Compute and visualize centroids</span>
+<span class="n">df_centroid</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">centroid_features</span><span class="p">(</span><span class="n">Sxx_db</span><span class="p">,</span> <span class="n">df_rois</span><span class="p">)</span>
+<span class="n">df_centroid</span> <span class="o">=</span> <span class="n">format_features</span><span class="p">(</span><span class="n">df_centroid</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">overlay_centroid</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">df_centroid</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">vmin</span><span class="o">=-</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">96</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+                                    <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Sifre, L., &amp; Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. <a class="reference external" href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007">http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007</a></p></li>
+</ol>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-find-rois-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/19017540e8099e186b7874ee51b4d6f8/find_rois.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">find_rois.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/8055a34b0139a5e96f073b9b1c5e1d22/find_rois.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">find_rois.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

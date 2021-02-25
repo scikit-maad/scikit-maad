@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.load &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.sound.load_spectrogram" href="maad.sound.load_spectrogram.html" />
+    <link rel="prev" title="Sound processing" href="../sound.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../sound.html">Sound processing</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../sound.html#input-and-output">Input and output</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.sound.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.load_spectrogram.html">maad.sound.load_spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.write.html">maad.sound.write</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../sound.html#preprocess-audio">Preprocess audio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sound.html#transform-audio">Transform audio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sound.html#metrics">Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../sound.html">Sound processing</a> &raquo;</li>
+        
+      <li>maad.sound.load</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.sound.load.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-sound-load">
+<h1>maad.sound.load<a class="headerlink" href="#maad-sound-load" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.sound.load">
+<code class="sig-prename descclassname">maad.sound.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">'left'</span></em>, <em class="sig-param"><span class="n">detrend</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/input_output.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an audio file (stereo or mono).</p>
+<p>Currently, this function con only load WAVE files.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>Name or path of the audio file</p>
+</dd>
+<dt><strong>channel</strong><span class="classifier">{<a href="#id1"><span class="problematic" id="id2">`</span></a>’left’, right’}, optional, default: left</span></dt><dd><p>In case of stereo sound select the channel that is kept</p>
+</dd>
+<dt><strong>detrend</strong><span class="classifier">boolean, optional, default is True</span></dt><dd><p>Subtract the DC value.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Print messages into the console or terminal if verbose is True</p>
+</dd>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+</dd>
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+is added to the root filename.</p>
+</dd>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>savefilename<span class="classifier">str, optional, default :’_audiogram.png’</span></dt><dd><p>Postfix of the figure filename</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+in order to get all the  existing colormaps
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
+‘viridis’…</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+luminance data.  Note if you pass a <cite>norm</cite> instance, your
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.
+extent : list of scalars [left, right, bottom, top], optional, default: None
+The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch. 
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
+For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>s_out</strong><span class="classifier">1d ndarray of integer</span></dt><dd><p>Vector containing the audiogram</p>
+</dd>
+<dt><strong>fs</strong><span class="classifier">int</span></dt><dd><p>The sampling frequency in Hz of the audiogram</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../data/tropical_forest_morning.wav&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span><span class="o">/</span><span class="n">fs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax0</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;ground level&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax0</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.075</span><span class="p">,</span><span class="mf">0.0751</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../data/tropical_forest_morning.wav&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;canopy level&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.075</span><span class="p">,</span><span class="mf">0.075</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.sound.load_spectrogram.html" class="btn btn-neutral float-right" title="maad.sound.load_spectrogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../sound.html" class="btn btn-neutral float-left" title="Sound processing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

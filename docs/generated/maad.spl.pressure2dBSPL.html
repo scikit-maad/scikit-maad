@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.spl.pressure2dBSPL &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.spl.dBSPL2pressure" href="maad.spl.dBSPL2pressure.html" />
+    <link rel="prev" title="maad.spl.wav2pressure" href="maad.spl.wav2pressure.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../spl.html">Sound pressure level</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../spl.html#conversion-to-sound-pressure-level-spl">Conversion to sound pressure level (SPL)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2volt.html">maad.spl.wav2volt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.volt2pressure.html">maad.spl.volt2pressure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2pressure.html">maad.spl.wav2pressure</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.spl.pressure2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.dBSPL2pressure.html">maad.spl.dBSPL2pressure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.power2dBSPL.html">maad.spl.power2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.amplitude2dBSPL.html">maad.spl.amplitude2dBSPL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.spl.wav2dBSPL.html">maad.spl.wav2dBSPL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../spl.html">Sound pressure level</a> &raquo;</li>
+        
+      <li>maad.spl.pressure2dBSPL</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.spl.pressure2dBSPL.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-spl-pressure2dbspl">
+<h1>maad.spl.pressure2dBSPL<a class="headerlink" href="#maad-spl-pressure2dbspl" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.spl.pressure2dBSPL">
+<code class="sig-prename descclassname">maad.spl.</code><code class="sig-name descname">pressure2dBSPL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">pRef</span><span class="o">=</span><span class="default_value">2e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/spl/conversion_SPL.html#pressure2dBSPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.spl.pressure2dBSPL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert sound pressure (p [Pa]) to sound pressure level (L [dB]).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>p</strong><span class="classifier">ndarray-like or scalar</span></dt><dd><p>Array or scalar containing the sound pressure in Pa</p>
+</dd>
+<dt><strong>pRef</strong><span class="classifier">Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray-like or scalar</span></dt><dd><p>Array or scalar containing the sound pressure level (L [dB])</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/cold_forest_daylight.wav&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">wav2pressure</span><span class="p">(</span><span class="n">wave</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get instantaneous sound pressure level (L)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">pressure2dBSPL</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="go">    array([53.65176859, 55.18106489, 55.22220942, ..., 45.3480775 ,</span>
+<span class="go">    39.81175156, 44.54440589])</span>
+</pre></div>
+</div>
+<p>Get equivalent sound pressure level (Leq) from the RMS of the pressure signal</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p_rms</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">rms</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">pressure2dBSPL</span><span class="p">(</span><span class="n">p_rms</span><span class="p">)</span>  
+<span class="go">    54.53489077674256      </span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.spl.dBSPL2pressure.html" class="btn btn-neutral float-right" title="maad.spl.dBSPL2pressure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.spl.wav2pressure.html" class="btn btn-neutral float-left" title="maad.spl.wav2pressure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

@@ -7,7 +7,10 @@
 import os
 import textwrap
 from setuptools import setup, find_packages, Command
+from importlib.machinery import SourceFileLoader
 
+version = SourceFileLoader('maad.version',
+                           'maad/version.py').load_module()
 
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root.
@@ -25,7 +28,7 @@ class CleanCommand(Command):
 
 setup(
       name = 'scikit-maad',
-      version = '0.1.5.2',
+      version = version.__version__,  # Specified at maad/version.py file
       #packages = find_namespace_packages(include=['maad.*']),
       packages = find_packages(),
       author = 'Juan Sebastian ULLOA and Sylvain HAUPERT',
@@ -52,6 +55,7 @@ setup(
         Programming Language :: Python :: 3.5
         Programming Language :: Python :: 3.6
         Programming Language :: Python :: 3.7
+        Programming Language :: Python :: 3.8
         Topic :: Scientific/Engineering :: Artificial Intelligence 
         """).strip().splitlines()
        )

@@ -1,0 +1,1032 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sound.sound_func &mdash; scikit-maad 0.1.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ecoacoustics.html">ecoacoustics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/rois.html">rois</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/sound.html">sound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/util.html">util</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">scikit-maad examples gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>sound.sound_func</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sound.sound_func</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Multiresolution Analysis of Acoustic Diversity</span>
+<span class="sd">functions for processing sound </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span> 
+<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span> 
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">hilbert</span><span class="p">,</span><span class="n">butter</span><span class="p">,</span> <span class="n">sosfilt</span><span class="p">,</span> <span class="n">stft</span><span class="p">,</span> <span class="n">convolve</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">get_window</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot1D</span><span class="p">,</span> <span class="n">plot2D</span><span class="p">,</span> <span class="n">crop_image</span><span class="p">,</span> <span class="n">linear2dB</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># private functions</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_wave2frames</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of</span>
+<span class="sd">    length N</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : 1d ndarray of floats (already divided by the number of bits)</span>
+<span class="sd">        Vector containing the sound waveform </span>
+
+<span class="sd">    N : int, optional, default is 512</span>
+<span class="sd">        Number of points per frame</span>
+<span class="sd">                </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    timeframes : 2d ndarray of floats</span>
+<span class="sd">        Matrix containing K frames (row) with N points (column), K*N &lt;= length (s)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># transform wave into array</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="c1"># compute the number of frames</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">//</span><span class="n">N</span>
+    <span class="c1"># Reshape the waveform (ie vector) into a serie of frames (ie 2D matrix)</span>
+    <span class="n">timeframes</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">K</span><span class="o">*</span><span class="n">N</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">timeframes</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.load.html#sound.sound_func.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a wav file (stereo or mono)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string </span>
+<span class="sd">        The name or path of the .wav file to load      </span>
+<span class="sd">        if you want to extract the date of creation of the file, the filename </span>
+<span class="sd">        must have this postfix :</span>
+<span class="sd">        XXXX_yyyymmdd_hhmmss.wav</span>
+<span class="sd">        with yyyy : year / mm : month / dd: day / hh : hour (24hours) /</span>
+<span class="sd">        mm : minutes / ss : seconds</span>
+<span class="sd">            </span>
+<span class="sd">    channel : {&#39;left&#39;, right&#39;}, optional, default: left</span>
+<span class="sd">        In case of stereo sound select the channel that is kept </span>
+
+<span class="sd">    detrend : boolean, optional, default is True</span>
+<span class="sd">        Subtract the DC value.</span>
+<span class="sd">    </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        print messages into the consol or terminal if verbose is True</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">           </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_audiogram.png&#39;</span>
+<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">         </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">            width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">            title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">            label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">            in order to get all the  existing colormaps</span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">            &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">            ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        - dpi : integer, optional, default is 96</span>
+<span class="sd">            Dot per inch. </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure</span>
+<span class="sd">            </span>
+<span class="sd">        ... and more, see matplotlib     </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------    </span>
+<span class="sd">    s_out : 1d ndarray of integer</span>
+<span class="sd">        Vector containing the audiogram </span>
+<span class="sd">        </span>
+<span class="sd">    fs : int </span>
+<span class="sd">        The sampling frequency in Hz of the audiogram    </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = maad.sound.load(filename=&quot;../data/guyana_tropical_forest.wav&quot;, channel=&#39;LEFT&#39;, detrend=True, verbose=False)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;loading </span><span class="si">%s</span><span class="s2">...&quot;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>   
+    
+    <span class="c1"># read the .wav file and return the sampling frequency fs (Hz) </span>
+    <span class="c1"># and the audiogram s as a 1D array of integer</span>
+    <span class="n">fs</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">wavfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sampling frequency: </span><span class="si">%d</span><span class="s2">Hz&quot;</span> <span class="o">%</span> <span class="n">fs</span><span class="p">)</span>
+    
+    <span class="c1"># Normalize the signal between -1 to 1 depending on the type</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="mi">32</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span> <span class="c1"># as it&#39;s unsigned</span>
+    
+    <span class="c1"># test if stereo signal. if YES =&gt; keep only the ch_select</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">2</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select left channel&quot;</span><span class="p">)</span>
+            <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select right channel&quot;</span><span class="p">)</span>
+            <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        
+    <span class="c1"># Detrend the signal by removing the DC offset</span>
+    <span class="k">if</span> <span class="n">detrend</span><span class="p">:</span> <span class="n">s_out</span> <span class="o">=</span> <span class="n">s_out</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s_out</span><span class="p">)</span>
+    
+    <span class="c1"># Time vector</span>
+    <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">s_out</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span> 
+    
+    <span class="c1"># DISPLAY</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">figtitle</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figtitle&#39;</span><span class="p">,</span> <span class="s1">&#39;Orignal sound&#39;</span><span class="p">)</span>        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot1D</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="n">figtitle</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span> 
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_audiogram&#39;</span><span class="p">)</span>  
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+                           
+    <span class="k">return</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">fs</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="envelope"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.envelope.html#sound.sound_func.envelope">[docs]</a><span class="k">def</span> <span class="nf">envelope</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calcul the envelope of a sound (1d) </span>
+<span class="sd">    The sound is first divided into frames (2d) using the function </span>
+<span class="sd">    wave2timeframes(s), then the max of each frame gives a good approximation</span>
+<span class="sd">    of the envelope.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : ndarray of floats </span>
+<span class="sd">        1d : sound waveform</span>
+<span class="sd">        </span>
+<span class="sd">    mode : str, optional, default is &quot;fast&quot;</span>
+<span class="sd">        - &quot;fast&quot; : The sound is first divided into frames (2d) using the </span>
+<span class="sd">            function wave2timeframes(s), then the max of each frame gives a </span>
+<span class="sd">            good approximation of the envelope.</span>
+<span class="sd">        - &quot;Hilbert&quot; : estimation of the envelope from the Hilbert transform. </span>
+<span class="sd">            The method is slow</span>
+<span class="sd">    </span>
+<span class="sd">    N : integer, optional, default is 512</span>
+<span class="sd">        Size of each frame. The largest, the highest is the approximation.</span>
+<span class="sd">                  </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------    </span>
+<span class="sd">    env : ndarray of floats</span>
+<span class="sd">        Envelope of the sound (1d) </span>
+<span class="sd">        </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Fast calculation is inspired by the work of M. Towsey at Queensland University of Technology (QUT).</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s,fs = maad.sound.load(filename=&quot;../data/guyana_tropical_forest.wav&quot;, channel=&#39;LEFT&#39;, detrend=True, verbose=False)</span>
+<span class="sd">    &gt;&gt;&gt; env_fast = maad.sound.envelope(s, mode=&#39;fast&#39;, N=512)</span>
+<span class="sd">    &gt;&gt;&gt; env_fast</span>
+<span class="sd">    array([0.0859375 , 0.09140015, 0.08306885, ..., 0.03884888, 0.06614685,</span>
+<span class="sd">       0.04876709])</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; env_hilbert = maad.sound.envelope(s, mode=&#39;hilbert&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; env_hilbert</span>
+<span class="sd">    array([0.06588196, 0.11301711, 0.09201435, ..., 0.18053983, 0.18351906,</span>
+<span class="sd">       0.10258595])</span>
+<span class="sd">    </span>
+<span class="sd">    compute the time vector for the vector wave</span>
+<span class="sd">    &gt;&gt;&gt; t = np.arange(0,len(s),1)/fs</span>
+<span class="sd">    compute the time vector for the vector env_fast</span>
+<span class="sd">    &gt;&gt;&gt; t_env_fast = np.arange(0,len(env_fast),1)*len(s)/fs/len(env_fast)</span>
+<span class="sd">    </span>
+<span class="sd">    plot 0.1 of the envelope and 0.1s of the abs(s)</span>
+<span class="sd">    import matplotlib.pyplot as plt</span>
+<span class="sd">    fig1, ax1 = plt.subplots()</span>
+<span class="sd">    ax1.plot(t[t&lt;0.1], abs(wave[t&lt;0.1]), label=&#39;abs(s)&#39;)</span>
+<span class="sd">    ax1.plot(t[t&lt;0.1], env_hilbert[t&lt;0.1], label=&#39;env(s) - hilbert option&#39;)</span>
+<span class="sd">    ax1.plot(t_env_fast[t_env_fast&lt;0.1], env_fast[t_env_fast&lt;0.1], label=&#39;env(s) - fast option&#39;)</span>
+<span class="sd">    ax1.set_xlabel(&#39;Time [sec]&#39;)</span>
+<span class="sd">    ax1.legend()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fast&#39;</span> <span class="p">:</span>
+        <span class="c1"># Envelope : take the max (see M. Towsey) of each frame</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="n">_wave2frames</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">frames</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span><span class="s1">&#39;hilbert&#39;</span> <span class="p">:</span>
+        <span class="c1"># Compute the hilbert transform of the waveform and take the norm </span>
+        <span class="c1"># (magnitude) </span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">hilbert</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING : choose a mode between &#39;fast&#39; and &#39;hilbert&#39;&quot;</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">env</span></div>
+
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="iir_filter1d"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.iir_filter1d.html#sound.sound_func.iir_filter1d">[docs]</a><span class="k">def</span> <span class="nf">iir_filter1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fcut</span><span class="p">,</span> <span class="n">forder</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span><span class="s1">&#39;butter&#39;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+              <span class="n">rs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        1d vector of scalar to be filtered</span>
+<span class="sd">        </span>
+<span class="sd">    fs : scalar</span>
+<span class="sd">        sampling frequency   </span>
+<span class="sd">        </span>
+<span class="sd">    fcut : array_like</span>
+<span class="sd">        A scalar or length-2 sequence giving the critical frequencies.             </span>
+<span class="sd">    </span>
+<span class="sd">    forder : int</span>
+<span class="sd">        The order of the filter.</span>
+<span class="sd">    </span>
+<span class="sd">    ftype : {&#39;bandpass&#39;, &#39;lowpass&#39;, &#39;highpass&#39;, &#39;bandstop&#39;}, optional, default </span>
+<span class="sd">        is &#39;bandpass&#39;</span>
+<span class="sd">        The type of filter.</span>
+<span class="sd">        </span>
+<span class="sd">    fname : {&#39;butter&#39;, &#39;cheby1&#39;, &#39;cheby2&#39;, &#39;ellip&#39;, &#39;bessel&#39;}, optional, default</span>
+<span class="sd">        is &#39;butter&#39;</span>
+<span class="sd">        </span>
+<span class="sd">    The type of IIR filter to design:</span>
+<span class="sd">    </span>
+<span class="sd">        Butterworth : &#39;butter&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Chebyshev I : &#39;cheby1&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Chebyshev II : &#39;cheby2&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Cauer/elliptic: &#39;ellip&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Bessel/Thomson: &#39;bessel&#39;</span>
+<span class="sd">            </span>
+<span class="sd">    rp : float, optional</span>
+<span class="sd">        For Chebyshev and elliptic filters, provides the maximum ripple in </span>
+<span class="sd">        the passband. (dB)</span>
+<span class="sd">        </span>
+<span class="sd">    rs : float, optional</span>
+<span class="sd">        For Chebyshev and elliptic filters, provides the minimum attenuation </span>
+<span class="sd">        in the stop band. (dB)           </span>
+<span class="sd">            </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">forder</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fcut</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="n">ftype</span><span class="p">,</span><span class="n">ftype</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">rp</span><span class="p">,</span> 
+                     <span class="n">rs</span><span class="o">=</span><span class="n">rs</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span></div>
+ 
+<span class="c1">#=============================================================================</span>
+<div class="viewcode-block" id="fir_filter"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.fir_filter.html#sound.sound_func.fir_filter">[docs]</a><span class="k">def</span> <span class="nf">fir_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        1d vector or 2d matrix of scalars to be filtered</span>
+<span class="sd">   </span>
+<span class="sd">    kernel : array_like or tuple</span>
+<span class="sd">        Pass directly the kernel (1d vector of scalars) </span>
+<span class="sd">        Or pass the arguments in a tuple to create a kernel. Arguments are:   </span>
+<span class="sd">        </span>
+<span class="sd">        - window : string, float, or tuple. The type of window to create. </span>
+<span class="sd">        </span>
+<span class="sd">        - boxcar, triang, blackman, hamming, hann, bartlett, flattop,parzen, bohman, blackmanharris, nuttall, barthann, </span>
+<span class="sd">        </span>
+<span class="sd">        - (kaiser, beta), </span>
+<span class="sd">        </span>
+<span class="sd">        - (gaussian, standard deviation), </span>
+<span class="sd">        </span>
+<span class="sd">        - (general_gaussian, power, width), </span>
+<span class="sd">        </span>
+<span class="sd">        - (slepian, width), </span>
+<span class="sd">        </span>
+<span class="sd">        - (dpss, normalized half-bandwidth), </span>
+<span class="sd">        </span>
+<span class="sd">        - (chebwin, attenuation), </span>
+<span class="sd">        </span>
+<span class="sd">        - (exponential, decay scale), </span>
+<span class="sd">        </span>
+<span class="sd">        - (tukey, taper fraction)</span>
+<span class="sd">    </span>
+<span class="sd">    Nx : int</span>
+<span class="sd">        The number of samples in the window.</span>
+<span class="sd">                    </span>
+<span class="sd">    Examples:</span>
+<span class="sd">    kernel = (&#39;boxcar&#39;, 9)</span>
+<span class="sd">    kernel = ((&#39;gaussian&#39;, 0.5), 5)</span>
+<span class="sd">    kernel = [1 3 5 7 5 3 1] </span>
+<span class="sd">    </span>
+<span class="sd">    axis : int</span>
+<span class="sd">        Determine along which axis is performed the filtering in case of 2d matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span> <span class="o">==</span><span class="mi">1</span> <span class="p">:</span>
+            <span class="n">win</span> <span class="o">=</span> <span class="n">get_window</span><span class="p">(</span><span class="n">kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span> <span class="o">==</span><span class="mi">2</span> <span class="p">:</span>
+            <span class="n">win</span> <span class="o">=</span> <span class="n">get_window</span><span class="p">(</span><span class="n">kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">kernel</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">kernel</span>
+
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Trick to avoid strange values at the beginning and end of the convolve</span>
+        <span class="c1"># signal. Add mirror values</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">):]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="c1"># convolve and normalized the result by the sum of the kernel</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">win</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span><span class="mi">1</span> <span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        
+        <span class="c1"># Trick to avoid strange values at the beginning and end of the convolve</span>
+        <span class="c1"># signal. Add mirror values</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>  <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">):]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">y</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">win</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">win</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">),:]</span>
+        
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span><span class="mi">1</span> <span class="p">:</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">y</span></div>
+
+
+
+<div class="viewcode-block" id="select_bandwidth"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.select_bandwidth.html#sound.sound_func.select_bandwidth">[docs]</a><span class="k">def</span> <span class="nf">select_bandwidth</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span> <span class="n">lfc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hfc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                     <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    select a bandwidth of the signal</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s :  1d ndarray of integer</span>
+<span class="sd">        Vector containing the audiogram     </span>
+<span class="sd">        </span>
+<span class="sd">    fs : int</span>
+<span class="sd">        The sampling frequency in Hz</span>
+<span class="sd">        </span>
+<span class="sd">    lfc : int, optional, default: None</span>
+<span class="sd">        Low frequency cut (Hz) in the range [0;fs/2]   </span>
+<span class="sd">        </span>
+<span class="sd">    hfc : int, optional, default: None</span>
+<span class="sd">        High frequency cut (Hz) in the range [0;fs/2]</span>
+<span class="sd">        if lfc and hfc are declared and lfc&lt;hfc, bandpass filter is performed</span>
+<span class="sd">        </span>
+<span class="sd">    order : int, optional, default: 3</span>
+<span class="sd">        Order of the Butterworth filter. </span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions   </span>
+<span class="sd">        </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
+<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">            width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">            title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">            label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">            in order to get all the  existing colormaps</span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">            &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        - ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        - dpi : integer, optional, default is 96</span>
+<span class="sd">            Dot per inch. </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        </span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure</span>
+<span class="sd">        </span>
+<span class="sd">        ... and more, see matplotlib     </span>
+<span class="sd">          </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s_out : 1d ndarray of integer</span>
+<span class="sd">        Vector containing the audiogram after being filtered           </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+
+
+    <span class="k">if</span> <span class="n">lfc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lfc</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">hfc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hfc</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span>         
+    
+    <span class="k">if</span> <span class="n">lfc</span><span class="o">!=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">hfc</span><span class="o">!=</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># bandpass filter the signal</span>
+        <span class="n">Wn</span> <span class="o">=</span> <span class="p">[</span><span class="n">lfc</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">hfc</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Wn</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+        <span class="n">s_out</span> <span class="o">=</span> <span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="n">lfc</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">hfc</span><span class="o">!=</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span> <span class="p">:</span>     
+        <span class="c1"># lowpass filter the signal</span>
+        <span class="n">Wn</span> <span class="o">=</span> <span class="n">hfc</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="mi">2</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Wn</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+        <span class="n">s_out</span> <span class="o">=</span> <span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>    
+    <span class="k">elif</span> <span class="n">lfc</span><span class="o">!=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">hfc</span><span class="o">==</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span> <span class="p">:</span>  
+        <span class="c1"># highpass filter the signal</span>
+        <span class="n">Wn</span> <span class="o">=</span> <span class="n">lfc</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="mi">2</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Wn</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;highpass&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+        <span class="n">s_out</span> <span class="o">=</span> <span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>       
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># do nothing</span>
+        <span class="n">s_out</span> <span class="o">=</span> <span class="n">s</span>
+        
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        <span class="n">figtitle</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figtitle&#39;</span><span class="p">,</span><span class="s1">&#39;Audiogram&#39;</span><span class="p">)</span>
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Amplitude [AU]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">figtitle</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figtitle&#39;</span><span class="p">,</span><span class="s1">&#39;Audiogram&#39;</span><span class="p">)</span>
+        <span class="n">linecolor</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;linecolor&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="c1"># Time vector</span>
+        <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span>   
+        <span class="c1"># plot Original sound</span>
+        <span class="n">ax1</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot1D</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">figtitle</span> <span class="o">=</span> <span class="n">figtitle</span><span class="p">,</span> <span class="n">linecolor</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span> <span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;orignal sound&#39;</span><span class="p">,</span>
+                          <span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+        <span class="c1"># plot filtered sound</span>
+        <span class="n">ax2</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot1D</span><span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">s_out</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">figtitle</span> <span class="o">=</span> <span class="n">figtitle</span><span class="p">,</span> <span class="n">linecolor</span> <span class="o">=</span> <span class="n">linecolor</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;filtered sound&#39;</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span> 
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_filt_audiogram&#39;</span><span class="p">)</span>  
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  
+    
+    <span class="k">return</span> <span class="n">s_out</span></div>
+
+
+<div class="viewcode-block" id="spectrogram"><a class="viewcode-back" href="../../_autosummary/sound.sound_func.spectrogram.html#sound.sound_func.spectrogram">[docs]</a><span class="k">def</span> <span class="nf">spectrogram</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hann&#39;</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">fcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tcrop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;psd&#39;</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                 <span class="n">savefig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+     
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a sound waveform into a spectrogram </span>
+<span class="sd">    the output is : </span>
+<span class="sd">        - power (mode=&#39;psd&#39;)</span>
+<span class="sd">        - amplitude (mode = &#39;amplitude&#39;) =&gt; sqrt(power)</span>
+<span class="sd">        - complex with real and imaginary parts (mode = &#39;complex&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : 1d ndarray</span>
+<span class="sd">        Vector containing the sound waveform </span>
+<span class="sd">        </span>
+<span class="sd">    fs : int</span>
+<span class="sd">        The sampling frequency in Hz </span>
+<span class="sd">        </span>
+<span class="sd">    window : str or tuple or array_like, optional, default to &#39;hann&#39;</span>
+<span class="sd">        Desired window to use. If window is a string or tuple, it is passed to </span>
+<span class="sd">        get_window to generate the window values, which are DFT-even by default. </span>
+<span class="sd">        See get_window for a list of windows and required parameters. </span>
+<span class="sd">        If window is array_like it will be used directly as the window and its length must be nperseg. </span>
+<span class="sd">        </span>
+<span class="sd">    nperseg : int, optional. Defaults to 1024.</span>
+<span class="sd">        Length of the segment used to compute the FFT. No zero padding. </span>
+<span class="sd">        For fast calculation, it&#39;s better to use a number that is a power 2. </span>
+<span class="sd">        This parameter sets the resolution in frequency as the spectrogram will</span>
+<span class="sd">        contains nperseg/2 frequency bins between 0Hz-(fs/2)Hz, with a resolution</span>
+<span class="sd">        df = fs/nperseg</span>
+<span class="sd">        It sets also the time slot (dt) of each frequency frames : dt = nperseg/fs</span>
+<span class="sd">        The higher is the number, the lower is the resolution in time (dt) </span>
+<span class="sd">        but better is the resolution in frequency (df).</span>
+<span class="sd">        </span>
+<span class="sd">    noverlap : int, optional. Defaults to None.</span>
+<span class="sd">        Number of points to overlap between segments. </span>
+<span class="sd">        If None, noverlap = nperseg // 2. </span>
+
+<span class="sd">    mode : str, optional. Default is &#39;psd&#39;</span>
+<span class="sd">        Choose the output between </span>
+<span class="sd">        - &#39;psd&#39; : Power Spectral Density </span>
+<span class="sd">        - &#39;amplitude&#39; : module of the stft (sqrt(psd))</span>
+<span class="sd">        - &#39;complex&#39; : real and imaginary part of the stft</span>
+<span class="sd">        </span>
+<span class="sd">    fcrop, tcrop : list of 2 scalars [min, max], optional, default is None</span>
+<span class="sd">        fcrop corresponds to the min and max boundary frequency values</span>
+<span class="sd">        tcrop corresponds to the min and max boundary time values  </span>
+<span class="sd">        </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        print messages into the consol or terminal if verbose is True</span>
+<span class="sd">        </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">        </span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.</span>
+<span class="sd">        </span>
+<span class="sd">    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">            </span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
+<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        </span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">            width, height in inches.  </span>
+<span class="sd">        </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">            title of the figure</span>
+<span class="sd">        </span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        </span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">            label of the vertical axis</span>
+<span class="sd">        </span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">            in order to get all the  existing colormaps</span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">            &#39;viridis&#39;...</span>
+<span class="sd">        </span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+<span class="sd">        </span>
+<span class="sd">        - ext : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        </span>
+<span class="sd">        - dpi : integer, optional, default is 96</span>
+<span class="sd">            Dot per inch. </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure</span>
+<span class="sd">        </span>
+<span class="sd">        ... and more, see matplotlib  </span>
+<span class="sd">              </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PSDxx : 2d ndarray of floats</span>
+<span class="sd">        Spectrogram : Matrix containing K frames with N/2 frequency bins, </span>
+<span class="sd">        K*N &lt;= length (wave)</span>
+<span class="sd">        </span>
+<span class="sd">    dt : scalar</span>
+<span class="sd">        Time resolution of the spectrogram (horizontal x-axis)</span>
+<span class="sd">        </span>
+<span class="sd">    df : scalar</span>
+<span class="sd">        Frequency resolution of the spectrogram (vertical y-axis)</span>
+<span class="sd">        </span>
+<span class="sd">    ext : list of scalars [left, right, bottom, top]</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">        the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This function take care of the energy concervation which is crucial when working in with sound pressure level (dB SPL)</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s,fs = maad.sound.load(filename=&quot;../data/guyana_tropical_forest.wav&quot;, channel=&#39;LEFT&#39;, detrend=True, verbose=False)</span>
+<span class="sd">    </span>
+<span class="sd">    Compute energy of signal s</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; E1 = sum(s**2)</span>
+<span class="sd">    &gt;&gt;&gt; linear2dB(E1, mode=&#39;power&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    Compute the spectrogram with &#39;psd&#39; output (if N&lt;4096, the energy is lost)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; N = 4096</span>
+<span class="sd">    &gt;&gt;&gt; Pxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window=&#39;hann&#39;, nperseg=N, noverlap=N//2, </span>
+<span class="sd">    ...                                       fcrop=None, tcrop=None, </span>
+<span class="sd">    ...                                       mode = &#39;psd&#39;,</span>
+<span class="sd">    ...                                       verbose=False, display=True, </span>
+<span class="sd">    ...                                       savefig = None)   </span>
+<span class="sd">    </span>
+<span class="sd">    Compute mean power os spectrogram</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; mean_power = mean(Pxx, axis = 1)</span>
+<span class="sd">    </span>
+<span class="sd">    energy =&gt; power x time</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; E2 = sum(mean_power*len(s)) </span>
+<span class="sd">    &gt;&gt;&gt; linear2dB(E2, mode=&#39;power&#39;)</span>
+
+<span class="sd">    Compute the spectrogram with &#39;amplitude&#39; output</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; Sxx,tn,fn,_ = maad.sound.spectrogram (s, fs, window=&#39;hann&#39;, nperseg=N, noverlap=N//20, </span>
+<span class="sd">    ...                                       fcrop=None, tcrop=None, </span>
+<span class="sd">    ...                                       mode = &#39;amplitude&#39;,</span>
+<span class="sd">    ...                                       verbose=False, display=True, </span>
+<span class="sd">    ...                                       savefig = None)   </span>
+<span class="sd">    </span>
+<span class="sd">    For energy conservation =&gt; convert Sxx (amplitude) into power before doing the average.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; mean_power = mean(Sxx**2, axis = 1)</span>
+<span class="sd">    </span>
+<span class="sd">    energy =&gt; power x time</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; E3 = sum(mean_power*len(s)) </span>
+<span class="sd">    &gt;&gt;&gt; linear2dB(E3, mode=&#39;power&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Test if noverlap is None. By default, noverlap is half the length of the fft</span>
+    <span class="k">if</span> <span class="n">noverlap</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>  <span class="n">noverlap</span> <span class="o">=</span> <span class="n">nperseg</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="c1"># compute the number of frames</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">//</span><span class="p">(</span><span class="n">nperseg</span><span class="o">-</span><span class="n">noverlap</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+ 
+    <span class="c1"># compute spectrogram</span>
+    <span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">Sxx_complex</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> 
+                                              <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span> 
+                                              <span class="n">nfft</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> 
+                                              <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;complex&#39;</span><span class="p">,</span>
+                                              <span class="n">detrend</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> 
+                                              <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>          
+   
+            
+    <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;spectrogram dimension Nx=</span><span class="si">%d</span><span class="s1"> Ny=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Sxx_complex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Sxx_complex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        
+    <span class="c1"># Mutliply by the frequency resolution step (fs/nperseg) to get the power</span>
+    <span class="c1"># so multiply by the sqrt((fs/nperseg)) to get the amplitude</span>
+    <span class="c1"># Also multiply by sqrt(2) in order to compensate that only the postive frequencies are kept</span>
+    <span class="c1"># complex    </span>
+    <span class="n">Sxx_complex</span> <span class="o">=</span> <span class="n">Sxx_complex</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="n">nperseg</span><span class="p">))</span>
+    <span class="c1"># magnitude</span>
+    <span class="n">Sxx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Sxx_complex</span><span class="p">)</span>
+    <span class="c1"># power</span>
+    <span class="n">PSDxx</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span><span class="s1">&#39;complex&#39;</span><span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_complex</span>
+    
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span><span class="s1">&#39;amplitude&#39;</span> <span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx</span>
+    
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span><span class="s1">&#39;psd&#39;</span><span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">PSDxx</span>    
+    
+    <span class="c1"># test if the last frames are computed on a whole time frame. </span>
+    <span class="c1"># if note =&gt; remove these frames</span>
+    <span class="k">if</span> <span class="n">PSDxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">K</span><span class="p">:</span>
+        <span class="n">sup</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">K</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="p">[:,:</span><span class="o">-</span><span class="n">sup</span><span class="p">]</span>
+        <span class="n">tn</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[:</span><span class="o">-</span><span class="n">sup</span><span class="p">]</span>
+        
+    <span class="c1"># Remove the last frequency bin in order to obtain nperseg/2 frequency bins</span>
+    <span class="c1"># instead of nperseg/2 + 1 </span>
+    <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c1"># Crop the image in order to analyzed only a portion of it</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fcrop</span> <span class="ow">or</span> <span class="n">tcrop</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Crop the spectrogram along time axis and frequency axis&#39;</span><span class="p">)</span>
+        <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span> <span class="o">=</span> <span class="n">crop_image</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">fcrop</span><span class="p">,</span><span class="n">tcrop</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;max value of the spectrogram </span><span class="si">%.5f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">Sxx_out</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1"># Extent</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="c1"># dt and df resolution</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*************************************************************&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Time resolution dt=</span><span class="si">%.2f</span><span class="s2">s | Frequency resolution df=</span><span class="si">%.2f</span><span class="s2">Hz &quot;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">))</span>  
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*************************************************************&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="p">:</span> 
+        
+        <span class="c1">#### convert into dB if db_range is not none</span>
+        <span class="n">db_range</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;db_range&#39;</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">db_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;psd&#39;</span><span class="p">:</span>  
+                <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="n">db_range</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;amplitude&#39;</span><span class="p">:</span> 
+                <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="n">db_range</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;complex&#39;</span><span class="p">:</span> 
+                <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">linear2dB</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">),</span> <span class="n">db_range</span><span class="o">=</span><span class="n">db_range</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">Sxx_out</span>
+
+        <span class="n">ylabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span><span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span> 
+        <span class="n">title</span>  <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;Spectrogram&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+        <span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span> 
+        <span class="n">vmin</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span><span class="n">Sxx_disp</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> 
+        <span class="n">vmax</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span><span class="n">Sxx_disp</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> 
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2D</span> <span class="p">(</span><span class="n">Sxx_disp</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> 
+                         <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span> <span class="o">=</span> <span class="n">xlabel</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span> 
+            <span class="n">dpi</span>   <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span><span class="mi">96</span><span class="p">)</span>
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span> 
+            <span class="nb">format</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">savefilename</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectrogram&#39;</span><span class="p">)</span>  
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>     
+
+    <span class="k">return</span> <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ext</span>   </div>
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

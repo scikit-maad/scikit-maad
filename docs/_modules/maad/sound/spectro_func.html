@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.spectro_func &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>maad.sound.spectro_func</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for maad.sound.spectro_func</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Collection of functions transform an audio signal into spectrogram and </span>
+<span class="sd">manipulate spectrograms.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:  Juan Sebastian ULLOA &lt;lisofomia@gmail.com&gt;</span>
+<span class="c1">#           Sylvain HAUPERT &lt;sylvain.haupert@mnhn.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: New BSD License</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Import external modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="c1"># Import internal modules</span>
+<span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="p">(</span><span class="n">plot1d</span><span class="p">,</span> <span class="n">plot2d</span><span class="p">,</span> <span class="n">crop_image</span><span class="p">,</span> <span class="n">power2dB</span><span class="p">,</span> <span class="n">amplitude2dB</span><span class="p">)</span>
+
+<span class="c1"># %%</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># public functions</span>
+<span class="c1"># =============================================================================</span>
+
+
+<div class="viewcode-block" id="spectrogram"><a class="viewcode-back" href="../../../generated/maad.sound.spectrogram.html#maad.sound.spectrogram">[docs]</a><span class="k">def</span> <span class="nf">spectrogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hann&#39;</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">flims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute a spectrogram using the short-time Fourier transform from an audio signal.</span>
+
+<span class="sd">    The function can compute diferent outputs according to the parameter &#39;mode&#39;:</span>
+<span class="sd">        - power (mode=&#39;psd&#39;)</span>
+<span class="sd">        - amplitude (mode = &#39;amplitude&#39;) =&gt; sqrt(power)</span>
+<span class="sd">        - complex with real and imaginary parts (mode = &#39;complex&#39;)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : 1d ndarray</span>
+<span class="sd">        Vector containing the sound waveform </span>
+<span class="sd">    fs : int</span>
+<span class="sd">        The sampling frequency in Hz </span>
+<span class="sd">    window : str or tuple or array_like, optional, default to &#39;hann&#39;</span>
+<span class="sd">        Desired window to use. If window is a string or tuple, it is passed to </span>
+<span class="sd">        get_window to generate the window values, which are DFT-even by default. </span>
+<span class="sd">        See get_window for a list of windows and required parameters. </span>
+<span class="sd">        If window is array_like it will be used directly as the window and its length must be nperseg. </span>
+<span class="sd">    nperseg : int, optional. Defaults to 1024.</span>
+<span class="sd">        Length of the segment used to compute the FFT. No zero padding. </span>
+<span class="sd">        For fast calculation, it&#39;s better to use a number that is a power 2. </span>
+<span class="sd">        This parameter sets the resolution in frequency as the spectrogram will</span>
+<span class="sd">        contains nperseg/2 frequency bins between 0Hz-(fs/2)Hz, with a resolution</span>
+<span class="sd">        df = fs/nperseg</span>
+<span class="sd">        It sets also the time slot (dt) of each frequency frames : dt = nperseg/fs</span>
+<span class="sd">        The higher is the number, the lower is the resolution in time (dt) </span>
+<span class="sd">        but better is the resolution in frequency (df).  </span>
+<span class="sd">    noverlap : int, optional. Defaults to None.</span>
+<span class="sd">        Number of points to overlap between segments. </span>
+<span class="sd">        If None, noverlap = nperseg // 2. </span>
+<span class="sd">    mode : str, optional. Default is &#39;psd&#39;</span>
+<span class="sd">        Choose the output between </span>
+<span class="sd">        - &#39;psd&#39; : Power Spectral Density </span>
+<span class="sd">        - &#39;amplitude&#39; : module of the stft (sqrt(psd))</span>
+<span class="sd">        - &#39;complex&#39; : real and imaginary part of the stft  </span>
+<span class="sd">    flims, tlims : list of 2 scalars [min, max], optional, default is None</span>
+<span class="sd">        flims corresponds to the min and max boundary frequency values</span>
+<span class="sd">        tlims corresponds to the min and max boundary time values  </span>
+<span class="sd">    verbose : boolean, optional, default is False</span>
+<span class="sd">        print messages into the consol or terminal if verbose is True   </span>
+<span class="sd">    display : boolean, optional, default is False</span>
+<span class="sd">        Display the signal if True</span>
+<span class="sd">    savefig : string, optional, default is None</span>
+<span class="sd">        Root filename (with full path) is required to save the figures. Postfix</span>
+<span class="sd">        is added to the root filename.        </span>
+<span class="sd">    **kwargs, optional. This parameter is used by plt.plot and savefig functions</span>
+<span class="sd">        - savefilename : str, optional, default :&#39;_filt_audiogram.png&#39;</span>
+<span class="sd">            Postfix of the figure filename</span>
+<span class="sd">        - db_range : scalar, optional, default : 100</span>
+<span class="sd">            if db_range is a number, anything lower than -db_range is set to </span>
+<span class="sd">            -db_range and anything larger than 0 is set to 0</span>
+<span class="sd">        - figsize : tuple of integers, optional, default: (4,10)</span>
+<span class="sd">            width, height in inches.  </span>
+<span class="sd">        - title : string, optional, default : &#39;Spectrogram&#39;</span>
+<span class="sd">            title of the figure</span>
+<span class="sd">        - xlabel : string, optional, default : &#39;Time [s]&#39;</span>
+<span class="sd">            label of the horizontal axis</span>
+<span class="sd">        - ylabel : string, optional, default : &#39;Amplitude [AU]&#39;</span>
+<span class="sd">        - cmap : string or Colormap object, optional, default is &#39;gray&#39;</span>
+<span class="sd">            See https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">            in order to get all the  existing colormaps</span>
+<span class="sd">            examples: &#39;hsv&#39;, &#39;hot&#39;, &#39;bone&#39;, &#39;tab20c&#39;, &#39;jet&#39;, &#39;seismic&#39;, </span>
+<span class="sd">            &#39;viridis&#39;...</span>
+<span class="sd">        - vmin, vmax : scalar, optional, default: None</span>
+<span class="sd">            `vmin` and `vmax` are used in conjunction with norm to normalize</span>
+<span class="sd">            luminance data.  Note if you pass a `norm` instance, your</span>
+<span class="sd">            settings for `vmin` and `vmax` will be ignored.</span>
+
+<span class="sd">        - extent : list of scalars [left, right, bottom, top], optional, default: None</span>
+<span class="sd">            The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">            upper-right corners. If `None`, the image is positioned such that</span>
+<span class="sd">            the pixel centers fall on zero-based (row, column) indices.</span>
+<span class="sd">        - dpi : integer, optional, default is 96</span>
+<span class="sd">            Dot per inch. </span>
+<span class="sd">            For printed version, choose high dpi (i.e. dpi=300) =&gt; slow</span>
+<span class="sd">            For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</span>
+<span class="sd">        - format : string, optional, default is &#39;png&#39;</span>
+<span class="sd">            Format to save the figure</span>
+
+<span class="sd">        ... and more, see matplotlib  </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Sxx : 2d ndarray of floats</span>
+<span class="sd">        Spectrogram : Matrix containing K frames with N/2 frequency bins, </span>
+<span class="sd">        K*N &lt;= length (wave)</span>
+<span class="sd">        Sxx unit is power =&gt; Sxx_power if mode is &#39;psd&#39;</span>
+<span class="sd">        Sxx unit is amplitude =&gt; Sxx_ampli if mode is &#39;amplitude&#39; or &#39;complex&#39;</span>
+<span class="sd">    tn : 1d ndarray of floats</span>
+<span class="sd">        time vector (horizontal x-axis)    </span>
+<span class="sd">    fn : 1d ndarray of floats</span>
+<span class="sd">        Frequency vector (vertical y-axis)    </span>
+<span class="sd">    extent : list of scalars [left, right, bottom, top]</span>
+<span class="sd">        The location, in data-coordinates, of the lower-left and</span>
+<span class="sd">        upper-right corners. </span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This function takes care of the energy conservation which is crucial </span>
+<span class="sd">    when working in with sound pressure level (dB SPL)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s,fs = maad.sound.load(&quot;../data/guyana_tropical_forest.wav&quot;)</span>
+
+<span class="sd">    Compute energy of signal s</span>
+
+<span class="sd">    &gt;&gt;&gt; E1 = sum(s**2)</span>
+<span class="sd">    &gt;&gt;&gt; maad.util.power2dB(E1)</span>
+<span class="sd">    44.861029507805256</span>
+
+<span class="sd">    Compute the spectrogram with &#39;psd&#39; output (if N&lt;4096, the energy is lost)</span>
+
+<span class="sd">    &gt;&gt;&gt; N = 4096</span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = &#39;psd&#39;)   </span>
+
+<span class="sd">    Display Power Spectrogram</span>
+
+<span class="sd">    &gt;&gt;&gt; Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB</span>
+<span class="sd">    &gt;&gt;&gt; fig_kwargs = {&#39;vmax&#39;: Sxx_dB.max(),</span>
+<span class="sd">                      &#39;vmin&#39;:-70,</span>
+<span class="sd">                      &#39;extent&#39;:ext,</span>
+<span class="sd">                      &#39;figsize&#39;:(4,13),</span>
+<span class="sd">                      &#39;title&#39;:&#39;Power spectrogram density (PSD)&#39;,</span>
+<span class="sd">                      &#39;xlabel&#39;:&#39;Time [sec]&#39;,</span>
+<span class="sd">                      &#39;ylabel&#39;:&#39;Frequency [Hz]&#39;,</span>
+<span class="sd">                      }</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = maad.util.plot2d(Sxx_dB,**fig_kwargs)     </span>
+
+<span class="sd">    Compute mean power spectrogram</span>
+
+<span class="sd">    &gt;&gt;&gt; S_power_mean = maad.sound.avg_power_spectro(Sxx_power)</span>
+
+<span class="sd">    energy =&gt; power x time</span>
+
+<span class="sd">    &gt;&gt;&gt; E2 = sum(S_power_mean*len(s)) </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.power2dB(E2)</span>
+<span class="sd">    44.93083283875093</span>
+
+<span class="sd">    Compute the spectrogram with &#39;amplitude&#39; output</span>
+
+<span class="sd">    &gt;&gt;&gt; Sxx_ampli,tn,fn,_ = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode=&#39;amplitude&#39;)  </span>
+
+<span class="sd">    For energy conservation =&gt; convert Sxx_ampli (amplitude) into power before doing the average.</span>
+
+<span class="sd">    &gt;&gt;&gt; S_ampli_mean = maad.sound.avg_amplitude_spectro(Sxx_ampli)</span>
+<span class="sd">    &gt;&gt;&gt; S_power_mean = S_ampli_mean**2</span>
+
+<span class="sd">    energy =&gt; power x time</span>
+
+<span class="sd">    &gt;&gt;&gt; E3 = sum(S_power_mean*len(s)) </span>
+<span class="sd">    &gt;&gt;&gt; maad.util.power2dB(E3)</span>
+<span class="sd">    44.93083283875093</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Test if noverlap is None. By default, noverlap is half the length of the fft</span>
+    <span class="k">if</span> <span class="n">noverlap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">noverlap</span> <span class="o">=</span> <span class="n">nperseg</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="c1"># compute the number of frames</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">//</span><span class="p">(</span><span class="n">nperseg</span><span class="o">-</span><span class="n">noverlap</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># compute spectrogram</span>
+    <span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">Sxx_complex</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+                                                <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span>
+                                                <span class="n">nfft</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                                                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;complex&#39;</span><span class="p">,</span>
+                                                <span class="n">detrend</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                                <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Mutliply by the frequency resolution step (fs/nperseg) to get the power</span>
+    <span class="c1"># so multiply by the sqrt((fs/nperseg)) to get the amplitude</span>
+    <span class="c1"># Also multiply by sqrt(2) in order to compensate that only the postive frequencies are kept</span>
+    <span class="c1"># complex</span>
+    <span class="n">Sxx_complex</span> <span class="o">=</span> <span class="n">Sxx_complex</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="n">nperseg</span><span class="p">))</span>
+    <span class="c1"># magnitude</span>
+    <span class="n">Sxx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Sxx_complex</span><span class="p">)</span>
+    <span class="c1"># power</span>
+    <span class="n">PSDxx</span> <span class="o">=</span> <span class="n">Sxx</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;complex&#39;</span><span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_complex</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;psd&#39;</span><span class="p">:</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">PSDxx</span>
+
+    <span class="c1"># test if the last frames are computed on a whole time frame.</span>
+    <span class="c1"># if note =&gt; remove these frames</span>
+    <span class="k">if</span> <span class="n">PSDxx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">K</span><span class="p">:</span>
+        <span class="n">sup</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">K</span>
+        <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="n">sup</span><span class="p">]</span>
+        <span class="n">tn</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[:</span><span class="o">-</span><span class="n">sup</span><span class="p">]</span>
+
+    <span class="c1"># Remove the last frequency bin in order to obtain nperseg/2 frequency bins</span>
+    <span class="c1"># instead of nperseg/2 + 1</span>
+    <span class="n">Sxx_out</span> <span class="o">=</span> <span class="n">Sxx_out</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;spectrogram dimension Nx=</span><span class="si">%d</span><span class="s1"> Ny=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span>
+              <span class="p">(</span><span class="n">Sxx_complex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Sxx_complex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="c1"># Crop the image in order to analyzed only a portion of it</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">flims</span> <span class="ow">or</span> <span class="n">tlims</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Crop the spectrogram along time axis and frequency axis&#39;</span><span class="p">)</span>
+        <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span> <span class="o">=</span> <span class="n">crop_image</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">flims</span><span class="p">,</span> <span class="n">tlims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;max value of the spectrogram </span><span class="si">%.5f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">Sxx_out</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1"># Extent</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="c1"># dt and df resolution</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*************************************************************&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Time resolution dt=</span><span class="si">%.2f</span><span class="s2">s | Frequency resolution df=</span><span class="si">%.2f</span><span class="s2">Hz &quot;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">df</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*************************************************************&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Display</span>
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Time [sec]&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectrogram&#39;</span><span class="p">)</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+        <span class="n">figsize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="n">db_range</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;db_range&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span>
+
+        <span class="c1"># convert into dB</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;psd&#39;</span><span class="p">:</span>
+            <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="n">db_range</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">:</span>
+            <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">amplitude2dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="n">db_range</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;complex&#39;</span><span class="p">:</span>
+            <span class="n">Sxx_disp</span> <span class="o">=</span> <span class="n">amplitude2dB</span><span class="p">(</span><span class="n">Sxx_out</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="n">db_range</span><span class="p">)</span>
+
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">db_range</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="n">Sxx_disp</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plot2d</span><span class="p">(</span><span class="n">Sxx_disp</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                        <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># SAVE FIGURE</span>
+        <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dpi</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">)</span>
+            <span class="n">bbox_inches</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">)</span>
+            <span class="n">savefilename</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;savefilename&#39;</span><span class="p">,</span> <span class="s1">&#39;_spectrogram&#39;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">savefig</span><span class="o">+</span><span class="n">savefilename</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="nb">format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;&#39;save figure : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">bbox_inches</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Sxx_out</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">extent</span></div>
+
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="linear_to_octave"><a class="viewcode-back" href="../../../generated/maad.sound.linear_to_octave.html#maad.sound.linear_to_octave">[docs]</a><span class="k">def</span> <span class="nf">linear_to_octave</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">thirdOctave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave</span>
+<span class="sd">    spectrum (1d) or Spectrogram (2d).</span>
+
+<span class="sd">    Our advice is to work with PSD (amplitude²) for energy conservation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : ndarray of floats</span>
+<span class="sd">        Linear spectrum (1d) or Spectrogram (2d). </span>
+<span class="sd">        Work with PSD to be consistent with energy conservation</span>
+<span class="sd">    fn : 1d ndarray of floats</span>
+<span class="sd">        Frequency vector of the linear spectrum/spectrogram</span>
+<span class="sd">    thirdOctave : Boolean, default is True</span>
+<span class="sd">        choose between Octave or thirdOctave frequency resolution</span>
+<span class="sd">    display : boolean, default is False</span>
+<span class="sd">        Display the octave spectrum/spectrogram</span>
+<span class="sd">    ** kwargs : optional. This parameter is used by plt.plot    </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    X_octave : ndarray of floats</span>
+<span class="sd">        Octave or 1/3 octave Spectrum (1d) or Spectrogram (2d)</span>
+<span class="sd">    bin_octave : vector of floats</span>
+<span class="sd">        New frequency vector (octave or 1/3 octave frequency repartition)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn,fn, ext = maad.sound.spectrogram (w, fs, nperseg=8192)</span>
+<span class="sd">    &gt;&gt;&gt; maad.sound.linear_to_octave(Sxx_power, fn, display=True, extent=ext, vmin=-50)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># define the third octave or octave frequency vector in Hz.</span>
+    <span class="k">if</span> <span class="n">thirdOctave</span><span class="p">:</span>
+        <span class="n">bin_octave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mf">31.5</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span>
+                               <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">630</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1250</span><span class="p">,</span> <span class="mi">1600</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">3150</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span>
+                               <span class="mi">5000</span><span class="p">,</span> <span class="mi">6300</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">12500</span><span class="p">,</span> <span class="mi">16000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">])</span>  <span class="c1"># third octave band.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bin_octave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="mi">16000</span><span class="p">])</span>  <span class="c1"># octave</span>
+
+    <span class="c1"># get the corresponding octave from fn</span>
+    <span class="n">bin_octave</span> <span class="o">=</span> <span class="n">bin_octave</span><span class="p">[(</span><span class="n">bin_octave</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
+                            <span class="o">&amp;</span> <span class="p">(</span><span class="n">bin_octave</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">fn</span><span class="p">))]</span>
+
+    <span class="c1"># Bins limit</span>
+    <span class="n">bin_octave_low</span> <span class="o">=</span> <span class="n">bin_octave</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mf">0.1666666</span><span class="p">)</span>
+    <span class="n">bin_octave_up</span> <span class="o">=</span> <span class="n">bin_octave</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mf">0.1666666</span><span class="p">)</span>
+
+    <span class="c1"># select the indices corresponding to the frequency bins range</span>
+    <span class="n">X_octave</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bin_octave</span><span class="p">)):</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span> <span class="o">&gt;=</span> <span class="n">bin_octave_low</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fn</span> <span class="o">&lt;=</span> <span class="n">bin_octave_up</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+        <span class="n">X_octave</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">ind</span><span class="p">,</span> <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">X_octave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X_octave</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+        <span class="n">X_octave_dB</span> <span class="o">=</span> <span class="n">power2dB</span><span class="p">(</span><span class="n">X_octave</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">X_octave_dB</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;extent&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;Time [sec]&#39;</span>
+                <span class="n">duration</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">deltaT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">xticks</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span>
+                          <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">deltaT</span><span class="p">)</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;pseudoTime [points]&#39;</span>
+                <span class="n">xticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">100</span><span class="p">),</span>
+                <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+
+            <span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">X_octave_dB</span><span class="p">)),</span>
+                          <span class="s1">&#39;vmin&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">X_octave_dB</span><span class="p">)),</span>
+                          <span class="s1">&#39;xticks&#39;</span><span class="p">:</span> <span class="n">xticks</span><span class="p">,</span>
+                          <span class="s1">&#39;figsize&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="p">),</span>
+                          <span class="s1">&#39;yticks&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bin_octave</span><span class="p">)),</span> <span class="n">bin_octave</span><span class="p">),</span>
+                          <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Octave Spectrogram&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+                          <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">,</span>
+                          <span class="p">}</span>
+            <span class="n">plot2d</span><span class="p">(</span><span class="n">X_octave_dB</span><span class="p">,</span> <span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">X_octave_dB</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fig_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Octave Spectrum&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Amplitude [dB]&#39;</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="n">plot1d</span><span class="p">(</span><span class="n">bin_octave</span><span class="p">,</span> <span class="n">X_octave_dB</span><span class="p">,</span> <span class="o">**</span><span class="n">fig_kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">X_octave</span><span class="p">,</span> <span class="n">bin_octave</span></div>
+
+<span class="c1"># %%</span>
+
+
+<div class="viewcode-block" id="avg_power_spectro"><a class="viewcode-back" href="../../../generated/maad.sound.avg_power_spectro.html#maad.sound.avg_power_spectro">[docs]</a><span class="k">def</span> <span class="nf">avg_power_spectro</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the average of a power spectrogram along the time axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sxx_power : 2d ndarray of floats</span>
+<span class="sd">        Power spectrogram [Matrix]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    S_power_mean : 1d ndarray of floats</span>
+<span class="sd">        Power spectrum [Vector]</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    avg_amplitude_spectro</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_power,tn, fn, ext = maad.sound.spectrogram (w, fs)</span>
+
+<span class="sd">    Compute mean power spectrogram</span>
+
+<span class="sd">    &gt;&gt;&gt; S_power_mean = maad.sound.avg_power_spectro(Sxx_power)</span>
+<span class="sd">    &gt;&gt;&gt; S_power_mean</span>
+<span class="sd">    array([2.91313297e-04, 9.16802665e-04, 2.89179556e-04, 1.04767281e-04,</span>
+<span class="sd">       6.66154492e-05, 4.59636926e-05, 3.59688131e-05, 3.30869371e-05,</span>
+<span class="sd">       ...</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">S_power_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sxx_power</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">S_power_mean</span></div>
+
+<span class="c1"># %%</span>
+
+<div class="viewcode-block" id="avg_amplitude_spectro"><a class="viewcode-back" href="../../../generated/maad.sound.avg_amplitude_spectro.html#maad.sound.avg_amplitude_spectro">[docs]</a><span class="k">def</span> <span class="nf">avg_amplitude_spectro</span><span class="p">(</span><span class="n">Sxx_ampli</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the average of an amplitude spectrogram along the time axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sxx_ampli : 2d ndarray of floats</span>
+<span class="sd">        Amplitude spectrogram [Matrix]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    S_ampli_mean : 1d ndarray of floats</span>
+<span class="sd">        Amplitude spectrum [Vector]</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    avg_power_spectro</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; w, fs = maad.sound.load(&#39;../data/guyana_tropical_forest.wav&#39;) </span>
+<span class="sd">    &gt;&gt;&gt; Sxx_amplitude,tn, fn, ext = maad.sound.spectrogram (w, fs, mode=&quot;amplitude&quot;)</span>
+
+<span class="sd">    Compute mean amplitude spectrogram</span>
+
+<span class="sd">    &gt;&gt;&gt; S_amplitude_mean = maad.sound.avg_amplitude_spectro(Sxx_amplitude)</span>
+<span class="sd">    &gt;&gt;&gt; S_amplitude_mean</span>
+<span class="sd">    array([0.0170679 , 0.03027875, 0.01700528, 0.01023559, 0.00816183,</span>
+<span class="sd">       0.00677965, 0.0059974 , 0.00575212, 0.00700752, 0.00926279,</span>
+<span class="sd">       ...</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># average the amplitude spectrogram taking the PSD for energy conservation</span>
+    <span class="n">S_ampli_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sxx_ampli</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">S_ampli_mean</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

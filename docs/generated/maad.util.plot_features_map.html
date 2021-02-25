@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.util.plot_features_map &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.util.plot_features" href="maad.util.plot_features.html" />
+    <link rel="prev" title="maad.util.overlay_centroid" href="maad.util.overlay_centroid.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../util.html">Utilities</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../util.html#visualization">Visualization</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.util.rand_cmap.html">maad.util.rand_cmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.crop_image.html">maad.util.crop_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.save_figlist.html">maad.util.save_figlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_wave.html">maad.util.plot_wave</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_spectrum.html">maad.util.plot_spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_spectrogram.html">maad.util.plot_spectrogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_rois.html">maad.util.overlay_rois</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.overlay_centroid.html">maad.util.overlay_centroid</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.util.plot_features_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_features.html">maad.util.plot_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_correlation_map.html">maad.util.plot_correlation_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.plot_shape.html">maad.util.plot_shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.util.false_Color_Spectro.html">maad.util.false_Color_Spectro</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html#mathematical">Mathematical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html#parser">Parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../util.html">Utilities</a> &raquo;</li>
+        
+      <li>maad.util.plot_features_map</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.util.plot_features_map.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-util-plot-features-map">
+<h1>maad.util.plot_features_map<a class="headerlink" href="#maad-util-plot-features-map" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.util.plot_features_map">
+<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">plot_features_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'24h'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#plot_features_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.plot_features_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot features values on a heatmap.</p>
+<p>The plot has the features the vertical axis and the time on the horizontal axis.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>df</strong><span class="classifier">Panda DataFrame</span></dt><dd><p>DataFrame with features (ie. indices).</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">boolean, default is True</span></dt><dd><p>if True, the features are scaled between 0 to 1</p>
+</dd>
+<dt><strong>mode</strong><span class="classifier">string in {‘24h’}, default is ‘24h’</span></dt><dd><dl class="simple">
+<dt>Select if the timeline of the phenology :</dt><dd><p>-‘24h’ : average of the results over a day
+- otherwise, the timeline is the timeline of the dataframe</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>Specific to this function:</p>
+<ul class="simple">
+<li><p>ftime : Time format to display as x label by default ‘%Y-%m-%d’(see <a class="reference external" href="https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior">https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior</a>)</p></li>
+</ul>
+<p>Specific to matplotlib:</p>
+<ul>
+<li><p>figsize : tuple of integers, optional, default: (4,10) width, height in inches.</p></li>
+<li><p>title : string, optional, default : ‘Spectrogram’ title of the figure</p></li>
+<li><p>xlabel : string, optional, default : ‘Time [s]’ label of the horizontal axis</p></li>
+<li><p>ylabel : string, optional, default : ‘Amplitude [AU]’ label of the vertical axis</p></li>
+<li><dl>
+<dt>xticks<span class="classifier">tuple of ndarrays, optional, default</span><span class="classifier">none</span></dt><dd><ul class="simple">
+<li><p>ticks : array_like =&gt; A list of positions at which ticks should</p></li>
+</ul>
+<p>be placed. You can pass an empty list to disable yticks.
+* labels : array_like, optional =&gt;  A list of explicit labels to place 
+at the given locs.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>yticks<span class="classifier">tuple of ndarrays, optional, default</span><span class="classifier">none</span></dt><dd><ul class="simple">
+<li><p>ticks : array_like =&gt; A list of positions at which ticks should</p></li>
+</ul>
+<p>be placed. You can pass an empty list to disable yticks.
+* labels : array_like, optional =&gt;  A list of explicit labels to place 
+at the given locs.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+in order to get all the  existing colormaps
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’, 
+‘viridis’…</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+luminance data.  Note if you pass a <cite>norm</cite> instance, your
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>extent<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>now<span class="classifier">boolean, optional, default</span><span class="classifier">True</span></dt><dd><p>if True, display now. Cannot display multiple images. 
+To display mutliple images, set now=False until the last call for 
+the last image</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fig</strong><span class="classifier">Figure</span></dt><dd><p>The Figure instance</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">Axis</span></dt><dd><p>The Axis instance</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>see plot_extract_alpha_indices.py advanced example for a complete example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2021</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">indices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;00:00:00&#39;</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;23:00:00&#39;</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;1H&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">plot_features_map</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> 
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.util.plot_features.html" class="btn btn-neutral float-right" title="maad.util.plot_features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.util.overlay_centroid.html" class="btn btn-neutral float-left" title="maad.util.overlay_centroid" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

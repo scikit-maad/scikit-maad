@@ -1,68 +1,54 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" Segmentation methods for 1D signals
-
-This module gathers a collection of functions to detect regions of interest 
-on 1D signals
-
-Authors: Juan Sebastian Ulloa, Sylvain Haupert
-License: 3-Clause BSD license
+""" S
+Segmentation methods for 1D signals.
+This module gathers a collection of functions to detect regions of interest (ROIs)
+in the temporal domain.
 """
+#
+# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
+#
+# License: New BSD License
+
+# =============================================================================
+# Load the modules
+# =============================================================================
+# Import external modules
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import pandas as pd
 
-def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
-    """
-    Filter 1D signal with a Kaiser-windowed filter
-    
-    Parameters:
-    ----------
-        s : ndarray
-            input 1D signal
-        cutoff : ndarray
-            upper and lower frequencies (min_f, max_f)
-        atten : float 
-            attenuation in dB
-        transition_bw : float
-            transition bandwidth in percent default 5% of total band
-        bandpass : bool
-            bandpass (True) or bandreject (False) filter, default is bandpass
-    Returns:
-    -------
-        s_filt (array): signal filtered
-            
-    """
-    width = (cutoff[1] - cutoff[0]) * transition_bw
-    numtaps, beta = signal.kaiserord(atten, width/(0.5*fs))
-    np.ceil(numtaps-1) // 2 * 2 + 1  # round to nearest odd to have Type I filter
-    taps = signal.firwin(numtaps, cutoff, window=('kaiser', beta), 
-                         scale=False, nyq=0.5*fs, pass_zero=not(bandpass))
-    s_filt = signal.lfilter(taps, 1, s)
-    return s_filt
+# import internal modules
+from maad.sound import sinc
 
-
+#%%
+# =============================================================================
+# Private functions
+# =============================================================================
 def _corresp_onset_offset(onset, offset, tmin, tmax):
-    """ Check that each onsets have a corresponding offset 
+    """ 
+    Check that each onsets have a corresponding offset.
 
     Parameters
     ----------
-        onset: ndarray
-            array with onset from find_rois_1d
-        offset: ndarray
-            array with offset from find_rois_1d
-        tmin: float
-            Start time of wav file  (in s)
-        tmax:
-            End time of wav file  (in s)
+    onset: ndarray
+        array with onset from find_rois_1d
+    offset: ndarray
+        array with offset from find_rois_1d
+    tmin: float
+        Start time of wav file  (in s)
+    tmax:
+        End time of wav file  (in s)
+    
     Return
     ------
-        onset : ndarray
-            onset with corresponding offset
-        offset : ndarray
-            offset with corresponding onset
+    onset : ndarray
+        onset with corresponding offset
+    offset : ndarray
+        offset with corresponding onset
     """
     if onset[0] > offset[0]:      # check start
         onset = np.insert(onset,0,tmin)
@@ -74,28 +60,30 @@ def _corresp_onset_offset(onset, offset, tmin, tmax):
         pass
     return onset, offset
 
+#%%
 def _energy_windowed(s, wl=512, fs=None):
-    """ Computse windowed energy on signal
+    """ 
+    Computse windowed energy on an audio signal.
     
     Computes the energy of the signals by windows of length wl. Used to amplify sectors where the density of energy is higher
     
     Parameters
     ----------
-        s : ndarray
-            input signal
-        wl : float
-            length of the window to summarize the rms value
-        fs : float
-            frequency sampling of the signal, used to keep track of temporal information of the signal
+    s : ndarray
+        input signal
+    wl : float
+        length of the window to summarize the rms value
+    fs : float
+        frequency sampling of the signal, used to keep track of temporal information of the signal
 
     Returns
     -------
-        time : ndarray
-            temporal index vector
-        s_rms : ndarray
-            windowed rms signal
-        
+    time : ndarray
+        temporal index vector
+    s_rms : ndarray
+        windowed rms signal
     """
+    
     s_aux = np.lib.pad(s, (0, wl-len(s)%wl), 'reflect')  # padding
     s_aux = s_aux**2 
     #  s_aux = np.abs(s_aux) # absolute value. alternative option
@@ -104,40 +92,59 @@ def _energy_windowed(s, wl=512, fs=None):
     time = np.arange(0,len(s_rms)) * wl / fs + wl*0.5/fs
     return time, s_rms
 
+#%%
+# =============================================================================
+# Public functions
+# =============================================================================
 def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
                   savefilename='rois.csv', **kwargs):
     """
-    Find region of interest (ROIS) based on predetermined temporal length and frequency limits
+    Find region of interest using known estimates of signal length and frequency limits.
     
     The general approach is based on continous wavelet transform following a three step process
-        1. Filter the signal with a bandpass sinc filter
-        2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [See ref 1]
-        3. Binarize the signal applying a linear threshold
+    
+    1. Filter the signal with a bandpass sinc filter
+    
+    2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [1]
+    
+    3. Binarize the signal applying a linear threshold
         
     Parameters
     ----------
-        s : ndarray
-            input signal
-        flims : int
-            upper and lower frequencies (in Hz) 
-        tlen : int 
-            temporal length of signal searched (in s)
-        th : float, optional
-            threshold to binarize the output
-        display: boolean, optional, default is False
-            plot results if set to True, default is False
-        save_df : boolean, optional
-            save results to csv file
-        savefilename : str, optional
-            Name of the file to save the table as comma separatd values (csv)        
+    s : ndarray
+        input signal
+    flims : int
+        upper and lower frequencies (in Hz) 
+    tlen : int 
+        temporal length of signal searched (in s)
+    th : float, optional
+        threshold to binarize the output
+    display: boolean, optional, default is False
+        plot results if set to True, default is False
+    save_df : boolean, optional
+        save results to csv file
+    savefilename : str, optional
+        Name of the file to save the table as comma separatd values (csv)        
+    
     Returns
     -------
-        rois : pandas DataFrame
-            an object with temporal and frequencial limits of regions of interest            
+    rois : pandas DataFrame
+        an table with temporal and frequencial limits of regions of interest            
     
-    Reference
-    ---------
-    [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
+    References
+    ----------
+    .. [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
+    
+    Examples
+    --------
+    >>> from maad import sound, rois
+    >>> s, fs = sound.load('./data/spinetail.wav')
+    >>> rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
+        min_f     min_t   max_f     max_t
+    0  4500.0   0.74304  8000.0   2.50776
+    1  4500.0   5.10839  8000.0   7.33751
+    2  4500.0  11.23846  8000.0  13.37469
+    3  4500.0  16.16109  8000.0  18.29732
     """
     # filter signal
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)

@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Batch - This script gives an example of how to use scikit-MAAD package &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Batch - This script gives an example of how to use scikit-MAAD package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_auto_examples/maad_batch.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-maad-batch-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="batch-this-script-gives-an-example-of-how-to-use-scikit-maad-package">
+<span id="sphx-glr-auto-examples-maad-batch-py"></span><h1>Batch - This script gives an example of how to use scikit-MAAD package<a class="headerlink" href="#batch-this-script-gives-an-example-of-how-to-use-scikit-maad-package" title="Permalink to this headline">¶</a></h1>
+<p>Created on Mon Aug  6 17:59:44 2018
+&#64;author: haupert</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># Clear all the variables</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;reset -sf&#39;</span><span class="p">)</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Load the modules</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># for csv</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ############## Import MAAD module</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a> <span class="c1"># in order to be wind/linux/MacOS compatible</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># change the path to the current path where the script is located</span>
+<span class="c1"># Get the current dir of the current file</span>
+<span class="n">dir_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.dirname" title="os.path.dirname" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/os.path.html#os.path.realpath" title="os.path.realpath" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span></a><span class="p">(</span><span class="s1">&#39;__file__&#39;</span><span class="p">))</span>
+<a href="https://docs.python.org/3/library/os.html#os.chdir" title="os.chdir" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">chdir</span></a><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+
+<span class="n">maad_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">os</span><span class="o">.</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">maad_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="kn">import</span> <span class="nn">maad</span>
+
+<span class="c1"># Close all the figures (like in Matlab)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------------          options              ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1"># root directory of the files</span>
+<span class="n">rootdir</span> <span class="o">=</span> <span class="s1">&#39;D:</span><span class="se">\\</span><span class="s1">mes_projets_data</span><span class="se">\\</span><span class="s1">2018</span><span class="se">\\</span><span class="s1">FRANCE</span><span class="se">\\</span><span class="s1">PNR_JURA</span><span class="se">\\</span><span class="s1">Magneto4</span><span class="se">\\</span><span class="s1">Data</span><span class="se">\\</span><span class="s1">&#39;</span>
+<span class="n">savedir</span> <span class="o">=</span> <span class="s1">&#39;D:</span><span class="se">\\</span><span class="s1">mes_projets_data</span><span class="se">\\</span><span class="s1">2018</span><span class="se">\\</span><span class="s1">FRANCE</span><span class="se">\\</span><span class="s1">PNR_JURA</span><span class="se">\\</span><span class="s1">Magneto4</span><span class="se">\\</span><span class="s1">Results</span><span class="se">\\</span><span class="s1">&#39;</span>
+<span class="n">save_csv</span> <span class="o">=</span> <span class="s1">&#39;magneto04&#39;</span>
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------------          end options          ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+
+
+<span class="sd">&quot;&quot;&quot;****************************************************************************</span>
+<span class="sd"># -------------- LOAD SOUND AND PREPROCESS SOUND    ---------------------------</span>
+<span class="sd">****************************************************************************&quot;&quot;&quot;</span>
+<span class="c1"># find a file in subdirectories</span>
+<span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subFolders</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/os.html#os.walk" title="os.walk" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">walk</span></a><span class="p">(</span><span class="n">rootdir</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;.wav&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+            <span class="c1"># Save file basename</span>
+            <span class="n">savefile_base</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">savefile</span> <span class="o">=</span> <span class="n">savedir</span><span class="o">+</span><span class="n">savefile_base</span>
+
+            <span class="c1"># Load the original sound</span>
+            <span class="n">s</span><span class="p">,</span><span class="n">fs</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                                        <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Filter the sound between Low frequency cut (lfc) and High frequency cut (hlc)</span>
+            <span class="n">s_filt</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">select_bandwidth</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">lfc</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hfc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                                 <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Compute the spectrogram of the sound</span>
+            <span class="n">overlap</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">convert_dt_df_into_points</span><span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span>
+                                                                            <span class="n">df</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
+            <span class="n">im_ref</span><span class="p">,</span><span class="n">tn</span><span class="p">,</span><span class="n">fn</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">s_filt</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                                                   <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span> <span class="n">db_range</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                                                   <span class="n">db_gain</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">db_norm_val</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                   <span class="n">fcrop</span> <span class="o">=</span><span class="p">[</span><span class="mi">1100</span><span class="p">,</span><span class="mi">11100</span><span class="p">],</span> <span class="n">tcrop</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                                   <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="n">savefile_base</span><span class="p">)</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">tn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Noise subtraction</span>
+            <span class="n">win_px</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">df</span><span class="p">)</span>   <span class="c1"># convert window width from Hz into pixels</span>
+            <span class="n">std_px</span><span class="o">=</span><span class="n">win_px</span><span class="o">*</span><span class="mi">3</span>         <span class="c1"># convert std from Hz into pixels</span>
+            <span class="n">im_denoized</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">noise_subtraction</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">gauss_win</span><span class="o">=</span><span class="n">win_px</span><span class="p">,</span>
+                                                      <span class="n">gauss_std</span><span class="o">=</span><span class="n">std_px</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                      <span class="n">llambda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                      <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Blurring</span>
+            <span class="n">im_blurred</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">blurr</span><span class="p">(</span><span class="n">im_denoized</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                         <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Binarization</span>
+            <span class="n">im_bin</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">create_mask</span><span class="p">(</span><span class="n">im_blurred</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">bin_c</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">bin_l</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                           <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Rois extraction</span>
+            <span class="n">im_rois</span><span class="p">,</span> <span class="n">rois_bbox</span>  <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">select_rois</span><span class="p">(</span><span class="n">im_bin</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">min_roi</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+                                                         <span class="n">max_roi</span><span class="o">=</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                         <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># display overlay ROIs</span>
+            <span class="n">maad</span><span class="o">.</span><span class="n">rois</span><span class="o">.</span><span class="n">overlay_rois</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">rois_bbox</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="n">savefile_base</span><span class="p">)</span>
+
+            <span class="c1"># Characterise ROIs</span>
+            <span class="n">freq</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">ntheta</span><span class="o">=</span><span class="mi">2</span>
+
+            <span class="n">params</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">filter_bank_2d_nodc</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span>
+                                                                <span class="n">ntheta</span><span class="o">=</span><span class="n">ntheta</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                                <span class="n">gamma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                                <span class="n">savefig</span><span class="o">=</span><span class="n">savefile_base</span><span class="p">)</span>
+
+            <span class="c1"># multiresolution image filtering (Gaussian pyramids)</span>
+            <span class="n">im_filtlist</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">filter_multires</span><span class="p">(</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">kernels</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
+                                                        <span class="n">npyr</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+            <span class="c1"># Extract shape features for each roi</span>
+            <span class="n">params_features</span><span class="p">,</span> <span class="n">shape_features</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">shapes</span><span class="p">(</span><span class="n">im_list</span> <span class="o">=</span> <span class="n">im_filtlist</span><span class="p">,</span>
+                                                                   <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span>
+                                                                   <span class="n">im_rois</span><span class="o">=</span><span class="n">im_rois</span><span class="p">)</span>
+
+            <span class="c1"># Extract centroids features for each roi</span>
+            <span class="n">centroid_features</span> <span class="o">=</span> <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">centroids</span><span class="p">(</span><span class="n">im</span><span class="o">=</span><span class="n">im_ref</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span>
+                                                        <span class="n">date</span><span class="o">=</span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">date_from_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
+                                                        <span class="n">im_rois</span><span class="o">=</span><span class="n">im_rois</span><span class="p">)</span>
+
+            <span class="c1"># table = maad.features.create_csv(shape_features, centroid_features)</span>
+            <span class="n">maad</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">save_csv</span><span class="p">(</span><span class="n">save_csv</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span>
+                                   <span class="n">shape_features</span><span class="p">,</span> <span class="n">centroid_features</span><span class="p">,</span>
+                                   <span class="n">label_features</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="mi">82</span> <span class="o">*</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Data vizualization with pandas</span>
+<span class="c1"># ============================================================================</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># table with a summray of the features value</span>
+<span class="n">features</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+
+<span class="c1"># histograpm for each features</span>
+<span class="c1"># features.hist(bins=50, figsize=(20,15))</span>
+<span class="c1"># plt.show()</span>
+
+<span class="c1"># Find correlations.</span>
+<span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">corr_matrix</span><span class="p">[</span><span class="s2">&quot;shp5&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">corr_matrix</span><span class="p">[</span><span class="s2">&quot;shp7&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-maad-batch-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/31be66c996dc9d4ae8abc34dbc8fbf59/maad_batch.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">maad_batch.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/0ad2614ad8e58f584a85db31e94ebe6e/maad_batch.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">maad_batch.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

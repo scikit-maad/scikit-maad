@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>features.shape.all_shape_features &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>features.shape.all_shape_features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/features.shape.all_shape_features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="features-shape-all-shape-features">
+<h1>features.shape.all_shape_features<a class="headerlink" href="#features-shape-all-shape-features" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="features.shape.all_shape_features">
+<code class="sig-prename descclassname">features.shape.</code><code class="sig-name descname">all_shape_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">rois</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">'low'</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/features/shape.html#all_shape_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.shape.all_shape_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes shape and central frequency features from signal at specified 
+time-frequency limits defined by regions of interest (ROIs).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>s: ndarray</strong></dt><dd><p>Singal to be analysed</p>
+</dd>
+<dt><strong>fs: int</strong></dt><dd><p>Sampling frequency of the signal</p>
+</dd>
+<dt><strong>rois: pandas DataFrame</strong></dt><dd><p>Time frequency limits for the analysis. Columns should have at 
+least min_t, max_t, min_f, max_f. Can be computed with multiple 
+detection methods, such as find_rois_cwt</p>
+</dd>
+<dt><strong>resolution: str or dict, default is ‘med’</strong></dt><dd><p>Specify resolution of shape descriptors. Can be: ‘low’, ‘med’, ‘high’. 
+Default is ‘low’. Alternatively, custom resolution can be provided  
+using a dictionary with options to define the filter bank. Valid keys  
+are: ntheta, bandwidth, frequency, gamma, npyr</p>
+</dd>
+<dt><strong>opt_spec: dictionnary, optional</strong></dt><dd><p>Options for the spectrogram with keys, window length ‘nperseg’, 
+window overlap in percentage ‘overlap’ and frequency limits ‘flims’ 
+which is a list of 2 scalars : minimum and maximum boundary frequency  
+values in Hertz</p>
+</dd>
+<dt><strong>display: boolean, optional, default is False</strong></dt><dd><p>Flag. If display is True, plot results</p>
+</dd>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>savefilename<span class="classifier">str, optional, default :’_spectro_overlaycentroid.png’ </span></dt><dd><p>Postfix of the figure filename</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’ </span></dt><dd><p>title of the figure</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’ </span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’ </span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’ </span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a> 
+in order to get all the  existing colormaps 
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,  
+‘viridis’…</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None </span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize 
+luminance data.  Note if you pass a <cite>norm</cite> instance, your 
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>dpi<span class="classifier">integer, optional, default is 96 </span></dt><dd><p>Dot per inch.  
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow 
+For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>format<span class="classifier">string, optional, default is ‘png’ </span></dt><dd><p>Format to save the figure</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>feature_rois: pandas Dataframe</dt><dd><p>A dataframe with each column corresponding to a feature</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">read_audacity_annot</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.sound</span> <span class="kn">import</span> <span class="n">load</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">maad.features</span> <span class="kn">import</span> <span class="n">all_shape_features</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rois</span> <span class="o">=</span> <span class="n">read_audacity_annot</span><span class="p">(</span><span class="s1">&#39;../data/spinetail.txt&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="n">all_shape_features</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">rois</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span>
+<span class="go">    label      min_t     ...       duration_x  bandwidth_y</span>
+<span class="go">    0     SP   0.101385     ...              0.0          0.0</span>
+<span class="go">    1   CRER   0.506924     ...              0.0          0.0</span>
+<span class="go">    2     SP   1.203945     ...              0.0          0.0</span>
+<span class="go">    3     SP   2.724718     ...              0.0          0.0</span>
+<span class="go">    4   CRER   5.221319     ...              0.0          0.0</span>
+<span class="go">    5     SP   6.260514     ...              0.0          0.0</span>
+<span class="go">    6     SP   7.946037     ...              0.0          0.0</span>
+<span class="go">    7     SP   8.896519     ...              0.0          0.0</span>
+<span class="go">    8     SP   9.973733     ...              0.0          0.0</span>
+<span class="go">    9   CRER  11.329756     ...              0.0          0.0</span>
+<span class="go">    10    SP  11.773314     ...              0.0          0.0</span>
+<span class="go">    ....</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">Index([&#39;label&#39;, &#39;min_t&#39;, &#39;min_f&#39;, &#39;max_t&#39;, &#39;max_f&#39;, &#39;min_y&#39;, &#39;min_x&#39;, &#39;max_y&#39;,</span>
+<span class="go">       &#39;max_x&#39;, &#39;shp_001&#39;, &#39;shp_002&#39;, &#39;shp_003&#39;, &#39;shp_004&#39;, &#39;shp_005&#39;,</span>
+<span class="go">       &#39;shp_006&#39;, &#39;shp_007&#39;, &#39;shp_008&#39;, &#39;shp_009&#39;, &#39;shp_010&#39;, &#39;shp_011&#39;,</span>
+<span class="go">       &#39;shp_012&#39;, &#39;shp_013&#39;, &#39;shp_014&#39;, &#39;shp_015&#39;, &#39;shp_016&#39;, &#39;centroid_y&#39;,</span>
+<span class="go">       &#39;centroid_x&#39;, &#39;duration_x&#39;, &#39;bandwidth_y&#39;, &#39;area_xy&#39;, &#39;centroid_f&#39;,</span>
+<span class="go">       &#39;centroid_t&#39;, &#39;duration_t&#39;, &#39;bandwidth_f&#39;, &#39;area_tf&#39;],</span>
+<span class="go">      dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

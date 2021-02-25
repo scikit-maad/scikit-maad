@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.false_Color_Spectro &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sound.html">Sound processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>util.false_Color_Spectro</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_autosummary/generated/util.false_Color_Spectro.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="util-false-color-spectro">
+<h1>util.false_Color_Spectro<a class="headerlink" href="#util-false-color-spectro" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="util.false_Color_Spectro">
+<code class="sig-prename descclassname">util.</code><code class="sig-name descname">false_Color_Spectro</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">indices</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">plim</span><span class="o">=</span><span class="default_value">(1, 99)</span></em>, <em class="sig-param"><span class="n">reverseLUT</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">permut</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">unit</span><span class="o">=</span><span class="default_value">'minutes'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/util/visualization.html#false_Color_Spectro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.false_Color_Spectro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create False Color Spectrogram from indices obtained by MAAD.
+Only indices than can be computed bin per bin (ie frequency per frequency)
+are used to create False Color Spectro. They are called xxx_per_bin.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>df</strong><span class="classifier">Panda DataFrame</span></dt><dd><p>DataFrame with indices per frequency bin.</p>
+</dd>
+<dt><strong>indices</strong><span class="classifier">list, default is None</span></dt><dd><p>List of indices. 
+If permut is False (see permut),</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if indices is None<span class="classifier">1st indices is red (R), 2nd indice is green (G) </span></dt><dd><p>and the 3rd indices is blue (B).</p>
+</dd>
+</dl>
+<p>if indices is a list of 3 indices or more, only the 3 first indices
+(triplet) are used to create the false color spectro.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if permut is True,</dt><dd><p>if indices is None : All indices in df are used
+if indices is a list of 3 indices or more, all the indices in the 
+list are used to create the false color spectro with all the 
+possibile permutations.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>plim</strong><span class="classifier">list of 2 scalars, default is (1,99)</span></dt><dd><p>Set the minimum and maximum percentile to define the min and max value 
+of each indice. These values are then used to clip the values of each 
+indices between these limits.</p>
+</dd>
+<dt><strong>reverseLUT: boolean, default is False</strong></dt><dd><p>LUT : look-up table.
+if False, the highest indice value is the brigthest color (255) 
+and the lowest indice value is the darkest (0)
+if True, it’s the reverse order, the highest indice value is the 
+darkest color (0) and the lowest is the brighest (255)</p>
+</dd>
+<dt><strong>permut</strong><span class="classifier">boolean, default is False</span></dt><dd><p>if True, all the permutations possible for red, green, blue are computed
+among the list of indices (see indices)</p>
+</dd>
+<dt><strong>unit</strong><span class="classifier">string in {‘minutes’, ‘hours’, ‘days’, ‘weeks’}, default is ‘minutes’</span></dt><dd><p>Select the unit base for x axis</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">boolean, default is False</span></dt><dd><p>print indices on the default terminal</p>
+</dd>
+<dt><strong>display</strong><span class="classifier">boolean, default is False</span></dt><dd><p>Display False Color Spectro</p>
+</dd>
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>if not None, figures will be safe. Savefig is the prefix of the save
+filename.</p>
+</dd>
+<dt><strong>**kwargs, optional</strong></dt><dd><ul class="simple">
+<li><p>dpi : scalar, optional, default 96</p></li>
+<li><p>format : str, optional, default .png</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>false_color_image</strong><span class="classifier">ndarray of scalars</span></dt><dd><p>Matrix with ndim = 4 if multiple false color spectro or ndim = 3, if
+single false color spectro with 3 colors : R, G, B</p>
+</dd>
+<dt><strong>triplet</strong><span class="classifier">list</span></dt><dd><p>List of triplet of indices corresponding to each false color spectro</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>see plot_extract_alpha_indices.py advanced example for a complete example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A_per_bin</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span>
+<span class="go">                 [0.3,0.3,0.3,0.3,0.3],</span>
+<span class="go">                 [0.5,0.5,0.3,0.0,0.0],</span>
+<span class="go">                 [0.2,0.2,0.3,0.0,0.0],</span>
+<span class="go">                 [0.0,0.0,0.3,0.0,0.0]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B_per_bin</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span>
+<span class="go">                 [0.5,0.5,0.5,0.5,0.5],</span>
+<span class="go">                 [0.5,0.5,0.2,0.0,0.0],</span>
+<span class="go">                 [0.5,0.2,0.1,0.0,0.0],</span>
+<span class="go">                 [0.5,0.2,0.0,0.0,0.0]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C_per_bin</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span>
+<span class="go">                 [0.7,0.2,0.0,0.5,0.5],</span>
+<span class="go">                 [0.5,0.5,0.7,0.2,0.2],</span>
+<span class="go">                 [0.0,0.7,0.0,0.2,0.2],</span>
+<span class="go">                 [0.7,0.2,0.0,0.2,0.2]]   </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">A_per_bin</span><span class="p">,</span><span class="n">B_per_bin</span><span class="p">,</span><span class="n">C_per_bin</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">T</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A_per_bin&#39;</span><span class="p">,</span><span class="s1">&#39;B_per_bin&#39;</span><span class="p">,</span><span class="s1">&#39;C_per_bin&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;20200101&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maad</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">false_Color_Spectro</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span> <span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;days&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>
