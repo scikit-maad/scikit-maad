@@ -26,6 +26,7 @@ sound
 util
     Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`    
 """
+from .version import __version__
 
 from . import spl
 from . import features
