@@ -1005,9 +1005,11 @@ def crossfade(s1, s2, fs, fade_len=1):
     
     Examples
     --------
-    from maad import sound, util
-    s, fs = sound.load('../data/spinetail.wav')
-    s1 = sound.trim(s, fs, )
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s1 = sound.trim(s, fs, 0, 4)
+    >>> s2 = sound.trim(s, fs, 15, 19)
+    >>> s_out = util.crossfade(s1, s2, fs, fade_len=1)
     
     """
     fade_in = np.sqrt(np.arange(0, fs * fade_len) / (fs * fade_len))
@@ -1039,6 +1041,11 @@ def crossfade_list(s_list, fs, fade_len=1):
     Returns
     -------
         s_out : ndarray
+    
+    See also
+    --------
+    crossfade
+    
     """
 
     for idx, s in enumerate(s_list):

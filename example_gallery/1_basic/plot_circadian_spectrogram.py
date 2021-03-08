@@ -22,6 +22,7 @@ files to build a visual representation of a 24 hour natural soundscape.
 
 #%% Load packages and set variables.
 import glob
+import matplotlib.pyplot as plt
 from maad import sound, util
 
 fpath = '../data/indices/'  # location of audio files
