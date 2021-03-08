@@ -977,3 +977,75 @@ def format_features(df, tn, fn):
         count += 1
 
     return df
+
+def crossfade(s1, s2, fs, fade_len=1):
+    """
+    AAdd a smooth transition (cross-fade) between two audio signals.
+    The function applies a squared function to apply the transition between signals. 
+    The signals must have the same sampling rate.
+    
+    Parameters
+    ----------
+    s1 : numpy.ndarray
+        First audio signal.
+    s2 : numpy.ndarray
+        Second audio signal.
+    fs: int
+        Sampling frequency of signals. 
+
+    Returns
+    -------
+    s_out: numpy.ndarray
+        Signal with the resulting crossfade between s1 and s2. The length in seconds 
+        of the resulting signal is: `len(s1)/fs + len(s1)/fs - fade_len`. 
+
+    See also
+    --------
+    crossfade_list
+    
+    Examples
+    --------
+    from maad import sound, util
+    s, fs = sound.load('../data/spinetail.wav')
+    s1 = sound.trim(s, fs, )
+    
+    """
+    fade_in = np.sqrt(np.arange(0, fs * fade_len) / (fs * fade_len))
+    fade_out = np.flip(fade_in)
+    fstart_idx = len(s1) - (fs * fade_len) - 1
+    fstop_idx = fs * fade_len
+    s1_fade_out = s1[fstart_idx:-1] * fade_out
+    s2_fade_in = s2[0:fstop_idx] * fade_in
+    s_out = np.concatenate(
+        [s1[0 : fstart_idx + 1], s1_fade_out + s2_fade_in, s2[fstop_idx - 1 : -1]]
+    )
+    return s_out
+
+def crossfade_list(s_list, fs, fade_len=1):
+    """
+    Apply a cross-fade to a list of audio signals.
+    Audio signlas must be numpy arrays with the same sampling rate. The function applies 
+    a squared function to apply the transition between signals.
+
+    Parameters
+    ----------
+        s_list : list
+            List with audio signlas (1D numpy arrays) to be concatenated
+        fs : int
+            sampling frequency
+        fade_len: float
+            length of fade between audio in seconds
+    
+    Returns
+    -------
+        s_out : ndarray
+    """
+
+    for idx, s in enumerate(s_list):
+        if idx == 0:
+            s_out = s_list[idx]
+        else:
+            s = s_list[idx]
+            s_out = crossfade(s_out, s, fs)
+
+    return s_out

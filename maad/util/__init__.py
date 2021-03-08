@@ -67,6 +67,8 @@ Miscellaneous
     nearest_idx
     get_df_single_row
     format_features
+    crossfade
+    crossfade_list
 
 """
 
@@ -83,7 +85,9 @@ from .miscellaneous import (index_bw,
                            add_dB,
                            nearest_idx,
                            get_df_single_row,
-                           format_features)
+                           format_features,
+                           crossfade,
+                           crossfade_list)
 
 from .visualization import (rand_cmap,
                            crop_image,
@@ -128,6 +132,8 @@ __all__ = [
            'nearest_idx',
            'get_df_single_row',
            'format_features',
+           'crossfade',
+           'crossfade_list',
            #  visualization      
            'rand_cmap',
            'crop_image',
