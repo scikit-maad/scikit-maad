@@ -28,14 +28,9 @@ from maad.util import (power2dB, plot2d, format_features, read_audacity_annot,
 # First, load and audio file and compute the power spectrogram.
 s, fs = sound.load('../../data/cold_forest_daylight.wav')
 
-t0 = 0
-t1 = 20
-f0 = 100
-f1 = 10000
 dB_max = 96
 
-Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2,
-                                     flims=(f0,f1), tlims=(t0,t1))
+Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
 
 # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
 # range when quantification bit is 16bits and display the result
