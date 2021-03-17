@@ -23,6 +23,7 @@ Preprocess audio
     sinc
     smooth
     select_bandwidth
+    pcen
     remove_background
     remove_background_morpho
     remove_background_along_axis
@@ -63,7 +64,8 @@ from .filter import (select_bandwidth,
                      sinc,
                      smooth)
 
-from .spectral_subtraction import (remove_background,
+from .spectral_subtraction import (pcen,
+                                   remove_background,
                                    remove_background_morpho,
                                    remove_background_along_axis,
                                    median_equalizer)
@@ -95,6 +97,7 @@ __all__ = [
         'sinc',
         'smooth',
         # spectral_subtraction.py
+        'pcen',
         'remove_background', 
         'remove_background_morpho',
         'remove_background_along_axis',

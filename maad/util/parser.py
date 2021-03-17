@@ -110,24 +110,29 @@ def read_audacity_annot (audacity_filename):
     >>> overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
     
     """
-    # read file with tab delimiter
-    tab_in = pd.read_csv(audacity_filename, delimiter='\t', header=None)
-    
-    # arrange data
-    t_info = tab_in.loc[np.arange(0,len(tab_in),2),:]
-    t_info = t_info.rename(index=str, columns={0: 'min_t', 1: 'max_t', 2:'label'})
-    t_info = t_info.reset_index(drop=True)
-    
-    f_info = tab_in.loc[np.arange(1,len(tab_in)+1,2),:]
-    f_info = f_info.rename(index=str, columns={0: 'slash', 1: 'min_f', 2:'max_f'})
-    f_info = f_info.reset_index(drop=True)
-    
-    # return dataframe
-    tab_out = pd.concat([t_info['label'].astype('str'), 
-                         t_info['min_t'].astype('float32'), 
-                         f_info['min_f'].astype('float32'), 
-                         t_info['max_t'].astype('float32'), 
-                         f_info['max_f'].astype('float32')],  axis=1)
+    # try to read file with tab delimiter (if the file is not empty)
+    try:
+        tab_in = pd.read_csv(audacity_filename, delimiter='\t', header=None)
+
+        # arrange data
+        t_info = tab_in.loc[np.arange(0, len(tab_in), 2), :]
+        t_info = t_info.rename(index=str, columns={
+                               0: 'min_t', 1: 'max_t', 2: 'label'})
+        t_info = t_info.reset_index(drop=True)
+
+        f_info = tab_in.loc[np.arange(1, len(tab_in)+1, 2), :]
+        f_info = f_info.rename(index=str, columns={
+                               0: 'slash', 1: 'min_f', 2: 'max_f'})
+        f_info = f_info.reset_index(drop=True)
+
+        # return dataframe
+        tab_out = pd.concat([t_info['label'].astype('str'),
+                             t_info['min_t'].astype('float32'),
+                             f_info['min_f'].astype('float32'),
+                             t_info['max_t'].astype('float32'),
+                             f_info['max_f'].astype('float32')],  axis=1)
+    except :
+        tab_out = pd.DataFrame()
 
     return tab_out
 

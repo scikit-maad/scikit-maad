@@ -2236,7 +2236,7 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
 def region_of_interest_index(Sxx_dB_noNoise, tn, fn, 
                           smooth_param1=1, mask_mode='relative', 
                           mask_param1=6, mask_param2=0.5, 
-                          min_roi=25, max_roi=512*10000, 
+                          min_roi=9, max_roi=512*10000, 
                           display=False, **kwargs):
     """
     Compute an acoustic activity index based on the regions of interested detected on a spectrogram.
