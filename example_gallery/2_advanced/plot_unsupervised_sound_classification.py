@@ -20,7 +20,7 @@ from maad.util import power2dB, plot2d, format_features, overlay_rois
 #%%
 # Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
 
-s, fs = sound.load('/Users/jsulloa/Downloads/rock_savana.wav')
+s, fs = sound.load('../../data/guyana_tropical_forest.wav')
 s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 
 db_max=70  # used to define the range of the spectrogram

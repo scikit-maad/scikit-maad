@@ -35,7 +35,7 @@ f1 = 10000
 dB_max = 96
 
 Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2,
-                                     fcrop=(f0,f1), tcrop=(t0,t1))
+                                     flims=(f0,f1), tlims=(t0,t1))
 
 # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
 # range when quantification bit is 16bits and display the result
