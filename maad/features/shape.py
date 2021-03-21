@@ -656,18 +656,15 @@ def shape_features(Sxx, resolution='low', rois=None):
             shape.append(np.mean(im)) 
         shape = [shape]  # for dataframe formating below
     else: 
-        shape = np.zeros(shape=(len(rois),len(im_rs))) 
-        index_pyr = 0 
-        for im in im_rs: 
-            index_row = 0 
-            for _, row in rois.iterrows() : 
-                row = pd.DataFrame(row).T 
-                im_blobs = rois_to_imblobs(np.zeros(Sxx.shape), row)
-                roi_mean = (im * im_blobs).sum() / im_blobs.sum() 
-                shape[index_row,index_pyr]= roi_mean 
-                index_row = index_row + 1 
-            index_pyr = index_pyr + 1 
-     
+        shape = np.zeros(shape=(len(rois),len(im_rs)))
+        im_rs = np.array(im_rs)
+        index_row = 0 
+        for _, row in rois.iterrows(): 
+            im_rs_blobs = im_rs[:, row.min_y:row.max_y+1, row.min_x:row.max_x+1]
+            roi_mean = np.mean(im_rs_blobs, axis=(1,2))
+            shape[index_row,:] = roi_mean 
+            index_row = index_row + 1 
+    
     # organise parameters 
     params_multires = _params_to_df(params, npyr) 
      
