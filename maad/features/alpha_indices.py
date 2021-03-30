@@ -18,6 +18,7 @@ Collection of functions to compute alpha acoustic indices to chracterise audio s
 import numbers
 import numpy as np 
 from numpy import sum, log, min, max, abs, mean, median, sqrt, diff, var
+from skimage.morphology import opening
 from scipy.ndimage.morphology import binary_erosion, binary_dilation
 from scipy.stats import rankdata
 from scipy.signal import find_peaks
@@ -2237,6 +2238,7 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
                           smooth_param1=1, mask_mode='relative', 
                           mask_param1=6, mask_param2=0.5, 
                           min_roi=9, max_roi=512*10000, 
+                          remove_rain = False,
                           display=False, **kwargs):
     """
     Compute an acoustic activity index based on the regions of interested detected on a spectrogram.
@@ -2274,7 +2276,10 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     min_roi, max_roi : scalars, optional, default : 9,  512*10000
         Define the minimum and the maximum area possible for an ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
-        the image     
+        the image    
+    remove_rain : boolean, default is False
+        If True, vertical frequency spikes due to rain are removed as possible
+        by applying a morphological mathematical image processing : grey opening
     display : boolean, default is false
         plot graphs and spectrograms
     /*/*kwargs optional. This parameter is used by plt.plot and savefig functions 
@@ -2305,6 +2310,10 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     # extent
     kwargs.update({'extent':(tn[0], tn[-1], fn[0], fn[-1])})
     
+    # if remove rain => remove frequential spikes (rain)
+    if remove_rain == True :
+        Sxx_dB_noNoise = opening(Sxx_dB_noNoise, selem=np.ones([1,5]))
+
     # Smooth the spectrogram in order to facilitate the creation of masks
     Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, std=smooth_param1, 
                          display=display, savefig=None,**kwargs) 
@@ -2647,6 +2656,9 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         mask_param2 : scalar, default is 0.5
             if 'relative' : bin_l
             if 'absolute' : bin_per
+        remove_rain : boolean, default is False
+            If True, most of spikes in spectrogram due to rain are removed using
+            a math morphological method, the grey opening
         min_roi, max_roi : scalars, optional, default : 9,  512*10000
             Define the minimum and the maximum area possible for an ROI. If None,  
             the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
@@ -2725,6 +2737,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     mask_mode       = kwargs.pop('mask_mode','relative')
     mask_param1     = kwargs.pop('mask_param1',6)
     mask_param2     = kwargs.pop('mask_param2',0.5)
+    remove_rain     = kwargs.pop('remove_rain',False)
     
     ### for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
@@ -2998,6 +3011,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                                                mask_param1, 
                                                mask_param2, 
                                                min_roi=min_roi_area, 
+                                               remove_rain = remove_rain,
                                                display=display)
     df_spectral_indices += [ROItotal, ROIcover]
     if verbose :
