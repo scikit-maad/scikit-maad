@@ -286,8 +286,10 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
           
-        - figsize : tuple of integers, optional, default: (4,10) 
-            width, height in inches.   
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
          
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
@@ -375,22 +377,22 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
         vmax=kwargs.pop('vmax',np.percentile(Sxx_out,99.9)) 
         extent=kwargs.pop('extent',None)
             
-        if extent is not None : 
-            xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4*2, 0.33*(extent[1]-extent[0])))
-        else: 
-            xlabel = 'pseudofrequency [points]'
-            figsize=kwargs.pop('figsize',(4*2, 13)) 
+        if extent is None : 
+            ylabel = "pseudofrequency [points]"
+            xlabel = "pseudotime [points]"
         
-         
         fig, (ax1, ax2) = plt.subplots(2, 1)
-        plot2d (Sxx, ax=ax1, extent=extent, figsize=figsize,
+        
+        plot2d (Sxx, ax=ax1, extent=extent, 
                 title=('Orignal Spectrogram'),  
-                ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                ylabel = ylabel, xlabel = xlabel, 
+                vmin=vmin, vmax=vmax, 
                 cmap=cmap, **kwargs)
-        plot2d (Sxx_out, ax=ax2, extent=extent, figsize=figsize,
+        
+        plot2d (Sxx_out, ax=ax2, extent=extent, 
                 title='Blurred Spectrogram (std='+str(std)+')',  
-                ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                ylabel = ylabel, xlabel = xlabel, 
+                vmin=vmin, vmax=vmax, 
                 cmap=cmap, **kwargs) 
         
         # SAVE FIGURE 
@@ -402,6 +404,5 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
             print('\n''save figure : %s' %filename) 
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
-
     return Sxx_out 
  

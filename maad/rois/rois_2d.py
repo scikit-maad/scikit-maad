@@ -171,16 +171,20 @@ def _double_threshold_rel (im, bin_std=6, bin_per=0.5,
             vmax=kwargs.pop('vmax',1)  
             extent=kwargs.pop('extent',None)
                 
-            if extent is not None : 
-                xlabel = 'frequency [Hz]' 
-                figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
-            else: 
-                xlabel = 'pseudofrequency [points]'
-                figsize=kwargs.pop('figsize',(4, 13)) 
+            if extent is None : 
+                xlabel = 'pseudotime [points]'
+                ylabel = 'pseudofrequency [points]'
              
-            _, fig = plot2d (im_out, extent=extent, figsize=figsize,title=title,  
-                             ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
-                             cmap=cmap, **kwargs) 
+            _, fig = plot2d (im_out, 
+                             extent = extent, 
+                             title  = title,  
+                             ylabel = ylabel, 
+                             xlabel = xlabel,
+                             vmin   = vmin, 
+                             vmax   = vmax, 
+                             cmap   = cmap, 
+                             **kwargs)  
+            
             # SAVE FIGURE 
             if savefig is not None :  
                 dpi   =kwargs.pop('dpi',96) 
@@ -318,17 +322,20 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
         extent=kwargs.pop('extent',None)
-            
-        if extent is not None : 
-            xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
-        else: 
-            xlabel = 'pseudofrequency [points]'
-            figsize=kwargs.pop('figsize',(4, 13)) 
+                
+        if extent is None : 
+            xlabel = 'pseudotime [points]'
+            ylabel = 'pseudofrequency [points]'
          
-        _, fig = plot2d (im_out, extent=extent, figsize=figsize,title=title,  
-                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
-                         cmap=cmap, **kwargs) 
+        _, fig = plot2d (im_out, 
+                         extent = extent, 
+                         title  = title,  
+                         ylabel = ylabel, 
+                         xlabel = xlabel,
+                         vmin   = vmin, 
+                         vmax   = vmax, 
+                         cmap   = cmap, 
+                         **kwargs) 
         # SAVE FIGURE 
         if savefig is not None :  
             dpi   =kwargs.pop('dpi',96) 
@@ -634,21 +641,22 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         xlabel =kwargs.pop('xlabel','Time [sec]')  
         title  =kwargs.pop('title','Selected ROIs')  
         extent=kwargs.pop('extent',None)
-            
-        if extent is not None : 
-            xlabel = 'frequency [Hz]' 
-            figsize=kwargs.pop('figsize', (4, 0.33*(extent[1]-extent[0])))
-        else: 
-            xlabel = 'pseudofrequency [points]'
-            figsize=kwargs.pop('figsize',(4, 13)) 
+                
+        if extent is None : 
+            xlabel = 'pseudotime [points]'
+            ylabel = 'pseudofrequency [points]'
          
         # randcmap = rand_cmap(len(rois_label)) 
         # cmap   =kwargs.pop('cmap',randcmap)  
         cmap   =kwargs.pop('cmap','tab20') 
          
-        _, fig = plot2d (im_rois, extent=extent, figsize=figsize,title=title,  
-                         ylabel = ylabel, xlabel = xlabel,
-                         cmap=cmap, **kwargs) 
+        _, fig = plot2d (im_rois, 
+                         extent = extent,
+                         title  = title,  
+                         ylabel = ylabel, 
+                         xlabel = xlabel,
+                         cmap   = cmap, 
+                         **kwargs) 
         # SAVE FIGURE 
         if savefig is not None :  
             dpi   =kwargs.pop('dpi',96) 

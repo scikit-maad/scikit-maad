@@ -140,8 +140,10 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
         - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
             Postfix of the figure filename 
          
-        - figsize : tuple of integers, optional, default: (4,10) 
-            width, height in inches.   
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
          
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
@@ -225,14 +227,11 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
     cmap = kwargs.pop("cmap", "gray")
-    ext = kwargs.pop("ext", None)
+    extent = kwargs.pop("ext", None)
 
-    if ext is not None:
-        figsize = kwargs.pop("figsize", (4, 0.33 * (ext[1] - ext[0])))
-    else:
+    if extent is None:
         ylabel = "pseudofrequency [points]"
         xlabel = "pseudotime [points]"
-        figsize = kwargs.pop("figsize", (4, 13))
 
     vmin = kwargs.pop("vmin", 0)
     vmax = kwargs.pop("vmax", 1)
@@ -244,18 +243,17 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
 
     if (ax is None) and (fig is None):
         ax, fig = plot2d(
-            im_ref,
-            extent=ext,
-            now=False,
-            figsize=figsize,
-            title=title,
-            ylabel=ylabel,
-            xlabel=xlabel,
-            vmin=vmin,
-            vmax=vmax,
-            cmap=cmap,
-            **kwargs
-        )
+                        im_ref,
+                        extent  = extent,
+                        now     = False,
+                        title   = title,
+                        ylabel  = ylabel,
+                        xlabel  = xlabel,
+                        vmin    = vmin,
+                        vmax    = vmax,
+                        cmap    = cmap,
+                        **kwargs
+                        )
 
     ax.plot(centroid.centroid_t, centroid.centroid_f, marker, ms=ms, color=color)
 
@@ -296,9 +294,11 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
             
         - savefilename : str, optional, default :'_spectro_overlayrois.png' 
             Postfix of the figure filename 
-         
-        - figsize : tuple of integers, optional, default: (4,10) 
-            width, height in inches.   
+            
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.  
          
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
@@ -383,27 +383,23 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
     fig = kwargs.pop("fig", None)
     extent = kwargs.pop("extent", None)
 
-    if extent is not None:
-        figsize = kwargs.pop("figsize", (4, 0.33 * (extent[1] - extent[0])))
-    else:
+    if extent is None:
         xlabel = "pseudoTime [points]"
         ylabel = "pseudoFrequency [points]"
-        figsize = kwargs.pop("figsize", (4, 13))
-
+        
     if (ax is None) and (fig is None):
         ax, fig = plot2d(
-            im_ref,
-            extent=extent,
-            now=False,
-            figsize=figsize,
-            title=title,
-            ylabel=ylabel,
-            xlabel=xlabel,
-            vmin=vmin,
-            vmax=vmax,
-            cmap=cmap,
-            **kwargs
-        )
+                        im_ref,
+                        extent  = extent,
+                        now     = False,
+                        title   = title,
+                        ylabel  = ylabel,
+                        xlabel  = xlabel,
+                        vmin    = vmin,
+                        vmax    = vmax,
+                        cmap    = cmap,
+                        **kwargs
+                        )
 
     # Convert pixels into time and frequency values
     y_len, x_len = im_ref.shape
@@ -1332,23 +1328,7 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
             be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place 
             at the given locs.
-        
-        - cmap : string or Colormap object, optional, default is 'gray'
-            See https://matplotlib.org/examples/color/colormaps_reference.html
-            in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
-            'viridis'...
-        
-        - vmin, vmax : scalar, optional, default: None
-            `vmin` and `vmax` are used in conjunction with norm to normalize
-            luminance data.  Note if you pass a `norm` instance, your
-            settings for `vmin` and `vmax` will be ignored.
-        
-        - extent : list of scalars [left, right, bottom, top], optional, default: None
-            The location, in data-coordinates, of the lower-left and
-            upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.
-        
+
         - now : boolean, optional, default : True
             if True, display now. Cannot display multiple images. 
             To display mutliple images, set now=False until the last call for 
