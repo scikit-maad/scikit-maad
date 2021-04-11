@@ -47,14 +47,9 @@ First, load and audio file and compute the power spectrogram.
 
     s, fs = sound.load('../../data/cold_forest_daylight.wav')
 
-    t0 = 0
-    t1 = 20
-    f0 = 100
-    f1 = 10000
     dB_max = 96
 
-    Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2,
-                                         fcrop=(f0,f1), tcrop=(t0,t1))
+    Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
 
     # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
     # range when quantification bit is 16bits and display the result
@@ -65,7 +60,7 @@ First, load and audio file and compute the power spectrogram.
 
 
 .. image:: /_auto_examples/2_advanced/images/sphx_glr_plot_compare_auto_and_manual_rois_selection_001.png
-    :alt: Spectrogram
+    :alt: plot compare auto and manual rois selection
     :class: sphx-glr-single-img
 
 
@@ -75,8 +70,8 @@ First, load and audio file and compute the power spectrogram.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      if now: plt.show()
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -359,7 +354,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.543 seconds)
+   **Total running time of the script:** ( 0 minutes  14.847 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_compare_auto_and_manual_rois_selection.py:

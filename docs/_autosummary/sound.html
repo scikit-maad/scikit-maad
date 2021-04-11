@@ -212,19 +212,22 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sound.select_bandwidth.html#sound.select_bandwidth" title="sound.select_bandwidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_bandwidth</span></code></a>(x, fs, fcut, forder[, …])</p></td>
 <td><p>Use a lowpass, highpass, bandpass or bandstop filter to process a 1d signal with an iir filter.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background.html#sound.remove_background" title="sound.remove_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background</span></code></a>(Sxx[, gauss_win, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.pcen.html#sound.pcen" title="sound.pcen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pcen</span></code></a>(Sxx[, gain, bias, power, b, eps, …])</p></td>
+<td><p>Per-Channel Energy Normalization (PCEN)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.remove_background.html#sound.remove_background" title="sound.remove_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background</span></code></a>(Sxx[, gauss_win, …])</p></td>
 <td><p>Remove background noise using spectral subtraction.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.remove_background_morpho.html#sound.remove_background_morpho" title="sound.remove_background_morpho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_morpho</span></code></a>(Sxx[, q, display, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background_morpho.html#sound.remove_background_morpho" title="sound.remove_background_morpho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_morpho</span></code></a>(Sxx[, q, display, …])</p></td>
 <td><p>Remove background noise in a spectrogram using mathematical morphology tool.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.remove_background_along_axis.html#sound.remove_background_along_axis" title="sound.remove_background_along_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_along_axis</span></code></a>(Sxx[, mode, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.remove_background_along_axis.html#sound.remove_background_along_axis" title="sound.remove_background_along_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_background_along_axis</span></code></a>(Sxx[, mode, …])</p></td>
 <td><p>Get the noisy profile along the defined axis and remove this profile from the spectrogram.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.median_equalizer.html#sound.median_equalizer" title="sound.median_equalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">median_equalizer</span></code></a>(Sxx[, display, savefig])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.median_equalizer.html#sound.median_equalizer" title="sound.median_equalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">median_equalizer</span></code></a>(Sxx[, display, savefig])</p></td>
 <td><p>Remove background noise in spectrogram using median equalizer.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sound.wave2frames.html#sound.wave2frames" title="sound.wave2frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wave2frames</span></code></a>(s[, Nt])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sound.wave2frames.html#sound.wave2frames" title="sound.wave2frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wave2frames</span></code></a>(s[, Nt])</p></td>
 <td><p>Reshape a sound waveform (ie vector) into a serie of frames (ie matrix) of length Nt.</p></td>
 </tr>
 </tbody>

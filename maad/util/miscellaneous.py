@@ -1046,8 +1046,7 @@ def crossfade_list(s_list, fs, fade_len=1):
     --------
     crossfade
     
-    """
-
+    """    
     for idx, s in enumerate(s_list):
         if idx == 0:
             s_out = s_list[idx]

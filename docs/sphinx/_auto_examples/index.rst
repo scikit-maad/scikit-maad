@@ -62,6 +62,27 @@ Basic examples
    :hidden:
 
    /_auto_examples/1_basic/plot_audio_representation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="When dealing with large amounts of data, visualization plays a key role to evidence the main pa...">
+
+.. only:: html
+
+ .. figure:: /_auto_examples/1_basic/images/thumb/sphx_glr_plot_circadian_spectrogram_thumb.png
+     :alt: Circadian soundscape
+
+     :ref:`sphx_glr__auto_examples_1_basic_plot_circadian_spectrogram.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /_auto_examples/1_basic/plot_circadian_spectrogram
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
@@ -123,7 +144,7 @@ Advanced examples
 .. only:: html
 
  .. figure:: /_auto_examples/2_advanced/images/thumb/sphx_glr_plot_unsupervised_sound_classification_thumb.png
-     :alt: Use unsupervised learning to classify sounds
+     :alt: Classify soundtypes with unsupervised learning
 
      :ref:`sphx_glr__auto_examples_2_advanced_plot_unsupervised_sound_classification.py`
 

@@ -265,7 +265,7 @@
         <span class="c1"># (magnitude) </span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">hilbert</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;WARNING : choose a mode between &#39;fast&#39; and &#39;hilbert&#39;&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid mode. Mode should be &#39;fast&#39; or &#39;hilbert&#39; &quot;</span><span class="p">)</span>
         
     <span class="k">return</span> <span class="n">env</span></div>
 

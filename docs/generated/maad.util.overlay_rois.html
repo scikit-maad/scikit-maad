@@ -196,7 +196,7 @@
 <h1>maad.util.overlay_rois<a class="headerlink" href="#maad-util-overlay-rois" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.util.overlay_rois">
-<code class="sig-prename descclassname">maad.util.</code><code class="sig-name descname">overlay_rois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_ref</span></em>, <em class="sig-param"><span class="n">rois</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#overlay_rois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.util.overlay_rois" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">maad.util.</span></code><code class="sig-name descname"><span class="pre">overlay_rois</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">im_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rois</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/util/visualization.html#overlay_rois"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#maad.util.overlay_rois" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display bounding boxes with time-frequency regions of interest over a spectrogram.</p>
 <p>Regions of interest (ROIs) must be provided. They can be loaded as manual annotations or computed using automated methods (see the example section).</p>
 <dl class="field-list">
@@ -216,7 +216,9 @@ is added to the root filename.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10) </span></dt><dd><p>width, height in inches.</p>
+<dt>extent<span class="classifier">list of scalars [left, right, bottom, top], optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
 </dd>
 </dl>
 </li>

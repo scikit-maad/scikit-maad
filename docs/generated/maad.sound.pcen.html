@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maad.sound.pcen &mdash; scikit-maad 1.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="maad.sound.remove_background" href="maad.sound.remove_background.html" />
+    <link rel="prev" title="maad.sound.select_bandwidth" href="maad.sound.select_bandwidth.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> scikit-maad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../sound.html">Sound processing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../sound.html#input-and-output">Input and output</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../sound.html#preprocess-audio">Preprocess audio</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.fir_filter.html">maad.sound.fir_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.sinc.html">maad.sound.sinc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.smooth.html">maad.sound.smooth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.select_bandwidth.html">maad.sound.select_bandwidth</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maad.sound.pcen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.remove_background.html">maad.sound.remove_background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.remove_background_morpho.html">maad.sound.remove_background_morpho</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.remove_background_along_axis.html">maad.sound.remove_background_along_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.median_equalizer.html">maad.sound.median_equalizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.wave2frames.html">maad.sound.wave2frames</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../sound.html#transform-audio">Transform audio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sound.html#metrics">Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rois.html">Segmentation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Acoustic features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spl.html">Sound pressure level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Example gallery</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-maad</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../sound.html">Sound processing</a> &raquo;</li>
+        
+      <li>maad.sound.pcen</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/maad.sound.pcen.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maad-sound-pcen">
+<h1>maad.sound.pcen<a class="headerlink" href="#maad-sound-pcen" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="maad.sound.pcen">
+<code class="sig-prename descclassname"><span class="pre">maad.sound.</span></code><code class="sig-name descname"><span class="pre">pcen</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Sxx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.98</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/spectral_subtraction.html#pcen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#maad.sound.pcen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Per-Channel Energy Normalization (PCEN)</p>
+<p>This function normalizes a time-frequency representation Sxx by
+performing automatic gain control, followed by nonlinear compression <a class="reference internal" href="#r846019f64d35-1" id="id1">[1]</a>
+This function was adapted from librosa PCEN function <span id="id2">[R846019f64d35-2]</span> to match linear
+spectrogram representation</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>Sxx</strong><span class="classifier">2D numpy array</span></dt><dd><p>Original spectrogram (or image)</p>
+</dd>
+<dt><strong>gain</strong><span class="classifier">scalar (&gt;=0), optional, default is 0.98</span></dt><dd><p>Gain factor. Typical values should be less than 1.</p>
+</dd>
+<dt><strong>bias</strong><span class="classifier">scalar (&gt;=0), optional, default is 2</span></dt><dd><p>Bias point of the nonlinear compression</p>
+</dd>
+<dt><strong>power</strong><span class="classifier">scalar (&gt;=0), optional, default is 0.5</span></dt><dd><p>Compression exponent. Typical values should be between 0 and 0.5.
+Smaller values of power result in stronger compression.
+At the limit power=0, polynomial compression becomes logarithmic.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">scalar between [0, 1], optional, default is 0.025</span></dt><dd><p>The filter coefficient for the low-pass filter.</p>
+</dd>
+<dt><strong>eps</strong><span class="classifier">scalar (&gt;0), optional, default is 1e-6</span></dt><dd><p>A small constant used to ensure numerical stability of the filter.</p>
+</dd>
+<dt><strong>display</strong><span class="classifier">boolean, optional, default is False</span></dt><dd><p>Display the signal if True</p>
+</dd>
+<dt><strong>savefig</strong><span class="classifier">string, optional, default is None</span></dt><dd><p>Root filename (with full path) is required to save the figures. Postfix
+is added to the root filename.</p>
+</dd>
+<dt><strong>**kwargs, optional. This parameter is used by plt.plot and savefig functions</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>savefilename<span class="classifier">str, optional, default :’_spectro_after_noise_subtraction.png’</span></dt><dd><p>Postfix of the figure filename</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>figsize<span class="classifier">tuple of integers, optional, default: (4,10)</span></dt><dd><p>width, height in inches.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>title<span class="classifier">string, optional, default</span><span class="classifier">‘Spectrogram’</span></dt><dd><p>title of the figure</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xlabel<span class="classifier">string, optional, default</span><span class="classifier">‘Time [s]’</span></dt><dd><p>label of the horizontal axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ylabel<span class="classifier">string, optional, default</span><span class="classifier">‘Amplitude [AU]’</span></dt><dd><p>label of the vertical axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cmap<span class="classifier">string or Colormap object, optional, default is ‘gray’</span></dt><dd><p>See <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a>
+in order to get all the  existing colormaps
+examples: ‘hsv’, ‘hot’, ‘bone’, ‘tab20c’, ‘jet’, ‘seismic’,
+‘viridis’…</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vmin, vmax<span class="classifier">scalar, optional, default: None</span></dt><dd><p><cite>vmin</cite> and <cite>vmax</cite> are used in conjunction with norm to normalize
+luminance data.  Note if you pass a <cite>norm</cite> instance, your
+settings for <cite>vmin</cite> and <cite>vmax</cite> will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>extent<span class="classifier">scalars (left, right, bottom, top), optional, default: None</span></dt><dd><p>The location, in data-coordinates, of the lower-left and
+upper-right corners. If <cite>None</cite>, the image is positioned such that
+the pixel centers fall on zero-based (row, column) indices.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>dpi<span class="classifier">integer, optional, default is 96</span></dt><dd><p>Dot per inch.
+For printed version, choose high dpi (i.e. dpi=300) =&gt; slow
+For screen version, choose low dpi (i.e. dpi=96) =&gt; fast</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>format<span class="classifier">string, optional, default is ‘png’</span></dt><dd><p>Format to save the figure</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>… and more, see matplotlib</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Sxx_out</strong><span class="classifier">2d ndarray of scalar</span></dt><dd><p>Spectrogram after PCEN</p>
+</dd>
+<dt><strong>enhance_profile</strong><span class="classifier">1d ndarray of scalar</span></dt><dd><p>Enhance profile</p>
+</dd>
+<dt><strong>PCENxx</strong><span class="classifier">2d ndarray of scalar</span></dt><dd><p>enhanced map</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r846019f64d35-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Lostanlen, V., Salamon, J., McFee, B., Cartwright, M., Farnsworth,</p>
+</dd>
+</dl>
+<p>A., Kelling, S., and Bello, J. P. Per-Channel Energy Normalization: Why
+and How. IEEE Signal Processing Letters, 26(1), 39-43.
+.. [R846019f64d35-2] McFee, Brian, Colin Raffel, Dawen Liang, Daniel PW Ellis,
+Matt McVicar, Eric Battenberg, and Oriol Nieto. “librosa: Audio and music
+signal analysis in python.” In Proceedings of the 14th python in science
+conference, pp. 18-25. 2015.
+<a class="reference external" href="https://librosa.org/doc/main/generated/librosa.pcen.html">https://librosa.org/doc/main/generated/librosa.pcen.html</a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="maad.sound.remove_background.html" class="btn btn-neutral float-right" title="maad.sound.remove_background" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="maad.sound.select_bandwidth.html" class="btn btn-neutral float-left" title="maad.sound.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, scikit-maad development team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

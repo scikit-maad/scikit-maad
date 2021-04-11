@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="maad.sound.remove_background_morpho" href="maad.sound.remove_background_morpho.html" />
-    <link rel="prev" title="maad.sound.select_bandwidth" href="maad.sound.select_bandwidth.html" /> 
+    <link rel="prev" title="maad.sound.pcen" href="maad.sound.pcen.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="maad.sound.sinc.html">maad.sound.sinc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.sound.smooth.html">maad.sound.smooth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.sound.select_bandwidth.html">maad.sound.select_bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maad.sound.pcen.html">maad.sound.pcen</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">maad.sound.remove_background</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.sound.remove_background_morpho.html">maad.sound.remove_background_morpho</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maad.sound.remove_background_along_axis.html">maad.sound.remove_background_along_axis</a></li>
@@ -192,7 +193,7 @@
 <h1>maad.sound.remove_background<a class="headerlink" href="#maad-sound-remove-background" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="maad.sound.remove_background">
-<code class="sig-prename descclassname">maad.sound.</code><code class="sig-name descname">remove_background</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Sxx</span></em>, <em class="sig-param"><span class="n">gauss_win</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">gauss_std</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">beta1</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">beta2</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">llambda</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/spectral_subtraction.html#remove_background"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#maad.sound.remove_background" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">maad.sound.</span></code><code class="sig-name descname"><span class="pre">remove_background</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Sxx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gauss_win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gauss_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/maad/sound/spectral_subtraction.html#remove_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#maad.sound.remove_background" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove background noise using spectral subtraction.</p>
 <p>Based on the spectrum of the A posteriori noise profile.   
 It computes an atenuation map in the time-frequency domain.  
@@ -351,7 +352,7 @@ for 16 bits wav) in order to have positive values</p>
         <a href="maad.sound.remove_background_morpho.html" class="btn btn-neutral float-right" title="maad.sound.remove_background_morpho" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="maad.sound.select_bandwidth.html" class="btn btn-neutral float-left" title="maad.sound.select_bandwidth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="maad.sound.pcen.html" class="btn btn-neutral float-left" title="maad.sound.pcen" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -1145,6 +1145,84 @@
         <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="crossfade"><a class="viewcode-back" href="../../../generated/maad.util.crossfade.html#maad.util.crossfade">[docs]</a><span class="k">def</span> <span class="nf">crossfade</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fade_len</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    AAdd a smooth transition (cross-fade) between two audio signals.</span>
+<span class="sd">    The function applies a squared function to apply the transition between signals. </span>
+<span class="sd">    The signals must have the same sampling rate.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s1 : numpy.ndarray</span>
+<span class="sd">        First audio signal.</span>
+<span class="sd">    s2 : numpy.ndarray</span>
+<span class="sd">        Second audio signal.</span>
+<span class="sd">    fs: int</span>
+<span class="sd">        Sampling frequency of signals. </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s_out: numpy.ndarray</span>
+<span class="sd">        Signal with the resulting crossfade between s1 and s2. The length in seconds </span>
+<span class="sd">        of the resulting signal is: `len(s1)/fs + len(s1)/fs - fade_len`. </span>
+
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    crossfade_list</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from maad import sound, util</span>
+<span class="sd">    &gt;&gt;&gt; s, fs = sound.load(&#39;../data/spinetail.wav&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; s1 = sound.trim(s, fs, 0, 4)</span>
+<span class="sd">    &gt;&gt;&gt; s2 = sound.trim(s, fs, 15, 19)</span>
+<span class="sd">    &gt;&gt;&gt; s_out = util.crossfade(s1, s2, fs, fade_len=1)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fade_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">fade_len</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span> <span class="n">fade_len</span><span class="p">))</span>
+    <span class="n">fade_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">fade_in</span><span class="p">)</span>
+    <span class="n">fstart_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span> <span class="n">fade_len</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">fstop_idx</span> <span class="o">=</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">fade_len</span>
+    <span class="n">s1_fade_out</span> <span class="o">=</span> <span class="n">s1</span><span class="p">[</span><span class="n">fstart_idx</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">fade_out</span>
+    <span class="n">s2_fade_in</span> <span class="o">=</span> <span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">fstop_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">fade_in</span>
+    <span class="n">s_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">s1</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">fstart_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s1_fade_out</span> <span class="o">+</span> <span class="n">s2_fade_in</span><span class="p">,</span> <span class="n">s2</span><span class="p">[</span><span class="n">fstop_idx</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">s_out</span></div>
+
+<div class="viewcode-block" id="crossfade_list"><a class="viewcode-back" href="../../../generated/maad.util.crossfade_list.html#maad.util.crossfade_list">[docs]</a><span class="k">def</span> <span class="nf">crossfade_list</span><span class="p">(</span><span class="n">s_list</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fade_len</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a cross-fade to a list of audio signals.</span>
+<span class="sd">    Audio signlas must be numpy arrays with the same sampling rate. The function applies </span>
+<span class="sd">    a squared function to apply the transition between signals.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">        s_list : list</span>
+<span class="sd">            List with audio signlas (1D numpy arrays) to be concatenated</span>
+<span class="sd">        fs : int</span>
+<span class="sd">            sampling frequency</span>
+<span class="sd">        fade_len: float</span>
+<span class="sd">            length of fade between audio in seconds</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        s_out : ndarray</span>
+<span class="sd">    </span>
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+<span class="sd">    crossfade</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">s_out</span> <span class="o">=</span> <span class="n">s_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">s_out</span> <span class="o">=</span> <span class="n">crossfade</span><span class="p">(</span><span class="n">s_out</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">s_out</span></div>
 </pre></div>
 
            </div>

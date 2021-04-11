@@ -13,9 +13,9 @@ Audio representation
 ====================
 
 An audio signal can be represented in both, temporal and spectral domains. 
-These representations give valuable information related to the signal characteristics
-and hence are complementary. In this introductory example we will load an audio signal, 
-apply basic transformations to better understand its features.
+These representations are complementary and fundamental to understand the audio
+signal characteristics. In this introductory example we will load an audio signal, 
+apply basic transformations to better understand its features in time and frequency.
 
 
 .. code-block:: default
@@ -41,7 +41,7 @@ apply basic transformations to better understand its features.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:612: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:608: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -87,9 +87,9 @@ spectral domains.
 .. code-block:: default
 
 
-    fig, ax = plt.subplots(4,1, figsize=(10,12))
+    fig, ax = plt.subplots(4,1, figsize=(8,10))
     util.plot_wave(s_trim, fs, ax=ax[0])
-    util.plot_wave(env, fs/128, ax=ax[1])
+    util.plot_wave(env, fs, ax=ax[1])
     util.plot_spectrum(pxx, fidx, ax=ax[2])
     util.plot_spectrogram(Sxx, extent=ext, ax=ax[3], colorbar=False)
 
@@ -106,9 +106,9 @@ spectral domains.
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:612: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:608: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:891: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -117,7 +117,7 @@ spectral domains.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.915 seconds)
+   **Total running time of the script:** ( 0 minutes  1.908 seconds)
 
 
 .. _sphx_glr_download__auto_examples_1_basic_plot_audio_representation.py:

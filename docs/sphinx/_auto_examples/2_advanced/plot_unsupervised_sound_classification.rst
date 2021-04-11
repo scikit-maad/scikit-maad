@@ -9,8 +9,8 @@
     .. _sphx_glr__auto_examples_2_advanced_plot_unsupervised_sound_classification.py:
 
 
-Use unsupervised learning to classify sounds
-============================================
+Classify soundtypes with unsupervised learning
+==============================================
 
 Unsupervised learning algorithms search for structures or patterns in a dataset without requiring labels. In the context of ecoacoustics, this approach can be usefull to draw inferences when manual labelling is inaccesible or too expensive. For example, unsupervised learning can be used to estimate the animal acoustic diversity [1], combine human-reasoning and automated procedures to build reference libraries, and find hidden structures in the soundscapes. 
 
@@ -41,7 +41,7 @@ Start by loading an example audio file. Ambient noise will be removed with a low
 .. code-block:: default
 
 
-    s, fs = sound.load('/Users/jsulloa/Downloads/rock_savana.wav')
+    s, fs = sound.load('../../data/guyana_tropical_forest.wav')
     s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 
     db_max=70  # used to define the range of the spectrogram
@@ -53,7 +53,7 @@ Start by loading an example audio file. Ambient noise will be removed with a low
 
 
 .. image:: /_auto_examples/2_advanced/images/sphx_glr_plot_unsupervised_sound_classification_001.png
-    :alt: Spectrogram
+    :alt: plot unsupervised sound classification
     :class: sphx-glr-single-img
 
 
@@ -63,8 +63,8 @@ Start by loading an example audio file. Ambient noise will be removed with a low
 
  .. code-block:: none
 
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:700: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      if now: plt.show()
+    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -156,12 +156,18 @@ The shape audio features have 26 dimensions. To facilitate the clustering proces
 
     //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
       return f(*args, **kwds)
+    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
+      return f(*args, **kwds)
+    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
+      return f(*args, **kwds)
+    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
+      return f(*args, **kwds)
     [t-SNE] Computing 37 nearest neighbors...
     [t-SNE] Indexed 187 samples in 0.000s...
     [t-SNE] Computed neighbors for 187 samples in 0.002s...
     [t-SNE] Computed conditional probabilities for sample 187 / 187
     [t-SNE] Mean sigma: 0.044609
-    [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
+    [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690720
     [t-SNE] KL divergence after 1000 iterations: 0.288394
 
 
@@ -244,7 +250,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  5.787 seconds)
+   **Total running time of the script:** ( 0 minutes  12.300 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_unsupervised_sound_classification.py:

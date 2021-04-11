@@ -38,7 +38,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Signal decomposition and false-color spectrograms" href="../2_advanced/plot_nmf_and_false_color_spectrogram.html" />
+    <link rel="next" title="Circadian soundscape" href="plot_circadian_spectrogram.html" />
     <link rel="prev" title="Simple audio segmentation" href="plot_find_rois_simple.html" /> 
 </head>
 
@@ -107,6 +107,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#basic-examples">Basic examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="plot_find_rois_simple.html">Simple audio segmentation</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Audio representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_circadian_spectrogram.html">Circadian soundscape</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#advanced-examples">Advanced examples</a></li>
@@ -186,9 +187,9 @@
 <div class="sphx-glr-example-title section" id="audio-representation">
 <span id="sphx-glr-auto-examples-1-basic-plot-audio-representation-py"></span><h1>Audio representation<a class="headerlink" href="#audio-representation" title="Permalink to this headline">¶</a></h1>
 <p>An audio signal can be represented in both, temporal and spectral domains.
-These representations give valuable information related to the signal characteristics
-and hence are complementary. In this introductory example we will load an audio signal,
-apply basic transformations to better understand its features.</p>
+These representations are complementary and fundamental to understand the audio
+signal characteristics. In this introductory example we will load an audio signal,
+apply basic transformations to better understand its features in time and frequency.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span>
 <span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">util</span>
@@ -199,7 +200,7 @@ apply basic transformations to better understand its features.</p>
 </div>
 <img alt="plot audio representation" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_audio_representation_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:612: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:608: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
@@ -217,22 +218,22 @@ Let’s trim the signal to zoom in a single song.</p>
 </div>
 <p>Finally, we can visualize the signal characteristics in the temporal and
 spectral domains.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">util</span><span class="o">.</span><span class="n">plot_wave</span><span class="p">(</span><span class="n">s_trim</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">util</span><span class="o">.</span><span class="n">plot_wave</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="o">/</span><span class="mi">128</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">util</span><span class="o">.</span><span class="n">plot_wave</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">util</span><span class="o">.</span><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">pxx</span><span class="p">,</span> <span class="n">fidx</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 <span class="n">util</span><span class="o">.</span><span class="n">plot_spectrogram</span><span class="p">(</span><span class="n">Sxx</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ext</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="plot audio representation" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_audio_representation_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:612: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:608: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
-/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:891: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.915 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.908 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-1-basic-plot-audio-representation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1c3cf87a3ef4742f1b0c1b477795515b/plot_audio_representation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_audio_representation.py</span></code></a></p>
@@ -252,7 +253,7 @@ spectral domains.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../2_advanced/plot_nmf_and_false_color_spectrogram.html" class="btn btn-neutral float-right" title="Signal decomposition and false-color spectrograms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_circadian_spectrogram.html" class="btn btn-neutral float-right" title="Circadian soundscape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="plot_find_rois_simple.html" class="btn btn-neutral float-left" title="Simple audio segmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

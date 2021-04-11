@@ -17,6 +17,8 @@
    
       add_dB
       amplitude2dB
+      crossfade
+      crossfade_list
       dB2amplitude
       dB2power
       format_features

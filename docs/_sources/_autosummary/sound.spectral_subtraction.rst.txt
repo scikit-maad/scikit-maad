@@ -1,4 +1,4 @@
-sound.spectral\_subtraction
+﻿sound.spectral\_subtraction
 ===========================
 
 .. automodule:: sound.spectral_subtraction
@@ -16,6 +16,7 @@ sound.spectral\_subtraction
       :nosignatures:
    
       median_equalizer
+      pcen
       remove_background
       remove_background_along_axis
       remove_background_morpho

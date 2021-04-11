@@ -186,6 +186,7 @@
 <span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">var</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">opening</span>
 <span class="kn">from</span> <span class="nn">scipy.ndimage.morphology</span> <span class="kn">import</span> <span class="n">binary_erosion</span><span class="p">,</span> <span class="n">binary_dilation</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rankdata</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">find_peaks</span>
@@ -2404,7 +2405,8 @@
 <div class="viewcode-block" id="region_of_interest_index"><a class="viewcode-back" href="../../../generated/maad.features.region_of_interest_index.html#maad.features.region_of_interest_index">[docs]</a><span class="k">def</span> <span class="nf">region_of_interest_index</span><span class="p">(</span><span class="n">Sxx_dB_noNoise</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> 
                           <span class="n">smooth_param1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mask_mode</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> 
                           <span class="n">mask_param1</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">mask_param2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
-                          <span class="n">min_roi</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">max_roi</span><span class="o">=</span><span class="mi">512</span><span class="o">*</span><span class="mi">10000</span><span class="p">,</span> 
+                          <span class="n">min_roi</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">max_roi</span><span class="o">=</span><span class="mi">512</span><span class="o">*</span><span class="mi">10000</span><span class="p">,</span> 
+                          <span class="n">remove_rain</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                           <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute an acoustic activity index based on the regions of interested detected on a spectrogram.</span>
@@ -2442,7 +2444,10 @@
 <span class="sd">    min_roi, max_roi : scalars, optional, default : 9,  512*10000</span>
 <span class="sd">        Define the minimum and the maximum area possible for an ROI. If None,  </span>
 <span class="sd">        the minimum ROI area is 1 pixel and the maximum ROI area is the area of  </span>
-<span class="sd">        the image     </span>
+<span class="sd">        the image    </span>
+<span class="sd">    remove_rain : boolean, default is False</span>
+<span class="sd">        If True, vertical frequency spikes due to rain are removed as possible</span>
+<span class="sd">        by applying a morphological mathematical image processing : grey opening</span>
 <span class="sd">    display : boolean, default is false</span>
 <span class="sd">        plot graphs and spectrograms</span>
 <span class="sd">    /*/*kwargs optional. This parameter is used by plt.plot and savefig functions </span>
@@ -2473,6 +2478,10 @@
     <span class="c1"># extent</span>
     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;extent&#39;</span><span class="p">:(</span><span class="n">tn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])})</span>
     
+    <span class="c1"># if remove rain =&gt; remove frequential spikes (rain)</span>
+    <span class="k">if</span> <span class="n">remove_rain</span> <span class="o">==</span> <span class="kc">True</span> <span class="p">:</span>
+        <span class="n">Sxx_dB_noNoise</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">Sxx_dB_noNoise</span><span class="p">,</span> <span class="n">selem</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
+
     <span class="c1"># Smooth the spectrogram in order to facilitate the creation of masks</span>
     <span class="n">Sxx_dB_noNoise_smooth</span> <span class="o">=</span> <span class="n">smooth</span><span class="p">(</span><span class="n">Sxx_dB_noNoise</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">smooth_param1</span><span class="p">,</span> 
                          <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
@@ -2815,6 +2824,9 @@
 <span class="sd">        mask_param2 : scalar, default is 0.5</span>
 <span class="sd">            if &#39;relative&#39; : bin_l</span>
 <span class="sd">            if &#39;absolute&#39; : bin_per</span>
+<span class="sd">        remove_rain : boolean, default is False</span>
+<span class="sd">            If True, most of spikes in spectrogram due to rain are removed using</span>
+<span class="sd">            a math morphological method, the grey opening</span>
 <span class="sd">        min_roi, max_roi : scalars, optional, default : 9,  512*10000</span>
 <span class="sd">            Define the minimum and the maximum area possible for an ROI. If None,  </span>
 <span class="sd">            the minimum ROI area is 1 pixel and the maximum ROI area is the area of  </span>
@@ -2893,6 +2905,7 @@
     <span class="n">mask_mode</span>       <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mask_mode&#39;</span><span class="p">,</span><span class="s1">&#39;relative&#39;</span><span class="p">)</span>
     <span class="n">mask_param1</span>     <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mask_param1&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
     <span class="n">mask_param2</span>     <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mask_param2&#39;</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">remove_rain</span>     <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;remove_rain&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
     
     <span class="c1">### for ADI, AEI, RAOQ</span>
     <span class="n">bin_step</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bin_step&#39;</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span> <span class="c1"># in Hz</span>
@@ -3166,6 +3179,7 @@
                                                <span class="n">mask_param1</span><span class="p">,</span> 
                                                <span class="n">mask_param2</span><span class="p">,</span> 
                                                <span class="n">min_roi</span><span class="o">=</span><span class="n">min_roi_area</span><span class="p">,</span> 
+                                               <span class="n">remove_rain</span> <span class="o">=</span> <span class="n">remove_rain</span><span class="p">,</span>
                                                <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">)</span>
     <span class="n">df_spectral_indices</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ROItotal</span><span class="p">,</span> <span class="n">ROIcover</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">verbose</span> <span class="p">:</span>
