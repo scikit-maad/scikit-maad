@@ -12,9 +12,11 @@
 Circadian soundscape
 ====================
 
-When dealing with large amounts of data, visualization plays a key role to evidence
+When dealing with large amounts of audio recordings, visualization plays a key role to evidence
 the main patterns in the data. In this example we show how to easily combine 96 audio 
 files to build a visual representation of a 24 hour natural soundscape.
+
+Load packages and set variables.
 
 
 .. code-block:: default
@@ -33,6 +35,8 @@ files to build a visual representation of a 24 hour natural soundscape.
 
 
 
+Build a long list of audio slices of length `sample_len`.
+
 
 .. code-block:: default
 
@@ -50,6 +54,7 @@ files to build a visual representation of a 24 hour natural soundscape.
 
 
 
+Combine all audio recordings applying a crossfade and compute a the spectrogram of
 the resulting mixed audio.
 
 
@@ -66,6 +71,9 @@ the resulting mixed audio.
 
 
 
+Display the spectrogram. We can see clearly the bird chorus at dawn (5-10 h) and 
+dusk (20-21 h), as well as the wind and airplanes sounds at low frequencies.
+
 
 .. code-block:: default
 
@@ -81,22 +89,13 @@ the resulting mixed audio.
     :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      plt.show()
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.653 seconds)
+   **Total running time of the script:** ( 0 minutes  2.980 seconds)
 
 
 .. _sphx_glr_download__auto_examples_1_basic_plot_circadian_spectrogram.py:

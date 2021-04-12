@@ -106,7 +106,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Example gallery</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#basic-examples">Basic examples</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Simple audio segmentation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#detect-the-accelerating-trill">Detect the accelerating trill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-audio-file">Load audio file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#detect-the-bouncy-trill">Detect the bouncy trill</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#detect-the-fast-descending-chirp">Detect the fast descending chirp</a></li>
 </ul>
 </li>
@@ -190,12 +191,15 @@
 </div>
 <div class="sphx-glr-example-title section" id="simple-audio-segmentation">
 <span id="sphx-glr-auto-examples-1-basic-plot-find-rois-simple-py"></span><h1>Simple audio segmentation<a class="headerlink" href="#simple-audio-segmentation" title="Permalink to this headline">¶</a></h1>
-<p>In an audio signal, regions of interest are usually regions with high density of energy. The function find_rois_cwt allows finding regions of interest in the signal giving very simple and intuitive parameters: temporal length and frequency limits. This segmentation can be seen as a coarse detection process, the starting point of more advanced classification methods.</p>
+<p>In audio signals, regions of interest are usually regions with high density of energy. The function <a href="#id1"><span class="problematic" id="id2">``</span></a>find_rois_cwt` allows finding regions of interest in the signal giving very simple and intuitive parameters: temporal length and frequency limits. This segmentation can be seen as a coarse detection process, the starting point of more advanced classification methods.</p>
 <p>The following sound example as two main different soundtypes in the foreground:</p>
 <ul class="simple">
-<li><p>An accelerating trill between 4.5 and 8 kHz lasting approximately 2 seconds</p></li>
+<li><p>A bouncy trill between 4.5 and 8 kHz lasting approximately 2 seconds</p></li>
 <li><p>A fast descending chirp between 8 and 12 kHz lasting 0.1 approximately seconds</p></li>
 </ul>
+<div class="section" id="load-audio-file">
+<h2>Load audio file<a class="headerlink" href="#load-audio-file" title="Permalink to this headline">¶</a></h2>
+<p>Load an audio file and compute the spectrogram for visualization.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">maad</span> <span class="kn">import</span> <span class="n">sound</span>
 <span class="kn">from</span> <span class="nn">maad.rois</span> <span class="kn">import</span> <span class="n">find_rois_cwt</span>
 <span class="kn">from</span> <span class="nn">maad.util</span> <span class="kn">import</span> <span class="n">plot_spectrogram</span>
@@ -206,35 +210,32 @@
 </pre></div>
 </div>
 <img alt="plot find rois simple" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_find_rois_simple_001.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:891: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-</pre></div>
 </div>
-<div class="section" id="detect-the-accelerating-trill">
-<h2>Detect the accelerating trill<a class="headerlink" href="#detect-the-accelerating-trill" title="Permalink to this headline">¶</a></h2>
-<p>The accelerating trill is the song of a small neotropical bird, Cranioleuca erythrops. This song can be detected on the recording using the function find_rois_cwt and setting frequency limits flims=(4500,8000) and temporal length of signal tlen=2.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">flims</span><span class="o">=</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mi">8000</span><span class="p">),</span> <span class="n">tlen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<div class="section" id="detect-the-bouncy-trill">
+<h2>Detect the bouncy trill<a class="headerlink" href="#detect-the-bouncy-trill" title="Permalink to this headline">¶</a></h2>
+<p>The accelerating trill is the song of a small neotropical bird, the Red-faced Spinetail <em>Cranioleuca erythrops</em>. This song can be detected on the recording using the function <code class="docutils literal notranslate"><span class="pre">find_rois_cwt</span></code> and setting frequency limits <code class="docutils literal notranslate"><span class="pre">flims=(4500,8000)</span></code> and temporal length of signal <code class="docutils literal notranslate"><span class="pre">tlen=2</span></code>. The segmentation results are returned as a dataframe with temporal segmentation given by the function and using the frequency limits defined by the user.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_trill</span> <span class="o">=</span> <span class="n">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">flims</span><span class="o">=</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mi">8000</span><span class="p">),</span> <span class="n">tlen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_trill</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="plot find rois simple" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_find_rois_simple_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/rois/rois_1d.py:209: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    min_f     min_t   max_f     max_t
+0  4500.0   0.74304  8000.0   2.50776
+1  4500.0   5.10839  8000.0   7.33751
+2  4500.0  11.23846  8000.0  13.37469
+3  4500.0  16.16109  8000.0  18.29732
 </pre></div>
 </div>
 </div>
 <div class="section" id="detect-the-fast-descending-chirp">
 <h2>Detect the fast descending chirp<a class="headerlink" href="#detect-the-fast-descending-chirp" title="Permalink to this headline">¶</a></h2>
-<p>Alternatively, the fast descending chirp (unknown species) can be segmented in the recording by changing the detection parameters.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">flims</span><span class="o">=</span><span class="p">(</span><span class="mi">8000</span><span class="p">,</span><span class="mi">12000</span><span class="p">),</span> <span class="n">tlen</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<p>Alternatively, the fast descending chirp (unknown species) can be segmented in the recording by changing the detection parameters, <code class="docutils literal notranslate"><span class="pre">flims</span></code> and <code class="docutils literal notranslate"><span class="pre">tlen</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_chirp</span> <span class="o">=</span> <span class="n">find_rois_cwt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fs</span></a><span class="p">,</span> <span class="n">flims</span><span class="o">=</span><span class="p">(</span><span class="mi">8000</span><span class="p">,</span><span class="mi">12000</span><span class="p">),</span> <span class="n">tlen</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_chirp</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="plot find rois simple" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_find_rois_simple_003.png" />
-<p>The segmentation results are returned as a dataframe with temporal segmentation given by the function and using the frequency limits defined by the user.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</pre></div>
-</div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>     min_f     min_t    max_f     max_t
 0   8000.0   0.18576  12000.0   0.26993
@@ -255,7 +256,7 @@
 15  8000.0  19.22032  12000.0  19.31610
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.289 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.102 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-1-basic-plot-find-rois-simple-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/426c8c446b4451cfcdd5a3774fffd1e6/plot_find_rois_simple.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_find_rois_simple.py</span></code></a></p>

@@ -8,8 +8,7 @@ Unsupervised learning algorithms search for structures or patterns in a dataset 
 
 In this example, we will use unsupervised learning to automatically annotate multiple sounds in an audio recording.  The process follows four main steps. We will (i) find sounds that can be delimited in time and frequency, here defined as regions of interest (ROIs), (ii) characterize ROIs by features in the time-frequency domain using 2D wavelets [2], (iii) use t-SNE, a dimensionality reduction algorithm, to reduce the dimensionality of the data [3], and (iv) a automatically form homogenous groups using DBSCAN [4]. We will use a real audio file recorded with an omnidirectional microphone. This audio has a poor signal-to-noise ratio, which is typical of automated audio recordings.
 
-Note: To execute this example you will need to have instaled the Python packages
-matplotlib, scikit-image and scikit-learn.
+**Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.
 """
 # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_unsupervised_sound_classification_004.png'
 import numpy as np
@@ -18,7 +17,7 @@ from maad import sound, features, rois
 from maad.util import power2dB, plot2d, format_features, overlay_rois
 
 #%%
-# Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
+# Start by loading an example audio file. We will remove low frequency ambient noise with a lowpass filter and then compute the spectrogram.
 
 s, fs = sound.load('../../data/guyana_tropical_forest.wav')
 s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
@@ -45,7 +44,7 @@ ax0, fig0 = overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':60, 'extent':ext})
 #%% 
 # 2. Compute acoustic features
 # ----------------------------
-# The `shape_feaures` function uses bidimensional wavelets to get the texture and spectro-temporal shape coeficients of each ROI. Wavelets have the advantage of being robust when the signal-to-noise ratio is low, and derive homogeneous descriptors which facilitate the clustering process. The wavelet decomposition is performed on the complete spectrogram, hence the coeficients for ROIs do not vary much even when not the time-frequency bounds are not exact. The centroid features gives an estimate of the median frequency of the ROIs.
+# The ``shape_feaures`` function uses bidimensional wavelets to get the texture and spectro-temporal shape coeficients of each ROI. Wavelets have the advantage of being robust when the signal-to-noise ratio is low, and derive homogeneous descriptors which facilitate the clustering process. The wavelet decomposition is performed on the complete spectrogram, hence the coeficients for ROIs do not vary much even when not the time-frequency bounds are not exact. The centroid features gives an estimate of the median frequency of the ROIs.
 
 df_shape, params = features.shape_features(Sxx_db, resolution='low', rois=df_rois)
 df_centroid = features.centroid_features(Sxx_db, df_rois)

@@ -16,8 +16,7 @@ Unsupervised learning algorithms search for structures or patterns in a dataset 
 
 In this example, we will use unsupervised learning to automatically annotate multiple sounds in an audio recording.  The process follows four main steps. We will (i) find sounds that can be delimited in time and frequency, here defined as regions of interest (ROIs), (ii) characterize ROIs by features in the time-frequency domain using 2D wavelets [2], (iii) use t-SNE, a dimensionality reduction algorithm, to reduce the dimensionality of the data [3], and (iv) a automatically form homogenous groups using DBSCAN [4]. We will use a real audio file recorded with an omnidirectional microphone. This audio has a poor signal-to-noise ratio, which is typical of automated audio recordings.
 
-Note: To execute this example you will need to have instaled the Python packages
-matplotlib, scikit-image and scikit-learn.
+**Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.
 
 
 .. code-block:: default
@@ -35,7 +34,7 @@ matplotlib, scikit-image and scikit-learn.
 
 
 
-Start by loading an example audio file. Ambient noise will be removed with a lowpass filter and then we will compute the spectrogram.
+Start by loading an example audio file. We will remove low frequency ambient noise with a lowpass filter and then compute the spectrogram.
 
 
 .. code-block:: default
@@ -56,15 +55,6 @@ Start by loading an example audio file. Ambient noise will be removed with a low
     :alt: plot unsupervised sound classification
     :class: sphx-glr-single-img
 
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      plt.show()
 
 
 
@@ -99,7 +89,7 @@ To find regions of interest in the spectrogram, we will remove stationary backgr
 
 2. Compute acoustic features
 ----------------------------
-The `shape_feaures` function uses bidimensional wavelets to get the texture and spectro-temporal shape coeficients of each ROI. Wavelets have the advantage of being robust when the signal-to-noise ratio is low, and derive homogeneous descriptors which facilitate the clustering process. The wavelet decomposition is performed on the complete spectrogram, hence the coeficients for ROIs do not vary much even when not the time-frequency bounds are not exact. The centroid features gives an estimate of the median frequency of the ROIs.
+The ``shape_feaures`` function uses bidimensional wavelets to get the texture and spectro-temporal shape coeficients of each ROI. Wavelets have the advantage of being robust when the signal-to-noise ratio is low, and derive homogeneous descriptors which facilitate the clustering process. The wavelet decomposition is performed on the complete spectrogram, hence the coeficients for ROIs do not vary much even when not the time-frequency bounds are not exact. The centroid features gives an estimate of the median frequency of the ROIs.
 
 
 .. code-block:: default
@@ -154,20 +144,12 @@ The shape audio features have 26 dimensions. To facilitate the clustering proces
 
  .. code-block:: none
 
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
     [t-SNE] Computing 37 nearest neighbors...
     [t-SNE] Indexed 187 samples in 0.000s...
-    [t-SNE] Computed neighbors for 187 samples in 0.002s...
+    [t-SNE] Computed neighbors for 187 samples in 0.005s...
     [t-SNE] Computed conditional probabilities for sample 187 / 187
     [t-SNE] Mean sigma: 0.044609
-    [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690720
+    [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
     [t-SNE] KL divergence after 1000 iterations: 0.288394
 
 
@@ -195,8 +177,6 @@ In the above plot it is possible to observe how sounds are aggregated. It is pos
 
  .. code-block:: none
 
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
     Number of soundtypes found: 5
 
 
@@ -250,7 +230,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.300 seconds)
+   **Total running time of the script:** ( 0 minutes  12.102 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_unsupervised_sound_classification.py:

@@ -13,6 +13,7 @@
 
 import os
 import sys
+import warnings
 sys.path.insert(0, os.path.abspath('../../maad/'))
 
 
@@ -53,7 +54,9 @@ sphinx_gallery_conf = {
      'capture_repr': (),  # define which output is captured https://sphinx-gallery.github.io/stable/configuration.html#capture-repr
      'ignore_repr_types': r'matplotlib[text, axes]',
 }
-
+warnings.filterwarnings("ignore", category=UserWarning,
+                        message='Matplotlib is currently using agg, which is a'
+                                ' non-GUI backend, so cannot show the figure.')
 
 
 numpydoc_show_class_members = False

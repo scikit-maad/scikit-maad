@@ -23,7 +23,7 @@ Basic examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In an audio signal, regions of interest are usually regions with high density of energy. The fu...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In audio signals, regions of interest are usually regions with high density of energy. The func...">
 
 .. only:: html
 
@@ -65,7 +65,7 @@ Basic examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="When dealing with large amounts of data, visualization plays a key role to evidence the main pa...">
+    <div class="sphx-glr-thumbcontainer" tooltip="When dealing with large amounts of audio recordings, visualization plays a key role to evidence...">
 
 .. only:: html
 

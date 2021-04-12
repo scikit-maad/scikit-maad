@@ -18,7 +18,7 @@ important preprocessing step for further analyses of individual components.
 Here, we will combine the robust characterization capabilities of 
 the bidimensional wavelets [1] with an advanced signal decomposition tool, the 
 non-negative-matrix factorization (NMF)[2]. NMF is a widely used tool to analyse
-high-dimensional that automatically extracts sparse and meaningfull components
+high-dimensional data that automatically extracts sparse and meaningfull components
 of non-negative matrices. Audio spectrograms are in essence sparse and 
 non-negative matrices, and hence well suited to be decomposed with NMF. This 
 decomposition can be further used to generate false-color spectrograms to 
@@ -26,8 +26,7 @@ rapidly identify patterns in soundscapes and increase the interpretability of
 the signal [3]. This example shows how to use the scikit-maad package to easily 
 decompose audio signals and visualize false-colour spectrograms.
 
-Dependencies: To execute this example you will need to have instaled the 
-scikit-image and scikit-learn Python packages.
+**Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.
 
 
 .. code-block:: default
@@ -45,25 +44,12 @@ scikit-image and scikit-learn Python packages.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-    //miniconda3/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
 
 
 
-
-First, load and audio file and compute the spectrogram.
+Load audio from disk
+--------------------
+Load the audio file and compute the spectrogram.
 
 
 .. code-block:: default
@@ -73,7 +59,7 @@ First, load and audio file and compute the spectrogram.
 
     Sxx_db = power2dB(Sxx, db_range=70)
     Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, multichannel=False)  # rescale for faster computation
-    plot2d(Sxx_db, **{'figsize':(4,10),'extent':ext})
+    plot2d(Sxx_db, figsize=(4,10), extent=ext)
 
 
 
@@ -83,19 +69,12 @@ First, load and audio file and compute the spectrogram.
     :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:891: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      plt.show()
 
 
 
-
-Then, compute feature with ``shape_features_raw`` to get the raw output of the 
+Filter the spectrogram with 2D wavelets
+---------------------------------------
+Compute feature with ``shape_features_raw`` to get the raw output of the 
 spectrogram filtered by the filterbank composed of 2D Gabor wavelets. This
 raw output can be fed to the NMF algorithm to decompose the spectrogram into
 elementary basis spectrograms.
@@ -112,10 +91,23 @@ elementary basis spectrograms.
     # Decompose signal using non-negative matrix factorization
     Y = NMF(n_components=3, init='random', random_state=0).fit_transform(X)
 
-    # Normalize the data and combine the three NMF basis spectrograms and the
-    # intensity spectrogram into a single array to fit the RGBA color model. RGBA
-    # stands for Red, Green, Blue and Alpha, where alpha indicates how opaque each
-    # pixel is.
+
+
+
+
+
+
+
+Arrange into RGBA color model
+-----------------------------
+Normalize the data and combine the three NMF basis spectrograms and the
+intensity spectrogram into a single array to fit the RGBA color model. RGBA
+stands for Red, Green, Blue and Alpha, where alpha indicates how opaque each
+pixel is.
+
+
+.. code-block:: default
+
 
     Y = MinMaxScaler(feature_range=(0,1)).fit_transform(Y)
     intensity = 1 - (Sxx_db - Sxx_db.min()) / (Sxx_db.max() - Sxx_db.min())
@@ -129,6 +121,8 @@ elementary basis spectrograms.
 
 
 
+Visualize output
+----------------
 Finally, plot the resulting basis spectrogram as separate elements and 
 combine them to produce a false-colour spectrogram using the RGBA color 
 model.
@@ -194,7 +188,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.454 seconds)
+   **Total running time of the script:** ( 0 minutes  1.589 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_nmf_and_false_color_spectrogram.py:

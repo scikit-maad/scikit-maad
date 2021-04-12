@@ -17,6 +17,8 @@ These representations are complementary and fundamental to understand the audio
 signal characteristics. In this introductory example we will load an audio signal, 
 apply basic transformations to better understand its features in time and frequency.
 
+Load an audio file and plot the waveform
+
 
 .. code-block:: default
 
@@ -35,21 +37,12 @@ apply basic transformations to better understand its features in time and freque
     :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:608: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      plt.show()
-
 
 
 
 It can be noticed that in this audio there are four consecutive songs of the spinetail 
 *Cranioleuca erythorps*, every song lasting of approximatelly two seconds. 
-Let's trim the signal to zoom in a single song.
+Let's trim the signal to zoom in on the details of the song.
 
 
 .. code-block:: default
@@ -64,7 +57,7 @@ Let's trim the signal to zoom in a single song.
 
 
 
-short-time Fourier transforms.
+Onced trimmed, lets compute the envelope of the signal, the Fourier and short-time Fourier transforms.
 
 
 .. code-block:: default
@@ -100,24 +93,13 @@ spectral domains.
     :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:608: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      plt.show()
-    /Volumes/lacie_macosx/numerical_analysis_toolbox/scikit-maad/maad/util/visualization.py:887: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-      plt.show()
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.908 seconds)
+   **Total running time of the script:** ( 0 minutes  0.549 seconds)
 
 
 .. _sphx_glr_download__auto_examples_1_basic_plot_audio_representation.py:

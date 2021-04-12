@@ -10,7 +10,8 @@ signal characteristics. In this introductory example we will load an audio signa
 apply basic transformations to better understand its features in time and frequency.
 """
 
-#%% Load an audio file and plot the waveform
+#%% 
+# Load an audio file and plot the waveform
 import matplotlib.pyplot as plt
 from maad import sound
 from maad import util
@@ -21,12 +22,12 @@ util.plot_wave(s, fs)
 #%% 
 # It can be noticed that in this audio there are four consecutive songs of the spinetail 
 # *Cranioleuca erythorps*, every song lasting of approximatelly two seconds. 
-# Let's trim the signal to zoom in a single song.
+# Let's trim the signal to zoom in on the details of the song.
 
 s_trim = sound.trim(s, fs, 5, 8)
 
-#%% Onced trimmed, lets compute the envelope of the signal, the Fourier and 
-# short-time Fourier transforms.
+#%% 
+# Onced trimmed, lets compute the envelope of the signal, the Fourier and short-time Fourier transforms.
 env = sound.envelope(s_trim, mode='fast', Nt=128)
 pxx, fidx = sound.spectrum(s, fs, nperseg=1024, method='welch')
 Sxx, tn, fn, ext = sound.spectrogram(s_trim, fs, window='hann', nperseg=1024, noverlap=512)
