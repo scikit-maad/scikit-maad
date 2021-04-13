@@ -1,13 +1,13 @@
 Installation instructions
 -------------------------
 
-**scikit-maad** is a free, open-source and modular Python package to analyze 
-ecoacoustics datasets. **scikit-maad** works with other popular Python Scientific Packages. The scikit-maad dependencies are listed below:
+**scikit-maad** is built on top of popular Python packages for scientific computing and digital signal processing, these dependencies are listed below:
 
-- Python >= 3.5
+- Python >= 3.6
 - NumPy >= 1.13
 - SciPy >= 0.18
 - scikit-image >= 0.14
+- resampy >= 0.2
 
 
 1. Standard installation
