@@ -13,7 +13,7 @@ Installation instructions
 1. Standard installation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-The simplest way to install **scikit-maad** is using **pypi**, the package installer for Python. To install, run the following command in your Python environment::
+**scikit-maad** is available at the Python software repository `PyPI <https://pypi.org/>. The simplest way to install it is using **pip**, the standard installer for Python. To install, run the following command in your Python environment::
 
     pip install scikit-maad
 
@@ -25,7 +25,7 @@ If you use the Conda package manager you may need to first install pip and then 
 2. Development installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can install the development version if you want to work on the latest version or develop new features. First uninstall any existing installations::
+Alternatively, you can install the development version if you want to work on the latest version or develop new features. First uninstall any existing installations::
 
     pip uninstall scikit-maad
 
