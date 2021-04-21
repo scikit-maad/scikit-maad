@@ -134,7 +134,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 
     Examples
     --------
-    >>> s,fs = maad.sound.load("../data/guyana_tropical_forest.wav")
+    >>> s,fs = maad.sound.load("../data/rock_savanna.wav")
 
     Compute energy of signal s
 
@@ -327,7 +327,7 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/guyana_tropical_forest.wav') 
+    >>> w, fs = maad.sound.load('../data/rock_savanna.wav') 
     >>> Sxx_power,tn,fn, ext = maad.sound.spectrogram (w, fs, nperseg=8192)
     >>> maad.sound.linear_to_octave(Sxx_power, fn, display=True, extent=ext, vmin=-50)
     """
@@ -416,7 +416,7 @@ def avg_power_spectro(Sxx_power):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/guyana_tropical_forest.wav') 
+    >>> w, fs = maad.sound.load('../data/rock_savanna.wav') 
     >>> Sxx_power,tn, fn, ext = maad.sound.spectrogram (w, fs)
 
     Compute mean power spectrogram
@@ -455,7 +455,7 @@ def avg_amplitude_spectro(Sxx_ampli):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/guyana_tropical_forest.wav') 
+    >>> w, fs = maad.sound.load('../data/rock_savanna.wav') 
     >>> Sxx_amplitude,tn, fn, ext = maad.sound.spectrogram (w, fs, mode="amplitude")
 
     Compute mean amplitude spectrogram

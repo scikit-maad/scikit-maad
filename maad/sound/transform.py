@@ -57,7 +57,7 @@ def envelope (s, mode='fast', Nt=32):
     
     Examples
     --------
-    >>> s,fs = maad.sound.load("../data/guyana_tropical_forest.wav")
+    >>> s,fs = maad.sound.load("../data/rock_savanna.wav")
     >>> env_fast = maad.sound.envelope(s, mode='fast', Nt=32)
     >>> env_fast
     array([0.2300415 , 0.28643799, 0.24285889, ..., 0.3059082 , 0.20040894,

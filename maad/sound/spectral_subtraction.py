@@ -141,7 +141,7 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
 
     Load audio recording and convert it into spectrogram
 
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
 
     Convert linear spectrogram into dB and add 96dB (which is the maximum dB
@@ -346,7 +346,7 @@ def remove_background_morpho(Sxx, q=0.1, display=False, savefig=None, **kwargs):
 
     Load audio recording and convert it into spectrogram
 
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
 
     Convert linear spectrogram into dB
@@ -369,7 +369,7 @@ def remove_background_morpho(Sxx, q=0.1, display=False, savefig=None, **kwargs):
 
     Load audio recording and convert it into spectrogram
 
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(0,20))   
     >>> Sxx_dB = maad.util.power2dB(Sxx) +96
 
@@ -561,7 +561,7 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
 
     Load audio recording and convert it into spectrogram
 
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
 
     Convert linear spectrogram into dB
@@ -734,7 +734,7 @@ def median_equalizer(Sxx, display=False, savefig=None, **kwargs):
 
     Load audio recording and convert it into spectrogram
 
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)   
 
     Convert linear spectrogram into dB
