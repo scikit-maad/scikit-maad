@@ -65,6 +65,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/sphinx/_build
 
 # PyBuilder
 target/
@@ -109,14 +110,9 @@ venv.bak/
 # Ignore files from macosx .DS_Store that are to store custom attributes of the folders
 *.DS_Store
 maad/__pycache__/__init__.cpython-36.pyc
-maad/__pycache__/__init__.cpython-36.pyc
 
-# Ignore *.pyc files reulting from compilation of module
+# Ignore *.pyc files resulting from compilation of module
 *.pyc
-pending_fixes.txt
-/docs/sphinx/_build
-/docs/sphinx/_build
 
-Architecture_20210107.docx
 
 .vscode/
