@@ -84,7 +84,7 @@ print('Number of soundtypes found:', np.unique(cluster.labels_).size)
 # Visualize the clustering results
 from maad.util import rand_cmap
 fig, ax = plt.subplots()
-ax.scatter(Y[:,0], Y[:,1], c=cluster.labels_, cmap=rand_cmap(6), alpha=0.8)
+ax.scatter(Y[:,0], Y[:,1], c=cluster.labels_, cmap=rand_cmap(5 , first_color_black=False), alpha=0.8)
 ax.set_xlabel('tsne dim 1')
 ax.set_ylabel('tsne dim 2')
 
