@@ -40,7 +40,7 @@ Start by loading an example audio file. We will remove low frequency ambient noi
 .. code-block:: default
 
 
-    s, fs = sound.load('../../data/guyana_tropical_forest.wav')
+    s, fs = sound.load('../../data/rock_savanna.wav')
     s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 
     db_max=70  # used to define the range of the spectrogram
@@ -146,7 +146,7 @@ The shape audio features have 26 dimensions. To facilitate the clustering proces
 
     [t-SNE] Computing 37 nearest neighbors...
     [t-SNE] Indexed 187 samples in 0.000s...
-    [t-SNE] Computed neighbors for 187 samples in 0.005s...
+    [t-SNE] Computed neighbors for 187 samples in 0.008s...
     [t-SNE] Computed conditional probabilities for sample 187 / 187
     [t-SNE] Mean sigma: 0.044609
     [t-SNE] KL divergence after 250 iterations with early exaggeration: 56.690716
@@ -230,7 +230,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.102 seconds)
+   **Total running time of the script:** ( 0 minutes  12.603 seconds)
 
 
 .. _sphx_glr_download__auto_examples_2_advanced_plot_unsupervised_sound_classification.py:
