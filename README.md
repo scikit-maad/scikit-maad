@@ -25,7 +25,7 @@ $ python setup.py install
 ```
 
 ## Examples and documentation
-- See https://scikit-maad.github.io/scikit-maad for a complete reference manual and example gallery.
+- See https://scikit-maad.github.io for a complete reference manual and example gallery.
 - In depth information related to the Multiresolution Analysis of Acoustic Diversity implemented in scikit-maad was published in: Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). [Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis](https://doi.org/10.1016/j.ecolind.2018.03.026). Ecological Indicators, 90, 346–355
 
 ## Contributions and bug report
