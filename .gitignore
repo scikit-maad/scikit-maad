@@ -67,6 +67,7 @@ instance/
 docs/_build/
 docs/generated
 docs/_autosummary
+docs/_auto_examples
 
 # PyBuilder
 target/
