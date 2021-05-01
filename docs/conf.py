@@ -14,7 +14,7 @@
 import os
 import sys
 import warnings
-sys.path.insert(0, os.path.abspath('../../maad/'))
+sys.path.insert(0, os.path.abspath('../maad/'))
 
 
 # -- Project information -----------------------------------------------------
@@ -48,7 +48,7 @@ autosummary_generate = True
 
 # -- Example Gallery --
 sphinx_gallery_conf = {
-     'examples_dirs': '../../example_gallery',   # path to your example scripts
+     'examples_dirs': '../example_gallery',   # path to your example scripts
      'gallery_dirs': '_auto_examples',  # path to where to save gallery generated output
      'default_thumb_file': '../_images/logo_maad_small.png',
      'capture_repr': (),  # define which output is captured https://sphinx-gallery.github.io/stable/configuration.html#capture-repr
