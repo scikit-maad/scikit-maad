@@ -24,6 +24,7 @@ and the Université Paris-Saclay respectively. Python functions have been added 
 
    install
    quickstart
+   audio_dataset
    
 .. toctree::
    :caption: Documentation

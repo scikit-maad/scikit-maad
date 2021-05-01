@@ -17,6 +17,7 @@
    
       load
       load_spectrogram
+      load_url
       write
    
    
