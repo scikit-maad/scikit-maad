@@ -459,13 +459,11 @@ def temporal_median (s, mode ='fast', Nt=512) :
     ----------
     s : 1D array
         Audio to process (wav)
-    mode : str, optional, default is "fast"
-        Select the mode to compute the envelope of the audio waveform
-        - "fast" : The sound is first divided into frames (2d) using the 
-            function _wave2timeframes(s), then the max of each frame gives a 
-            good approximation of the envelope.
-        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
-            The method is slow
+    mode : str, optional, default is "fast". 
+        Select the mode to compute the envelope of the audio waveform.
+        
+        - "fast" : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. The method is slow
     Nt : integer, optional, default is 512
         Size of each frame. The largest, the highest is the approximation.
     
@@ -498,14 +496,16 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
     ----------
     s : 1D array
         Audio to process (wav)
-    compatibility : string {'QUT', 'seewave'}, default is 'QUT'
+        compatibility : string {'QUT', 'seewave'}, default is 'QUT'
         Select the way to compute the temporal entropy.
-            - QUT [2]_: entropy of the squared envelope
-            - seewave [1]_ : entropy of the envelope
+        
+        - QUT [2]_: entropy of the squared envelope
+        - seewave [1]_ : entropy of the envelope
     mode : str, optional, default is "fast"
         Select the mode to compute the envelope of the audio waveform.
-            - "fast" : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.
-            - "Hilbert" : estimation of the envelope from the Hilbert transform. The method is slow.
+        
+        - "fast" : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. The method is slow.
     Nt : integer, optional, default is 512
         Size of each frame. The largest, the highest is the approximation.
    
@@ -516,14 +516,9 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
        
     References
     ----------
-    .. [1] Seewave : http://rug.mnhn.fr/seewave/
-    Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool 
-    for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
+    .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
      
-    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis/
-    Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. 
-    (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). 
-    Zenodo. http://doi.org/10.5281/zenodo.1188744
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
     
     Notes
     -----
@@ -577,8 +572,8 @@ def acoustic_richness_index (Ht_array, M_array):
     .. [1] Depraetere, M., Pavoine, S., Jiguet, F., Gasc, A., Duvail, S., & Sueur, J. (2012). Monitoring animal diversity using acoustic indices: Implementation in a temperate woodland. Ecological Indicators, 13, 46–54.
     .. [2] Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound analysis and synthesis. Bioacoustics, 18, 213–226.
 
-    Examples:
-    ---------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/indices/S4A03895_20190522_060000.wav')
     >>> Ht_6h00 = maad.features.temporal_entropy(s)
     >>> M_6h00 = maad.features.temporal_median(s)
@@ -611,7 +606,9 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
     
     Acoustic activity corresponds to the portion of the waveform above a 
     threshold [1]_
+    
     Three values are computed with this function:
+    
         - ACTfract : proportion (fraction) of points above the threshold 
         - ACTcount : number of points above the threshold
         - ACTmean : mean value (in dB) of the portion of the signal above the threhold
@@ -624,6 +621,7 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
         data >Threshold is considered to be an activity 
     mode : str, optional, default is "fast"
         Select the mode to compute the envelope of the audio waveform
+       
         - "fast" : The sound is first divided into frames (2d) using the 
             function _wave2timeframes(s), then the max of each frame gives a 
             good approximation of the envelope.
@@ -643,8 +641,7 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
         
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
     Examples
     --------
@@ -687,8 +684,10 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
     threshold. An acoustic event could be short (at list one point if 
     rejectDuration is None) or very long (the duration of the entire audio). 
     Two acoustic events are separated by a period with low audio signal (ie
-    below the threshold)
+    below the threshold).
+    
     Four values are computed with this function:
+    
         - EVNtFraction : Fraction: events duration over total duration
         - EVNmean : mean events duration (s)
         - EVNcount : number of events per s
@@ -708,10 +707,13 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
         duration is in s
     mode : str, optional, default is "fast"
         Select the mode to compute the envelope of the audio waveform
-        - "fast" : The sound is first divided into frames (2d) using the 
+        
+        - "fast" : 
+            The sound is first divided into frames (2d) using the 
             function _wave2timeframes(s), then the max of each frame gives a 
             good approximation of the envelope.
-        - "Hilbert" : estimation of the envelope from the Hilbert transform. 
+        - "Hilbert" : 
+            Estimation of the envelope from the Hilbert transform. 
             The method is slow
     Nt : integer, optional, default is 512
         Size of each frame. The largest, the highest is the approximation.
@@ -735,8 +737,7 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
 
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
     Examples
     --------
@@ -802,8 +803,10 @@ def frequency_entropy (X, compatibility="QUT") :
         conservation
     compatibility : string {'QUT', 'seewave'}, default is 'QUT'
         Select the way to compute the spectral entropy.
-            - QUT [2]_ : entropy of P
-            - seewave [1]_ : entropy of sqrt(P)   
+           
+        - QUT [2]_ : entropy of P
+        - seewave [1]_ : entropy of sqrt(P)   
+    
     Returns
     -------
     Hf: float
@@ -814,14 +817,9 @@ def frequency_entropy (X, compatibility="QUT") :
        
     References
     ----------
-    .. [1] Seewave : http://rug.mnhn.fr/seewave/
-    Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool 
-    for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
+    .. [1] Seewave : http://rug.mnhn.fr/seewave/. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
      
-    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis/
-    Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. 
-    (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). 
-    Zenodo. http://doi.org/10.5281/zenodo.1188744
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis/. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
     
     Notes
     -----
@@ -913,13 +911,8 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     
     References
     ----------
-    .. [1] Gasc, A. & al (2013). Biodiversity sampling using a global acoustic 
-    approach: contrasting sites with microendemics in New Caledonia. 
-    PloS one, 8(5), e65311.
-    
-    Inspired by the function `fpeaks` from the R package Seewave.
-    .. [2] Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound 
-    analysis and synthesis. Bioacoustics, 18, 213–226.
+    .. [1] Gasc, A. & al (2013). Biodiversity sampling using a global acoustic approach: contrasting sites with microendemics in New Caledonia. PloS one, 8(5), e65311. Inspired by the function `fpeaks` from the R package Seewave.
+    .. [2] Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound analysis and synthesis. Bioacoustics, 18, 213–226.
     
     Examples
     --------
@@ -1035,7 +1028,7 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
         
     References 
     ----------
-    Credit : Towsey 2017
+    .. [1] Credit : Towsey 2017
     
     Examples
     --------
@@ -1154,11 +1147,10 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
         
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
@@ -1195,7 +1187,9 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
     
     Acoustic activity corresponds to the portion of the spectrogram above a 
     threshold frequency per frequency along time axis [1]_
+    
     The function computes for each frequency bin:
+        
         - ACTfract : proportion (fraction) of points above the threshold 
         - ACTcount : number of points above the threshold
         - ACTmean : mean value (in dB) of the portion of the signal above the threhold
@@ -1220,8 +1214,7 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
         
     References 
     ----------
-    Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
     Examples
     --------
@@ -1257,6 +1250,7 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     below the threshold). Acoustic events are calculated frequency by frequency
     along time axis
     This function computes:
+      
         - EVNspFraction : Fraction of events duration over total duration
         - EVNspmean : mean events duration (s)
         - EVNspcount : number of events per s
@@ -1296,8 +1290,7 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
     
     Examples
     --------
@@ -1361,7 +1354,6 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
 #=============================================================================
 def acoustic_complexity_index(Sxx):
-    
     """
     Compute the Acoustic Complexity Index (ACI) from a spectrogram [1]_.
         
@@ -1396,10 +1388,7 @@ def acoustic_complexity_index(Sxx):
         
     References
     ----------
-    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing 
-    activity of an avian community: the Acoustic Complexity Index (ACI). 
-    Ecological Indicators, 11, 868-873.
-    
+    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing activity of an avian community: the Acoustic Complexity Index (ACI). Ecological Indicators, 11, 868-873.
     
     Examples
     --------
@@ -1408,7 +1397,6 @@ def acoustic_complexity_index(Sxx):
     >>> _, _ , ACI  = maad.features.acoustic_complexity_index(Sxx)
     >>> print('ACI : %2.0f ' %ACI)
     ACI : 306
-
     """   
     ACI_xx = ((np.abs(diff(Sxx,1)).transpose())/(np.sum(Sxx,1)).transpose()).transpose()       
     ACI_per_bin = np.sum(ACI_xx,axis=1)
@@ -1467,8 +1455,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     References
     ----------
-    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
-    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
     
     Examples
     --------
@@ -1553,8 +1540,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
         
     References 
     ----------
-    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. 
-    A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
     
     Examples
     --------
@@ -1626,9 +1612,7 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
     
     References
     ----------
-    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. 
-    The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive 
-    for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
+    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
     
     Inspired by Seewave and soundecology R packages.
     
@@ -1696,11 +1680,7 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     
     References 
     ----------
-    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic 
-    invasion resistance in Hawaii: bioacoustics, field surveys, and airborne 
-    remote sensing. Ecological Applications 17: 2137-2144.
-    
-    Ported and modified from the soundecology R package.
+    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic invasion resistance in Hawaii: bioacoustics, field surveys, and airborne remote sensing. Ecological Applications 17: 2137-2144. Ported and modified from the soundecology R package.
     
     Notes
     -----    
@@ -1709,8 +1689,8 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
         - remove negative value in order to get positive values only
         - dividing by the frequency resolution df instead of multiplication
     
-    Examples :
-    ----------
+    Examples
+    --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs,mode='amplitude')  
     >>> BI = maad.features.bioacoustics_index(Sxx,fn)
@@ -1973,7 +1953,7 @@ def frequency_raoq (S_power, fn, bin_step=1000):
         Rao quadratic entropy  
         
     References
-    ---------
+    ----------
     
     1. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09
 
@@ -2036,16 +2016,11 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
        
     References 
     ----------
-    .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). 
-    Modeling soundscape pleasantness using perceptual assessments and acoustic measurements 
-    along paths in urban context. Acta Acustica united with Acustica,
-    .. [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). 
-    Estimation of the perceived time of presence of sources in urban acoustic environments 
-    using deep learning techniques. Acta Acustica united with Acustica,
+    .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). Modeling soundscape pleasantness using perceptual assessments and acoustic measurements along paths in urban context. Acta Acustica united with Acustica,
+    .. [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). Estimation of the perceived time of presence of sources in urban acoustic environments using deep learning techniques. Acta Acustica united with Acustica.
     
     Examples
     --------
-    
     During the day
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
@@ -2387,7 +2362,8 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         print indices on the default terminal
     display : boolean, default is False
         Display graphs
-    \*\*kwargs : arguments for functions :
+    \*\*kwargs : arguments for functions:
+        
         - temporal_leq(s, fs, gain, Vadc, sensitivity, dBref, dt)
         - temporal_snr(s, mode, Nt) 
         - temporal_median(s, mode, Nt)
@@ -2396,8 +2372,10 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         - temporal_events (s, fs, dB_threshold, rejectDuration, mode, Nt,display)
     
         For envelope
+        
         mode : str, optional, default is "fast"
             Select the mode to compute the envelope of the audio waveform
+            
             - "fast" : The sound is first divided into frames (2d) using the 
                 function _wave2timeframes(s), then the max of each frame gives a 
                 good approximation of the envelope.
@@ -2407,12 +2385,15 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
             Size of each frame. The largest, the highest is the approximation.
             
         For entropy
+        
         compatibility : string {'QUT', 'seewave'}, default is 'QUT'
             Select the way to compute the temporal entropy.
-                - QUT : entropy of the envelope²
-                - seewave : entropy of the envelope
+                
+            - QUT : entropy of the envelope²
+            - seewave : entropy of the envelope
                 
         For LEQt calculation
+        
         gain : integer
             Total gain applied to the sound (preamplifer + amplifier)
         Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
@@ -2420,22 +2401,20 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         sensitivity : float, optional, default is -35 (dB/V)
             Sensitivity of the microphone
         dBref : integer, optional, default is 94 (dBSPL)
-            Pressure sound level used for the calibration of the microphone 
-            (usually 94dB, sometimes 114dB)
+            Pressure sound level used for the calibration of the microphone (usually 94dB, sometimes 114dB)
         dt : float, optional, default is 1 (second)
             Integration step to compute the Leq (Equivalent Continuous Sound level) 
         
-        for audio activity and events
+        For audio activity and events
+        
         dB_threshold : scalar, optional, default is 3dB
-            data >Threshold is considered to be an event 
-            if the length is > rejectLength
+            data >Threshold is considered to be an event if the length is > rejectLength
         rejectDuration : scalar, optional, default is None
-            event shorter than rejectDuration are discarded
-            duration is in s
+            event shorter than rejectDuration are discarded duration is in s
    
     Returns
     -------
-    df_temporal_indices: Panda dataframe
+    df_temporal_indices: Pandas dataframe
        Dataframe containing of the calculated audio indices : ZCR, MEANt, 
        VARt, SKEWt, KURTt, LEQt, BGNt, SNRt, MED, Ht, ACTtFraction, 
        ACTtCount, ACTtMean, EVNtFraction, EVNtMean, EVNtCount
@@ -2596,25 +2575,27 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print indices on the default terminal
     display : boolean, default is False
         Display graphs
-    \*\*kwargs : arguments for functions :
-                spectral_leq
-                frequency_entropy
-                soundscape_index
-                bioacoustics_index
-                acoustic_diversity_index
-                acoustic_eveness_index
-                spectral_cover
-                spectral_activity
-                spectral_events
-                tfsd
-                region_of_interest_index
+    \*\*kwargs : arguments for functions:
+    
+        - spectral_leq
+        - frequency_entropy
+        - soundscape_index
+        - bioacoustics_index
+        - acoustic_diversity_index
+        - acoustic_eveness_index
+        - spectral_cover
+        - spectral_activity
+        - spectral_events
+        - tfsd
+        - region_of_interest_index
                
         For soundscape_index, bioacoustics_index, acoustic_diversity_index, acoustic_eveness_index
+        
         R_compatible : string, optional, default is "soundecology"
-            if 'soundecology', the result is similar to the package SoundEcology in R 
-            Otherwise, the result is specific to maad
+            if 'soundecology', the result is similar to the package SoundEcology in R. Otherwise, the result is specific to maad
                 
         For LEQf calculation
+        
         gain : integer
             Total gain applied to the sound (preamplifer + amplifier)
         Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
@@ -2622,21 +2603,24 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         sensitivity : float, optional, default is -35 (dB/V)
             Sensitivity of the microphone
         dBref : integer, optional, default is 94 (dBSPL)
-            Pressure sound level used for the calibration of the microphone 
-            (usually 94dB, sometimes 114dB)
-        pRef : Sound pressure reference in the medium (air : 20e-6, water : 1e-6)
+            Pressure sound level used for the calibration of the microphone (usually 94dB, sometimes 114dB)
+        pRef : float
+            Sound pressure reference in the medium (air : 20e-6, water : 1e-6)
         
-        for spectral activity and events, ADI, AEI
+        For spectral activity and events, ADI, AEI
+        
         dB_threshold : scalar, optional, default is 3dB
             data >Threshold is considered to be an event 
             if the length is > rejectLength
             
-        for spectral activity and events
+        For spectral activity and events
+        
         rejectDuration : scalar, optional, default is None
             event shorter than rejectDuration are discarded
             duration is in s
             
-        for Roi
+        For Roi
+        
         smooth_param1 : scalar, default is 1
             Standard deviation of the gaussian kernel used to smooth the image 
             The larger is the number, the smoother will be the image and the longer 
@@ -2664,7 +2648,8 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
             the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
             the image     
         
-        for ADI, AEI, RAOQ
+        For ADI, AEI, RAOQ
+        
         bin_step : scalar, optional, default is 500
             Frequency step in Hz        
   

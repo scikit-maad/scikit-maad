@@ -12,9 +12,9 @@ Level (SPL in Pascal) and Leq (Continuous Equivalent SPL).
 # License: New BSD License 
 
 
-"""****************************************************************************
-# -------------------       Load modules            ---------------------------
-****************************************************************************"""
+#****************************************************************************
+# -------------------       Load modules           ---------------------------
+#****************************************************************************
 
 # Import external modules
 
@@ -25,9 +25,9 @@ from numpy import sum, log10, abs, mean, sqrt
 import sys
 _MIN_ = sys.float_info.min
 
-"""****************************************************************************
-# -------------------       Functions               ---------------------------
-****************************************************************************"""
+#****************************************************************************
+# -------------------       Functions             ---------------------------
+#****************************************************************************
 
 #%%
 def wav2volt (wave, Vadc=2): 
@@ -334,8 +334,8 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in dB SPL (Sound Pressure level in dB)
       
-    See also:
-    ---------
+    See also
+    --------
     power2dBSPL
 
     Examples
@@ -381,8 +381,8 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound pressure level (L [dB])
         
-    See also:
-    ---------
+    See also
+    --------
     amplitude2dBSPL
         
     Examples
