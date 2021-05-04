@@ -772,15 +772,11 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
         - ylabel : string, optional, default : 'Frequency [Hz]'
             label of the vertical axis
         - xticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
         - yticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
@@ -1163,7 +1159,8 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
         if True, the features are scaled between 0 to 1
         
     mode : string in {'24h'}, default is '24h'
-        Select if the timeline of the phenology :
+        Select if the timeline of the phenology:
+            
             -'24h' : average of the results over a day
             - otherwise, the timeline is the timeline of the dataframe
             
@@ -1183,16 +1180,12 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
         - ylabel : string, optional, default : 'Amplitude [AU]' label of the vertical axis
             
         - xticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
             
         - yticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
         
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
@@ -1318,16 +1311,12 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
             label of the vertical axis
             
         - xticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
             
         - yticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
 
         - now : boolean, optional, default : True
             if True, display now. Cannot display multiple images. 
@@ -1442,16 +1431,12 @@ def plot_correlation_map(df, R_threshold=0.75, method="spearman", **kwargs):
             label of the vertical axis
             
         - xticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
             
         - yticks : tuple of ndarrays, optional, default : none
-            * ticks : array_like => A list of positions at which ticks should 
-            be placed. You can pass an empty list to disable yticks.
-            * labels : array_like, optional =>  A list of explicit labels to place 
-            at the given locs.
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
         
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
@@ -1553,16 +1538,12 @@ def false_Color_Spectro(
         
     indices : list, default is None
         List of indices. 
-        If permut is False (see permut), 
-            if indices is None : 1st indices is red (R), 2nd indice is green (G) 
-                                 and the 3rd indices is blue (B).
-            if indices is a list of 3 indices or more, only the 3 first indices
-            (triplet) are used to create the false color spectro.
-        if permut is True,
-            if indices is None : All indices in df are used
-            if indices is a list of 3 indices or more, all the indices in the 
-            list are used to create the false color spectro with all the 
-            possibile permutations.
+        If permut is False (see permut), if indices is None : 1st indices is red (R), 2nd indice is green (G) 
+        and the 3rd indices is blue (B).
+        if indices is a list of 3 indices or more, only the 3 first indices (triplet) are used to create the false color spectro.
+        if permut is True, if indices is None : All indices in df are used
+        if indices is a list of 3 indices or more, all the indices in the 
+        list are used to create the false color spectro with all the possibile permutations.
     
     plim : list of 2 scalars, default is (1,99)
         Set the minimum and maximum percentile to define the min and max value 

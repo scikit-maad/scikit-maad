@@ -255,7 +255,7 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
     
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> s_resamp = sound.resample(s, fs, target_fs=fs/2)
-    >>> print('Number of samples - original audio:', s.shape[0], '\n'
+    >>> print('Number of samples - original audio:', s.shape[0],
     ...       'Number of samples - resampled audio:', s_resamp.shape[0])
     >>> _ = sound.spectrogram(s, fs, display=True)
     >>> _ = sound.spectrogram(s_resamp, fs/2, display=True)
