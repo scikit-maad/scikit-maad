@@ -547,18 +547,12 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
     noise_profile : 1d ndarray of scalar
         Noise profile
 
-
     References
     ----------
-
-    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
-    Natural Recordings of the Environment. Queensland University of Technology,
-    Brisbane
-
+    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane
 
     Examples
     --------
-
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
@@ -566,7 +560,7 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
 
     Convert linear spectrogram into dB
 
-    >>> Sxx_dB = maad.util.power2dB(Sxx) +96
+    >>> Sxx_dB = maad.util.power2dB(Sxx) + 96
 
     Remove stationnary noise from the spectrogram with modes 'ale', 'median', and 'mean'.
 
@@ -585,7 +579,6 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
     >>> maad.util.plot2d(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)
     >>> fig.set_size_inches(8,10)
     >>> fig.tight_layout()   
-
     """
 
     # get the noise profile, N define the running mean size of the histogram
@@ -909,14 +902,8 @@ def pcen(Sxx, gain=0.98, bias=2, power=0.5, b=0.025, eps=1e-6,
        References
        ----------
 
-       .. [1] Lostanlen, V., Salamon, J., McFee, B., Cartwright, M., Farnsworth,
-       A., Kelling, S., and Bello, J. P. Per-Channel Energy Normalization: Why
-       and How. IEEE Signal Processing Letters, 26(1), 39-43.
-       .. [2] McFee, Brian, Colin Raffel, Dawen Liang, Daniel PW Ellis,
-       Matt McVicar, Eric Battenberg, and Oriol Nieto. “librosa: Audio and music
-       signal analysis in python.” In Proceedings of the 14th python in science
-       conference, pp. 18-25. 2015.
-       https://librosa.org/doc/main/generated/librosa.pcen.html
+       .. [1] Lostanlen, V., Salamon, J., McFee, B., Cartwright, M., Farnsworth, A., Kelling, S., and Bello, J. P. Per-Channel Energy Normalization: Why and How. IEEE Signal Processing Letters, 26(1), 39-43.
+       .. [2] McFee, Brian, Colin Raffel, Dawen Liang, Daniel PW Ellis,Matt McVicar, Eric Battenberg, and Oriol Nieto. “librosa: Audio and music signal analysis in python.” In Proceedings of the 14th python in science conference, pp. 18-25. 2015. https://librosa.org/doc/main/generated/librosa.pcen.html
 
        """
     # PCEN

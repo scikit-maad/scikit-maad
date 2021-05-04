@@ -38,7 +38,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     ----------
     filename : string 
         Name or path of the audio file
-    channel : {`'left', right'}, optional, default: left
+    channel : {'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
     detrend : boolean, optional, default is True
         Subtract the DC value.
@@ -49,7 +49,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions    
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions    
         - savefilename : str, optional, default :'_audiogram.png'
             Postfix of the figure filename
         - figsize : tuple of integers, optional, default: (4,10)

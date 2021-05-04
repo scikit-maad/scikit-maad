@@ -1031,16 +1031,16 @@ def crossfade_list(s_list, fs, fade_len=1):
 
     Parameters
     ----------
-        s_list : list
-            List with audio signlas (1D numpy arrays) to be concatenated
-        fs : int
-            sampling frequency
-        fade_len: float
-            length of fade between audio in seconds
+    s_list : list
+        List with audio signlas (1D numpy arrays) to be concatenated
+    fs : int
+        sampling frequency
+    fade_len: float
+        length of fade between audio in seconds
     
     Returns
     -------
-        s_out : ndarray
+    s_out : ndarray
     
     See also
     --------
