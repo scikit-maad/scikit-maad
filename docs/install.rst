@@ -13,7 +13,7 @@ Installation instructions
 1. Standard installation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-**scikit-maad** is available at the Python software repository `PyPI <https://pypi.org/>. The simplest way to install it is using **pip**, the standard installer for Python. To install, run the following command in your Python environment::
+**scikit-maad** is available at the Python software repository `PyPI <https://pypi.org/>`. The simplest way to install it is using **pip**, the standard installer for Python. To install, run the following command in your Python environment::
 
     pip install scikit-maad
 
@@ -42,7 +42,7 @@ To update the installation pull the latest modifications from the repository and
     git pull
     python setup.py install
     
-If you do not have git installed, download the latest ZIP version from `GitHub <https://github.com/scikit-maad/scikit-maad>`_, in the tab named **Code**, look for the link **Download ZIP**. In the download location call::
+If you do not have git installed, download the latest ZIP version from `GitHub <https://github.com/scikit-maad/scikit-maad>`, in the tab named **Code**, look for the link **Download ZIP**. In the download location call::
     
     pip install scikit-maad-production.zip
     
