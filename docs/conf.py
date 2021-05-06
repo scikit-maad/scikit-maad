@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../maad/'))
 # -- Project information -----------------------------------------------------
 
 project = 'scikit-maad'
-copyright = '2020, scikit-maad development team.'
+copyright = '2021, scikit-maad development team.'
 author = 'scikit-maad development team'
 
 # The full version, including alpha/beta/rc tags
