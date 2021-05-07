@@ -1,5 +1,4 @@
-[comment]: # (<img src="./docs/_images/logo_maad.png" alt="drawing" width="500"/>)
-<img src= "logo_maad.png" alt="drawing" width="500"/>
+<img src="./docs/_images/logo_maad.png" alt="drawing" width="500"/>
 
 **scikit-maad** is an open source Python package dedicated to the quantitative analysis of environmental audio recordings. This package was designed to (1) load and process digital audio, (2) segment and find regions of interest, (3) compute acoustic features, and (4) estimate sound pressure level. This workflow opens the possibility to scan large audio datasets and use powerful machine learning techniques, allowing to measure acoustic properties and identify key patterns in all kinds of soundscapes.
 
