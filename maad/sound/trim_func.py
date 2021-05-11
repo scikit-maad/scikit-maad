@@ -42,7 +42,7 @@ def wave2frames (s, Nt=512):
     
     Fast method to estimate the envelope of a waveform
     
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> frames = maad.sound.wave2frames(s, Nt=32)
     >>> env_fast = np.max(abs(frames),0) 
     

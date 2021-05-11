@@ -78,8 +78,8 @@ def zero_crossing_rate(s, fs):
     zcr : float   
         number of zero crossing /s
 
-    Reference
-    ---------
+    References
+    ----------
     .. [1] https://en.wikipedia.org/wiki/Zero-crossing_rate
 
     Examples

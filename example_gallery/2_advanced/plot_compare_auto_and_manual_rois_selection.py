@@ -12,7 +12,7 @@ to extract automatically the acoustic signature as a region of interest (ROI)
 by different image processing tools such as binarization, double thresholding,
 mathematical morphology tools...
 
-Dependencies: To execute this example you will need to have installed the 
+**Dependencies**: To execute this example you will need to have installed the 
 scikit-image, scikit-learn and pandas Python packages.
 
 """
@@ -205,8 +205,6 @@ ax4, fig4 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None,
                                 'ms':2,'fig':fig4, 'ax':ax4})
 
 #%%
-# References
-# -----------
-# 1.Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from
-#   Natural Recordings of the Environment. Queensland University of Technology,
-#   Brisbane
+# **References** 
+# 
+# [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane

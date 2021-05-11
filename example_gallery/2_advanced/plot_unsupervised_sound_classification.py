@@ -19,7 +19,7 @@ from maad.util import power2dB, plot2d, format_features, overlay_rois
 #%%
 # Start by loading an example audio file. We will remove low frequency ambient noise with a lowpass filter and then compute the spectrogram.
 
-s, fs = sound.load('../../data/guyana_tropical_forest.wav')
+s, fs = sound.load('../../data/rock_savanna.wav')
 s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3, ftype='highpass')
 
 db_max=70  # used to define the range of the spectrogram
@@ -84,7 +84,7 @@ print('Number of soundtypes found:', np.unique(cluster.labels_).size)
 # Visualize the clustering results
 from maad.util import rand_cmap
 fig, ax = plt.subplots()
-ax.scatter(Y[:,0], Y[:,1], c=cluster.labels_, cmap=rand_cmap(6), alpha=0.8)
+ax.scatter(Y[:,0], Y[:,1], c=cluster.labels_, cmap=rand_cmap(5 , first_color_black=False), alpha=0.8)
 ax.set_xlabel('tsne dim 1')
 ax.set_ylabel('tsne dim 2')
 

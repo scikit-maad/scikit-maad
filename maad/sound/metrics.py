@@ -57,7 +57,7 @@ def temporal_snr (s, mode ='fast', Nt=512) :
 
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> _,_,snr = maad.sound.temporal_snr(s)
     >>> snr
     1.5744987447774665
@@ -116,7 +116,7 @@ def spectral_snr (Sxx_power) :
 
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
     >>> _, _, snr, _, _, _ = maad.sound.spectral_snr(Sxx_power)
     >>> snr
@@ -159,7 +159,7 @@ def sharpness (Sxx) :
         
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/guyana_tropical_forest.wav')
+    >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)  
     >>> sharp = maad.sound.sharpness(Sxx_power)
     >>> sharp

@@ -14,6 +14,8 @@ its time-frequency representation
 # =============================================================================
 # Import external modules
 import numpy as np
+import io
+from urllib.request import urlopen
 from scipy.io import wavfile 
 from skimage.io import imread 
 from scipy.io.wavfile import write as write_wav
@@ -36,7 +38,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     ----------
     filename : string 
         Name or path of the audio file
-    channel : {`'left', right'}, optional, default: left
+    channel : {'left', right'}, optional, default: left
         In case of stereo sound select the channel that is kept 
     detrend : boolean, optional, default is True
         Subtract the DC value.
@@ -47,7 +49,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
-    **kwargs, optional. This parameter is used by plt.plot and savefig functions    
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions    
         - savefilename : str, optional, default :'_audiogram.png'
             Postfix of the figure filename
         - figsize : tuple of integers, optional, default: (4,10)
@@ -363,3 +365,54 @@ def write(filename, fs, data):
     if data.ndim > 1:
         data = data.T
     write_wav(filename, fs, np.asfortranarray(data))
+    
+#%%
+def load_url(url):
+    """
+    Download audio file from the web and load it as a variable. The audio file must be
+    a Waveform Audio Format (WAV) file.
+    
+    Parameters
+    ----------
+    url : str
+        Audio code name or URL address where the file is located.
+    
+    Returns
+    -------
+    s : 1d ndarray
+        Array with the signal amplitude
+    fs : int
+        Sampling frequency of the signal, in Hertz (Hz)
+    
+    Examples
+    --------
+    
+    Load an audio example using its code name.
+    
+    >>> from maad import sound
+    >>> s, fs = sound.load_url('spinetail')
+    
+    Load an audio example using the full web address.
+    
+    >>> from maad import sound
+    >>> s, fs = sound.load_url('https://github.com/scikit-maad/scikit-maad/raw/production/data/spinetail.wav')
+    """
+
+    # set dictionary for examples from the audio dataset
+    code_name_url = {
+        'spinetail': 'https://github.com/scikit-maad/scikit-maad/raw/production/data/spinetail.wav',
+        'cold_forest_daylight': 'https://github.com/scikit-maad/scikit-maad/raw/production/data/cold_forest_daylight.wav',
+        'cold_forest_night': 'https://github.com/scikit-maad/scikit-maad/raw/production/data/cold_forest_night.wav',
+        'rock_savanna': 'https://github.com/scikit-maad/scikit-maad/raw/production/data/guyana_tropical_forest.wav',
+        'tropical_forest_morning': 'https://github.com/scikit-maad/scikit-maad/raw/production/data/tropical_forest_morning.wav'
+        }
+    
+    # Check if url is in the dictionary keys    
+    if url in code_name_url.keys():
+        url_path = code_name_url[url]
+    # load as web address
+    else:
+        url_path = url
+    
+    s, fs = load(io.BytesIO(urlopen(url_path).read()))
+    return s, fs

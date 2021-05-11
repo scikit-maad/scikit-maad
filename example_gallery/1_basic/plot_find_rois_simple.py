@@ -4,12 +4,12 @@
 Simple audio segmentation
 =========================
 
-In audio signals, regions of interest are usually regions with high density of energy. The function ``find_rois_cwt` allows finding regions of interest in the signal giving very simple and intuitive parameters: temporal length and frequency limits. This segmentation can be seen as a coarse detection process, the starting point of more advanced classification methods.
+In audio signals, regions of interest are usually regions with high density of energy. The function ``find_rois_cwt`` allows finding regions of interest in the signal giving very simple and intuitive parameters: temporal length and frequency limits. This segmentation can be seen as a coarse detection process, the starting point of more advanced classification methods.
 
 The following sound example as two main different soundtypes in the foreground:
 
-- A bouncy trill between 4.5 and 8 kHz lasting approximately 2 seconds
-- A fast descending chirp between 8 and 12 kHz lasting 0.1 approximately seconds
+- A bouncy trill between 4.5 and 8 kHz lasting approximately 2 seconds.
+- A fast descending chirp between 8 and 12 kHz lasting 0.1 approximately seconds.
 """
 
 #%% 

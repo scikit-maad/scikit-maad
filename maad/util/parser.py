@@ -215,8 +215,9 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     
     Keeps only filenames corresponding to extension.
     Filenames must follow :
-        - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
-        - or POSIX format (for audiomoth)  
+        
+    - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
+    - or POSIX format (for audiomoth)  
     
     The result is a panda dataframe with 'Date' as index and 'File' (with full path as column) 
     

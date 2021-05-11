@@ -11,6 +11,7 @@ Input and output
     :toctree: generated/
 
     load
+    load_url
     load_spectrogram
     write
     
@@ -56,6 +57,7 @@ Metrics
 """
 
 from .input_output import (load,
+                           load_url,
                            load_spectrogram,
                            write)
 
@@ -89,6 +91,7 @@ from .metrics import (temporal_snr,
 __all__ = [
         # io.py
         'load',
+        'load_url',
         'load_spectrogram',
         'write',
         # filter.py
