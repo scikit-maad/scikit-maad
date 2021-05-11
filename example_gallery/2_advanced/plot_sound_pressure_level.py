@@ -22,7 +22,7 @@ In this example, we will evaluate the variation of the sound pressure level
 of the ambient sound in a cold temperate forest in France during 24h. 
 
 """
-# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_extract_alpha_indices_002.png'
+# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_sound_pressure_level.png'
 
 import pandas as pd
 import os
