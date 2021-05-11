@@ -2142,7 +2142,7 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
     dt : float
         Time resolution in seconds. 
     norm : string, optional, default is 'per_bin'
-        Determine if the AGI is normalized by the global meaian value 
+        Determine if the AGI is normalized by the global mean value 
         ('global' mode) or by the median value per frequency bin 
         ('per_bin')
         

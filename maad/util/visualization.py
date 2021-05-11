@@ -1260,12 +1260,17 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
 
     # kwargs
     cmap = kwargs.pop("cmap", "RdBu_r")
+    figsize = kwargs.pop("figsize", None)
 
     # plot
-    fig = plt.figure()
+    if figsize is None :
+        fig = plt.figure(figsize=(len(df)*0.33, len(list(df))*0.27))
     ax = fig.add_subplot(111)
     caxes = ax.matshow(df.transpose(), cmap=cmap, aspect="auto", **kwargs)
-    fig.colorbar(caxes, shrink=0.75, label="Normalized value")
+    if norm :
+        fig.colorbar(caxes, shrink=0.75, label="Normalized value")
+    else :
+        fig.colorbar(caxes, shrink=0.75, label="Value")    
     # Set ticks on both sides of axes on
     ax.tick_params(axis="x", bottom=True, top=False, labelbottom=True, labeltop=False)
     # We want to show all ticks...
@@ -1275,8 +1280,8 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
     ax.set_yticklabels(df.columns)
     ax.set_xticklabels(x_label)
     # Rotate the tick labels and set their alignment.
-    plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=8)
-    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=8)
+    plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=10)
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=10)
     fig.tight_layout()
     plt.show()
 
