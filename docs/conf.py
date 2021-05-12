@@ -14,6 +14,7 @@
 import os
 import sys
 import warnings
+from importlib.machinery import SourceFileLoader
 sys.path.insert(0, os.path.abspath('../maad/'))
 
 
@@ -24,8 +25,11 @@ copyright = '2021, scikit-maad development team'
 author = 'scikit-maad development team'
 
 # The full version, including alpha/beta/rc tags
-release = '1.1'
-version = '1.1'
+maad_version = SourceFileLoader('maad.version',
+                                '../maad/version.py').load_module()
+
+release = maad_version.__version__
+version = maad_version.__version__
 
 # -- General configuration ---------------------------------------------------
 
