@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-How compute sound pressure level (dB SPL) from audio dataset collected with automatic recording units (ARU)
-======================================================================================================
+Computing sound pressure level (dB SPL) of audio dataset collected with automatic recording units (ARU)
+========================================================================================================
 
-Sound pressure level (dB SPL) is quantitative value that allows comparison of
-audio recordings coming from different datasets and environment. 
+Sound pressure level (dB SPL) is a quantitative value that allows comparison of
+audio recordings coming from different datasets and environments. 
 Sound pressure level corresponds to a quantitative measurement of the acoustic 
 pressure energy. 
 Each ARU can be converted into a pseudo sound meter level knowing few 
@@ -16,7 +16,7 @@ This is sufficient to convert a wav file (array of intergers) into pressure
 (Pa).
 Of course, as the frequency response of the ARUs's microphone is never flat, 
 the result is an approximation of the real sound pressure level. In order to be
-more precise, one should correct the frequency response of the microphone
+more precise, one should correct the frequency response of the microphone.
 
 In this example, we will evaluate the variation of the sound pressure level 
 of the ambient sound in a cold temperate forest in France during 24h. 
