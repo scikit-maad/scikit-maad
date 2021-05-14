@@ -2,19 +2,17 @@
 # -*- coding: utf-8 -*-
 
 """
-Computing sound pressure level (dB SPL) of audio dataset collected with automatic recording units (ARU)
-========================================================================================================
+Estimate sound pressure level from audio recordings
+===================================================
 
-Sound pressure level (dB SPL) is a quantitative value that allows comparison of
-audio recordings coming from different datasets and environments. 
-Sound pressure level corresponds to a quantitative measurement of the acoustic 
-pressure energy. 
-Each ARU can be converted into a pseudo sound meter level knowing few 
-parameters : the sensitivity of the microphone, the amplification
+Sound pressure level (dB SPL) is a quantitative value that allows comparison of audio 
+recordings coming from different datasets and environments. Sound pressure level 
+corresponds to a quantitative measurement of the acoustic pressure energy. 
+An Automated Recording Unit (ARU) can be converted into a pseudo sound meter level 
+knowing few parameters: the sensitivity of the microphone, the amplification
 gain, the bit depth and the voltage range of the analog to digital converter.
 This is sufficient to convert a wav file (array of intergers) into pressure 
-(Pa).
-Of course, as the frequency response of the ARUs's microphone is never flat, 
+(Pa). Of course, as the frequency response of the ARUs's microphone is never flat, 
 the result is an approximation of the real sound pressure level. In order to be
 more precise, one should correct the frequency response of the microphone.
 
@@ -24,6 +22,7 @@ of the ambient sound in a cold temperate forest in France during 24h.
 """
 # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_sound_pressure_level.png'
 
+# Load required packages
 import pandas as pd
 import os
 import numpy as np
@@ -31,28 +30,32 @@ import matplotlib.pyplot as plt
 from maad import sound, util, spl
 
 #%%
+# Set variables
+# -------------
 # It is very important to always keep the parameters of the ARU that was used 
 # to collect the audio dataset. This is a mandatory to compute the sound 
 # pressure level of the audio file (dB SPL) as a sound meter level would do.
-# For this experiment, we use a SM4 ARU with an amplification gain of 16dB.
+# For this experiment, we used a Songmeter 4 (SM4, from Wildlife Acoustics) 
+# with an amplification gain of 16dB.
 S = -35         # Sensibility of the microphone -35dBV (SM4) / -18dBV (Audiomoth)   
-G = 26+16       # Total amplification gain (SM4 has a +26dB preamplifier)
+G = 26+16       # Total amplification gain in dB (SM4 has a +26dB preamplifier)
 VADC = 2        # Voltage range of the analog to digital converter (ADC)
 
 #%%
-# First, we parse the directory /indices in order to get a df with date 
-# and fullfilename. As the data were collected with a SM4 audio recording device
+# First, we parse the directory /indices in order to get a DataFrame with date 
+# and fullfilename. As the data was collected with a SM4 audio recording device,
 # we set the dateformat agument to 'SM4' in order to be able to parse the date
 # from the filename. In case of Audiomoth, the date is coded as Hex in the 
 # filename.
 df = util.date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 
 #%%
-# LOAD SOUND AND PREPROCESS SOUND  
-
+# Load and preprocess audio
+# -------------------------
 # Then we process all the files found in the directory /indices.
 # Initialisation of an empty dataframe df_spl to store all the dB SPL values 
 # extracted from the whole audio dataset.
+
 df_spl = pd.DataFrame()
 
 # Main loop to go through all audio files
@@ -174,8 +177,9 @@ for index, row in df.iterrows() :
 df_spl = df_spl.set_index('Date')
 
 #%%
-
-#### Display the phenology of the Leq (dB SPL) of each frequency band.
+# Display results
+# ---------------
+# Display Leq (dB SPL) dynamics for each frequency band.
 # One can observe that most of the acoustic energy is between 0-1kHz. Moreover
 # the sound pressure level of the 0-1kHz frequency band is not constant but 
 # increases during the day, from 4am to 22pm with a maximum between at 10am 
@@ -190,7 +194,7 @@ plt.xlabel('Hours')
 plt.ylabel('Frequency')
 plt.tight_layout()
 
-#### Display the comparison between the phenology of the Leq (dB SPL) corresponding 
+# Display the comparison between the dynamics of the Leq (dB SPL) corresponding 
 # mainly to the anthropophony (frequency band 0-1kHz) and the biophony 
 # (frequency band 1-12kHz)
 plt.figure(figsize=[7,4])

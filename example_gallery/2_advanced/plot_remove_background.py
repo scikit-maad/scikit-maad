@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
-Remove background noise from audio with signal processing tools
-===============================================================
+Remove background noise with signal processing tools
+====================================================
 
-This example shows different ways to remove background noise directly from
-the spectrogram.
-We use the sharpness metric to have a quantitative estimation of how well is 
-the noise reduction. This metric gives partial information. Other metrics 
-should be use in complement.
+Environmental audio recordings usually have stationary noise that needs to be removed to
+enhance the signal to noise ratio of biological sounds.
+This example shows different ways to remove stationary background noise using spectral 
+subtraction techniques. These techniques are applied over the spectrogram and return a 2D matrix. 
+We use the sharpness metric to have a quantitative estimation of how well is the noise 
+reduction. For a more comprehensive analysis, other metrics should be use in complement.
 
 """
 # sphinx_gallery_thumbnail_path = '../_images/sphx_glr_remove_background.png'
@@ -26,23 +27,23 @@ from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 
 #%%
+# Load and plot the spectrogram of the original audio file
+# --------------------------------------------------------
 # First, we load the audio file and take its spectrogram.
 # The linear spectrogram is then transformed into dB. The dB range is  96dB 
 # which is the maximum dB range value for a 16bits audio recording. We add
-# 96dB in order to get have only positive values in the spectrogram
+# 96dB in order to get have only positive values in the spectrogram.
 s, fs = load('../../data/tropical_forest_morning.wav')
-#s, fs = load('../data/cold_forest_night.wav')
 Sxx, tn, fn, ext = spectrogram(s, fs, fcrop=[0,20000], tcrop=[0,60])
 Sxx_dB = power2dB(Sxx, db_range=96) + 96
-
-#%%
-# We plot the original spectrogram.
 plot2d(Sxx_dB, extent=ext, title='original',
        vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
 
 print ("Original sharpness : %2.3f" % sharpness(Sxx_dB))
 
 #%%
+# Test different methods to remove stationary background noise
+# ------------------------------------------------------------
 # Test the function "remove_background"
 start = timer()
 X1, noise_profile1, _ = remove_background(Sxx_dB)
