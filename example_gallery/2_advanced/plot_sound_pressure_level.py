@@ -20,7 +20,6 @@ In this example, we will evaluate the variation of the sound pressure level
 of the ambient sound in a cold temperate forest in France during 24h. 
 
 """
-# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_sound_pressure_level.png'
 
 # Load required packages
 import pandas as pd
@@ -194,6 +193,7 @@ plt.xlabel('Hours')
 plt.ylabel('Frequency')
 plt.tight_layout()
 
+#%%
 # Display the comparison between the dynamics of the Leq (dB SPL) corresponding 
 # mainly to the anthropophony (frequency band 0-1kHz) and the biophony 
 # (frequency band 1-12kHz)

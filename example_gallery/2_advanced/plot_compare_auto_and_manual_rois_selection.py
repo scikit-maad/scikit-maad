@@ -16,7 +16,7 @@ mathematical morphology tools...
 scikit-image, scikit-learn and pandas Python packages.
 
 """
-# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_compare_auto_and_manual_rois_selection.png'
+# sphinx_gallery_thumbnail_path = './_images/sphx_glr_compare_auto_and_manual_rois_selection.png'
 
 import numpy as np
 import pandas as pd
