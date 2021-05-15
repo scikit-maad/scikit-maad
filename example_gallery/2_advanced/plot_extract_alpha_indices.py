@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
-Extract ecoacoustics alpha indices from audio recording
-=======================================================
+Extract acoustic indices from audio recordings
+==============================================
 
-In ecoacoustics, acoustics diversity is measured by single values, the so-called
-alpha indices, which compress a portion of audio into a single value. In this
-example, we will see how to compute these indices and show basics post-processing
+Acoustic indices can summarize aspects of the acoustic energy distribution in
+audio recordings and are widely used to characterize animal acoustic communities[1-3].
+In this example, we will see how to eficiently compute multiple acoustic indices, 
+and present basics post-processing posibilities. The audio recordings used in this 
+example can be downloaded from the open GitHub repository 
+(https://github.com/scikit-maad/scikit-maad/tree/production/data).
 
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_extract_alpha_indices_002.png'
@@ -19,6 +22,10 @@ from maad.util import (date_parser, plot_correlation_map,
                        plot_features_map, plot_features, false_Color_Spectro)
 
 #%%
+# Set Variables
+# -------------
+# We list all spectral and temporal acoustic indices that will be computed.
+
 SPECTRAL_FEATURES=['MEANf','VARf','SKEWf','KURTf','NBPEAKS','LEQf', 
 'ENRf','BGNf','SNRf','Hf', 'EAS','ECU','ECV','EPS','EPS_KURT','EPS_SKEW','ACI',
 'NDSI','rBA','AnthroEnergy','BioEnergy','BI','ROU','ADI','AEI','LFC','MFC','HFC',
@@ -31,11 +38,11 @@ TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
                'ACTtMean','EVNtFraction', 'EVNtMean', 'EVNtCount']
 
 #%%
-# First, we parse the directory /indices in order to get a df with date 
+# We parse the directory were the audio dataset is located in order to get a df with date 
 # and fullfilename. As the data were collected with a SM4 audio recording device
 # we set the dateformat agument to 'SM4' in order to be able to parse the date
 # from the filename. In case of Audiomoth, the date is coded as Hex in the 
-# filename.
+# filename. The path to the audio dataset is "../../data/indices/".
 df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 
 # remove index => Date becomes a column instead of an index. This is
@@ -44,7 +51,8 @@ df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 #df = df.reset_index()
 
 #%%
-# LOAD SOUND AND PREPROCESS SOUND  
+# Batch compute acoustic indices on the audio dataset
+# ---------------------------------------------------
 df_indices = pd.DataFrame()
 df_indices_per_bin = pd.DataFrame()
     
@@ -136,6 +144,8 @@ df_indices = df_indices.set_index('Date')
 df_indices_per_bin = df_indices_per_bin.set_index('Date')
 
 #%%
+# Display results
+# ---------------
 # After calculating all alpha indices (in audio and spectral domain), let's 
 # have a look to the data. 
 # First, plot correlation map of all indices. We set the R threshold to 0 in
@@ -174,3 +184,10 @@ fcs, triplet = false_Color_Spectro(df_indices_per_bin,
                                    permut=False,
                                    display=True,
                                    figsize=(4,7))
+
+#%% 
+# References
+# ----------
+# 1. Sueur, J., Farina, A., Gasc, A., Pieretti, N., & Pavoine, S. (2014). Acoustic Indices for Biodiversity Assessment and Landscape Investigation. Acta Acustica United with Acustica, 100(4), 772–781. https://doi.org/10.3813/AAA.918757
+# 2. Buxton, R. T., McKenna, M. F., Clapp, M., Meyer, E., Stabenau, E., Angeloni, L. M., Crooks, K., & Wittemyer, G. (2018). Efficacy of extracting indices from large-scale acoustic recordings to monitor biodiversity: Acoustical Monitoring. Conservation Biology, 32(5), 1174–1184. https://doi.org/10.1111/cobi.13119
+# 3. Towsey, M., Wimmer, J., Williamson, I., & Roe, P. (2014). The use of acoustic indices to determine avian species richness in audio-recordings of the environment. Ecological Informatics, 21, 110–119. https://doi.org/10.1016/j.ecoinf.2013.11.007
