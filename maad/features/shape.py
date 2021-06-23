@@ -660,7 +660,7 @@ def shape_features(Sxx, resolution='low', rois=None):
         im_rs = np.array(im_rs)
         index_row = 0 
         for _, row in rois.iterrows(): 
-            im_rs_blobs = im_rs[:, row.min_y:row.max_y+1, row.min_x:row.max_x+1]
+            im_rs_blobs = im_rs[:, int(row.min_y):int(row.max_y)+1, int(row.min_x):int(row.max_x)+1]
             roi_mean = np.mean(im_rs_blobs, axis=(1,2))
             shape[index_row,:] = roi_mean 
             index_row = index_row + 1 
