@@ -129,13 +129,14 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
     References 
     ---------- 
     .. [1] Steven F. Boll, "Suppression of Acoustic Noise in Speech Using Spectral 
-       Subtraction", IEEE Transactions on Signal Processing, 27(2),pp 113-120, 
-       1979 
-
+       Subtraction", IEEE Transactions on Signal Processing, 27(2),pp 113-120,1979  
+       `DOI:10.1109/TASSP.1979.1163209 <https://doi.org/10.1109/TASSP.1979.1163209>`_
+       
     .. [2] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean square  
        error short-time spectral amplitude estimator, IEEE. Transactions in 
        Acoust., Speech, Signal Process., vol. 32, no. 6, pp. 11091121, Dec. 1984.   
-
+       `DOI:10.1109/TASSP.1984.1164453 <https://doi.org/10.1109/TASSP.1984.1164453>`_
+       
     Examples
     --------
 
@@ -549,7 +550,7 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
 
     References
     ----------
-    .. [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane
+    .. [1] Towsey, M., 2013. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane
 
     Examples
     --------
@@ -902,7 +903,7 @@ def pcen(Sxx, gain=0.98, bias=2, power=0.5, b=0.025, eps=1e-6,
        References
        ----------
 
-       .. [1] Lostanlen, V., Salamon, J., McFee, B., Cartwright, M., Farnsworth, A., Kelling, S., and Bello, J. P. Per-Channel Energy Normalization: Why and How. IEEE Signal Processing Letters, 26(1), 39-43.
+       .. [1] Lostanlen, V., Salamon, J., McFee, B., Cartwright, M., Farnsworth, A., Kelling, S., and Bello, J. P. Per-Channel Energy Normalization: Why and How. IEEE Signal Processing Letters, 26(1), 39-43. `DOI: 10.1109/LSP.2018.2878620 <https://doi.org/10.1109/LSP.2018.2878620>`_ 
        .. [2] McFee, Brian, Colin Raffel, Dawen Liang, Daniel PW Ellis,Matt McVicar, Eric Battenberg, and Oriol Nieto. “librosa: Audio and music signal analysis in python.” In Proceedings of the 14th python in science conference, pp. 18-25. 2015. https://librosa.org/doc/main/generated/librosa.pcen.html
 
        """
