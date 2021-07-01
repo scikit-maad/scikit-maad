@@ -978,9 +978,12 @@ def format_features(df, tn, fn):
 
     return df
 
+
+# %%
+
 def crossfade(s1, s2, fs, fade_len=1):
     """
-    AAdd a smooth transition (cross-fade) between two audio signals.
+    Add a smooth transition (cross-fade) between two audio signals.
     The function applies a squared function to apply the transition between signals. 
     The signals must have the same sampling rate.
     
@@ -1023,10 +1026,13 @@ def crossfade(s1, s2, fs, fade_len=1):
     )
     return s_out
 
+# %%
+
+
 def crossfade_list(s_list, fs, fade_len=1):
     """
     Apply a cross-fade to a list of audio signals.
-    Audio signlas must be numpy arrays with the same sampling rate. The function applies 
+    Audio signals must be numpy arrays with the same sampling rate. The function applies 
     a squared function to apply the transition between signals.
 
     Parameters
