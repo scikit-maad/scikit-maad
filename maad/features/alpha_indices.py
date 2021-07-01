@@ -46,7 +46,7 @@ from maad.rois import select_rois, create_mask
 # =============================================================================
 def _acoustic_activity (xdB, dB_threshold, axis=1):
     """
-    Acoustic Activity [1]_:
+    Acoustic Activity [1]_ [2]_:
     
     for each frequency bin :
     - ACTfract : proportion (fraction) of points above the threshold 
@@ -75,9 +75,9 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
         
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived 
-    from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
-    
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane. https://eprints.qut.edu.au/61399/4/61399.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     ACTsp [Towsey] : ACTfract (proportion (fraction) of point value above the theshold)
     EVNsp [Towsey] : ACTcount (number of point value above the theshold)
     """ 
@@ -95,7 +95,7 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
 #%%    
 def _acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
     """
-    Acoustic events [1]_ :
+    Acoustic events [1]_ [2]_:
         - EVNsum : total events duration (s) 
         - EVNmean : mean events duration (s)
         - EVNcount : number of events per s
@@ -131,9 +131,9 @@ def _acoustic_events(xdB, dt, dB_threshold=6, rejectDuration=None):
 
     References 
     ----------
-    .. [1]  Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
-            Derived from Natural Recordings of the Environment. 
-            Queensland University of Technology, Brisbane.
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane. https://eprints.qut.edu.au/61399/4/61399.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     """    
     # total duration
     if xdB.ndim ==1 : duration = (len(xdB)-1) * dt
@@ -281,7 +281,7 @@ def _gini(x, corr=False):
 #%%
 def _raoQ (p, bins):
     """
-    Compute Rao's Quadratic entropy in 1d
+    Compute Rao's Quadratic entropy in 1d [1]_
     
     Parameters
     ---------
@@ -297,8 +297,7 @@ def _raoQ (p, bins):
     
     Reference:
     ---------
-    .. [1] Botta-Dukát, Zoltán, Rao’s quadratic entropy as a measure of functional 
-    diversity based on multiple traits, Journal of Vegetation Science, 2005
+    .. [1] Botta-Dukát, Zoltán, Rao’s quadratic entropy as a measure of functional diversity based on multiple traits, Journal of Vegetation Science, 2005. `DOI: 10.1111/j.1654-1103.2005.tb02393.x <https://doi.org/10.1111/j.1654-1103.2005.tb02393.x>`_ 
     
     """
     
@@ -399,7 +398,7 @@ def roughness (x, norm=None, axis=0) :
     """
     Computes the roughness (depends on the number of peaks and their amplitude)
     of a vector or matrix x (i.e. waveform, spectrogram...)   
-    Roughness = sum(second_derivation(x)²)
+    Roughness = sum(second_derivation(x)²) [1]_ [2]_
     
     Parameters
     ----------
@@ -424,8 +423,8 @@ def roughness (x, norm=None, axis=0) :
 
     References
     ----------
-    Described in [Ramsay JO, Silverman BW (2005) Functional data analysis.]
-    Ported from SEEWAVE R Package
+    .. [1] Described in Ramsay, J. O., & Silverman, B. W. (2005). Principal components analysis for functional data. Functional data analysis, 147-172. https://link.springer.com/content/pdf/10.1007/0-387-22751-2_8.pdf
+    .. [2] Ported from SEEWAVE R Package http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
     """      
     
     if norm is not None:
@@ -516,8 +515,7 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
        
     References
     ----------
-    .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
-     
+    .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
     .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
     
     Notes
@@ -552,8 +550,8 @@ def acoustic_richness_index (Ht_array, M_array):
     """
     Compute the acoustic richness index of an audio file. 
     
-    This acoustic index was first described in [1]_. The present version was 
-    translated from the R software package Seewave [2]_.
+    This acoustic index was first described in [1]_. 
+    The present version was ported from the R package Seewave [2]_.
     
     Parameters
     ----------
@@ -569,8 +567,8 @@ def acoustic_richness_index (Ht_array, M_array):
         
     References
     ----------
-    .. [1] Depraetere, M., Pavoine, S., Jiguet, F., Gasc, A., Duvail, S., & Sueur, J. (2012). Monitoring animal diversity using acoustic indices: Implementation in a temperate woodland. Ecological Indicators, 13, 46–54.
-    .. [2] Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound analysis and synthesis. Bioacoustics, 18, 213–226.
+    .. [1] Depraetere, M., Pavoine, S., Jiguet, F., Gasc, A., Duvail, S., & Sueur, J. (2012). Monitoring animal diversity using acoustic indices: Implementation in a temperate woodland. Ecological Indicators, 13, 46–54. `DOI: 10.1016/j.ecolind.2011.05.006 <https://doi.org/10.1016/j.ecolind.2011.05.006>`_ 
+    .. [2] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
 
     Examples
     --------
@@ -605,7 +603,7 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
     Compute the acoustic activity index in temporal domain.
     
     Acoustic activity corresponds to the portion of the waveform above a 
-    threshold [1]_
+    threshold [1]_ [2]_
     
     Three values are computed with this function:
     
@@ -641,8 +639,9 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
         
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
-    
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane. https://eprints.qut.edu.au/61399/4/61399.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
@@ -678,7 +677,7 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
 def temporal_events (s, fs, dB_threshold=3, rejectDuration=None, 
                   mode='fast', Nt=512, display=False, **kwargs):
     """
-    Compute the acoustic event index from an audio signal.
+    Compute the acoustic event index from an audio signal [1]_ [2]_.
     
     An acoustic event corresponds to the period of the signal above a 
     threshold. An acoustic event could be short (at list one point if 
@@ -737,8 +736,9 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
 
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
-    
+    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane. https://eprints.qut.edu.au/61399/4/61399.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
@@ -817,10 +817,9 @@ def frequency_entropy (X, compatibility="QUT") :
        
     References
     ----------
-    .. [1] Seewave : http://rug.mnhn.fr/seewave/. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226.
-     
-    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis/. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
-    
+    .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+  
     Notes
     -----
     The spectral entropy of a signal measures the energy dispersion along frequencies. Low values 
@@ -877,7 +876,8 @@ def frequency_entropy (X, compatibility="QUT") :
 def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200, 
                   slopes=(1,1), display=False, **kwargs):
     """
-    Count the number of frequency peaks on a mean spectrum.
+    Count the number of frequency peaks on a mean spectrum. [1]_ 
+    This function was adapted from the function fpeaks of the R package Seewave [2]_
     
     Parameters
     ----------
@@ -911,8 +911,8 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     
     References
     ----------
-    .. [1] Gasc, A. & al (2013). Biodiversity sampling using a global acoustic approach: contrasting sites with microendemics in New Caledonia. PloS one, 8(5), e65311. Inspired by the function `fpeaks` from the R package Seewave.
-    .. [2] Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave: A free modular tool for sound analysis and synthesis. Bioacoustics, 18, 213–226.
+    .. [1] Gasc, A. & al (2013). Biodiversity sampling using a global acoustic approach: contrasting sites with microendemics in New Caledonia. PloS one, 8(5), e65311. `DOI: 10.1371/journal.pone.0065311 <https://doi.org/10.1371/journal.pone.0065311>`_ 
+    .. [2] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
     
     Examples
     --------
@@ -992,7 +992,7 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
 def spectral_entropy (Sxx, fn, flim=None, display=False) :
     """
     Compute different entropies based on the average spectrum, its variance, 
-    and its maxima [1]_     
+    and its maxima [1]_ [2]_    
     
     Parameters
     ----------
@@ -1028,8 +1028,9 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
         
     References 
     ----------
-    .. [1] Credit : Towsey 2017
-    
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
@@ -1052,7 +1053,7 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
     # force Sxx to be an ndarray
     X = np.asarray(Sxx)
 
-    # TOWSEY & BUXTON : only on the bio band
+    # TOWSEY : only on the bio band
     # EAS [TOWSEY] #
     ####  COMMENT : Result a bit different due to different Hilbert implementation
     X_mean = mean(X[iBAND], axis=1)
@@ -1114,7 +1115,7 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
     """
     Compute the proportion (cover) of the spectrogram above a threshold for 
     three bandwidths : low frequency band (LF), medium frequency band (MF) and 
-    high frequency band (HF).  
+    high frequency band (HF) [1]_ [2]_.  
     
     Parameters
     ----------
@@ -1147,8 +1148,9 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
         
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
-    
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
@@ -1186,7 +1188,7 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
     Compute the acoustic activity on a spectrogram.
     
     Acoustic activity corresponds to the portion of the spectrogram above a 
-    threshold frequency per frequency along time axis [1]_
+    threshold frequency per frequency along time axis [1]_ [2]_
     
     The function computes for each frequency bin:
         
@@ -1214,8 +1216,9 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
         
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
-    
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     Examples
     --------
     >>> import numpy as np
@@ -1241,7 +1244,7 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
 def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None, 
                      display=False, **kwargs):
     """
-    Compute acoustic events from a spectrogram [1]_.
+    Compute acoustic events from a spectrogram [1]_ [2]_.
     
     An acoustic event corresponds to the period of the signal above a 
     threshold. An acoustic event could be short (at list one point if 
@@ -1290,8 +1293,9 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
     References 
     ----------
-    .. [1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
-    
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+
     Examples
     --------
     >>> import numpy as np
@@ -1388,7 +1392,7 @@ def acoustic_complexity_index(Sxx):
         
     References
     ----------
-    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing activity of an avian community: the Acoustic Complexity Index (ACI). Ecological Indicators, 11, 868-873.
+    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing activity of an avian community: the Acoustic Complexity Index (ACI). Ecological Indicators, 11, 868-873. `DOI: 10.1016/j.ecolind.2010.11.005 <https://doi.org/10.1016/j.ecolind.2010.11.005>`_ 
     
     Examples
     --------
@@ -1455,7 +1459,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     References
     ----------
-    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.`DOI: 10.1007/s10980-011-9636-9 <https://doi.org/10.1007/s10980-011-9636-9>`_ 
     
     Examples
     --------
@@ -1540,7 +1544,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
         
     References 
     ----------
-    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.`DOI: 10.1007/s10980-011-9636-9 <https://doi.org/10.1007/s10980-011-9636-9>`_ 
     
     Examples
     --------
@@ -1612,9 +1616,9 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
     
     References
     ----------
-    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive for Studying Soundscape Ecology. Ecological Informatics 12: 50-67.
+    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive for Studying Soundscape Ecology. Ecological Informatics 12: 50-67. `DOI: 10.1016/j.ecoinf.2012.08.001 <https://doi.org/10.1016/j.ecoinf.2012.08.001>`_ https://doi.org/10.1016/j.ecoinf.2012.08.001
     
-    Inspired by Seewave and soundecology R packages.
+    Ported from Seewave (http://rug.mnhn.fr/seewave) and soundecology R packages (cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf).
     
     Examples
     --------
@@ -1680,7 +1684,8 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     
     References 
     ----------
-    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic invasion resistance in Hawaii: bioacoustics, field surveys, and airborne remote sensing. Ecological Applications 17: 2137-2144. Ported and modified from the soundecology R package.
+    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic invasion resistance in Hawaii: bioacoustics, field surveys, and airborne remote sensing. Ecological Applications 17: 2137-2144. `DOI: 10.1890/07-0004.1 <https://doi.org/10.1890/07-0004.1>`_ 
+    Ported and modified from the soundecology R package - cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
     
     Notes
     -----    
@@ -1843,7 +1848,7 @@ def more_entropy(x, order=3, axis=0) :
     """
     Compute the entropy of an audio signal using multiple methods.
     
-    There are currently five types supported:
+    There are currently five types supported: [1]_
         - Havrda
         - Renyi
         - paired Shannon
@@ -1878,9 +1883,7 @@ def more_entropy(x, order=3, axis=0) :
         
     References
     ----------
-    1. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). 
-    Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, 
-    Old Dominion University, DOI: 10.25777/qgak-sf09
+    .. [1]. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, Old Dominion University. `DOI: 10.25777/qgak-sf09 <https://doi.org/10.25777/qgak-sf09>`_
     
     Examples
     --------
@@ -1936,7 +1939,7 @@ def more_entropy(x, order=3, axis=0) :
 
 def frequency_raoq (S_power, fn, bin_step=1000):
     """
-    Compute Rao's quadratic entropy on a power spectrum (1d).
+    Compute Rao's quadratic entropy on a power spectrum (1d). [1]_
         
     Parameters
     ----------
@@ -1954,9 +1957,8 @@ def frequency_raoq (S_power, fn, bin_step=1000):
         
     References
     ----------
+    .. [1]. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, Old Dominion University. `DOI: 10.25777/qgak-sf09 <https://doi.org/10.25777/qgak-sf09>`_
     
-    1. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD) dissertation, Mathematics and Statistics, Old Dominion University, DOI: 10.25777/qgak-sf09
-
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
@@ -1983,7 +1985,7 @@ def frequency_raoq (S_power, fn, bin_step=1000):
 
 def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     """
-    Compute the Time frequency derivation index (tfsd) from a spectrogram.
+    Compute the Time frequency derivation index (tfsd) from a spectrogram. [1]_ [2]_
         
     Parameters
     ----------
@@ -2016,8 +2018,8 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
        
     References 
     ----------
-    .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). Modeling soundscape pleasantness using perceptual assessments and acoustic measurements along paths in urban context. Acta Acustica united with Acustica,
-    .. [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). Estimation of the perceived time of presence of sources in urban acoustic environments using deep learning techniques. Acta Acustica united with Acustica.
+    .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). Modeling soundscape pleasantness using perceptual assessments and acoustic measurements along paths in urban context. Acta Acustica united with Acustica. `DOI: 10.3813/AAA.919073 <https://doi.org/10.3813/AAA.919073>`_ 
+    .. [2] Gontier, F., Lavandier, C., Aumond, P., Lagrange, M., & Petiot, J. F. (2019). Estimation of the perceived time of presence of sources in urban acoustic environments using deep learning techniques. Acta Acustica united with Acustica.`DOI: 10.3813/AAA.919384 <https://doi.org/10.3813/AAA.919384>`_
     
     Examples
     --------
@@ -2210,15 +2212,17 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
 #=============================================================================
 
 def region_of_interest_index(Sxx_dB_noNoise, tn, fn, 
-                          smooth_param1=1, mask_mode='relative', 
-                          mask_param1=6, mask_param2=0.5, 
-                          min_roi=9, max_roi=512*10000, 
-                          remove_rain = False,
-                          display=False, **kwargs):
+                             smooth_param1=1, mask_mode='relative', 
+                             mask_param1=6, mask_param2=0.5, 
+                             min_roi=9, max_roi=512*10000, 
+                             remove_rain = False,
+                             display=False, **kwargs):
     """
-    Compute an acoustic activity index based on the regions of interested detected on a spectrogram.
+    Compute an acoustic activity index based on the regions of interested 
+    detected on a spectrogram.
     
-    The function first find regions of interest (ROI) and then compute the number and cover area 
+    The function first find regions of interest (ROI) and then compute the number
+    or ROIs and the cover area of these ROIS
     on the spectrogram.
     
     Parameters
@@ -2291,7 +2295,7 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
 
     # Smooth the spectrogram in order to facilitate the creation of masks
     Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, std=smooth_param1, 
-                         display=display, savefig=None,**kwargs) 
+                                   display=display, savefig=None,**kwargs) 
     # binarization of the spectrogram to select part of the spectrogram with 
     # acoustic activity
     if mask_mode == 'relative' :
@@ -2322,15 +2326,6 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
         kwargs.update({'vmax':np.max(X)})
         kwargs.update({'vmin':np.min(X)})
         ax, fig = overlay_rois(X, rois, **kwargs)
- 
-#        dpi= 96
-#        bbox_inches= 'tight'
-#        format='png'
-#        savefilename='_spectrogram_bounding_box'
-#        filename = savefile+savefilename+'.'+format
-#        print('\n''save figure : %s' %filename)
-#        fig20.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
-#                    format=format)  
 
     #ROItotal
     ROItotal = len(centroid)
