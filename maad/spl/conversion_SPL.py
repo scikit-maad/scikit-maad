@@ -4,6 +4,10 @@
 """ 
 Collection of functions to convert audio and voltage data to Sound Pressure 
 Level (SPL in Pascal) and Leq (Continuous Equivalent SPL).
+Functions are adapted from the algorithm proposed in Merchant, N.D., 
+Fristrup, K.M., Johnson, M.P., Tyack, P.L., Witt, M.J., Blondel, P. and 
+Parks, S.E. (2015), Measuring acoustic habitats. Methods Ecol Evol, 6: 257-265. 
+`DOI: 10.1111/2041-210X.12330 <https://doi.org/10.1111/2041-210X.12330>`_
 """   
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
