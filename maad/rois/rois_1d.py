@@ -133,7 +133,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     
     References
     ----------
-    .. [1] Bioinformatics (2006) 22 (17): 2059-2065. DOI:10.1093/bioinformatics/btl355 http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
+    .. [1] Pan Du, Warren A. Kibbe, Simon M. Lin, Improved peak detection in mass spectrum by incorporating continuous wavelet transform-based pattern matching, Bioinformatics, Volume 22, Issue 17, 1 September 2006, Pages 2059–2065, `DOI: 10.1093/bioinformatics/btl355 <https://doi.org/10.1093/bioinformatics/btl355>`_ 
     
     Examples
     --------
