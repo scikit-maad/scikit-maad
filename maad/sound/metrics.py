@@ -107,12 +107,8 @@ def spectral_snr (Sxx_power) :
         
     References
     ----------
-    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms 
-          Derived from Natural Recordings of the Environment. 
-          Queensland University of Technology, Brisbane.
-    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived 
-          from long-duration recordings of the naturalenvironment.
-          Queensland University of Technology, Brisbane.
+    ..[1] Towsey, Michael (2013), Noise Removal from Waveforms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane.
+    ..[2] Towsey, Michael (2017),The calculation of acoustic indices derived from long-duration recordings of the naturalenvironment.Queensland University of Technology, Brisbane.
 
     Examples
     --------
