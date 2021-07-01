@@ -121,6 +121,7 @@ def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
     L.F. Lamel, L.R. Rabiner, A.E. Rosenberg, J.G. Wilpon
     An improved endpoint detector for isolated word recognition
     IEEE Trans. ASSP, ASSP-29 (1981), pp. 777-785
+    `DOI: 10.1109/TASSP.1981.1163642 <https://doi.org/10.1109/TASSP.1981.1163642>`_
     
     Examples
     --------
