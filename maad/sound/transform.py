@@ -30,7 +30,7 @@ from maad.util import plot_spectrum
 # =============================================================================
 def envelope (s, mode='fast', Nt=32):
     """
-    Calcul the envelope of a sound waveform (1d)
+    Calculate the envelope of a sound waveform (1d)
     
     Parameters
     ----------
@@ -383,3 +383,64 @@ def trim(s, fs, min_t, max_t, pad=False, pad_constant=0):
                     s_slice[i] = s[i][int(min_lim): int(max_lim)]                
         
         return s_slice
+    
+def normalize(s, max_amp=0.7, max_db=None):
+    """
+    Normalize audio signal to desired amplitude or decibell full scale value (dBFS).
+    
+    Parameters
+    ----------
+    s : np.ndarray 
+        Mono audio signal as NumPy array.
+    max_amp : float, optional
+        Maximum amplitude. Must be between 0-1. The default is 0.7.
+    max_db : float, optional
+        Maximum amplitude in dBFS. Must be a negative value.
+
+    Returns
+    -------
+    s_out : np.ndarray
+        Normalized mono signal.
+        
+    See Also
+    --------
+    sound.trim
+    
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from maad import sound
+    
+    Use normalized amplitude value for normalization
+    
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s_out = sound.normalize(s, max_amp=0.8)
+    >>> print('s_out maximum amplitude:', np.abs(s_out).max())
+    s_out maximum amplitude: 0.8
+    
+    Use a dBFS value for normalization:
+    
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s_out = sound.normalize(s, max_db=-3)
+    >>> print('s_out maximum value in dBFS:', np.max(20*np.log10(np.abs(s_out))))
+    s_out maximum value in dBFS: -3.0
+    
+    """
+    # Check values for normalization and transform if using max_dbfs
+    if (max_amp < 0) | (max_amp > 1):
+        raise ValueError('max_amp should be a value between 0 and 1')
+        
+    elif (max_db is not None):
+        if max_db > 0:
+            raise ValueError('max_db should be a negative value')
+        else:
+            # transform dbfs to normalized amplitude
+            max_amp = 10 ** (max_db/20)
+    else:
+        pass
+        
+    # compute and apply gain value
+    gain = max_amp/np.abs(s).max()
+    s_out = s*gain
+    
+    return s_out

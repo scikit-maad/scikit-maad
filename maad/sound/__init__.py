@@ -44,6 +44,7 @@ Transform audio
     spectrum
     resample
     trim
+    normalize
 
 Metrics
 -------
@@ -77,7 +78,8 @@ from .trim_func import wave2frames
 from .transform import (envelope,
                         spectrum,
                         resample,
-                        trim)
+                        trim,
+                        normalize)
 
 from .spectro_func import (spectrogram,
                            avg_power_spectro,
@@ -112,6 +114,7 @@ __all__ = [
         'spectrum',
         'resample',
         'trim',
+        'normalize',
         # spectro_func.py
         'spectrogram',
         'avg_power_spectro',
