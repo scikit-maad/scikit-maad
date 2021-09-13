@@ -21,6 +21,7 @@ sample_len = 3  # length in seconds of each audio slice
 #%% 
 # Build a long list of audio slices of length `sample_len`.
 flist = glob.glob(fpath+'*.wav')
+flist.sort()
 long_wav = list()
 for idx, fname in enumerate(flist):
     s, fs = sound.load(fname)
