@@ -330,21 +330,42 @@ def trim(s, fs, min_t, max_t, pad=False, pad_constant=0):
     
     if pad:
         
-        if s.ndim == 1:
+        if s.ndim == 1:  # mono file
             
             if (duration * fs) > s.shape[-1]:
+                # length of trimmed section larger than signal duration, pad both sides
                 up_lim = int(max_t * fs - s.shape[-1])
                 if min_t <=0:
                     low_lim = int(abs(min_t) * fs) 
-                    s_slice = np.pad(s, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                    s_slice = np.pad(s, (low_lim, up_lim), 'constant',
+                                     constant_values=(pad_constant))
                 else:
                     low_lim = int(0.0) 
-                    s_slice = np.pad(s, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                    s_slice = np.pad(s, (low_lim, up_lim), 'constant',
+                                     constant_values=(pad_constant))
                     s_slice = s_slice[int(min_lim):]
+
+            elif min_t < 0:
+                # min_t with negative values, pad left side
+                pad_width = int(abs(min_t) * fs)
+                up_lim = int(max_t * fs)
+                s_slice = s[0:up_lim]
+                s_slice = np.pad(s_slice, (pad_width, 0), 'constant', 
+                                 constant_values=(pad_constant))
+
+            elif max_t * fs > s.shape[-1]:
+                # max_t with values outside duration of signal, pad right side
+                low_lim = int(min_t * fs)
+                pad_width = int((max_t * fs) - s.shape[-1])
+                s_slice = s[low_lim:]
+                s_slice = np.pad(s_slice, (0, pad_width), 'constant', 
+                                 constant_values=(pad_constant))
+                                 
             else:
+                # no padding needed
                 s_slice = s[int(min_lim): int(max_lim)]
         
-        else:
+        else:  # stereo file
             
             s_slice = np.empty((s.shape[0], int(duration * fs)))
             for i, chanel in enumerate(s):
@@ -353,10 +374,12 @@ def trim(s, fs, min_t, max_t, pad=False, pad_constant=0):
                     
                     if min_t <=0:
                         low_lim = int(abs(min_t) * fs) 
-                        s_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                        s_slice = np.pad(chanel, (low_lim, up_lim), 'constant',
+                                         constant_values=(pad_constant))
                     else:
                         low_lim = int(0.0) 
-                        s_slice = np.pad(chanel, (low_lim, up_lim), 'constant', constant_values=(pad_constant))
+                        s_slice = np.pad(chanel, (low_lim, up_lim), 'constant',
+                                         constant_values=(pad_constant))
                         s_slice = s_slice[int(min_lim):]
                 else:
                     s_slice[i] = s[i][int(min_lim): int(max_lim)]
@@ -366,7 +389,7 @@ def trim(s, fs, min_t, max_t, pad=False, pad_constant=0):
     else:
         
         if min_t < 0:
-            raise ValueError("t_min must be >= 0.")
+            raise ValueError("min_t must be >= 0.")
         
         if s.ndim == 1:
             if (duration * fs) > s.shape[-1]:
