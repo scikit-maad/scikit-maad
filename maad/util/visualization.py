@@ -271,7 +271,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
 
 
 #%%
-def overlay_rois(im_ref, rois, savefig=None, **kwargs):
+def overlay_rois(im_ref, rois, textbox_label=False, savefig=None, **kwargs):
     """ 
     Display bounding boxes with time-frequency regions of interest over a spectrogram.
     
@@ -282,10 +282,18 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
     im_ref : 2d ndarray of scalars 
         Spectrogram (or image) 
  
-    rois_bbox : list of tuple (min_y,min_x,max_y,max_x) 
-        Contains the bounding box of each ROI 
+    rois_bbox : pandas.DataFrame
+        Contains the bounding box of each ROI. The pandas.DataFrame must have columns
+        ['min_x', 'max_x', 'min_y', 'max_y']. If your data is in the time-frequency
+        format ['min_t', 'max_t', 'min_f', 'max_f'], use the function
+        maad.util.format_features to get the cooresponding
+        x, y coordinates.
+    
+    textbox_label: bool
+        Display a text box above the bounding box indicating the name of the label.
+        The rois_bbox pandas.DataFrame must have a column called 'label' with names
+        assigned to each ROI.
  
-         
     savefig : string, optional, default is None 
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
@@ -339,6 +347,18 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
     Examples 
     -------- 
     
+    Simple display of bounding boxes over the spectrogram.
+    
+    >>> from maad import sound, util
+    >>> s, fs = sound.load('./data/spinetail.wav')
+    >>> rois = util.read_audacity_annot('./data/spinetail.txt')
+    >>> Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=512, noverlap=256)
+    >>> rois = util.format_features(rois, tn, fn)
+    >>> fig, ax = plt.subplots(figsize=(10,5))
+    >>> util.plot_spectrogram(Sxx,ext, db_range=70, ax=ax)
+    >>> util.overlay_rois(Sxx, rois, fig=fig, ax=ax, textbox_label=True)
+    
+    Detect regions of interest and display them over the spectrogram.
     Load audio recording and compute the spectrogram.
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
@@ -456,6 +476,19 @@ def overlay_rois(im_ref, rois, savefig=None, **kwargs):
             )
             # draw the rectangle
             ax.add_patch(rect)
+            
+            if textbox_label:
+                textbox = dict(boxstyle='square', fc=color(ii), 
+                               ec=color(ii), alpha=1, pad=0, linewidth=2)
+                ax.text(x0*x_scaling + xmin, (y1+2)*y_scaling + ymin, 
+                        str(row.label), 
+                        color='white',
+                        fontweight='semibold',
+                        fontsize='small',
+                        fontfamily='sans-serif',
+                        fontvariant='small-caps',
+                        bbox=textbox
+                        )
 
     fig.canvas.draw()
 
