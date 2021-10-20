@@ -1704,6 +1704,7 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     >>> BI  = maad.features.bioacoustics_index(Sxx,fn,R_compatible=None)
     >>> print('BI MAAD: %2.2f ' %BI)
     BI MAAD : 17.05
+    
     """    
     
     # select the indices corresponding to the frequency bins range
@@ -1883,7 +1884,7 @@ def more_entropy(x, order=3, axis=0) :
         
     References
     ----------
-    .. [1]. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, Old Dominion University. `DOI: 10.25777/qgak-sf09 <https://doi.org/10.25777/qgak-sf09>`_
+    .. [1] Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, Old Dominion University. `DOI: 10.25777/qgak-sf09 <https://doi.org/10.25777/qgak-sf09>`_
     
     Examples
     --------
@@ -1957,7 +1958,7 @@ def frequency_raoq (S_power, fn, bin_step=1000):
         
     References
     ----------
-    .. [1]. Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, Old Dominion University. `DOI: 10.25777/qgak-sf09 <https://doi.org/10.25777/qgak-sf09>`_
+    .. [1] Zhao, Yueqin. "Rao's Quadratic Entropy and Some New Applications" (2010). Doctor of Philosophy (PhD), dissertation,Mathematics and Statistics, Old Dominion University. `DOI: 10.25777/qgak-sf09 <https://doi.org/10.25777/qgak-sf09>`_
     
     Examples
     --------

@@ -88,11 +88,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
 # -- Options for HTML output -------------------------------------------------
-
+import sphinx_rtd_theme
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_logo = './logo/logo_maad_white.png'
 #html_theme_options = {'logo_only': True}
 # Add any paths that contain custom static files (such as style sheets) here,
