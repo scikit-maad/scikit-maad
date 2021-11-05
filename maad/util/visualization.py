@@ -214,6 +214,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
     
     """
+    
     # Check format of the input data
     if type(centroid) is not pd.core.frame.DataFrame:
         raise TypeError("Rois must be of type pandas DataFrame")
