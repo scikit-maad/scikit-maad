@@ -14,6 +14,7 @@ its time-frequency representation
 # =============================================================================
 # Import external modules
 import numpy as np
+from warnings import warn
 import io
 from urllib.request import urlopen
 from scipy.io import wavfile 
@@ -302,7 +303,7 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
      
     return Sxx, tn, fn, extent 
 #%%
-def write(filename, fs, data):
+def write(filename, fs, data, bit_depth=None):
     """
     Write a NumPy array as a WAV file with the Scipy method. [1]_ 
 
@@ -314,6 +315,10 @@ def write(filename, fs, data):
         Sample rate (samples/sec).
     data : ndarray
         Mono or stereo signal as NumPy array.
+    bit_depth: int
+        Specifies the bit depth format of the audio recording.
+        Should be one of 8, 16 or 32. If None, bit depth will be determined from
+        the Numpy data type. See section Common data types.
         
     See Also
     --------
@@ -355,15 +360,39 @@ def write(filename, fs, data):
     >>> data = np.sin(2. * np.pi * 440. *t)
     >>> maad.sound.write('example.wav', fs, data)
     
-    Open an audio file, filter a frequency band and write to disk.
+    Open an audio file, filter a frequency band and write to disk specifying the bit depth.
     
     >>> from maad import sound
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> s_filt = sound.sinc(s, (3000, 10000), fs)
-    >>> sound.write('spinetail_filtered.wav', fs, s_filt)
+    >>> sound.write('spinetail_filtered.wav', fs, s_filt, bit_depth=16)
     """
+
+    if (data.dtype == 'float64') | (data.dtype == 'float32'):
+        # Check that the array has values between -1 and 1
+        if (data.min() < -1) | (data.max() > 1):
+            warn('Values should be between [-1, 1]. Clipping signal.')
+            data[data<-1] = -1
+            data[data>1] = 1
+        
+        # Convert to desired bit depth
+        if bit_depth == 8:
+            data = data + 1 # change range to postive [0,2]
+            data = (data * 127).astype(np.uint8)
+            
+        elif bit_depth == 16:
+            data = (data * 32767).astype(np.int16)
+            
+        elif bit_depth == 32:
+            data = (data * 2147483647).astype(np.int32)
+        
+        else:
+            warn('Values for bit depth should be 8, 16 or 32. Argument ignored.')
+            pass
+        
     if data.ndim > 1:
         data = data.T
+    
     write_wav(filename, fs, np.asfortranarray(data))
     
 #%%
