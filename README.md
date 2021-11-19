@@ -30,6 +30,28 @@ $ python setup.py install
 - See https://scikit-maad.github.io for a complete reference manual and example gallery.
 - In depth information related to the Multiresolution Analysis of Acoustic Diversity implemented in scikit-maad was published in: Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). [Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis](https://doi.org/10.1016/j.ecolind.2018.03.026). Ecological Indicators, 90, 346–355
 
+## Citing this work
+
+If you find scikit-maad usefull for your research, please consider citing it as:
+Ulloa, J. S., Haupert, S., Latorre, J. F., Aubin, T., & Sueur, J. (2021). scikit‐maad: An open‐source and modular toolbox for quantitative soundscape analysis in Python. Methods in Ecology and Evolution, 2041-210X.13711. https://doi.org/10.1111/2041-210X.13711
+
+.. code:: bibtex
+
+@article{ulloa_etal_scikitmaad_2021,
+	title = {scikit‐maad: {An} open‐source and modular toolbox for quantitative soundscape analysis in {Python}},
+	issn = {2041-210X, 2041-210X},
+	shorttitle = {scikit‐maad},
+	url = {https://onlinelibrary.wiley.com/doi/10.1111/2041-210X.13711},
+	doi = {10.1111/2041-210X.13711},
+	language = {en},
+	urldate = {2021-10-04},
+	journal = {Methods in Ecology and Evolution},
+	author = {Ulloa, Juan Sebastián and Haupert, Sylvain and Latorre, Juan Felipe and Aubin, Thierry and Sueur, Jérôme},
+	month = sep,
+	year = {2021},
+	pages = {2041--210X.13711},
+}
+
 ## Contributions and bug report
 Improvements and new features are greatly appreciated. If you would like to contribute developing new features or making improvements to the available package, please refer to our [wiki](https://github.com/scikit-maad/scikit-maad/wiki/How-to-contribute-to-scikit-maad). Bug reports and especially tested patches may be submitted directly to the [bug tracker](https://github.com/scikit-maad/scikit-maad/issues). 
 
