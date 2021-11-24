@@ -43,28 +43,28 @@ def _date_from_filename (filename):
     # date by default
     date = datetime(1900,1,1,0,0,0,0)
     # test if it is possible to extract the recording date from the filename
-    if filename[-19:-15].isdigit(): 
-        yy=int(filename[-19:-15])
+    if filename[9:13].isdigit(): 
+        yy=int(filename[9:13])
     else:
         return date
-    if filename[-15:-13].isdigit(): 
-        mm=int(filename[-15:-13])
+    if filename[13:15].isdigit(): 
+        mm=int(filename[13:15])
     else:
         return date
-    if filename[-13:-11].isdigit(): 
-        dd=int(filename[-13:-11])
+    if filename[15:17].isdigit(): 
+        dd=int(filename[15:17])
     else:
         return date
-    if filename[-10:-8].isdigit(): 
-        HH=int(filename[-10:-8])
+    if filename[18:20].isdigit(): 
+        HH=int(filename[18:20])
     else:
         return date
-    if filename[-8:-6].isdigit(): 
-        MM=int(filename[-8:-6])
+    if filename[20:22].isdigit(): 
+        MM=int(filename[20:22])
     else:
         return date
-    if filename[-6:-4].isdigit(): 
-        SS=int(filename[-6:-4])
+    if filename[22:24].isdigit(): 
+        SS=int(filename[22:24])
     else:
         return date
 
@@ -262,15 +262,13 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
             if verbose: print(file)
             if extension.upper() in file or extension.lower() in file :
                 filename = os.path.join(root, file)
+                file_stem = Path(filename).stem
                 c_file.append(filename) 
                 if dateformat == "SM4":
-                    c_date.append(_date_from_filename(filename))      
+                    c_date.append(_date_from_filename(file_stem))      
                 elif dateformat == "POSIX" :
-                    file_stem = Path(filename).stem
-                    print(file_stem)
                     posix_time = int(file_stem, 16)
                     dd = datetime.utcfromtimestamp(posix_time).strftime('%Y-%m-%d %H:%M:%S')
-                    print(dd)
                     c_date.append(dd)                          
                 
     ####### SORTED BY DATE
