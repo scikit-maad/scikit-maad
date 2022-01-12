@@ -573,7 +573,7 @@ def mean_dB(*argv, axis=0):
         Arrays containing the sound waveform in dB
 
     axis : integer, optional, default is 0
-        if addition of multiple arrays, select the axis on which the sum is done
+        if average of multiple arrays, select the axis on which the average is done
 
     Returns
     -------
