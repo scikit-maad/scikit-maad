@@ -114,23 +114,41 @@ def read_audacity_annot (audacity_filename):
     try:
         tab_in = pd.read_csv(audacity_filename, delimiter='\t', header=None)
 
-        # arrange data
-        t_info = tab_in.loc[np.arange(0, len(tab_in), 2), :]
-        t_info = t_info.rename(index=str, columns={
-                               0: 'min_t', 1: 'max_t', 2: 'label'})
-        t_info = t_info.reset_index(drop=True)
+        # test if time-frequency annotation (1st column contain '/')
+        # Hack to force the type of the column to be string in order to test if 
+        # the column contains a character
+        tab_in[0] = tab_in[0].astype('str')
+        if (tab_in[0].str.contains(r"\\", na = False).sum() > 0) :
 
-        f_info = tab_in.loc[np.arange(1, len(tab_in)+1, 2), :]
-        f_info = f_info.rename(index=str, columns={
-                               0: 'slash', 1: 'min_f', 2: 'max_f'})
-        f_info = f_info.reset_index(drop=True)
-
-        # return dataframe
-        tab_out = pd.concat([t_info['label'].astype('str'),
-                             t_info['min_t'].astype('float32'),
-                             f_info['min_f'].astype('float32'),
-                             t_info['max_t'].astype('float32'),
-                             f_info['max_f'].astype('float32')],  axis=1)
+            # arrange data
+            t_info = tab_in.loc[np.arange(0, len(tab_in), 2), :]
+            t_info = t_info.rename(index=str, columns={
+                                   0: 'min_t', 1: 'max_t', 2: 'label'})
+            t_info = t_info.reset_index(drop=True)
+    
+            f_info = tab_in.loc[np.arange(1, len(tab_in)+1, 2), :]
+            f_info = f_info.rename(index=str, columns={
+                                   0: 'slash', 1: 'min_f', 2: 'max_f'})
+            f_info = f_info.reset_index(drop=True)
+    
+            # return dataframe
+            tab_out = pd.concat([t_info['label'].astype('str'),
+                                 t_info['min_t'].astype('float32'),
+                                 f_info['min_f'].astype('float32'),
+                                 t_info['max_t'].astype('float32'),
+                                 f_info['max_f'].astype('float32')],  axis=1)
+        else :
+            tab_in = tab_in.rename(index=str, columns={
+                                   0: 'min_t', 1: 'max_t', 2: 'label'})
+            tab_in['min_f'] = np.nan
+            tab_in['max_f'] = np.nan
+            
+            # return dataframe
+            tab_out = pd.concat([tab_in['label'].astype('str'),
+                                 tab_in['min_t'].astype('float32'),
+                                 tab_in['min_f'].astype('float32'),
+                                 tab_in['max_t'].astype('float32'),
+                                 tab_in['max_f'].astype('float32')],  axis=1)
     except :
         tab_out = pd.DataFrame()
 
