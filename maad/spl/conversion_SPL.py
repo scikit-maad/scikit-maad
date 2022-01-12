@@ -523,7 +523,7 @@ def pressure2leq (p, fs, dt=1, pRef = 20e-6):
     # reshape into 2D (the duration of each row is dt)
     p_2D = p_1D.reshape(N_RMS,dN)
     # RMS
-    p_RMS = sqrt(mean(p_2D**2,axis=1))# Test the current operating system
+    p_RMS = sqrt(mean(p_2D**2,axis=1))
     # if p_RMS ==0 set to MIN
     p_RMS[p_RMS==0] = _MIN_
     # RMS to Leq (Equivalent Continuous Sound level)
