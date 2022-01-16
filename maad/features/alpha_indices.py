@@ -874,7 +874,7 @@ def frequency_entropy (X, compatibility="QUT") :
 
 #=============================================================================
 def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200, 
-                  slopes=(1,1), display=False, **kwargs):
+                  slopes=(1,1), prominence=0, display=False, **kwargs):
     """
     Count the number of frequency peaks on a mean spectrum. [1]_ 
     This function was adapted from the function fpeaks of the R package Seewave [2]_
@@ -901,6 +901,10 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
         Refers to the amplitude slopes of the peak. 
         The first value is the left slope and the second value is the right slope. 
         Only peaks with higher slopes than threshold values will be kept. 
+    prominence : number, ndarray or sequence, optional, default is None
+        Prominence of peaks. The first element is the minimal prominence and the
+        second element is the maximal prominence. If a single number is provided
+        it is interpreted as the minimal value, and no maximial value will be used.
     display: boolean, optional, default is False
         if True, display the mean spectrum with the detected peaks
         
@@ -940,7 +944,7 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     min_pix_distance = min_freq_dist/(fn[1]-fn[0])
     index, prop = find_peaks(S, height = min_peak_val, 
                              distance = min_pix_distance, 
-                             prominence=0)
+                             prominence=prominence)
     
     # keep peaks with with slopes higher than the limit
     if slopes is None :
