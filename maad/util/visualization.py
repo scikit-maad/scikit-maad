@@ -38,7 +38,7 @@ def _check_axes(axes):
 
 
 #%%
-def plot_shape(shape, params, row=0, display_values=False):
+def plot_shape(shape, params, row=0, ax=None, display_values=False):
     """ 
     Plot shape features in a bidimensional plot.
      
@@ -94,8 +94,11 @@ def plot_shape(shape, params, row=0, display_values=False):
     textlab = np.round(textlab, 2)
 
     # plot figure
-    fig = plt.figure(figsize=(8, 6))
-    ax = fig.add_subplot(111)
+    if ax is None:
+        fig = plt.figure(figsize=(8, 6))
+        ax = fig.add_subplot(111)
+    else:
+        pass
     ax.imshow(
         shape_plt, aspect="auto", origin="lower", interpolation="None", cmap="viridis"
     )

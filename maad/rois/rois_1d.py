@@ -23,6 +23,7 @@ import pandas as pd
 
 # import internal modules
 from maad.sound import sinc
+from maad import sound, util
 
 #%%
 # =============================================================================
@@ -181,13 +182,15 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
         if save_df==True:
             df.to_csv(savefilename, sep=',', header=True, index=False)
 
-    # Display
+    #%% Display
     if display==True: 
         figsize = kwargs.pop('figsize',(12,6))
         cmap = kwargs.pop('cmap','gray')
-        nfft = kwargs.pop('nfft',512)
-        noverlap = kwargs.pop('noverlap',256)
-        # plot
+        nfft = kwargs.pop('nperseg',512)
+        noverlap = kwargs.pop('noverlap',512)
+        nperseg = kwargs.pop('nperseg',1024)
+        db_range = kwargs.pop('db_range',80)
+        # plot wavelet
         fig,(ax1,ax2) = plt.subplots(2,1,figsize=figsize)
         ax1.margins(x=0)
         ax1.plot(s_cwt)
@@ -195,7 +198,9 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
         ax1.set_ylabel('Amplitude')
         ax1.grid(True)
         ax1.hlines(th, 0, len(s_cwt), linestyles='dashed', colors='r')
-        ax2.specgram(s, NFFT=nfft, Fs=fs, noverlap=noverlap, cmap=cmap)
+        #plot spectrogram
+        Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg = nperseg, noverlap=noverlap, mode='psd')
+        util.plot_spectrogram(Sxx, ext, db_range, ax=ax2, colorbar=False)
         ax2.set_ylabel('Frequency (Hz)')
         ax2.set_xlabel('Time (s)')
         if not(df.empty):
