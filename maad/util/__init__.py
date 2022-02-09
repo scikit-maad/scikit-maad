@@ -70,6 +70,16 @@ Miscellaneous
     crossfade
     crossfade_list
 
+Xeno-Canto
+----------
+.. autosummary::
+    :toctree: generated/
+    
+    query
+    multi_query
+    selection
+    download
+
 """
 
 from .miscellaneous import (index_bw,
@@ -116,6 +126,12 @@ from .math_func import (running_mean,
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
                      date_parser)
+
+from .xeno_canto import (xc_query,
+                         xc_multi_query,
+                         xc_selection,
+                         xc_download)
+
 __all__ = [
            # miscellaneous 
            'index_bw',
@@ -161,5 +177,10 @@ __all__ = [
            # parser
            'read_audacity_annot',
            'write_audacity_annot',
-           'date_parser'
+           'date_parser',
+           # xeno_canto
+           'xc_query',
+           'xc_multi_query',
+           'xc_selection',
+           'xc_download'
             ]
