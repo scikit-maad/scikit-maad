@@ -2318,7 +2318,9 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
             
     # get the mask with rois (im_rois) and the bounding box for each rois (rois_bbox) 
     # and an unique index for each rois => in the pandas dataframe rois
-    im_rois, rois  = select_rois(im_mask,min_roi=9, 
+    im_rois, rois  = select_rois(im_mask,
+                                 min_roi=min_roi, 
+                                 max_roi=max_roi,
                                  display= display, **kwargs)
 
     ##### Extract centroids features of each roi from the spectrogram in dB without noise 
