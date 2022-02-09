@@ -1685,7 +1685,7 @@ def false_Color_Spectro(
         if isinstance(df[indice].iloc[0], str):
             # convert string into scalars
             df[indice] = df[indice].apply(literal_eval)
-
+            
     # create a dataframe with normalized values for each indices
     df_z = pd.DataFrame()
 
