@@ -75,10 +75,10 @@ Xeno-Canto
 .. autosummary::
     :toctree: generated/
     
-    query
-    multi_query
-    selection
-    download
+    xc_query
+    xc_multi_query
+    xc_selection
+    xc_download
 
 """
 
