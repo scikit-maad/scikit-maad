@@ -17,7 +17,6 @@ dispersion,
 attenuation and might be seen as a proxy.
 
 """
-# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_sound_degradation_due_to_attenuation_thumb.png'
 
 from maad import sound, spl, util
 

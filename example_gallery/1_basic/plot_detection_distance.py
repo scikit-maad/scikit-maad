@@ -21,7 +21,6 @@ possible to estimate the detection distance of each frequency component of
 that sound
 
 """
-# sphinx_gallery_thumbnail_path = '../_images/sphx_glr_plot_detection_distance_thumb.png'
 
 from maad import sound, spl, util
 import numpy as np
