@@ -1479,7 +1479,9 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     N = np.floor((fmax-fmin)/bin_step)
     
     # convert into dB and normalization by the max
-    Sxx_dB = amplitude2dB(Sxx/max(Sxx))       
+    # add -3dB to obtain the same result as R package soundecology
+    # (this is probably due to an error in calculating the spectrogram in R)
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) -3   
     
     # Score for each frequency in the frequency bandwith
     s_sum = []
@@ -1564,7 +1566,9 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     N = np.floor((fmax-fmin)/bin_step)
     
     # convert into dB and normalization by the max
-    Sxx_dB = amplitude2dB(Sxx/max(Sxx))
+    # add -3dB to obtain the same result as R package soundecology
+    # (this is probably due to an error in calculating the spectrogram in R)
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) -3
  
     # Score for each frequency in the frequency bandwith
     s_sum = []
@@ -2318,7 +2322,9 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
             
     # get the mask with rois (im_rois) and the bounding box for each rois (rois_bbox) 
     # and an unique index for each rois => in the pandas dataframe rois
-    im_rois, rois  = select_rois(im_mask,min_roi=9, 
+    im_rois, rois  = select_rois(im_mask,
+                                 min_roi=min_roi, 
+                                 max_roi=max_roi,
                                  display= display, **kwargs)
 
     ##### Extract centroids features of each roi from the spectrogram in dB without noise 
