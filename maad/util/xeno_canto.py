@@ -28,8 +28,8 @@ def xc_query(searchTerms,
              format_date = False,
              verbose=False):
     """
-    Query retreives metadata from Xeno-Canto website depending on the
-    search terms 
+    Query metadata from Xeno-Canto website depending on the search terms. The
+    audio recordings metadata are grouped and stored in a dataframe.
 
     Parameters
     ----------
@@ -202,9 +202,11 @@ def xc_selection(df_dataset,
     max_nb_files : int, optional
         Max number of audio files per species. The default is 100.
     max_length : string, optional
-        Max duration of the audio files. The default is '2:00'.
+        Max duration of the audio files. The default is '01:00'.
     min_length : string, optional
-        Min duration of the audio files. The default is '0:10'.
+        Min duration of the audio files. The default is '00:10'.
+    min_quality : string, optional
+        Min quality of the audio files. The default is 'B'.
     verbose : boolean, optional
         Print messages during the execution of the function. The default is False.
 
