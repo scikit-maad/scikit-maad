@@ -10,7 +10,7 @@ in order to classify the sound made by different species.
 We focus on the characteristics of the drumming performed by the woodpeckers 
 species that are present in Europe.
 
-**Dependencies**: To execute this example you will need to have installed the 
+**Dependencies**: To execute this example you need to have installed the 
 librosa, sklearn and pandas Python packages.
 
 
@@ -74,6 +74,7 @@ def grab_audio(path, audio_format='mp3'):
 # ----------------
 # Directory where to download the audiofile from xeno-canto
 XC_ROOTDIR = '../../data/'
+#%%
 # Name of the dataset. This will be used to create a subdir with the same name 
 XC_DIR = 'woodpecker_dataset' 
 
@@ -91,7 +92,6 @@ data = [['Eurasian Three-toed', 'Picoides tridactylus'],
 #%%
 # Query Xeno-Canto
 # ----------------
-
 # get the genus and species needed for Xeno-Canto
 df_species = pd.DataFrame(data,columns =['english name',
                                          'scientific name'])
@@ -101,7 +101,8 @@ for name in df_species['scientific name']:
     gen.append(name.rpartition(' ')[0])
     sp.append(name.rpartition(' ')[2])
 
-# Buld the query dataframe with columns paramXXX
+#%%
+# Build the query dataframe with columns paramXXX
 # gen : genus
 # cnt : country
 # area : continent (europe, america, asia, africa)
@@ -137,6 +138,7 @@ df_dataset = util.xc_selection(df_dataset,
                                min_length='00:10',
                                min_quality='B',
                                verbose = True )
+#%%
 # download all the audio files into a directory with a subdirectory for each 
 # species
 util.xc_download(df_dataset,
@@ -151,7 +153,7 @@ util.xc_download(df_dataset,
 #------------------------------------------
 # create a dataframe with all recordings in the directory
 filelist = grab_audio(XC_ROOTDIR+XC_DIR)
-
+#%%
 # Create new columns with short filename and species names
 df = pd.DataFrame()
 for file in filelist:
@@ -169,9 +171,9 @@ print('=====================================================')
 # Process all audio files, species by species
 #--------------------------------------------
 # In this part, all audio file will be processed in order to extract each
-# drumming portion separately. Then pulses are automaticaly detected for each 
-# drumming before computing drumming parameters such as median pulse rate, 
-# duration, number of pulses...
+# drumming portion separately. 
+# Then pulses are automaticaly detected for each drumming before computing
+# drumming parameters such as median pulse rate, duration, number of pulses...
 
 # store starting time 
 start_time = time.time() 
@@ -360,7 +362,7 @@ plt.show()
 #%%
 # Display clusters based on the drummings features
 #-------------------------------------------------
-# a collection of features is associated to each drumming found in the audio
+# A collection of features is associated to each drumming found in the audio
 # recordings. The goal is to display clusters in 2D with the dimensionality
 # reduction tool t-SNE and associate a color to each point that corresponds
 # to the belonging species. It is then possible to observe species that are
