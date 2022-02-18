@@ -5,7 +5,7 @@
 Collection of functions to compute alpha acoustic indices to chracterise audio signals.
 """
 #
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+# Authors:  Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>        
 #
 # License: New BSD License
@@ -1693,14 +1693,14 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     References 
     ----------
     .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic invasion resistance in Hawaii: bioacoustics, field surveys, and airborne remote sensing. Ecological Applications 17: 2137-2144. `DOI: 10.1890/07-0004.1 <https://doi.org/10.1890/07-0004.1>`_ 
-    Ported and modified from the soundecology R package - cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
+    .. [2] Ported and modified from the soundecology R package - cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
     
     Notes
     -----    
     Soundecology compatible version:
-        - average of dB value
-        - remove negative value in order to get positive values only
-        - dividing by the frequency resolution df instead of multiplication
+    * Average of dB value
+    * Remove negative value in order to get positive values only
+    * Dividing by the frequency resolution df instead of multiplication
     
     Examples
     --------
