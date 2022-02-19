@@ -17,7 +17,7 @@ dispersion,
 attenuation and might be seen as a proxy.
 
 """
-
+import matplotlib.pyplot as plt
 from maad import sound, spl, util
 
 #%%
@@ -134,10 +134,6 @@ print(df)
 # Here, we will simulate the attenuation of the signal after propagating 10m, 
 # 50m, 100m, 200m
 
-# plot original spectrogram
-import matplotlib.pyplot as plt
-fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4, sharex=True, figsize=(15,3))
-
 #%%
 # Compute the attenuation of the recorded spinetail song at 10m.
 p_att = spl.apply_attenuation(p0_sig, fs, r0 = r0, r = 10)
@@ -165,11 +161,12 @@ Sxx_dB_att_10m = util.add_dB(Sxx_dB_att_10m,Sxx_dB_noise)
 Sxx_dB_att_50m = util.add_dB(Sxx_dB_att_50m,Sxx_dB_noise)  
 Sxx_dB_att_100m = util.add_dB(Sxx_dB_att_100m,Sxx_dB_noise)  
 Sxx_dB_att_200m = util.add_dB(Sxx_dB_att_200m,Sxx_dB_noise)  
-  #%%
+#%%
 # Plot attenuated spectrograms at different distances of propagation.
 # We can observe that the highest frequency content (harmonics) disappears first.
 # We can also observe that at 200m, almost none of the spinetail signal is still
 # visible. Only the background noise, with the call of another species remains
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4, sharex=True, figsize=(15,3))
 util.plot2d(Sxx_dB_att_10m, title='10m', ax=ax1, extent=ext, vmin=0, vmax=96, figsize=[3,3])
 util.plot2d(Sxx_dB_att_50m, title='50m', ax=ax2, extent=ext, vmin=0, vmax=96, figsize=[3,3])
 util.plot2d(Sxx_dB_att_100m, title='100m', ax=ax3, extent=ext, vmin=0, vmax=96, figsize=[3,3])
