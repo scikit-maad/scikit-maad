@@ -467,3 +467,50 @@ def normalize(s, max_amp=0.7, max_db=None):
     s_out = s*gain
     
     return s_out
+
+def gain(s, gain_db=0):
+    """
+    Amply amplification or attenuation to the audio signal.
+    
+    Parameters
+    ----------
+    s : np.ndarray 
+        Mono audio signal as NumPy array.
+    gain_db : float, optional
+        Gain value to amplify (positive values), or attenuate (negative values) the 
+        signal in dB.
+
+    Returns
+    -------
+    s_out : np.ndarray
+        Amplified or attenuated audio signal.
+        
+    See Also
+    --------
+    sound.normalize, sound.trim
+    
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from maad import sound
+    
+    Amplify the signal by 3 dB
+    
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s_out = sound.gain(s, gain_db=3)
+    >>> print('Signal amplified by:', 20*np.log10((s_out.max()/s.max())), 'dB')
+    Signal amplified by: 3 dB
+    
+    Attenuate the signal by 3 dB
+    
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s_out = sound.gain(s, gain_db=-3)
+    >>> print('Signal amplified by:', 20*np.log10((s_out.max()/s.max())), 'dB')
+    Signal amplified by: -3 dB
+    
+    """        
+    # Apply the gain value
+    
+    s_out = s * 10**(gain_db/20)
+    
+    return s_out
