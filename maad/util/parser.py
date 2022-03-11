@@ -82,7 +82,10 @@ def _date_from_filename (filename):
 def read_audacity_annot (audacity_filename):
     """
     Read audacity annotations file (or labeling file) and return a Pandas Dataframe
-    with the bounding box and the label of each region of interest (ROI).
+    with the bounding box and the label of each region of interest (ROI). Allows to
+    read annotations with standard Audacity style (temporal selection) and with
+    spectral selection style (spectro-temporal selection). If the file exists but has no 
+    annotations, the function returns and empty dataframe.
     
     Parameters
     ----------
@@ -155,10 +158,14 @@ def read_audacity_annot (audacity_filename):
     return tab_out
 
 #%%
-
-def write_audacity_annot(fname, df_rois):
+def write_audacity_annot(fname, df_rois, save_file=True):
     """ 
-    Write audio segmentation to file (Audacity format).
+    Write audio segmentation to text file in Audacity format, a file that can be imported
+    and modified with Audacity. If the dataframe has no frequency delimiters, annotations
+    are saved with standard Audacity format (temporal segmentation). If the dataframe has
+    temporal and frequencial delimiters, the annotations are saved as spectral selection 
+    style (spectro-temporal selection). If the dataframe is empty, the function saves an 
+    empty file.
     
     Parameters
     ----------
@@ -199,16 +206,19 @@ def write_audacity_annot(fname, df_rois):
     if df_rois.size==0:
         print(fname, '> No detection found')
         df = pd.DataFrame(data=None)
-        df.to_csv(fname, sep=',',header=False, index=False)
+        df.to_csv(fname, sep='\t', header=False, index=False)
+        
     else:
         # if there is no label, create a vector with incremental values
         if 'label' not in df_rois :
             label = np.arange(0,len(df_rois))
+        
         # if no frequency coordinates, only temporal annotations
         if ('min_f' not in df_rois) or ('max_f' not in df_rois) :
             df_to_save = pd.DataFrame({'min_t':df_rois.min_t, 
-                                    'max_t':df_rois.max_t, 
-                                    'label':label})
+                                       'max_t':df_rois.max_t, 
+                                       'label':label})
+        
         elif ('min_f' in df_rois) and ('max_f'  in df_rois) :
             df_to_save_odd = pd.DataFrame({'index': np.arange(0,len(df_rois)*2,2),
                                         'min_t':df_rois.min_t, 
@@ -221,12 +231,112 @@ def write_audacity_annot(fname, df_rois):
             df_to_save = pd.concat([df_to_save_odd,df_to_save_even])
             df_to_save = df_to_save.set_index('index')
             df_to_save = df_to_save.sort_index()
-        df_to_save.to_csv(fname, index=False, header=False, sep='\t') 
+            
+        if save_file:
+            df_to_save.to_csv(fname, index=False, header=False, sep='\t') 
+        else:
+            pass
     
     return df_to_save
 
-#%%
+#%% 
+def read_raven_annot(raven_filename):
+    """
+    Read raven annotations file (or labeling file) and return a Pandas Dataframe
+    with the bounding box and the label of each region of interest (ROI). If the file 
+    exists but has no annotations, the function returns and empty dataframe.
+    
+    Parameters
+    ----------
+    raven_filename : string
+        Path to the annotation file
 
+    Returns
+    -------
+    tab_out : Pandas Dataframe 
+        Region of interest with time-frequency limits and manual annotation label
+    
+    References
+    ----------
+    http://ravensoundsoftware.com/wp-content/uploads/2017/11/Raven14UsersManual.pdf
+        
+    """
+    df_out = pd.read_csv(fname, sep='\t')
+    return df_out
+    
+#%%
+def write_raven_annot(fname, df_rois, save_file=True):
+    """ 
+    Write audio segmentation to text file in Audacity format, a file that can be imported
+    and modified with Audacity. If the dataframe has no frequency delimiters, annotations
+    are saved with standard Audacity format (temporal segmentation). If the dataframe has
+    temporal and frequencial delimiters, the annotations are saved as spectral selection 
+    style (spectro-temporal selection). If the dataframe is empty, the function saves an 
+    empty file.
+    
+    Parameters
+    ----------
+    fname: str
+        filename to save the segmentation
+    df_rois: pandas dataframe
+        Dataframe containing the coordinates corresponding to sound signatures
+        For bounding box (temporal eand frequency limits) :: df_rois 
+        must contain at least the columns 'min_t', 'max_t', 'min_f', 'max_f'
+            
+    Returns
+    -------
+    df_out: pandas dataframe
+        Dataframe that has been saved in Raven format
+    
+    Examples
+    --------
+    >>> from maad import sound, rois, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> df_rois = rois.find_rois_cwt(s, fs, flims=(3000,8000), tlen=2, th=0)
+    >>> df_rois['Label'] = 'Spinetail'
+    >>> df_raven = util.write_raven_annot('spinetail_annotations.txt', df_rois)
+    
+    """
+    df_out = df_rois.copy()
+    # Save empty file if dataframe is empty
+    if df_out.size==0:
+        print(fname, '> No detection found')
+        df = pd.DataFrame(data=None)
+        df.to_csv(fname, sep='\t', header=False, index=False)
+        
+    else:
+        # Format dataframe and save
+        # add basic raven columns if needed
+        if not('Selection' in df_out.columns):
+            df_out['Selection'] = np.arange(1, len(df_out)+1)
+        
+        if not('View' in df_out.columns):
+            df_out['View'] = 'Spectrogram 1'
+        
+        if not('Channel' in df_out.columns):
+            df_out['Channel'] = 1
+        
+        # change column names
+        df_out.rename(columns={'min_t': 'Begin Time (s)', 
+                           'max_t': 'End Time (s)',
+                           'min_f': 'Low Freq (Hz)',
+                           'max_f': 'High Freq (Hz)'}, inplace=True)
+        
+        # reorder column names
+        colname_raven = ['Selection', 'View', 'Channel', 'Begin Time (s)',
+                         'End Time (s)', 'Low Freq (Hz)', 'High Freq (Hz)']
+        colname_order = colname_raven + df_out.columns[~df_out.columns.isin(colname_raven)].tolist()
+        df_out = df_out.reindex(columns=colname_order)
+        
+        if save_file:
+            df_out.to_csv(fname, sep='\t', index=False)
+        else:
+            pass
+    
+    return df_out
+
+
+#%%
 def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     """
     Parse all filenames contained in a directory and its subdirectories.

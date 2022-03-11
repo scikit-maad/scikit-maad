@@ -46,6 +46,8 @@ Parser
     
     read_audacity_annot
     write_audacity_annot
+    read_raven_annot
+    write_raven_annot
     date_parser
 
 Miscellaneous
@@ -125,6 +127,8 @@ from .math_func import (running_mean,
 
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
+                     read_raven_annot,
+                     write_raven_annot,
                      date_parser)
 
 from .xeno_canto import (xc_query,
