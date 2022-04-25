@@ -3,7 +3,7 @@
 Utilities
 =========
 
-The module ``utils`` has a handfull of useful set of tools used in the audio analysis framework.
+The module ``utils`` has a handful of useful set of tools used in the audio analysis framework.
 
 Visualization
 -------------
@@ -82,6 +82,17 @@ Xeno-Canto
     xc_selection
     xc_download
 
+Audio_metadata
+----------
+.. autosummary::
+    :toctree: generated/
+
+    check_file_format
+    audio_header
+    filename_info
+    get_metadata_file
+    get_metadata_dir
+
 """
 
 from .miscellaneous import (index_bw,
@@ -136,6 +147,12 @@ from .xeno_canto import (xc_query,
                          xc_selection,
                          xc_download)
 
+from .audio_metadata_utilities import (check_file_format,
+                                       audio_header,
+                                       filename_info,
+                                       get_metadata_file,
+                                       get_metadata_dir)
+
 __all__ = [
            # miscellaneous 
            'index_bw',
@@ -186,5 +203,11 @@ __all__ = [
            'xc_query',
            'xc_multi_query',
            'xc_selection',
-           'xc_download'
+           'xc_download',
+            #Audio_metadata
+            'check_file_format',
+            'audio_header',
+            'filename_info',
+            'get_metadata_file',
+            'get_metadata_dir'
             ]
