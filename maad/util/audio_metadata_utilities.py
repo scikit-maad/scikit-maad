@@ -225,7 +225,7 @@ def get_metadata_dir(path_dir, verbose=False):
     
     See Also
     --------
-    maad.util.get_metadata_file
+    maad.util.get_metadata_file, maad.util.audio_header, maad.util.filename_info
 
     """
 
@@ -282,6 +282,5 @@ filename_info(path_audio)
 check_file_format(path_audio)  # should be error=1
 
 """
-#%%
 
 

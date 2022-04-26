@@ -82,8 +82,8 @@ Xeno-Canto
     xc_selection
     xc_download
 
-Audio_metadata
-----------
+Audio metadata
+--------------
 .. autosummary::
     :toctree: generated/
 
@@ -204,7 +204,7 @@ __all__ = [
            'xc_multi_query',
            'xc_selection',
            'xc_download',
-            #Audio_metadata
+            # audio_metadata_utilities
             'check_file_format',
             'audio_header',
             'filename_info',
