@@ -275,7 +275,8 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
 
 
 #%%
-def overlay_rois(im_ref, rois, textbox_label=False, savefig=None, **kwargs):
+def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None, 
+                 textbox_label=False, savefig=None, **kwargs):
     """ 
     Display bounding boxes with time-frequency regions of interest over a spectrogram.
     
@@ -292,6 +293,24 @@ def overlay_rois(im_ref, rois, textbox_label=False, savefig=None, **kwargs):
         format ['min_t', 'max_t', 'min_f', 'max_f'], use the function
         maad.util.format_features to get the cooresponding
         x, y coordinates.
+        
+    edge_color : {None, string, tuple, list of tuples}, default is None
+        Define the color of the bounding-box to display.
+        if it's a string, select a color name 
+        if it's a tuple, give a tuple of floats [0,1] in the form (r,g,b,a), 
+        with r for red, g for green, b for blue and a for alpha (i.e transparency)
+        for example
+        - pure red : (1,0,0,0)
+        - pure yellow : (1,1,0,0)
+        - pure blue with transparency(0,0,1,0.5)
+        if it's a list, give a list of tuple or string. The number of element 
+        in the list should be equal to the number of elements in unique_labels.
+        if it's set to None, a random list of colors is used.
+        
+    unique_labels : list, default is None
+        list of unique labels that could be either strings or numbers. When
+        a list is given as argument, the number element in the list should 
+        be the same as the number of edge_color
     
     textbox_label: bool
         Display a text box above the bounding box indicating the name of the label.
@@ -396,7 +415,7 @@ def overlay_rois(im_ref, rois, textbox_label=False, savefig=None, **kwargs):
         raise TypeError(
             "Array must be a Pandas DataFrame with column names: min_y, min_x, max_y, max_x. Check example in documentation."
         )
-
+        
     ylabel = kwargs.pop("ylabel", "Frequency [Hz]")
     xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
@@ -432,67 +451,85 @@ def overlay_rois(im_ref, rois, textbox_label=False, savefig=None, **kwargs):
     x_scaling = (xmax - xmin) / x_len
     y_scaling = (ymax - ymin) / y_len
 
-    # test if rois has a label column
-    if "label" in rois:
-        # select the label column
-        rois_label = rois.label.values
-        uniqueLabels = np.unique(np.array(rois_label))
-    else:
-        uniqueLabels = []
+    # if no list of unique labels is provided, try to find a "label" column
+    if unique_labels is None :
+        # test if rois has a label column
+        if "label" in rois:
+            # select the label column
+            rois_label = rois.label.values
+            uniqueLabels = list(np.unique(np.array(rois_label)))
+        else:
+            uniqueLabels = [0]    
+    else: 
+        if isinstance(unique_labels,list) :     
+            uniqueLabels = unique_labels
+        elif isinstance(unique_labels,np.ndarray) :     
+            uniqueLabels = list(unique_labels)
+        elif isinstance(unique_labels, str) :
+            uniqueLabels = [unique_labels]
+        else:
+            # test if unique_labels is a number
+            try:
+                int(unique_labels)
+                uniqueLabels = [unique_labels]
+            except:
+                raise TypeError(
+                    "unique_labels must be a list or a string or a number"
+                )      
+        
+    # Colormap
+    if edge_color is None :
+        # in order to still have the color yellow by default in case of no label
+        # or a unique label
+        if len(uniqueLabels) == 1:
+            color = tuple(["yellow"])
+        else:
+            color_func = rand_cmap(len(uniqueLabels) + 1, first_color_black=False)
+            color = color_func(np.arange(len(uniqueLabels)))
+    # if a list of colors is defined, test if the length of the list is 
+    # enough compared to the number of unique labels
+    # convert into tuple
+    elif isinstance(edge_color, str) :    
+        color = tuple([edge_color]) * len(uniqueLabels)
+    elif isinstance(edge_color, list) :  
+        nn = int(len(uniqueLabels)/len(edge_color)) +1
+        color = tuple(edge_color) * nn
 
-    # if only one label or no label in rois
-    if len(uniqueLabels) <= 1:
-        for index, row in rois.iterrows():
-            y0 = row["min_y"]
-            x0 = row["min_x"]
-            y1 = row["max_y"]
-            x1 = row["max_x"]
-            rect = mpatches.Rectangle(
-                (x0 * x_scaling + xmin, y0 * y_scaling + ymin),
-                (x1 - x0) * x_scaling,
-                (y1 - y0) * y_scaling,
-                fill=False,
-                edgecolor="yellow",
-                linewidth=1,
-            )
-            # draw the rectangle
-            ax.add_patch(rect)
-    else:
-        # Colormap
-        color = rand_cmap(len(uniqueLabels) + 1, first_color_black=False)
-        cc = 0
-        for index, row in rois.iterrows():
-            cc = cc + 1
-            y0 = row["min_y"]
-            x0 = row["min_x"]
-            y1 = row["max_y"]
-            x1 = row["max_x"]
-            for index, name in enumerate(uniqueLabels):
-                if row["label"] in name:
-                    ii = index
-            rect = mpatches.Rectangle(
-                (x0 * x_scaling + xmin, y0 * y_scaling + ymin),
-                (x1 - x0) * x_scaling,
-                (y1 - y0) * y_scaling,
-                fill=False,
-                edgecolor=color(ii),
-                linewidth=1,
-            )
-            # draw the rectangle
-            ax.add_patch(rect)
-            
-            if textbox_label:
-                textbox = dict(boxstyle='square', fc=color(ii), 
-                               ec=color(ii), alpha=1, pad=0, linewidth=2)
-                ax.text(x0*x_scaling + xmin, (y1+2)*y_scaling + ymin, 
-                        str(row.label), 
-                        color='white',
-                        fontweight='semibold',
-                        fontsize='small',
-                        fontfamily='sans-serif',
-                        fontvariant='small-caps',
-                        bbox=textbox
-                        )
+    cc = 0
+    for index, row in rois.iterrows():
+        cc = cc + 1
+        y0 = row["min_y"]
+        x0 = row["min_x"]
+        y1 = row["max_y"]
+        x1 = row["max_x"]
+        # find the position of the label in uniqueLabels
+        if "label" in row :
+            ii = uniqueLabels.index(row["label"])
+        else:
+            ii = 0
+        rect = mpatches.Rectangle(
+            (x0 * x_scaling + xmin, y0 * y_scaling + ymin),
+            (x1 - x0) * x_scaling,
+            (y1 - y0) * y_scaling,
+            fill=False,
+            edgecolor=color[ii],
+            linewidth=1,
+        )
+        # draw the rectangle
+        ax.add_patch(rect)
+        
+        if textbox_label:
+            textbox = dict(boxstyle='square', fc=color[ii], 
+                           ec=color[ii], alpha=1, pad=0, linewidth=2)
+            ax.text(x0*x_scaling + xmin, (y1+2)*y_scaling + ymin, 
+                    str(row.label), 
+                    color='white',
+                    fontweight='semibold',
+                    fontsize='small',
+                    fontfamily='sans-serif',
+                    fontvariant='small-caps',
+                    bbox=textbox
+                    )
 
     fig.canvas.draw()
 

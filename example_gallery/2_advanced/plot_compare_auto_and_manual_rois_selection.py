@@ -83,7 +83,8 @@ df_centroid = features.centroid_features(Sxx_db, df_rois, im_rois)
 df_centroid = format_features(df_centroid, tn, fn)
 ax0, fig0 = overlay_centroid(Sxx_db, df_centroid, savefig=None,
                              **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':4, 
-                                'marker':'+', 'fig':fig0, 'ax':ax0})
+                                'marker':'+', 'color':'red',
+                                'fig':fig0, 'ax':ax0})
 
 
 #%% 
@@ -110,7 +111,7 @@ df_centroid_GT = features.centroid_features(Sxx_db, df_rois_GT)
 df_centroid_GT = format_features(df_centroid_GT, tn, fn)
 ax1, fig1 = overlay_centroid(Sxx_db, df_centroid_GT, savefig=None, 
                              **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                'ms':2, 'marker':'+','color':'blue',
+                                'ms':2, 'marker':'+','color':'red',
                                 'fig':fig1, 'ax':ax1})
 
 # print informations about the rois
@@ -147,7 +148,8 @@ df_centroid['label'] = [str(i) for i in labels]
 # on the original spectrogram
 ax2, fig2 = overlay_rois(Sxx_db, df_centroid, **{'vmin':0,'vmax':dB_max,'extent':ext})
 ax2, fig2 = overlay_centroid(Sxx_db, df_centroid, savefig=None, 
-                             **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':2, 
+                             **{'vmin':0,'vmax':dB_max,'extent':ext,
+                                'ms':2, 'marker':'+', 'color':'red',
                                 'fig':fig2, 'ax':ax2})
 
 #%% 
@@ -184,7 +186,8 @@ ax3, fig3 = overlay_rois(Sxx_db, df_rois_WAV, **{'vmin':0,'vmax':dB_max,
 df_centroid_WAV = format_features(df_centroid_WAV, tn, fn)
 ax3, fig3 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
                              **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                'ms':2, 'fig':fig3, 'ax':ax3})
+                                'ms':2,'marker':'+', 'color':'red',
+                                'fig':fig3, 'ax':ax3})
 
 #%%
 # Prepare the features in order to have zero mean and same variance

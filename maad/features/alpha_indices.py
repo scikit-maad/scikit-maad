@@ -2221,9 +2221,13 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
 #=============================================================================
 
 def region_of_interest_index(Sxx_dB_noNoise, tn, fn, 
-                             smooth_param1=1, mask_mode='relative', 
-                             mask_param1=6, mask_param2=0.5, 
-                             min_roi=9, max_roi=512*10000, 
+                             smooth_param1=1, 
+                             mask_mode='relative', 
+                             mask_param1=6, 
+                             mask_param2=0.5, 
+                             min_roi=9, 
+                             max_roi=512*10000, 
+                             max_ratio_xy = None,
                              remove_rain = False,
                              display=False, **kwargs):
     """
@@ -2255,19 +2259,35 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
             Binarize an image based on a double relative threshold.  
             The values used for the thresholding are independent of the values 
             in the image => absolute threshold 
+        .. warning:: The default ``mask_mode`` parameter is deprecated in 
+        version 1.3 and will be changed to ``absolute`` in 1.4.
     mask_param1 : scalar, default is 6
-        if 'relative' : bin_h
-        if 'absolute' : bin_std
+        if 'relative' : bin_std 
+        if 'absolute' : bin_h
+        .. warning:: The default ``mask_param1`` parameter is deprecated in 
+        version 1.3 and will be changed to ``10`` in 1.4.
     mask_param2 : scalar, default is 0.5
-        if 'relative' : bin_l
-        if 'absolute' : bin_per
+        if 'relative' : bin_per
+        if 'absolute' : bin_l
+        .. warning:: The default ``mask_param2`` parameter is deprecated in 
+        version 1.3 and will be changed to ``3`` in 1.4.
     min_roi, max_roi : scalars, optional, default : 9,  512*10000
-        Define the minimum and the maximum area possible for an ROI. If None,  
+        Define the minimum and the maximum area possible for a ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
-        the image    
+        the image 
+        .. warning:: The default ``min_roi`` and ``max_roi`` parameter is 
+        deprecated in version 1.3 and will be changed to ``None`` in 1.4.
+    max_ratio_xy : scalar, optional, default : None
+        Define the maximum ratio between the vertical axis (y) and horizontal 
+        axis (x) that is allowed for a ROI. This is very convenient to remove
+        vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
+        of spikes due to light to medium rainfall.
     remove_rain : boolean, default is False
         If True, vertical frequency spikes due to rain are removed as possible
         by applying a morphological mathematical image processing : grey opening
+        .. warning:: The ``remove_rain`` parameter is deprecated in version 1.3 
+        and will be removed in 1.4. It's better to use the ``max_ratio_yx`` 
+        parameter
     display : boolean, default is false
         plot graphs and spectrograms
     /*/*kwargs optional. This parameter is used by plt.plot and savefig functions 
@@ -2326,11 +2346,18 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
                                  min_roi=min_roi, 
                                  max_roi=max_roi,
                                  display= display, **kwargs)
-
+    
     ##### Extract centroids features of each roi from the spectrogram in dB without noise 
     X = dB2power(Sxx_dB_noNoise)
     rois = format_features(rois, tn, fn) 
     centroid = centroid_features(X, rois, im_rois)
+    
+    ###### remove rois with ratio >max_ratio_xy (they are mostly artefact 
+    # such as wind, ain or clipping)
+    # add ratio x/y
+    rois['ratio_xy'] = (rois.max_y -rois.min_y) / (rois.max_x -rois.min_x) 
+    if max_ratio_xy is not None :
+        rois = rois[rois['ratio_xy'] < max_ratio_xy]      
     
     if display :
         X = Sxx_dB_noNoise
@@ -2649,6 +2676,11 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         remove_rain : boolean, default is False
             If True, most of spikes in spectrogram due to rain are removed using
             a math morphological method, the grey opening
+        max_ratio_yx : scalar, optional, default : None
+            Define the maximum ratio between the vertical axis (y) and horizontal 
+            axis (x) that is allowed for a ROI. This is very convenient to remove
+            vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
+            of spikes due to light to medium rainfall.
         min_roi, max_roi : scalars, optional, default : 9,  512*10000
             Define the minimum and the maximum area possible for an ROI. If None,  
             the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
@@ -2724,11 +2756,13 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     
     ### for Roi
     min_roi_area    = kwargs.pop('min_roi_area',None) # if None =>  30ms * 100Hz
+    max_roi_area    = kwargs.pop('max_roi_area',None) # 
     smooth_param1   = kwargs.pop('smooth_param1',1)
     mask_mode       = kwargs.pop('mask_mode','relative')
     mask_param1     = kwargs.pop('mask_param1',6)
     mask_param2     = kwargs.pop('mask_param2',0.5)
     remove_rain     = kwargs.pop('remove_rain',False)
+    max_ratio_xy    = kwargs.pop('max_ratio_xy',10)
     
     ### for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
@@ -3002,7 +3036,9 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                                                mask_param1, 
                                                mask_param2, 
                                                min_roi=min_roi_area, 
+                                               max_roi=max_roi_area,
                                                remove_rain = remove_rain,
+                                               max_ratio_xy = max_ratio_xy,
                                                display=display)
     df_spectral_indices += [ROItotal, ROIcover]
     if verbose :
