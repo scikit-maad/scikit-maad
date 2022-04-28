@@ -320,6 +320,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
         extent=kwargs.pop('extent',None)
+        interpolation=kwargs.pop('interpolation','none')
                 
         if extent is None : 
             xlabel = 'pseudotime [points]'
@@ -333,6 +334,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
                          vmin   = vmin, 
                          vmax   = vmax, 
                          cmap   = cmap, 
+                         interpolation = interpolation,
                          **kwargs) 
         # SAVE FIGURE 
         if savefig is not None :  
