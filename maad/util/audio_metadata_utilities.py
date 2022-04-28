@@ -91,7 +91,13 @@ def audio_header(path_audio):
     -------
     metadata : dictionary
         header information.
-
+    
+    Examples
+    --------
+    >>> from maad import util
+    >>> dic_metadata = util.audio_header('../data/spinetail.wav')
+    >>> print(dic_metadata)
+    {'path_audio': '../data/spinetail.wav', 'fname': 'spinetail.wav', 'sample_rate': 44100, 'channels': 1, 'bits': 16, 'samples': 861799, 'fsize': 1723642, 'length': 19.541927437641725}
     """
     basename = os.path.basename(path_audio)
 
@@ -204,7 +210,7 @@ def get_metadata_file(path_audio, verbose=False):
 
 # %%
 def get_metadata_dir(path_dir, verbose=False):
-     """
+    """
     Get metadata asociated with audio recordings in a directory. Metadata includes basic 
     information of the audio file format (sample rate, number of channels, bit depth and 
     file size), and date information from the filename. Note however, that this function 
@@ -226,25 +232,30 @@ def get_metadata_dir(path_dir, verbose=False):
     See Also
     --------
     maad.util.get_metadata_file, maad.util.audio_header, maad.util.filename_info
-
+    
+    Examples
+    --------
+    >>> from maad import util
+    >>> df_metadata = util.get_metadata_dir('../data/indices/')
     """
 
-     # List all files recursively and select only wav files.
-     root = os.path.dirname(path_dir)  # if filename is given, look for the directory.
-     flist = [os.path.join(path_dir, name) for path_dir, subdirs, files in os.walk(root) for name in files]
-     flist_wav = [k for k in flist if '.WAV' in k] + [k for k in flist if '.wav' in k]
+    # List all files recursively and select only wav files.
+    root = os.path.dirname(path_dir)  # if filename is given, look for the directory.
+    flist = [os.path.join(path_dir, name) for path_dir, subdirs, files in os.walk(root) for name in files]
+    flist_wav = [k for k in flist if '.WAV' in k] + [k for k in flist if '.wav' in k]
 
-     # Get metadata for each file
-     df_metadata = pd.DataFrame()
-     for count, file in enumerate(flist_wav):
-         if verbose:
-             print(count, '/', len(flist_wav), ':', os.path.basename(file))
+    # Get metadata for each file
+    df_metadata = pd.DataFrame()
+    for count, file in enumerate(flist_wav):
+        if verbose:
+            print(count, '/', len(flist_wav), ':', os.path.basename(file))
 
-         data = get_metadata_file(file, verbose)
-         df_metadata = pd.concat([df_metadata, pd.DataFrame.from_records([data])])
+        data = get_metadata_file(file, verbose)
+        df_metadata = pd.concat([df_metadata, pd.DataFrame.from_records([data])])
 
-     else:
-         return df_metadata
+    df_metadata.reset_index(drop=True, inplace=True)
+    
+    return df_metadata
 
 
 
