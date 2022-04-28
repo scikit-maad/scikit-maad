@@ -21,7 +21,6 @@ from pathlib import Path
 import numpy as np
 import os
 
-
 # %%
 def xc_query(searchTerms,
              format_time = False,
@@ -295,7 +294,7 @@ def xc_download(df,
 
     Parameters
     ----------
-    df_dataset : pandas DataFrame
+    df : pandas DataFrame
         Dataframe containing the selected recordings metadata 
     rootdir : string
         Path to the directory where the whole dataset will be saved
@@ -314,19 +313,21 @@ def xc_download(df,
 
     Returns
     -------
-    None.
-
+    fullpath_list : string
+        Returns a list with all the paths to the newly downloaded audio files
     """
     # Check whether the specified path is an existing directory or not 
     isdir = os.path.isdir(rootdir) 
     
     # Download audio
-    if (isdir == False) or (overwrite == True) :
-        if verbose :
-            if (isdir == True) and (overwrite == True) :
-                print("The directory "
-                      + rootdir
-                      + " already exists and will be overwritten")
+    fullpath_list = []
+    if (isdir == False) or ((isdir == True) and (overwrite == True)) : 
+        if (overwrite == True):
+            if verbose:
+                print(
+                    "The directory "
+                    + rootdir
+                    + " already exists and will be overwritten" )
 
         # rearrange index to be sure to have unique and increasing index
         df['index'] = np.arange(0, len(df))
@@ -355,19 +356,24 @@ def xc_download(df,
             fileaddress = row.file
             if verbose : 
                 print("Saving file ", index+1, "/", numfiles, ": " + fileaddress)
-            urllib.request.urlretrieve(fileaddress, path/filename)
+            fullpath, _ = urllib.request.urlretrieve(fileaddress, path / filename)
+            fullpath_list += [str(fullpath)]
             # save csv
             if save_csv:
                 filename_csv = str(path/'metadata.csv')
                 # test if the csv file doesn't exit
                 if os.path.exists(filename_csv) == False:
                     mask = (df.gen == row.gen) & (df.sp == row.sp)
-                    df[mask].to_csv(filename_csv, index=False)
-                
-                
-
-                
-                
+                    df[mask].to_csv(filename_csv, index=False)    
+    else :
+        if verbose:
+            print(
+                "The directory "
+                + rootdir
+                + " already exists"
+            )
+            
+    return fullpath_list
 
 # %%
 if __name__ == '__main__':
