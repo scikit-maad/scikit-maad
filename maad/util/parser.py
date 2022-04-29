@@ -261,7 +261,7 @@ def read_raven_annot(raven_filename):
     http://ravensoundsoftware.com/wp-content/uploads/2017/11/Raven14UsersManual.pdf
         
     """
-    df_out = pd.read_csv(fname, sep='\t')
+    df_out = pd.read_csv(raven_filename, sep='\t')
     return df_out
     
 #%%
