@@ -868,7 +868,7 @@ def format_features(df, tn, fn):
                     df_bbox.append((min_y, min_x, max_y, max_x))
                 else:
                     df = df.drop(idx)
-
+            
             # check if new columns
             if not (('min_y' and 'min_x' and 'max_y' and 'max_x') in df):
                 df = df.join(pd.DataFrame(df_bbox,
@@ -879,7 +879,9 @@ def format_features(df, tn, fn):
             else:
                 df.update(pd.DataFrame(df_bbox,
                                        columns=['min_y', 'min_x',
-                                                'max_y', 'max_x']))
+                                                'max_y', 'max_x'],
+                                       index=df.index))
+         
 
         # if ('min_y' and 'min_x' and 'max_y' and 'max_x') in df and not (('min_t' and 'min_f' and 'max_t' and 'max_f') in df):
         if ('min_y' and 'min_x' and 'max_y' and 'max_x') in df:
@@ -901,6 +903,7 @@ def format_features(df, tn, fn):
                                           columns=['min_f', 'min_t',
                                                    'max_f', 'max_t'],
                                           index=df.index))
+            
 
         # if ('centroid_y' and 'centroid_x') in df and not (('centroid_f' and 'centroid_t') in df):
         if ('centroid_y' and 'centroid_x') in df:
@@ -932,7 +935,8 @@ def format_features(df, tn, fn):
             # otherwise update the existing columns with new values
             else:
                 df.update(pd.DataFrame(df_centroid,
-                                       columns=['centroid_y', 'centroid_x']))
+                                       columns=['centroid_y', 'centroid_x'],
+                                       index=df.index))
                 
         # =============
         # if ('duration_x' and 'bandwidth_y' and 'area_xy') in df and not (('duration_t' and 'bandwidth_f' and 'area_tf') in df):
@@ -972,7 +976,8 @@ def format_features(df, tn, fn):
             else:
                 df.update(pd.DataFrame(df_area,
                                        columns=['duration_x',
-                                                'bandwidth_y', 'area_xy']))
+                                                'bandwidth_y', 'area_xy'],
+                                       index=df.index))
 
         count += 1
 
