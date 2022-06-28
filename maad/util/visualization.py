@@ -1031,21 +1031,24 @@ def rand_cmap(
     type="bright",
     first_color_black=True,
     last_color_black=False,
+    seed=321,
     verbose=False):
     """
     Creates a random colormap to be used together with matplotlib. Useful for segmentation tasks
     
     Parameters
     ----------
-    nlabels : Integer
+    nlabels : int
         Number of labels (size of colormap)
-    type : String
+    type : string
         'bright' for strong colors, 'soft' for pastel colors. Default is 'bright'
-    first_color_black : Boolean
+    first_color_black : bool, optional
         Option to use first color as black. Default is True  
-    last_color_black : Boolean   
-        Option to use last color as black, Default is False
-    verbose  : Boolean   
+    last_color_black : bool, optional   
+        Option to use last color as black. Default is False
+    seed : int, optional
+         Fix the seed of the random engine. Default is 321   
+    verbose  : bool, optional   
         Prints the number of labels and shows the colormap. Default is False
     
     Returns
@@ -1059,7 +1062,7 @@ def rand_cmap(
     """
 
     # initialize the random seed in order to get always the same random order
-    np.random.seed(seed=321)
+    np.random.seed(seed=seed)
 
     if verbose:
         print("Number of labels: " + str(nlabels))
