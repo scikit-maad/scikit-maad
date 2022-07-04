@@ -1184,7 +1184,6 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
     
     return LFC, MFC, HFC
 
-
 #=============================================================================
 
 def spectral_activity (Sxx_dB, dB_threshold=6):
