@@ -1479,9 +1479,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     N = np.floor((fmax-fmin)/bin_step)
     
     # convert into dB and normalization by the max
-    # add -3dB to obtain the same result as R package soundecology
-    # (this is probably due to an error in calculating the spectrogram in R)
-    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) -3   
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) 
     
     # Score for each frequency in the frequency bandwith
     s_sum = []
@@ -1566,9 +1564,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     N = np.floor((fmax-fmin)/bin_step)
     
     # convert into dB and normalization by the max
-    # add -3dB to obtain the same result as R package soundecology
-    # (this is probably due to an error in calculating the spectrogram in R)
-    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) -3
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) 
  
     # Score for each frequency in the frequency bandwith
     s_sum = []
