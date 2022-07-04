@@ -186,6 +186,10 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
     44.93083283875093
 
     """
+    
+    # Get the argument detrend. By default is "constant" but some reasons (ADI
+    # and AEI index from soundecology), detrend should be None
+    detrend = kwargs.pop("detrend", "constant")
 
     # Test if noverlap is None. By default, noverlap is half the length of the fft
     if noverlap is None:
@@ -199,7 +203,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
                                                 nperseg=nperseg, noverlap=noverlap,
                                                 nfft=nperseg,
                                                 mode='complex',
-                                                detrend='constant',
+                                                detrend=detrend,
                                                 scaling='density', axis=-1)
 
     # Mutliply by the frequency resolution step (fs/nperseg) to get the power

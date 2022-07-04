@@ -1423,7 +1423,11 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     Parameters
     ----------
     Sxx : ndarray of floats
-        2d : Spectrogram
+        2d : amplitude spectrogram. In order to obtain the same output as for soundecology,
+        the signal and the spectrogram need to be processed without detrend on.
+        maad.sound.load("myfile.wav", ..., detrend = False)
+        maad.sound.spectrogram(s, fs, ..., detrend = False)
+        For a complete example, see the example below
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1466,11 +1470,24 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
-    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn)
+    
+    Load the signal and compute the spectrogram to give the same result as soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False)
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False) 
+    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000)
     >>> print('ADI : %2.2f ' %ADI)
-    ADI : 2.45 
+    ADI : 2.05
+    
+    Load the signal and compute the spectrogram as usual (detrend ON) such that
+    the dB threshold needs to be adapted to give results that are more or less
+    in line with soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
+    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -30)
+    >>> print('ADI : %2.2f ' %ADI)
+    ADI : 1.46
     
     """
         
@@ -1514,7 +1531,11 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     Parameters
     ----------
     Sxx: ndarray of floats
-        2d : Spectrogram
+        2d : amplitude spectrogram. In order to obtain the same output as for soundecology,
+        the signal and the spectrogram need to be processed without detrend on.
+        maad.sound.load("myfile.wav", ..., detrend = False)
+        maad.sound.spectrogram(s, fs, ..., detrend = False)
+        For a complete example, see the example below
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1522,7 +1543,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     fmin : scalar, optional, default is 0
         Minimum frequency in Hz
         
-    fmax : scalar, optional, default is 20000
+    fmax : scalar, optional, default is 20000 
         Maximum frequency in Hz
         
     bin_step : scalar, optional, default is 500
@@ -1551,11 +1572,24 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
-    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn)
+    
+    Load the signal and compute the spectrogram to give the same result as soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False) 
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)   
+    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000)
     >>> print('AEI : %2.2f ' %AEI)
-    AEI : 0.56    
+    AEI : 0.39   
+    
+    Load the signal and compute the spectrogram as usual (detrend ON) such that
+    the dB threshold needs to be adapted to give results that are more or less
+    in line with soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
+    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -30)
+    >>> print('AEI : %2.2f ' %AEI)
+    AEI : 0.39   
     
     """
 
@@ -2761,6 +2795,12 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     
     ### for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
+    ADI_dB_threshold = kwargs.pop('ADI_dB_threshold',-50) # in dB 
+    AEI_dB_threshold = kwargs.pop('AEI_dB_threshold',-50) # in dB 
+    # => for same result as soundecology, we have to compute AEI and ADI outside
+    # of this function as the signal can't be detrended (the dc value is not
+    # removed)
+    # -30 seems to give reasonable results that are more or less expected
     
     #### create a list
     df_spectral_indices=[] 
@@ -2917,10 +2957,10 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     """  
     ADI = acoustic_diversity_index(Sxx_amplitude, fn, fmin=flim_low[0], 
                                  fmax=flim_mid[1], bin_step=bin_step, 
-                                 dB_threshold=-50, index="shannon") 
+                                 dB_threshold=ADI_dB_threshold, index="shannon") 
     AEI = acoustic_eveness_index(Sxx_amplitude, fn, fmin=flim_low[0], 
                                fmax=flim_mid[1], bin_step=bin_step, 
-                               dB_threshold=-50) 
+                               dB_threshold=AEI_dB_threshold) 
     df_spectral_indices += [ADI, AEI]
     if verbose :
         print("ADI %2.5f" %ADI)
