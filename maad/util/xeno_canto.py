@@ -133,6 +133,7 @@ def xc_query(searchTerms,
 def xc_multi_query(df_query,
                    format_time = False,
                    format_date = False,
+
                    verbose = False):
     """
     Multi_query performs multiple queries following the search terms defined
@@ -171,17 +172,8 @@ def xc_multi_query(df_query,
                                                 verbose))
    
     # rearrange index to be sure to have unique and increasing index
-    # df_dataset['index'] = np.arange(0, len(df_dataset))
-    # df_dataset.set_index(['index'], inplace=True)
     df_dataset.reset_index(drop=True, inplace=True)
     
-    # # the format of length is not correct (missing 0 before 0:45 => 00:45)
-    # # Correct the format of length for length shorten than 9:59 (4 characters)
-    # # by adding a 0
-    # df_dataset['length'].where(~(df_dataset.length.str.len()==4), 
-    #                             other='0'+ df_dataset[df_dataset.length.str.len()==4].length, 
-    #                             inplace=True) 
-  
     return df_dataset
 
 #%%
