@@ -23,8 +23,10 @@ import os
 
 # %%
 def xc_query(searchTerms,
+             max_nb_files = None,
              format_time = False,
              format_date = False,
+             random_seed = 1979,
              verbose=False):
     """
     Query metadata from Xeno-Canto website depending on the search terms. The
@@ -44,6 +46,8 @@ def xc_query(searchTerms,
         - len : length
         - area : continent (europe, africa, america, asia)
         see more here : https://www.xeno-canto.org/help/search
+    max_nb_files: integer, optional
+        Maximum number of audio files requested. The default is None
     format_time : boolean, optional
         Time in Xeno-Canto is not always present neither correctly formated. 
         If true, time will be correctly formated to be processed as DateTime 
@@ -52,6 +56,9 @@ def xc_query(searchTerms,
     format_date : boolean, optional
         Date in Xeno-Canto is not always present neither correctly formated. 
         If true, rows with uncorrect format of date are dropped.
+    random_seed : integer, optional
+        Fix the random seed in order to get the same result every time the 
+        function is called
     verbose : boolean, optional
         Print messages during the execution of the function. The default is False.
 
@@ -78,6 +85,15 @@ def xc_query(searchTerms,
         df_dataset = df_dataset.append(pd.DataFrame(jsondata['recordings']))
         # increment the current page
         page = page+1
+        
+    # if no limit in the number of files
+    if max_nb_files is not None :
+        # test if the number of files is greater than the maximum number of
+        # resquested files
+        if len(df_dataset) > max_nb_files : 
+            df_dataset = df_dataset.sample(n = max_nb_files,
+                                           random_state = random_seed)
+        
     if verbose:
         print("Found", numPages, "pages in total.")
         print("Saved metadata for", len(df_dataset), "files")
@@ -131,9 +147,10 @@ def xc_query(searchTerms,
 
 # %%
 def xc_multi_query(df_query,
+                   max_nb_files = None,
                    format_time = False,
                    format_date = False,
-
+                   random_seed = 1979,
                    verbose = False):
     """
     Multi_query performs multiple queries following the search terms defined
@@ -144,6 +161,8 @@ def xc_multi_query(df_query,
     df_query : pandas DataFrame
         Dataframe with search terms. Each row corresponds to a new query. 
         Columns corresponds to the search terms allowed by Xeno-Canto
+    max_nb_files: integer, optional
+        Maximum number of audio files requested. The default is None
     format_time : boolean, optional
         Time in Xeno-Canto is not always present neither correctly formated. 
         If true, time will be correctly formated to be processed as DateTime 
@@ -152,6 +171,9 @@ def xc_multi_query(df_query,
     format_date : boolean, optional
         Date in Xeno-Canto is not always present neither correctly formated. 
         If true, rows with uncorrect format of date are dropped.
+    random_seed : integer, optional
+        Fix the random seed in order to get the same result every time the 
+        function is called
     verbose : boolean, optional
         Print messages during the execution of the function. The default is False.
 
@@ -167,10 +189,12 @@ def xc_multi_query(df_query,
     for index, row in df_query.iterrows():
         searchTerms = row.tolist()
         df_dataset = df_dataset.append(xc_query(searchTerms, 
+                                                max_nb_files,
                                                 format_time,
                                                 format_date,
+                                                random_seed,
                                                 verbose))
-   
+
     # rearrange index to be sure to have unique and increasing index
     df_dataset.reset_index(drop=True, inplace=True)
     
@@ -390,7 +414,13 @@ if __name__ == '__main__':
     df_query['q'] = 'q:A'
     df_query['len'] = 'len:"10-60"'
 
-    df_dataset = xc_multi_query(df_query, verbose=True)
+    df_dataset = xc_multi_query(df_query, 
+                                max_nb_files = 5,
+                                verbose=True)
+    
+    print('number of files in the dataset is %d'%(len(df_dataset)))
+    print(df_dataset.head(15))
     
     # df_dataset.to_csv('dataset_xc.csv')
+    
     # xc_download(df_dataset,'my_dataset', , save=True)
