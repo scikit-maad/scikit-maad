@@ -35,6 +35,7 @@ def xc_query(searchTerms,
     searchTerms : list
         list of search terms to perform the query
         The main seach terms are :
+        - grp : birds
         - gen : genus
         - ssp : subspecies
         - en  : english name
@@ -377,13 +378,15 @@ def xc_download(df,
 
 # %%
 if __name__ == '__main__':
+    
     df_query = pd.DataFrame()
     df_species = pd.DataFrame()
+    
     # species
     df_species['scientific name'] = ['Agelaius phoeniceus',
                                      'psittacula krameri',
                                      'Ardea herodias']
-    # quality
+    # query
     gen = []
     sp = []
     for name in df_species['scientific name']:
@@ -393,12 +396,9 @@ if __name__ == '__main__':
     df_query['gen'] = gen
     df_query['sp'] = sp
     df_query['q'] = 'q:A'
-    df_query['len_l'] = 'len_l:60'
-    df_query['len_g'] = 'len_l:10'
+    df_query['len'] = 'len:"10-60"'
 
     df_dataset = xc_multi_query(df_query, verbose=True)
     
-    df_out = xc_selection(df_dataset)
-
-    # df_dataset.to_csv('tidmarsh_dataset.csv')
-    # xc_download(df_dataset_metadata,'tidmarsh_dataset', , save=True)
+    # df_dataset.to_csv('dataset_xc.csv')
+    # xc_download(df_dataset,'my_dataset', , save=True)

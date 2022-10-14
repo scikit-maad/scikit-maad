@@ -74,9 +74,8 @@ for name in df_species['scientific name']:
 # gen : genus
 # cnt : country
 # area : continent (europe, america, asia, africa)
-# q : quality (q_gt => quality equal or greater than)
-# len : length of the audio file (len_lt => length lower than; 
-#                                 len_gt => length greater than )
+# q : quality
+# len : length of the audio file 
 # type : type of sound : 'song' or 'call' or 'drumming'
 # Please have a look here to know all the parameters and how to use them :
 # https://xeno-canto.org/help/search

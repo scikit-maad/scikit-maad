@@ -106,9 +106,8 @@ for name in df_species['scientific name']:
 # gen : genus
 # cnt : country
 # area : continent (europe, america, asia, africa)
-# q : quality (q_gt => quality equal or greater than)
-# len : length of the audio file (len_lt => length lower than; 
-#                                 len_gt => length greater than )
+# q : quality 
+# len : length of the audio file 
 # type : type of sound : 'song' or 'call' or 'drumming'
 # Please have a look here to know all the parameters and how to use them :
 # https://xeno-canto.org/help/search
@@ -117,9 +116,8 @@ df_query['param1'] = gen
 df_query['param2'] = sp
 df_query['param3'] ='type:drumming'
 df_query['param4'] ='area:europe'
-# df_query['param5 ='len_lt:120'
-# df_query['param6'] ='len_gt:5'
-# df_query['param7'] ='q_gt:C'
+# df_query['param5 ='len:"5-120"'
+# df_query['param6'] ='q:">C"'
 
 # Get recordings metadata corresponding to the query
 df_dataset= util.xc_multi_query(df_query, 
