@@ -10,7 +10,11 @@
 Soundscape analysis in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-scikit-maad is an open source Python package dedicated to the quantitative analysis of environmental audio recordings. This package was designed to (1) load and process digital audio, (2) segment and find regions of interest, (3) compute acoustic features, and (4) estimate sound pressure level. This workflow opens the possibility to scan large audio datasets and use powerful machine learning techniques, allowing to measure acoustic properties and identify key patterns in all kinds of soundscapes.
+**scikit-maad** is an open source Python package dedicated to the quantitative analysis of environmental audio recordings. This package was designed to (1) load and process digital audio, (2) segment and find regions of interest, (3) compute acoustic features, and (4) estimate sound pressure level. This workflow opens the possibility to scan large audio datasets and use powerful machine learning techniques, allowing to measure acoustic properties and identify key patterns in all kinds of soundscapes.
+
+.. note::
+  A new stable release of scikit-maad is now available (v1.3), including a wrapper to download xeno-canto recordings, functions to estimate the detection distance of signals, new display functions and much more.
+  See full details on `GitHub <https://github.com/scikit-maad/scikit-maad/releases/tag/1.3>`_.
 
 .. toctree::
    :maxdepth: 1
@@ -36,25 +40,23 @@ scikit-maad is an open source Python package dedicated to the quantitative analy
 
    _auto_examples/index
    
+
+Citing scikit-maad
+~~~~~~~~~~~~~~~~~~
+
+.. note::
+  If you find this package useful in your research, we would appreciate citations to:
+    
+  Ulloa, J. S., Haupert, S., Latorre, J. F., Aubin, T., & Sueur, J. (2021). scikit-maad: An open-source and modular toolbox for quantitative soundscape analysis in Python. Methods in Ecology and Evolution, 2041-210X.13711. https://doi.org/10.1111/2041-210X.13711
+
+
+About the project
+~~~~~~~~~~~~~~~~~
+
+In 2018, we began to translate a set of audio processing functions from Matlab to an open-source programming language, namely, Python. These functions provided the necessary tools to replicate the Multiresolution Analysis of Acoustic Diversity (MAAD), a method to estimate animal acoustic diversity using unsupervised learning (`Ulloa et al., 2018 <https://doi.org/10.1016/j.ecolind.2018.03.026>`_). We soon realized that Python provided a suitable environment to extend these core functions and to develop a flexible toolbox for our research. During the past few years, we added over 50 acoustic indices, plus a module to estimate the sound pressure level of audio events. Furthermore, we updated, organized, and fully documented the code to make this development accessible to a much wider audience. This work was initiated by `Juan Sebastian Ulloa <https://www.researchgate.net/profile/Juan_Ulloa>`_, supervised by **Jérôme Sueur** and **Thierry Aubin** at the `Muséum National d'Histoire Naturelle <http://isyeb.mnhn.fr/fr>`_ and the `Université Paris Saclay <http://neuro-psi.cnrs.fr/>`_ respectively. Python functions have been added by `Sylvain Haupert <https://www.researchgate.net/profile/Sylvain_Haupert>`_, `Juan Felipe Latorre <https://www.researchgate.net/profile/Juan_Latorre_Gil>`_ (`Universidad Nacional de Colombia <https://unal.edu.co/>`_) and Juan Sebastián Ulloa (`Instituto de Investigación de Recursos Biológicos Alexander von Humboldt <http://www.humboldt.org.co/>`_).
+
 Indices and tables
 ~~~~~~~~~~~~~~~~~~
 
 * :ref:`genindex`
 * :ref:`modindex`
-
-
-Citing scikit-maad
-~~~~~~~~~~~~~~~~~~
-
-If you find this package useful in your research, we would appreciate citations to:
-
-.. [#] Ulloa, J. S., Haupert, S., Latorre, J. F., Aubin, T., & Sueur, J. (2021). scikit-maad: An open-source and modular toolbox for quantitative soundscape analysis in Python. Methods in Ecology and Evolution, 2041-210X.13711. https://doi.org/10.1111/2041-210X.13711
-
-About the authors
-~~~~~~~~~~~~~~~~~
-
-This work started in 2016 at the Museum National d'Histoire Naturelle (MNHN) 
-in Paris, France. It was initiated by **Juan Sebastian Ulloa**, supervised by 
-**Jérôme Sueur** and **Thierry Aubin** at the Muséum National d'Histoire Naturelle 
-and the Université Paris-Saclay respectively. Python functions have been added by 
-**Sylvain Haupert**, **Juan Felipe Latorre**, and **Juan Sebastian Ulloa**. 

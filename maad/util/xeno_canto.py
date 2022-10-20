@@ -21,21 +21,23 @@ from pathlib import Path
 import numpy as np
 import os
 
-
 # %%
 def xc_query(searchTerms,
+             max_nb_files = None,
              format_time = False,
              format_date = False,
+             random_seed = 1979,
              verbose=False):
     """
-    Query retreives metadata from Xeno-Canto website depending on the
-    search terms 
+    Query metadata from Xeno-Canto website depending on the search terms. The
+    audio recordings metadata are grouped and stored in a dataframe.
 
     Parameters
     ----------
     searchTerms : list
         list of search terms to perform the query
         The main seach terms are :
+        - grp : birds
         - gen : genus
         - ssp : subspecies
         - en  : english name
@@ -44,6 +46,8 @@ def xc_query(searchTerms,
         - len : length
         - area : continent (europe, africa, america, asia)
         see more here : https://www.xeno-canto.org/help/search
+    max_nb_files: integer, optional
+        Maximum number of audio files requested. The default is None
     format_time : boolean, optional
         Time in Xeno-Canto is not always present neither correctly formated. 
         If true, time will be correctly formated to be processed as DateTime 
@@ -52,6 +56,9 @@ def xc_query(searchTerms,
     format_date : boolean, optional
         Date in Xeno-Canto is not always present neither correctly formated. 
         If true, rows with uncorrect format of date are dropped.
+    random_seed : integer, optional
+        Fix the random seed in order to get the same result every time the 
+        function is called
     verbose : boolean, optional
         Print messages during the execution of the function. The default is False.
 
@@ -78,6 +85,15 @@ def xc_query(searchTerms,
         df_dataset = df_dataset.append(pd.DataFrame(jsondata['recordings']))
         # increment the current page
         page = page+1
+        
+    # if no limit in the number of files
+    if max_nb_files is not None :
+        # test if the number of files is greater than the maximum number of
+        # resquested files
+        if len(df_dataset) > max_nb_files : 
+            df_dataset = df_dataset.sample(n = max_nb_files,
+                                           random_state = random_seed)
+        
     if verbose:
         print("Found", numPages, "pages in total.")
         print("Saved metadata for", len(df_dataset), "files")
@@ -131,8 +147,10 @@ def xc_query(searchTerms,
 
 # %%
 def xc_multi_query(df_query,
+                   max_nb_files = None,
                    format_time = False,
                    format_date = False,
+                   random_seed = 1979,
                    verbose = False):
     """
     Multi_query performs multiple queries following the search terms defined
@@ -143,6 +161,8 @@ def xc_multi_query(df_query,
     df_query : pandas DataFrame
         Dataframe with search terms. Each row corresponds to a new query. 
         Columns corresponds to the search terms allowed by Xeno-Canto
+    max_nb_files: integer, optional
+        Maximum number of audio files requested. The default is None
     format_time : boolean, optional
         Time in Xeno-Canto is not always present neither correctly formated. 
         If true, time will be correctly formated to be processed as DateTime 
@@ -151,6 +171,9 @@ def xc_multi_query(df_query,
     format_date : boolean, optional
         Date in Xeno-Canto is not always present neither correctly formated. 
         If true, rows with uncorrect format of date are dropped.
+    random_seed : integer, optional
+        Fix the random seed in order to get the same result every time the 
+        function is called
     verbose : boolean, optional
         Print messages during the execution of the function. The default is False.
 
@@ -166,22 +189,15 @@ def xc_multi_query(df_query,
     for index, row in df_query.iterrows():
         searchTerms = row.tolist()
         df_dataset = df_dataset.append(xc_query(searchTerms, 
+                                                max_nb_files,
                                                 format_time,
                                                 format_date,
+                                                random_seed,
                                                 verbose))
-   
+
     # rearrange index to be sure to have unique and increasing index
-    # df_dataset['index'] = np.arange(0, len(df_dataset))
-    # df_dataset.set_index(['index'], inplace=True)
     df_dataset.reset_index(drop=True, inplace=True)
     
-    # # the format of length is not correct (missing 0 before 0:45 => 00:45)
-    # # Correct the format of length for length shorten than 9:59 (4 characters)
-    # # by adding a 0
-    # df_dataset['length'].where(~(df_dataset.length.str.len()==4), 
-    #                             other='0'+ df_dataset[df_dataset.length.str.len()==4].length, 
-    #                             inplace=True) 
-  
     return df_dataset
 
 #%%
@@ -202,9 +218,11 @@ def xc_selection(df_dataset,
     max_nb_files : int, optional
         Max number of audio files per species. The default is 100.
     max_length : string, optional
-        Max duration of the audio files. The default is '2:00'.
+        Max duration of the audio files. The default is '01:00'.
     min_length : string, optional
-        Min duration of the audio files. The default is '0:10'.
+        Min duration of the audio files. The default is '00:10'.
+    min_quality : string, optional
+        Min quality of the audio files. The default is 'B'.
     verbose : boolean, optional
         Print messages during the execution of the function. The default is False.
 
@@ -293,7 +311,7 @@ def xc_download(df,
 
     Parameters
     ----------
-    df_dataset : pandas DataFrame
+    df : pandas DataFrame
         Dataframe containing the selected recordings metadata 
     rootdir : string
         Path to the directory where the whole dataset will be saved
@@ -312,19 +330,21 @@ def xc_download(df,
 
     Returns
     -------
-    None.
-
+    fullpath_list : string
+        Returns a list with all the paths to the newly downloaded audio files
     """
     # Check whether the specified path is an existing directory or not 
     isdir = os.path.isdir(rootdir) 
     
     # Download audio
-    if (isdir == False) or (overwrite == True) :
-        if verbose :
-            if (isdir == True) and (overwrite == True) :
-                print("The directory "
-                      + rootdir
-                      + " already exists and will be overwritten")
+    fullpath_list = []
+    if (isdir == False) or ((isdir == True) and (overwrite == True)) : 
+        if (overwrite == True):
+            if verbose:
+                print(
+                    "The directory "
+                    + rootdir
+                    + " already exists and will be overwritten" )
 
         # rearrange index to be sure to have unique and increasing index
         df['index'] = np.arange(0, len(df))
@@ -353,29 +373,36 @@ def xc_download(df,
             fileaddress = row.file
             if verbose : 
                 print("Saving file ", index+1, "/", numfiles, ": " + fileaddress)
-            urllib.request.urlretrieve(fileaddress, path/filename)
+            fullpath, _ = urllib.request.urlretrieve(fileaddress, path / filename)
+            fullpath_list += [str(fullpath)]
             # save csv
             if save_csv:
                 filename_csv = str(path/'metadata.csv')
                 # test if the csv file doesn't exit
                 if os.path.exists(filename_csv) == False:
                     mask = (df.gen == row.gen) & (df.sp == row.sp)
-                    df[mask].to_csv(filename_csv, index=False)
-                
-                
-
-                
-                
+                    df[mask].to_csv(filename_csv, index=False)    
+    else :
+        if verbose:
+            print(
+                "The directory "
+                + rootdir
+                + " already exists"
+            )
+            
+    return fullpath_list
 
 # %%
 if __name__ == '__main__':
+    
     df_query = pd.DataFrame()
     df_species = pd.DataFrame()
+    
     # species
     df_species['scientific name'] = ['Agelaius phoeniceus',
                                      'psittacula krameri',
                                      'Ardea herodias']
-    # quality
+    # query
     gen = []
     sp = []
     for name in df_species['scientific name']:
@@ -385,12 +412,15 @@ if __name__ == '__main__':
     df_query['gen'] = gen
     df_query['sp'] = sp
     df_query['q'] = 'q:A'
-    df_query['len_l'] = 'len_l:60'
-    df_query['len_g'] = 'len_l:10'
+    df_query['len'] = 'len:"10-60"'
 
-    df_dataset = xc_multi_query(df_query, verbose=True)
+    df_dataset = xc_multi_query(df_query, 
+                                max_nb_files = 5,
+                                verbose=True)
     
-    df_out = xc_selection(df_dataset)
-
-    # df_dataset.to_csv('tidmarsh_dataset.csv')
-    # xc_download(df_dataset_metadata,'tidmarsh_dataset', , save=True)
+    print('number of files in the dataset is %d'%(len(df_dataset)))
+    print(df_dataset.head(15))
+    
+    # df_dataset.to_csv('dataset_xc.csv')
+    
+    # xc_download(df_dataset,'my_dataset', , save=True)

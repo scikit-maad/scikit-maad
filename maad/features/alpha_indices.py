@@ -5,7 +5,7 @@
 Collection of functions to compute alpha acoustic indices to chracterise audio signals.
 """
 #
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+# Authors:  Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>        
 #
 # License: New BSD License
@@ -1184,7 +1184,6 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
     
     return LFC, MFC, HFC
 
-
 #=============================================================================
 
 def spectral_activity (Sxx_dB, dB_threshold=6):
@@ -1424,7 +1423,11 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     Parameters
     ----------
     Sxx : ndarray of floats
-        2d : Spectrogram
+        2d : amplitude spectrogram. In order to obtain the same output as for soundecology,
+        the signal and the spectrogram need to be processed without detrend on.
+        maad.sound.load("myfile.wav", ..., detrend = False)
+        maad.sound.spectrogram(s, fs, ..., detrend = False)
+        For a complete example, see the example below
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1467,11 +1470,24 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
-    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn)
+    
+    Load the signal and compute the spectrogram to give the same result as soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False)
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False) 
+    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000)
     >>> print('ADI : %2.2f ' %ADI)
-    ADI : 2.45 
+    ADI : 2.05
+    
+    Load the signal and compute the spectrogram as usual (detrend ON) such that
+    the dB threshold needs to be adapted to give results that are more or less
+    in line with soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
+    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -30)
+    >>> print('ADI : %2.2f ' %ADI)
+    ADI : 1.46
     
     """
         
@@ -1479,9 +1495,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     N = np.floor((fmax-fmin)/bin_step)
     
     # convert into dB and normalization by the max
-    # add -3dB to obtain the same result as R package soundecology
-    # (this is probably due to an error in calculating the spectrogram in R)
-    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) -3   
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) 
     
     # Score for each frequency in the frequency bandwith
     s_sum = []
@@ -1517,7 +1531,11 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     Parameters
     ----------
     Sxx: ndarray of floats
-        2d : Spectrogram
+        2d : amplitude spectrogram. In order to obtain the same output as for soundecology,
+        the signal and the spectrogram need to be processed without detrend on.
+        maad.sound.load("myfile.wav", ..., detrend = False)
+        maad.sound.spectrogram(s, fs, ..., detrend = False)
+        For a complete example, see the example below
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1525,7 +1543,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     fmin : scalar, optional, default is 0
         Minimum frequency in Hz
         
-    fmax : scalar, optional, default is 20000
+    fmax : scalar, optional, default is 20000 
         Maximum frequency in Hz
         
     bin_step : scalar, optional, default is 500
@@ -1554,11 +1572,24 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     
     Examples
     --------
-    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
-    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn)
+    
+    Load the signal and compute the spectrogram to give the same result as soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False) 
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)   
+    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000)
     >>> print('AEI : %2.2f ' %AEI)
-    AEI : 0.56    
+    AEI : 0.39   
+    
+    Load the signal and compute the spectrogram as usual (detrend ON) such that
+    the dB threshold needs to be adapted to give results that are more or less
+    in line with soundecology
+    
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
+    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -30)
+    >>> print('AEI : %2.2f ' %AEI)
+    AEI : 0.39   
     
     """
 
@@ -1566,9 +1597,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     N = np.floor((fmax-fmin)/bin_step)
     
     # convert into dB and normalization by the max
-    # add -3dB to obtain the same result as R package soundecology
-    # (this is probably due to an error in calculating the spectrogram in R)
-    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) -3
+    Sxx_dB = amplitude2dB(Sxx/max(Sxx)) 
  
     # Score for each frequency in the frequency bandwith
     s_sum = []
@@ -1693,14 +1722,14 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     References 
     ----------
     .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic invasion resistance in Hawaii: bioacoustics, field surveys, and airborne remote sensing. Ecological Applications 17: 2137-2144. `DOI: 10.1890/07-0004.1 <https://doi.org/10.1890/07-0004.1>`_ 
-    Ported and modified from the soundecology R package - cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
+    .. [2] Ported and modified from the soundecology R package - cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
     
     Notes
     -----    
     Soundecology compatible version:
-        - average of dB value
-        - remove negative value in order to get positive values only
-        - dividing by the frequency resolution df instead of multiplication
+    * Average of dB value
+    * Remove negative value in order to get positive values only
+    * Dividing by the frequency resolution df instead of multiplication
     
     Examples
     --------
@@ -2221,9 +2250,13 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
 #=============================================================================
 
 def region_of_interest_index(Sxx_dB_noNoise, tn, fn, 
-                             smooth_param1=1, mask_mode='relative', 
-                             mask_param1=6, mask_param2=0.5, 
-                             min_roi=9, max_roi=512*10000, 
+                             smooth_param1=1, 
+                             mask_mode='relative', 
+                             mask_param1=6, 
+                             mask_param2=0.5, 
+                             min_roi=9, 
+                             max_roi=512*10000, 
+                             max_ratio_xy = None,
                              remove_rain = False,
                              display=False, **kwargs):
     """
@@ -2255,19 +2288,35 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
             Binarize an image based on a double relative threshold.  
             The values used for the thresholding are independent of the values 
             in the image => absolute threshold 
+        .. warning:: The default ``mask_mode`` parameter is deprecated in 
+        version 1.3 and will be changed to ``absolute`` in 1.4.
     mask_param1 : scalar, default is 6
-        if 'relative' : bin_h
-        if 'absolute' : bin_std
+        if 'relative' : bin_std 
+        if 'absolute' : bin_h
+        .. warning:: The default ``mask_param1`` parameter is deprecated in 
+        version 1.3 and will be changed to ``10`` in 1.4.
     mask_param2 : scalar, default is 0.5
-        if 'relative' : bin_l
-        if 'absolute' : bin_per
+        if 'relative' : bin_per
+        if 'absolute' : bin_l
+        .. warning:: The default ``mask_param2`` parameter is deprecated in 
+        version 1.3 and will be changed to ``3`` in 1.4.
     min_roi, max_roi : scalars, optional, default : 9,  512*10000
-        Define the minimum and the maximum area possible for an ROI. If None,  
+        Define the minimum and the maximum area possible for a ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
-        the image    
+        the image 
+        .. warning:: The default ``min_roi`` and ``max_roi`` parameter is 
+        deprecated in version 1.3 and will be changed to ``None`` in 1.4.
+    max_ratio_xy : scalar, optional, default : None
+        Define the maximum ratio between the vertical axis (y) and horizontal 
+        axis (x) that is allowed for a ROI. This is very convenient to remove
+        vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
+        of spikes due to light to medium rainfall.
     remove_rain : boolean, default is False
         If True, vertical frequency spikes due to rain are removed as possible
         by applying a morphological mathematical image processing : grey opening
+        .. warning:: The ``remove_rain`` parameter is deprecated in version 1.3 
+        and will be removed in 1.4. It's better to use the ``max_ratio_yx`` 
+        parameter
     display : boolean, default is false
         plot graphs and spectrograms
     /*/*kwargs optional. This parameter is used by plt.plot and savefig functions 
@@ -2326,11 +2375,18 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
                                  min_roi=min_roi, 
                                  max_roi=max_roi,
                                  display= display, **kwargs)
-
+    
     ##### Extract centroids features of each roi from the spectrogram in dB without noise 
     X = dB2power(Sxx_dB_noNoise)
     rois = format_features(rois, tn, fn) 
     centroid = centroid_features(X, rois, im_rois)
+    
+    ###### remove rois with ratio >max_ratio_xy (they are mostly artefact 
+    # such as wind, ain or clipping)
+    # add ratio x/y
+    rois['ratio_xy'] = (rois.max_y -rois.min_y) / (rois.max_x -rois.min_x) 
+    if max_ratio_xy is not None :
+        rois = rois[rois['ratio_xy'] < max_ratio_xy]      
     
     if display :
         X = Sxx_dB_noNoise
@@ -2649,6 +2705,11 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         remove_rain : boolean, default is False
             If True, most of spikes in spectrogram due to rain are removed using
             a math morphological method, the grey opening
+        max_ratio_yx : scalar, optional, default : None
+            Define the maximum ratio between the vertical axis (y) and horizontal 
+            axis (x) that is allowed for a ROI. This is very convenient to remove
+            vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
+            of spikes due to light to medium rainfall.
         min_roi, max_roi : scalars, optional, default : 9,  512*10000
             Define the minimum and the maximum area possible for an ROI. If None,  
             the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
@@ -2724,14 +2785,22 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     
     ### for Roi
     min_roi_area    = kwargs.pop('min_roi_area',None) # if None =>  30ms * 100Hz
+    max_roi_area    = kwargs.pop('max_roi_area',None) # 
     smooth_param1   = kwargs.pop('smooth_param1',1)
     mask_mode       = kwargs.pop('mask_mode','relative')
     mask_param1     = kwargs.pop('mask_param1',6)
     mask_param2     = kwargs.pop('mask_param2',0.5)
     remove_rain     = kwargs.pop('remove_rain',False)
+    max_ratio_xy    = kwargs.pop('max_ratio_xy',10)
     
     ### for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
+    ADI_dB_threshold = kwargs.pop('ADI_dB_threshold',-50) # in dB 
+    AEI_dB_threshold = kwargs.pop('AEI_dB_threshold',-50) # in dB 
+    # => for same result as soundecology, we have to compute AEI and ADI outside
+    # of this function as the signal can't be detrended (the dc value is not
+    # removed)
+    # -30 seems to give reasonable results that are more or less expected
     
     #### create a list
     df_spectral_indices=[] 
@@ -2888,10 +2957,10 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     """  
     ADI = acoustic_diversity_index(Sxx_amplitude, fn, fmin=flim_low[0], 
                                  fmax=flim_mid[1], bin_step=bin_step, 
-                                 dB_threshold=-50, index="shannon") 
+                                 dB_threshold=ADI_dB_threshold, index="shannon") 
     AEI = acoustic_eveness_index(Sxx_amplitude, fn, fmin=flim_low[0], 
                                fmax=flim_mid[1], bin_step=bin_step, 
-                               dB_threshold=-50) 
+                               dB_threshold=AEI_dB_threshold) 
     df_spectral_indices += [ADI, AEI]
     if verbose :
         print("ADI %2.5f" %ADI)
@@ -3002,7 +3071,9 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                                                mask_param1, 
                                                mask_param2, 
                                                min_roi=min_roi_area, 
+                                               max_roi=max_roi_area,
                                                remove_rain = remove_rain,
+                                               max_ratio_xy = max_ratio_xy,
                                                display=display)
     df_spectral_indices += [ROItotal, ROIcover]
     if verbose :
