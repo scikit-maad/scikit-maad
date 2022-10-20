@@ -43,7 +43,7 @@ setup(
       license = 'BSD 3 Clause',
       keywords = ['ecoacoustics', 'bioacoustics', 'ecology', 'sound pressure level', 'signal processing'],
       url = 'https://github.com/scikit-maad/scikit-maad',
-      proyect_urls={'Documentation': 'https://scikit-maad.github.io'},
+      project_urls={'Documentation': 'https://scikit-maad.github.io'},
       platform = 'OS Independent',
       cmdclass={'clean': CleanCommand},
       license_file = 'LICENSE',                     
