@@ -45,6 +45,7 @@ Transform audio
     resample
     trim
     normalize
+    gain
 
 Metrics
 -------
@@ -79,7 +80,8 @@ from .transform import (envelope,
                         spectrum,
                         resample,
                         trim,
-                        normalize)
+                        normalize,
+                        gain)
 
 from .spectro_func import (spectrogram,
                            avg_power_spectro,
@@ -115,6 +117,7 @@ __all__ = [
         'resample',
         'trim',
         'normalize',
+        'gain',
         # spectro_func.py
         'spectrogram',
         'avg_power_spectro',

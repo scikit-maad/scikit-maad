@@ -377,7 +377,7 @@ def moments (X, axis=None):
     >>> print ('mean:%2.4f / var:%2.4f / skew:%2.4f / kurt:%2.4f' %(mean, var, skew, kurt)) 
     mean:-0.0000 / var:0.0012 / skew:-0.0065 / kurt:24.7116    
     """
-    # force P to be ndarray
+    # force X to be ndarray
     X = np.asarray(X)
     
     return mean(X, axis), var(X, axis), skewness(X, axis), kurtosis(X, axis)
@@ -411,6 +411,9 @@ def entropy (x, axis=0):
     Entropy is 0.9998 
         
     """
+    # force x to be ndarray
+    x = np.asarray(x)
+    
     if isinstance(x, (np.ndarray)) == True:
         if x.ndim > axis:
             if x.shape[axis] == 0: 
@@ -418,12 +421,12 @@ def entropy (x, axis=0):
                 H = None 
             elif x.shape[axis] == 1:
                 H = 0 # null entropy
-            elif x.all() == 0:
+            elif x.any() == 0: # test if there are only zeros
                 if x.ndim == 1 : # case vector
-                    H = 0 # null entropy
+                    H = 1 # entropy = 1
                 else : # case matrix
-                    if axis == 0 : H = np.zeros(x.shape[1]) # null entropy
-                    if axis == 1 : H = np.zeros(x.shape[0]) # null entropy
+                    if axis == 0 : H = np.ones(x.shape[1]) # entropy = 1
+                    if axis == 1 : H = np.ones(x.shape[0]) # entropy = 1
             else:
                 # if datain contains negative values -> rescale the signal between 
                 # between posSitive values (for example (0,1))

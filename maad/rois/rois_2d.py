@@ -320,6 +320,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
         vmin=kwargs.pop('vmin',0)  
         vmax=kwargs.pop('vmax',1)  
         extent=kwargs.pop('extent',None)
+        interpolation=kwargs.pop('interpolation','none')
                 
         if extent is None : 
             xlabel = 'pseudotime [points]'
@@ -333,6 +334,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
                          vmin   = vmin, 
                          vmax   = vmax, 
                          cmap   = cmap, 
+                         interpolation = interpolation,
                          **kwargs) 
         # SAVE FIGURE 
         if savefig is not None :  
@@ -432,7 +434,7 @@ def create_mask(im, mode_bin = 'relative',
     
     Smooth the spectrogram
     
-    >>> Sxx_dB_blurred = maad.rois.smooth(Sxx_dB)
+    >>> Sxx_dB_blurred = maad.sound.smooth(Sxx_dB)
     
     Detection of the acoustic signature => creation of a mask
     
@@ -443,7 +445,7 @@ def create_mask(im, mode_bin = 'relative',
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
     >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2d(im_bin, ax=ax2, extent=ext, title='mask)')
+    >>> maad.util.plot2d(im_bin, ax=ax2, extent=ext, title='mask')
     >>> fig.set_size_inches(13,8)
     >>> fig.tight_layout() 
     

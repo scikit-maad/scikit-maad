@@ -32,7 +32,6 @@ Attenuation and active distance
     dBSPL_per_bin
     detection_distance
     pressure_at_r0
-    L0_at_r0
     dBSPL_at_r0
     apply_attenuation
 
