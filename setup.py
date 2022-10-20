@@ -44,7 +44,7 @@ setup(
       keywords = ['ecoacoustics', 'bioacoustics', 'ecology', 'sound pressure level', 'signal processing'],
       url = 'https://github.com/scikit-maad/scikit-maad',
       project_urls={'Documentation': 'https://scikit-maad.github.io'},
-      platform = 'OS Independent',
+      platforms = 'OS Independent',
       cmdclass={'clean': CleanCommand},
       license_file = 'LICENSE',                     
       python_requires='>=3.6',
