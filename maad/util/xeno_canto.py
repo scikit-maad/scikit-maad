@@ -148,10 +148,10 @@ def xc_query(searchTerms,
 # %%
 def xc_multi_query(df_query,
                    max_nb_files = None,
-                   format_time = False,
-                   format_date = False,
-                   random_seed = 1979,
-                   verbose = False):
+                   format_time  = False,
+                   format_date  = False,
+                   random_seed  = 1979,
+                   verbose      = False):
     """
     Multi_query performs multiple queries following the search terms defined
     in the input dataframe
@@ -300,11 +300,11 @@ def xc_selection(df_dataset,
 
 #%%
 def xc_download(df,
-                 rootdir,
-                 dataset_name='dataset',
-                 overwrite = False,
-                 save_csv=False,
-                 verbose = False):
+                rootdir,
+                dataset_name='dataset',
+                overwrite   = False,
+                save_csv    =False,
+                verbose     = False):
     """
     Download the audio files from Xeno-Canto based on the input dataframe
     It will create directories for each species if needed
@@ -334,7 +334,7 @@ def xc_download(df,
         Returns a list with all the paths to the newly downloaded audio files
     """
     # Check whether the specified path is an existing directory or not 
-    isdir = os.path.isdir(rootdir) 
+    isdir = os.path.isdir(os.path.join(rootdir,dataset_name))
     
     # Download audio
     fullpath_list = []
@@ -368,7 +368,8 @@ def xc_download(df,
                           " for downloaded files...")
                 os.makedirs(path)
             # get filenames
-            filename = 'XC' + row.id + '.mp3'
+            filename = 'XC' + str(row.id) + '.mp3'
+            print(filename)
             # get website recording http download address 
             fileaddress = row.file
             if verbose : 
@@ -381,17 +382,119 @@ def xc_download(df,
                 # test if the csv file doesn't exit
                 if os.path.exists(filename_csv) == False:
                     mask = (df.gen == row.gen) & (df.sp == row.sp)
-                    df[mask].to_csv(filename_csv, index=False)    
+                    df[mask].to_csv(filename_csv, sep=";", index=False)    
     else :
         if verbose:
             print(
-                "The directory "
+                "***WARNING*** : The directory "
                 + rootdir
                 + " already exists"
             )
             
     return fullpath_list
 
+#%%
+
+def xc_save_csv(
+        df,
+        rootdir   = os.getcwd(),
+        filename  = "xc_metadata.csv",
+        overwrite = False,
+        verbose   = False): 
+    """
+    Save audio recordings metadata collected from xeno-canto into a csv file
+
+    Parameters
+    ----------
+    df : pandas DataFrame
+        Dataframe containing the selected recordings metadata 
+    rootdir : string, optional
+        Path to the directory. The default is the current directory
+    filename : string, optional
+        Name of the csv file. The default is "xc_metadata.csv"
+    overwrite : boolean, optional
+        Overwirte the csv file if it already exists
+    verbose : boolean, optional
+        Print messages during the execution of the function. The default is False.
+
+    Returns
+    -------
+    fullpath : string
+        Returns the full path of the csv file
+    """    
+    
+    # # if no rootdir specified, select the current path as rootdir
+    # if rootdir is None:
+    #     rootdir = os.getcwd()
+    
+    # Check whether the specified path is an existing file or not 
+    isfile = os.path.isfile(os.path.join(rootdir,filename))
+    
+    if (isfile == False) or ((isfile == True) and (overwrite == True)) : 
+        if (overwrite == True):
+            if verbose:
+                print(
+                    "The file "
+                    + filename
+                    + " already exists in " 
+                    + rootdir
+                    + " and will be overwritten" )
+                    
+        df_dataset.to_csv(os.path.join(rootdir,filename), 
+                          sep=';', 
+                          index=False, 
+                          header=True)
+        fullpath = os.path.join(rootdir,filename)
+    else:
+        if verbose:
+            print(
+                "***WARNING*** : The file "
+                + filename
+                + " already exists in "
+                + rootdir
+            )
+        fullpath = []
+        
+    return fullpath
+    
+#%%
+    
+def xc_read_csv(        
+        filename,
+        rootdir   = os.getcwd(),
+        verbose   = False): 
+    """
+    Read audio recordings metadata collected from xeno-canto and saved into
+    a csv file
+
+    Parameters
+    ----------
+    filename : string
+        Name of the csv file.
+    rootdir : string, optional
+        Path to the directory. The default is the current directory
+    verbose : boolean, optional
+        Print messages during the execution of the function. The default is False.
+
+    Returns
+    -------
+    df_dataset : pandas DataFrame
+        Dataframe containing the audio recordings metadata 
+    """    
+
+    try :
+        df_dataset = pd.read_csv(os.path.join(rootdir,filename), sep=';')
+    except:
+        df_dataset = pd.DataFrame()
+        if verbose : 
+            print(
+                "***WARNING : The file "
+                + filename
+                + " does not exist in " 
+                + rootdir)
+    
+    return df_dataset
+    
 # %%
 if __name__ == '__main__':
     
@@ -421,6 +524,13 @@ if __name__ == '__main__':
     print('number of files in the dataset is %d'%(len(df_dataset)))
     print(df_dataset.head(15))
     
-    # df_dataset.to_csv('dataset_xc.csv')
+    xc_save_csv(df_dataset, filename='dataset_xc.csv', verbose=True)
     
-    # xc_download(df_dataset,'my_dataset', , save=True)
+    df_dataset = xc_read_csv('dataset_xc.csv', verbose=True)
+    
+    xc_download(df_dataset, 
+                rootdir='/home/haupert/Downloads', 
+                dataset_name='my_dataset', 
+                save_csv=True,
+                overwrite=False,
+                verbose = True)
