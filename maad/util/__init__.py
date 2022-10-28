@@ -146,8 +146,9 @@ from .xeno_canto import (xc_query,
                          xc_multi_query,
                          xc_selection,
                          xc_download,
-                         xc_save_csv,
-                         xc_read_csv)
+                         # xc_save_csv,
+                         # xc_read_csv
+                         )
 
 from .audio_metadata_utilities import (check_file_format,
                                        audio_header,
@@ -208,8 +209,8 @@ __all__ = [
            'xc_multi_query',
            'xc_selection',
            'xc_download',
-           'xc_save_csv',
-           'xc_read_csv',
+           # 'xc_save_csv',
+           # 'xc_read_csv',
             # audio_metadata_utilities
             'check_file_format',
             'audio_header',
