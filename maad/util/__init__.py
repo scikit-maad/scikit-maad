@@ -145,7 +145,10 @@ from .parser import (read_audacity_annot,
 from .xeno_canto import (xc_query,
                          xc_multi_query,
                          xc_selection,
-                         xc_download)
+                         xc_download,
+                         # xc_save_csv,
+                         # xc_read_csv
+                         )
 
 from .audio_metadata_utilities import (check_file_format,
                                        audio_header,
@@ -198,12 +201,16 @@ __all__ = [
            # parser
            'read_audacity_annot',
            'write_audacity_annot',
+           'read_raven_annot',
+           'write_raven_annot',
            'date_parser',
            # xeno_canto
            'xc_query',
            'xc_multi_query',
            'xc_selection',
            'xc_download',
+           # 'xc_save_csv',
+           # 'xc_read_csv',
             # audio_metadata_utilities
             'check_file_format',
             'audio_header',

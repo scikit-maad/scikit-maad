@@ -67,6 +67,7 @@ def xc_query(searchTerms,
     df_dataset : pandas DataFrame
         Dataframe containing all the recordings metadata matching search terms
     """
+    # initialization of 
     numPages = 1
     page = 1
     df_dataset = pd.DataFrame()
@@ -97,6 +98,10 @@ def xc_query(searchTerms,
     if verbose:
         print("Found", numPages, "pages in total.")
         print("Saved metadata for", len(df_dataset), "files")
+        
+    # convert latitude and longitude coordinates into float
+    df_dataset['lat'] = df_dataset['lat'].astype(float)
+    df_dataset['lng'] = df_dataset['lng'].astype(float)
     
     # test if the dataset is not empty
     if len(df_dataset)>0:
@@ -148,10 +153,10 @@ def xc_query(searchTerms,
 # %%
 def xc_multi_query(df_query,
                    max_nb_files = None,
-                   format_time = False,
-                   format_date = False,
-                   random_seed = 1979,
-                   verbose = False):
+                   format_time  = False,
+                   format_date  = False,
+                   random_seed  = 1979,
+                   verbose      = False):
     """
     Multi_query performs multiple queries following the search terms defined
     in the input dataframe
@@ -300,11 +305,11 @@ def xc_selection(df_dataset,
 
 #%%
 def xc_download(df,
-                 rootdir,
-                 dataset_name='dataset',
-                 overwrite = False,
-                 save_csv=False,
-                 verbose = False):
+                rootdir,
+                dataset_name='dataset',
+                overwrite   = False,
+                save_csv    = False,
+                verbose     = False):
     """
     Download the audio files from Xeno-Canto based on the input dataframe
     It will create directories for each species if needed
@@ -330,36 +335,46 @@ def xc_download(df,
 
     Returns
     -------
-    fullpath_list : string
-        Returns a list with all the paths to the newly downloaded audio files
+    df : pandas DataFrame
+        Dataframe similar to df but without the rows of the audio recordings
+        that were not downloaded.
+        Add a new column "fullfilename" with the paths to the newly downloaded 
+        audio files
     """
-    # Check whether the specified path is an existing directory or not 
-    isdir = os.path.isdir(rootdir) 
-    
-    # Download audio
+    # format rootdir as path
+    rootdir = Path(rootdir)
+
+    # list of the full paths to the audios
     fullpath_list = []
+    
+    # Try to set 'id' as index
+    try :
+        df.set_index('id', inplace = True)
+    except :
+        pass
+   
+    #--------------------------------------------------------------------------
+    # Check whether the specified path is an existing directory or not 
+    isdir = os.path.exists(rootdir / dataset_name)    
     if (isdir == False) or ((isdir == True) and (overwrite == True)) : 
         if (overwrite == True):
             if verbose:
                 print(
                     "The directory "
-                    + rootdir
-                    + " already exists and will be overwritten" )
-
-        # rearrange index to be sure to have unique and increasing index
-        df['index'] = np.arange(0, len(df))
-        df.set_index(['index'], inplace=True)
-        
+                    + str(rootdir / dataset_name)
+                    + " already exists and will be overwritten" )        
         if verbose :
             numfiles = len(df)
             print("A total of", numfiles, "files will be downloaded")
             
         # change type of rootdir into Path
-        rootdir = Path(rootdir)
+        count = 1
         for index, row in df.iterrows():
+
+            #------------------------------------------------------------------
             # create a name for the directory
             name_dir = row.gen + ' ' + row.sp + '_' + row.en
-            # create data/xeno-canto-dataset directory
+            # create a directory for the species
             path = rootdir / dataset_name / name_dir
             if not os.path.exists(path):
                 if verbose :
@@ -367,31 +382,179 @@ def xc_download(df,
                           str(path) + 
                           " for downloaded files...")
                 os.makedirs(path)
+            #------------------------------------------------------------------
             # get filenames
-            filename = 'XC' + row.id + '.mp3'
-            # get website recording http download address 
-            fileaddress = row.file
-            if verbose : 
-                print("Saving file ", index+1, "/", numfiles, ": " + fileaddress)
-            fullpath, _ = urllib.request.urlretrieve(fileaddress, path / filename)
-            fullpath_list += [str(fullpath)]
+            filename = 'XC' + str(index) + '.mp3'
+            # test if the mp3 file already exists
+            if os.path.exists(rootdir / dataset_name / name_dir / filename) == True:
+                fullpath_list += [path / filename]
+                if verbose :
+                    print( filename + " already exists")
+                # drop the row of this recordings
+                #df.drop(index, inplace = True)
+            else:
+                #--------------------------------------------------------------
+                # get website recording http download address 
+                fileaddress = row.file
+                # try to download the audio recording
+                try :
+                    fullpath, _ = urllib.request.urlretrieve(fileaddress, path / filename)
+                    fullpath_list += [str(fullpath)]
+                    if verbose : 
+                        print("Saving file ", count, "/", numfiles, ": " + fileaddress)
+                except:
+                    # can't download the audio file (it does not exist (anymore) in
+                    # xeno-canto)
+                    if verbose :
+                        print("***WARNING*** Can't save the file ", 
+                              count, "/", numfiles, ": " + fileaddress)
+                    # drop the row of this recordings
+                    df.drop(index, inplace = True)
+                    
+            #------------------------------------------------------------------        
             # save csv
             if save_csv:
                 filename_csv = str(path/'metadata.csv')
                 # test if the csv file doesn't exit
                 if os.path.exists(filename_csv) == False:
-                    mask = (df.gen == row.gen) & (df.sp == row.sp)
-                    df[mask].to_csv(filename_csv, index=False)    
+                    # try to create a file and add a row corresponding to the index
+                    try :
+                        df.loc[index].to_frame().T.to_csv(filename_csv, 
+                                                          sep=";", 
+                                                          index=True, 
+                                                          index_label = 'id') 
+                    except :
+                        pass
+                # if the csv file exists, concat both dataframes
+                else :
+                    # try to read the file and add a row corresponding to the index
+                    try :
+                        pd.concat([pd.read_csv(filename_csv,sep=';',index_col='id'), 
+                                   df.loc[index].to_frame().T], 
+                                  ignore_index=False).drop_duplicates().to_csv(filename_csv, 
+                                                                               sep=";", 
+                                                                               index=True,
+                                                                               index_label='id')       
+                    except :
+                        pass
+            
+            # increment the counter
+            count += 1
+                        
+        # add a new column
+        df['fullfilename'] = fullpath_list
+        
     else :
         if verbose:
             print(
-                "The directory "
-                + rootdir
+                "***WARNING*** : The directory "
+                + str(rootdir)
                 + " already exists"
             )
             
-    return fullpath_list
+    return df
 
+#%%
+
+# def xc_save_csv(
+#         df,
+#         rootdir   = os.getcwd(),
+#         filename  = "xc_metadata.csv",
+#         overwrite = False,
+#         verbose   = False): 
+#     """
+#     Save audio recordings metadata collected from xeno-canto into a csv file
+
+#     Parameters
+#     ----------
+#     df : pandas DataFrame
+#         Dataframe containing the selected recordings metadata 
+#     rootdir : string, optional
+#         Path to the directory. The default is the current directory
+#     filename : string, optional
+#         Name of the csv file. The default is "xc_metadata.csv"
+#     overwrite : boolean, optional
+#         Overwirte the csv file if it already exists
+#     verbose : boolean, optional
+#         Print messages during the execution of the function. The default is False.
+
+#     Returns
+#     -------
+#     fullpath : string
+#         Returns the full path of the csv file
+#     """    
+#     # format rootdir to Path
+#     rootdir = Path(rootdir)
+    
+#     # Check whether the specified path is an existing file or not 
+#     isfile = os.path.isfile(rootdir / filename)
+    
+#     if (isfile == False) or ((isfile == True) and (overwrite == True)) : 
+#         if (overwrite == True):
+#             if verbose:
+#                 print(
+#                     "The file "
+#                     + filename
+#                     + " already exists in " 
+#                     + str(rootdir)
+#                     + " and will be overwritten" )      
+#         df.to_csv(rootdir / filename, 
+#                   sep=';', 
+#                   index=True, 
+#                   header=True)
+#         fullpath = rootdir / filename
+#     else:
+#         if verbose:
+#             print(
+#                 "***WARNING*** : The file "
+#                 + filename
+#                 + " already exists in "
+#                 + str(rootdir)
+#             )
+#         fullpath = []
+        
+#     return fullpath
+    
+# #%%
+    
+# def xc_read_csv(        
+#         filename,
+#         rootdir   = os.getcwd(),
+#         verbose   = False): 
+#     """
+#     Read audio recordings metadata collected from xeno-canto and saved into
+#     a csv file
+
+#     Parameters
+#     ----------
+#     filename : string
+#         Name of the csv file.
+#     rootdir : string, optional
+#         Path to the directory. The default is the current directory
+#     verbose : boolean, optional
+#         Print messages during the execution of the function. The default is False.
+
+#     Returns
+#     -------
+#     df_dataset : pandas DataFrame
+#         Dataframe containing the audio recordings metadata 
+#     """    
+#     # format rootdir to Path
+#     rootdir = Path(rootdir)
+    
+#     try :
+#         df_dataset = pd.read_csv(rootdir / filename, sep=';', index='id')
+#     except:
+#         df_dataset = pd.DataFrame()
+#         if verbose : 
+#             print(
+#                 "***WARNING : The file "
+#                 + filename
+#                 + " does not exist in " 
+#                 + str(rootdir))
+    
+#     return df_dataset
+    
 # %%
 if __name__ == '__main__':
     
@@ -421,6 +584,11 @@ if __name__ == '__main__':
     print('number of files in the dataset is %d'%(len(df_dataset)))
     print(df_dataset.head(15))
     
-    # df_dataset.to_csv('dataset_xc.csv')
     
-    # xc_download(df_dataset,'my_dataset', , save=True)
+    xc_download(df_dataset, 
+                rootdir=os.getcwd(), 
+                dataset_name='my_dataset', 
+                save_csv=True,
+                overwrite=False,
+                verbose = True)
+

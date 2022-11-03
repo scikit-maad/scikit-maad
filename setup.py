@@ -32,7 +32,6 @@ class CleanCommand(Command):
 setup(
       name = 'scikit-maad',
       version = version.__version__,  # Specified at maad/version.py file
-      #packages = find_namespace_packages(include=['maad.*']),
       packages = find_packages(),
       author = 'Juan Sebastian Ulloa and Sylvain Haupert',
       author_email = 'jseb.ulloa@gmail.com, sylvain.haupert@mnhn.fr',
@@ -43,17 +42,17 @@ setup(
       license = 'BSD 3 Clause',
       keywords = ['ecoacoustics', 'bioacoustics', 'ecology', 'sound pressure level', 'signal processing'],
       url = 'https://github.com/scikit-maad/scikit-maad',
-      proyect_urls={'Documentation': 'https://scikit-maad.github.io'},
-      platform = 'OS Independent',
+      project_urls={'Documentation': 'https://scikit-maad.github.io'},
+      platforms = 'OS Independent',
       cmdclass={'clean': CleanCommand},
       license_file = 'LICENSE',                     
-      python_requires='>=3.6',
+      python_requires='>=3.5',
       install_requires = ['numpy>=1.19', 
                           'scipy>=1.5', 
                           'scikit-image>=0.17', 
                           'pandas>=1.1',
-                          'resampy>=0.2'],
-
+                          'resampy>=0.2',
+                          'matplotlib>=3.3'],
       classifiers=textwrap.dedent("""
         Development Status :: 4 - Beta
         Intended Audience :: Science/Research
