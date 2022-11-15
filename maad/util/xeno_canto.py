@@ -67,6 +67,17 @@ def xc_query(searchTerms,
     df_dataset : pandas DataFrame
         Dataframe containing all the recordings metadata matching search terms
     """
+    
+    #*** HACK *** to remove the parameter 'type' from query as it does
+    # not work at the time 10 Nov 2022
+    params = searchTerms
+    searchTerms = []
+    if params is not None :
+        for param in params:
+            if 'type' not in param :  
+                searchTerms.append(param)    
+    #*** END HACK *** 
+    
     # initialization of 
     numPages = 1
     page = 1
@@ -86,43 +97,48 @@ def xc_query(searchTerms,
         df_dataset = df_dataset.append(pd.DataFrame(jsondata['recordings']))
         # increment the current page
         page = page+1
-        
-    # if no limit in the number of files
-    if max_nb_files is not None :
-        # test if the number of files is greater than the maximum number of
-        # resquested files
-        if len(df_dataset) > max_nb_files : 
-            df_dataset = df_dataset.sample(n = max_nb_files,
-                                           random_state = random_seed)
-        
-    if verbose:
-        print("Found", numPages, "pages in total.")
-        print("Saved metadata for", len(df_dataset), "files")
-        
-    # convert latitude and longitude coordinates into float
-    df_dataset['lat'] = df_dataset['lat'].astype(float)
-    df_dataset['lng'] = df_dataset['lng'].astype(float)
-    
+                
     # test if the dataset is not empty
     if len(df_dataset)>0:
+        
+        #*** HACK *** to filter the dataset with the parameter 'type' as it does
+        # not work for regular query at the time 10 Nov 2022
+        if verbose :
+            print("searchTerms {}".format(searchTerms))
+        if params is not None :
+            for param in params  :
+                if 'type' in param :
+                    value =  param.split(':')[1] 
+                    df_dataset = df_dataset[df_dataset.type.apply(lambda type: value in type)]
+        #*** END HACK *** 
+
+        # convert latitude and longitude coordinates into float
+        df_dataset['lat'] = df_dataset['lat'].astype(float)
+        df_dataset['lng'] = df_dataset['lng'].astype(float)
+        
         # rearrange index to be sure to have unique and increasing index
         df_dataset.reset_index(drop=True, inplace=True)
+        
         # the format of length is not correct (missing 0 before 0:45 => 00:45)
         # Correct the format of length for length shorten than 9:59 (4 characters)
         # by adding a 0
         df_dataset['length'].where(~(df_dataset.length.str.len()==4), 
                                     other='0'+ df_dataset[df_dataset.length.str.len()==4].length, 
                                     inplace=True) 
+        
         if format_time == True :
             # rearrange index to be sure to have unique and increasing index
             df_dataset.reset_index(drop=True, inplace=True)
+            
             # the format of time is not always correct
             # replace . by :
             df_dataset['time'].replace(to_replace = '[.]', value=':', regex= True)
             df_dataset['time'].replace(to_replace = '[ ] ', value='', regex= True)
+            
             # drop rows where there is no valid time information that can be corrected
             df_dataset = df_dataset[(df_dataset.time.str.match('^(0[0-9]|1[0-9]|2[0-3])[:]([0-5][0-9])$')) | 
                                     (df_dataset.time.str.match('^([0-9])[:]([0-5][0-9])$'))]
+            
             # Correct the format of time when 0 is missing (missing 0 before 0:45 => 00:45)
             # by adding a 0
             df_dataset['time'][df_dataset.time.str.match('^([0-9])[:]([0-5][0-9])$')] = '0' + df_dataset[df_dataset.time.str.match('^([0-9])[:]([0-5][0-9])$')].time
@@ -144,6 +160,18 @@ def xc_query(searchTerms,
             df_dataset['week'] = pd.to_datetime(df_dataset['date']).dt.isocalendar()['week']
             # add a column with datetime in DateTime format
             df_dataset['datetime'] =  pd.to_datetime(df_dataset['time']+' '+ df_dataset['date'])
+
+    # if no limit in the number of files
+    if max_nb_files is not None :
+        # test if the number of files is greater than the maximum number of
+        # resquested files
+        if len(df_dataset) > max_nb_files : 
+            df_dataset = df_dataset.sample(n = max_nb_files,
+                                           random_state = random_seed)
+       
+    if verbose:
+        print("Found", numPages, "pages in total.")
+        print("Saved metadata for", len(df_dataset), "files")
             
     # rearrange index to be sure to have unique and increasing index
     df_dataset.reset_index(drop=True, inplace=True)
