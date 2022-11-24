@@ -51,7 +51,8 @@ setup(
                           'scipy>=1.5', 
                           'scikit-image>=0.17', 
                           'pandas>=1.1',
-                          'resampy>=0.2'],
+                          'resampy>=0.2',
+                          'matplotlib'],
       classifiers=textwrap.dedent("""
         Development Status :: 4 - Beta
         Intended Audience :: Science/Research
