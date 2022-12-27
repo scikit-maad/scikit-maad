@@ -23,7 +23,7 @@ from maad.util import plot_spectrogram
 
 s, fs = sound.load('../../data/spinetail.wav')
 Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
-plot_spectrogram(Sxx, extent=ext, db_range=60, gain=20, figsize=(4,10))
+plot_spectrogram(Sxx, extent=ext, db_range=60, gain=20, colorbar=False, figsize=(2.5,10))
 
 #%% 
 # Detect the bouncy trill

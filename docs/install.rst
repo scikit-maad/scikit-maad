@@ -1,13 +1,7 @@
 Installation instructions
 -------------------------
 
-**scikit-maad** is built on top of popular Python packages for scientific computing and digital signal processing, these dependencies are listed below:
-
-- Python >= 3.6
-- NumPy >= 1.13
-- SciPy >= 0.18
-- scikit-image >= 0.14
-- resampy >= 0.2
+**scikit-maad** is built on top of popular Python packages for scientific computing and digital signal processing, such as numpy, scipy, pandas, scikit-image and resampy. Package managers like pip and conda can take care of these automatically.
 
 
 1. Standard installation
