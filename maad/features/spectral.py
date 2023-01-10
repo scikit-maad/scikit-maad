@@ -136,10 +136,10 @@ def spectral_quantile(s, fs, q, nperseg=1024, roi=None):
 
     Parameters
     ----------
-    s : TYPE
-        DESCRIPTION.
-    fs : TYPE
-        DESCRIPTION.
+    s : 1D array
+        Input audio signal
+    fs : float
+        Sampling frequency of audio signal
     q : array or float
         Quantile or sequence of quantiles to compute, which must be between 0 and 1
         inclusive.
@@ -152,8 +152,8 @@ def spectral_quantile(s, fs, q, nperseg=1024, roi=None):
 
     Returns
     -------
-    TYPE
-        DESCRIPTION.
+    Pandas Series
+        Quantiles of power spectrum. 
 
     """
     q = np.asanyarray(q)
