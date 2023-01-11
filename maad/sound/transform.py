@@ -102,7 +102,7 @@ def envelope (s, mode='fast', Nt=32):
     return env
 
 #%%
-def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', method='welch', 
+def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hamming', method='welch', 
         tlims=None, flims=None, scaling='spectrum', as_pandas_series=False, display=False):
     """ 
     Estimate the power spectral density or power spectrum of 1D signal.
