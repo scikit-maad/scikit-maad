@@ -12,7 +12,7 @@ from importlib.machinery import SourceFileLoader
 version = SourceFileLoader('maad.version',
                            'maad/version.py').load_module()
 
-with open('README.md', 'r') as fdesc:
+with open('README.md', 'r', encoding="utf8") as fdesc:
     long_description = fdesc.read()
 
 class CleanCommand(Command):
