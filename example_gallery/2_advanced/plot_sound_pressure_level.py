@@ -86,7 +86,7 @@ for index, row in df.iterrows() :
     ========================================================================"""
  
     # Compute the Power Spectrogram Density (PSD) : Sxx_power
-    Sxx_power,tn,fn,ext = sound.spectrogram (wave, fs, window='hanning', 
+    Sxx_power,tn,fn,ext = sound.spectrogram (wave, fs, window='hann', 
                                              nperseg = 1024, noverlap=1024//2, 
                                              verbose = False, display = False, 
                                              savefig = None)   

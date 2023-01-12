@@ -130,7 +130,7 @@ def get_unimode (X, mode ='median', axis=1, N=7, N_bins=100, verbose=False):
     by frequency bin) of a spectrogram
     
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
-    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hann',noverlap=512, nFFT=1024)
     >>> Sxx_dB = maad.util.power2dB(Sxx_power)
     >>> BGN_med = maad.util.get_unimode (Sxx_dB, mode='median', axis=1)
     >>> import matplotlib.pyplot as plt 

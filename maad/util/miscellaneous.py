@@ -46,7 +46,7 @@ def index_bw(fn, bw):
     Examples
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
-    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hanning',noverlap=512, nFFT=1024)
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hann',noverlap=512, nFFT=1024)
     >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
     >>> bw = (2000,6000) #in Hz
     >>> fig_kwargs = {'vmax': Sxx_dB.max(),
