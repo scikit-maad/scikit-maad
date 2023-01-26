@@ -16,9 +16,11 @@ import numpy as np
 import pandas as pd
 from scipy import interpolate
 from numpy.lib.function_base import _quantile_is_valid
+from itertools import groupby
+
 # Import internal modules
-from maad.util import moments
-from maad import sound
+from maad.util import moments, power2dB
+from maad import sound, spl
 
 #%%
 # =============================================================================
@@ -112,12 +114,12 @@ def min_frequency(s, fs, method='best', nperseg=1024, roi=None, as_pandas_series
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('data/spinetail.wav')
     
     Compute peak frequency with the fast method 
     
     >>> min_freq, min_freq_amp = features.peak_frequency(s, fs)
-    >>> print('Minimum Frequency: {:.5f} / Minimum Frequency Amplitud: {:.5E}'.format(min_freq, min_freq_amp))
+    >>> print('Minimum Frequency: {:.5f} / Minimum Frequency Amplitude: {:.5E}'.format(min_freq, min_freq_amp))
     Minimum Frequency: 6634.16016 / Minimum Frequency Amplitud: 1.29992E-04
 
     """
@@ -232,7 +234,8 @@ def peak_frequency(s, fs, method='best', nperseg=1024, roi=None, as_pandas_serie
     else:                   return np.array([peak_freq, amp_peak_freq])
 
 #%%
-def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=None, as_pandas_series=False, **kwargs):
+def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=None, 
+                      as_pandas_series=False, amp=False, **kwargs):
     """
     Compute the q-th quantile of the power spectrum. If a region of interest with time and spectral limits is provided,
     the q-th quantile is computed on the selection.
@@ -256,6 +259,8 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     as_pandas_series: bool
         Return data as a pandas.Series. This is usefull when computing multiple features
         over a signal. Default is False.
+    amp: bool
+        Return quantiles frequency and its amplitude. Default is False.
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
@@ -294,11 +299,22 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     spec_quantile = list()
     for quantile in q:
         spec_quantile.append(pxx.index[np.where(norm_cumsum>=quantile)[0][0]])
-    
-    if as_pandas_series:  return pd.Series(spec_quantile, index=[qth for qth in q])
-    else:                 return np.array(spec_quantile)
+
+    if as_pandas_series:  
+        df =  pd.Series(spec_quantile, index=[qth for qth in q])
+        if amp:
+            df = pd.DataFrame(df, columns=["freq"]) 
+            df["amp"] = pxx[spec_quantile].values
+        return df
+    else:    
+        spec_quantile_array = np.array(spec_quantile)
+        if amp:
+            spec_quantile_array = np.transpose(np.matrix([spec_quantile_array, pxx[spec_quantile_array]]))
+        return spec_quantile_array
+
 #%%
-def bandwidth(s, fs, nperseg=1024, roi=None,  bw_method="quantile", as_pandas_series=False, **kwargs):
+def bandwidth(s, fs, nperseg=1024, roi=None,  mode="quantile", method='fast', 
+              threshold=1.0, reference="peak", dB=3, as_pandas_series=False,  **kwargs):
     """
     Compute the bandwith of the power spectrum. If a region of interest with time and spectral limits is provided,
     the bandwidth is computed on the selection.
@@ -315,9 +331,22 @@ def bandwidth(s, fs, nperseg=1024, roi=None,  bw_method="quantile", as_pandas_se
         Region of interest where peak frequency will be computed. 
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
-    bw_method : {'quantile', '3dB'}, optional
+    mode : {'quantile', '3dB'}, optional
         Method used to compute the spectral bandwidth. 
         The default is 'quantile'.
+    method : {'fast', 'best'}, optional
+        Method used to compute the peak frequency. 
+        The default is 'fast'.
+    threshold : float
+        Threshold to caculate the bandwith from the reference frequency.
+        Default is 0.5.
+    reference : {'peak', 'central'}, optional
+        Reference point to calculate the bandwith.
+        Default is "peak"
+    dB: float, optional
+        The X dB bandwidth, the frequency at which the signal amplitude 
+        reduces by x dB (when x= 3 the frequency becomes half its value). 
+        Default is -3.
     as_pandas_series: bool
         Return data as a pandas.Series. This is usefull when computing multiple features
         over a signal. Default is False.
@@ -330,45 +359,108 @@ def bandwidth(s, fs, nperseg=1024, roi=None,  bw_method="quantile", as_pandas_se
         Bandwidth 50% of the audio
     bandwidth_90 : float 
         Bandwidth 90%  of the audio
-    
+    bandwidth_xdB : float
+        XdB_Bandwidth of the audio
     Examples
     --------
     >>> from maad import features, sound
     >>> s, fs = sound.load('../../data/spinetail.wav')
 
-    Compute the bandwidth of the power spectrum
+    Compute the bandwidth of the power spectrum using quantiles
 
-    >>> bw, bw_90 = features.bandwidth(s, fs)
+    >>> bw, bw_90 = features.bandwidth(s, fs, mode="quantile")
     >>> print("Bandwidth: {:.4f} / Bandwidth 90% {:.4f}".format(bw, bw_90))
     Bandwidth: 473.7305 / Bandwidth 90% 3186.9141
 
-    """    
-    # Compute spectral quantiles
-    if bw_method=="quantile":
-        q = spectral_quantile(s, fs, [0.05, 0.25, 0.75, 0.95], nperseg, roi, as_pandas_series, **kwargs)
-    elif bw_method=="3dB":
-        pass
+    Compute the 3 dB bandwidth of the power spectrum using the peak frequency as reference
 
-    # Compute spectral bandwidth
-    if as_pandas_series: 
-        return pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])], index=["bandwidth", "bandwidth_90"])
-    else:                
-        return np.array([np.abs(q[2]-q[1]), np.abs(q[3]-q[0])])
+    >>> dB3_bw = features.bandwidth(s, fs, mode="3dB", reference="peak")
+    >>> print("3dB bandwidth : {:.4f} ".format(dB3_bw))
+    3dB bandwidth : 344.5312
+
+    """    
+    # Compute spectral bandwith with the quantiles
+    if mode=="quantile":
+        q = spectral_quantile(s, fs, [0.05, 0.25, 0.75, 0.95], nperseg, roi, as_pandas_series, **kwargs)
+        # Compute spectral bandwidth
+        if as_pandas_series: 
+            return pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])], index=["bandwidth", "bandwidth_90"])
+        else:                
+            return np.array([np.abs(q[2]-q[1]), np.abs(q[3]-q[0])])
+    
+    # Compute spectral X-bB Bandwidth
+    elif mode=="3dB":
+        #intersect_points = pulse_rate(s, fs, nperseg, roi, dB, method, 
+        #                              threshold, reference, False, **kwargs)
+        if roi is None:
+            Sxx_power,tn,fn,_ = sound.spectrogram(s, fs, nperseg=nperseg, mode='psd', **kwargs)
+        else:
+            Sxx_power,tn,fn,_ = sound.spectrogram(s, fs, nperseg=nperseg, mode='psd',
+                                                tlims=[roi.min_t, roi.max_t], 
+                                                flims=[roi.min_f, roi.max_f],
+                                                **kwargs)
+        # peak_freq, amp_peak_freq = peak_frequency(s, fs, method, nperseg, roi, False, dB, method)
+        # spec, f_idx = sound.spectrum(s, fs, nperseg, method="periodogram", **kwargs)
+        # Sxx_power,tn,fn,_ = sound.spectrogram (s, fs, nperseg=nperseg, mode='psd', **kwargs)
+        # matlab or raven
+        S_power_mean = np.mean(Sxx_power, axis=1)
+        Sxx_dB = pd.Series(power2dB(S_power_mean), index=fn)
+
+        # compute peak frequency and its amplitud in dB
+        if reference=="peak":
+            #peak_freq, amp_peak_freq = peak_frequency(s, fs, method, nperseg, roi, False)
+            #amp_peak_freq = power2dB(amp_peak_freq, db_range, db_gain)
+            peak_freq = Sxx_dB.idxmax() 
+            amp_peak_freq = Sxx_dB[peak_freq]
+            threshold_array = (amp_peak_freq-dB)*np.ones_like(Sxx_dB)
+        # compute central frequency and its amplitud in dB
+        elif reference=="central":
+            central_freq_matrix = spectral_quantile(s, fs, [0.5], nperseg, roi, False, True)
+            central_freq, central_freq_amp = central_freq_matrix[0,0], central_freq_matrix[0,1]
+            central_freq_amp = power2dB(central_freq_amp)
+            threshold_array = (central_freq_amp-dB)*np.ones_like(Sxx_dB)
+        else:
+            raise Exception("Invalid reference. Reference should be 'central' or 'peak'")
+        if method=='best': # interpolation
+            pass
+        elif method=='fast': # pandas indexation
+            intersect_points = np.where(np.abs(Sxx_dB-threshold_array)<threshold)[0]
+            candidates = np.split(intersect_points, np.where(np.diff(intersect_points) != 1)[0]+1)
+            intersect_points = list()
+            for cand in candidates:
+                dif = np.abs(Sxx_dB[fn[cand]].values-threshold).argmin()
+                intersect_points.append(fn[cand[dif]])
+            
+            if len(intersect_points)==2:
+                bw_3dB = intersect_points[1]-intersect_points[0]
+            else:
+                bw_3dB = intersect_points[-1]-intersect_points[0]
+            
+            if as_pandas_series: return pd.Series(bw_3dB, index=["3dB_bandwidth"])
+            else:                return bw_3dB
+        else:
+            raise Exception("Invalid method. Method should be 'best' or 'fast'")
+    else:
+        raise Exception("Invalid mode. Mode should be 'quantile' or '3dB'")
+    
 #%% ---------------
 # # Frequencia
 # # - peak frequency      ok
 # # - spectrum quantile   ok
-# # - Bandwidth           ok (3dB missing method)
+# # - Bandwidth           ok (3dB missing method fast without interpolation)
 # # - max freq            ok
 # # - min freq            ok
 # # Tiempo
 # # - quantile                 ok
 # # - Center time              ok
 # # - Duration                 ok
+# # notebook with examples and comparison with raven
 # # - Call rate / Pulse Rate     https://www.avisoft.com/tutorials/measuring-sound-parameters-from-the-spectrogram-automatically/
+#    env vs time NOT dB vs freq. scipy.signal.find_peaks
+#    **check python compatibility**
 # # Spectro-temporal            timeR seewave
-# # - pitch tracking
-
+# # - pitch tracking veremos!
+# pip install pylint
 
 # info, sox 
 # load

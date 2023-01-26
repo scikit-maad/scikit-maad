@@ -59,6 +59,9 @@ Temporal features
     
     temporal_moments
     zero_crossing_rate
+    temporal_duration
+    temporal_quantile
+    pulse_rate
     
 Spectral features
 -----------------
@@ -66,8 +69,10 @@ Spectral features
     :toctree: generated/
         
     spectral_moments
+    min_frequency
     peak_frequency
     spectral_quantile
+    bandwidth
 
 """
 
@@ -80,11 +85,16 @@ from .shape import (filter_multires,
                           all_shape_features)
 
 from .spectral import (spectral_moments,
+                       min_frequency,
                        peak_frequency,
-                       spectral_quantile)
+                       spectral_quantile,
+                       bandwidth)
 
 from .temporal import (temporal_moments,
-                       zero_crossing_rate)
+                       zero_crossing_rate,
+                       temporal_duration,
+                       temporal_quantile,
+                       pulse_rate)
 
 from .alpha_indices import (temporal_median,
                             temporal_entropy,
@@ -125,11 +135,16 @@ __all__ = [
            'all_shape_features',
            # spectral
            'spectral_moments',
+           'min_frequency',
            'peak_frequency',
            'spectral_quantile',
+            'bandwidth',
            # temporal
            'temporal_moments',
            'zero_crossing_rate',
+           'temporal_duration',
+           'temporal_quantile',
+           'pulse_rate',
            # alpha_indices
            'temporal_moments',
            'temporal_median',
