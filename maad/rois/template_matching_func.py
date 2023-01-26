@@ -3,7 +3,10 @@
 """
 Template matching functions
 
-License: New BSD License
+New BSD License
+
+TODO:
+    - min_t and max_t should be 0 to len(Sxx_audio)
 """
 
 # Import external modules
@@ -21,12 +24,12 @@ def template_matching(Sxx, Sxx_template, tn, fn, ext, peak_th,
                       peak_distance=None, display=False, **kwargs):
     """
     Use normalized spectrogram cross-correlation to detect the occurrence of a template
-    sound in a audio.
+    sound in a target audio.
 
-    The output is an array with values between -1.0 and 1.0. The value at a given 
-    position corresponds to the correlation coefficient between the spectrogram of 
-    the audio and and the spectrogram of the template. The function also delivers the 
-    detection found as peaks and as regions of interest.
+    The output is an array with values between -1.0 and 1.0. The value at a given
+    position corresponds to the correlation coefficient between the spectrograms of
+    the target audio and the template. The function also delivers the detection found
+    as peaks and as regions of interest (rois).
 
     Parameters
     ----------
@@ -37,22 +40,24 @@ def template_matching(Sxx, Sxx_template, tn, fn, ext, peak_th,
         Spectrogram of target sound.
 
     tn : 1d array
-        Time vector that results from the maad.sound.spectrogram function.
+        Time vector of target audio, which results from the maad.sound.spectrogram function.
 
     fn : 1d array
-        Frecuency vector that results from the maad.sound.spectrogram function.
+        Frecuency vector of target audio, which results from the maad.sound.spectrogram function.
 
     ext : list of scalars [left, right, bottom, top]
-        The location, in data-coordinates, of the lower-left and upper-right corners.
-        This variable results from the maad.sound.spectrogram function.
+        Extent keyword arguments controls the bounding box in data coordinates for the 
+        spectrogram of the target audio, which results from the maad.sound.spectrogram function.
 
     peak_th : float, optional
         Threshold applied to find peaks in the cross-correlation array. 
-        Should be a value between -1 and 1. The default is 0.5.
+        Should be a value between -1 and 1.
 
     peak_distance : float, optional
         Required minimal temporal distance (>= 0) in seconds between neighbouring 
-        peaks. If set to `None`, the minimum temporal resolution will be used.
+        peaks. If set to `None`, the minimum temporal resolution will be used. 
+        The minimal temporal resolution is given by the array tn and depends on the parameters
+        used to compute the spectrogram.
 
     display : Boolean, optional
         display the results of the template matching. The default is False.
