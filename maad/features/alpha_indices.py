@@ -2076,6 +2076,10 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     0.012818445992714088
     
     """
+    
+    # tfsd must be computed on dB scale
+    Sxx = np.log10(Sxx)
+    
     # convert into 1/3 octave
     if mode == 'thirdOctave' : 
         x, fn_bin = linear_to_octave(Sxx, fn, thirdOctave=True)
