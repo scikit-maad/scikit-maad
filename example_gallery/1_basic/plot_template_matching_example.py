@@ -4,7 +4,12 @@
 Template matching
 =================
 
-Template matching is a simple but powerfull method to detect a stereotyped sound of interest using a template signal. This example shows how to use the normalized cross-correlation of spectrograms. For a more detailed information on how to implement this technique in a large dataset check [1].
+Template matching is a simple but powerfull method to detect a stereotyped sound of interest using a template signal. This example shows how to use the normalized cross-correlation of spectrograms. For a more detailed information on how to implement this technique in a large dataset check references [1,2].
+
+**References**
+[1] Ulloa, Juan Sebastian, Amandine Gasc, Phillipe Gaucher, Thierry Aubin, Maxime Réjou-Méchain, and Jérôme Sueur. 2016. “Screening Large Audio Datasets to Determine the Time and Space Distribution of Screaming Piha Birds in a Tropical Forest.” Ecological Informatics 31:91–99. doi: 10.1016/j.ecoinf.2015.11.012.
+
+[2] Brunelli, Roberto. 2009. Template Matching Techniques in Computer Vision: Theory and Practice. John Wiley and Sons, Ltd.
 """
 #%%
 # Load modules
