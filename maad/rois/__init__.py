@@ -20,6 +20,7 @@ Spectro-temporal
     create_mask
     select_rois
     rois_to_imblobs
+    template_matching
 
 """
 
@@ -29,9 +30,13 @@ from .rois_2d import (create_mask,
 
 from .rois_1d import (find_rois_cwt)
 
+from .template_matching_func import (template_matching)
+
 __all__ = [ # rois 2d
            'create_mask',
            'select_rois',
            'rois_to_imblobs',
            # rois 1d
-           'find_rois_cwt']
+           'find_rois_cwt',
+           # template matching
+           'template_matching']
