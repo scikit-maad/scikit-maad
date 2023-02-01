@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-""" 
+"""
 Collection of functions to extract features from music
 """
 #
@@ -30,47 +30,47 @@ from maad.sound import envelope, trim
 def temporal_moments(s):
     """
     Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.
-    
+
     Parameters
     ----------
     s : 1D array
         Audio to process
-        
+
     Returns
     -------
-    mean : float 
+    mean : float
         mean of the audio
-    var : float 
+    var : float
         variance  of the audio
     skew : float
         skewness of the audio
     kurt : float
         kurtosis of the audio
-        
+
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> sm, sv, ss, sk = maad.features.temporal_moments (s)
     >>> print('mean: %2.2f / var: %2.5f / skewness: %2.4f / kurtosis: %2.2f' % (sm, sv, ss, sk))
     mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71
-    
+
     """
     # force s to be ndarray
     s = np.asarray(s)
-    
+
     return moments(s)
 
 #%%
 def zero_crossing_rate(s, fs):
     """
     Compute the zero crossing rate feature of an audio signal.
-    
-    The zero-crossing rate is the rate of sign-changes along a signal, i.e., 
-    the rate at which the signal changes from positive to zero to negative or 
-    from negative to zero to positive. This feature has been used widely 
-    in speech recognition and music information retrieval, 
+
+    The zero-crossing rate is the rate of sign-changes along a signal, i.e.,
+    the rate at which the signal changes from positive to zero to negative or
+    from negative to zero to positive. This feature has been used widely
+    in speech recognition and music information retrieval,
     being a key feature to classify percussive sounds [1]_.
-    
+
     Parameters
     ----------
     s : 1D array
@@ -79,8 +79,8 @@ def zero_crossing_rate(s, fs):
         Sampling frequency of the audio (Hz)
 
     Returns
-    ------- 
-    zcr : float   
+    -------
+    zcr : float
         number of zero crossing /s
 
     References
@@ -92,22 +92,22 @@ def zero_crossing_rate(s, fs):
     >>> from maad import sound, features
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> features.zero_crossing_rate(s,fs)
-    10500.397192384766    
-    
+    10500.397192384766
+
     """
     zero_crosses = np.nonzero(np.diff(s > 0))[0]
     duration = len(s) / fs
     zcr = 1/duration * len(zero_crosses)
-    
+
     return zcr
 
 
 #%%
-def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fast", Nt=32, 
-                      as_pandas_series=False, amp=False):
+def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fast", Nt=32,
+                      as_pandas=False, amp=False):
     """
-    Compute the q-th temporal quantile of the waveform. If a region of interest with time and spectral limits is provided,
-    the q-th temporal quantile is computed on the selection.
+    Compute the q-th temporal quantile of the waveform. If a region of interest with time
+    and spectral limits is provided, the q-th temporal quantile is computed on the selection.
 
     Parameters
     ----------
@@ -120,14 +120,14 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fa
         inclusive.
         The defaul is [0.05, 0.25, 0.5, 0.75, 0.95].
     roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed. 
+        Region of interest where peak frequency will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     mode : str, optional, default is `fast`
-        - `fast` : The sound is first divided into frames (2d) using the 
-            function wave2timeframes(s), then the max of each frame gives a 
+        - `fast` : The sound is first divided into frames (2d) using the
+            function wave2timeframes(s), then the max of each frame gives a
             good approximation of the envelope.
-        - `Hilbert` : estimation of the envelope from the Hilbert transform. 
+        - `Hilbert` : estimation of the envelope from the Hilbert transform.
             The method is slow
     Nt : integer, optional, default is `32`
         Size of each frame. The largest, the highest is the approximation.
@@ -137,7 +137,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fa
     Returns
     -------
     Pandas Series or Numpy array
-        Temporal quantiles of waveform. 
+        Temporal quantiles of waveform.
 
     Examples
     --------
@@ -147,7 +147,8 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fa
     Compute the q-th temporal quantile of the wave energy
 
     >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95])
-    >>> print("5%: {:.2f} / 25%: {:.2f} / 50%: {:.2f} / 75%: {:.2f} / 95%: {:.2f}".format(qt[0], qt[1], qt[2], qt[3], qt[4]))
+    >>> print("5%: {:.2f} / 25%: {:.2f} / 50%: {:.2f} / 75%: {:.2f} \
+    >>> / 95%: {:.2f}".format(qt[0], qt[1], qt[2], qt[3], qt[4]))
     5%: 1.22 / 25%: 5.71 / 50%: 11.82 / 75%: 16.36 / 95%: 17.76
 
     """
@@ -158,7 +159,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fa
     if roi is None:
         min_t = 0
     else:
-        s = trim(s, fs, min_t = roi.min_t, max_t = roi.max_t)
+        s = trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
         min_t = roi.min_t
 
     env = envelope(s, mode, Nt)
@@ -167,27 +168,27 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], roi=None, mode="fa
 
     # Compute temporal quantile
     norm_cumsum = energy.cumsum()/energy.sum()
-    spec_quantile = list()
+    spec_quantile = []
     for quantile in q:
         spec_quantile.append(energy.index[np.where(norm_cumsum>=quantile)[0][0]])
-    
-    if as_pandas_series:  
-        df =  pd.Series(spec_quantile, index=[qth for qth in q])
-        if amp:
-            df = pd.DataFrame(df, columns=["freq"]) 
-            df["amp"] = energy[spec_quantile].values
-        return df
-    else:    
-        spec_quantile_array = np.array(spec_quantile)
-        if amp:
-            spec_quantile_array = np.transpose(np.matrix([spec_quantile_array, energy[spec_quantile_array]]))
-        return spec_quantile_array
-    
+
+    if amp:
+        if as_pandas:
+            out = pd.DataFrame({"freq":spec_quantile, "amp":energy[spec_quantile].values}, index=q)
+        else:
+            out = np.transpose(np.matrix([q, spec_quantile, energy[spec_quantile]]))
+    else:
+        if as_pandas:
+            out = pd.Series(spec_quantile, index=q)
+        else:
+            out = np.transpose(np.matrix([q, spec_quantile]))
+
+    return out
 #%%
 def temporal_duration(s, fs, roi=None, mode="fast", Nt=32, as_pandas_series=False):
-    """ 
-    Compute the temporal duration of the waveform. If a region of interest with time and spectral limits is provided,
-    the temporal duration is computed on the selection.
+    """
+    Compute the temporal duration of the waveform. If a region of interest with time
+    and spectral limits is provided, the temporal duration is computed on the selection.
 
     Parameters
     ----------
@@ -196,14 +197,14 @@ def temporal_duration(s, fs, roi=None, mode="fast", Nt=32, as_pandas_series=Fals
     fs : float
         Sampling frequency of audio signal
     roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed. 
+        Region of interest where peak frequency will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     mode : str, optional, default is `fast`
-        - `fast` : The sound is first divided into frames (2d) using the 
-            function wave2timeframes(s), then the max of each frame gives a 
+        - `fast` : The sound is first divided into frames (2d) using the
+            function wave2timeframes(s), then the max of each frame gives a
             good approximation of the envelope.
-        - `Hilbert` : estimation of the envelope from the Hilbert transform. 
+        - `Hilbert` : estimation of the envelope from the Hilbert transform.
             The method is slow
     Nt : integer, optional, default is `32`
         Size of each frame. The largest, the highest is the approximation.
@@ -212,16 +213,16 @@ def temporal_duration(s, fs, roi=None, mode="fast", Nt=32, as_pandas_series=Fals
         over a signal. Default is False.
     Returns
     -------
-    duration : float 
+    duration : float
         Duration 50% of the audio
-    duration_90 : float 
+    duration_90 : float
         Duration 90%  of the audio
-    
+
     Examples
     --------
     >>> from maad import features, sound
     >>> s, fs = sound.load('data/spinetail.wav')
-    
+
     Compute the temporal duration of the time energy
 
     >>> duration, duration_90 = features.temporal_duration(s, fs)
@@ -231,19 +232,22 @@ def temporal_duration(s, fs, roi=None, mode="fast", Nt=32, as_pandas_series=Fals
     """
     # Compute temporal quantile
     q = temporal_quantile(s, fs, [0.05, 0.25, 0.75, 0.95], roi, mode, Nt, as_pandas_series)
-    
+
     # Compute temporal duration
-    if as_pandas_series: 
-        return pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])], index=["duration", "duration_90"])
-    else:                
-        return np.array([np.abs(q[2]-q[1]), np.abs(q[3]-q[0])])
+    if as_pandas_series:
+        out = pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])],
+                         index=["duration", "duration_90"])
+    else:
+        out = np.array([np.abs(q[2]-q[1]), np.abs(q[3]-q[0])])
+
+    return out
 
 #%%
-def pulse_rate(s, fs, roi=None, dB=3, method='fast', dmin=0.1,
-               threshold=1.0, reference="peak", as_pandas_series=False, **kwargs):
+def pulse_rate(s, fs, roi=None, dB=3, mode='fast', dmin=0.1, tol=1e-2,
+               threshold=1.0, reference="peak", Nt=32, as_pandas_series=False, **kwargs):
     """
-    Compute the bandwith of the power spectrum. If a region of interest with time and spectral limits is provided,
-    the bandwidth is computed on the selection.
+    Compute the bandwith of the power spectrum. If a region of interest with time and
+    spectral limits is provided, the bandwidth is computed on the selection.
 
     Parameters
     ----------
@@ -254,31 +258,31 @@ def pulse_rate(s, fs, roi=None, dB=3, method='fast', dmin=0.1,
     nperseg : int, optional
         Length of segment to compute the FFT. The default is 1024.
     roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed. 
+        Region of interest where peak frequency will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     mode : {'quantile', '3dB'}, optional
-        Method used to compute the spectral bandwidth. 
+        Method used to compute the spectral bandwidth.
         The default is 'quantile'.
     as_pandas_series: bool, optional
         Return data as a pandas.Series. This is usefull when computing multiple features
         over a signal. Default is False.
     dB: float, optional
-        The X dB bandwidth, the frequency at which the signal amplitude 
-        reduces by x dB (when x= 3 the frequency becomes half its value). 
+        The X dB bandwidth, the frequency at which the signal amplitude
+        reduces by x dB (when x= 3 the frequency becomes half its value).
         Default is -3.
     threshold : float
         Threshold to caculate the bandwith from the reference frequency.
         Default is 0.5.
     reference : {'peak', 'central'}, optional
         Reference point to calculate the bandwith.
-        Default is "peak"        
+        Default is "peak"
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
     Returns
     -------
-    bandwidth : float 
+    bandwidth : float
         Bandwidth 50% of the audio
     Examples
     --------
@@ -291,192 +295,47 @@ def pulse_rate(s, fs, roi=None, dB=3, method='fast', dmin=0.1,
     >>> print("3dB bandwidth: {:.4f} ".format())
     3 dB bandwidth:
     # sound.spectrogram <-> sound.spectrum()
-    """    
+    """
     if roi is None:
         min_t = 0
     else:
         s = trim(s, fs, min_t = roi.min_t, max_t = roi.max_t)
         min_t = roi.min_t
 
-    s_dB = 20*np.log10(np.abs(s))
-    s_dB = np.clip(s_dB, np.nanmean(s_dB), 0)
-    s_dB_mean = np.nanmean(s_dB)
-    peaks, properties = find_peaks(s_dB, prominence=1, distance=50, height=s_dB_mean//2,  threshold=1)
-    #plt.plot(s_dB); plt.plot(peaks, s_dB[peaks], 'x'); plt.show();
+    env = envelope(s, mode, Nt)
+    t = np.arange(0,len(env),1)*len(s)/fs/len(env)
+    #t = np.arange(0,len(env),1)/fs
+    s_dB = pd.Series(20*np.log10(np.abs(env)), index=t)
 
-    # if as_pandas_series is True:    
+    if reference=="peak":
+        t_ref, s_dB_ref = s_dB.idxmax(), s_dB[s_dB.idxmax()]
+    elif reference=="center":
+        center = temporal_quantile(s, fs, [0.5], roi, "fast", 32, False, True)
+        t_ref, s_dB_ref = center[0,0], center[0,1]
+    else:
+        raise Exception("Invalid reference. Reference should be 'peak' or 'center'")
+
+    threshold_array = (s_dB_ref-dB)*np.ones_like(env)
+
+    #s_dB = np.clip(s_dB, np.nanmean(s_dB), 0)
+    #s_dB_mean = np.nanmean( s_dB)
+    peaks, properties = find_peaks(s_dB.values, height=threshold_array[0],
+                                   prominence=10, distance=100, threshold=.1)
+    intersect_points = s_dB.where(np.abs(s_dB.values-threshold_array[0]) < tol).dropna()
+
+    # import matplotlib.pyplot as plt
+    # plt.plot(t, s_dB.values,'o-', ms=2)
+    # plt.plot(t_ref, s_dB_ref, 'kx')
+    # plt.plot(t, threshold_array, 'k--')
+    # plt.plot(t[peaks], s_dB[t[peaks]], 'x')
+    # plt.plot(intersect_points.index, intersect_points.values, 'bx')
+    # plt.show()
+
+    # if as_pandas_series is True:
     #     return Sxx_dB[intersect_points]
-    # else:                           
+    # else:
     #     return np.transpose(np.matrix([Sxx_dB[intersect_points].index, Sxx_dB[intersect_points].values]))
     #     #return np.array([Sxx_dB[intersect_points].index, Sxx_dB[intersect_points].values])
 
-    #Sxx_amplitude,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode='amplitude') 
+    #Sxx_amplitude,tn,fn,_ = maad.sound.spectrogram (w, fs, nperseg=1024, mode='amplitude')
     #S_amplitude_mean = np.mean(Sxx_amplitude, axis=1)
-
-# #%%
-# def min_time(s, fs, method='best', roi=None, mode='fast', Nt=32, as_pandas_series=False):
-#     """
-#     Compute the minimum time for audio signal. The minimum time is the time of
-#     minimum energy. If a region of interest with time and spectral limits is provided,
-#     the minimum time is computed on the selection.
-    
-#     Parameters
-#     ----------
-#     s : 1D array
-#         Input audio signal
-#     fs : float
-#         Sampling frequency of audio signal
-#     method : {'fast', 'best'}, optional
-#         Method used to compute the minimum time. 
-#         The default is 'best'.
-#     roi : pandas.Series, optional
-#         Region of interest where minimum time will be computed. 
-#         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
-#         The default is None.
-#     mode : str, optional, default is `fast`
-#         - `fast` : The sound is first divided into frames (2d) using the 
-#             function wave2timeframes(s), then the max of each frame gives a 
-#             good approximation of the envelope.
-#         - `Hilbert` : estimation of the envelope from the Hilbert transform. 
-#             The method is slow
-#     Nt : integer, optional, default is `32`
-#         Size of each frame. The largest, the highest is the approximation.
-#     as_pandas_series: bool
-#         Return data as a pandas.Series. This is usefull when computing multiple features
-#         over a signal. Default is False.
-    
-#     Returns
-#     -------
-#     min_time : float
-#         Minimum time of audio segment.
-#     amp_min_time : float
-#         Amplitud of the minimum time of audio segment.
-
-#     Examples
-#     --------
-#     >>> from maad import features, sound
-#     >>> s, fs = sound.load('../../data/spinetail.wav')
-    
-#     Compute peak time with the fast method 
-    
-#     >>> min_time, amp_min_time = features.min_time(s, fs)
-#     >>> print('Minimum Time: {:.5f} / Minimum Time Amplitud: {:.5E}'.format(min_time, amp_min_time))
-#     Minimum Time: 3.78561 / Minimum Time Amplitud: 1.80306E-06
-
-#     """
-#     if roi is None:
-#         min_t = 0
-#     else:
-#         s = trim(s, fs, min_t = roi.min_t, max_t = roi.max_t)
-#         min_t = roi.min_t
-    
-#     # compute envelope, time, and energy
-#     env = envelope(s, mode, Nt)
-#     t = min_t+np.arange(0,len(env),1)*len(s)/fs/len(env)
-#     energy = pd.Series(env**2, index=t)
-        
-#     # simplest form to get peak frequency, but less precise
-#     if method=='fast':
-#         min_time = energy.idxmin() 
-#         amp_min_time = energy[min_time]
-    
-#     elif method=='best':        
-#         # use interpolation get more precise peak frequency estimation
-#         idxmin = energy.index.get_loc(energy.idxmin())
-#         x = energy.iloc[[idxmin-1, idxmin, idxmin+1]].index.values
-#         y = energy.iloc[[idxmin-1, idxmin, idxmin+1]].values
-#         f = interpolate.interp1d(x,y, kind='quadratic')
-#         xnew = np.arange(x[0], x[2], 1)
-#         ynew = f(xnew) 
-#         min_time = xnew[ynew.argmax()]
-#         amp_min_time = ynew[ynew.argmax()]
-
-#     else:
-#         raise Exception("Invalid method. Method should be 'fast' or 'best' ")
-    
-#     if as_pandas_series:    return pd.Series([amp_min_time], index=[min_time])
-#     else:                   return np.array([min_time, amp_min_time])
-
-# #%%
-# def peak_time(s, fs, method='best', roi=None, mode='fast', Nt=32, as_pandas_series=False):
-#     """
-#     Compute the peak time for audio signal. The peak time is the time of
-#     maximum energy. If a region of interest with time and spectral limits is provided,
-#     the peak time is computed on the selection.
-    
-#     Parameters
-#     ----------
-#     s : 1D array
-#         Input audio signal
-#     fs : float
-#         Sampling frequency of audio signal
-#     method : {'fast', 'best'}, optional
-#         Method used to compute the peak time. 
-#         The default is 'best'.
-#     roi : pandas.Series, optional
-#         Region of interest where peak time will be computed. 
-#         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
-#         The default is None.
-#     mode : str, optional, default is `fast`
-#         - `fast` : The sound is first divided into frames (2d) using the 
-#             function wave2timeframes(s), then the max of each frame gives a 
-#             good approximation of the envelope.
-#         - `Hilbert` : estimation of the envelope from the Hilbert transform. 
-#             The method is slow
-#     Nt : integer, optional, default is `32`
-#         Size of each frame. The largest, the highest is the approximation.
-#     as_pandas_series: bool
-#         Return data as a pandas.Series. This is usefull when computing multiple features
-#         over a signal. Default is False.
-    
-#     Returns
-#     -------
-#     peak_time : float
-#         Peak time of audio segment.
-#     amp_peak_time : float
-#         Amplitud of the peak time of audio segment.
-
-#     Examples
-#     --------
-#     >>> from maad import features, sound
-#     >>> s, fs = sound.load('../../data/spinetail.wav')
-    
-#     Compute peak time with the fast method 
-    
-#     >>> peak_time, peak_time_amp = features.peak_time(s, fs)
-#     >>> print('Peak Time: {:.5f} / Peak Time Amplitud: {:.5f}'.format(peak_time, peak_time_amp))
-#     Peak Time: 1.34967 / Peak Time Amplitud: 0.17552
-
-#     """
-#     if roi is None:
-#         min_t = 0
-#     else:
-#         s = trim(s, fs, min_t = roi.min_t, max_t = roi.max_t)
-#         min_t = roi.min_t
-
-#     # compute envelope, time, and energy
-#     env = envelope(s, mode, Nt)
-#     t = min_t+np.arange(0,len(env),1)*len(s)/fs/len(env)
-#     energy = pd.Series(env**2, index=t)
-        
-#     # simplest form to get peak frequency, but less precise
-#     if method=='fast':
-#         peak_time = energy.idxmax() 
-#         amp_peak_time = energy[peak_time]
-    
-#     elif method=='best':        
-#         # use interpolation get more precise peak frequency estimation
-#         idxmax = energy.index.get_loc(energy.idxmax())
-#         x = energy.iloc[[idxmax-1, idxmax, idxmax+1]].index.values
-#         y = energy.iloc[[idxmax-1, idxmax, idxmax+1]].values
-#         f = interpolate.interp1d(x,y, kind='quadratic')
-#         xnew = np.arange(x[0], x[2], 1)
-#         ynew = f(xnew) 
-#         peak_time = xnew[ynew.argmax()]
-#         amp_peak_time = ynew[ynew.argmax()]
-
-#     else:
-#         raise Exception("Invalid method. Method should be 'fast' or 'best' ")
-    
-#     if as_pandas_series:    return pd.Series([amp_peak_time], index=[peak_time])
-#     else:                   return np.array([peak_time, amp_peak_time])

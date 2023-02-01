@@ -85,7 +85,6 @@ from .shape import (filter_multires,
                           all_shape_features)
 
 from .spectral import (spectral_moments,
-                       min_frequency,
                        peak_frequency,
                        spectral_quantile,
                        bandwidth)
@@ -135,7 +134,6 @@ __all__ = [
            'all_shape_features',
            # spectral
            'spectral_moments',
-           'min_frequency',
            'peak_frequency',
            'spectral_quantile',
             'bandwidth',
