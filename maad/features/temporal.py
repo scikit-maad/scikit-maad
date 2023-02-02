@@ -304,7 +304,6 @@ def pulse_rate(s, fs, roi=None, dB=3, mode='fast', dmin=0.1, tol=1e-2,
 
     env = envelope(s, mode, 1e1)
     t = np.arange(0,len(env),1)*len(s)/fs/len(env)
-    plt.plot(t, env); plt.show()
     #t = np.arange(0,len(env),1)/fs
     s_dB = pd.Series(20*np.log10(np.abs(env)), index=t)
 
