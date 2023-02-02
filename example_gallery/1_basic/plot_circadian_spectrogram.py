@@ -7,6 +7,7 @@ Circadian soundscape
 When dealing with large amounts of audio recordings, visualization plays a key role to evidence
 the main patterns in the data. In this example we show how to easily combine 96 audio 
 files to build a visual representation of a 24 hour natural soundscape.
+
 """
 
 #%% 
@@ -29,7 +30,7 @@ for idx, fname in enumerate(flist):
     long_wav.append(s)
 
 #%% 
-# Combine all audio recordings applying a crossfade and compute a the spectrogram of
+# Combine all audio recordings applying a crossfade and compute the spectrogram of
 # the resulting mixed audio.
 long_wav = util.crossfade_list(long_wav, fs, fade_len=0.5)
 Sxx, tn, fn, ext = sound.spectrogram(long_wav, fs, 

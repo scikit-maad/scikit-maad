@@ -19,6 +19,7 @@ from scipy.signal import hilbert
 from scipy.signal import periodogram, welch
 import scipy
 import resampy
+from warnings import warn
 
 # import internal modules
 from maad.sound import wave2frames
@@ -102,7 +103,7 @@ def envelope (s, mode='fast', Nt=32):
     return env
 
 #%%
-def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', method='welch', 
+def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hann', method='welch', 
         tlims=None, flims=None, scaling='spectrum', as_pandas_series=False, display=False):
     """ 
     Estimate the power spectral density or power spectrum of 1D signal.
@@ -127,8 +128,9 @@ def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', met
     noverlap: int, optional
         Overlap between segments for Welch's method. If None, noverlap = nperseg/2.
     
-    window : string, default is 'hanning
-        Name of the window used for the short fourier transform.
+    window : string, default is 'hann'
+        Name of the window used for the short fourier transform, 'hanning' window is 
+        now deprecated.
     
     nfft: int, optional
         Length of FFT for periodogram method. If None, length of signal will be used.
@@ -181,7 +183,6 @@ def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', met
     >>> spec, f_idx = sound.spectrum(s, fs, nperseg=2056, tlims=(5.3, 7.9), flims=(2000, 12000), display=True)
     
     """
-    
     if tlims is not None:
     # trim audio signal
         try:
@@ -189,6 +190,11 @@ def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hanning', met
         except:
             raise Exception('length of tlims tuple should be 2')
     
+    # small fix to keep compatibility with old scipy version
+    if window=='hanning':
+        window='hann'
+        warn("Window type 'hanning' will be deprecated. Changing to 'hann' window.", FutureWarning)
+
     if method=='welch':
         f_idx, pxx = welch(s, fs, window, nperseg, noverlap, nfft, scaling=scaling)
     

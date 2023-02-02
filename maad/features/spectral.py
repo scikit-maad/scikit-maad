@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ 
-Collection of functions to extract features from music
+Collection of functions to extract spectral features from audio signals
 """
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
@@ -13,9 +13,12 @@ Collection of functions to extract features from music
 # =============================================================================
 # Import external modules
 import numpy as np
-
+import pandas as pd
+from scipy import interpolate
+from numpy.lib.function_base import _quantile_is_valid
 # Import internal modules
 from maad.util import moments
+from maad import sound
 
 #%%
 # =============================================================================
@@ -70,3 +73,106 @@ def spectral_moments (X, axis=None):
     
     return moments(X,axis)
 
+#%%
+def peak_frequency(s, fs, nperseg=1024, roi=None, method='best'):
+    """
+    Compute the peak frequency for audio signal. The peak frequency is the frequency of
+    maximum power. If a region of interest with time and spectral limits is provided,
+    the peak frequency is computed on the selection.
+    
+    Parameters
+    ----------
+    s : 1D array
+        Input audio signal
+    fs : float
+        Sampling frequency of audio signal
+    nperseg : int, optional
+        Length of segment to compute the FFT. The default is 1024.
+    roi : pandas.Series, optional
+        Region of interest where peak frequency will be computed. 
+        Series must have a valid input format with index: min_t, min_f, max_t, max_f.
+        The default is None.
+    method : {'fast', 'best'}, optional
+        Method used to compute the peak frequency. 
+        The default is 'fast'.
+
+    Returns
+    -------
+    peak_freq : float
+        Peak frequency of audio segment.
+
+    """
+    if roi is None:
+        pxx, fidx = sound.spectrum(s, fs, nperseg)
+    else:
+        pxx, fidx = sound.spectrum(s, fs, nperseg, 
+                                   tlims=[roi.min_t, roi.max_t], 
+                                   flims=[roi.min_f, roi.max_f])
+    pxx = pd.Series(pxx, index=fidx)
+        
+    # simplest form to get peak frequency, but less precise
+    if method=='fast':
+        peak_freq = pxx.idxmax() 
+    
+    elif method=='best':        
+        # use interpolation get more precise peak frequency estimation
+        idxmax = pxx.index.get_loc(pxx.idxmax())
+        x = pxx.iloc[[idxmax-1, idxmax, idxmax+1]].index.values
+        y = pxx.iloc[[idxmax-1, idxmax, idxmax+1]].values
+        f = interpolate.interp1d(x,y, kind='quadratic')
+        xnew = np.arange(x[0], x[2], 1)
+        ynew = f(xnew) 
+        peak_freq = xnew[ynew.argmax()]
+
+    else:
+        raise Exception("Invalid method. Method should be 'fast' or 'best' ")
+    
+    return peak_freq
+
+#%%
+def spectral_quantile(s, fs, q, nperseg=1024, roi=None):
+    """
+    Compute the q-th quantile of the power spectrum.
+
+    Parameters
+    ----------
+    s : 1D array
+        Input audio signal
+    fs : float
+        Sampling frequency of audio signal
+    q : array or float
+        Quantile or sequence of quantiles to compute, which must be between 0 and 1
+        inclusive.
+    nperseg : int, optional
+        Length of segment to compute the FFT. The default is 1024.
+    roi : pandas.Series, optional
+        Region of interest where peak frequency will be computed. 
+        Series must have a valid input format with index: min_t, min_f, max_t, max_f.
+        The default is None.
+
+    Returns
+    -------
+    Pandas Series
+        Quantiles of power spectrum. 
+
+    """
+    q = np.asanyarray(q)
+    if not _quantile_is_valid(q):
+        raise ValueError("Percentiles must be in the range [0, 100]")
+    
+    # Compute spectrum
+    if roi is None:
+        pxx, fidx = sound.spectrum(s, fs, nperseg)
+    else:
+        pxx, fidx = sound.spectrum(s, fs, nperseg, 
+                                   tlims=[roi.min_t, roi.max_t], 
+                                   flims=[roi.min_f, roi.max_f])
+    pxx = pd.Series(pxx, index=fidx)
+
+    # Compute spectral q
+    norm_cumsum = pxx.cumsum()/pxx.sum()
+    spec_quantile = list()
+    for quantile in q:
+        spec_quantile.append(pxx.index[np.where(norm_cumsum>=quantile)[0][0]])
+
+    return pd.Series(spec_quantile, index=q)

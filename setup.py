@@ -12,7 +12,7 @@ from importlib.machinery import SourceFileLoader
 version = SourceFileLoader('maad.version',
                            'maad/version.py').load_module()
 
-with open('README.md', 'r') as fdesc:
+with open('README.md', 'r', encoding="utf8") as fdesc:
     long_description = fdesc.read()
 
 class CleanCommand(Command):
@@ -51,7 +51,8 @@ setup(
                           'scipy>=1.5', 
                           'scikit-image>=0.17', 
                           'pandas>=1.1',
-                          'resampy>=0.2'],
+                          'resampy>=0.2',
+                          'matplotlib'],
       classifiers=textwrap.dedent("""
         Development Status :: 4 - Beta
         Intended Audience :: Science/Research

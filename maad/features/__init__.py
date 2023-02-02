@@ -66,6 +66,8 @@ Spectral features
     :toctree: generated/
         
     spectral_moments
+    peak_frequency
+    spectral_quantile
 
 """
 
@@ -77,7 +79,9 @@ from .shape import (filter_multires,
                           centroid_features,
                           all_shape_features)
 
-from .spectral import (spectral_moments)
+from .spectral import (spectral_moments,
+                       peak_frequency,
+                       spectral_quantile)
 
 from .temporal import (temporal_moments,
                        zero_crossing_rate)
@@ -121,6 +125,8 @@ __all__ = [
            'all_shape_features',
            # spectral
            'spectral_moments',
+           'peak_frequency',
+           'spectral_quantile',
            # temporal
            'temporal_moments',
            'zero_crossing_rate',

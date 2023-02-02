@@ -81,7 +81,7 @@ def _date_from_filename (filename):
 # =============================================================================
 def read_audacity_annot (audacity_filename):
     """
-    Read audacity annotations file (or labeling file) and return a Pandas Dataframe
+    Read Audacity annotations file (or labeling file) and return a Pandas Dataframe
     with the bounding box and the label of each region of interest (ROI). Allows to
     read annotations with standard Audacity style (temporal selection) and with
     spectral selection style (spectro-temporal selection). If the file exists but has no 
@@ -242,7 +242,7 @@ def write_audacity_annot(fname, df_rois, save_file=True):
 #%% 
 def read_raven_annot(raven_filename):
     """
-    Read raven annotations file (or labeling file) and return a Pandas Dataframe
+    Read Raven annotations file (or labeling file) and return a Pandas Dataframe
     with the bounding box and the label of each region of interest (ROI). If the file 
     exists but has no annotations, the function returns and empty dataframe.
     
@@ -267,8 +267,8 @@ def read_raven_annot(raven_filename):
 #%%
 def write_raven_annot(fname, df_rois, save_file=True):
     """ 
-    Write audio segmentation to text file in Audacity format, a file that can be imported
-    and modified with Audacity. If the dataframe has no frequency delimiters, annotations
+    Write audio segmentation to text file in Raven format, a file that can be imported
+    and modified with Raven. If the dataframe has no frequency delimiters, annotations
     are saved with standard Audacity format (temporal segmentation). If the dataframe has
     temporal and frequencial delimiters, the annotations are saved as spectral selection 
     style (spectro-temporal selection). If the dataframe is empty, the function saves an 
