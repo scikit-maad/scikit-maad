@@ -72,6 +72,7 @@ Spectral features
     min_frequency
     peak_frequency
     spectral_quantile
+    spectral_quantile1
     bandwidth
 
 """
@@ -87,6 +88,7 @@ from .shape import (filter_multires,
 from .spectral import (spectral_moments,
                        peak_frequency,
                        spectral_quantile,
+                       spectral_quantile1,
                        bandwidth)
 
 from .temporal import (temporal_moments,
@@ -136,6 +138,7 @@ __all__ = [
            'spectral_moments',
            'peak_frequency',
            'spectral_quantile',
+           'spectral_quantile1',
             'bandwidth',
            # temporal
            'temporal_moments',

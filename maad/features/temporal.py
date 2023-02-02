@@ -244,7 +244,7 @@ def temporal_duration(s, fs, roi=None, mode="fast", Nt=32, as_pandas_series=Fals
 
 #%%
 def pulse_rate(s, fs, roi=None, dB=3, mode='fast', dmin=0.1, tol=1e-2,
-               threshold=1.0, reference="peak", Nt=32, as_pandas_series=False, **kwargs):
+               threshold=1.0, reference="peak", Nt=50, as_pandas_series=False, **kwargs):
     """
     Compute the bandwith of the power spectrum. If a region of interest with time and
     spectral limits is provided, the bandwidth is computed on the selection.
@@ -302,8 +302,9 @@ def pulse_rate(s, fs, roi=None, dB=3, mode='fast', dmin=0.1, tol=1e-2,
         s = trim(s, fs, min_t = roi.min_t, max_t = roi.max_t)
         min_t = roi.min_t
 
-    env = envelope(s, mode, Nt)
+    env = envelope(s, mode, 1e1)
     t = np.arange(0,len(env),1)*len(s)/fs/len(env)
+    plt.plot(t, env); plt.show()
     #t = np.arange(0,len(env),1)/fs
     s_dB = pd.Series(20*np.log10(np.abs(env)), index=t)
 
@@ -323,13 +324,13 @@ def pulse_rate(s, fs, roi=None, dB=3, mode='fast', dmin=0.1, tol=1e-2,
                                    prominence=10, distance=100, threshold=.1)
     intersect_points = s_dB.where(np.abs(s_dB.values-threshold_array[0]) < tol).dropna()
 
-    # import matplotlib.pyplot as plt
-    # plt.plot(t, s_dB.values,'o-', ms=2)
-    # plt.plot(t_ref, s_dB_ref, 'kx')
-    # plt.plot(t, threshold_array, 'k--')
-    # plt.plot(t[peaks], s_dB[t[peaks]], 'x')
-    # plt.plot(intersect_points.index, intersect_points.values, 'bx')
-    # plt.show()
+    import matplotlib.pyplot as plt
+    plt.plot(t, s_dB.values,'o-', ms=2)
+    plt.plot(t_ref, s_dB_ref, 'kx')
+    plt.plot(t, threshold_array, 'k--')
+    plt.plot(t[peaks], s_dB[t[peaks]], 'x')
+    plt.plot(intersect_points.index, intersect_points.values, 'bx')
+    plt.show()
 
     # if as_pandas_series is True:
     #     return Sxx_dB[intersect_points]

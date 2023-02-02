@@ -106,7 +106,7 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     rotx = x * np.cos(theta) + y * np.sin(theta) 
     roty = -x * np.sin(theta) + y * np.cos(theta) 
     # combine gambor and  
-    g = np.zeros(y.shape, dtype=np.complex) 
+    g = np.zeros(y.shape, dtype=complex) 
     g[:] = np.exp(-0.5 * (rotx ** 2 / sigma_x ** 2 + roty ** 2 / sigma_y ** 2)) 
     g /= 2 * np.pi * sigma_x * sigma_y # gaussian envelope 
     oscil = np.exp(1j * (2 * np.pi * frequency * rotx + offset)) # harmonic / oscilatory function 

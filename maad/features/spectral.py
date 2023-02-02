@@ -244,9 +244,50 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
         if as_pandas:
             out = pd.Series(spec_quantile, index=q)
         else:
-            out = np.transpose(np.matrix([q, spec_quantile]))
+            out = np.array(spec_quantile)
 
     return out
+
+#%%
+def spectral_quantile1(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=None,
+                      as_pandas=False, amp=False, **kwargs):
+    """
+    Compute the q-th quantile of the power spectrum. If a region of interest with time and
+    spectral limits is provided, the q-th quantile is computed on the selection.
+
+    """
+    q = np.asanyarray(q)
+    if not _quantile_is_valid(q):
+        raise ValueError("Percentiles must be in the range [0, 100]")
+
+    # Compute spectrum
+    if roi is None:
+        Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg, **kwargs)
+    else:
+        Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg, 
+                                      tlims=[roi.min_t, roi.max_t], flims=[roi.min_f, roi.max_f],
+                                      **kwargs)
+    Sxx = pd.Series(np.average(Sxx,axis=0), index=tn)
+
+    # Compute spectral q
+    norm_cumsum = Sxx.cumsum()/Sxx.sum()
+    spec_quantile = []
+    for quantile in q:
+        spec_quantile.append(Sxx.index[np.where(norm_cumsum>=quantile)[0][0]])
+
+    if amp:
+        if as_pandas:
+            out = pd.DataFrame({"time":spec_quantile, "amp":Sxx[spec_quantile].values}, index=q)
+        else:
+            out = np.transpose(np.matrix([q, spec_quantile, Sxx[spec_quantile]]))
+    else:
+        if as_pandas:
+            out = pd.Series(spec_quantile, index=q)
+        else:
+            out = np.array(spec_quantile)
+
+    return out
+
 
 #%%
 def bandwidth(s, fs, nperseg=1024, roi=None,  mode="quantile", method='fast',
@@ -304,7 +345,7 @@ def bandwidth(s, fs, nperseg=1024, roi=None,  mode="quantile", method='fast',
 
     Compute the bandwidth of the power spectrum using quantiles
 
-    >>> bw, bw_90 = features.bandwidth(s, fs, mode="quantile")
+    >>> bw, bw_90 = features.bandwidth(s, fs, mode="quantile", as_pandas=True)
     >>> print("Bandwidth: {:.4f} / Bandwidth 90% {:.4f}".format(bw, bw_90))
     Bandwidth: 473.7305 / Bandwidth 90% 3186.9141
 
@@ -317,8 +358,8 @@ def bandwidth(s, fs, nperseg=1024, roi=None,  mode="quantile", method='fast',
     """
     # Compute spectral bandwith with the quantiles
     if mode=="quantile":
-        q = spectral_quantile(s, fs, [0.05, 0.25, 0.75, 0.95],
-                              nperseg, roi, as_pandas, **kwargs)
+        q = spectral_quantile(s, fs, [0.05, 0.25, 0.75, 0.95], 
+                              nperseg, roi, as_pandas, False, **kwargs)
         # Compute spectral bandwidth
         if as_pandas:
             out = pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])],
