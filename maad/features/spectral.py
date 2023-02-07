@@ -20,7 +20,6 @@ from scipy.optimize import root
 
 # Import internal modules
 from maad.util import moments, power2dB
-from IPython.display import display
 from maad import sound
 
 #%%
