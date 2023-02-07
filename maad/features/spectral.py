@@ -52,9 +52,9 @@ def spectral_moments (X, axis=None):
 
     Examples
     --------
-    >>> from maad import sound
-    >>> s, fs = sound.load('../data/spinetail.wav')
-    >>> Sxx_power,_,_,_ = sound.spectrogram (s, fs)
+    >>> from maad import sound, features
+    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> Sxx_power,_,_,_ = sound.spectrogram(s, fs)
 
     Compute spectral moments on the mean spectrum
 
@@ -69,7 +69,7 @@ def spectral_moments (X, axis=None):
     >>> from maad.features import spectral_moments
     >>> sm_per_bin, sv_per_bin, ss_per_bin, sk_per_bin = spectral_moments(Sxx_power, axis=1)
     >>> print('Length of sk_per_bin is : %2.0f' % len(sk_per_bin))
-    Length of sk is : 512
+    Length of sk_per_bin is : 512
 
     """
     # force P to be ndarray
@@ -120,9 +120,9 @@ def peak_frequency(s, fs, method='best', nperseg=1024, roi=None, amp=False, as_p
 
     Compute peak frequency with the fast method
 
-    >>> peak_freq, peak_freq_amp = features.peak_frequency(s, fs)
+    >>> peak_freq, peak_freq_amp = features.peak_frequency(s, fs, amp=True)
     >>> print('Peak Frequency: {:.5f}, Amplitud: {:.5f}'.format(peak_freq, peak_freq_amp))
-    Peak Frequency: 6634.16016, Amplitud: 0.00013
+    Peak Frequency: 6634.16016, Amplitud: 0.00012
 
     """
     if roi is None:
@@ -209,19 +209,25 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
 
     Compute the q-th quantile of the power spectrum
 
-    >>> qs = features.spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95])
-    >>> print("5%: {:.2f} / 25%: {:.2f} / 50%: {:.2f} / 75%: {:.2f} \
-    >>> / 95%: {:.2f}".format(qs[0], qs[1], qs[2], qs[3], qs[4]))
-    5%: 6029.30 / 25%: 6416.89 / 50%: 6632.23 / 75%: 6890.62 / 95%: 9216.21
+    >>> qs = features.spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], as_pandas=True)
+    >>> print(qs)
+    0.05    6029.296875
+    0.25    6416.894531
+    0.50    6632.226562
+    0.75    6890.625000
+    0.95    9216.210938
+    dtype: float64
 
     Compute the q-th quantile of the power spectrum and its amplitude
 
-    >>> qs = features.spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], 
-    >>>                                 amp=True, as_pandas=True)
+    >>> qs = features.spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], amp=True, as_pandas=True)
     >>> print(qs)
-    index freq amp
-    0.25  6416.894531  0.000092 / 0.50  6632.226562  0.000123
-    0.75  6890.625000  0.000029 / 0.95  9216.210938  0.000005
+                 freq       amp
+    0.05  6029.296875  0.000009
+    0.25  6416.894531  0.000092
+    0.50  6632.226562  0.000123
+    0.75  6890.625000  0.000029
+    0.95  9216.210938  0.000005
 
     """
     q = np.asanyarray(q)
@@ -309,18 +315,25 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
 
     Compute the q-th temporal quantile in the spectrum
 
-    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95])
-    >>> print("5%: {:.4f} / 25%: {:.4f} / 50%: {:.4f} / 75%: {:.4f} \
-    >>> / 95%: {:.4f}".format(qt[0], qt[1], qt[2], qt[3], qt[4]))
-    5%: 1.2190 / 25%: 5.7121 / 50%: 11.8190 / 75%: 16.5558 / 95%: 17.7517
+    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], as_pandas=True)
+    >>> print(qt)
+    0.05     1.219048
+    0.25     5.712109
+    0.50    11.818957
+    0.75    16.555828
+    0.95    17.751655
+    dtype: float64
 
     Compute the q-th temporal quantile in the waveform, amplitude
 
-    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], \
-    >>>                                 env_mode="fast", mode="amplitude", Nt=32)
-    >>> print("5%: {:.2f} / 25%: {:.2f} / 50%: {:.2f} / 75%: {:.2f} \
-    >>> / 95%: {:.2f}".format(qt[0], qt[1], qt[2], qt[3], qt[4]))
-    5%: 1.2154 / 25%: 5.7071 / 50%: 11.8169 / 75%: 16.3564 / 95%: 17.7605
+    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], mode="amplitude", Nt=32, as_pandas=True)
+    >>> print(qt)
+    0.05     1.215429
+    0.25     5.707076
+    0.50    11.816876
+    0.75    16.356414
+    0.95    17.760507
+    dtype: float64
 
     """
     q = np.asanyarray(q)
@@ -565,9 +578,11 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', dB=3, di
 
     Compute all the spectral features
 
-    >>> all_spectral_features = features.all_spectral_features(s, fs)
-         sm            sv      ...   Time 75%   Time 95%  bandwidth_50  bandwidth_90  bandwidth_3dB
-    0  0.000002  8.118042e-11  ...  16.555828  17.751655   473.730469    3186.914062    320.8791
+    >>> all_spectral_features = features.all_spectral_features(s, fs, display=True)
+             sm            sv        ss         sk  ...   Time 95%  bandwidth_50  bandwidth_90  bandwidth_3dB
+    0  0.000002  8.118042e-11  5.844664  40.488906  ...  17.751655    473.730469   3186.914062      320.87913
+    <BLANKLINE>
+    [1 rows x 18 columns]
     """
 
     Sxx_power,_,_,_ = sound.spectrogram (s, fs, window='hann', nperseg=nperseg)

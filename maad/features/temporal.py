@@ -51,7 +51,7 @@ def temporal_moments(s, fs, roi=None):
     Examples
     --------
     >>> from maad import sound, features
-    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> s, fs = sound.load('../../data/spinetail.wav')
     >>> sm, sv, ss, sk = features.temporal_moments (s, fs)
     >>> print('mean: %2.2f / var: %2.5f / skewness: %2.4f / kurtosis: %2.2f' % (sm, sv, ss, sk))
     mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71
@@ -156,7 +156,7 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
 
     >>> duration, duration_90 = features.temporal_duration(s, fs)
     >>> print("Duration: {:.4f} / Duration 90% {:.4f}".format(duration, duration_90))
-    Duration: 10.6493 / Duration 90% 16.5451
+    Duration: 10.8437 / Duration 90% 16.5326
 
     """
     # Compute temporal quantile
@@ -217,19 +217,23 @@ def pulse_rate(s, fs, roi=None, threshold1=3, threshold2=None, mode='fast', dmin
 
     Detect events 15-dB below the peak with a minimum distance of 0.5 s.
 
+    >>> import numpy as np
     >>> t = np.arange(0,len(s),1)/fs
     >>> s_dB = 20*np.log10(np.abs(s))
-    >>> events, amp = pulse_rate(s, fs, dmin=0.5, dB=20)
+    >>> events, amp = features.pulse_rate(s, fs, dmin=0.1, threshold1=15)
 
-    Plot signal in dB and detected events, initial and final points
+    Display events detected
 
-    >>> plt.figure()
-    >>> plt.plot(t, s_dB)
-    >>> plt.plot(events["min_t"], amp*np.ones_like(events["min_t"]), 'kx')
-    >>> plt.plot(events["max_t"], amp*np.ones_like(events["max_t"]), 'kx')
-    >>> plt.ylim((-50,0))
-    >>> plt.show()
-
+    >>> print(events)
+           min_t      max_t  duration
+    0   0.100213   0.237265  0.137052
+    1   0.754612   2.625429  1.870817
+    2   2.804495   3.082256  0.277761
+    3   5.388269   7.209351  1.821081
+    4  11.467152  13.260148  1.792995
+    5  15.443903  15.737938  0.294034
+    6  16.318792  17.956873  1.638081
+    7  19.174788  19.344555  0.169768
     """
     if roi is None:
         min_t = 0
@@ -321,9 +325,11 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3,
 
     Compute all the temporal features
 
-    >>> temporal_features = features.all_temporal_features(s,fs)
-             sm        sv      ...   Time 75%   Time 95%       zcr     duration_50    duration_90
-    0 -2.043264e-19  0.001167  ...  16.356414  17.760507  10500.397192    10.649338    16.545078
+    >>> temporal_features = features.all_temporal_features(s,fs,display=True)
+                 sm        sv        ss         sk   Time 5%  ...   Time 75%   Time 95%           zcr  duration_50  duration_90
+    0 -2.043264e-19  0.001167 -0.006548  24.711611  1.215429  ...  16.356414  17.760507  10500.397192    10.649338    16.545078
+    <BLANKLINE>
+    [1 rows x 12 columns]
     """
 
     tm  = temporal_moments(s, fs, roi)
