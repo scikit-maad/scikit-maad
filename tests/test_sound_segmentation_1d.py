@@ -6,7 +6,6 @@ Test module for preprocessing functions
 """
 import os
 import pytest
-import maad
 import pandas as pd
 import numpy as np
 from maad import sound
