@@ -142,8 +142,8 @@ __all__ = [
            'peak_frequency',
            'spectral_quantile',
            'temporal_quantile',
-            'bandwidth',
-            'all_spectral_features',
+           'bandwidth',
+           'all_spectral_features',
            # temporal
            'temporal_moments',
            'zero_crossing_rate',
