@@ -254,7 +254,7 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
         if as_pandas:
             out = pd.DataFrame({"freq":spec_quantile, "amp":pxx[spec_quantile].values}, index=q)
         else:
-            out = np.transpose(np.matrix([q, spec_quantile, pxx[spec_quantile]]))
+            out = np.transpose(np.array([q, spec_quantile, pxx[spec_quantile]]))
     else:
         if as_pandas:
             out = pd.Series(spec_quantile, index=q)
@@ -362,7 +362,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
             if as_pandas:
                 out = pd.DataFrame({"time":spec_quantile, "amp":energy[spec_quantile].values}, index=q)
             else:
-                out = np.transpose(np.matrix([q, spec_quantile, energy[spec_quantile]]))
+                out = np.transpose(np.array([q, spec_quantile, energy[spec_quantile]]))
         else:
             if as_pandas:
                 out = pd.Series(spec_quantile, index=q)
@@ -391,7 +391,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
             if as_pandas:
                 out = pd.DataFrame({"time":spec_quantile, "amp":Sxx[spec_quantile].values}, index=q)
             else:
-                out = np.transpose(np.matrix([q, spec_quantile, Sxx[spec_quantile]]))
+                out = np.transpose(np.array([q, spec_quantile, Sxx[spec_quantile]]))
         else:
             if as_pandas:
                 out = pd.Series(spec_quantile, index=q)
@@ -477,7 +477,7 @@ def bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
                                  "amp":[q[2,2], q[0,2]]},
                                 index=["bandwidth_50", "bandwidth_90"])
             else:
-                out = np.matrix([[np.abs(q[2,1]-q[1,1]), q[2,2]], [np.abs(q[3,1]-q[0,1]). q[0,2]]])
+                out = np.array([[np.abs(q[2,1]-q[1,1]), q[2,2]], [np.abs(q[3,1]-q[0,1]). q[0,2]]])
         else:
             if as_pandas:
                 out = pd.Series([np.abs(q[2,1]-q[1,1]), np.abs(q[3,1]-q[0,1])],
