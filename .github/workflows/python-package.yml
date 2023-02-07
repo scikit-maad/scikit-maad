@@ -27,13 +27,11 @@ jobs:
         architecture: x64
     - name: Install dependencies
       run: |
-        sudo apt-get install gcc
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         python -m pip install numpy
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python -m pip install -U setuptools
-        python -m pip install scikit-maad
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
