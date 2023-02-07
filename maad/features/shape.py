@@ -1023,5 +1023,4 @@ def all_shape_features(s, fs, rois, resolution='low',
         print('list of features')
         print(list(features))
      
-    return features 
- 
+    return features
