@@ -18,7 +18,7 @@ Ensemble of functions to compute acoustic descriptors from 2D spectrograms.
 from __future__ import print_function 
 import numpy as np 
 import pandas as pd 
-from scipy import ndimage as ndi 
+from scipy import ndimage as ndi
 import itertools as it 
 import matplotlib.pyplot as plt 
 from skimage import transform, measure 
