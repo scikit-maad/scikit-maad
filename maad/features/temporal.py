@@ -217,23 +217,16 @@ def pulse_rate(s, fs, roi=None, threshold1=3, threshold2=None, mode='fast', dmin
 
     Detect events 15-dB below the peak with a minimum distance of 0.5 s.
 
-    >>> import numpy as np
-    >>> t = np.arange(0,len(s),1)/fs
-    >>> s_dB = 20*np.log10(np.abs(s))
-    >>> events, amp = features.pulse_rate(s, fs, dmin=0.1, threshold1=15)
+    >>> events, amp = features.pulse_rate(s, fs, dmin=0.5, threshold1=15)
 
     Display events detected
 
     >>> print(events)
            min_t      max_t  duration
-    0   0.100213   0.237265  0.137052
-    1   0.754612   2.625429  1.870817
-    2   2.804495   3.082256  0.277761
-    3   5.388269   7.209351  1.821081
-    4  11.467152  13.260148  1.792995
-    5  15.443903  15.737938  0.294034
-    6  16.318792  17.956873  1.638081
-    7  19.174788  19.344555  0.169768
+    0   0.754612   2.625429  1.870817
+    1   5.388269   7.209351  1.821081
+    2  11.467152  13.260148  1.792995
+    3  16.318792  17.956873  1.638081
     """
     if roi is None:
         min_t = 0
@@ -283,8 +276,8 @@ def pulse_rate(s, fs, roi=None, threshold1=3, threshold2=None, mode='fast', dmin
     return events, amp
 
 #%%
-def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3, 
-                          threshold2=None, dmin=0.1, Nt=5000, display=False):
+def all_temporal_features(s, fs, nperseg=5000, roi=None, threshold1=3, 
+                          threshold2=None, dmin=0.1, display=False):
     """
     Compute all the temporal features for a signal.
 
@@ -335,7 +328,6 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3,
     tm  = temporal_moments(s, fs, roi)
     zcr = zero_crossing_rate(s, fs, roi)
     qt  = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, "envelope")
-    pr  = pulse_rate(s, fs, roi, threshold1, threshold2, 'fast', dmin, Nt)
     duration_50, duration_90 = temporal_duration(s, fs, nperseg, roi, mode="envelope")
 
     temporal_features = pd.DataFrame({"sm":tm[0], "sv":tm[1], "ss":tm[2], "sk":tm[3],
