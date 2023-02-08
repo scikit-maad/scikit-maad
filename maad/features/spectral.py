@@ -265,7 +265,7 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
 
 #%%
 def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=None, mode="spectrum",
-                       Nt=32, env_mode="fast", as_pandas=False, amp=False, **kwargs):
+                      env_mode="fast", as_pandas=False, amp=False, **kwargs):
     """
     Compute the q-th temporal quantile of the waveform or spectrum. If a
     region of interest with time and spectral limits is provided, the q-th
@@ -282,16 +282,16 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
         inclusive.
         The defaul is [0.05, 0.25, 0.5, 0.75, 0.95].
     nperseg : int, optional
-        Length of segment to compute the FFT. The default is 1024.
+        Length of segment to compute the FFT when mode is spectrum. The default is 1024.
+        Size of each frame to compute the envelope. The largest, the highest is
+        the approximation. The default is 5000.
     roi : pandas.Series, optional
         Region of interest where peak frequency will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     mode : str, optional, default is 'spectrum'
         - 'spectrum' : The quantile is calculated in the espectrum.
-        - 'amplitude' : The quantile is calculated in the sound wave.
-    Nt : integer, optional, default is `32`
-        Size of each frame. The largest, the highest is the approximation.
+        - 'envelope' : The quantile is calculated in the sound wave.
     env_mode : str, optional, default is `fast`
         - `fast` : The sound is first divided into frames (2d) using the
             function wave2timeframes(s), then the max of each frame gives a
@@ -324,9 +324,9 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     0.95    17.751655
     dtype: float64
 
-    Compute the q-th temporal quantile in the waveform, amplitude
+    Compute the q-th temporal quantile in the waveform, using the envelope
 
-    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], mode="amplitude", Nt=32, as_pandas=True)
+    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], mode="envelope", as_pandas=True)
     >>> print(qt)
     0.05     1.215429
     0.25     5.707076
@@ -340,17 +340,19 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     if not _quantile_is_valid(q):
         raise ValueError("Percentiles must be in the range [0, 1]")
 
+    if mode=="envelope" and nperseg==1024: nperseg=5000
+
     # compute quantiles in the time amp
-    if mode=="amplitude":
+    if mode=="envelope":
         if roi is None:
             min_t = 0
         else:
             s = sound.trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
             min_t = roi.min_t
 
-        env = sound.envelope(s, env_mode, Nt)
+        env = sound.envelope(s**2, env_mode, nperseg)
         t = min_t+np.arange(0,len(env),1)*len(s)/fs/len(env)
-        energy = pd.Series(env**2, index=t)
+        energy = pd.Series(env, index=t)
 
         # Compute temporal quantile
         norm_cumsum = energy.cumsum()/energy.sum()
@@ -400,7 +402,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
 
         return out
     else:
-        raise Exception("Invalid mode. Mode should be 'spectrum' or 'amplitude'")
+        raise Exception("Invalid mode. Mode should be 'spectrum' or 'envelope'")
 
 #%%
 def bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
