@@ -107,17 +107,17 @@ def test_temporal_features():
 
     temporal_features = features.all_temporal_features(s, fs)
 
-    expected_values = pd.DataFrame({"sm":-2.043264e-19,
+    expected_values = pd.DataFrame({"sm":-2.04326427e-19,
                                     "sv":0.0011670735714956646,
-                                    "ss":-0.006548,
-                                    "sk":24.711611,
-                                    "Time 5%":1.21542937,
-                                    "Time 25%":5.70707583,
-                                    "Time 50%":11.81687603,
-                                    "Time 75%":16.35641403,
-                                    "Time 95%":17.76050707,
-                                    "zcr":10500.397192,
-                                    "duration_50":10.649338,
-                                    "duration_90":16.545078}, index=[0])
+                                    "ss":-0.006547980427883208,
+                                    "sk":24.711610834321217,
+                                    "Time 5%":1.1361585719559142,
+                                    "Time 25%":3.067628144280968,
+                                    "Time 50%":11.702433291145915,
+                                    "Time 75%":15.678988292991615,
+                                    "Time 95%":17.724073722512262,
+                                    "zcr":10500.397192384766,
+                                    "duration_50":12.611360148710647,
+                                    "duration_90":16.58791515055635}, index=[0])
 
     assert_frame_equal(temporal_features, expected_values)

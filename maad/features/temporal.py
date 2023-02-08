@@ -112,7 +112,7 @@ def zero_crossing_rate(s, fs, roi=None):
 
 #%%
 def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
-                      env_mode="fast", Nt=32, as_pandas_series=False, **kwargs):
+                      env_mode="fast", as_pandas_series=False, **kwargs):
     """
     Compute the temporal duration of the waveform. If a region of interest with time
     and spectral limits is provided, the temporal duration is computed on the selection.
@@ -161,7 +161,7 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     """
     # Compute temporal quantile
     q = temporal_quantile(s, fs, [0.05, 0.25, 0.75, 0.95], nperseg, roi, mode, 
-                          Nt, env_mode, as_pandas_series, **kwargs)
+                          env_mode, as_pandas_series, **kwargs)
 
     # Compute temporal duration
     if as_pandas_series:
@@ -334,9 +334,9 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3,
 
     tm  = temporal_moments(s, fs, roi)
     zcr = zero_crossing_rate(s, fs, roi)
-    qt  = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, "amplitude")
+    qt  = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, "envelope")
     pr  = pulse_rate(s, fs, roi, threshold1, threshold2, 'fast', dmin, Nt)
-    duration_50, duration_90 = temporal_duration(s, fs, nperseg, roi, mode="amplitude")
+    duration_50, duration_90 = temporal_duration(s, fs, nperseg, roi, mode="envelope")
 
     temporal_features = pd.DataFrame({"sm":tm[0], "sv":tm[1], "ss":tm[2], "sk":tm[3],
                                       "Time 5%":qt[0], "Time 25%":qt[1], "Time 50%":qt[2], 
