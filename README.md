@@ -9,7 +9,7 @@
 ## Installation
 scikit-maad dependencies:
 
-- Python >= 3.5
+- Python >= 3.7, <3.11
 - NumPy >= 1.13
 - SciPy >= 0.18
 - scikit-image >= 0.14
