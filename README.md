@@ -6,6 +6,14 @@
 
 [![DOI](https://zenodo.org/badge/148142520.svg)](https://zenodo.org/badge/latestdoi/148142520)
 
+## Operating System
+
+scikit-maad requires one of the following operating systems:
+
+- Linux
+- macOS (on Intel, Apple Silicone not supported)
+- Windows
+
 ## Installation
 scikit-maad dependencies:
 
