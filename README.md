@@ -61,6 +61,7 @@ venv/bin/python -m pip install --upgrade pip setuptools wheel
 - resampy>=0.2
 - scikit-image >= 0.17
 - SciPy >= 1.5
+- scikit-learn
 
 ## Installing from PyPI
 
