@@ -23,30 +23,30 @@ Soundscape analysis in Python
    install
    quickstart
    audio_dataset
-   
+
 .. toctree::
    :caption: Documentation
    :maxdepth: 1
-   
+
    sound
    rois
    features
    spl
    util
-   
+
 .. toctree::
    :maxdepth: 2
    :caption: Example Gallery
 
    _auto_examples/index
-   
+
 
 Citing scikit-maad
 ~~~~~~~~~~~~~~~~~~
 
 .. note::
   If you find this package useful in your research, we would appreciate citations to:
-    
+
   Ulloa, J. S., Haupert, S., Latorre, J. F., Aubin, T., & Sueur, J. (2021). scikit-maad: An open-source and modular toolbox for quantitative soundscape analysis in Python. Methods in Ecology and Evolution, 2041-210X.13711. https://doi.org/10.1111/2041-210X.13711
 
 
