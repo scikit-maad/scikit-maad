@@ -42,7 +42,7 @@ import numpy as np
 from maad import util
 
 
-def plot_xenocanto_wookpecker_activities():
+def plot_xenocanto_woodpecker_activities():
     # Query Xeno-Canto
     # ----------------
     # array with english name and scientific name of all european woodpeckers
@@ -224,4 +224,4 @@ def plot_xenocanto_wookpecker_activities():
 
 
 if __name__ == '__main__':
-    plot_xenocanto_wookpecker_activities()
+    plot_xenocanto_woodpecker_activities()

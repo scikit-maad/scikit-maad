@@ -61,7 +61,7 @@ from sklearn.preprocessing import StandardScaler
 from maad import sound, util, rois
 
 
-def wookpecker_drumming_characteristics():
+def woodpecker_drumming_characteristics():
     # Define local function
     # ---------------------
     # function to grab all audio files in a folder
@@ -391,4 +391,4 @@ def wookpecker_drumming_characteristics():
 
 
 if __name__ == '__main__':
-    wookpecker_drumming_characteristics()
+    woodpecker_drumming_characteristics()
