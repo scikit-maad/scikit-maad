@@ -84,13 +84,13 @@ venv/bin/python -m pip install --editable .
 Install the test requirements:
 
 ```bash
-venv/bin/python -m pip install pytest
+venv/bin/python -m pip install pytest-cov
 ```
 
 Actually run the tests:
 
 ```bash
-venv/bin/python -m pytest
+venv/bin/python -m pytest --cov tests --cov maad --cov example_gallery
 ```
 
 ## Examples and documentation
