@@ -5,10 +5,8 @@ Segmentation methods for 1D signals.
 This module gathers a collection of functions to detect regions of interest (ROIs)
 in the temporal domain.
 """
-#
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
 # License: New BSD License
 
 # =============================================================================
@@ -25,12 +23,11 @@ import pandas as pd
 from maad.sound import sinc
 from maad import sound, util
 
-#%%
 # =============================================================================
 # Private functions
 # =============================================================================
 def _corresp_onset_offset(onset, offset, tmin, tmax):
-    """ 
+    """
     Check that each onsets have a corresponding offset.
 
     Parameters
@@ -43,12 +40,12 @@ def _corresp_onset_offset(onset, offset, tmin, tmax):
         Start time of wav file  (in s)
     tmax:
         End time of wav file  (in s)
-    
+
     Return
     ------
-    onset : ndarray
+    onset: ndarray
         onset with corresponding offset
-    offset : ndarray
+    offset: ndarray
         offset with corresponding onset
     """
     if onset[0] > offset[0]:      # check start
@@ -61,86 +58,84 @@ def _corresp_onset_offset(onset, offset, tmin, tmax):
         pass
     return onset, offset
 
-#%%
 def _energy_windowed(s, wl=512, fs=None):
-    """ 
+    """
     Computse windowed energy on an audio signal.
-    
+
     Computes the energy of the signals by windows of length wl. Used to amplify sectors where the density of energy is higher
-    
+
     Parameters
     ----------
-    s : ndarray
+    s: ndarray
         input signal
-    wl : float
+    wl: float
         length of the window to summarize the rms value
-    fs : float
+    fs: float
         frequency sampling of the signal, used to keep track of temporal information of the signal
 
     Returns
     -------
-    time : ndarray
+    time: ndarray
         temporal index vector
-    s_rms : ndarray
+    s_rms: ndarray
         windowed rms signal
     """
-    
+
     s_aux = np.lib.pad(s, (0, wl-len(s)%wl), 'reflect')  # padding
-    s_aux = s_aux**2 
+    s_aux = s_aux**2
     #  s_aux = np.abs(s_aux) # absolute value. alternative option
     s_aux = np.reshape(s_aux,(int(len(s_aux)/wl),wl))
     s_rms = np.mean(s_aux,1)
     time = np.arange(0,len(s_rms)) * wl / fs + wl*0.5/fs
     return time, s_rms
 
-#%%
 # =============================================================================
 # Public functions
 # =============================================================================
-def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
+def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
                   savefilename='rois.csv', **kwargs):
     """
     Find region of interest using known estimates of signal length and frequency limits.
-    
+
     The general approach is based on continous wavelet transform following a three step process
-    
+
     1. Filter the signal with a bandpass sinc filter
-    
+
     2. Smoothing the signal by convolving it with a Mexican hat wavelet (Ricker wavelet) [1]
-    
+
     3. Binarize the signal applying a linear threshold
-        
+
     Parameters
     ----------
-    s : ndarray
+    s: ndarray
         input signal
-    flims : int
-        upper and lower frequencies (in Hz) 
-    tlen : int 
+    flims: int
+        upper and lower frequencies (in Hz)
+    tlen: int
         temporal length of signal searched (in s)
-    th : float, optional
+    th: float, optional
         threshold to binarize the output
     display: boolean, optional, default is False
         plot results if set to True, default is False
-    save_df : boolean, optional
+    save_df: boolean, optional
         save results to csv file
-    savefilename : str, optional
-        Name of the file to save the table as comma separatd values (csv)        
-    
+    savefilename: str, optional
+        Name of the file to save the table as comma separatd values (csv)
+
     Returns
     -------
-    rois : pandas DataFrame
-        an table with temporal and frequencial limits of regions of interest            
-    
+    rois: pandas DataFrame
+        an table with temporal and frequencial limits of regions of interest
+
     References
     ----------
-    .. [1] Pan Du, Warren A. Kibbe, Simon M. Lin, Improved peak detection in mass spectrum by incorporating continuous wavelet transform-based pattern matching, Bioinformatics, Volume 22, Issue 17, 1 September 2006, Pages 2059–2065, `DOI: 10.1093/bioinformatics/btl355 <https://doi.org/10.1093/bioinformatics/btl355>`_ 
-    
+    .. [1] Pan Du, Warren A. Kibbe, Simon M. Lin, Improved peak detection in mass spectrum by incorporating continuous wavelet transform-based pattern matching, Bioinformatics, Volume 22, Issue 17, 1 September 2006, Pages 2059–2065, `DOI: 10.1093/bioinformatics/btl355 <https://doi.org/10.1093/bioinformatics/btl355>`_
+
     Examples
     --------
     >>> from maad import sound, rois
     >>> s, fs = sound.load('./data/spinetail.wav')
-    >>> rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
+    >>> rois.find_rois_cwt(s, fs, flims=(4500, 8000), tlen=2, th=0, display=True)
         min_f     min_t   max_f     max_t
     0  4500.0   0.74304  8000.0   2.50776
     1  4500.0   5.10839  8000.0   7.33751
@@ -150,7 +145,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     # filter signal
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)
     # rms: calculate window of maximum 5% of tlen. improves speed of cwt
-    wl = 2**np.floor(np.log2(tlen*fs*0.05)) 
+    wl = 2**np.floor(np.log2(tlen*fs*0.05))
     t, s_rms = _energy_windowed(s_filt, int(wl), fs)
     # find peaks
     cwt_width = [round(tlen*fs/wl/2)]
@@ -174,7 +169,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     # A detection was found, save results to csv
         onset, offset = _corresp_onset_offset(onset, offset, tmin=0, tmax=len(s)/fs)
         rois_tf = np.transpose([np.repeat(flims[0],repeats=len(onset)),
-                                np.round(onset,5),  
+                                np.round(onset,5),
                                 np.repeat(flims[1],repeats=len(onset)),
                                 np.round(offset,5)])
         cols=['min_f', 'min_t','max_f', 'max_t']
@@ -183,7 +178,7 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
             df.to_csv(savefilename, sep=',', header=True, index=False)
 
     # Display
-    if display==True: 
+    if display==True:
         figsize = kwargs.pop('figsize',(12,6))
         cmap = kwargs.pop('cmap','gray')
         nfft = kwargs.pop('nperseg',512)
@@ -208,9 +203,9 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
                 xy = (df.min_t[idx],df.min_f[idx])
                 width = df.max_t[idx] - df.min_t[idx]
                 height = df.max_f[idx] - df.min_f[idx]
-                rect = patches.Rectangle(xy, width, height, lw=1, 
+                rect = patches.Rectangle(xy, width, height, lw=1,
                                          edgecolor='yellow', facecolor='none')
                 ax2.add_patch(rect)
         plt.show()
-    
+
     return df

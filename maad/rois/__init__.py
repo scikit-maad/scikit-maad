@@ -11,12 +11,12 @@ Temporal
     :toctree: generated/
 
     find_rois_cwt
-    
+
 Spectro-temporal
 ----------------
 .. autosummary::
     :toctree: generated/
-    
+
     create_mask
     select_rois
     rois_to_imblobs

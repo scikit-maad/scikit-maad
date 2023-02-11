@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-""" 
-Collection of functions transform an audio signal into spectrogram and 
+"""
+Collection of functions transform an audio signal into spectrogram and
 manipulate spectrograms.
 """
-#
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
 # License: New BSD License
 
 # =============================================================================
@@ -19,7 +17,6 @@ import scipy as sp
 # Import internal modules
 from maad.util import (plot1d, plot2d, crop_image, power2dB, amplitude2dB)
 
-# %%
 # =============================================================================
 # public functions
 # =============================================================================
@@ -40,50 +37,50 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 
     Parameters
     ----------
-    x : 1d ndarray
-        Vector containing the sound waveform 
-    fs : int
-        The sampling frequency in Hz 
-    window : str or tuple or array_like, optional, default to 'hann'
-        Desired window to use. If window is a string or tuple, it is passed to 
-        get_window to generate the window values, which are DFT-even by default. 
-        See get_window for a list of windows and required parameters. 
-        If window is array_like it will be used directly as the window and its length must be nperseg. 
-    nperseg : int, optional. Defaults to 1024.
-        Length of the segment used to compute the FFT. No zero padding. 
-        For fast calculation, it's better to use a number that is a power 2. 
+    x: 1d ndarray
+        Vector containing the sound waveform
+    fs: int
+        The sampling frequency in Hz
+    window: str or tuple or array_like, optional, default to 'hann'
+        Desired window to use. If window is a string or tuple, it is passed to
+        get_window to generate the window values, which are DFT-even by default.
+        See get_window for a list of windows and required parameters.
+        If window is array_like it will be used directly as the window and its length must be nperseg.
+    nperseg: int, optional. Defaults to 1024.
+        Length of the segment used to compute the FFT. No zero padding.
+        For fast calculation, it's better to use a number that is a power 2.
         This parameter sets the resolution in frequency as the spectrogram will
         contains nperseg/2 frequency bins between 0Hz-(fs/2)Hz, with a resolution
         df = fs/nperseg
-        It sets also the time slot (dt) of each frequency frames : dt = nperseg/fs
-        The higher is the number, the lower is the resolution in time (dt) 
-        but better is the resolution in frequency (df).  
-    noverlap : int, optional. Defaults to None.
-        Number of points to overlap between segments. 
-        If None, noverlap = nperseg // 2. 
-    mode : str, optional. Default is 'psd'
-        Choose the output between 
-        - 'psd' : Power Spectral Density 
-        - 'amplitude' : module of the stft (sqrt(psd))
-        - 'complex' : real and imaginary part of the stft  
-    flims, tlims : list of 2 scalars [min, max], optional, default is None
+        It sets also the time slot (dt) of each frequency frames: dt = nperseg/fs
+        The higher is the number, the lower is the resolution in time (dt)
+        but better is the resolution in frequency (df).
+    noverlap: int, optional. Defaults to None.
+        Number of points to overlap between segments.
+        If None, noverlap = nperseg // 2.
+    mode: str, optional. Default is 'psd'
+        Choose the output between
+        - 'psd': Power Spectral Density
+        - 'amplitude': module of the stft (sqrt(psd))
+        - 'complex': real and imaginary part of the stft
+    flims, tlims: list of 2 scalars [min, max], optional, default is None
         flims corresponds to the min and max boundary frequency values
-        tlims corresponds to the min and max boundary time values  
-    verbose : boolean, optional, default is False
-        print messages into the consol or terminal if verbose is True   
-    display : boolean, optional, default is False
+        tlims corresponds to the min and max boundary time values
+    verbose: boolean, optional, default is False
+        print messages into the consol or terminal if verbose is True
+    display: boolean, optional, default is False
         Display the signal if True
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
-        is added to the root filename.        
+        is added to the root filename.
     **kwargs, optional. This parameter is used by plt.plot and savefig functions
         - savefilename : str, optional, default :'_filt_audiogram.png'
             Postfix of the figure filename
         - db_range : scalar, optional, default : 100
-            if db_range is a number, anything lower than -db_range is set to 
+            if db_range is a number, anything lower than -db_range is set to
             -db_range and anything larger than 0 is set to 0
         - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
+            width, height in inches.
         - title : string, optional, default : 'Spectrogram'
             title of the figure
         - xlabel : string, optional, default : 'Time [s]'
@@ -92,7 +89,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',
             'viridis'...
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
@@ -104,32 +101,32 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
         - dpi : integer, optional, default is 96
-            Dot per inch. 
+            Dot per inch.
             For printed version, choose high dpi (i.e. dpi=300) => slow
             For screen version, choose low dpi (i.e. dpi=96) => fast
         - format : string, optional, default is 'png'
             Format to save the figure
 
-        ... and more, see matplotlib  
+        ... and more, see matplotlib
 
     Returns
     -------
     Sxx : 2d ndarray of floats
-        Spectrogram : Matrix containing K frames with N/2 frequency bins, 
+        Spectrogram : Matrix containing K frames with N/2 frequency bins,
         K*N <= length (wave)
         Sxx unit is power => Sxx_power if mode is 'psd'
         Sxx unit is amplitude => Sxx_ampli if mode is 'amplitude' or 'complex'
     tn : 1d ndarray of floats
-        time vector (horizontal x-axis)    
+        time vector (horizontal x-axis)
     fn : 1d ndarray of floats
-        Frequency vector (vertical y-axis)    
+        Frequency vector (vertical y-axis)
     extent : list of scalars [left, right, bottom, top]
         The location, in data-coordinates, of the lower-left and
-        upper-right corners. 
+        upper-right corners.
 
     Notes
     -----
-    This function takes care of the energy conservation which is crucial 
+    This function takes care of the energy conservation which is crucial
     when working with sound pressure level (dB SPL)
 
     Examples
@@ -145,7 +142,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
     Compute the spectrogram with 'psd' output (if N<4096, the energy is lost)
 
     >>> N = 4096
-    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = 'psd')   
+    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = 'psd')
 
     Display Power Spectrogram
 
@@ -158,7 +155,7 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2d(Sxx_dB,**fig_kwargs)     
+    >>> fig, ax = maad.util.plot2d(Sxx_dB,**fig_kwargs)
 
     Compute mean power spectrogram
 
@@ -166,13 +163,13 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 
     energy => power x time
 
-    >>> E2 = sum(S_power_mean*len(s)) 
+    >>> E2 = sum(S_power_mean*len(s))
     >>> maad.util.power2dB(E2)
     44.93083283875093
 
     Compute the spectrogram with 'amplitude' output
 
-    >>> Sxx_ampli,tn,fn,_ = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode='amplitude')  
+    >>> Sxx_ampli,tn,fn,_ = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode='amplitude')
 
     For energy conservation => convert Sxx_ampli (amplitude) into power before doing the average.
 
@@ -181,12 +178,12 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 
     energy => power x time
 
-    >>> E3 = sum(S_power_mean*len(s)) 
+    >>> E3 = sum(S_power_mean*len(s))
     >>> maad.util.power2dB(E3)
     44.93083283875093
 
     """
-    
+
     # Get the argument detrend. By default is "constant" but some reasons (ADI
     # and AEI index from soundecology), detrend should be None
     detrend = kwargs.pop("detrend", "constant")
@@ -299,9 +296,6 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
 
     return Sxx_out, tn, fn, extent
 
-# %%
-
-
 def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
     """
     Transform a linear spectrum (1d) or Spectrogram (2d into octave or 1/3 octave
@@ -312,7 +306,7 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
     Parameters
     ----------
     X : ndarray of floats
-        Linear spectrum (1d) or Spectrogram (2d). 
+        Linear spectrum (1d) or Spectrogram (2d).
         Work with PSD to be consistent with energy conservation
     fn : 1d ndarray of floats
         Frequency vector of the linear spectrum/spectrogram
@@ -320,7 +314,7 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
         choose between Octave or thirdOctave frequency resolution
     display : boolean, default is False
         Display the octave spectrum/spectrogram
-    ** kwargs : optional. This parameter is used by plt.plot    
+    ** kwargs : optional. This parameter is used by plt.plot
 
     Returns
     -------
@@ -331,7 +325,7 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/rock_savanna.wav') 
+    >>> w, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx_power,tn,fn, ext = maad.sound.spectrogram (w, fs, nperseg=8192)
     >>> maad.sound.linear_to_octave(Sxx_power, fn, display=True, extent=ext, vmin=-50)
     """
@@ -397,9 +391,6 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
 
     return X_octave, bin_octave
 
-# %%
-
-
 def avg_power_spectro(Sxx_power):
     """
     Computes the average of a power spectrogram along the time axis.
@@ -420,7 +411,7 @@ def avg_power_spectro(Sxx_power):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/rock_savanna.wav') 
+    >>> w, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx_power,tn, fn, ext = maad.sound.spectrogram (w, fs)
 
     Compute mean power spectrogram
@@ -437,7 +428,6 @@ def avg_power_spectro(Sxx_power):
 
     return S_power_mean
 
-# %%
 
 def avg_amplitude_spectro(Sxx_ampli):
     """
@@ -459,7 +449,7 @@ def avg_amplitude_spectro(Sxx_ampli):
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/rock_savanna.wav') 
+    >>> w, fs = maad.sound.load('../data/rock_savanna.wav')
     >>> Sxx_amplitude,tn, fn, ext = maad.sound.spectrogram (w, fs, mode="amplitude")
 
     Compute mean amplitude spectrogram

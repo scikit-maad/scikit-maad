@@ -9,7 +9,7 @@ Visualization
 -------------
 .. autosummary::
     :toctree: generated/
-    
+
     rand_cmap
     crop_image
     save_figlist
@@ -30,7 +30,7 @@ Mathematical
 ------------
 .. autosummary::
     :toctree: generated/
-    
+
     running_mean
     get_unimode
     entropy
@@ -43,7 +43,7 @@ Parser
 ------
 .. autosummary::
     :toctree: generated/
-    
+
     read_audacity_annot
     write_audacity_annot
     read_raven_annot
@@ -54,7 +54,7 @@ Miscellaneous
 -------------
 .. autosummary::
     :toctree: generated/
-    
+
     index_bw
     into_bins
     shift_bit_length
@@ -76,7 +76,7 @@ Xeno-Canto
 ----------
 .. autosummary::
     :toctree: generated/
-    
+
     xc_query
     xc_multi_query
     xc_selection
@@ -134,7 +134,7 @@ from .math_func import (running_mean,
                          rms,
                          kurtosis,
                          skewness,
-                         moments)                     
+                         moments)
 
 from .parser import (read_audacity_annot,
                      write_audacity_annot,
@@ -157,7 +157,7 @@ from .audio_metadata_utilities import (check_file_format,
                                        get_metadata_dir)
 
 __all__ = [
-           # miscellaneous 
+           # miscellaneous
            'index_bw',
            'into_bins',
            'shift_bit_length',
@@ -174,7 +174,7 @@ __all__ = [
            'format_features',
            'crossfade',
            'crossfade_list',
-           #  visualization      
+           #  visualization
            'rand_cmap',
            'crop_image',
            'save_figlist',
@@ -190,7 +190,7 @@ __all__ = [
            'plot_correlation_map',
            'plot_shape',
            'false_Color_Spectro',
-           # math_func       
+           # math_func
            'running_mean',
            'get_unimode',
            'entropy',
