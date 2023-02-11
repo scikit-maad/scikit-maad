@@ -3,34 +3,34 @@
 """
 Download metadata from Xeno-Canto to infer species activities
 =============================================================
- 
+
 The goal of this example is to show how to download metadata from Xeno-Canto
-to infer species activities. 
+to infer species activities.
 We focus on the activity of european woodpeckers.
 
-**Dependencies**: To execute this example you need to have installed 
+**Dependencies**: To execute this example you need to have installed
 pandas package.
 
 (from https://woodpeckersofeurope.blogspot.com/2007/11/drumming.html)
 Woodpeckers of Europe
-10 species of woodpecker (Picidae) breed in Europe: 
-9 resident species and the migratory Wryneck. 8 of these 10 also occur 
-outside Europe, with the distribution of Eurasian Three-toed, White-backed, 
-Lesser Spotted, Great Spotted, Black & Grey-headed Woodpeckers stretching 
-eastwards from the Western Palearctic into Asia, whilst Syrian is found in 
-the Middle East & Asia Minor & Wryneck winters in Africa. The global ranges 
+10 species of woodpecker (Picidae) breed in Europe:
+9 resident species and the migratory Wryneck. 8 of these 10 also occur
+outside Europe, with the distribution of Eurasian Three-toed, White-backed,
+Lesser Spotted, Great Spotted, Black & Grey-headed Woodpeckers stretching
+eastwards from the Western Palearctic into Asia, whilst Syrian is found in
+the Middle East & Asia Minor & Wryneck winters in Africa. The global ranges
 of Green & Middle Spotted Woodpeckers are confined to the Western Palearctic.
 
-Eurasian Three-toed : Picoides tridactylus
-White-backed : Dendrocopos leucotos
-Lesser Spotted : 	Dryobates minor
-Great Spotted : Dendrocopos major
-Black : 	Dryocopus martius
-Grey-headed : 	Picus canus
-Syrian : Dendrocopos syriacus
-Wryneck : Jynx torquilla
-Green : Picus viridis
-Middle Spotted : Dendrocoptes medius
+Eurasian Three-toed: Picoides tridactylus
+White-backed: Dendrocopos leucotos
+Lesser Spotted: 	Dryobates minor
+Great Spotted: Dendrocopos major
+Black: 	Dryocopus martius
+Grey-headed: 	Picus canus
+Syrian: Dendrocopos syriacus
+Wryneck: Jynx torquilla
+Green: Picus viridis
+Middle Spotted: Dendrocoptes medius
 
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_woodpeckers_drumming_annual_activity.png'
@@ -41,7 +41,6 @@ import numpy as np
 
 from maad import util
 
-#%%
 # Query Xeno-Canto
 # ----------------
 # array with english name and scientific name of all european woodpeckers
@@ -57,12 +56,10 @@ data = [['Eurasian Three-toed', 'Picoides tridactylus'],
         ['Green',               'Picus viridis'],
         ['Middle Spotted',      'Dendrocoptes medius']]
 
-#%%
 # creation of a dataframe for the array with species names
 df_species = pd.DataFrame(data,columns =['english name',
                                          'scientific name'])
 
-#%%
 # get the genus and species needed for Xeno-Canto
 gen = []
 sp = []
@@ -70,16 +67,15 @@ for name in df_species['scientific name']:
     gen.append(name.rpartition(' ')[0])
     sp.append(name.rpartition(' ')[2])
 
-#%%
 # Build the query dataframe with columns paramXXX
-# gen : genus
-# cnt : country
-# area : continent (europe, america, asia, africa)
-# q : quality (q_gt => quality equal or greater than)
-# len : length of the audio file (len_lt => length lower than; 
+# gen: genus
+# cnt: country
+# area: continent (europe, america, asia, africa)
+# q: quality (q_gt => quality equal or greater than)
+# len: length of the audio file (len_lt => length lower than;
 #                                 len_gt => length greater than )
-# type : type of sound : 'song' or 'call' or 'drumming'
-# Please have a look here to know all the parameters and how to use them :
+# and type: type of sound: 'song' or 'call' or 'drumming'
+# Please have a look here to know all the parameters and how to use them:
 # https://xeno-canto.org/help/search
 
 df_query = pd.DataFrame()
@@ -88,14 +84,12 @@ df_query['param2'] = sp
 df_query['param4'] ='type:drumming'
 df_query['param5'] ='area:europe'
 
-#%%
 # Get recordings metadata corresponding to the query
-df_dataset = util.xc_multi_query(df_query, 
+df_dataset = util.xc_multi_query(df_query,
                                  format_time = True,
                                  format_date = True,
                                  verbose=True)
 
-#%%
 # Creation of a dataframe with the number of files per species per 30mins
 # -----------------------------------------------------------------------
 # Using the metadata collected from Xeno-Canto, we create a new dataframe
@@ -110,13 +104,12 @@ df.dropna(subset=['time'], inplace=True)
 # Convert time into datetime
 df['time'] = pd.to_datetime(df['time'], format="%H:%M")
 
-#%%
 # New dataframe with the number of audio files per time slot.
 # The period of the time slot is 30 min
 
 df_count = pd.DataFrame()
 list_species = df['en'].unique()
-for species in list_species :
+for species in list_species:
     df_temp = pd.DataFrame()
     df_temp['count'] = df[df['en']==species].set_index(['time']).resample('30T').count().iloc[:,0]
     df_temp['species'] = species
@@ -125,11 +118,10 @@ for species in list_species :
 # create a column with time only
 df_count['time'] = df_count.index.strftime('%H:%M')
 
-#%% 
 # Creation of a dataframe with the number of files per species per week
 # ---------------------------------------------------------------------
 # Using the metadata collected from Xeno-Cant, we create a new dataframe
-# containing the number of files per species and per week. The goal is to 
+# containing the number of files per species and per week. The goal is to
 # create a dataframe with annual pattern of activity for all species
 # with a week (7 days) resolution.
 
@@ -138,26 +130,23 @@ df = df_dataset.copy()
 # remove all rows where data is missing (NA)
 df.dropna(subset=['week'], inplace=True)
 
-#%%
 # New dataframe with the number of audio files per week
 df_week_count = pd.DataFrame()
 list_species = df['en'].unique()
-for species in list_species :
+for species in list_species:
     df_temp = pd.DataFrame()
     df_temp['count'] = df[df['en']==species].set_index(['week']).index.value_counts()
     df_temp['species'] = species
     df_week_count = df_week_count.append(df_temp)
-    
+
 # create a column with time only
 df_week_count["week"] = df_week_count.index
 
-#%%
 # Display a heatmap of diel activity
 # ----------------------------------
 # make a copy of the dataset to avoid any modification of the original dataset
 df = df_count.copy()
 
-#%%
 # find the number of counts that corresponds to 50% of the counts
 for species in list_species:
     # find the threshold value
@@ -171,12 +160,11 @@ for species in list_species:
     # find the index where the cumulative sum of the count is higher
     idx = np.where(aa.cumsum() >= count_50_threshold)[0]
     aa[idx[0]]
-    df.loc[(df_count['species'] == species) & (df['count']< aa[idx[0]]), 'count'] = 0    
+    df.loc[(df_count['species'] == species) & (df['count']< aa[idx[0]]), 'count'] = 0
     df.loc[(df_count['species'] == species) & (df['count']>=aa[idx[0]]), 'count'] = 1
 
-#%%
 # Display the heatmap to see when (time of the day) the woodpeckers are active.
-# Woodpeckers are the most active during the morning, between 6:00am till 
+# Woodpeckers are the most active during the morning, between 6:00am till
 # 10:00am.
 df = df.pivot( 'species', 'time', "count")
 df = df.fillna(0)
@@ -207,21 +195,18 @@ ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
 
 fig.tight_layout()
 
-#%%
 # Display a heatmap of annual activity with week resolution
 # ---------------------------------------------------------
 # make a copy of the dataset to avoid any modification of the original dataset
 df = df_week_count.copy()
-#%%
 # create a new dataframe with the normalized number of audio files per week
 for species in list_species:
     df.loc[df['species'] == species, 'count'] = (df[df['species'] == species]['count']
                                                  /
                                                  np.max(df[df['species'] == species]['count']))
 
-#%%
 # Display the heatmap to see when (annually) the woodpeckers are active.
-# Woodpeckers are the most active during the winter and beginning of spring 
+# Woodpeckers are the most active during the winter and beginning of spring
 # (Februrary to April).
 df = df.pivot( 'species', 'week', "count")
 df = df.fillna(0)

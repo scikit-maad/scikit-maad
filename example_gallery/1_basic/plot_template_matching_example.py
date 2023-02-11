@@ -11,13 +11,11 @@ Template matching is a simple but powerfull method to detect a stereotyped sound
 
 [2] Brunelli, Roberto. 2009. Template Matching Techniques in Computer Vision: Theory and Practice. John Wiley and Sons, Ltd.
 """
-#%%
 # Load modules
 import matplotlib.pyplot as plt
 from maad import sound, util
 from maad.rois import template_matching
 
-#%%
 # Compute spectrograms
 # The first step is to compute the spectrogram of the template and the target audio. It is important to use the same spectrogram parameters for both signals in order to get adecuate results. For simplicity, we will take the template from the same target audio signal, but the template can be loaded from another file.
 
@@ -40,7 +38,6 @@ Sxx_template = util.power2dB(Sxx_template, db_range)
 Sxx_audio, tn, fn, ext = sound.spectrogram(s, fs, window, nperseg, noverlap, flims)
 Sxx_audio = util.power2dB(Sxx_audio, db_range)
 
-#%% 
 # Compute the cross-correlation of spectrograms and find peaks in the resulting signal using the `template matching` function. The template_matching functions gives temporal information on the location of the audio and frequency limits must be added.
 peak_th = 0.3 # set the threshold to find peaks
 xcorrcoef, rois = template_matching(Sxx_audio, Sxx_template, tn, ext, peak_th)
@@ -48,7 +45,6 @@ rois['min_f'] = flims[0]
 rois['max_f'] = flims[1]
 print(rois)
 
-#%% 
 # Finally, you can plot the detection results or save them as a csv file.
 Sxx, tn, fn, ext = sound.spectrogram(s, fs, window, nperseg, noverlap)
 fig, ax = plt.subplots(2,1, figsize=(8, 5), sharex=True)
