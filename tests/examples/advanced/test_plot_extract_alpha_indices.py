@@ -3,6 +3,9 @@ from example_gallery.advanced.plot_extract_alpha_indices import \
 
 
 def test_plot_extract_alpha_indices():
+    # Act
     plot_extract_alpha_indices()
 
+    # Assert
+    # If we get here, we count it as success
     assert True

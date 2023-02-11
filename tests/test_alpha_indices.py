@@ -48,13 +48,7 @@ def test_temporal_activity():
 # Spectral indices
 
 def test_spectral_entropy():
-    # Compute spectral entropy
-    s, fs = maad.sound.load(str(DATA_PATH / 'cold_forest_daylight.wav'))
-    Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)
-    spectral_entropy_indices = maad.features.spectral_entropy(
-        Sxx_power, fn, flim=(2000,10000))
-
-    # Load expected values
+    # Arrange
     expected_values = (
         0.26807540760637083,
         0.4883515296525619,
@@ -63,7 +57,14 @@ def test_spectral_entropy():
         17.580495975968567,
         3.5452699010615505,
     )
+    s, fs = maad.sound.load(str(DATA_PATH / 'cold_forest_daylight.wav'))
+    Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)
 
+    # Act
+    spectral_entropy_indices = maad.features.spectral_entropy(
+        Sxx_power, fn, flim=(2000, 10000))
+
+    # Assert
     assert np.allclose(spectral_entropy_indices, expected_values)
 
 
