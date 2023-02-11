@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#
 # Copyright (C) 2018 Juan Sebastian ULLOA <jseb.ulloa@gmail.com>
 #                    Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 # License: BSD 3 clause
