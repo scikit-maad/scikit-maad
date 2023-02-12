@@ -603,7 +603,7 @@ if __name__ == "__main__":
     import maad
 
     # Variables
-    S = -35     #  Sensbility microphone (for SM4 it is -35dBV)
+    S = -35     #  Sensibility microphone (for SM4 it is -35dBV)
     G = 42      # total amplification gain : preamplifier gain = 26dB and gain = 16dB
     P_REF = 20e-6   # Reference pressure (in the air : 20µPa)
     deltaT = 1  # Leq integration time dt in s

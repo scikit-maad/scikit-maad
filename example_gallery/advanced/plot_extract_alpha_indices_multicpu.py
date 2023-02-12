@@ -51,12 +51,12 @@ def plot_extract_alpha_indices_multicpu():
     # Parameters of the audio recorder. This is not a mandatory, but it allows
     # to compute the sound pressure level of the audio file (dB SPL) as a
     # sonometer would do.
-    S = -35  # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)
+    S = -35  # Sensibility microphone-35dBV (SM4) / -18dBV (Audiomoth)
     G = 26 + 16  # Amplification gain (26dB (SM4 preamplifier))
 
     # We parse the directory were the audio dataset is located in order to
     # get a df with date and fullfilename. As the data were collected with a
-    # SM4 audio recording device we set the dateformat agument to 'SM4' in
+    # SM4 audio recording device we set the dateformat argument to 'SM4' in
     # order to be able to parse the date from the filename. In case of
     # Audiomoth, the date is coded as Hex in the filename.
     audio_dataset_path = str(DATA_PATH / 'indices')
