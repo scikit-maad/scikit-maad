@@ -21,6 +21,7 @@ from maad import util
 def plot_audio_representation(filename):
     # Load an audio file
     signal, sample_rate = sound.load(filename)
+
     # Plot and show the waveform
     util.plot_wave(
         s=signal,
@@ -29,16 +30,17 @@ def plot_audio_representation(filename):
     plt.show()
 
     # It can be noticed that in this audio there are four consecutive songs
-    # of the spinetail
-    # *Cranioleuca erythorps*, every song lasting of approximately two
-    # seconds.
+    # of the spinetail *Cranioleuca erythorps*, every song lasting of
+    # approximately two seconds.
 
-    # Trim the signal to zoom in on the details of the song.
+    # Trim the signal to zoom in on the details of a repetition of the song.
+    song_start_in_seconds = 5
+    song_end_in_seconds = 8
     signal_trimmed = sound.trim(
         s=signal,
         fs=sample_rate,
-        min_t=5,
-        max_t=8,
+        min_t=song_start_in_seconds,
+        max_t=song_end_in_seconds,
     )
 
     # Compute the envelope of the trimmed signal
@@ -76,7 +78,7 @@ def plot_audio_representation(filename):
         )
 
     # Visualize the signal characteristics in the temporal and spectral domains
-    figure, axes = plt.subplots(
+    _, axes = plt.subplots(
         nrows=4,
         ncols=1,
         figsize=(8, 10),
@@ -105,10 +107,10 @@ def plot_audio_representation(filename):
     plt.show()
 
 
-def main():
+def _main():
     filename = str(DATA_PATH / 'spinetail.wav')
     plot_audio_representation(filename=filename)
 
 
 if __name__ == '__main__':
-    main()
+    _main()

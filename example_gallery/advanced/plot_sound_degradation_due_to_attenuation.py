@@ -42,28 +42,35 @@ def plot_sound_degradation_due_to_attenuation():
     # which was 16dB. So the total gain applied to the signal is: 42dB
     # We load the sound
     w, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
+
     # We convert the sound into sound pressure level (Pa)
     p0 = spl.wav2pressure(wave=w, gain=42, Vadc=2, sensitivity=-35)
+
     # Selection of the signal and the background noise
     # --------------------------------------------------
     # We select part of the sound with the spinetail signal
     p0_sig = p0[int(5.68 * fs):int(7.48 * fs)]
+
     # We select part of the sound with background
     p0_noise = p0[int(8.32 * fs):int(10.12 * fs)]
+
     # We convert the spinetail signal into spectrogram
     Sxx_power, tn, fn, ext = sound.spectrogram(p0_sig, fs,
                                                display=True, figsize=[2, 4],
                                                title='signal + noise')
+
     # We convert the background signal into spectrogram
     Sxx_power_noise, tn, fn, ext = sound.spectrogram(p0_noise, fs,
                                                      display=True,
                                                      figsize=[2, 4],
                                                      title='noise alone')
+
     # Then, we convert both spectrograms into dB. We choose a dB range of
     # 96dB which
     # is the maximal range for a 16 bits signal.
     Sxx_dB = util.power2dB(Sxx_power, db_range=96) + 96
     Sxx_dB_noise = util.power2dB(Sxx_power_noise, db_range=96) + 96
+
     # Evalution of the distance and sound level of the spinetail
     # ------------------------------------------------------------
     # Before simulating the attenuation of the acoustic signature depending on
@@ -83,6 +90,7 @@ def plot_sound_degradation_due_to_attenuation():
                                        ftype='bandpass')
     L = max(spl.pressure2leq(p0_sig_bw, fs, dt=0.1))
     print('Sound Level measured: %2.2fdB SPL' % L)
+
     # Evalution of the distance between the ARU and the spinetail
     # ------------------------------------------------------------
     # Then, knowing the sound level L at the position of the ARU, we can
@@ -97,6 +105,7 @@ def plot_sound_degradation_due_to_attenuation():
     print(
         'Max distance between ARU and spinetail is estimated to be %2.0fm' %
         r0)
+
     # Evalution of the maximum distance of propagation of the spinetail song
     # -----------------------------------------------------------------------
     # Finally, we can estimate the detection distance or active distance of the
@@ -118,11 +127,13 @@ def plot_sound_degradation_due_to_attenuation():
                                   L0=85,
                                   f=(F1 + F2) / 2)
     print('Max active distance is %2.1fm' % r)
+
     # Let's see the contribution of each type of attenuation
     _, df = spl.attenuation_dB(f=(F1 + F2) / 2,
                                r=r,
                                r0=1)
     print(df)
+
     # Simulation of the attenuation of the acoustic signature at different
     # distances
     # -------------------------------------------------------------------------------
@@ -136,25 +147,29 @@ def plot_sound_degradation_due_to_attenuation():
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=10)
     Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
     Sxx_dB_att_10m = util.power2dB(Sxx_power_att, db_range=96) + 96
+
     # Compute the attenuation of the recorded spinetail song at 50m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=50)
     Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
     Sxx_dB_att_50m = util.power2dB(Sxx_power_att, db_range=96) + 96
+
     # Compute the attenuation of the recorded spinetail song at 100m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=100)
     Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
     Sxx_dB_att_100m = util.power2dB(Sxx_power_att, db_range=96) + 96
+
     # Compute the attenuation of the recorded spinetail song at 200m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=200)
     Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
     Sxx_dB_att_200m = util.power2dB(Sxx_power_att, db_range=96) + 96
+
     # Add noise to the signal.
     # We add real noise recorded just after the song of the spinetail.
     Sxx_dB_att_10m = util.add_dB(Sxx_dB_att_10m, Sxx_dB_noise)
     Sxx_dB_att_50m = util.add_dB(Sxx_dB_att_50m, Sxx_dB_noise)
     Sxx_dB_att_100m = util.add_dB(Sxx_dB_att_100m, Sxx_dB_noise)
     Sxx_dB_att_200m = util.add_dB(Sxx_dB_att_200m, Sxx_dB_noise)
-    # %%
+
     # Plot attenuated spectrograms at different distances of propagation.
     # We can observe that the highest frequency content (harmonics) disappears first.
     # We can also observe that at 200m, almost none of the spinetail signal is still

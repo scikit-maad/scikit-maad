@@ -21,7 +21,6 @@ import time
 import matplotlib.pyplot as plt
 
 # Parallel processing packages
-# from functools import partial
 from tqdm import tqdm
 from concurrent import futures
 
@@ -47,11 +46,13 @@ def plot_extract_alpha_indices_multicpu():
                          'LEQt', 'BGNt', 'SNRt', 'MED', 'Ht', 'ACTtFraction',
                          'ACTtCount',
                          'ACTtMean', 'EVNtFraction', 'EVNtMean', 'EVNtCount']
+
     # Parameters of the audio recorder. This is not a mandatory but it allows
     # to compute the sound pressure level of the audio file (dB SPL) as a
     # sonometer would do.
     S = -35  # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)
     G = 26 + 16  # Amplification gain (26dB (SM4 preamplifier))
+
     # We parse the directory were the audio dataset is located in order to
     # get a df with date
     # and fullfilename. As the data were collected with a SM4 audio
@@ -61,6 +62,7 @@ def plot_extract_alpha_indices_multicpu():
     # from the filename. In case of Audiomoth, the date is coded as Hex in the
     # filename. The path to the audio dataset is "../../data/indices/".
     df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
+
     # Date is used as index. Reset the index in order to get back Date as
     # column
     df.reset_index(inplace=True)
@@ -163,7 +165,6 @@ def plot_extract_alpha_indices_multicpu():
             # add date and audio_path
             df_indices.insert(0, 'Date', date)
             df_indices.insert(1, 'file', audio_path)
-
         except:
             # if an error occur, send an empty output
             df_indices = pd.DataFrame()
@@ -191,10 +192,11 @@ def plot_extract_alpha_indices_multicpu():
             pbar.update(1)
             df_indices = df_indices.append(df_indices_temp)
     toc = time.perf_counter()
+
     # time duration of the process
     monocpu_duration = toc - tic
     print(f"Elapsed time is {monocpu_duration:0.1f} seconds")
-    # %%%
+
     """ 
     ===========================================================================
                      Multi CPU
@@ -206,9 +208,11 @@ def plot_extract_alpha_indices_multicpu():
     # create an empty dataframe. It will contain all ROIs found for each
     # audio file in the directory
     df_indices = pd.DataFrame()
+
     # Number of CPU used for the calculation.
     nb_cpu = os.cpu_count()
     tic = time.perf_counter()
+
     # Multicpu process
     with tqdm(total=len(df), desc="multi cpu indices calculation...") as pbar:
         with futures.ProcessPoolExecutor(max_workers=nb_cpu) as pool:
@@ -222,13 +226,16 @@ def plot_extract_alpha_indices_multicpu():
                 pbar.update(1)
                 df_indices = df_indices.append(df_indices_temp)
     toc = time.perf_counter()
+
     # time duration of the process
     multicpu_duration = toc - tic
     print(f"Elapsed time is {multicpu_duration:0.1f} seconds")
+
     # Display the comparison between to methods
     # -----------------------------------------
     plt.style.use('ggplot')
     fig, ax = plt.subplots(1, 1, figsize=(6, 2))
+
     # bar graphs
     width = 0.75
     x = ['sequential (mono CPU)', 'parallel (multi CPU)']

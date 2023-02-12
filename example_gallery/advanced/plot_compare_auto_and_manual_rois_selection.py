@@ -33,11 +33,13 @@ def plot_compare_auto_and_manual_rois_selection():
     dB_max = 96
     Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024,
                                                noverlap=1024 // 2)
+
     # Convert the power spectrogram into dB, add dB_max which is the maximum
     # decibel
     # range when quantification bit is 16bits and display the result
     Sxx_db = power2dB(Sxx_power) + dB_max
     plot2d(Sxx_db, **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+
     # Then, relevant acoustic events are extracted directly from the power
     # spectrogram based on a double thresholding technique. The result is
     # binary
@@ -62,6 +64,7 @@ def plot_compare_auto_and_manual_rois_selection():
     Sxx_power_noNoise = sound.median_equalizer(Sxx_power, display=True,
                                                **{'extent': ext})
     Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
+
     # Then we smooth the spectrogram in order to facilitate the creation of
     # masks as
     # small sparse details are merged if they are close to each other
@@ -71,23 +74,28 @@ def plot_compare_auto_and_manual_rois_selection():
                                              'vmin': 0, 'vmax': dB_max,
                                              'extent': ext
                                          })
+
     # Then we create a mask (i.e. binarization of the spectrogram) by using the
     # double thresholding technique
     im_mask = rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin='relative',
                                bin_std=8, bin_per=0.5,
                                verbose=False, display=False)
+
     # Finaly, we put together pixels that belong to the same acoustic event,
     # and
     # remove very small events (<=25 pixel²)
     im_rois, df_rois = rois.select_rois(im_mask, min_roi=25, max_roi=None,
                                         display=True,
                                         **{'extent': ext})
+
     # format dataframe df_rois in order to convert pixels into time and
     # frequency
     df_rois = format_features(df_rois, tn, fn)
+
     # overlay bounding box on the original spectrogram
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
                              **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+
     # Compute and visualize centroids
     df_centroid = features.centroid_features(Sxx_db, df_rois, im_rois)
     df_centroid = format_features(df_centroid, tn, fn)
@@ -98,6 +106,7 @@ def plot_compare_auto_and_manual_rois_selection():
                                      'marker': '+', 'color': 'red',
                                      'fig': fig0, 'ax': ax0
                                  })
+
     # Let's compare with the manual annotation (Ground Truth GT) obtained with
     # Audacity software.
     # Each acoustic signature is manually selected and labeled. All similar
@@ -105,18 +114,22 @@ def plot_compare_auto_and_manual_rois_selection():
     # signatures are labeled with the same name
     df_rois_GT = read_audacity_annot(
         str(DATA_PATH / 'cold_forest_daylight_label.txt'))  ## annotations using
+
     # Audacity
     # drop rows with frequency and time outside of tn and fn
     df_rois_GT = df_rois_GT[(df_rois_GT.min_t >= tn.min()) &
                             (df_rois_GT.max_t <= tn.max()) &
                             (df_rois_GT.min_f >= fn.min()) &
                             (df_rois_GT.max_f <= fn.max())]
+
     # format dataframe df_rois in order to convert time and frequency into
     # pixels
     df_rois_GT = format_features(df_rois_GT, tn, fn)
+
     # overlay bounding box on the original spectrogram
     ax1, fig1 = overlay_rois(Sxx_db, df_rois_GT,
                              **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+
     # Compute and visualize centroids
     df_centroid_GT = features.centroid_features(Sxx_db, df_rois_GT)
     df_centroid_GT = format_features(df_centroid_GT, tn, fn)
@@ -126,10 +139,12 @@ def plot_compare_auto_and_manual_rois_selection():
                                      'ms': 2, 'marker': '+', 'color': 'red',
                                      'fig': fig1, 'ax': ax1
                                  })
-    # print informations about the rois
+
+    # print information about the rois
     print('Total number of ROIs: %2.0f' % len(df_rois_GT))
     print('Number of different ROIs: %2.0f' % len(
         np.unique(df_rois_GT['label'])))
+
     # Now we cluster the ROIS depending on 3 ROIS features:
     # - centroid_f: frequency position of the roi centroid
     # - duration_t: duration of the roi
@@ -142,16 +157,21 @@ def plot_compare_auto_and_manual_rois_selection():
     # by KMeans
     from sklearn.cluster import KMeans
     from sklearn.preprocessing import StandardScaler
+
     # select features to perform KMeans clustering
     FEATURES = ['centroid_f', 'duration_t', 'bandwidth_f', 'area_tf']
+
     # Prepare the features in order to have zero mean and same variance
     X = StandardScaler().fit_transform(df_centroid[FEATURES])
+
     # perform KMeans with the same number of clusters as with the manual
     # annotation
     NN_CLUSTERS = len(np.unique(df_rois_GT['label']))
     labels = KMeans(n_clusters=NN_CLUSTERS, random_state=0).fit_predict(X)
+
     # Replace the unknow label by the cluster number predicted by KMeans
     df_centroid['label'] = [str(i) for i in labels]
+
     # overlay color bounding box corresponding to the label, and centroids
     # on the original spectrogram
     ax2, fig2 = overlay_rois(Sxx_db, df_centroid,
@@ -162,6 +182,7 @@ def plot_compare_auto_and_manual_rois_selection():
                                      'ms': 2, 'marker': '+', 'color': 'red',
                                      'fig': fig2, 'ax': ax2
                                  })
+
     # It is possible to extract Rois directly from the audio waveform without
     # computing the spectrogram. This works well if there is no big overlap
     # between
@@ -183,14 +204,17 @@ def plot_compare_auto_and_manual_rois_selection():
                                     th=0.0001)
     df_rois_sl = rois.find_rois_cwt(s, fs, flims=[1800, 3000], tlen=0.2,
                                     th=0.000001)
+
     ## concat df
     df_rois_WAV = pd.concat([df_rois_sh, df_rois_sm, df_rois_lm, df_rois_sl],
                             ignore_index=True)
+
     # drop rows with frequency and time outside of tn and fn
     df_rois_WAV = df_rois_WAV[(df_rois_WAV.min_t >= tn.min()) &
                               (df_rois_WAV.max_t <= tn.max()) &
                               (df_rois_WAV.min_f >= fn.min()) &
                               (df_rois_WAV.max_f <= fn.max())]
+
     # get features: centroid,
     df_rois_WAV = format_features(df_rois_WAV, tn, fn)
     df_centroid_WAV = features.centroid_features(Sxx_db, df_rois_WAV)
@@ -205,12 +229,16 @@ def plot_compare_auto_and_manual_rois_selection():
                                      'ms': 2, 'marker': '+', 'color': 'red',
                                      'fig': fig3, 'ax': ax3
                                  })
+
     # Prepare the features in order to have zero mean and same variance
     X = StandardScaler().fit_transform(df_centroid_WAV[FEATURES])
+
     # perform KMeans with the same number of clusters as with the manual annotation
     labels = KMeans(n_clusters=NN_CLUSTERS, random_state=0).fit_predict(X)
+
     # Replace the unknow label by the cluster number predicted by KMeans
     df_centroid_WAV['label'] = [str(i) for i in labels]
+
     # overlay color bounding box corresponding to the label, and centroids
     # on the original spectrogram
     ax4, fig4 = overlay_rois(Sxx_db, df_centroid_WAV, **{

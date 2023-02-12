@@ -46,8 +46,10 @@ def plot_detection_distance():
     L0 = 80
     L0_per_bin = spl.dBSPL_per_bin(L0, f)
     print(L0_per_bin)
+
     # Distance in m at which the initial sound pressure level is measured
     r0 = 1
+
     # The detection distance is mostly driven by the sound pressure level of
     # the
     # background noise (or ambient sound). Let's define an array with the sound
@@ -58,6 +60,7 @@ def plot_detection_distance():
          19.032034, 33.455814, 44.420644, 19.751421, 11.932672, 9.641225,
          8.075566, 7.447614, 6.991958, 7.854252, 11.911974, 4.192154,
          3.234791, 2.936258])
+
     # We know the initial sound pressure level LO at the distance r0 = 1m as
     # well
     # as the sound pressure level of the background L_bkg, then it is possible
@@ -77,6 +80,7 @@ def plot_detection_distance():
     # to the
     # stridulations of the insects that is very loud. It masks the propagation
     # of the audio signal at a very short distance.
+
     # Define a function to add value labels
     def valuelabel(f, r):
         for i in range(len(f)):
@@ -91,17 +95,22 @@ def plot_detection_distance():
     fig = plt.figure()
     fig.set_figwidth(6)
     fig.set_figheight(4.5)
+
     # Create bars
     y_pos = np.arange(len(f))
     plt.bar(y_pos, r)
+
     # Create names on the x-axis
     plt.xticks(y_pos, f)
     plt.xticks(rotation=45)
+
     # Call function
     valuelabel(f, r)
+
     # Define labels
     plt.ylabel("Detection distance [m]")
     plt.xlabel("Frequency [Hz]")
+
     # Show graphic
     plt.tight_layout()
     plt.grid(axis='y')

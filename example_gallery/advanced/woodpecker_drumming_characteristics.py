@@ -77,6 +77,7 @@ def woodpecker_drumming_characteristics():
     # ----------------
     # Directory where to download the audiofile from xeno-canto
     XC_ROOTDIR = str(DATA_PATH)
+
     # Name of the dataset. This will be used to create a subdir with the
     # same name
     XC_DIR = 'woodpecker_dataset'
@@ -90,6 +91,7 @@ def woodpecker_drumming_characteristics():
             ['Wryneck', 'Jynx torquilla'],
             ['Green', 'Picus viridis'],
             ['Middle Spotted', 'Dendrocoptes medius']]
+
     # Query Xeno-Canto
     # ----------------
     # get the genus and species needed for Xeno-Canto
@@ -100,6 +102,7 @@ def woodpecker_drumming_characteristics():
     for name in df_species['scientific name']:
         gen.append(name.rpartition(' ')[0])
         sp.append(name.rpartition(' ')[2])
+
     # Build the query dataframe with columns paramXXX
     # gen: genus
     # cnt: country
@@ -116,11 +119,13 @@ def woodpecker_drumming_characteristics():
     df_query['param4'] = 'area:europe'
     # df_query['param5 ='len:"5-120"'
     # df_query['param6'] ='q:">C"'
+
     # Get recordings metadata corresponding to the query
     df_dataset = util.xc_multi_query(df_query,
                                      format_time=False,
                                      format_date=False,
                                      verbose=True)
+
     # Download audio Xeno-Canto
     # --------------------------
     # From the metadata that was collected in the previous section,
@@ -132,6 +137,7 @@ def woodpecker_drumming_characteristics():
                                    min_length='00:10',
                                    min_quality='B',
                                    verbose=True)
+
     # download all the audio files into a directory with a subdirectory for
     # each
     # species
@@ -141,10 +147,12 @@ def woodpecker_drumming_characteristics():
                      overwrite=False,
                      save_csv=True,
                      verbose=True)
+
     # Grab all audio filenames in the directory
     # ------------------------------------------
     # create a dataframe with all recordings in the directory
     filelist = grab_audio(XC_ROOTDIR + XC_DIR)
+
     # Create new columns with short filename and species names
     df = pd.DataFrame()
     for file in filelist:
@@ -158,6 +166,7 @@ def woodpecker_drumming_characteristics():
     print('number of files: %2.0f' % len(df))
     print('number of species: %2.0f' % len(df.species.unique()))
     print('=====================================================')
+
     # Process all audio files, species by species
     # --------------------------------------------
     # In this part, all audio file will be processed in order to extract each
@@ -167,13 +176,16 @@ def woodpecker_drumming_characteristics():
     # pulses...
     # store starting time
     start_time = time.time()
+
     # Create an empty dataframe to drummings parameters
     df_drums = pd.DataFrame()
+
     # Loop to extract portion of the dataframe corresponding to a single
     # species
     for species in df.species.unique():
         # get the dataframe corresponding to the current species
         current_df = df[df.species == species]
+
         # Display the current species
         print('\n')
         print(' %s ' % species)
@@ -248,6 +260,7 @@ def woodpecker_drumming_characteristics():
 
                     # convert pulses in sample into seconds
                     pulses = pulses / fs * 32
+
                     # get the relative pulse amplitude
                     pulse_heights = pulses_info['peak_heights']
 
@@ -323,16 +336,20 @@ def woodpecker_drumming_characteristics():
                 '%2.0f%%' % np.round(((idx + 1) / len(current_df) * 100)))
             idx = idx + 1
     print("--- %2.2f minutes ---" % ((time.time() - start_time) / 60))
+
     # drop all rows with NaN
     df_drums = df_drums.dropna()
+
     # Display boxplot
     # ----------------
     # Display a boxplot of the feature "pulseRateMedian" for each species
     plt.style.use('ggplot')
+
     # create a figure
     fig = plt.figure(figsize=(7, 3))
     ax = fig.add_subplot(111)
     n = 0
+
     # loop to build a boxplot for each species based on the feature
     # "pulseRateMedian"
     for species in df_drums.species.unique():
@@ -350,6 +367,7 @@ def woodpecker_drumming_characteristics():
     ax.set_xlim(0, 30)
     plt.tight_layout()
     plt.show()
+
     # Display clusters based on the drummings features
     # -------------------------------------------------
     # A collection of features is associated to each drumming found in the audio
@@ -363,6 +381,7 @@ def woodpecker_drumming_characteristics():
     X = df_drums.drop(columns=['species', 'filename'])
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
+
     # compute the dimensionality reduction
     tsne = TSNE(n_components=2,
                 perplexity=30,
@@ -371,6 +390,7 @@ def woodpecker_drumming_characteristics():
                 n_jobs=-1,
                 verbose=True)
     Y = tsne.fit_transform(X)
+
     # overlay all species
     plt.figure(figsize=(5, 6))
     g = []

@@ -40,6 +40,7 @@ def plot_extract_alpha_indices():
                          'LEQt', 'BGNt', 'SNRt', 'MED', 'Ht', 'ACTtFraction',
                          'ACTtCount',
                          'ACTtMean', 'EVNtFraction', 'EVNtMean', 'EVNtCount']
+
     # We parse the directory were the audio dataset is located in order to
     # get a df with date
     # and fullfilename. As the data were collected with a SM4 audio
@@ -49,6 +50,7 @@ def plot_extract_alpha_indices():
     # from the filename. In case of Audiomoth, the date is coded as Hex in the
     # filename. The path to the audio dataset is "../../data/indices/".
     df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
+
     # remove index => Date becomes a column instead of an index. This is
     # required as df_audio_ind, df_spec_ind and df_spec_ind_per_bin do not have
     # date as index. Then we can concatenate all the dataframe.
@@ -58,9 +60,9 @@ def plot_extract_alpha_indices():
     df_indices = pd.DataFrame()
     df_indices_per_bin = pd.DataFrame()
     for index, row in df.iterrows():
-
         # get the full filename of the corresponding row
         fullfilename = row['file']
+
         # Save file basename
         path, filename = os.path.split(fullfilename)
         print(
@@ -71,7 +73,6 @@ def plot_extract_alpha_indices():
         try:
             wave, fs = sound.load(filename=fullfilename, channel='left',
                                   detrend=True, verbose=False)
-
         except:
             # Delete the row if the file does not exist or raise a value
             # error (i.e. no EOF)
@@ -153,6 +154,7 @@ def plot_extract_alpha_indices():
         df_indices = df_indices.append(pd.concat([df_row,
                                                   df_audio_ind,
                                                   df_spec_ind], axis=1))
+
         # add vector indices into the df_indices_per_bin dataframe
         df_indices_per_bin = df_indices_per_bin.append(pd.concat([df_row,
                                                                   df_spec_ind_per_bin],
@@ -160,6 +162,7 @@ def plot_extract_alpha_indices():
     # Set back Date as index
     df_indices = df_indices.set_index('Date')
     df_indices_per_bin = df_indices_per_bin.set_index('Date')
+
     # Display results
     # ---------------
     # After calculating all alpha indices (in audio and spectral domain), let's
@@ -170,11 +173,13 @@ def plot_extract_alpha_indices():
     # indices
     # set the threshold to 0.75 for instance.
     fig, ax = plot_correlation_map(df_indices, R_threshold=0)
+
     # A graphical way to have a quick overview of the indices variation during
     # a 24h cycle consists in plotting heatmaps of indices
     # For a better view, we seperate spectral and audio indices.
     plot_features_map(df_indices[SPECTRAL_FEATURES], mode='24h')
     plot_features_map(df_indices[TEMPORAL_FEATURES], mode='24h')
+
     # A more classical way to analyse variations of indices consists in
     # plotting
     # graphs. We choose to normalize rescale their value between 0 to 1 in
@@ -194,6 +199,7 @@ def plot_extract_alpha_indices():
                                   ax=ax[2, 0])
     fig, ax[2, 1] = plot_features(df_indices[['ROItotal']], norm=True,
                                   mode='24h', ax=ax[2, 1])
+
     # Create false color spectrograms with 3 indices
     fcs, triplet = false_Color_Spectro(df_indices_per_bin,
                                        indices=['KURTt_per_bin',
@@ -204,6 +210,7 @@ def plot_extract_alpha_indices():
                                        permut=False,
                                        display=True,
                                        figsize=(4, 7))
+
     # References
     # ----------
     # 1. Sueur, J., Farina, A., Gasc, A., Pieretti, N., & Pavoine, S. (2014). Acoustic Indices for Biodiversity Assessment and Landscape Investigation. Acta Acustica United with Acustica, 100(4), 772–781. https://doi.org/10.3813/AAA.918757

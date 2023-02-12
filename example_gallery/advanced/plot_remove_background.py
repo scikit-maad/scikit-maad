@@ -41,6 +41,7 @@ def plot_remove_background():
     plot2d(Sxx_dB, extent=ext, title='original',
            vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB) + 40)
     print("Original sharpness: %2.3f" % sharpness(Sxx_dB))
+
     # Test different methods to remove stationary background noise
     # ------------------------------------------------------------
     # Test the function "remove_background"
@@ -52,6 +53,7 @@ def plot_remove_background():
     print("sharpness: %2.3f" % sharpness(X1))
     plot2d(X1, extent=ext, title='remove_background',
            vmin=np.median(X1), vmax=np.median(X1) + 40)
+
     # Test the function "median_equalizer"
     start = timer()
     X2 = median_equalizer(Sxx)
@@ -62,6 +64,7 @@ def plot_remove_background():
     print("sharpness: %2.3f" % sharpness(X2))
     plot2d(X2, extent=ext, title='median_equalizer',
            vmin=np.median(X2), vmax=np.median(X2) + 40)
+
     # Test the function "remove_background_morpho"
     start = timer()
     X3, noise_profile3, _ = remove_background_morpho(Sxx_dB, q=0.95)
@@ -71,6 +74,7 @@ def plot_remove_background():
     print("sharpness: %2.3f" % sharpness(X3))
     plot2d(X3, extent=ext, title='remove_background_morpho',
            vmin=np.median(X3), vmax=np.median(X3) + 40)
+
     # Test the function "remove_background_along_axis"
     start = timer()
     X4, noise_profile4 = remove_background_along_axis(Sxx_dB, mode='median',

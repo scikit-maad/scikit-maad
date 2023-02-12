@@ -26,6 +26,7 @@ def plot_find_rois_simple():
     Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
     plot_spectrogram(Sxx, extent=ext, db_range=60, gain=20, colorbar=False,
                      figsize=(2.5, 10))
+
     # Detect the bouncy trill
     # -----------------------
     # The accelerating trill is the song of a small neotropical bird,
@@ -38,6 +39,7 @@ def plot_find_rois_simple():
     df_trill = find_rois_cwt(s, fs, flims=(4500, 8000), tlen=2, th=0,
                              display=True, figsize=(10, 6))
     print(df_trill)
+
     # Detect the fast descending chirp
     # --------------------------------
     # Alternatively, the fast descending chirp (unknown species) can be

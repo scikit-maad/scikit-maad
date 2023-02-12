@@ -26,6 +26,7 @@ def plot_template_matching():
     # for both signals in order to get adecuate results. For simplicity,
     # we will take the template from the same target audio signal, but the
     # template can be loaded from another file.
+
     # Set spectrogram parameters
     tlims = (9.8, 10.5)
     flims = (6000, 12000)
@@ -33,16 +34,20 @@ def plot_template_matching():
     noverlap = 512
     window = 'hann'
     db_range = 80
+
     # load data
     s, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
+
     # Compute spectrogram for template signal
     Sxx_template, _, _, _ = sound.spectrogram(s, fs, window, nperseg, noverlap,
                                               flims, tlims)
     Sxx_template = util.power2dB(Sxx_template, db_range)
+
     # Compute spectrogram for target audio
     Sxx_audio, tn, fn, ext = sound.spectrogram(s, fs, window, nperseg,
                                                noverlap, flims)
     Sxx_audio = util.power2dB(Sxx_audio, db_range)
+
     # Compute the cross-correlation of spectrograms and find peaks in the
     # resulting signal using the `template matching` function. The
     # template_matching functions gives temporal information on the location
@@ -53,6 +58,7 @@ def plot_template_matching():
     rois['min_f'] = flims[0]
     rois['max_f'] = flims[1]
     print(rois)
+
     # Finally, you can plot the detection results or save them as a csv file.
     Sxx, tn, fn, ext = sound.spectrogram(s, fs, window, nperseg, noverlap)
     fig, ax = plt.subplots(2, 1, figsize=(8, 5), sharex=True)

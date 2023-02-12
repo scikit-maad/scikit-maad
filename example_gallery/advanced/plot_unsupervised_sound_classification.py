@@ -30,6 +30,7 @@ def plot_unsupervised_sound_classification():
                                          noverlap=512)
     Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
     plot2d(Sxx_db, **{'extent': ext})
+
     # 1. Find regions of interest
     # ---------------------------
     # To find regions of interest in the spectrogram, we will remove
@@ -41,10 +42,12 @@ def plot_unsupervised_sound_classification():
     im_mask = rois.create_mask(im=Sxx_db_smooth, mode_bin='relative',
                                bin_std=2, bin_per=0.25)
     im_rois, df_rois = rois.select_rois(im_mask, min_roi=50, max_roi=None)
+
     # Format ROIs and visualize the bounding box on the audio spectrogram.
     df_rois = format_features(df_rois, tn, fn)
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
                              **{'vmin': 0, 'vmax': 60, 'extent': ext})
+
     # 2. Compute acoustic features
     # ----------------------------
     # The ``shape_feaures`` function uses bidimensional wavelets to get the
@@ -58,9 +61,11 @@ def plot_unsupervised_sound_classification():
     df_shape, params = features.shape_features(Sxx_db, resolution='low',
                                                rois=df_rois)
     df_centroid = features.centroid_features(Sxx_db, df_rois)
+
     # Get median frequency and normalize
     median_freq = fn[np.round(df_centroid.centroid_y).astype(int)]
     df_centroid['centroid_freq'] = median_freq / fn[-1]
+
     # 3. Reduce the dimensionality of the features
     # --------------------------------------------
     # The shape audio features have 26 dimensions. To facilitate the
@@ -77,6 +82,7 @@ def plot_unsupervised_sound_classification():
     ax.scatter(Y[:, 0], Y[:, 1], c='gray', alpha=0.8)
     ax.set_xlabel('tsne dim 1')
     ax.set_ylabel('tsne dim 2')
+
     # 4. Cluster the ROIs into homogeneous groups.
     # --------------------------------------------
     # In the above plot it is possible to observe how sounds are aggregated.
@@ -89,6 +95,7 @@ def plot_unsupervised_sound_classification():
     from sklearn.cluster import DBSCAN
     cluster = DBSCAN(eps=5, min_samples=4).fit(Y)
     print('Number of soundtypes found:', np.unique(cluster.labels_).size)
+
     # Visualize the clustering results
     from maad.util import rand_cmap
     fig, ax = plt.subplots()
@@ -96,10 +103,12 @@ def plot_unsupervised_sound_classification():
                cmap=rand_cmap(5, first_color_black=False), alpha=0.8)
     ax.set_xlabel('tsne dim 1')
     ax.set_ylabel('tsne dim 2')
+
     # Overlay bounding box on the original spectrogram
     df_rois['label'] = cluster.labels_.astype(str)
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
                              **{'vmin': 0, 'vmax': 60, 'extent': ext})
+
     # References
     # -----------
     # 1. Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur,

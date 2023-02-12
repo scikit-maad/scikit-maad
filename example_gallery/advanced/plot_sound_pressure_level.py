@@ -42,6 +42,7 @@ def plot_sound_pressure_level():
     S = -35  # Sensibility of the microphone -35dBV (SM4) / -18dBV (Audiomoth)
     G = 26 + 16  # Total amplification gain in dB (SM4 has a +26dB
     # preamplifier)
+
     VADC = 2  # Voltage range of the analog to digital converter (ADC)
     # First, we parse the directory /indices in order to get a DataFrame
     # with date
@@ -53,6 +54,7 @@ def plot_sound_pressure_level():
     # filename.
     df = util.date_parser("../../data/indices/", dateformat='SM4',
                           verbose=True)
+
     # Load and preprocess audio
     # -------------------------
     # Then we process all the files found in the directory /indices.
@@ -60,6 +62,7 @@ def plot_sound_pressure_level():
     # values
     # extracted from the whole audio dataset.
     df_spl = pd.DataFrame()
+
     # Main loop to go through all audio files
     for index, row in df.iterrows():
 
@@ -81,7 +84,6 @@ def plot_sound_pressure_level():
         try:
             wave, fs = sound.load(filename=fullfilename, channel='left',
                                   detrend=True, verbose=False)
-
         except:
             # Delete the row if the file does not exist or raise a value
             # error (i.e. no EOF)
@@ -166,7 +168,6 @@ def plot_sound_pressure_level():
                                        '10-11kHz',
                                        ])
 
-        # %%
         """ 
         =======================================================================
                          Create a dataframe
@@ -182,8 +183,10 @@ def plot_sound_pressure_level():
 
         #### add Leq values into the df_spl dataframe
         df_spl = df_spl.append(pd.concat([df_row, df_leq], axis=1))
+
     #### When the loop ends, set Date as index
     df_spl = df_spl.set_index('Date')
+
     # Display results
     # ---------------
     # Display Leq (dB SPL) dynamics for each frequency band.
@@ -203,6 +206,7 @@ def plot_sound_pressure_level():
     plt.xlabel('Hours')
     plt.ylabel('Frequency')
     plt.tight_layout()
+
     # Display the comparison between the dynamics of the Leq (dB SPL) corresponding
     # mainly to the anthropophony (frequency band 0-1kHz) and the biophony
     # (frequency band 1-12kHz)

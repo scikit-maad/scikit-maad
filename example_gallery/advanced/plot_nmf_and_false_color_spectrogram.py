@@ -44,6 +44,7 @@ def plot_nmf_and_false_color_spectrogram():
     Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True,
                                multichannel=False)  # rescale for faster
     # computation
+
     plot2d(Sxx_db, figsize=(4, 10), extent=ext)
     # Filter the spectrogram with 2D wavelets
     # ---------------------------------------
@@ -54,10 +55,13 @@ def plot_nmf_and_false_color_spectrogram():
     # spectrogram into
     # elementary basis spectrograms.
     shape_im, params = features.shape_features_raw(Sxx_db, resolution='low')
+
     # Format the output as an array for decomposition
     X = np.array(shape_im).reshape([len(shape_im), Sxx_db.size]).transpose()
+
     # Decompose signal using non-negative matrix factorization
     Y = NMF(n_components=3, init='random', random_state=0).fit_transform(X)
+
     # Arrange into RGBA color model
     # -----------------------------
     # Normalize the data and combine the three NMF basis spectrograms and the
@@ -70,6 +74,7 @@ def plot_nmf_and_false_color_spectrogram():
     intensity = 1 - (Sxx_db - Sxx_db.min()) / (Sxx_db.max() - Sxx_db.min())
     plt_data = Y.reshape([Sxx_db.shape[0], Sxx_db.shape[1], 3])
     plt_data = np.dstack((plt_data, intensity))
+
     # Visualize output
     # ----------------
     # Finally, plot the resulting basis spectrogram as separate elements and
@@ -81,6 +86,7 @@ def plot_nmf_and_false_color_spectrogram():
                   interpolation='bilinear')
         ax.set_axis_off()
         ax.set_title('Basis ' + str(idx + 1))
+
     # The first basis spectrogram shows fine and rapid modulations of the
     # signal.
     # Both signals have these features and hence both are delineated in this
@@ -100,7 +106,7 @@ def plot_nmf_and_false_color_spectrogram():
                  interpolation='bilinear')
     ax[1].set_axis_off()
     ax[1].set_title('False-color spectrogram')
-    #
+
     # **References**
     # [1] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation
     # invariant scattering for texture discrimination. Computer Vision and
