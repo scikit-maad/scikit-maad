@@ -42,19 +42,18 @@ def plot_extract_alpha_indices():
                          'ACTtMean', 'EVNtFraction', 'EVNtMean', 'EVNtCount']
 
     # We parse the directory were the audio dataset is located in order to
-    # get a df with date
-    # and fullfilename. As the data were collected with a SM4 audio
-    # recording device
-    # we set the dateformat agument to 'SM4' in order to be able to parse
-    # the date
-    # from the filename. In case of Audiomoth, the date is coded as Hex in the
-    # filename. The path to the audio dataset is "../../data/indices/".
+    # get a df with date and full filename. As the data were collected with a
+    # SM4 audio recording device we set the dateformat agument to 'SM4' in
+    # order to be able to parse the date from the filename. In case of
+    # Audiomoth, the date is coded as Hex in the filename. The path to the
+    # audio dataset is "../../data/indices/".
     df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 
     # remove index => Date becomes a column instead of an index. This is
     # required as df_audio_ind, df_spec_ind and df_spec_ind_per_bin do not have
     # date as index. Then we can concatenate all the dataframe.
     # df = df.reset_index()
+
     # Batch compute acoustic indices on the audio dataset
     # ---------------------------------------------------
     df_indices = pd.DataFrame()
@@ -69,11 +68,11 @@ def plot_extract_alpha_indices():
             '\n**************************************************************')
         print(filename)
 
-        #### Load the original sound (16bits) and get the sampling frequency fs
+        # Load the original sound (16bits) and get the sampling frequency fs
         try:
             wave, fs = sound.load(filename=fullfilename, channel='left',
                                   detrend=True, verbose=False)
-        except:
+        except Exception:
             # Delete the row if the file does not exist or raise a value
             # error (i.e. no EOF)
             df.drop(index, inplace=True)
@@ -82,16 +81,16 @@ def plot_extract_alpha_indices():
         """ 
         =======================================================================
                          Computation in the time domain
-        ========================================================================"""
+        =======================================================================
+        """
 
         # Parameters of the audio recorder. This is not a mandatory but it
-        # allows
-        # to compute the sound pressure level of the audio file (dB SPL) as a
-        # sonometer would do.
+        # allows to compute the sound pressure level of the audio file (dB
+        # SPL) as a sonometer would do.
         S = -35  # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)
         G = 26 + 16  # Amplification gain (26dB (SM4 preamplifier))
 
-        # compute all the audio indices and store them into a DataFrame
+        # Compute all the audio indices and store them into a DataFrame
         # dB_threshold and rejectDuration are used to select audio events.
         df_audio_ind = features.all_temporal_alpha_indices(wave, fs,
                                                            gain=G,
@@ -104,7 +103,8 @@ def plot_extract_alpha_indices():
         """ 
         =======================================================================
                          Computation in the frequency domain
-        ========================================================================"""
+        =======================================================================
+        """
 
         # Compute the Power Spectrogram Density (PSD): Sxx_power
         Sxx_power, tn, fn, ext = sound.spectrogram(wave, fs, window='hann',
@@ -114,16 +114,13 @@ def plot_extract_alpha_indices():
                                                    display=False,
                                                    savefig=None)
 
-        # compute all the spectral indices and store them into a DataFrame
+        # Compute all the spectral indices and store them into a DataFrame
         # flim_low, flim_mid, flim_hi corresponds to the frequency limits in Hz
-        # that are required to compute somes indices (i.e. NDSI)
-        # if R_compatible is set to 'soundecology', then the output are
-        # similar to
-        # soundecology R package.
-        # mask_param1 and mask_param2 are two parameters to find the regions of
-        # interest (ROIs). These parameters need to be adapted to the
-        # dataset in
-        # order to select ROIs
+        # that are required to compute somes indices (i.e. NDSI). If
+        # R_compatible is set to 'soundecology', then the output are
+        # similar to soundecology R package. mask_param1 and mask_param2
+        # are two parameters to find the regions of interest (ROIs). These
+        # parameters need to be adapted to the dataset in order to select ROIs.
         df_spec_ind, df_spec_ind_per_bin = features.all_spectral_alpha_indices(
             Sxx_power,
             tn, fn,
@@ -140,11 +137,12 @@ def plot_extract_alpha_indices():
         """ 
         =======================================================================
                          Create a dataframe
-        ========================================================================"""
+        =======================================================================
+        """
+
         # First, we create a dataframe from row that contains the date and the
-        # full filename. This is done by creating a DataFrame from row (ie.
-        # TimeSeries)
-        # then transposing the DataFrame.
+        # full filename. This is done by creating a DataFrame from row (i.e.
+        # TimeSeries) then transposing the DataFrame.
         df_row = pd.DataFrame(row)
         df_row = df_row.T
         df_row.index.name = 'Date'
@@ -166,25 +164,21 @@ def plot_extract_alpha_indices():
     # Display results
     # ---------------
     # After calculating all alpha indices (in audio and spectral domain), let's
-    # have a look to the data.
-    # First, plot correlation map of all indices. We set the R threshold to
-    # 0 in
-    # order to have everything. If you want to focus on highly correlated
-    # indices
-    # set the threshold to 0.75 for instance.
+    # have a look to the data. First, plot correlation map of all indices.
+    # We set the R threshold to 0 in order to have everything. If you want
+    # to focus on highly correlated indices set the threshold to 0.75 for
+    # instance.
     fig, ax = plot_correlation_map(df_indices, R_threshold=0)
 
     # A graphical way to have a quick overview of the indices variation during
-    # a 24h cycle consists in plotting heatmaps of indices
-    # For a better view, we seperate spectral and audio indices.
+    # a 24h cycle consists in plotting heatmaps of indices. For a better
+    # view, we separate spectral and audio indices.
     plot_features_map(df_indices[SPECTRAL_FEATURES], mode='24h')
     plot_features_map(df_indices[TEMPORAL_FEATURES], mode='24h')
 
     # A more classical way to analyse variations of indices consists in
-    # plotting
-    # graphs. We choose to normalize rescale their value between 0 to 1 in
-    # order to
-    # compare their trend during a 24h cycle
+    # plotting graphs. We choose to normalize rescale their value between 0
+    # and 1 in order to compare their trend during a 24h cycle
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(3, 2, sharex=True, squeeze=True, figsize=(5, 5))
     fig, ax[0, 0] = plot_features(df_indices[['Hf']], norm=True, mode='24h',

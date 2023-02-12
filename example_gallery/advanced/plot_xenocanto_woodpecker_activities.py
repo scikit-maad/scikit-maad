@@ -76,6 +76,7 @@ def plot_xenocanto_woodpecker_activities():
     # len: length of the audio file (len_lt => length lower than;
     #                                 len_gt => length greater than )
     # and type: type of sound: 'song' or 'call' or 'drumming'
+    #
     # Please have a look here to know all the parameters and how to use them:
     # https://xeno-canto.org/help/search
     df_query = pd.DataFrame()
@@ -94,15 +95,14 @@ def plot_xenocanto_woodpecker_activities():
     # -----------------------------------------------------------------------
     # Using the metadata collected from Xeno-Canto, we create a new dataframe
     # containing the number of files per species and per time slot (30
-    # mins). The
-    # goal is to create a dataframe with diel pattern of activity for all
-    # species
-    # with a time resolution of 30 mins.
-    # make a copy of the dataset to avoid any modification of the original
+    # mins). The goal is to create a dataframe with diel pattern of activity
+    # for all species with a time resolution of 30 mins.
+
+    # Copy the dataset to avoid any modification of the original
     # dataset
     df = df_dataset.copy()
 
-    # remove all rows where data is missing (NA)
+    # Remove all rows where data is missing (NA)
     df.dropna(subset=['time'], inplace=True)
 
     # Convert time into datetime
@@ -119,7 +119,7 @@ def plot_xenocanto_woodpecker_activities():
         df_temp['species'] = species
         df_count = df_count.append(df_temp)
 
-    # create a column with time only
+    # Create a column with time only
     df_count['time'] = df_count.index.strftime('%H:%M')
 
     # Creation of a dataframe with the number of files per species per week
@@ -128,8 +128,8 @@ def plot_xenocanto_woodpecker_activities():
     # containing the number of files per species and per week. The goal is to
     # create a dataframe with annual pattern of activity for all species
     # with a week (7 days) resolution.
-    # make a copy of the dataset to avoid any modification of the original
-    # dataset
+
+    # Copy the dataset to avoid any modification of the original dataset
     df = df_dataset.copy()
 
     # remove all rows where data is missing (NA)
@@ -150,7 +150,7 @@ def plot_xenocanto_woodpecker_activities():
 
     # Display a heatmap of diel activity
     # ----------------------------------
-    # make a copy of the dataset to avoid any modification of the original
+    # Copy the dataset to avoid any modification of the original
     # dataset
     df = df_count.copy()
 
@@ -178,9 +178,8 @@ def plot_xenocanto_woodpecker_activities():
                     df['count'] >= aa[idx[0]]), 'count'] = 1
 
     # Display the heatmap to see when (time of the day) the woodpeckers are
-    # active.
-    # Woodpeckers are the most active during the morning, between 6:00am till
-    # 10:00am.
+    # active. Woodpeckers are the most active during the morning, between
+    # 6:00am till 10:00am.
     df = df.pivot('species', 'time', "count")
     df = df.fillna(0)
 
@@ -211,11 +210,11 @@ def plot_xenocanto_woodpecker_activities():
 
     # Display a heatmap of annual activity with week resolution
     # ---------------------------------------------------------
-    # make a copy of the dataset to avoid any modification of the original
+    # Copy the dataset to avoid any modification of the original
     # dataset
     df = df_week_count.copy()
 
-    # create a new dataframe with the normalized number of audio files per week
+    # Create a new dataframe with the normalized number of audio files per week
     for species in list_species:
         df.loc[df['species'] == species, 'count'] = (
                     df[df['species'] == species]['count']
@@ -224,7 +223,7 @@ def plot_xenocanto_woodpecker_activities():
 
     # Display the heatmap to see when (annually) the woodpeckers are active.
     # Woodpeckers are the most active during the winter and beginning of spring
-    # (Februrary to April).
+    # (February to April).
     df = df.pivot('species', 'week', "count")
     df = df.fillna(0)
 

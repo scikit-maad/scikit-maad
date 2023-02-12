@@ -25,7 +25,9 @@ def plot_unsupervised_sound_classification():
     s, fs = sound.load(str(DATA_PATH / 'rock_savanna.wav'))
     s_filt = sound.select_bandwidth(s, fs, fcut=100, forder=3,
                                     ftype='highpass')
+
     db_max = 70  # used to define the range of the spectrogram
+
     Sxx, tn, fn, ext = sound.spectrogram(s_filt, fs, nperseg=1024,
                                          noverlap=512)
     Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
@@ -69,9 +71,9 @@ def plot_unsupervised_sound_classification():
     # 3. Reduce the dimensionality of the features
     # --------------------------------------------
     # The shape audio features have 26 dimensions. To facilitate the
-    # clustering process and visualize the results, it is posible to use
+    # clustering process and visualize the results, it is possible to use
     # non-metric dimensionality reduction algorithm, namely the
-    # t-distributed stochastic neighbor embedding (t-SNE), to proyect the
+    # t-distributed stochastic neighbor embedding (t-SNE), to project the
     # data in two dimensions.
     from sklearn.manifold import TSNE
     X = df_shape.loc[:, df_shape.columns.str.startswith('shp')]
@@ -86,7 +88,7 @@ def plot_unsupervised_sound_classification():
     # 4. Cluster the ROIs into homogeneous groups.
     # --------------------------------------------
     # In the above plot it is possible to observe how sounds are aggregated.
-    # It is posible to group these samples rapidly and objectively using a
+    # It is possible to group these samples rapidly and objectively using a
     # clustering algorithm. Here, we will use DBSCAN, a simple algorithm
     # that allows to find core samples with high density and expands
     # clusters from them. This algorithm has the advantage to find

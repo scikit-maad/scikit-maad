@@ -50,10 +50,8 @@ def plot_nmf_and_false_color_spectrogram():
     # ---------------------------------------
     # Compute feature with ``shape_features_raw`` to get the raw output of the
     # spectrogram filtered by the filterbank composed of 2D Gabor wavelets.
-    # This
-    # raw output can be fed to the NMF algorithm to decompose the
-    # spectrogram into
-    # elementary basis spectrograms.
+    # This raw output can be fed to the NMF algorithm to decompose the
+    # spectrogram into elementary basis spectrograms.
     shape_im, params = features.shape_features_raw(Sxx_db, resolution='low')
 
     # Format the output as an array for decomposition
@@ -66,10 +64,8 @@ def plot_nmf_and_false_color_spectrogram():
     # -----------------------------
     # Normalize the data and combine the three NMF basis spectrograms and the
     # intensity spectrogram into a single array to fit the RGBA color model.
-    # RGBA
-    # stands for Red, Green, Blue and Alpha, where alpha indicates how
-    # opaque each
-    # pixel is.
+    # RGBA stands for Red, Green, Blue and Alpha, where alpha indicates how
+    # opaque each pixel is.
     Y = MinMaxScaler(feature_range=(0, 1)).fit_transform(Y)
     intensity = 1 - (Sxx_db - Sxx_db.min()) / (Sxx_db.max() - Sxx_db.min())
     plt_data = Y.reshape([Sxx_db.shape[0], Sxx_db.shape[1], 3])
@@ -88,15 +84,12 @@ def plot_nmf_and_false_color_spectrogram():
         ax.set_title('Basis ' + str(idx + 1))
 
     # The first basis spectrogram shows fine and rapid modulations of the
-    # signal.
-    # Both signals have these features and hence both are delineated in this
-    # basis. The second basis highlights the short calls on the background,
-    # and the
-    # third component highlights the longer vocalizations of the spinetail.
-    # The three components can be mixed up to compose a false-colour
-    # spectrogram
-    # where it can be easily distinguished the different sound sources by
-    # color.
+    # signal. Both signals have these features and hence both are delineated
+    # in this basis. The second basis highlights the short calls on the
+    # background, and the third component highlights the longer
+    # vocalizations of the spinetail. The three components can be mixed up
+    # to compose a false-colour spectrogram where it can be easily
+    # distinguished the different sound sources by color.
     fig, ax = plt.subplots(2, 1, figsize=(10, 6))
     ax[0].imshow(Sxx_db, origin='lower', aspect='auto',
                  interpolation='bilinear', cmap='gray')

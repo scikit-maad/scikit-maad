@@ -35,39 +35,29 @@ def plot_compare_auto_and_manual_rois_selection():
                                                noverlap=1024 // 2)
 
     # Convert the power spectrogram into dB, add dB_max which is the maximum
-    # decibel
-    # range when quantification bit is 16bits and display the result
+    # decibel range when quantification bit is 16bits and display the result
     Sxx_db = power2dB(Sxx_power) + dB_max
     plot2d(Sxx_db, **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
 
     # Then, relevant acoustic events are extracted directly from the power
     # spectrogram based on a double thresholding technique. The result is
-    # binary
-    # image called a mask. Double thresholding technique is more
-    # sophisticated than
-    # basic thresholding based on a single value. First, a threshold selects
-    # pixels
-    # with high value (i.e. high acoustic energy). They should belong to an
-    # acoustic
-    # event. They are called seeds. From these seeds, we aggregate pixels
-    # connected
-    # to the seed with value higher than the second threslhold. These new
-    # pixels
-    # become seed and the aggregating process continue until no more new
-    # pixels are
+    # binary image called a mask. Double thresholding technique is more
+    # sophisticated than basic thresholding based on a single value. First,
+    # a threshold selects pixels with high value (i.e. high acoustic
+    # energy). They should belong to an acoustic event. They are called seeds.
+    # From these seeds, we aggregate pixels connected to the seed with value
+    # higher than the second threslhold. These new pixels become seed and
+    # the aggregating process continue until no more new pixels are
     # aggregated, meaning that there is no more connected pixels with value
-    # upper
-    # than the second threshold value.
-    # First we remove the stationary background in order to increase the
-    # contrast [1]
-    # Then we convert the spectrogram into dB
+    # upper than the second threshold value. First we remove the stationary
+    # background in order to increase the contrast [1] Then we convert the
+    # spectrogram into dB
     Sxx_power_noNoise = sound.median_equalizer(Sxx_power, display=True,
                                                **{'extent': ext})
     Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
 
     # Then we smooth the spectrogram in order to facilitate the creation of
-    # masks as
-    # small sparse details are merged if they are close to each other
+    # masks as small sparse details are merged if they are close to each other
     Sxx_db_noNoise_smooth = sound.smooth(Sxx_db_noNoise, std=0.5,
                                          display=True, savefig=None,
                                          **{
@@ -81,9 +71,8 @@ def plot_compare_auto_and_manual_rois_selection():
                                bin_std=8, bin_per=0.5,
                                verbose=False, display=False)
 
-    # Finaly, we put together pixels that belong to the same acoustic event,
-    # and
-    # remove very small events (<=25 pixel²)
+    # Finally, we put together pixels that belong to the same acoustic event,
+    # and remove very small events (<=25 pixel²)
     im_rois, df_rois = rois.select_rois(im_mask, min_roi=25, max_roi=None,
                                         display=True,
                                         **{'extent': ext})
@@ -108,25 +97,24 @@ def plot_compare_auto_and_manual_rois_selection():
                                  })
 
     # Let's compare with the manual annotation (Ground Truth GT) obtained with
-    # Audacity software.
-    # Each acoustic signature is manually selected and labeled. All similar
-    # acoustic
-    # signatures are labeled with the same name
+    # Audacity software. Each acoustic signature is manually selected and
+    # labeled. All similar acoustic signatures are labeled with the same name
     df_rois_GT = read_audacity_annot(
         str(DATA_PATH / 'cold_forest_daylight_label.txt'))  ## annotations using
 
     # Audacity
-    # drop rows with frequency and time outside of tn and fn
+
+    # Drop rows with frequency and time outside of tn and fn
     df_rois_GT = df_rois_GT[(df_rois_GT.min_t >= tn.min()) &
                             (df_rois_GT.max_t <= tn.max()) &
                             (df_rois_GT.min_f >= fn.min()) &
                             (df_rois_GT.max_f <= fn.max())]
 
-    # format dataframe df_rois in order to convert time and frequency into
+    # Format dataframe df_rois in order to convert time and frequency into
     # pixels
     df_rois_GT = format_features(df_rois_GT, tn, fn)
 
-    # overlay bounding box on the original spectrogram
+    # Overlay bounding box on the original spectrogram
     ax1, fig1 = overlay_rois(Sxx_db, df_rois_GT,
                              **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
 
@@ -140,25 +128,23 @@ def plot_compare_auto_and_manual_rois_selection():
                                      'fig': fig1, 'ax': ax1
                                  })
 
-    # print information about the rois
+    # Print information about the rois
     print('Total number of ROIs: %2.0f' % len(df_rois_GT))
     print('Number of different ROIs: %2.0f' % len(
         np.unique(df_rois_GT['label'])))
 
     # Now we cluster the ROIS depending on 3 ROIS features:
-    # - centroid_f: frequency position of the roi centroid
-    # - duration_t: duration of the roi
-    # - bandwidth_f: frequency bandwidth of the roi
+    # -   centroid_f: frequency position of the roi centroid
+    # -   duration_t: duration of the roi
+    # -   bandwidth_f: frequency bandwidth of the roi
     # The clustering is done by the so-called KMeans clustering algorithm.
     # The number of attended clustering is the number of clusters found with
-    # manual annotation.
-    # Finally, each rois is labeled with the corresponding cluster number
-    # predicted
-    # by KMeans
+    # manual annotation. Finally, each rois is labeled with the
+    # corresponding cluster number predicted by KMeans
     from sklearn.cluster import KMeans
     from sklearn.preprocessing import StandardScaler
 
-    # select features to perform KMeans clustering
+    # Select features to perform KMeans clustering
     FEATURES = ['centroid_f', 'duration_t', 'bandwidth_f', 'area_tf']
 
     # Prepare the features in order to have zero mean and same variance
@@ -185,16 +171,13 @@ def plot_compare_auto_and_manual_rois_selection():
 
     # It is possible to extract Rois directly from the audio waveform without
     # computing the spectrogram. This works well if there is no big overlap
-    # between
-    # each acoustic signature and you
-    # First, we have to define the frequency bandwidth where to find
-    # acoustic events
-    # In our example, there are clearly 3 frequency bandwidths (low : l,
-    # medium:m
-    # and high : h).
-    # We know that we have mostly short (ie. s) acoustic events in low,
-    # med and high
-    # frequency bandwidths but also a long (ie l) acoustic events in med.
+    # between each acoustic signature and you. First, we have to define the
+    # frequency bandwidth where to find acoustic events. In our example,
+    # there are clearly 3 frequency bandwidths (low : l, medium:m, and high
+    # : h). We know that we have mostly short (i.e. s) acoustic events in low,
+    # med and high frequency bandwidths but also a long (ie l) acoustic
+    # events in med.
+
     # To extract
     df_rois_sh = rois.find_rois_cwt(s, fs, flims=[7000, 8000], tlen=0.2,
                                     th=0.000001)
@@ -233,7 +216,8 @@ def plot_compare_auto_and_manual_rois_selection():
     # Prepare the features in order to have zero mean and same variance
     X = StandardScaler().fit_transform(df_centroid_WAV[FEATURES])
 
-    # perform KMeans with the same number of clusters as with the manual annotation
+    # perform KMeans with the same number of clusters as with the manual
+    # annotation
     labels = KMeans(n_clusters=NN_CLUSTERS, random_state=0).fit_predict(X)
 
     # Replace the unknow label by the cluster number predicted by KMeans

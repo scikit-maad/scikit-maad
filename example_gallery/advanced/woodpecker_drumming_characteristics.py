@@ -110,6 +110,7 @@ def woodpecker_drumming_characteristics():
     # q: quality
     # len: length of the audio file
     # and type: type of sound: 'song' or 'call' or 'drumming'
+    #
     # Please have a look here to know all the parameters and how to use them:
     # https://xeno-canto.org/help/search
     df_query = pd.DataFrame()
@@ -128,9 +129,8 @@ def woodpecker_drumming_characteristics():
 
     # Download audio Xeno-Canto
     # --------------------------
-    # From the metadata that was collected in the previous section,
-    # select a maximum of 20 files per species, regarding the quality and
-    # the length
+    # From the metadata that was collected in the previous section, select a
+    # maximum of 20 files per species, regarding the quality and the length.
     df_dataset = util.xc_selection(df_dataset,
                                    max_nb_files=20,
                                    max_length='01:00',
@@ -138,9 +138,8 @@ def woodpecker_drumming_characteristics():
                                    min_quality='B',
                                    verbose=True)
 
-    # download all the audio files into a directory with a subdirectory for
-    # each
-    # species
+    # Download all the audio files into a directory with a subdirectory for
+    # each species
     util.xc_download(df_dataset,
                      rootdir=XC_ROOTDIR,
                      dataset_name=XC_DIR,
@@ -150,7 +149,7 @@ def woodpecker_drumming_characteristics():
 
     # Grab all audio filenames in the directory
     # ------------------------------------------
-    # create a dataframe with all recordings in the directory
+    # Create a dataframe with all recordings in the directory
     filelist = grab_audio(XC_ROOTDIR + XC_DIR)
 
     # Create new columns with short filename and species names
@@ -170,11 +169,11 @@ def woodpecker_drumming_characteristics():
     # Process all audio files, species by species
     # --------------------------------------------
     # In this part, all audio file will be processed in order to extract each
-    # drumming portion separately.
-    # Then pulses are automaticaly detected for each drumming before computing
-    # drumming parameters such as median pulse rate, duration, number of
-    # pulses...
-    # store starting time
+    # drumming portion separately. Then pulses are automaticaly detected for
+    # each drumming before computing drumming parameters such as median
+    # pulse rate, duration, number of pulses...
+
+    # Store starting time
     start_time = time.time()
 
     # Create an empty dataframe to drummings parameters
@@ -337,7 +336,7 @@ def woodpecker_drumming_characteristics():
             idx = idx + 1
     print("--- %2.2f minutes ---" % ((time.time() - start_time) / 60))
 
-    # drop all rows with NaN
+    # Drop all rows with NaN
     df_drums = df_drums.dropna()
 
     # Display boxplot
@@ -345,13 +344,12 @@ def woodpecker_drumming_characteristics():
     # Display a boxplot of the feature "pulseRateMedian" for each species
     plt.style.use('ggplot')
 
-    # create a figure
+    # Create a figure
     fig = plt.figure(figsize=(7, 3))
     ax = fig.add_subplot(111)
     n = 0
 
-    # loop to build a boxplot for each species based on the feature
-    # "pulseRateMedian"
+    # Build a boxplot for each species based on the feature "pulseRateMedian"
     for species in df_drums.species.unique():
         ax.boxplot(df_drums[df_drums.species == species]['pulseRateMedian'],
                    positions=[n + 1],
@@ -370,19 +368,20 @@ def woodpecker_drumming_characteristics():
 
     # Display clusters based on the drummings features
     # -------------------------------------------------
-    # A collection of features is associated to each drumming found in the audio
-    # recordings. The goal is to display clusters in 2D with the dimensionality
-    # reduction tool t-SNE and associate a color to each point that corresponds
-    # to the belonging species. It is then possible to observe species that are
-    # clearly grouped into separate clusters from species that are mixed with
-    # others
+    # A collection of features is associated to each drumming found in the
+    # audio recordings. The goal is to display clusters in 2D with the
+    # dimensionality reduction tool t-SNE and associate a color to each
+    # point that corresponds to the belonging species. It is then possible
+    # to observe species that are clearly grouped into separate clusters
+    # from species that are mixed with others.
+
     # Preprocess data : data scaler
     df_drums = df_drums.dropna()
     X = df_drums.drop(columns=['species', 'filename'])
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
 
-    # compute the dimensionality reduction
+    # Compute the dimensionality reduction
     tsne = TSNE(n_components=2,
                 perplexity=30,
                 init='pca',
@@ -391,7 +390,7 @@ def woodpecker_drumming_characteristics():
                 verbose=True)
     Y = tsne.fit_transform(X)
 
-    # overlay all species
+    # Overlay all species
     plt.figure(figsize=(5, 6))
     g = []
     markers = Line2D.filled_markers

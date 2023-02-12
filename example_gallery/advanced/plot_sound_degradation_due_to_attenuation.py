@@ -27,19 +27,18 @@ def plot_sound_degradation_due_to_attenuation():
     # Load the sound and conversion into sound pressure
     # --------------------------------------------------
     # When working with sound attenuation in real environment,
-    # it is essential to
-    # know the sound pressure level at a certain distance (generally 1m). Here
-    # we used spinetail sound. We assume that its sound level at 1m = 85dB SPL.
-    # It is also essential to be able to tranform the signal recorded by the
-    # recorder into sound pressure level. Here, the audio recorder is a SM4
-    # (Wildlife Acoustics) which is an autonomous recording unit (ARU) from
-    # Wildlife. The sensitivity of the internal microphone is -35dBV and the
-    # maximal voltage converted by the analog to digital convertor (ADC) is
-    # 2Vpp
-    # (peak to peak). The gain used for the recording is a combination of
-    # the internal pre-amplifier of the SM4, which is 26dB and the
-    # adjustable gain
-    # which was 16dB. So the total gain applied to the signal is: 42dB
+    # it is essential to know the sound pressure level at a certain distance
+    # (generally 1m). Here we used spinetail sound. We assume that its sound
+    # level at 1m = 85dB SPL. It is also essential to be able to tranform
+    # the signal recorded by the recorder into sound pressure level. Here,
+    # the audio recorder is a SM4 (Wildlife Acoustics) which is an
+    # autonomous recording unit (ARU) from Wildlife. The sensitivity of the
+    # internal microphone is -35dBV and the maximal voltage converted by the
+    # analog to digital convertor (ADC) is 2Vpp (peak to peak). The gain
+    # used for the recording is a combination of the internal pre-amplifier
+    # of the SM4, which is 26dB and the adjustable gain which was 16dB. So
+    # the total gain applied to the signal is: 42dB
+
     # We load the sound
     w, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
 
@@ -71,7 +70,7 @@ def plot_sound_degradation_due_to_attenuation():
     Sxx_dB = util.power2dB(Sxx_power, db_range=96) + 96
     Sxx_dB_noise = util.power2dB(Sxx_power_noise, db_range=96) + 96
 
-    # Evalution of the distance and sound level of the spinetail
+    # Evaluation of the distance and sound level of the spinetail
     # ------------------------------------------------------------
     # Before simulating the attenuation of the acoustic signature depending on
     # the distance, we need to evaluate the distance at which the signal of the
@@ -91,7 +90,7 @@ def plot_sound_degradation_due_to_attenuation():
     L = max(spl.pressure2leq(p0_sig_bw, fs, dt=0.1))
     print('Sound Level measured: %2.2fdB SPL' % L)
 
-    # Evalution of the distance between the ARU and the spinetail
+    # Evaluation of the distance between the ARU and the spinetail
     # ------------------------------------------------------------
     # Then, knowing the sound level L at the position of the ARU, we can
     # estimate
@@ -106,7 +105,7 @@ def plot_sound_degradation_due_to_attenuation():
         'Max distance between ARU and spinetail is estimated to be %2.0fm' %
         r0)
 
-    # Evalution of the maximum distance of propagation of the spinetail song
+    # Evaluation of the maximum distance of propagation of the spinetail song
     # -----------------------------------------------------------------------
     # Finally, we can estimate the detection distance or active distance of the
     # spinetail which corresponds to the distance at which the call of the
@@ -171,9 +170,10 @@ def plot_sound_degradation_due_to_attenuation():
     Sxx_dB_att_200m = util.add_dB(Sxx_dB_att_200m, Sxx_dB_noise)
 
     # Plot attenuated spectrograms at different distances of propagation.
-    # We can observe that the highest frequency content (harmonics) disappears first.
-    # We can also observe that at 200m, almost none of the spinetail signal is still
-    # visible. Only the background noise, with the call of another species remains
+    # We can observe that the highest frequency content (harmonics) disappears
+    # first. We can also observe that at 200m, almost none of the spinetail
+    # signal is still visible. Only the background noise, with the call of
+    # another species remains.
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, sharex=True,
                                              figsize=(15, 3))
     util.plot2d(Sxx_dB_att_10m, title='10m', ax=ax1, extent=ext, vmin=0,

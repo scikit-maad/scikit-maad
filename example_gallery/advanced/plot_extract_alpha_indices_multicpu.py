@@ -47,20 +47,18 @@ def plot_extract_alpha_indices_multicpu():
                          'ACTtCount',
                          'ACTtMean', 'EVNtFraction', 'EVNtMean', 'EVNtCount']
 
-    # Parameters of the audio recorder. This is not a mandatory but it allows
+    # Parameters of the audio recorder. This is not a mandatory, but it allows
     # to compute the sound pressure level of the audio file (dB SPL) as a
     # sonometer would do.
     S = -35  # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)
     G = 26 + 16  # Amplification gain (26dB (SM4 preamplifier))
 
     # We parse the directory were the audio dataset is located in order to
-    # get a df with date
-    # and fullfilename. As the data were collected with a SM4 audio
-    # recording device
-    # we set the dateformat agument to 'SM4' in order to be able to parse
-    # the date
-    # from the filename. In case of Audiomoth, the date is coded as Hex in the
-    # filename. The path to the audio dataset is "../../data/indices/".
+    # get a df with date and fullfilename. As the data were collected with a
+    # SM4 audio recording device we set the dateformat agument to 'SM4' in
+    # order to be able to parse the date from the filename. In case of
+    # Audiomoth, the date is coded as Hex in the filename. The path to the
+    # audio dataset is "../../data/indices/".
     df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 
     # Date is used as index. Reset the index in order to get back Date as
@@ -71,10 +69,9 @@ def plot_extract_alpha_indices_multicpu():
     # ----------------------------------------------------------
     # This function should work by itself without waiting for another process
     # Here we defined a function to process a single audio file. The input
-    # arguments
-    # are the path to the audio file and the recording date of the audio
-    # file. Both
-    # arguments are in the dataframe df given by the function date_parser.
+    # arguments are the path to the audio file and the recording date of the
+    # audio file. Both arguments are in the dataframe df given by the
+    # function date_parser.
     def single_file_processing(audio_path,
                                date):
         """
@@ -107,7 +104,8 @@ def plot_extract_alpha_indices_multicpu():
             """ 
             ===================================================================
                              Computation in the time domain
-            ===================================================================="""
+            ===================================================================
+            """
 
             # compute all the audio indices and store them into a DataFrame
             # dB_threshold and rejectDuration are used to select audio events.
@@ -120,7 +118,8 @@ def plot_extract_alpha_indices_multicpu():
             """ 
             ===================================================================
                              Computation in the frequency domain
-            ===================================================================="""
+            ===================================================================
+            """
 
             # Compute the Power Spectrogram Density (PSD): Sxx_power
             Sxx_power, tn, fn, ext = sound.spectrogram(
@@ -131,16 +130,12 @@ def plot_extract_alpha_indices_multicpu():
 
             # compute all the spectral indices and store them into a DataFrame
             # flim_low, flim_mid, flim_hi corresponds to the frequency
-            # limits in Hz
-            # that are required to compute somes indices (i.e. NDSI)
-            # if R_compatible is set to 'soundecology', then the output are
-            # similar to
-            # soundecology R package.
-            # mask_param1 and mask_param2 are two parameters to find the
-            # regions of
+            # limits in Hz that are required to compute somes indices (i.e.
+            # NDSI) if R_compatible is set to 'soundecology', then the
+            # output are similar to soundecology R package. mask_param1 and
+            # mask_param2 are two parameters to find the regions of
             # interest (ROIs). These parameters need to be adapted to the
-            # dataset in
-            # order to select ROIs
+            # dataset in order to select ROIs.
             df_spec_ind, _ = features.all_spectral_alpha_indices(
                 Sxx_power,
                 tn, fn,
@@ -157,16 +152,18 @@ def plot_extract_alpha_indices_multicpu():
             """ 
             ===================================================================
                              Create a dataframe
-            ===================================================================="""
-            # add scalar indices into the df_indices dataframe
+            ===================================================================
+            """
+
+            # Add scalar indices into the df_indices dataframe
             df_indices = pd.concat([df_audio_ind,
                                     df_spec_ind], axis=1)
 
             # add date and audio_path
             df_indices.insert(0, 'Date', date)
             df_indices.insert(1, 'file', audio_path)
-        except:
-            # if an error occur, send an empty output
+        except Exception:
+            # If an error occur, send an empty output
             df_indices = pd.DataFrame()
 
         return df_indices
@@ -174,7 +171,8 @@ def plot_extract_alpha_indices_multicpu():
     """ 
     ===========================================================================
                      Mono CPU
-    ============================================================================"""
+    ===========================================================================
+    """
     # Only one cpu is used to process all data in dataframe, row by row.
     # This is the common way to process the data but it has some limitations:
     # - only 1 CPU is used even if the computer has more CPUs.
@@ -193,19 +191,20 @@ def plot_extract_alpha_indices_multicpu():
             df_indices = df_indices.append(df_indices_temp)
     toc = time.perf_counter()
 
-    # time duration of the process
+    # Time duration of the process
     monocpu_duration = toc - tic
     print(f"Elapsed time is {monocpu_duration:0.1f} seconds")
 
     """ 
     ===========================================================================
                      Multi CPU
-    ============================================================================"""
+    ===========================================================================
+    """
     # At least 2 CPUs will be used in parallel and the files to process will be
     # distributed on each CPU depending on their availability. This will
-    # speed up
-    # the process.
-    # create an empty dataframe. It will contain all ROIs found for each
+    # speed up the process.
+
+    # Create an empty dataframe. It will contain all ROIs found for each
     # audio file in the directory
     df_indices = pd.DataFrame()
 
