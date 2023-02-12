@@ -541,7 +541,9 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
 
     References
     ----------
-    .. [1] Towsey, M., 2013. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane
+    .. [1] Towsey, M., 2013. Noise Removal from Wave-forms and Spectrograms
+    Derived from Natural Recordings of the Environment. Queensland
+    University of Technology, Brisbane
 
     Examples
     --------

@@ -575,13 +575,23 @@ def shape_features(Sxx, resolution='low', rois=None):
 
     See Also
     --------
-    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc, maad.util.plot_shape
+    maad.features.opt_shape_presets, maad.features.filter_bank_2d_nodc,
+    maad.util.plot_shape
 
     References
     ----------
-    .. [1] Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018). Estimating animal acoustic diversity in tropical environments using unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355. `DOI: 10.1016/j.ecolind.2018.03.026 <https://doi.org/10.1016/j.ecolind.2018.03.026>`_
-    .. [2] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation invariant scattering for texture discrimination. Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. `DOI: 10.1109/CVPR.2013.163 <https://doi.org/10.1109/CVPR.2013.163>`_
-    .. [3] Mallat, S. (2008). A Wavelet Tour of Signal Processing: The Sparse Way. Academic Press. `DOI: 10.1016/B978-0-12-374370-1.X0001-8 <https://doi.org/10.1016/B978-0-12-374370-1.X0001-8>`_
+    .. [1] Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur,
+    J. (2018). Estimating animal acoustic diversity in tropical environments
+    using unsupervised multiresolution analysis. Ecological Indicators, 90,
+    346–355. `DOI: 10.1016/j.ecolind.2018.03.026
+    <https://doi.org/10.1016/j.ecolind.2018.03.026>`_
+    .. [2] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation
+    invariant scattering for texture discrimination. Computer Vision and
+    Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. `DOI:
+    10.1109/CVPR.2013.163 <https://doi.org/10.1109/CVPR.2013.163>`_
+    .. [3] Mallat, S. (2008). A Wavelet Tour of Signal Processing: The
+    Sparse Way. Academic Press. `DOI: 10.1016/B978-0-12-374370-1.X0001-8
+    <https://doi.org/10.1016/B978-0-12-374370-1.X0001-8>`_
 
     Examples
     --------

@@ -412,7 +412,10 @@ def create_mask(im, mode_bin = 'relative',
 
     References
     ----------
-    .. [1] J. Canny. A computational approach to edge detection. IEEE Transactions on Pattern Analysis and Machine Intelligence. 1986; vol. 8, pp.679-698. `DOI: 10.1109/TPAMI.1986.4767851 <https://doi.org/10.1109/TPAMI.1986.4767851>`_
+    .. [1] J. Canny. A computational approach to edge detection. IEEE
+    Transactions on Pattern Analysis and Machine Intelligence. 1986; vol. 8,
+    pp.679-698. `DOI: 10.1109/TPAMI.1986.4767851
+    <https://doi.org/10.1109/TPAMI.1986.4767851>`_
     .. [2] from MATLAB: Threshold estimation (Oliveira et al, 2015)
 
     Examples

@@ -1143,8 +1143,14 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
 
     References
     ----------
-    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
-    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived
+    from long-duration recordings of the natural environment. 2017.
+    https://eprints.qut.edu.au/110634/1
+    /QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael
+    Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018,
+    March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version
+    v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
 
     Examples
     --------
@@ -1295,8 +1301,14 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
     References
     ----------
-    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
-    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived
+    from long-duration recordings of the natural environment. 2017.
+    https://eprints.qut.edu.au/110634/1
+    /QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael
+    Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018,
+    March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version
+    v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
 
     Examples
     --------
@@ -1394,7 +1406,11 @@ def acoustic_complexity_index(Sxx):
 
     References
     ----------
-    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer the singing activity of an avian community: the Acoustic Complexity Index (ACI). Ecological Indicators, 11, 868-873. `DOI: 10.1016/j.ecolind.2010.11.005 <https://doi.org/10.1016/j.ecolind.2010.11.005>`_
+    .. [1] Pieretti N, Farina A, Morri FD (2011) A new methodology to infer
+    the singing activity of an avian community: the Acoustic Complexity
+    Index (ACI). Ecological Indicators, 11, 868-873. `DOI:
+    10.1016/j.ecolind.2010.11.005
+    <https://doi.org/10.1016/j.ecolind.2010.11.005>`_
 
     Examples
     --------
@@ -1567,7 +1583,10 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
 
     References
     ----------
-    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.`DOI: 10.1007/s10980-011-9636-9 <https://doi.org/10.1007/s10980-011-9636-9>`_
+    .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B.
+    Pekin. 2011. A primer of acoustic analysis for landscape ecologists.
+    Landscape Ecology 26: 1233-1246.`DOI: 10.1007/s10980-011-9636-9
+    <https://doi.org/10.1007/s10980-011-9636-9>`_
 
     Examples
     --------
@@ -1652,7 +1671,12 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
 
     References
     ----------
-    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo. 2012. The Remote Environmental Assessment Laboratory's Acoustic Library: An Archive for Studying Soundscape Ecology. Ecological Informatics 12: 50-67. `DOI: 10.1016/j.ecoinf.2012.08.001 <https://doi.org/10.1016/j.ecoinf.2012.08.001>`_ https://doi.org/10.1016/j.ecoinf.2012.08.001
+    .. [1] Kasten, Eric P., Stuart H. Gage, Jordan Fox, and Wooyeong Joo.
+    2012. The Remote Environmental Assessment Laboratory's Acoustic Library:
+    An Archive for Studying Soundscape Ecology. Ecological Informatics 12:
+    50-67. `DOI: 10.1016/j.ecoinf.2012.08.001
+    <https://doi.org/10.1016/j.ecoinf.2012.08.001>`_
+    https://doi.org/10.1016/j.ecoinf.2012.08.001
 
     Ported from Seewave (http://rug.mnhn.fr/seewave) and soundecology R packages (cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf).
 
@@ -1720,8 +1744,12 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
 
     References
     ----------
-    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic invasion resistance in Hawaii: bioacoustics, field surveys, and airborne remote sensing. Ecological Applications 17: 2137-2144. `DOI: 10.1890/07-0004.1 <https://doi.org/10.1890/07-0004.1>`_
-    .. [2] Ported and modified from the soundecology R package - cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
+    .. [1] Boelman NT, Asner GP, Hart PJ, Martin RE. 2007. Multi-trophic
+    invasion resistance in Hawaii: bioacoustics, field surveys, and airborne
+    remote sensing. Ecological Applications 17: 2137-2144. `DOI:
+    10.1890/07-0004.1 <https://doi.org/10.1890/07-0004.1>`_
+    .. [2] Ported and modified from the soundecology R package -
+    cran.ms.unimelb.edu.au/web/packages/soundecology/soundecology.pdf.
 
     Notes
     -----
