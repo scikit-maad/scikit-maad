@@ -21,6 +21,15 @@ decompose audio signals and visualize false-colour spectrograms.
 
 **Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.
 
+**References**
+[1] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation
+invariant scattering for texture discrimination. Computer Vision and
+Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240.
+http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
+[2] Lee, D., & Sueng, S. (1999). Learning the parts of objects by
+non-negative matrix factorization. Nature, 401, 788–791.
+https://doi.org/10.1038/44565
+[3] Towsey, M., Znidersic, E., Broken-Brow, J., Indraswari, K., Watson, D. M., Phillips, Y., Truskinger, A., & Roe, P. (2018). Long-duration, false-colour spectrograms for detecting species in large audio data-sets. Journal of Ecoacoustics, 2(1), 1–1. https://doi.org/10.22261/JEA.IUSWUI
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_nmf_and_false_color_spectrogram_003.png'
 import numpy as np
@@ -99,16 +108,6 @@ def plot_nmf_and_false_color_spectrogram():
                  interpolation='bilinear')
     ax[1].set_axis_off()
     ax[1].set_title('False-color spectrogram')
-
-    # **References**
-    # [1] Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation
-    # invariant scattering for texture discrimination. Computer Vision and
-    # Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240.
-    # http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
-    # [2] Lee, D., & Sueng, S. (1999). Learning the parts of objects by
-    # non-negative matrix factorization. Nature, 401, 788–791.
-    # https://doi.org/10.1038/44565
-    # [3] Towsey, M., Znidersic, E., Broken-Brow, J., Indraswari, K., Watson, D. M., Phillips, Y., Truskinger, A., & Roe, P. (2018). Long-duration, false-colour spectrograms for detecting species in large audio data-sets. Journal of Ecoacoustics, 2(1), 1–1. https://doi.org/10.22261/JEA.IUSWUI
 
 
 if __name__ == '__main__':

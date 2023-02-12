@@ -12,6 +12,11 @@ and present basics post-processing posibilities. The audio recordings used in th
 example can be downloaded from the open GitHub repository
 (https://github.com/scikit-maad/scikit-maad/tree/production/data).
 
+References
+----------
+1. Sueur, J., Farina, A., Gasc, A., Pieretti, N., & Pavoine, S. (2014). Acoustic Indices for Biodiversity Assessment and Landscape Investigation. Acta Acustica United with Acustica, 100(4), 772–781. https://doi.org/10.3813/AAA.918757
+2. Buxton, R. T., McKenna, M. F., Clapp, M., Meyer, E., Stabenau, E., Angeloni, L. M., Crooks, K., & Wittemyer, G. (2018). Efficacy of extracting indices from large-scale acoustic recordings to monitor biodiversity: Acoustical Monitoring. Conservation Biology, 32(5), 1174–1184. https://doi.org/10.1111/cobi.13119
+3. Towsey, M., Wimmer, J., Williamson, I., & Roe, P. (2014). The use of acoustic indices to determine avian species richness in audio-recordings of the environment. Ecological Informatics, 21, 110–119. https://doi.org/10.1016/j.ecoinf.2013.11.007
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_extract_alpha_indices_002.png'
 
@@ -210,12 +215,6 @@ def plot_extract_alpha_indices():
                                        permut=False,
                                        display=True,
                                        figsize=(4, 7))
-
-    # References
-    # ----------
-    # 1. Sueur, J., Farina, A., Gasc, A., Pieretti, N., & Pavoine, S. (2014). Acoustic Indices for Biodiversity Assessment and Landscape Investigation. Acta Acustica United with Acustica, 100(4), 772–781. https://doi.org/10.3813/AAA.918757
-    # 2. Buxton, R. T., McKenna, M. F., Clapp, M., Meyer, E., Stabenau, E., Angeloni, L. M., Crooks, K., & Wittemyer, G. (2018). Efficacy of extracting indices from large-scale acoustic recordings to monitor biodiversity: Acoustical Monitoring. Conservation Biology, 32(5), 1174–1184. https://doi.org/10.1111/cobi.13119
-    # 3. Towsey, M., Wimmer, J., Williamson, I., & Roe, P. (2014). The use of acoustic indices to determine avian species richness in audio-recordings of the environment. Ecological Informatics, 21, 110–119. https://doi.org/10.1016/j.ecoinf.2013.11.007
 
 
 if __name__ == '__main__':

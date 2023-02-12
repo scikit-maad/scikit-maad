@@ -15,6 +15,9 @@ mathematical morphology tools...
 **Dependencies**: To execute this example you will need to have installed the
 scikit-image, scikit-learn and pandas Python packages.
 
+**References**
+
+[1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_compare_auto_and_manual_rois_selection.png'
 
@@ -234,10 +237,6 @@ def plot_compare_auto_and_manual_rois_selection():
                                      'vmin': 0, 'vmax': dB_max, 'extent': ext,
                                      'ms': 2, 'fig': fig4, 'ax': ax4
                                  })
-    # **References**
-    #
-    # [1] Towsey, M., 2013b. Noise Removal from Wave-forms and Spectrograms Derived from Natural Recordings of the Environment. Queensland University of Technology, Brisbane
-
 
 if __name__ == '__main__':
     plot_compare_auto_and_manual_rois_selection()

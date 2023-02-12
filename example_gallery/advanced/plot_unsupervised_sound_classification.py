@@ -9,6 +9,23 @@ Unsupervised learning algorithms search for structures or patterns in a dataset 
 In this example, we will use unsupervised learning to automatically annotate multiple sounds in an audio recording.  The process follows four main steps. We will (i) find sounds that can be delimited in time and frequency, here defined as regions of interest (ROIs), (ii) characterize ROIs by features in the time-frequency domain using 2D wavelets [2], (iii) use t-SNE, a dimensionality reduction algorithm, to reduce the dimensionality of the data [3], and (iv) a automatically form homogenous groups using DBSCAN [4]. We will use a real audio file recorded with an omnidirectional microphone. This audio has a poor signal-to-noise ratio, which is typical of automated audio recordings.
 
 **Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.
+
+References
+-----------
+1.  Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur, J. (2018).
+    Estimating animal acoustic diversity in tropical environments using
+    unsupervised multiresolution analysis. Ecological Indicators, 90, 346–355.
+    https://doi.org/10.1016/j.ecolind.2018.03.026
+2.  Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation
+    invariant scattering for texture discrimination. Computer Vision and
+    Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240.
+    http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
+3.  Maaten, L. van der, & Hinton, G. (2008). Visualizing data using t-SNE.
+    Journal of Machine Learning Research, 9(Nov), 2579–2605.
+4.  Ester, M., Kriegel, H.-P., Sander, J., & Xu, X. (1996). A density-based
+    algorithm for discovering clusters in large spatial databases with noise.
+    Proceedings of the 2nd International Conference on Knowledge Discovery and
+    Data Mining, 96(34), 226–231.
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_unsupervised_sound_classification_004.png'
 import numpy as np
@@ -110,18 +127,6 @@ def plot_unsupervised_sound_classification():
     df_rois['label'] = cluster.labels_.astype(str)
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
                              **{'vmin': 0, 'vmax': 60, 'extent': ext})
-
-    # References
-    # -----------
-    # 1. Ulloa, J. S., Aubin, T., Llusia, D., Bouveyron, C., & Sueur,
-    # J. (2018). Estimating animal acoustic diversity in tropical
-    # environments using unsupervised multiresolution analysis. Ecological
-    # Indicators, 90, 346–355. https://doi.org/10.1016/j.ecolind.2018.03.026
-    # 2. Sifre, L., & Mallat, S. (2013). Rotation, scaling and deformation
-    # invariant scattering for texture discrimination. Computer Vision and
-    # Pattern Recognition (CVPR), 2013 IEEE Conference On, 1233–1240. http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6619007
-    # 3. Maaten, L. van der, & Hinton, G. (2008). Visualizing data using t-SNE. Journal of Machine Learning Research, 9(Nov), 2579–2605.
-    # 4. Ester, M., Kriegel, H.-P., Sander, J., & Xu, X. (1996). A density-based algorithm for discovering clusters in large spatial databases with noise. Proceedings of the 2nd International Conference on Knowledge Discovery and Data Mining, 96(34), 226–231.
 
 
 if __name__ == '__main__':
