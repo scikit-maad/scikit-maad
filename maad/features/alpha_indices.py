@@ -1426,6 +1426,7 @@ def acoustic_complexity_index(Sxx):
 
     return ACI_xx, ACI_per_bin, ACI_sum
 
+
 # ============================================================================
 def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
                             dB_threshold=-50, index="shannon"):
@@ -1535,6 +1536,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
         ADI = 1/sum(s)
 
     return ADI
+
 
 # ============================================================================
 def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
@@ -1720,6 +1722,7 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
 
     return NDSI, ratioBA, antroPh, bioPh
 
+
 # ============================================================================
 def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology'):
     """
@@ -1802,6 +1805,7 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
 
     return BI
 
+
 # ============================================================================
 #
 #   New ecoacoustics indices introduced by S. HAUPERT, 2020
@@ -1852,6 +1856,7 @@ def temporal_leq (s, fs, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1):
     LEQt = mean_dB(leq, axis=1)
 
     return LEQt
+
 
 # ============================================================================
 
@@ -1906,6 +1911,7 @@ def spectral_leq (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6):
     LEQf = psd2leq(X, gain, Vadc, sensitivity, dBref, pRef)
 
     return LEQf, LEQf_per_bin
+
 
 # ============================================================================
 
@@ -2002,6 +2008,7 @@ def more_entropy(x, order=3, axis=0) :
 
 # ============================================================================
 
+
 def frequency_raoq (S_power, fn, bin_step=1000):
     """
     Compute Rao's quadratic entropy on a power spectrum (1d). [1]_
@@ -2047,6 +2054,7 @@ def frequency_raoq (S_power, fn, bin_step=1000):
     return RAOQ
 
 # ============================================================================
+
 
 def tfsd (Sxx, fn, tn, flim=(2000, 8000), mode='thirdOctave', display=False):
     """
@@ -2438,7 +2446,7 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     # Pourcentage of ROI over the total area
     ROIcover = sum(area) / total_area *100
 
-    return  ROItotal, ROIcover
+    return ROItotal, ROIcover
 
 
 # ============================================================================

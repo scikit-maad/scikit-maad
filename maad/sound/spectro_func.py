@@ -392,6 +392,7 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
 
     return X_octave, bin_octave
 
+
 def avg_power_spectro(Sxx_power):
     """
     Computes the average of a power spectrogram along the time axis.
