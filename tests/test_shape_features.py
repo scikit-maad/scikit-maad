@@ -15,7 +15,7 @@ def test_shape_features():
     # Arrange
     data = pd.read_csv(str(TESTS_DATA_PATH / 'shape_spinetail_res_low.csv'))
     s, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
-    Sxx, tn, fn, ext = sound.spectrogram(s, fs, db_range=100)
+    Sxx, tn, fn, extent = sound.spectrogram(s, fs, db_range=100)
     Sxx_db = util.power2dB(Sxx, db_range=100)
 
     # Act

@@ -1149,8 +1149,9 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)
-    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram (s, fs)
+    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True,
+    extent=extent)
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> LFC, MFC, HFC = maad.features.spectral_cover(Sxx_dB_noNoise, fn)
     >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC))
@@ -1211,15 +1212,21 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
 
     References
     ----------
-    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived from long-duration recordings of the natural environment. 2017. https://eprints.qut.edu.au/110634/1/QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
-    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+    .. [1] TOWSEY, Michael W. The calculation of acoustic indices derived
+    from long-duration recordings of the natural environment. 2017.
+    https://eprints.qut.edu.au/110634/1
+    /QUTePrints110634_TechReport_Towsey2017August_AcousticIndices%20v3.pdf
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael
+    Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018,
+    March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version
+    v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
 
     Examples
     --------
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)
-    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram (s, fs)
+    >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=extent)
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ACTspfract_per_bin, ACTspcount_per_bin, ACTspmean_per_bin = maad.features.spectral_activity(Sxx_dB_noNoise)
     >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %np.mean(ACTspfract_per_bin))
@@ -1295,10 +1302,10 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     --------
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram (s, fs)
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power)
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
-    >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)
+    >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=extent)
     >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %np.mean(EVNspFract_per_bin))
     Mean proportion of spectrogram with events : 0.01%
 
@@ -1392,7 +1399,7 @@ def acoustic_complexity_index(Sxx):
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')
+    >>> Sxx, tn, fn, extent = maad.sound.spectrogram (s, fs, mode='amplitude')
     >>> _, _ , ACI  = maad.features.acoustic_complexity_index(Sxx)
     >>> print('ACI : %2.0f ' %ACI)
     ACI : 306
@@ -1466,7 +1473,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     Load the signal and compute the spectrogram to give the same result as soundecology
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False)
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)
+    >>> Sxx, tn, fn, extent = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)
     >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000)
     >>> print('ADI : %2.2f ' %ADI)
     ADI : 2.05
@@ -1476,7 +1483,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     in line with soundecology
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')
+    >>> Sxx, tn, fn, extent = maad.sound.spectrogram (s, fs, mode='amplitude')
     >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -30)
     >>> print('ADI : %2.2f ' %ADI)
     ADI : 1.46
@@ -1568,7 +1575,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     Load the signal and compute the spectrogram to give the same result as soundecology
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False)
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)
+    >>> Sxx, tn, fn, extent = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)
     >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000)
     >>> print('AEI : %2.2f ' %AEI)
     AEI : 0.39
@@ -1578,8 +1585,8 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     in line with soundecology
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')
-    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -30)
+    >>> Sxx, tn, fn, extent = maad.sound.spectrogram (s, fs, mode='amplitude')
+    >>> AEI = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -30)
     >>> print('AEI : %2.2f ' %AEI)
     AEI : 0.39
 
@@ -1652,7 +1659,7 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram (s, fs)
     >>> NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscape_index(Sxx_power,fn)
     >>> print('NDSI Soundecology : %2.2f ' %NDSI)
     NDSI Soundecology : 0.10
@@ -1726,7 +1733,7 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs,mode='amplitude')
+    >>> Sxx, tn, fn, extent = maad.sound.spectrogram (s, fs,mode='amplitude')
     >>> BI = maad.features.bioacoustics_index(Sxx,fn)
     >>> print('BI Soundecology : %2.2f ' %BI)
     BI Soundecology : 52.84
@@ -2738,13 +2745,13 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     Spectral indices on a daylight recording
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)
-    >>> df_spectral_indices_DAY, _ = maad.features.all_spectral_alpha_indices(Sxx_power,tn,fn,display=True, extent=ext)
+    >>> Sxx_power,tn,fn,extent = maad.sound.spectrogram (s, fs)
+    >>> df_spectral_indices_DAY, _ = maad.features.all_spectral_alpha_indices(Sxx_power,tn,fn,display=True, extent=extent)
 
     Spectral indices on a night recording
 
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
-    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx_power,tn,fn,extent = maad.sound.spectrogram (s, fs)
     >>> df_spectral_indices_NIGHT, _ = maad.features.all_spectral_alpha_indices(Sxx_power,tn,fn,display=True)
 
     Variation between night and day

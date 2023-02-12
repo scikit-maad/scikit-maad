@@ -53,12 +53,12 @@ def plot_sound_degradation_due_to_attenuation():
     p0_noise = p0[int(8.32 * fs):int(10.12 * fs)]
 
     # We convert the spinetail signal into spectrogram
-    Sxx_power, tn, fn, ext = sound.spectrogram(p0_sig, fs,
+    Sxx_power, tn, fn, extent = sound.spectrogram(p0_sig, fs,
                                                display=True, figsize=[2, 4],
                                                title='signal + noise')
 
     # We convert the background signal into spectrogram
-    Sxx_power_noise, tn, fn, ext = sound.spectrogram(p0_noise, fs,
+    Sxx_power_noise, tn, fn, extent = sound.spectrogram(p0_noise, fs,
                                                      display=True,
                                                      figsize=[2, 4],
                                                      title='noise alone')
@@ -143,22 +143,22 @@ def plot_sound_degradation_due_to_attenuation():
     # 50m, 100m, 200m
     # Compute the attenuation of the recorded spinetail song at 10m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=10)
-    Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
+    Sxx_power_att, tn, fn, extent = sound.spectrogram(p_att, fs)
     Sxx_dB_att_10m = util.power2dB(Sxx_power_att, db_range=96) + 96
 
     # Compute the attenuation of the recorded spinetail song at 50m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=50)
-    Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
+    Sxx_power_att, tn, fn, extent = sound.spectrogram(p_att, fs)
     Sxx_dB_att_50m = util.power2dB(Sxx_power_att, db_range=96) + 96
 
     # Compute the attenuation of the recorded spinetail song at 100m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=100)
-    Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
+    Sxx_power_att, tn, fn, extent = sound.spectrogram(p_att, fs)
     Sxx_dB_att_100m = util.power2dB(Sxx_power_att, db_range=96) + 96
 
     # Compute the attenuation of the recorded spinetail song at 200m.
     p_att = spl.apply_attenuation(p0_sig, fs, r0=r0, r=200)
-    Sxx_power_att, tn, fn, ext = sound.spectrogram(p_att, fs)
+    Sxx_power_att, tn, fn, extent = sound.spectrogram(p_att, fs)
     Sxx_dB_att_200m = util.power2dB(Sxx_power_att, db_range=96) + 96
 
     # Add noise to the signal.
@@ -175,13 +175,13 @@ def plot_sound_degradation_due_to_attenuation():
     # another species remains.
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, sharex=True,
                                              figsize=(15, 3))
-    util.plot2d(Sxx_dB_att_10m, title='10m', ax=ax1, extent=ext, vmin=0,
+    util.plot2d(Sxx_dB_att_10m, title='10m', ax=ax1, extent=extent, vmin=0,
                 vmax=96, figsize=[3, 3])
-    util.plot2d(Sxx_dB_att_50m, title='50m', ax=ax2, extent=ext, vmin=0,
+    util.plot2d(Sxx_dB_att_50m, title='50m', ax=ax2, extent=extent, vmin=0,
                 vmax=96, figsize=[3, 3])
-    util.plot2d(Sxx_dB_att_100m, title='100m', ax=ax3, extent=ext, vmin=0,
+    util.plot2d(Sxx_dB_att_100m, title='100m', ax=ax3, extent=extent, vmin=0,
                 vmax=96, figsize=[3, 3])
-    util.plot2d(Sxx_dB_att_200m, title='200m', ax=ax4, extent=ext, vmin=0,
+    util.plot2d(Sxx_dB_att_200m, title='200m', ax=ax4, extent=extent, vmin=0,
                 vmax=96, figsize=[3, 3])
 
 

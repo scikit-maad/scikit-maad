@@ -194,8 +194,14 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
         ax1.grid(True)
         ax1.hlines(th, 0, len(s_cwt), linestyles='dashed', colors='r')
         #plot spectrogram
-        Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg = nperseg, noverlap=noverlap, mode='psd')
-        util.plot_spectrogram(Sxx, ext, db_range, ax=ax2, colorbar=False)
+        Sxx, tn, fn, extent = sound.spectrogram(s, fs, nperseg = nperseg, noverlap=noverlap, mode='psd')
+        util.plot_spectrogram(
+            Sxx=Sxx,
+            extent=extent,
+            db_range=db_range,
+            ax=ax2,
+            colorbar=False,
+        )
         ax2.set_ylabel('Frequency (Hz)')
         ax2.set_xlabel('Time (s)')
         if not(df.empty):

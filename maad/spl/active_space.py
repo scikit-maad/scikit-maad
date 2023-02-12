@@ -962,14 +962,14 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.02):
     >>> p0 = maad.spl.wav2pressure(wave=w, gain=42)
     >>> p0_sig = p0[int(5.68*fs):int(7.48*fs)]
     >>> p0_noise = p0[int(8.32*fs):int(10.12*fs)]
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(p0_sig ,fs)
-    >>> Sxx_power_noise, tn, fn, ext = maad.sound.spectrogram(p0_noise ,fs)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram(p0_sig ,fs)
+    >>> Sxx_power_noise, tn, fn, extent = maad.sound.spectrogram(p0_noise ,fs)
     >>> Sxx_dB = maad.util.power2dB(Sxx_power, db_range=96) + 96
     >>> Sxx_dB_noise = maad.util.power2dB(Sxx_power_noise, db_range=96) + 96
 
     Get the sound level of the spinetail song (sound between 4900-7500 Hz).
 
-    >>> p0_sig_4900_7500 = maad.sound.select_bandwidth(p0_sig,fs,fcut=[4900,7300],forder=10, ftype='bandpass')
+    >>> p0_sig_4900_7500 = maad.sound.select_bandwidth(p0_sig,fs,fcut=[4900, 7300],forder=10, ftype='bandpass')
     >>> L = maad.spl.pressure2leq(p0_sig_4900_7500, fs)
     >>> print ('Sound Level measured : %2.2fdB SPL' %L)
 
@@ -981,24 +981,24 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.02):
 
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1,5, sharex=True, figsize=(15,3))
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, vmin=0, vmax=70, figsize=[3,3])
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, vmin=0, vmax=70, figsize=[3,3])
 
     Compute the audio attenuation at 10m.
 
     >>> p_att = maad.spl.apply_attenuation(p0_sig, fs, r0=5, r =10)
-    >>> Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)
+    >>> Sxx_power_att, tn, fn, extent = maad.sound.spectrogram(p_att,fs)
     >>> Sxx_dB_att_10m = maad.util.power2dB(Sxx_power_att,db_range=96) + 96
 
     >>> p_att = maad.spl.apply_attenuation(p0_sig, fs, r0=5, r =20)
-    >>> Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)
+    >>> Sxx_power_att, tn, fn, extent = maad.sound.spectrogram(p_att,fs)
     >>> Sxx_dB_att_20m = maad.util.power2dB(Sxx_power_att,db_range=96) + 96
 
     >>> p_att = maad.spl.apply_attenuation(p0_sig, fs, r0=5, r =40)
-    >>> Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)
+    >>> Sxx_power_att, tn, fn, extent = maad.sound.spectrogram(p_att,fs)
     >>> Sxx_dB_att_40m = maad.util.power2dB(Sxx_power_att,db_range=96) + 96
 
     >>> p_att = maad.spl.apply_attenuation(p0_sig, fs, r0=5, r =80)
-    >>> Sxx_power_att, tn, fn, ext = maad.sound.spectrogram(p_att,fs)
+    >>> Sxx_power_att, tn, fn, extent = maad.sound.spectrogram(p_att,fs)
     >>> Sxx_dB_att_80m = maad.util.power2dB(Sxx_power_att,db_range=96) + 96
 
     Add noise to the signal.
@@ -1010,11 +1010,10 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.02):
 
     Plot attenuated spectrogram.
 
-    >>> maad.util.plot2d(Sxx_dB_att_10m, ax=ax2, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-    >>> maad.util.plot2d(Sxx_dB_att_20m, ax=ax3, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-    >>> maad.util.plot2d(Sxx_dB_att_40m, ax=ax4, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-    >>> maad.util.plot2d(Sxx_dB_att_80m, ax=ax5, extent=ext, vmin=0, vmax=70, figsize=[3,3])
-
+    >>> maad.util.plot2d(Sxx_dB_att_10m, ax=ax2, extent=extent, vmin=0, vmax=70, figsize=[3,3])
+    >>> maad.util.plot2d(Sxx_dB_att_20m, ax=ax3, extent=extent, vmin=0, vmax=70, figsize=[3,3])
+    >>> maad.util.plot2d(Sxx_dB_att_40m, ax=ax4, extent=extent, vmin=0, vmax=70, figsize=[3,3])
+    >>> maad.util.plot2d(Sxx_dB_att_80m, ax=ax5, extent=extent, vmin=0, vmax=70, figsize=[3,3])
     """
 
     # Fourier domain

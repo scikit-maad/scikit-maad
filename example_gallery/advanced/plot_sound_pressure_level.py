@@ -98,12 +98,16 @@ def plot_sound_pressure_level():
         """
 
         # Compute the Power Spectrogram Density (PSD): Sxx_power
-        Sxx_power, tn, fn, ext = sound.spectrogram(wave, fs, window='hann',
-                                                   nperseg=1024,
-                                                   noverlap=1024 // 2,
-                                                   verbose=False,
-                                                   display=False,
-                                                   savefig=None)
+        Sxx_power, tn, fn, extent = sound.spectrogram(
+            wave,
+            fs,
+            window='hann',
+            nperseg=1024,
+            noverlap=1024 // 2,
+            verbose=False,
+            display=False,
+            savefig=None,
+        )
 
         # Average PSD (It's a mandatory to compute the mean on the PSD for
         # energy conservation)

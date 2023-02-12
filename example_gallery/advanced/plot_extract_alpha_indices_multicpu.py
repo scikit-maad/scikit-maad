@@ -127,7 +127,7 @@ def plot_extract_alpha_indices_multicpu():
             """
 
             # Compute the Power Spectrogram Density (PSD): Sxx_power
-            Sxx_power, tn, fn, ext = sound.spectrogram(
+            Sxx_power, tn, fn, extent = sound.spectrogram(
                 wave, fs, window='hann',
                 nperseg=1024, noverlap=1024 // 2,
                 verbose=False, display=False,

@@ -23,9 +23,15 @@ def plot_find_rois_simple():
     s, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
 
     # Load an audio file and compute the spectrogram for visualization.
-    Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
-    plot_spectrogram(Sxx, extent=ext, db_range=60, gain=20, colorbar=False,
-                     figsize=(2.5, 10))
+    Sxx, tn, fn, extent = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
+    plot_spectrogram(
+        Sxx=Sxx,
+        extent=extent,
+        db_range=60,
+        gain=20,
+        colorbar=False,
+        figsize=(2.5, 10),
+    )
 
     # Detect the bouncy trill
     # -----------------------

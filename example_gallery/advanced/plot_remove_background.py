@@ -36,10 +36,15 @@ def plot_remove_background():
     # which is the maximum dB range value for a 16bits audio recording. We add
     # 96dB in order to get have only positive values in the spectrogram.
     s, fs = load(str(DATA_PATH / 'tropical_forest_morning.wav'))
-    Sxx, tn, fn, ext = spectrogram(s, fs, fcrop=[0, 20000], tcrop=[0, 60])
+    Sxx, tn, fn, extent = spectrogram(s, fs, fcrop=[0, 20000], tcrop=[0, 60])
     Sxx_dB = power2dB(Sxx, db_range=96) + 96
-    plot2d(Sxx_dB, extent=ext, title='original',
-           vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB) + 40)
+    plot2d(
+        Sxx_dB,
+        extent=extent,
+        title='original',
+        vmin=np.median(Sxx_dB),
+        vmax=np.median(Sxx_dB) + 40,
+    )
     print("Original sharpness: %2.3f" % sharpness(Sxx_dB))
 
     # Test different methods to remove stationary background noise
@@ -51,7 +56,7 @@ def plot_remove_background():
     print("---- test remove_background -----")
     print("duration %2.3f s" % elapsed_time)
     print("sharpness: %2.3f" % sharpness(X1))
-    plot2d(X1, extent=ext, title='remove_background',
+    plot2d(X1, extent=extent, title='remove_background',
            vmin=np.median(X1), vmax=np.median(X1) + 40)
 
     # Test the function "median_equalizer"
@@ -62,7 +67,7 @@ def plot_remove_background():
     print("---- test median_equalizer -----")
     print("duration %2.3f s" % elapsed_time)
     print("sharpness: %2.3f" % sharpness(X2))
-    plot2d(X2, extent=ext, title='median_equalizer',
+    plot2d(X2, extent=extent, title='median_equalizer',
            vmin=np.median(X2), vmax=np.median(X2) + 40)
 
     # Test the function "remove_background_morpho"
@@ -72,7 +77,7 @@ def plot_remove_background():
     print("---- test remove_background_morpho -----")
     print("duration %2.3f s" % elapsed_time)
     print("sharpness: %2.3f" % sharpness(X3))
-    plot2d(X3, extent=ext, title='remove_background_morpho',
+    plot2d(X3, extent=extent, title='remove_background_morpho',
            vmin=np.median(X3), vmax=np.median(X3) + 40)
 
     # Test the function "remove_background_along_axis"
@@ -84,7 +89,7 @@ def plot_remove_background():
     print("---- test remove_background_along_axis -----")
     print("duration %2.3f s" % elapsed_time)
     print("sharpness: %2.3f" % sharpness(X4))
-    plot2d(X4, extent=ext, title='remove_background_along_axis',
+    plot2d(X4, extent=extent, title='remove_background_along_axis',
            vmin=np.median(X4), vmax=np.median(X4) + 40)
     plt.tight_layout()
 

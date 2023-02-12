@@ -142,14 +142,15 @@ def spectrogram(x, fs, window='hann', nperseg=1024, noverlap=None,
     Compute the spectrogram with 'psd' output (if N<4096, the energy is lost)
 
     >>> N = 4096
-    >>> Sxx_power,tn,fn,ext = maad.sound.spectrogram (s, fs, nperseg=N, noverlap=N//2, mode = 'psd')
+    >>> Sxx_power,tn,fn,extent = maad.sound.spectrogram (s, fs, nperseg=N,
+    noverlap=N//2, mode = 'psd')
 
     Display Power Spectrogram
 
     >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
     >>> fig_kwargs = {'vmax': Sxx_dB.max(),
                       'vmin':-70,
-                      'extent':ext,
+                      'extent':extent,
                       'figsize':(4,13),
                       'title':'Power spectrogram density (PSD)',
                       'xlabel':'Time [sec]',
@@ -326,8 +327,8 @@ def linear_to_octave(X, fn, thirdOctave=True, display=False, **kwargs):
     Examples
     --------
     >>> w, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx_power,tn,fn, ext = maad.sound.spectrogram (w, fs, nperseg=8192)
-    >>> maad.sound.linear_to_octave(Sxx_power, fn, display=True, extent=ext, vmin=-50)
+    >>> Sxx_power,tn,fn, extent = maad.sound.spectrogram (w, fs, nperseg=8192)
+    >>> maad.sound.linear_to_octave(Sxx_power, fn, display=True, extent=extent, vmin=-50)
     """
 
     # define the third octave or octave frequency vector in Hz.
@@ -412,7 +413,7 @@ def avg_power_spectro(Sxx_power):
     Examples
     --------
     >>> w, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx_power,tn, fn, ext = maad.sound.spectrogram (w, fs)
+    >>> Sxx_power,tn, fn, extent = maad.sound.spectrogram (w, fs)
 
     Compute mean power spectrogram
 
@@ -450,7 +451,7 @@ def avg_amplitude_spectro(Sxx_ampli):
     Examples
     --------
     >>> w, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx_amplitude,tn, fn, ext = maad.sound.spectrogram (w, fs, mode="amplitude")
+    >>> Sxx_amplitude,tn, fn, extent = maad.sound.spectrogram (w, fs, mode="amplitude")
 
     Compute mean amplitude spectrogram
 

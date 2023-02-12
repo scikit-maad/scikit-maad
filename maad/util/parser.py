@@ -101,11 +101,11 @@ def read_audacity_annot (audacity_filename):
     >>> from maad import sound
     >>> from maad.util import power2dB, read_audacity_annot, format_features, overlay_rois
     >>> s, fs = sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
+    >>> Sxx_power, tn, fn, extent = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
     >>> Sxx_db = power2dB(Sxx_power) + 96
     >>> df_rois = read_audacity_annot('../data/cold_forest_daylight_label.txt')
     >>> df_rois = format_features(df_rois, tn, fn)
-    >>> overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':ext})
+    >>> overlay_rois(Sxx_db, df_rois, **{'vmin':0,'vmax':96,'extent':extent})
 
     """
     # try to read file with tab delimiter (if the file is not empty)
@@ -181,13 +181,12 @@ def write_audacity_annot(fname, df_rois, save_file=True):
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(s, fs)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram(s, fs)
     >>> Sxx_db = maad.util.power2dB(Sxx_power) + 96
     >>> Sxx_power_noNoise= maad.sound.median_equalizer(Sxx_power)
     >>> Sxx_db_noNoise = maad.util.power2dB(Sxx_power_noNoise)
     >>> Sxx_db_noNoise_smooth = maad.sound.smooth(Sxx_db_noNoise, std=0.5)
-    >>> im_mask = maad.rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin ='relative',
-                                        bin_std=8, bin_per=0.5)
+    >>> im_mask = maad.rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin='relative', bin_std=8, bin_per=0.5)
     >>> im_rois, df_rois = maad.rois.select_rois(im_mask, min_roi=25, max_roi=None)
     >>> df_rois = maad.util.format_features(df_rois, tn, fn)
 

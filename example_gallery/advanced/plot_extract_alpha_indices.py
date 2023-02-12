@@ -118,12 +118,16 @@ def plot_extract_alpha_indices():
         """
 
         # Compute the Power Spectrogram Density (PSD): Sxx_power
-        Sxx_power, tn, fn, ext = sound.spectrogram(wave, fs, window='hann',
-                                                   nperseg=1024,
-                                                   noverlap=1024 // 2,
-                                                   verbose=False,
-                                                   display=False,
-                                                   savefig=None)
+        Sxx_power, tn, fn, extent = sound.spectrogram(
+            wave,
+            fs,
+            window='hann',
+            nperseg=1024,
+            noverlap=1024 // 2,
+            verbose=False,
+            display=False,
+            savefig=None,
+        )
 
         # Compute all the spectral indices and store them into a DataFrame
         # flim_low, flim_mid, flim_hi corresponds to the frequency limits in Hz

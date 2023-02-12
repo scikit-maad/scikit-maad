@@ -165,7 +165,13 @@ def template_matching(
 
         # plot spectrogram
         fig, ax = plt.subplots(2, 1, figsize=(8, 5), sharex=True)
-        util.plot_spectrogram(Sxx, ext, log_scale=False, ax=ax[0], colorbar=False)
+        util.plot_spectrogram(
+            Sxx=Sxx,
+            extent=ext,
+            log_scale=False,
+            ax=ax[0],
+            colorbar=False,
+        )
         if not (rois.empty):
             for idx, _ in rois.iterrows():
                 xy = (rois.min_t[idx], rois.min_f[idx])

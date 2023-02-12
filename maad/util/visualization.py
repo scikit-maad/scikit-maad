@@ -66,7 +66,7 @@ def plot_shape(shape, params, row=0, ax=None, display_values=False):
     >>> from maad.features import shape_features, plot_shape
     >>> import numpy as np
     >>> s, fs = load('../data/spinetail.wav')
-    >>> Sxx, ts, f, ext = spectrogram(s, fs)
+    >>> Sxx, ts, f, extent = spectrogram(s, fs)
     >>> shape, params = shape_features(np.log10(Sxx), resolution='high')
     >>> plot_shape(shape, params)
 
@@ -196,7 +196,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     Load audio and compute spectrogram
 
     >>> s, fs = load('../data/spinetail.wav')
-    >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80)
+    >>> Sxx,tn,fn,extent = spectrogram(s, fs, db_range=80)
     >>> Sxx = power2dB(Sxx, db_range=80)
 
     Load annotations and plot
@@ -204,15 +204,15 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     >>> from maad.util import read_audacity_annot
     >>> rois = read_audacity_annot('../data/spinetail.txt')
     >>> rois = format_features(rois, tn, fn)
-    >>> ax, fig = plot2d (Sxx, extent=ext)
-    >>> ax, fig = overlay_rois(Sxx,rois, extent=ext, ax=ax, fig=fig)
+    >>> ax, fig = plot2d (Sxx, extent=extent)
+    >>> ax, fig = overlay_rois(Sxx,rois, extent=extent, ax=ax, fig=fig)
 
     Compute the centroid of each rois, format to get results in the
     temporal and spectral domain and overlay the centroids.
 
     >>> centroid = centroid_features(Sxx, rois)
     >>> centroid = format_features(centroid, tn, fn)
-    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
+    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=extent, ax=ax, fig=fig)
 
     """
 
@@ -229,7 +229,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
     cmap = kwargs.pop("cmap", "gray")
-    extent = kwargs.pop("ext", None)
+    extent = kwargs.pop("extent", None)
 
     if extent is None:
         ylabel = "pseudofrequency [points]"
@@ -372,17 +372,18 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
     >>> from maad import sound, util
     >>> s, fs = sound.load('./data/spinetail.wav')
     >>> rois = util.read_audacity_annot('./data/spinetail.txt')
-    >>> Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=512, noverlap=256)
+    >>> Sxx, tn, fn, extent = sound.spectrogram(s, fs, nperseg=512,
+    noverlap=256)
     >>> rois = util.format_features(rois, tn, fn)
     >>> fig, ax = plt.subplots(figsize=(10,5))
-    >>> util.plot_spectrogram(Sxx,ext, db_range=70, ax=ax)
+    >>> util.plot_spectrogram(Sxx,extent, db_range=70, ax=ax)
     >>> util.overlay_rois(Sxx, rois, fig=fig, ax=ax, textbox_label=True)
 
     Detect regions of interest and display them over the spectrogram.
     Load audio recording and compute the spectrogram.
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs, fcrop=(0,10000))
 
     Subtract the background noise before finding ROIs.
 
@@ -401,7 +402,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
 
     >>> import numpy as np
     >>> im_rois, df_rois = maad.rois.select_rois(im_bin, min_roi=100)
-    >>> maad.util.overlay_rois (Sxx_noNoise_dB, df_rois, extent=ext,vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60)
+    >>> maad.util.overlay_rois (Sxx_noNoise_dB, df_rois, extent=extent, vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60)
 
     """
 
@@ -994,20 +995,20 @@ def plot_spectrogram(Sxx, extent, db_range=96, gain=0, log_scale=True,
 
     >>> from maad import sound, util
     >>> s, fs = sound.load('../data/spinetail.wav')
-    >>> Sxx, tn, fn, ext = sound.spectrogram(s,fs)
-    >>> util.plot_spectrogram(Sxx, ext, db_range=50, gain=30, figsize=(4,10))
+    >>> Sxx, tn, fn, extent = sound.spectrogram(s,fs)
+    >>> util.plot_spectrogram(Sxx, extent, db_range=50, gain=30, figsize=(4,10))
 
     Use `plot_spectrogram` with predifined matplotlib axes.
 
     >>> import matplotlib.pyplot as plt
     >>> fig, ax = plt.subplots(2,1, figsize=(10,6))
     >>> util.plot_wave(s, fs, ax=ax[0])
-    >>> util.plot_spectrogram(Sxx, ext, db_range=50, gain=30, colorbar=False, ax=ax[1])
+    >>> util.plot_spectrogram(Sxx, extent, db_range=50, gain=30, colorbar=False, ax=ax[1])
 
     Plot a single frase of the spinetail.
 
-    >>> Sxx, tn, fn, ext = sound.spectrogram(s,fs, flims=(2000,15000), tlims=(5,8))
-    >>> util.plot_spectrogram(Sxx, ext, db_range=50, gain=30, figsize=(4,6))
+    >>> Sxx, tn, fn, extent = sound.spectrogram(s,fs, flims=(2000,15000), tlims=(5,8))
+    >>> util.plot_spectrogram(Sxx, extent, db_range=50, gain=30, figsize=(4,6))
     """
     if log_scale:
         Sxx_db = power2dB(Sxx, db_range, gain)

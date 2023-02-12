@@ -34,13 +34,13 @@ def plot_compare_auto_and_manual_rois_selection():
     # First, load and audio file and compute the power spectrogram.
     s, fs = sound.load(str(DATA_PATH / 'cold_forest_daylight.wav'))
     dB_max = 96
-    Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024,
+    Sxx_power, tn, fn, extent = sound.spectrogram(s, fs, nperseg=1024,
                                                noverlap=1024 // 2)
 
     # Convert the power spectrogram into dB, add dB_max which is the maximum
     # decibel range when quantification bit is 16bits and display the result
     Sxx_db = power2dB(Sxx_power) + dB_max
-    plot2d(Sxx_db, **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+    plot2d(Sxx_db, **{'vmin': 0, 'vmax': dB_max, 'extent': extent})
 
     # Then, relevant acoustic events are extracted directly from the power
     # spectrogram based on a double thresholding technique. The result is
@@ -56,7 +56,7 @@ def plot_compare_auto_and_manual_rois_selection():
     # background in order to increase the contrast [1] Then we convert the
     # spectrogram into dB
     Sxx_power_noNoise = sound.median_equalizer(Sxx_power, display=True,
-                                               **{'extent': ext})
+                                               **{'extent': extent})
     Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
 
     # Then we smooth the spectrogram in order to facilitate the creation of
@@ -65,7 +65,7 @@ def plot_compare_auto_and_manual_rois_selection():
                                          display=True, savefig=None,
                                          **{
                                              'vmin': 0, 'vmax': dB_max,
-                                             'extent': ext
+                                             'extent': extent
                                          })
 
     # Then we create a mask (i.e. binarization of the spectrogram) by using the
@@ -78,7 +78,7 @@ def plot_compare_auto_and_manual_rois_selection():
     # and remove very small events (<=25 pixel²)
     im_rois, df_rois = rois.select_rois(im_mask, min_roi=25, max_roi=None,
                                         display=True,
-                                        **{'extent': ext})
+                                        **{'extent': extent})
 
     # format dataframe df_rois in order to convert pixels into time and
     # frequency
@@ -86,14 +86,14 @@ def plot_compare_auto_and_manual_rois_selection():
 
     # overlay bounding box on the original spectrogram
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
-                             **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+                             **{'vmin': 0, 'vmax': dB_max, 'extent': extent})
 
     # Compute and visualize centroids
     df_centroid = features.centroid_features(Sxx_db, df_rois, im_rois)
     df_centroid = format_features(df_centroid, tn, fn)
     ax0, fig0 = overlay_centroid(Sxx_db, df_centroid, savefig=None,
                                  **{
-                                     'vmin': 0, 'vmax': dB_max, 'extent': ext,
+                                     'vmin': 0, 'vmax': dB_max, 'extent': extent,
                                      'ms': 4,
                                      'marker': '+', 'color': 'red',
                                      'fig': fig0, 'ax': ax0
@@ -119,14 +119,14 @@ def plot_compare_auto_and_manual_rois_selection():
 
     # Overlay bounding box on the original spectrogram
     ax1, fig1 = overlay_rois(Sxx_db, df_rois_GT,
-                             **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+                             **{'vmin': 0, 'vmax': dB_max, 'extent': extent})
 
     # Compute and visualize centroids
     df_centroid_GT = features.centroid_features(Sxx_db, df_rois_GT)
     df_centroid_GT = format_features(df_centroid_GT, tn, fn)
     ax1, fig1 = overlay_centroid(Sxx_db, df_centroid_GT, savefig=None,
                                  **{
-                                     'vmin': 0, 'vmax': dB_max, 'extent': ext,
+                                     'vmin': 0, 'vmax': dB_max, 'extent': extent,
                                      'ms': 2, 'marker': '+', 'color': 'red',
                                      'fig': fig1, 'ax': ax1
                                  })
@@ -164,10 +164,10 @@ def plot_compare_auto_and_manual_rois_selection():
     # overlay color bounding box corresponding to the label, and centroids
     # on the original spectrogram
     ax2, fig2 = overlay_rois(Sxx_db, df_centroid,
-                             **{'vmin': 0, 'vmax': dB_max, 'extent': ext})
+                             **{'vmin': 0, 'vmax': dB_max, 'extent': extent})
     ax2, fig2 = overlay_centroid(Sxx_db, df_centroid, savefig=None,
                                  **{
-                                     'vmin': 0, 'vmax': dB_max, 'extent': ext,
+                                     'vmin': 0, 'vmax': dB_max, 'extent': extent,
                                      'ms': 2, 'marker': '+', 'color': 'red',
                                      'fig': fig2, 'ax': ax2
                                  })
@@ -206,12 +206,12 @@ def plot_compare_auto_and_manual_rois_selection():
     df_centroid_WAV = features.centroid_features(Sxx_db, df_rois_WAV)
     ax3, fig3 = overlay_rois(Sxx_db, df_rois_WAV, **{
         'vmin': 0, 'vmax': dB_max,
-        'extent': ext
+        'extent': extent
     })
     df_centroid_WAV = format_features(df_centroid_WAV, tn, fn)
     ax3, fig3 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None,
                                  **{
-                                     'vmin': 0, 'vmax': dB_max, 'extent': ext,
+                                     'vmin': 0, 'vmax': dB_max, 'extent': extent,
                                      'ms': 2, 'marker': '+', 'color': 'red',
                                      'fig': fig3, 'ax': ax3
                                  })
@@ -230,11 +230,11 @@ def plot_compare_auto_and_manual_rois_selection():
     # on the original spectrogram
     ax4, fig4 = overlay_rois(Sxx_db, df_centroid_WAV, **{
         'vmin': 0, 'vmax': dB_max,
-        'extent': ext
+        'extent': extent
     })
     ax4, fig4 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None,
                                  **{
-                                     'vmin': 0, 'vmax': dB_max, 'extent': ext,
+                                     'vmin': 0, 'vmax': dB_max, 'extent': extent,
                                      'ms': 2, 'fig': fig4, 'ax': ax4
                                  })
 

@@ -799,7 +799,7 @@ def format_features(df, tn, fn):
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(s, fs)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram(s, fs)
     >>> df_rois = maad.util.read_audacity_annot('../data/cold_forest_daylight_label.txt')
     >>> list(df_rois)
     >>> df_rois = maad.util.format_features(df_rois, tn, fn)

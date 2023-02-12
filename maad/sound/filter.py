@@ -150,11 +150,11 @@ def fir_filter(x, kernel, axis=0):
     Load and display the spectrogram of a sound waveform
 
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(w,fs)
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
-                      'extent': ext,
+                      'extent': extent,
                       'figsize': (4,13),
                       'title': 'Power spectrogram density (PSD)',
                       'xlabel': 'Time [sec]',
@@ -335,7 +335,7 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(5,10), fcrop=(0,10000))
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs, tcrop=(5,10), fcrop=(0,10000))
 
     Convert linear spectrogram into dB
 
@@ -351,10 +351,10 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
 
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2d(Sxx_dB_std05, ax=ax2, extent=ext, title='smooth (std=0.5)', vmin=10, vmax=70)
-    >>> maad.util.plot2d(Sxx_dB_std10, ax=ax3, extent=ext, title='smooth (std=1)', vmin=10, vmax=70)
-    >>> maad.util.plot2d(Sxx_dB_std15, ax=ax4, extent=ext, title='smooth (std=1.5)', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, title='original', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB_std05, ax=ax2, extent=extent, title='smooth (std=0.5)', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB_std10, ax=ax3, extent=extent, title='smooth (std=1)', vmin=10, vmax=70)
+    >>> maad.util.plot2d(Sxx_dB_std15, ax=ax4, extent=extent, title='smooth (std=1.5)', vmin=10, vmax=70)
     >>> fig.set_size_inches(7,9)
     >>> fig.tight_layout()
 

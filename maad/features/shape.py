@@ -313,15 +313,15 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     >>> from maad.features import filter_bank_2d_nodc, filter_multires
     >>> from maad import util
     >>> s, fs = load('../data/spinetail.wav')
-    >>> Sxx, dt, df, ext = spectrogram(s, fs)
+    >>> Sxx, dt, df, extent = spectrogram(s, fs)
     >>> Sxx_db = util.power2dB(Sxx, db_range=80) + 80
-    >>> util.plot2d(Sxx_db, **{'extension':ext})
+    >>> util.plot2d(Sxx_db, **{'extension':extent})
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2)
     >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
 
     Plot one of the resulting spectrograms.
 
-    >>> util.plot2d(Sxx_out[5], **{'extension':ext})
+    >>> util.plot2d(Sxx_out[5], **{'extension':extent})
 
     """
 
@@ -592,7 +592,7 @@ def shape_features(Sxx, resolution='low', rois=None):
     >>> from maad.features import shape_features
     >>> from maad.util import format_features, power2dB, plot_shape
     >>> s, fs = load('../data/spinetail.wav')
-    >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=100, display=True)
+    >>> Sxx, tn, fn, extent = spectrogram(s, fs, db_range=100, display=True)
     >>> Sxx_db = power2dB(Sxx, db_range=100)
     >>> shape, params = shape_features(Sxx_db, resolution='med')
     >>> ax = plot_shape(shape.mean(), params)
@@ -708,13 +708,13 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     >>> from maad.features import shape_features_raw
     >>> from maad.util import power2dB, plot2d
     >>> s, fs = load('../data/spinetail.wav')
-    >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True)
+    >>> Sxx, tn, fn, extent = spectrogram(s, fs, db_range=80, display=True)
     >>> Sxx_db = power2dB(Sxx, db_range=80)
     >>> shape_raw, params = shape_features_raw(Sxx_db, resolution='low')
-    >>> plot2d(shape_raw[0], **{'extent':ext, 'title': 'High-frequency vertical component'})
-    >>> plot2d(shape_raw[13], **{'extent':ext, 'title': 'Low-frequency vertical components'})
-    >>> plot2d(shape_raw[2], **{'extent':ext, 'title': 'High-frequency horizontal components'})
-    >>> plot2d(shape_raw[15], **{'extent':ext, 'title': 'Low-frequency horizontal components'})
+    >>> plot2d(shape_raw[0], **{'extent':extent, 'title': 'High-frequency vertical component'})
+    >>> plot2d(shape_raw[13], **{'extent':extent, 'title': 'Low-frequency vertical components'})
+    >>> plot2d(shape_raw[2], **{'extent':extent, 'title': 'High-frequency horizontal components'})
+    >>> plot2d(shape_raw[15], **{'extent':extent, 'title': 'Low-frequency horizontal components'})
     """
 
     # unpack settings
@@ -774,7 +774,7 @@ def centroid_features(Sxx, rois=None, im_rois=None):
     Load audio and compute spectrogram
 
     >>> s, fs = load('../data/spinetail.wav')
-    >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80)
+    >>> Sxx,tn,fn,extent = spectrogram(s, fs, db_range=80)
     >>> Sxx = power2dB(Sxx, db_range=80)
 
     Load annotations and plot
@@ -782,15 +782,15 @@ def centroid_features(Sxx, rois=None, im_rois=None):
     >>> from maad.util import read_audacity_annot
     >>> rois = read_audacity_annot('../data/spinetail.txt')
     >>> rois = format_features(rois, tn, fn)
-    >>> ax, fig = plot2d (Sxx, extent=ext)
-    >>> ax, fig = overlay_rois(Sxx,rois, extent=ext, ax=ax, fig=fig)
+    >>> ax, fig = plot2d (Sxx, extent=extent)
+    >>> ax, fig = overlay_rois(Sxx,rois, extent=extent, ax=ax, fig=fig)
 
     Compute the centroid of each rois, format to get results in the
     temporal and spectral domain and overlay the centroids.
 
     >>> centroid = centroid_features(Sxx, rois)
     >>> centroid = format_features(centroid, tn, fn)
-    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
+    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=extent, ax=ax, fig=fig)
 
     """
 
@@ -961,8 +961,19 @@ def all_shape_features(s, fs, rois, resolution='low',
     vmin   = kwargs.pop('vmin',-120)
     vmax   = kwargs.pop('vmax',-20)
 
-    Sxx, tn, fn, ext = spectrogram(s, fs, window, nperseg, overlap, fcrop,
-                                   tcrop, mode, verbose, display=False, **kwargs)
+    Sxx, tn, fn, extent = spectrogram(
+        s,
+        fs,
+        window,
+        nperseg,
+        overlap,
+        fcrop,
+        tcrop,
+        mode,
+        verbose,
+        display=False,
+        **kwargs,
+    )
 
     # dB scale
     Sxx = 10*np.log10(Sxx)

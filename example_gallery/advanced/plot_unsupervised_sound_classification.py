@@ -45,10 +45,10 @@ def plot_unsupervised_sound_classification():
 
     db_max = 70  # used to define the range of the spectrogram
 
-    Sxx, tn, fn, ext = sound.spectrogram(s_filt, fs, nperseg=1024,
+    Sxx, tn, fn, extent = sound.spectrogram(s_filt, fs, nperseg=1024,
                                          noverlap=512)
     Sxx_db = power2dB(Sxx, db_range=db_max) + db_max
-    plot2d(Sxx_db, **{'extent': ext})
+    plot2d(Sxx_db, **{'extent': extent})
 
     # 1. Find regions of interest
     # ---------------------------
@@ -65,7 +65,7 @@ def plot_unsupervised_sound_classification():
     # Format ROIs and visualize the bounding box on the audio spectrogram.
     df_rois = format_features(df_rois, tn, fn)
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
-                             **{'vmin': 0, 'vmax': 60, 'extent': ext})
+                             **{'vmin': 0, 'vmax': 60, 'extent': extent})
 
     # 2. Compute acoustic features
     # ----------------------------
@@ -126,7 +126,7 @@ def plot_unsupervised_sound_classification():
     # Overlay bounding box on the original spectrogram
     df_rois['label'] = cluster.labels_.astype(str)
     ax0, fig0 = overlay_rois(Sxx_db, df_rois,
-                             **{'vmin': 0, 'vmax': 60, 'extent': ext})
+                             **{'vmin': 0, 'vmax': 60, 'extent': extent})
 
 
 if __name__ == '__main__':

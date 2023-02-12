@@ -140,7 +140,7 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs)
 
     Convert linear spectrogram into dB and add 96dB (which is the maximum dB
     for 16 bits wav) in order to have positive values
@@ -156,8 +156,8 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=extent, title='Without stationary noise', vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()
 
@@ -342,7 +342,7 @@ def remove_background_morpho(Sxx, q=0.1, display=False, savefig=None, **kwargs):
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs)
 
     Convert linear spectrogram into dB
 
@@ -357,15 +357,15 @@ def remove_background_morpho(Sxx, q=0.1, display=False, savefig=None, **kwargs):
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=extent, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()
 
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, tcrop=(0,20))
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs, tcrop=(0,20))
     >>> Sxx_dB = maad.util.power2dB(Sxx) +96
 
     Remove stationnary noise from the spectrogram with different q
@@ -378,9 +378,9 @@ def remove_background_morpho(Sxx, q=0.1, display=False, savefig=None, **kwargs):
 
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
-    >>> maad.util.plot2d(Sxx_dB_noNoise_q25, ax=ax1, extent=ext, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise_q25), vmax=np.median(Sxx_dB_noNoise_q25)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise_q50, ax=ax2, extent=ext, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise_q50), vmax=np.median(Sxx_dB_noNoise_q50)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise_q75, ax=ax3, extent=ext, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise_q75), vmax=np.median(Sxx_dB_noNoise_q75)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_q25, ax=ax1, extent=extent, title='Without stationary noise (q=0.25)',vmin=np.median(Sxx_dB_noNoise_q25), vmax=np.median(Sxx_dB_noNoise_q25)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_q50, ax=ax2, extent=extent, title='Without stationary noise (q=0.50)',vmin=np.median(Sxx_dB_noNoise_q50), vmax=np.median(Sxx_dB_noNoise_q50)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_q75, ax=ax3, extent=extent, title='Without stationary noise (q=0.75)',vmin=np.median(Sxx_dB_noNoise_q75), vmax=np.median(Sxx_dB_noNoise_q75)+40)
     >>> fig.set_size_inches(15,9)
     >>> fig.tight_layout()
 
@@ -548,7 +548,7 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs)
 
     Convert linear spectrogram into dB
 
@@ -565,10 +565,10 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
     >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise_ale, ax=ax2, extent=ext, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise_ale), vmax=np.median(Sxx_dB_noNoise_ale)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise_med, ax=ax3, extent=ext, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise_med), vmax=np.median(Sxx_dB_noNoise_med)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise_mean, ax=ax4, extent=ext, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_ale, ax=ax2, extent=extent, title='Without stationary noise (mode = ''ale'')',vmin=np.median(Sxx_dB_noNoise_ale), vmax=np.median(Sxx_dB_noNoise_ale)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_med, ax=ax3, extent=extent, title='Without stationary noise (mode = ''med'')',vmin=np.median(Sxx_dB_noNoise_med), vmax=np.median(Sxx_dB_noNoise_med)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise_mean, ax=ax4, extent=extent, title='Without stationary noise (mode = ''mean'')',vmin=np.median(Sxx_dB_noNoise_mean), vmax=np.median(Sxx_dB_noNoise_mean)+40)
     >>> fig.set_size_inches(8,10)
     >>> fig.tight_layout()
     """
@@ -717,7 +717,7 @@ def median_equalizer(Sxx, display=False, savefig=None, **kwargs):
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/rock_savanna.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs)
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs)
 
     Convert linear spectrogram into dB
 
@@ -733,8 +733,8 @@ def median_equalizer(Sxx, display=False, savefig=None, **kwargs):
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
-    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=ext, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, title='original', vmin=np.median(Sxx_dB), vmax=np.median(Sxx_dB)+40)
+    >>> maad.util.plot2d(Sxx_dB_noNoise, ax=ax2, extent=extent, title='Without stationary noise',vmin=np.median(Sxx_dB_noNoise), vmax=np.median(Sxx_dB_noNoise)+40)
     >>> fig.set_size_inches(15,8)
     >>> fig.tight_layout()
 

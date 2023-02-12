@@ -421,7 +421,7 @@ def create_mask(im, mode_bin = 'relative',
     Load audio recording and convert it into spectrogram
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs, fcrop=(0,10000))
 
     Convert linear spectrogram into dB
 
@@ -439,11 +439,10 @@ def create_mask(im, mode_bin = 'relative',
 
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2d(im_bin, ax=ax2, extent=ext, title='mask')
+    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=extent, title='original', vmin=10, vmax=70)
+    >>> maad.util.plot2d(im_bin, ax=ax2, extent=extent, title='mask')
     >>> fig.set_size_inches(13,8)
     >>> fig.tight_layout()
-
     """
 
     if mode_bin == 'relative':
@@ -549,7 +548,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     Load audio recording compute the spectrogram in dB.
 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)
     >>> Sxx_dB = maad.util.power2dB(Sxx) +96
 
     Smooth the spectrogram

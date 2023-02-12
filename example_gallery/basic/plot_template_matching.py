@@ -46,7 +46,7 @@ def plot_template_matching():
     Sxx_template = util.power2dB(Sxx_template, db_range)
 
     # Compute spectrogram for target audio
-    Sxx_audio, tn, fn, ext = sound.spectrogram(
+    Sxx_audio, tn, fn, extent = sound.spectrogram(
         s, fs, window, nperseg, noverlap, flims
     )
     Sxx_audio = util.power2dB(Sxx_audio, db_range)
@@ -57,16 +57,22 @@ def plot_template_matching():
     # of the audio and frequency limits must be added.
     peak_th = 0.3  # set the threshold to find peaks
     xcorrcoef, rois = template_matching(
-        Sxx_audio, Sxx_template, tn, ext, peak_th
+        Sxx_audio, Sxx_template, tn, extent, peak_th
     )
     rois['min_f'] = flims[0]
     rois['max_f'] = flims[1]
     print(rois)
 
     # Finally, you can plot the detection results or save them as a csv file.
-    Sxx, tn, fn, ext = sound.spectrogram(s, fs, window, nperseg, noverlap)
+    Sxx, tn, fn, extent = sound.spectrogram(s, fs, window, nperseg, noverlap)
     fig, ax = plt.subplots(2, 1, figsize=(8, 5), sharex=True)
-    util.plot_spectrogram(Sxx, ext, db_range=80, ax=ax[0], colorbar=False)
+    util.plot_spectrogram(
+        Sxx=Sxx,
+        extent=extent,
+        db_range=80,
+        ax=ax[0],
+        colorbar=False,
+    )
     util.overlay_rois(
         Sxx, util.format_features(rois, tn, fn), fig=fig, ax=ax[0],
     )

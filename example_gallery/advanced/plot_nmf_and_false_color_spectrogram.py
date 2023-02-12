@@ -48,13 +48,13 @@ def plot_nmf_and_false_color_spectrogram():
     # --------------------
     # Load the audio file and compute the spectrogram.
     s, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
-    Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
+    Sxx, tn, fn, extent = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
     Sxx_db = power2dB(Sxx, db_range=70)
     Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True,
                                multichannel=False)  # rescale for faster
     # computation
 
-    plot2d(Sxx_db, figsize=(4, 10), extent=ext)
+    plot2d(Sxx_db, figsize=(4, 10), extent=extent)
     # Filter the spectrogram with 2D wavelets
     # ---------------------------------------
     # Compute feature with ``shape_features_raw`` to get the raw output of the

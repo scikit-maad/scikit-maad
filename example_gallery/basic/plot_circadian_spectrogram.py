@@ -39,7 +39,7 @@ def plot_circadian_spectrogram():
     )
 
     # Compute spectrogram of the mixed audio
-    Sxx, _, _, ext = sound.spectrogram(
+    Sxx, _, _, extent = sound.spectrogram(
         x=trimmed_signals,
         fs=sample_rate,
         window='hann',
