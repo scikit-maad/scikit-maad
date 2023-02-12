@@ -1434,7 +1434,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
         Frequency step in Hz
 
     dB_threshold : scalar, optional, default is -50dB
-        Threshold to compute the score (ie. the number of data > threshold,
+        Threshold to compute the score (i.e. the number of data > threshold,
         normalized by the length)
 
     index : string, optional, default is "shannon"
@@ -1445,7 +1445,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     Returns
     -------
     ADI : scalar
-        Acoustic Diversity Index of the spectrogram (ie. index of the vector
+        Acoustic Diversity Index of the spectrogram (i.e. index of the vector
         of scores)
 
     Notes
@@ -1542,13 +1542,13 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
         Frequency step in Hz
 
     dB_threshold : scalar, optional, default is -50
-        Threshold to compute the score (ie. the number of data > threshold,
+        Threshold to compute the score (i.e. the number of data > threshold,
         normalized by the length)
 
     Returns
     -------
     AEI : scalar
-        Acoustic Eveness of the spectrogram (ie. Gini of the vector of scores)
+        Acoustic Eveness of the spectrogram (i.e. Gini of the vector of scores)
 
     Notes
     -----

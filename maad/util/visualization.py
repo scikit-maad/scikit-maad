@@ -1221,7 +1221,7 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
     Parameters
     ----------
     df : Panda DataFrame
-        DataFrame with features (ie. indices).
+        DataFrame with features (i.e. indices).
 
     norm : boolean, default is True
         if True, the features are scaled between 0 to 1
@@ -1354,13 +1354,13 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
 
 def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     """
-    Plot the variation of features values (ie. indices) in the DataFrame obtained
+    Plot the variation of features values (i.e. indices) in the DataFrame obtained
     with ``maad.features``.
 
     Parameters
     ----------
     df : Panda DataFrame
-        DataFrame with features (ie. indices).
+        DataFrame with features (i.e. indices).
 
     norm : boolean, default is True
         if True, the features are normalized by the max
@@ -1482,7 +1482,7 @@ def plot_correlation_map(df, R_threshold=0.75, method="spearman", **kwargs):
     Parameters
     ----------
     df : Panda DataFrame
-        DataFrame with features (ie. indices).
+        DataFrame with features (i.e. indices).
 
     R_threshold : scalar between 0 to 1, default is 0.75
         Show correlations with R higher than R_threshold

@@ -340,7 +340,7 @@ def kurtosis (x, axis=None):
 
 def moments (X, axis=None):
     """
-    Computes the first 4th moments of a vector (1d, ie. spectrum or waveform)
+    Computes the first 4th moments of a vector (1d, i.e. spectrum or waveform)
     or spectrogram (2d)
 
     - mean
