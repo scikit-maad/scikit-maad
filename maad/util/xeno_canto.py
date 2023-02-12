@@ -424,7 +424,7 @@ def xc_download(df,
                     fullpath_list += [str(fullpath)]
                     if verbose :
                         print("Saving file ", count, "/", numfiles, ": " + fileaddress)
-                except:
+                except Exception:
                     # can't download the audio file (it does not exist (anymore) in
                     # xeno-canto)
                     if verbose :
@@ -565,7 +565,7 @@ def xc_download(df,
 
 #     try :
 #         df_dataset = pd.read_csv(rootdir / filename, sep=';', index='id')
-#     except:
+#     except Exception:
 #         df_dataset = pd.DataFrame()
 #         if verbose :
 #             print(

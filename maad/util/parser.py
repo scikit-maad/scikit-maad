@@ -147,7 +147,7 @@ def read_audacity_annot (audacity_filename):
                                  tab_in['min_f'].astype('float32'),
                                  tab_in['max_t'].astype('float32'),
                                  tab_in['max_f'].astype('float32')],  axis=1)
-    except:
+    except Exception:
         tab_out = pd.DataFrame()
 
     return tab_out

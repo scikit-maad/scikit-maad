@@ -469,7 +469,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
             try:
                 int(unique_labels)
                 uniqueLabels = [unique_labels]
-            except:
+            except Exception:
                 raise TypeError(
                     "unique_labels must be a list or a string or a number"
                 )

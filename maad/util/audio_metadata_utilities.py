@@ -49,7 +49,7 @@ def check_file_format(path_audio):
     except FileNotFoundError as fnfe:
         raise fnfe
 
-    except:
+    except Exception:
         error = 1
         return error
 

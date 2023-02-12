@@ -183,7 +183,7 @@ def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hann', method
     # trim audio signal
         try:
             s = s[int(tlims[0]*fs): int(tlims[1]*fs)]
-        except:
+        except Exception:
             raise Exception('length of tlims tuple should be 2')
 
     # small fix to keep compatibility with old scipy version
