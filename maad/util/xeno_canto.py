@@ -536,8 +536,6 @@ def xc_download(df,
 
 #     return fullpath
 
-# #%%
-
 # def xc_read_csv(
 #         filename,
 #         rootdir   = os.getcwd(),
