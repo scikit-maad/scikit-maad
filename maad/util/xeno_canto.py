@@ -141,7 +141,7 @@ def xc_query(searchTerms,
             df_dataset['time'][df_dataset.time.str.match('^([0-9])[:]([0-5][0-9])$')] = '0' + df_dataset[df_dataset.time.str.match('^([0-9])[:]([0-5][0-9])$')].time
 
             if verbose:
-                print("Keeped metadata for", len(df_dataset), "files after formating time")
+                print("Kept metadata for", len(df_dataset), "files after formating time")
 
         if format_date == True:
             # rearrange index to be sure to have unique and increasing index
@@ -150,7 +150,7 @@ def xc_query(searchTerms,
             df_dataset = df_dataset[df_dataset.date.str.match(r'^(20[0-9][0-9]|19[0-9][0-9])-(0[1-9]|1[0-2])-([1-9]|1[0-9]|2[0-9]|3[0-1])$')]
 
             if verbose:
-                print("Keeped metadata for", len(df_dataset), "files after formating date")
+                print("Kept metadata for", len(df_dataset), "files after formating date")
 
         if (format_time == True) and (format_date == True):
             # add a column with the week number
