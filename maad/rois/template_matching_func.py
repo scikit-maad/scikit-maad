@@ -15,7 +15,8 @@ from scipy.signal import find_peaks
 from skimage.feature import match_template
 import matplotlib.pyplot as plt
 from matplotlib import patches
-from maad import sound, util
+from maad import util
+
 
 def template_matching(
     Sxx, Sxx_template, tn, ext, peak_th, peak_distance=None, display=False, **kwargs
