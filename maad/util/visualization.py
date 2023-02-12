@@ -953,8 +953,16 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
     return ax, fig
 
 
-def plot_spectrogram(Sxx, extent, db_range=96, gain=0, log_scale=True,
-                     colorbar=True, interpolation='bilinear', **kwargs):
+def plot_spectrogram(
+    Sxx,
+    extent,
+    db_range=96,
+    gain=0,
+    log_scale=True,
+    colorbar=True,
+    interpolation='bilinear',
+    **kwargs,
+):
     """
     Plot spectrogram represenation.
 
