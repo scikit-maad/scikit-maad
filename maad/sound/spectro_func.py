@@ -10,11 +10,9 @@ manipulate spectrograms.
 # =============================================================================
 # Load the modules
 # =============================================================================
-# Import external modules
 import numpy as np
 import scipy as sp
 
-# Import internal modules
 from maad.util import (plot1d, plot2d, crop_image, power2dB, amplitude2dB)
 
 # =============================================================================
