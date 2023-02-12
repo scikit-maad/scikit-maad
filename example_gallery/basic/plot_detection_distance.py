@@ -56,7 +56,8 @@ def plot_detection_distance():
         [44.270917, 27.586848, 25.60843, 23.205826, 20.631086, 24.080126,
          19.032034, 33.455814, 44.420644, 19.751421, 11.932672, 9.641225,
          8.075566, 7.447614, 6.991958, 7.854252, 11.911974, 4.192154,
-         3.234791, 2.936258])
+         3.234791, 2.936258]
+    )
 
     # We know the initial sound pressure level LO at the distance r0 = 1m as
     # well as the sound pressure level of the background L_bkg, then it is
@@ -65,8 +66,9 @@ def plot_detection_distance():
     # are common values for rainforest. We also set the coefficient of
     # attenuation of the habitat to 0.02dB/kHz/m which is also
     # representative of the attenuation of rainforest habitat.
-    f, r = spl.detection_distance(L_bkg, L0_per_bin, f, r0, t=24, rh=87,
-                                  a0=0.02)
+    f, r = spl.detection_distance(
+        L_bkg, L0_per_bin, f, r0, t=24, rh=87, a0=0.02,
+    )
 
     # Display the detection distance for each frequency as a bar plot. We can
     # observe that the detection distance is highly variable from 10m at
@@ -75,14 +77,15 @@ def plot_detection_distance():
     # masks the propagation of the audio signal at a very short distance.
 
     # Define a function to add value labels
-    def valuelabel(f, r):
+    def add_value_labels(f, r):
         for i in range(len(f)):
-            plt.text(i,
-                     r[i] + 2,
-                     '%dm' % r[i],
-                     ha='center',
-                     size=6,
-                     )
+            plt.text(
+                i,
+                r[i] + 2,
+                '%dm' % r[i],
+                ha='center',
+                size=6,
+             )
 
     # Create the figure and set the size
     fig = plt.figure()
@@ -98,7 +101,7 @@ def plot_detection_distance():
     plt.xticks(rotation=45)
 
     # Call function
-    valuelabel(f, r)
+    add_value_labels(f, r)
 
     # Define labels
     plt.ylabel("Detection distance [m]")
