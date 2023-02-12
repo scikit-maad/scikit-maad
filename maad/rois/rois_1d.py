@@ -149,10 +149,10 @@ def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False,
     t, s_rms = _energy_windowed(s_filt, int(wl), fs)
     # find peaks
     cwt_width = [round(tlen*fs/wl/2)]
-    npad = 5 ## seems to work with 3, but not sure
-    s_rms = np.pad(s_rms, np.int64(cwt_width[0]*npad), 'reflect')  ## add pad
+    npad = 5 # seems to work with 3, but not sure
+    s_rms = np.pad(s_rms, np.int64(cwt_width[0]*npad), 'reflect')  # add pad
     s_cwt = signal.cwt(s_rms, signal.ricker, cwt_width)
-    s_cwt = s_cwt[0][np.int64(cwt_width[0]*npad):len(s_cwt[0])-np.int64(cwt_width[0]*npad)] ## rm pad
+    s_cwt = s_cwt[0][np.int64(cwt_width[0]*npad):len(s_cwt[0])-np.int64(cwt_width[0]*npad)] # rm pad
     # find onset and offset of sound
     segments_bin = np.array(s_cwt > th)
     onset = t[np.where(np.diff(segments_bin.astype(int)) > 0)]+t[0]  # there is delay because of the diff that needs to  be accounted

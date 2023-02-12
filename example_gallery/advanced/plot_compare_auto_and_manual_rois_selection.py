@@ -100,7 +100,7 @@ def plot_compare_auto_and_manual_rois_selection():
     # Audacity software. Each acoustic signature is manually selected and
     # labeled. All similar acoustic signatures are labeled with the same name
     df_rois_GT = read_audacity_annot(
-        str(DATA_PATH / 'cold_forest_daylight_label.txt'))  ## annotations using
+        str(DATA_PATH / 'cold_forest_daylight_label.txt'))  # annotations using
 
     # Audacity
 
@@ -188,7 +188,7 @@ def plot_compare_auto_and_manual_rois_selection():
     df_rois_sl = rois.find_rois_cwt(s, fs, flims=[1800, 3000], tlen=0.2,
                                     th=0.000001)
 
-    ## concat df
+    # concat df
     df_rois_WAV = pd.concat([df_rois_sh, df_rois_sm, df_rois_lm, df_rois_sl],
                             ignore_index=True)
 

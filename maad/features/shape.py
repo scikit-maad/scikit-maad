@@ -830,11 +830,11 @@ def centroid_features(Sxx, rois=None, im_rois=None):
 
         centroid = pd.DataFrame(centroid, columns=['centroid_y', 'centroid_x'], index=rois.index)
 
-        ##### duration in number of pixels
+        # duration in number of pixels
         centroid['duration_x'] = (rois.max_x -rois.min_x)
-        ##### bandwidth in number of pixels
+        # bandwidth in number of pixels
         centroid['bandwidth_y'] = (rois.max_y -rois.min_y)
-        ##### area
+        # area
         centroid['area_xy'] = area
 
         # concat rois and centroid dataframes

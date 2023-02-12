@@ -78,10 +78,10 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
     EVNsp [Towsey]: ACTcount (number of point value above the theshold)
     """
 
-    ### For x to be a ndarray
+    # For x to be a ndarray
     xdB = np.asarray(xdB)
 
-    ### compute _score
+    # compute _score
     ACTfract, ACTcount = _score(xdB, dB_threshold, axis=axis)
     ACTfract= ACTfract.tolist()
     ACTcount = ACTcount.tolist()
@@ -642,16 +642,16 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
 
     """
 
-    ### For wave to be a ndarray
+    # For wave to be a ndarray
     s = np.asarray(s)
 
-    ### envelope
+    # envelope
     if mode == 'fast' :
         env = envelope(s, mode='fast', Nt=Nt)
     elif mode == 'hilbert' :
         env = envelope(s, mode='hilbert')
 
-    ### get background value
+    # get background value
     _,BGNt,_ = temporal_snr(s, mode, Nt)
 
     # linear to power dB
@@ -738,10 +738,10 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
     EVNtFract: 0.37 / EVNmean: 0.08 / EVNcount:  5
 
     """
-    ### For wave to be a ndarray
+    # For wave to be a ndarray
     s = np.asarray(s)
 
-    ### envelope
+    # envelope
     if mode == 'fast' :
         env = envelope(s, mode, Nt)
         dt =1/fs*Nt
@@ -752,7 +752,7 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
     # Time vector
     tn = np.arange(0,len(env),1)*len(s)/fs/len(env)
 
-    ### get background value
+    # get background value
     _,BGNt,_ = temporal_snr(s, mode, Nt)
 
     # linear to power dB
@@ -766,7 +766,7 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
     # EVNtFraction
     EVNtFraction = EVNtSum / (dt*len(tn))
 
-    ### display
+    # display
     if display :
         fig, ax = plt.subplots()
         ax.plot(tn, env/max(abs(env)), lw=0.5, alpha=1)
@@ -982,7 +982,7 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
 
 # ============================================================================
 
-####    Indices based on the entropy
+#    Indices based on the entropy
 
 def spectral_entropy (Sxx, fn, flim=None, display=False) :
     """
@@ -1050,24 +1050,24 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
 
     # TOWSEY : only on the bio band
     # EAS [TOWSEY] #
-    ####  COMMENT : Result a bit different due to different Hilbert implementation
+    #  COMMENT : Result a bit different due to different Hilbert implementation
     X_mean = mean(X[iBAND], axis=1)
     Hf = entropy(X_mean)
     EAS = 1 - Hf
 
-    #### Entropy of spectral variance (along the time axis for each frequency)
+    # Entropy of spectral variance (along the time axis for each frequency)
     """ ECU [TOWSEY] """
     X_Var = var(X[iBAND], axis=1)
     Hf_var = entropy(X_Var)
     ECU = 1 - Hf_var
 
-    #### Entropy of coefficient of variance (along the time axis for each frequency)
+    # Entropy of coefficient of variance (along the time axis for each frequency)
     """ ECV [TOWSEY] """
     X_CoV = var(X[iBAND], axis=1)/mean(X[iBAND], axis=1)
     Hf_CoV = entropy(X_CoV)
     ECV = 1 - Hf_CoV
 
-    #### Entropy of spectral maxima
+    # Entropy of spectral maxima
     """ EPS [TOWSEY]  """
     ioffset = np.argmax(iBAND==True)
     Nbins = sum(iBAND==True)
@@ -1078,17 +1078,17 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
     if sum(max_X_bin) == 0 :
         max_X_bin = np.zeros(len(max_X_bin))
         EPS = float('nan')
-        #### Kurtosis of spectral maxima
+        # Kurtosis of spectral maxima
         EPS_KURT = float('nan')
-        #### skewness of spectral maxima
+        # skewness of spectral maxima
         EPS_SKEW = float('nan')
     else:
         max_X_bin = max_X_bin/sum(max_X_bin)
         Hf_fmax = entropy(max_X_bin)
         EPS = 1 - Hf_fmax
-        #### Kurtosis of spectral maxima
+        # Kurtosis of spectral maxima
         EPS_KURT = kurtosis(max_X_bin)
-        #### skewness of spectral maxima
+        # skewness of spectral maxima
         EPS_SKEW = skewness(max_X_bin)
 
     if display:
@@ -1158,7 +1158,7 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
 
     """
 
-    ### For Sxx to be a ndarray
+    # For Sxx to be a ndarray
     Sxx = np.asarray(Sxx)
 
     idx = index_bw(fn,flim_LF)
@@ -1227,7 +1227,7 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
 
     """
 
-    ### For Sxx_dB to be a ndarray
+    # For Sxx_dB to be a ndarray
     Sxx_dB = np.asarray(Sxx_dB)
 
     ACTspfract, ACTspcount, ACTspmean = _acoustic_activity (Sxx_dB, dB_threshold,
@@ -1303,7 +1303,7 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     Mean proportion of spectrogram with events : 0.01%
 
     """
-    ### For wave to be a ndarray
+    # For wave to be a ndarray
     Sxx_dB = np.asarray(Sxx_dB)
 
     EVNspSum, EVNspMean, EVNspCount, EVNsp = _acoustic_events (Sxx_dB, dt,
@@ -1607,7 +1607,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     return AEI
 
 # ============================================================================
-####    Indices based on the energy
+#    Indices based on the energy
 # ============================================================================
 def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000),
                      R_compatible = 'soundecology'):
@@ -2373,12 +2373,12 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
                                  max_roi=max_roi,
                                  display= display, **kwargs)
 
-    ##### Extract centroids features of each roi from the spectrogram in dB without noise
+    # Extract centroids features of each roi from the spectrogram in dB without noise
     X = dB2power(Sxx_dB_noNoise)
     rois = format_features(rois, tn, fn)
     centroid = centroid_features(X, rois, im_rois)
 
-    ###### remove rois with ratio >max_ratio_xy (they are mostly artefact
+    # remove rois with ratio >max_ratio_xy (they are mostly artefact
     # such as wind, ain or clipping)
     # add ratio x/y
     rois['ratio_xy'] = (rois.max_y -rois.min_y) / (rois.max_x -rois.min_x)
@@ -2394,7 +2394,7 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     #ROItotal
     ROItotal = len(centroid)
 
-    ##### calcul the area of each roi
+    # calcul the area of each roi
     # rectangular area (overestimation)
     area = (rois.max_y -rois.min_y) * (rois.max_x -rois.min_x)
     # size of im_rois => whole spectrogram
@@ -2506,7 +2506,7 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
 
     """
 
-    #### get variables
+    # get variables
     # Envelope => mode {'fast', 'hilbert"}, if 'fast', set Nt, number of point by frame
     mode = kwargs.pop('mode','fast')
     Nt = kwargs.pop('Nt',512)
@@ -2525,7 +2525,7 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
     dB_threshold = kwargs.pop('dB_threshold',3)
     rejectDuration = kwargs.pop('rejectDuration',0.01)
 
-    #### create a list
+    # create a list
     df_temporal_indices=[]
 
     """************************* Zero Crossing Rate ************ ***********"""
@@ -2766,7 +2766,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     # extent
     kwargs.update({'extent':(tn[0], tn[-1], fn[0], fn[-1])})
 
-    #### get variables
+    # get variables
     R_compatible = kwargs.pop('R_compatible','soundecology')
 
     # for LEQ :
@@ -2780,7 +2780,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     dB_threshold = kwargs.pop('dB_threshold',3)
     rejectDuration = kwargs.pop('rejectDuration',None) # if None => 3 pixels
 
-    ### for Roi
+    # for Roi
     min_roi_area    = kwargs.pop('min_roi_area',None) # if None =>  30ms * 100Hz
     max_roi_area    = kwargs.pop('max_roi_area',None) #
     smooth_param1   = kwargs.pop('smooth_param1',1)
@@ -2790,7 +2790,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     remove_rain     = kwargs.pop('remove_rain',False)
     max_ratio_xy    = kwargs.pop('max_ratio_xy',10)
 
-    ### for ADI, AEI, RAOQ
+    # for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
     ADI_dB_threshold = kwargs.pop('ADI_dB_threshold',-50) # in dB
     AEI_dB_threshold = kwargs.pop('AEI_dB_threshold',-50) # in dB
@@ -2799,16 +2799,16 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     # removed)
     # -30 seems to give reasonable results that are more or less expected
 
-    #### create a list
+    # create a list
     df_spectral_indices=[]
     df_per_bin_indices=[]
 
-    ### for flim to be ndarray
+    # for flim to be ndarray
     flim_low = np.asarray(flim_low)
     flim_mid = np.asarray(flim_mid)
     flim_hi = np.asarray(flim_hi)
 
-    #### Prepare different spectrograms and spectrums
+    # Prepare different spectrograms and spectrums
     # amplitude spectrogram
     Sxx_amplitude = sqrt(Sxx_power)
     # mean amplitude spectrum
@@ -2872,15 +2872,15 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print("Hf %2.5f" % Hf)
 
     """*********************** Remove stationnary noise ********************"""
-    #### Use median_equalizer function as it is fast reliable
+    # Use median_equalizer function as it is fast reliable
     Sxx_power_noNoise = median_equalizer(Sxx_power, display=display, **kwargs)
 
-    #### Convert into dB
+    # Convert into dB
     Sxx_dB_noNoise = power2dB(Sxx_power_noNoise)
 
     """******** Spectral indices from Spectrum (Amplitude or Energy) *******"""
     """ EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  """
-    #### Does not take into account low frequencies.
+    # Does not take into account low frequencies.
     EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = spectral_entropy (Sxx_power_noNoise,
                                                                fn,
                                                                flim=(flim_mid[0],flim_hi[1]),
@@ -2902,7 +2902,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
             Bioacoustics Index
     ============================================================="""
 
-    #### Acoustic complexity index => 1st derivative of the spectrogram
+    # Acoustic complexity index => 1st derivative of the spectrogram
     """ ACI """
     _,ACI_per_bin,ACI_sum = acoustic_complexity_index(Sxx_amplitude)
     ACI=ACI_sum
@@ -2911,7 +2911,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     if verbose :
         print("ACI {seewave} %2.5f" %ACI)
 
-    #### energy repartition in the frequency bins
+    # energy repartition in the frequency bins
     """ NDSI & rBA """
     NDSI, rBA, AnthroEnergy, BioEnergy = soundscape_index(Sxx_power, fn,
                                                          flim_bioPh=flim_mid,
@@ -2924,7 +2924,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         else :
             print("NDSI {seewave} %2.5f" %NDSI)
 
-    ###### Bioacoustics Index : the calculation in R from soundecology is weird...
+    # Bioacoustics Index : the calculation in R from soundecology is weird...
     """ BI """
     BI = bioacoustics_index(Sxx_amplitude, fn,
                            flim=flim_mid, R_compatible=R_compatible)
@@ -2935,7 +2935,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         else :
             print("BI {MAAD} %2.5f" %BI)
 
-    #### roughness
+    # roughness
     """ ROU """
     ROU_per_bin = roughness(Sxx_amplitude, norm=None, axis=1)
     ROU = np.sum(ROU_per_bin)
@@ -2945,7 +2945,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print("roughness %2.2f" % ROU)
 
     """*********** Spectral indices from the decibel spectrogram ***********"""
-    #### Score
+    # Score
     """ ADI & AEI """
     """
         COMMENT :
@@ -2964,7 +2964,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print("AEI %2.5f" %AEI)
 
     """************************** SPECTRAL COVER ***************************"""
-    #### frequency cover
+    # frequency cover
     """ LFC, MFC, HFC [TOWSEY] """
     LFC, MFC, HFC = spectral_cover (Sxx_dB_noNoise, fn,dB_threshold=dB_threshold,
                                     flim_LF=flim_low,flim_MF=flim_mid,flim_HF=flim_hi)
@@ -3037,7 +3037,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     if verbose :
         print("RAOQ %2.2f" % RAOQ)
 
-    #### Acoustic gradient index => real 1st derivative of the spectrogram
+    # Acoustic gradient index => real 1st derivative of the spectrogram
     """ AGI """
     # Time resolution (in s)
     DELTA_T = tn[1]-tn[0]

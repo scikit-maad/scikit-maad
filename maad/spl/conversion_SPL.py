@@ -458,7 +458,7 @@ def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
 
     # convert in Volt
     volt = wav2volt(wave, Vadc)
-    ##### volt amplitude to Leq
+    # volt amplitude to Leq
     # wav to RMS
     dN = int(np.floor(dt*f)) # RMS period in number of points
     N_RMS = int(np.floor(len(volt)/dN)) # number of RMS periods
@@ -510,7 +510,7 @@ def pressure2leq (p, fs, dt=1, pRef = 20e-6):
     # be sure they are ndarray
     p = np.asarray(p)
 
-    ##### wav SPLto Leq
+    # wav SPLto Leq
     # wav to RMS
     dN = int(np.floor(dt*fs)) # RMS period in number of points
     N_RMS = int(np.floor(len(p)/dN)) # number of RMS periods
@@ -584,7 +584,7 @@ def psd2leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
 # ############################### TEST ########################################
 # Test the current operating system
 if __name__ == "__main__":
-    # ############## Import MAAD module
+    # Import MAAD module
     from pathlib import Path  # in order to be Windows/Linux/MacOS compatible
     import os
 
@@ -602,7 +602,7 @@ if __name__ == "__main__":
     os.sys.path.append(maad_path.as_posix())
     import maad
 
-    ####### Variables
+    # Variables
     S = -35     #  Sensbility microphone (for SM4 it is -35dBV)
     G = 42      # total amplification gain : preamplifier gain = 26dB and gain = 16dB
     P_REF = 20e-6   # Reference pressure (in the air : 20µPa)

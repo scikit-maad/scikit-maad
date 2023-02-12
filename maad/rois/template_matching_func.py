@@ -126,7 +126,7 @@ def template_matching(
     # When flims from Sxx is larger than Sxx_template, take mean value
     xcorrcoef = np.mean(xcorrcoef, axis=0)
 
-    ## Find peaks
+    # Find peaks
     prominence = kwargs.pop("prominence", None)
     width = kwargs.pop("width", None)
     wlen = kwargs.pop("wlen", None)

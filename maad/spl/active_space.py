@@ -568,7 +568,7 @@ def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.02):
 
     Asum_dB = Ageo_dB[np.newaxis,...] + Aatm_dB  + Ahab_dB
 
-    #### create a dataframe with all values
+    # create a dataframe with all values
     # test if f is a single value
     if f.ndim == 0 : Nf= 1
     else: Nf = len(f)
