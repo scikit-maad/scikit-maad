@@ -26,6 +26,8 @@ import pandas as pd
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+
+from example_gallery._paths import DATA_PATH
 from maad import sound, util, spl
 
 
@@ -48,8 +50,12 @@ def plot_sound_pressure_level():
     # recording device, we set the dateformat argument to 'SM4' in order to
     # be able to parse the date from the filename. In case of Audiomoth,
     # the date is coded as Hex in the filename.
-    df = util.date_parser("../../data/indices/", dateformat='SM4',
-                          verbose=True)
+    audio_dataset_path = str(DATA_PATH / 'indices')
+    df = util.date_parser(
+        datadir=audio_dataset_path,
+        dateformat='SM4',
+        verbose=True,
+    )
 
     # Load and preprocess audio
     # -------------------------

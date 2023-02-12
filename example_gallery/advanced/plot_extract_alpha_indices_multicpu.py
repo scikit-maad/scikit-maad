@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from concurrent import futures
 
+from example_gallery._paths import DATA_PATH
 from maad import sound, features
 from maad.util import date_parser
 
@@ -57,9 +58,13 @@ def plot_extract_alpha_indices_multicpu():
     # get a df with date and fullfilename. As the data were collected with a
     # SM4 audio recording device we set the dateformat agument to 'SM4' in
     # order to be able to parse the date from the filename. In case of
-    # Audiomoth, the date is coded as Hex in the filename. The path to the
-    # audio dataset is "../../data/indices/".
-    df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
+    # Audiomoth, the date is coded as Hex in the filename.
+    audio_dataset_path = str(DATA_PATH / 'indices')
+    df = date_parser(
+        datadir=audio_dataset_path,
+        dateformat='SM4',
+        verbose=True,
+    )
 
     # Date is used as index. Reset the index in order to get back Date as
     # column
