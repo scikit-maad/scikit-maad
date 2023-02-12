@@ -33,15 +33,14 @@ from maad import spl
 
 def plot_detection_distance():
     # Let's decide that the propagation sound is a wideband sound ranging
-    # from 0Hz
-    # to 20000Hz with an initial sound pressure level of 80 dBSPL at 1m which
-    # corresponds to the sum of the sound pressure level along the full
-    # frequency
-    # bandwidth. So we need first to spread the intial sound pressure level
-    # over
-    # this frequency bandwidth.
+    # from 0Hz to 20000Hz with an initial sound pressure level of 80 dBSPL at
+    # 1m which corresponds to the sum of the sound pressure level along the
+    # full frequency bandwidth. So we need first to spread the initial sound
+    # pressure level over this frequency bandwidth.
+
     # frequency vector from 0Hz to 20000Hz, with 1000Hz resolution
     f = np.arange(0, 20000, 1000)
+
     # Repartition of the initial sound pressure level along each frequency bin
     L0 = 80
     L0_per_bin = spl.dBSPL_per_bin(L0, f)
@@ -51,10 +50,9 @@ def plot_detection_distance():
     r0 = 1
 
     # The detection distance is mostly driven by the sound pressure level of
-    # the
-    # background noise (or ambient sound). Let's define an array with the sound
-    # pressure level experimentaly measured in a rainforest (French Guiana)
-    # at noon for each frequency bin (from 0Hz to 20kHz).
+    # the background noise (or ambient sound). Let's define an array with
+    # the sound pressure level experimentally measured in a rainforest (
+    # French Guiana) at noon for each frequency bin (from 0Hz to 20kHz).
     L_bkg = np.array(
         [44.270917, 27.586848, 25.60843, 23.205826, 20.631086, 24.080126,
          19.032034, 33.455814, 44.420644, 19.751421, 11.932672, 9.641225,
@@ -62,24 +60,20 @@ def plot_detection_distance():
          3.234791, 2.936258])
 
     # We know the initial sound pressure level LO at the distance r0 = 1m as
-    # well
-    # as the sound pressure level of the background L_bkg, then it is possible
-    # to estimate the detection distance for each frequency bin. We set the
-    # temperature at 24°C and the relative humidity at 87% as there are common
-    # values for rainforest. We also set the coefficient of attenuation of the
-    # habitat to 0.02dB/kHz/m which is also representative of the
-    # attenuation of
-    # rainforest habitat.
+    # well as the sound pressure level of the background L_bkg, then it is
+    # possible  to estimate the detection distance for each frequency bin.
+    # We set the temperature at 24°C and the relative humidity at 87% as there
+    # are common values for rainforest. We also set the coefficient of
+    # attenuation of the habitat to 0.02dB/kHz/m which is also
+    # representative of the attenuation of rainforest habitat.
     f, r = spl.detection_distance(L_bkg, L0_per_bin, f, r0, t=24, rh=87,
                                   a0=0.02)
 
     # Display the detection distance for each frequency as a bar plot. We can
     # observe that the detection distance is highly variable from 10m at
-    # 8kHz till
-    # 81m for 4kHz. The low detection distance between 7kHz to 8kHz is due
-    # to the
-    # stridulations of the insects that is very loud. It masks the propagation
-    # of the audio signal at a very short distance.
+    # 8kHz till 81m for 4kHz. The low detection distance between 7kHz to
+    # 8kHz is due to the stridulations of the insects that is very loud. It
+    # masks the propagation of the audio signal at a very short distance.
 
     # Define a function to add value labels
     def valuelabel(f, r):

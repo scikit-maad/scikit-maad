@@ -11,18 +11,18 @@ The following sound example as two main different soundtypes in the foreground:
 - A bouncy trill between 4.5 and 8 kHz lasting approximately 2 seconds.
 - A fast descending chirp between 8 and 12 kHz lasting 0.1 approximately seconds.
 """
-from example_gallery._paths import DATA_PATH
-# Load audio file
-# ---------------
-# Load an audio file and compute the spectrogram for visualization.
-
 from maad import sound
 from maad.rois import find_rois_cwt
 from maad.util import plot_spectrogram
 
+from example_gallery._paths import DATA_PATH
+
 
 def plot_find_rois_simple():
+    # Load audio file
     s, fs = sound.load(str(DATA_PATH / 'spinetail.wav'))
+
+    # Load an audio file and compute the spectrogram for visualization.
     Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
     plot_spectrogram(Sxx, extent=ext, db_range=60, gain=20, colorbar=False,
                      figsize=(2.5, 10))
