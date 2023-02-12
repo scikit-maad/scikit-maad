@@ -1026,4 +1026,4 @@ def apply_attenuation (p0, fs, r, r0= 1, t=20, rh=60, pa=101325, a0=0.02):
     # keep the real part
     p = np.real(p)
 
-    return (p)
+    return p
