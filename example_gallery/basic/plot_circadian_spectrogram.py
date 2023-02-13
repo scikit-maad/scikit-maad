@@ -18,38 +18,28 @@ from example_gallery._paths import DATA_PATH
 
 def plot_circadian_spectrogram():
     # Collect a list of trimmed signals from the sound files
-    trimmed_signals = []
-    signal_trim_start_in_seconds = 0
-    signal_trim_end_in_seconds = signal_trim_start_in_seconds + 3
+    signals = []
     for wav_filename in sorted((DATA_PATH / 'indices').glob('*.wav')):
         signal, sample_rate = sound.load(wav_filename)
-        trimmed_signal = sound.trim(
-            s=signal,
-            fs=sample_rate,
-            min_t=signal_trim_start_in_seconds,
-            max_t=signal_trim_end_in_seconds,
-        )
-        trimmed_signals.append(trimmed_signal)
+        signals.append(signal)
 
-    # Combine all audio recordings into one by applying a crossfade to them
-    trimmed_signals = util.crossfade_list(
-        s_list=trimmed_signals,
+    # Combine all audio recordings into one
+    signal = util.crossfade_list(
+        s_list=signals,
         fs=sample_rate,
-        fade_len=0.5,
+        fade_len=0.0,
     )
 
     # Compute spectrogram of the mixed audio
-    Sxx, _, _, extent = sound.spectrogram(
-        x=trimmed_signals,
+    Sxx, _, _, _ = sound.spectrogram(
+        x=signal,
         fs=sample_rate,
         window='hann',
         nperseg=1024,
         noverlap=512,
     )
 
-    # Display the spectrogram. We can see clearly the bird chorus at dawn (
-    # 5-10 h) and dusk (20-21 h), as well as the wind and airplanes sounds at
-    # low frequencies
+    # Plot the spectrogram
     _, axes = plt.subplots(
         nrows=1,
         ncols=1,
@@ -66,6 +56,9 @@ def plot_circadian_spectrogram():
     axes.set_xlabel('Time [Hours]')
     axes.set_xticks(range(0, 25, 4))
     plt.show()
+
+    # At dawn (5-10 h) and dusk (19-22 h), we can see clearly the bird chorus.
+    # At low frequencies, we can see wind noise and propeller airplane sounds.
 
 
 if __name__ == '__main__':
