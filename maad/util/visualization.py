@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-""" 
+"""
 Ensemble of functions that facilitate data visualization.
 """
 
@@ -22,7 +22,7 @@ _MIN_ = sys.float_info.min
 # Importation from internal modules
 from maad.util import linear_scale, power2dB
 
-#%%
+
 def _check_axes(axes):
     """Check if "axes" is an instance of an axis object. If not, use `gca`."""
     if axes is None:
@@ -37,40 +37,39 @@ def _check_axes(axes):
     return axes
 
 
-#%%
 def plot_shape(shape, params, row=0, ax=None, display_values=False):
-    """ 
+    """
     Plot shape features in a bidimensional plot.
-     
-    Parameters 
-    ---------- 
-    shape: 1D array, pd.Series or pd.DataFrame 
-        Shape features computed with shape_features function. 
-     
-    params: pd.DataFrame 
-        Pandas dataframe returned by maad.features_rois.shape_features 
-     
-    row: int 
-        Observation to be visualized 
-     
-    display_values: bool 
-        Set to True to display the coefficient values. Default is False. 
-     
-    Returns 
-    ------- 
-    ax: matplotlib.axes 
-        Axes of the figure 
-         
-    Examples 
-    -------- 
-    >>> from maad.sound import load, spectrogram 
-    >>> from maad.features import shape_features, plot_shape 
-    >>> import numpy as np 
-    >>> s, fs = load('../data/spinetail.wav') 
-    >>> Sxx, ts, f, ext = spectrogram(s, fs) 
-    >>> shape, params = shape_features(np.log10(Sxx), resolution='high') 
-    >>> plot_shape(shape, params) 
- 
+
+    Parameters
+    ----------
+    shape: 1D array, pd.Series or pd.DataFrame
+        Shape features computed with shape_features function.
+
+    params: pd.DataFrame
+        Pandas dataframe returned by maad.features_rois.shape_features
+
+    row: int
+        Observation to be visualized
+
+    display_values: bool
+        Set to True to display the coefficient values. Default is False.
+
+    Returns
+    -------
+    ax: matplotlib.axes
+        Axes of the figure
+
+    Examples
+    --------
+    >>> from maad.sound import load, spectrogram
+    >>> from maad.features import shape_features, plot_shape
+    >>> import numpy as np
+    >>> s, fs = load('../data/spinetail.wav')
+    >>> Sxx, ts, f, extent = spectrogram(s, fs)
+    >>> shape, params = shape_features(np.log10(Sxx), resolution='high')
+    >>> plot_shape(shape, params)
+
     """
 
     # compute shape of matrix
@@ -119,105 +118,104 @@ def plot_shape(shape, params, row=0, ax=None, display_values=False):
     return ax
 
 
-#%%
 def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
-    """ 
-    Overlay centroids on the original spectrogram 
-     
-    Parameters 
-    ---------- 
-    Sxx :  2D array 
-        Spectrogram 
-               
-    centroid: pandas DataFrame 
-        DataFrame with centroid descriptors (centroid_f, centroid_t) 
-        Do format_features(rois,tn,fn) before using overlay_centroid to be sure that 
-        the format of the DataFrame is correct 
-             
-    savefig : string, optional, default is None 
-        Root filename (with full path) is required to save the figures. Postfix 
-        is added to the root filename. 
-         
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
-            
-        - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
-            Postfix of the figure filename 
-         
-        - extent : list of scalars [left, right, bottom, top], optional, default: None
+    """
+    Overlay centroids on the original spectrogram
+
+    Parameters
+    ----------
+    Sxx:  2D array
+        Spectrogram
+
+    centroid: pandas DataFrame
+        DataFrame with centroid descriptors (centroid_f, centroid_t)
+        Do format_features(rois,tn,fn) before using overlay_centroid to be sure that
+        the format of the DataFrame is correct
+
+    savefig: string, optional, default is None
+        Root filename (with full path) is required to save the figures. Postfix
+        is added to the root filename.
+
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
+
+        - savefilename: str, optional, default:'_spectro_overlaycentroid.png'
+            Postfix of the figure filename
+
+        - extent: list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-         
-        - title : string, optional, default : 'Spectrogram' 
-            title of the figure 
-         
-        - xlabel : string, optional, default : 'Time [s]' 
-            label of the horizontal axis 
-         
-        - ylabel : string, optional, default : 'Amplitude [AU]' 
-            label of the vertical axis 
-         
-        - cmap : string or Colormap object, optional, default is 'gray' 
-            See https://matplotlib.org/examples/color/colormaps_reference.html 
-            in order to get all the  existing colormaps 
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
-            'viridis'... 
-         
-        - vmin, vmax : scalar, optional, default: None 
-            `vmin` and `vmax` are used in conjunction with norm to normalize 
-            luminance data.  Note if you pass a `norm` instance, your 
-            settings for `vmin` and `vmax` will be ignored. 
-                 
-        - dpi : integer, optional, default is 96 
-            Dot per inch.  
-            For printed version, choose high dpi (i.e. dpi=300) => slow 
-            For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
-        - format : string, optional, default is 'png' 
-            Format to save the figure  
-         
-        ... and more, see matplotlib  
- 
-    Returns 
-    ------- 
-    ax  
-        axis object (see matplotlib) 
-    fig  
-        figure object (see matplotlib) 
- 
+
+        - title: string, optional, default: 'Spectrogram'
+            title of the figure
+
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
+
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
+
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',
+            'viridis'...
+
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+
+        - dpi : integer, optional, default is 96
+            Dot per inch.
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
+
+        - format : string, optional, default is 'png'
+            Format to save the figure
+
+        ... and more, see matplotlib
+
+    Returns
+    -------
+    ax
+        axis object (see matplotlib)
+    fig
+        figure object (see matplotlib)
+
     Examples
     --------
- 
-    Get centroid from the whole power spectrogram 
- 
+
+    Get centroid from the whole power spectrogram
+
     >>> from maad.sound import load, spectrogram
     >>> from maad.features import centroid_features
     >>> from maad.util import (power2dB, format_features, overlay_rois, plot2d,
                                overlay_centroid)
-     
-    Load audio and compute spectrogram 
-     
-    >>> s, fs = load('../data/spinetail.wav') 
-    >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) 
+
+    Load audio and compute spectrogram
+
+    >>> s, fs = load('../data/spinetail.wav')
+    >>> Sxx,tn,fn,extent = spectrogram(s, fs, db_range=80)
     >>> Sxx = power2dB(Sxx, db_range=80)
-     
+
     Load annotations and plot
-    
+
     >>> from maad.util import read_audacity_annot
-    >>> rois = read_audacity_annot('../data/spinetail.txt') 
-    >>> rois = format_features(rois, tn, fn) 
-    >>> ax, fig = plot2d (Sxx, extent=ext)
-    >>> ax, fig = overlay_rois(Sxx,rois, extent=ext, ax=ax, fig=fig)
-    
-    Compute the centroid of each rois, format to get results in the 
+    >>> rois = read_audacity_annot('../data/spinetail.txt')
+    >>> rois = format_features(rois, tn, fn)
+    >>> ax, fig = plot2d (Sxx, extent=extent)
+    >>> ax, fig = overlay_rois(Sxx,rois, extent=extent, ax=ax, fig=fig)
+
+    Compute the centroid of each rois, format to get results in the
     temporal and spectral domain and overlay the centroids.
-     
-    >>> centroid = centroid_features(Sxx, rois) 
+
+    >>> centroid = centroid_features(Sxx, rois)
     >>> centroid = format_features(centroid, tn, fn)
-    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
-    
+    >>> ax, fig = overlay_centroid(Sxx,centroid, extent=extent, ax=ax, fig=fig)
+
     """
-    
+
     # Check format of the input data
     if type(centroid) is not pd.core.frame.DataFrame:
         raise TypeError("Rois must be of type pandas DataFrame")
@@ -231,7 +229,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
     cmap = kwargs.pop("cmap", "gray")
-    extent = kwargs.pop("ext", None)
+    extent = kwargs.pop("extent", None)
 
     if extent is None:
         ylabel = "pseudofrequency [points]"
@@ -274,138 +272,138 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     return ax, fig
 
 
-#%%
-def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None, 
+def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
                  textbox_label=False, savefig=None, **kwargs):
-    """ 
+    """
     Display bounding boxes with time-frequency regions of interest over a spectrogram.
-    
+
     Regions of interest (ROIs) must be provided. They can be loaded as manual annotations or computed using automated methods (see the example section).
-     
-    Parameters 
-    ---------- 
-    im_ref : 2d ndarray of scalars 
-        Spectrogram (or image) 
- 
+
+    Parameters
+    ----------
+    im_ref : 2d ndarray of scalars
+        Spectrogram (or image)
+
     rois_bbox : pandas.DataFrame
         Contains the bounding box of each ROI. The pandas.DataFrame must have columns
         ['min_x', 'max_x', 'min_y', 'max_y']. If your data is in the time-frequency
         format ['min_t', 'max_t', 'min_f', 'max_f'], use the function
         maad.util.format_features to get the cooresponding
         x, y coordinates.
-        
+
     edge_color : {None, string, tuple, list of tuples}, default is None
         Define the color of the bounding-box to display.
-        if it's a string, select a color name 
-        if it's a tuple, give a tuple of floats [0,1] in the form (r,g,b,a), 
-        with r for red, g for green, b for blue and a for alpha (i.e transparency)
+        if it's a string, select a color name
+        if it's a tuple, give a tuple of floats [0,1] in the form (r,g,b,a),
+        with r for red, g for green, b for blue and a for alpha (i.e. transparency)
         for example
         - pure red : (1,0,0,0)
         - pure yellow : (1,1,0,0)
         - pure blue with transparency(0,0,1,0.5)
-        if it's a list, give a list of tuple or string. The number of element 
+        if it's a list, give a list of tuple or string. The number of element
         in the list should be equal to the number of elements in unique_labels.
         if it's set to None, a random list of colors is used.
-        
+
     unique_labels : list, default is None
         list of unique labels that could be either strings or numbers. When
-        a list is given as argument, the number element in the list should 
+        a list is given as argument, the number element in the list should
         be the same as the number of edge_color
-    
+
     textbox_label: bool
         Display a text box above the bounding box indicating the name of the label.
         The rois_bbox pandas.DataFrame must have a column called 'label' with names
         assigned to each ROI.
- 
-    savefig : string, optional, default is None 
-        Root filename (with full path) is required to save the figures. Postfix 
-        is added to the root filename. 
-         
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
-            
-        - savefilename : str, optional, default :'_spectro_overlayrois.png' 
-            Postfix of the figure filename 
-            
+
+    savefig : string, optional, default is None
+        Root filename (with full path) is required to save the figures. Postfix
+        is added to the root filename.
+
+    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
+
+        - savefilename : str, optional, default :'_spectro_overlayrois.png'
+            Postfix of the figure filename
+
         - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
-            the pixel centers fall on zero-based (row, column) indices.  
-         
-        - title : string, optional, default : 'Spectrogram' 
-            title of the figure 
-         
-        - xlabel : string, optional, default : 'Time [s]' 
-            label of the horizontal axis 
-         
-        - ylabel : string, optional, default : 'Amplitude [AU]' 
-            label of the vertical axis 
-         
-        - cmap : string or Colormap object, optional, default is 'gray' 
-            See https://matplotlib.org/examples/color/colormaps_reference.html 
-            in order to get all the  existing colormaps 
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
-            'viridis'... 
-         
-        - vmin, vmax : scalar, optional, default: None 
-            `vmin` and `vmax` are used in conjunction with norm to normalize 
-            luminance data.  Note if you pass a `norm` instance, your 
-            settings for `vmin` and `vmax` will be ignored. 
-         
-        - dpi : integer, optional, default is 96 
-            Dot per inch.  
-            For printed version, choose high dpi (i.e. dpi=300) => slow 
-            For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
-        - format : string, optional, default is 'png' 
-            Format to save the figure  
-         
-        ... and more, see matplotlib  
- 
-    Returns 
-    ------- 
-    ax : axis object (see matplotlib) 
-         
-    fig : figure object (see matplotlib) 
-    
-    Examples 
-    -------- 
-    
+            the pixel centers fall on zero-based (row, column) indices.
+
+        - title : string, optional, default : 'Spectrogram'
+            title of the figure
+
+        - xlabel : string, optional, default : 'Time [s]'
+            label of the horizontal axis
+
+        - ylabel : string, optional, default : 'Amplitude [AU]'
+            label of the vertical axis
+
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',
+            'viridis'...
+
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+
+        - dpi : integer, optional, default is 96
+            Dot per inch.
+            For printed version, choose high dpi (i.e. dpi=300) => slow
+            For screen version, choose low dpi (i.e. dpi=96) => fast
+
+        - format : string, optional, default is 'png'
+            Format to save the figure
+
+        ... and more, see matplotlib
+
+    Returns
+    -------
+    ax : axis object (see matplotlib)
+
+    fig : figure object (see matplotlib)
+
+    Examples
+    --------
+
     Simple display of bounding boxes over the spectrogram.
-    
+
     >>> from maad import sound, util
     >>> s, fs = sound.load('./data/spinetail.wav')
     >>> rois = util.read_audacity_annot('./data/spinetail.txt')
-    >>> Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=512, noverlap=256)
+    >>> Sxx, tn, fn, extent = sound.spectrogram(s, fs, nperseg=512,
+    noverlap=256)
     >>> rois = util.format_features(rois, tn, fn)
     >>> fig, ax = plt.subplots(figsize=(10,5))
-    >>> util.plot_spectrogram(Sxx,ext, db_range=70, ax=ax)
+    >>> util.plot_spectrogram(Sxx,extent, db_range=70, ax=ax)
     >>> util.overlay_rois(Sxx, rois, fig=fig, ax=ax, textbox_label=True)
-    
+
     Detect regions of interest and display them over the spectrogram.
     Load audio recording and compute the spectrogram.
-    
+
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,10000))   
+    >>> Sxx,tn,fn,extent = maad.sound.spectrogram (s, fs, fcrop=(0,10000))
 
     Subtract the background noise before finding ROIs.
-    
+
     >>> Sxx_noNoise = maad.sound.median_equalizer(Sxx)
-    
+
     Convert linear spectrogram into dB and smooth.
-    
-    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise)         
+
+    >>> Sxx_noNoise_dB = maad.util.power2dB(Sxx_noNoise)
     >>> Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)
-    
+
     Detection of the acoustic signature => creation of a mask
-    
-    >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
-    
+
+    >>> im_bin = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative')
+
     Select rois from the mask and display bounding box over the spectrogram without noise.
-    
+
     >>> import numpy as np
-    >>> im_rois, df_rois = maad.rois.select_rois(im_bin, min_roi=100)  
-    >>> maad.util.overlay_rois (Sxx_noNoise_dB, df_rois, extent=ext,vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60) 
-        
+    >>> im_rois, df_rois = maad.rois.select_rois(im_bin, min_roi=100)
+    >>> maad.util.overlay_rois (Sxx_noNoise_dB, df_rois, extent=extent, vmin=np.median(Sxx_noNoise_dB), vmax=np.median(Sxx_noNoise_dB)+60)
+
     """
 
     # Check format of the input data
@@ -415,7 +413,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         raise TypeError(
             "Array must be a Pandas DataFrame with column names: min_y, min_x, max_y, max_x. Check example in documentation."
         )
-        
+
     ylabel = kwargs.pop("ylabel", "Frequency [Hz]")
     xlabel = kwargs.pop("xlabel", "Time [s]")
     title = kwargs.pop("title", "ROIs Overlay")
@@ -429,7 +427,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
     if extent is None:
         xlabel = "pseudoTime [points]"
         ylabel = "pseudoFrequency [points]"
-        
+
     if (ax is None) and (fig is None):
         ax, fig = plot2d(
                         im_ref,
@@ -459,11 +457,11 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
             rois_label = rois.label.values
             uniqueLabels = list(np.unique(np.array(rois_label)))
         else:
-            uniqueLabels = [0]    
-    else: 
-        if isinstance(unique_labels,list) :     
+            uniqueLabels = [0]
+    else:
+        if isinstance(unique_labels,list) :
             uniqueLabels = unique_labels
-        elif isinstance(unique_labels,np.ndarray) :     
+        elif isinstance(unique_labels,np.ndarray) :
             uniqueLabels = list(unique_labels)
         elif isinstance(unique_labels, str) :
             uniqueLabels = [unique_labels]
@@ -472,11 +470,11 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
             try:
                 int(unique_labels)
                 uniqueLabels = [unique_labels]
-            except:
+            except Exception:
                 raise TypeError(
                     "unique_labels must be a list or a string or a number"
-                )      
-        
+                )
+
     # Colormap
     if edge_color is None :
         # in order to still have the color yellow by default in case of no label
@@ -486,12 +484,12 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         else:
             color_func = rand_cmap(len(uniqueLabels) + 1, first_color_black=False)
             color = color_func(np.arange(len(uniqueLabels)))
-    # if a list of colors is defined, test if the length of the list is 
+    # if a list of colors is defined, test if the length of the list is
     # enough compared to the number of unique labels
     # convert into tuple
-    elif isinstance(edge_color, str) :    
+    elif isinstance(edge_color, str) :
         color = tuple([edge_color]) * len(uniqueLabels)
-    elif isinstance(edge_color, list) :  
+    elif isinstance(edge_color, list) :
         nn = int(len(uniqueLabels)/len(edge_color)) +1
         color = tuple(edge_color) * nn
 
@@ -517,12 +515,12 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         )
         # draw the rectangle
         ax.add_patch(rect)
-        
+
         if textbox_label:
-            textbox = dict(boxstyle='square', fc=color[ii], 
+            textbox = dict(boxstyle='square', fc=color[ii],
                            ec=color[ii], alpha=1, pad=0, linewidth=2)
-            ax.text(x0*x_scaling + xmin, (y1+2)*y_scaling + ymin, 
-                    str(row.label), 
+            ax.text(x0*x_scaling + xmin, (y1+2)*y_scaling + ymin,
+                    str(row.label),
                     color='white',
                     fontweight='semibold',
                     fontsize='small',
@@ -544,30 +542,29 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
     return ax, fig
 
 
-#%%
 def plot1d(x, y, ax=None, **kwargs):
     """
-    Plot the waveform or spectrum of an audio signal. 
-    
+    Plot the waveform or spectrum of an audio signal.
+
     Parameters
     ----------
     x : 1d ndarray of integer
         Vector containing the abscissa values (horizontal axis)
-             
+
     y : 1d ndarray of scalar
-        Vector containing the ordinate values (vertical axis)  
-    
+        Vector containing the ordinate values (vertical axis)
+
     ax : axis, optional, default is None
         Draw the signal on this specific axis. Allow multiple plots on the same
         axis.
-            
+
     \*\*kwargs, optional
         - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
+            width, height in inches.
         - facecolor : matplotlib color, optional, default: 'w' (white)
-            the background color.  
+            the background color.
         - edgecolor : matplotlib color, optional, default: 'k' (black)
-            the border color. 
+            the border color.
         - color : matplotlib color, optional, default: 'k' (black)
             the line color
             The following color abbreviations are supported:
@@ -583,12 +580,12 @@ def plot1d(x, y, ax=None, **kwargs):
             'k'         black
             'w'         white
             ==========  ========
-            In addition, you can specify colors in many ways, including RGB 
+            In addition, you can specify colors in many ways, including RGB
             tuples (0.2,1,0.5). See matplotlib color
         - linewidth : scalar, optional, default: 0.5
             width in pixels
         - figtitle: string, optional, default: 'Audiogram'
-            Title of the plot 
+            Title of the plot
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
         - ylabel : string, optional, default : 'Amplitude [AU]'
@@ -596,44 +593,44 @@ def plot1d(x, y, ax=None, **kwargs):
         - legend : string, optional, default : None
             Legend for the plot
         - now : boolean, optional, default : True
-            if True, display now. Cannot display multiple plots. 
-            To display mutliple plots, set now=False until the last call for 
-            the last plot         
-        
+            if True, display now. Cannot display multiple plots.
+            To display mutliple plots, set now=False until the last call for
+            the last plot
+
         ...and more, see matplotlib
-        
+
     Returns
     -------
     fig : Figure
-        The Figure instance 
+        The Figure instance
     ax : Axis
         The Axis instance
-        
+
     Examples
     --------
-    >>> import numpy as np    
-    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
-    
+    >>> import numpy as np
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+
     Plot the audiogram
-    
+
     >>> tn = np.arange(0,len(s))/fs
     >>> fig, ax = maad.util.plot1d(tn,s)
-    
+
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    
+
     Convert spectrogram into dB SPL
-    
-    >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) 
-       
+
+    >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42)
+
     Plot the spectrum at t = 7s
-    
+
     >>> index = maad.util.nearest_idx(tn,7)
     >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
                       'linewidth': 0.5
                       }
-    
+
     >>> fig, ax = maad.util.plot1d(fn, Lxx[:,index], **fig_kwargs)
     """
 
@@ -673,7 +670,7 @@ def plot1d(x, y, ax=None, **kwargs):
     #ax.axis("tight")
     ax.grid(True, linewidth=0.3)
     ax.margins(x=0)
-    
+
     if legend is not None:
         ax.legend()
 
@@ -684,11 +681,10 @@ def plot1d(x, y, ax=None, **kwargs):
     return ax, fig
 
 
-#%%
 def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     """
     Plot audio waveform.
-    
+
     Parameters
     ----------
     s : 1d ndarray
@@ -696,7 +692,7 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     fs : int
         Sampling rate of audio signal.
     tlims : tuple, optional
-        Minimum and maximum temporal limits for the display (min_t, max_t). 
+        Minimum and maximum temporal limits for the display (min_t, max_t).
         The default is None.
     ax : matplotlib.axes, optional
         Pre-existing axes for the plot. The default is None.
@@ -707,20 +703,20 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     -------
     ax : matplotlib.axes
         The matplotlib axes associated to plot.
-    
+
     See also
     --------
     maad.sound.plot_spectrum
-        
+
     Examples
     --------
-    
+
     Plot a waveform of an audio signal.
     >>> from maad import sound
     >>> from maad.util import plot_wave
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> ax = plot_wave(s, fs)
-    
+
     Use `plot_wave` with predifined matplotlib axes.
     >>> import matplotlib.pyplot as plt
     >>> s, fs = sound.load('../data/spinetail.wav')
@@ -741,32 +737,31 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     return ax
 
 
-#%%
 def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, **kwargs):
     """
     Plot power spectral density estimate (PSD).
-    
+
     Parameters
     ----------
     pxx : 1d ndarray
         Power spectral density estimate computed with `maad.sound.spectrum`.
-        
+
     f_idx : 1d ndarray
         Index of frequencies associated with the PSD.
-    
+
     ax : matplotlib.axes, optional
         Pre-existing axes for the plot. The default is None.
-        
+
     flims : tuple, optional
-        Minimum and maximum spectral limits for the display (min_f, max_f). 
+        Minimum and maximum spectral limits for the display (min_f, max_f).
         Default is None.
 
     log_scale : bool, optional
         Use a logarithmic scale to display amplitude values. The default is False.
-    
+
     fill : bool, optional
         Fill the area between the curve and the minimum value.
-        
+
     **kwargs : matplotlib figure properties
             Other keyword arguments that are passed down to matplotlib.axes.
 
@@ -778,19 +773,19 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     See also
     --------
     maad.sound.spectrum, maad.util.plot_wave
-    
+
     Examples
     --------
-    
+
     Plot a spectrum of an audio signal.
-    
+
     >>> from maad import sound, util
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> pxx, f_idx = sound.spectrum(s, fs, nperseg=1024)
     >>> util.plot_spectrum(pxx, f_idx)
-    
+
     Use `plot_spectrum` with predifined matplotlib axes.
-    
+
     >>> import matplotlib.pyplot as plt
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> s_slice = sound.trim(s, fs, 5, 8)
@@ -798,7 +793,7 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     >>> fig, ax = plt.subplots(2,1, figsize=(10,6))
     >>> util.plot_wave(s_slice, fs, ax=ax[0])
     >>> util.plot_spectrum(pxx, f_idx, ax=ax[1], log_scale=True)
-    
+
     """
     ylabel = kwargs.pop("ylabel", "Amplitude [AU]")
     xlabel = kwargs.pop("xlabel", "Frequency [Hz]")
@@ -819,26 +814,25 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
     return ax
 
 
-#%%
 def plot2d(im, ax=None, colorbar=True, **kwargs):
     """
-    Display the spectrogram of an audio signal. 
-    
-    The spectrogram should be previously computed using the function 
+    Display the spectrogram of an audio signal.
+
+    The spectrogram should be previously computed using the function
     ``maad.sound.spectrogram``.
-    
+
     Parameters
     ----------
-    im : 2D numpy array 
+    im : 2D numpy array
         Image or Spectrogram
-             
+
     ax : axis, optional, default is None
         Draw the image on this specific axis. Allow multiple plots on the same
         figure.
-            
+
     \*\*kwargs, optional
         - figsize : tuple of integers, optional, default: (4,13)
-            width, height in inches.  
+            width, height in inches.
         - title : string, optional, default : 'Spectrogram'
             title of the figure
         - xlabel : string, optional, default : 'Time [s]'
@@ -854,7 +848,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',
             'viridis'...
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
@@ -865,26 +859,26 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
         - now : boolean, optional, default : True
-            if True, display now. Cannot display multiple images. 
-            To display mutliple images, set now=False until the last call for 
-            the last image    
-        - interpolation : list of string [None, 'none', 'nearest', 'bilinear', 
-           'bicubic', 'spline16','spline36', 'hanning', 'hamming', 'hermite', 
-           'kaiser', 'quadric','catrom', 'gaussian', 'bessel', 'mitchell', 
+            if True, display now. Cannot display multiple images.
+            To display mutliple images, set now=False until the last call for
+            the last image
+        - interpolation : list of string [None, 'none', 'nearest', 'bilinear',
+           'bicubic', 'spline16','spline36', 'hanning', 'hamming', 'hermite',
+           'kaiser', 'quadric','catrom', 'gaussian', 'bessel', 'mitchell',
            'sinc', 'lanczos'], optional, default : None
-            
+
         ... and more, see matplotlib
-        
+
     Returns
     -------
     fig : Figure
-        The Figure instance 
+        The Figure instance
     ax : Axis
         The Axis instance
-        
+
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
@@ -894,8 +888,8 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
                       'xlabel':'Time [s]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)      
-        
+    >>> fig, ax = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)
+
     """
 
     # matplotlib parameters
@@ -931,7 +925,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
         fig = ax.get_figure()
 
     # display image
-    _im = ax.imshow(im, extent=extent, origin="lower", cmap=cmap, 
+    _im = ax.imshow(im, extent=extent, origin="lower", cmap=cmap,
                     vmin=vmin, vmax=vmax, **kwargs)
     if colorbar==True:
         plt.colorbar(_im, ax=ax)
@@ -958,12 +952,20 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
 
     return ax, fig
 
-#%%
-def plot_spectrogram(Sxx, extent, db_range=96, gain=0, log_scale=True,
-                     colorbar=True, interpolation='bilinear', **kwargs):
+
+def plot_spectrogram(
+    Sxx,
+    extent,
+    db_range=96,
+    gain=0,
+    log_scale=True,
+    colorbar=True,
+    interpolation='bilinear',
+    **kwargs,
+):
     """
     Plot spectrogram represenation.
-    
+
     Parameters
     ----------
     Sxx : 2d ndarray
@@ -975,12 +977,12 @@ def plot_spectrogram(Sxx, extent, db_range=96, gain=0, log_scale=True,
     gain : int or float, optional
         Gain in decibels added to the signal for display. The default is 0.
     log_scale : bool, optional
-        Logarithmic transformation of spectrogram coefficients to enhace visual 
+        Logarithmic transformation of spectrogram coefficients to enhace visual
         representation. The default is True.
     colorbar : bool, optional
         Plot the colorbar next to the spectrogram. The default is True.
     interpolation : bool, optional
-        Interpolate spectrogram values to enhance visual representation. 
+        Interpolate spectrogram values to enhance visual representation.
         The default is 'bilinear'.
     **kwargs : matplotlib figure properties
             Other keyword arguments that are passed down to matplotlib.axes.
@@ -993,39 +995,38 @@ def plot_spectrogram(Sxx, extent, db_range=96, gain=0, log_scale=True,
     See also
     --------
     maad.sound.plot_spectrum, maad.util.plot_wave
-    
+
     Examples
     --------
-    
+
     Plot the spectrogram of an audio.
-    
+
     >>> from maad import sound, util
-    >>> s, fs = sound.load('../data/spinetail.wav') 
-    >>> Sxx, tn, fn, ext = sound.spectrogram(s,fs)
-    >>> util.plot_spectrogram(Sxx, ext, db_range=50, gain=30, figsize=(4,10))
-        
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> Sxx, tn, fn, extent = sound.spectrogram(s,fs)
+    >>> util.plot_spectrogram(Sxx, extent, db_range=50, gain=30, figsize=(4,10))
+
     Use `plot_spectrogram` with predifined matplotlib axes.
-    
+
     >>> import matplotlib.pyplot as plt
     >>> fig, ax = plt.subplots(2,1, figsize=(10,6))
     >>> util.plot_wave(s, fs, ax=ax[0])
-    >>> util.plot_spectrogram(Sxx, ext, db_range=50, gain=30, colorbar=False, ax=ax[1])
+    >>> util.plot_spectrogram(Sxx, extent, db_range=50, gain=30, colorbar=False, ax=ax[1])
 
     Plot a single frase of the spinetail.
-    
-    >>> Sxx, tn, fn, ext = sound.spectrogram(s,fs, flims=(2000,15000), tlims=(5,8))
-    >>> util.plot_spectrogram(Sxx, ext, db_range=50, gain=30, figsize=(4,6))
+
+    >>> Sxx, tn, fn, extent = sound.spectrogram(s,fs, flims=(2000,15000), tlims=(5,8))
+    >>> util.plot_spectrogram(Sxx, extent, db_range=50, gain=30, figsize=(4,6))
     """
     if log_scale:
         Sxx_db = power2dB(Sxx, db_range, gain)
     else :
         Sxx_db = Sxx
-    
-    ax, fig = plot2d(Sxx_db, extent=extent, colorbar=colorbar, 
+
+    ax, fig = plot2d(Sxx_db, extent=extent, colorbar=colorbar,
                      interpolation=interpolation, **kwargs)
     return ax
 
-#%%
 def rand_cmap(
     nlabels,
     type="bright",
@@ -1035,7 +1036,7 @@ def rand_cmap(
     verbose=False):
     """
     Creates a random colormap to be used together with matplotlib. Useful for segmentation tasks
-    
+
     Parameters
     ----------
     nlabels : int
@@ -1043,22 +1044,22 @@ def rand_cmap(
     type : string
         'bright' for strong colors, 'soft' for pastel colors. Default is 'bright'
     first_color_black : bool, optional
-        Option to use first color as black. Default is True  
-    last_color_black : bool, optional   
+        Option to use first color as black. Default is True
+    last_color_black : bool, optional
         Option to use last color as black. Default is False
     seed : int, optional
-         Fix the seed of the random engine. Default is 321   
-    verbose  : bool, optional   
+         Fix the seed of the random engine. Default is 321
+    verbose  : bool, optional
         Prints the number of labels and shows the colormap. Default is False
-    
+
     Returns
     -------
-    random_colormap : Colormap 
+    random_colormap : Colormap
         Colormap type used by matplotlib
 
     References
     ----------
-    adapted from https://github.com/delestro/rand_cmap author : delestro    
+    adapted from https://github.com/delestro/rand_cmap author : delestro
     """
 
     # initialize the random seed in order to get always the same random order
@@ -1132,36 +1133,35 @@ def rand_cmap(
     return random_colormap
 
 
-#%%
 def crop_image(im, tn, fn, fcrop=None, tcrop=None):
     """
     Crop a spectrogram (or an image) in time (horizontal X axis) and frequency
     (vertical y axis)
-    
+
     Parameters
     ----------
     im : 2d ndarray
         image to be cropped
-    
+
     tn, fn : 1d ndarray
-        tn is the time vector. fn is the frequency vector. They are required 
+        tn is the time vector. fn is the frequency vector. They are required
         in order to know the correspondance between pixels and (time,frequency)
-    
+
     fcrop, tcrop : list of 2 scalars [min, max], optional, default is None
         fcrop corresponds to the min and max boundary frequency values
         tcrop corresponds to the min and max boundary time values
-                
+
     Returns
     -------
     im : 2d ndarray
         image cropped
-        
+
     tn, fn, 1d ndarray
         new time and frequency vectors
-    
+
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
@@ -1171,7 +1171,7 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
                       'xlabel':'Time [s]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)      
+    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)
     >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,10000), tcrop=(0,30))
     >>> fig_kwargs = {'vmax': Lxx.max(),
                       'vmin':0,
@@ -1180,7 +1180,7 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
                       'xlabel':'Time [s]',
                       'ylabel':'Frequency [Hz]',
                       }
-    >>> fig, ax = maad.util.plot2d(Lxx_crop,**fig_kwargs)  
+    >>> fig, ax = maad.util.plot2d(Lxx_crop,**fig_kwargs)
     """
 
     if tcrop is not None:
@@ -1203,17 +1203,17 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
 def save_figlist(fname, figlist):
     """
     Save a list of figures or spectrograms to disk.
-    
+
     Parameters
     ----------
     fname: string
-        Suffix string add to the filename. The extension should be specified since it 
+        Suffix string add to the filename. The extension should be specified since it
         indicates the image format.
 
     Notes
     -----
     This function does not return any variable.
-        
+
     """
     for i, fig in enumerate(figlist):
         fname_save = "%d_%s" % (i, fname)
@@ -1224,80 +1224,80 @@ def save_figlist(fname, figlist):
 def plot_features_map(df, norm=True, mode="24h", **kwargs):
     """
     Plot features values on a heatmap.
-    
+
     The plot has the features the vertical axis and the time on the horizontal axis.
-    
+
     Parameters
     ----------
     df : Panda DataFrame
-        DataFrame with features (ie. indices).
-    
+        DataFrame with features (i.e. indices).
+
     norm : boolean, default is True
         if True, the features are scaled between 0 to 1
-        
+
     mode : string in {'24h'}, default is '24h'
         Select if the timeline of the phenology:
-            
+
             -'24h' : average of the results over a day
             - otherwise, the timeline is the timeline of the dataframe
-            
+
     **kwargs
         Specific to this function:
-        
+
         - ftime : Time format to display as x label by default '%Y-%m-%d'(see https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior)
-            
+
         Specific to matplotlib:
-            
-        - figsize : tuple of integers, optional, default: (4,10) width, height in inches.  
-        
+
+        - figsize : tuple of integers, optional, default: (4,10) width, height in inches.
+
         - title : string, optional, default : 'Spectrogram' title of the figure
-        
+
         - xlabel : string, optional, default : 'Time [s]' label of the horizontal axis
 
         - ylabel : string, optional, default : 'Amplitude [AU]' label of the vertical axis
-            
+
         - xticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
-            
+
         - yticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
-        
+
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',
             'viridis'...
-        
+
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        
+
         - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        
+
         - now : boolean, optional, default : True
-            if True, display now. Cannot display multiple images. 
-            To display mutliple images, set now=False until the last call for 
-            the last image      
-            
+            if True, display now. Cannot display multiple images.
+            To display mutliple images, set now=False until the last call for
+            the last image
+
         ... and more, see matplotlib
-        
+
     Returns
     -------
     fig : Figure
-        The Figure instance 
+        The Figure instance
     ax : Axis
-        The Axis instance   
-       
+        The Axis instance
+
     Examples
     --------
     see plot_extract_alpha_indices.py advanced example for a complete example
-    
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> np.random.seed(2021)
@@ -1306,7 +1306,7 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
     >>> indices = ['A','B','C','D','E','F','G']
     >>> df.columns = indices
     >>> df.index =pd.date_range(start=pd.Timestamp('00:00:00'), end=pd.Timestamp('23:00:00'), freq='1H')
-    >>> maad.util.plot_features_map(df) 
+    >>> maad.util.plot_features_map(df)
     """
 
     if isinstance(df, pd.DataFrame) == False:
@@ -1340,7 +1340,7 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
     if norm :
         fig.colorbar(caxes, shrink=0.75, label="Normalized value")
     else :
-        fig.colorbar(caxes, shrink=0.75, label="Value")    
+        fig.colorbar(caxes, shrink=0.75, label="Value")
     # Set ticks on both sides of axes on
     ax.tick_params(axis="x", bottom=True, top=False, labelbottom=True, labeltop=False)
     # We want to show all ticks...
@@ -1363,61 +1363,61 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
 
 def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     """
-    Plot the variation of features values (ie. indices) in the DataFrame obtained 
+    Plot the variation of features values (i.e. indices) in the DataFrame obtained
     with ``maad.features``.
-            
+
     Parameters
     ----------
     df : Panda DataFrame
-        DataFrame with features (ie. indices).
-    
+        DataFrame with features (i.e. indices).
+
     norm : boolean, default is True
         if True, the features are normalized by the max
-        
+
     mode : string in {'24h'}, default is '24h'
         Select if the timeline of the phenology :
             -'24h' : average of the results over a day
             - otherwise, the timeline is the timeline of the dataframe
-            
+
     **kwargs
         - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
-        
+            width, height in inches.
+
         - figtitle : string, optional, default : ''
             title of the figure
-        
+
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        
+
         - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-            
+
         - xticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
-            
+
         - yticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
 
         - now : boolean, optional, default : True
-            if True, display now. Cannot display multiple images. 
-            To display mutliple images, set now=False until the last call for 
-            the last image      
-            
+            if True, display now. Cannot display multiple images.
+            To display mutliple images, set now=False until the last call for
+            the last image
+
         ... and more, see matplotlib
-        
+
     Returns
     -------
     fig : Figure
-        The Figure instance 
+        The Figure instance
     ax : Axis
         The Axis instance
-        
+
     Examples
     --------
     see plot_extract_alpha_indices.py advanced example for a complete example
-    
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> np.random.seed(2021)
@@ -1426,8 +1426,8 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     >>> indices = ['A','B']
     >>> df.columns = indices
     >>> df.index =pd.date_range(start=pd.Timestamp('00:00:00'), end=pd.Timestamp('23:00:00'), freq='1H')
-    >>> maad.util.plot_features(df) 
-        
+    >>> maad.util.plot_features(df)
+
     """
     if isinstance(df, pd.DataFrame) == False:
         raise TypeError("df must be a Pandas Dataframe")
@@ -1487,73 +1487,73 @@ def plot_correlation_map(df, R_threshold=0.75, method="spearman", **kwargs):
     """
     Plot the correlation map between indices in the DataFrame obtained
     with ``maad``.
-        
+
     Parameters
     ----------
     df : Panda DataFrame
-        DataFrame with features (ie. indices).
-        
+        DataFrame with features (i.e. indices).
+
     R_threshold : scalar between 0 to 1, default is 0.75
         Show correlations with R higher than R_threshold
-        
+
     method : string in {'spearman', 'pearson'}, default is 'spearman'
         Choose the correlation type
-    
+
     **kwargs
         - figsize : tuple of integers, optional, default: (4,10)
-            width, height in inches.  
-        
+            width, height in inches.
+
         - title : string, optional, default : 'Spectrogram'
             title of the figure
-        
+
         - xlabel : string, optional, default : 'Time [s]'
             label of the horizontal axis
-        
+
         - ylabel : string, optional, default : 'Amplitude [AU]'
             label of the vertical axis
-            
+
         - xticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
-            
+
         - yticks : tuple of ndarrays, optional, default : none
             * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
             * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
-        
+
         - cmap : string or Colormap object, optional, default is 'gray'
             See https://matplotlib.org/examples/color/colormaps_reference.html
             in order to get all the  existing colormaps
-            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',
             'viridis'...
-        
+
         - vmin, vmax : scalar, optional, default: None
             `vmin` and `vmax` are used in conjunction with norm to normalize
             luminance data.  Note if you pass a `norm` instance, your
             settings for `vmin` and `vmax` will be ignored.
-        
+
         - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-        
+
         - now : boolean, optional, default : True
-            if True, display now. Cannot display multiple images. 
-            To display mutliple images, set now=False until the last call for 
-            the last image      
-            
+            if True, display now. Cannot display multiple images.
+            To display mutliple images, set now=False until the last call for
+            the last image
+
         ... and more, see matplotlib
-        
+
     Returns
     -------
     fig : Figure
-        The Figure instance 
+        The Figure instance
     ax : Axis
         The Axis instance
-        
+
     Examples
     --------
     see plot_extract_alpha_indices.py advanced example for a complete example
-    
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> np.random.seed(2021)
@@ -1612,67 +1612,67 @@ def false_Color_Spectro(
     Create False Color Spectrogram from indices obtained by MAAD.
     Only indices than can be computed bin per bin (ie frequency per frequency)
     are used to create False Color Spectro. They are called xxx_per_bin.
-        
+
     Parameters
     ----------
     df : Panda DataFrame
         DataFrame with indices per frequency bin.
-        
+
     indices : list, default is None
-        List of indices. 
-        If permut is False (see permut), if indices is None : 1st indices is red (R), 2nd indice is green (G) 
+        List of indices.
+        If permut is False (see permut), if indices is None : 1st indices is red (R), 2nd indice is green (G)
         and the 3rd indices is blue (B).
         if indices is a list of 3 indices or more, only the 3 first indices (triplet) are used to create the false color spectro.
         if permut is True, if indices is None : All indices in df are used
-        if indices is a list of 3 indices or more, all the indices in the 
+        if indices is a list of 3 indices or more, all the indices in the
         list are used to create the false color spectro with all the possibile permutations.
-    
+
     plim : list of 2 scalars, default is (1,99)
-        Set the minimum and maximum percentile to define the min and max value 
-        of each indice. These values are then used to clip the values of each 
+        Set the minimum and maximum percentile to define the min and max value
+        of each indice. These values are then used to clip the values of each
         indices between these limits.
-             
+
     reverseLUT: boolean, default is False
         LUT : look-up table.
-        if False, the highest indice value is the brigthest color (255) 
+        if False, the highest indice value is the brigthest color (255)
         and the lowest indice value is the darkest (0)
-        if True, it's the reverse order, the highest indice value is the 
-        darkest color (0) and the lowest is the brighest (255)     
-    
+        if True, it's the reverse order, the highest indice value is the
+        darkest color (0) and the lowest is the brighest (255)
+
     permut : boolean, default is False
         if True, all the permutations possible for red, green, blue are computed
         among the list of indices (see indices)
-    
+
     unit : string in {'minutes', 'hours', 'days', 'weeks'}, default is 'minutes'
         Select the unit base for x axis
-        
+
     verbose : boolean, default is False
         print indices on the default terminal
-        
+
     display : boolean, default is False
         Display False Color Spectro
-        
-    savefig : string, optional, default is None 
+
+    savefig : string, optional, default is None
         if not None, figures will be safe. Savefig is the prefix of the save
         filename.
-    
+
     \*\*kwargs, optional
        - dpi : scalar, optional, default 96
        - format : str, optional, default .png
-    
+
     Returns
     -------
     false_color_image : ndarray of scalars
         Matrix with ndim = 4 if multiple false color spectro or ndim = 3, if
         single false color spectro with 3 colors : R, G, B
-            
+
     triplet : list
         List of triplet of indices corresponding to each false color spectro
-        
+
     Examples
     --------
-    see plot_extract_alpha_indices.py advanced example for a complete example 
-    
+    see plot_extract_alpha_indices.py advanced example for a complete example
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> A_per_bin = [[0.5,0.4,0.3,0.2,0.1],
@@ -1689,13 +1689,13 @@ def false_Color_Spectro(
                      [0.7,0.2,0.0,0.5,0.5],
                      [0.5,0.5,0.7,0.2,0.2],
                      [0.0,0.7,0.0,0.2,0.2],
-                     [0.7,0.2,0.0,0.2,0.2]]   
+                     [0.7,0.2,0.0,0.2,0.2]]
     >>> df = pd.DataFrame([A_per_bin,B_per_bin,C_per_bin])
     >>> df = df.T
     >>> df.columns = ['A_per_bin','B_per_bin','C_per_bin']
     >>> df.index = pd.date_range('20200101', periods=len(df))
     >>> maad.util.false_Color_Spectro (df, display=True ,unit='days', figsize=[3,3])
-    
+
     """
     # sort dataframe by date
     df = df.sort_index(axis=0)
@@ -1728,7 +1728,7 @@ def false_Color_Spectro(
         if isinstance(df[indice].iloc[0], str):
             # convert string into scalars
             df[indice] = df[indice].apply(literal_eval)
-            
+
     # create a dataframe with normalized values for each indices
     df_z = pd.DataFrame()
 

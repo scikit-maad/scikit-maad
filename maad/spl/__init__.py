@@ -10,7 +10,7 @@ Conversion to sound pressure level (SPL)
 ----------------------------------------
 .. autosummary::
     :toctree: generated/
-    
+
     wav2volt
     volt2pressure
     wav2pressure
@@ -22,12 +22,12 @@ Conversion to sound pressure level (SPL)
     wav2leq
     pressure2leq
     psd2leq
-    
+
 Attenuation and active distance
 -------------------------------
 .. autosummary::
     :toctree: generated/
-    
+
     attenuation_dB
     dBSPL_per_bin
     detection_distance
@@ -57,7 +57,7 @@ from .active_space import (attenuation_dB,
                            apply_attenuation)
 
 __all__ = [
-           # conversion_SPL        
+           # conversion_SPL
            'wav2volt',
            'volt2pressure',
            'wav2pressure',

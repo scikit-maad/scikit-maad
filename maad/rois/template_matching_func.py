@@ -15,9 +15,9 @@ from scipy.signal import find_peaks
 from skimage.feature import match_template
 import matplotlib.pyplot as plt
 from matplotlib import patches
-from maad import sound, util
+from maad import util
 
-#%%
+
 def template_matching(
     Sxx, Sxx_template, tn, ext, peak_th, peak_distance=None, display=False, **kwargs
 ):
@@ -32,33 +32,33 @@ def template_matching(
 
     Parameters
     ----------
-    Sxx : 2D array
+    Sxx: 2D array
         Spectrogram of audio signal.
 
-    Sxx_template : TYPE
+    Sxx_template: TYPE
         Spectrogram of target sound.
 
-    tn : 1d array
+    tn: 1d array
         Time vector of target audio, which results from the maad.sound.spectrogram function.
 
-    fn : 1d array
+    fn: 1d array
         Frecuency vector of target audio, which results from the maad.sound.spectrogram function.
 
-    ext : list of scalars [left, right, bottom, top]
+    ext: list of scalars [left, right, bottom, top]
         Extent keyword arguments controls the bounding box in data coordinates for the
         spectrogram of the target audio, which results from the maad.sound.spectrogram function.
 
-    peak_th : float, optional
+    peak_th: float, optional
         Threshold applied to find peaks in the cross-correlation array.
         Should be a value between -1 and 1.
 
-    peak_distance : float, optional
+    peak_distance: float, optional
         Required minimal temporal distance (>= 0) in seconds between neighbouring
         peaks. If set to `None`, the minimum temporal resolution will be used.
         The minimal temporal resolution is given by the array tn and depends on the parameters
         used to compute the spectrogram.
 
-    display : Boolean, optional
+    display: Boolean, optional
         display the results of the template matching. The default is False.
 
     **kwargs: keywords pair, optional
@@ -68,11 +68,11 @@ def template_matching(
 
     Returns
     -------
-    xcorrcoef : 1D array
+    xcorrcoef: 1D array
         Correlation coefficients resulting from the cross-correlation between
         audio and target template.
 
-    rois : pandas DataFrame
+    rois: pandas DataFrame
         Detections found based on cross-correlation coefficients. The result is
         presented as a DataFrame where each row represent a detection, with the
         peak time (peak_time), peak amplitude (xcorrcoef), minimum and maximum time
@@ -127,7 +127,7 @@ def template_matching(
     # When flims from Sxx is larger than Sxx_template, take mean value
     xcorrcoef = np.mean(xcorrcoef, axis=0)
 
-    ## Find peaks
+    # Find peaks
     prominence = kwargs.pop("prominence", None)
     width = kwargs.pop("width", None)
     wlen = kwargs.pop("wlen", None)
@@ -166,7 +166,13 @@ def template_matching(
 
         # plot spectrogram
         fig, ax = plt.subplots(2, 1, figsize=(8, 5), sharex=True)
-        util.plot_spectrogram(Sxx, ext, log_scale=False, ax=ax[0], colorbar=False)
+        util.plot_spectrogram(
+            Sxx=Sxx,
+            extent=ext,
+            log_scale=False,
+            ax=ax[0],
+            colorbar=False,
+        )
         if not (rois.empty):
             for idx, _ in rois.iterrows():
                 xy = (rois.min_t[idx], rois.min_f[idx])
@@ -178,7 +184,7 @@ def template_matching(
                 ax[0].add_patch(rect)
 
         # plot corr coef
-        ax[1].plot(tn[0 : xcorrcoef.shape[0]], xcorrcoef)
+        ax[1].plot(tn[0: xcorrcoef.shape[0]], xcorrcoef)
         ax[1].plot(peaks_time, xcorrcoef[peaks], "x")
         ax[1].hlines(peak_th, 0, tn[-1], linestyle="dotted", color="0.75")
         ax[1].set_xlabel("Time [s]")

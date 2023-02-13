@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """ Ensemble of usefull functions for scikit-maad. """
-#
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
 # License: New BSD License
 
 # =============================================================================
@@ -22,8 +20,6 @@ import warnings
 import sys
 _MIN_ = sys.float_info.min
 
-# %%
-
 
 def index_bw(fn, bw):
     """
@@ -31,21 +27,21 @@ def index_bw(fn, bw):
 
     Parameters
     ----------
-    fn :  1d ndarray of scalars
+    fn:  1d ndarray of scalars
         Vector of frequencies
 
-    bw : single value or tupple of two values
-        if single value : frequency to select
-        if tupple of two values : min frequency and max frequency to select
+    bw: single value or tupple of two values
+        if single value: frequency to select
+        if tupple of two values: min frequency and max frequency to select
 
     Returns
     -------
-    index : 1d ndarray of scalars
+    index: 1d ndarray of scalars
         Vector of booleans corresponding to the selected frequency(-ies)
 
     Examples
     --------
-    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs,window='hann',noverlap=512, nFFT=1024)
     >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
     >>> bw = (2000,6000) #in Hz
@@ -84,43 +80,42 @@ def index_bw(fn, bw):
         index = [bool(x) for x in index]
     return index
 
-# %%
 
 def into_bins(x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False):
-    """ 
-    Divide a vector (1D) or a matrix (2D) into multiple bins according to a 
+    """
+    Divide a vector (1D) or a matrix (2D) into multiple bins according to a
     bin_step with respect of the energy
 
     Parameters
     ----------
-    x : array-like
+    x: array-like
         1D or 2D array to bin
-    an :1d ndarray of floats 
-        Vector containing the positions of each value. 
+    an:1d ndarray of floats
+        Vector containing the positions of each value.
         In case of 2D matrix, this vector corresponds to the horizontal (row)
         or vertical (columns) units
-    bin_step : scalar
+    bin_step: scalar
         Determine the width of each bin.
-    axis : integer, optional, default is 0
+    axis: integer, optional, default is 0
         Determine  along which axis the transformation is done.
-        In case of matrix :
+        In case of matrix:
         axis = 0 => transformation is done on column
-        axis = 1 => transformation is done on row 
-    bin_min : scalar, optional, default is None
-        This minimum value corresponds to the start of the first bin. 
+        axis = 1 => transformation is done on row
+    bin_min: scalar, optional, default is None
+        This minimum value corresponds to the start of the first bin.
         By default, the minimum value is the first value of an.
-    bin_max : scalar, optional, default is None
-        This maximum value corresponds to end of the last bin. 
-        By default, the maximum value is the last value of an.   
-    display : boolean, optional, defualt is False
-        Display the result of the tranformation : an histogram
+    bin_max: scalar, optional, default is None
+        This maximum value corresponds to end of the last bin.
+        By default, the maximum value is the last value of an.
+    display: boolean, optional, defualt is False
+        Display the result of the tranformation: an histogram
         In case of matrix, the mean histogram is shown.
 
     Returns
     -------
-    xbins :  array-like
+    xbins:  array-like
         1D or 2D array which correspond to the data after being transformed into bins
-    bin : 1d ndarray of floats 
+    bin: 1d ndarray of floats
         Vector containing the positions of each bin
 
     Examples
@@ -133,16 +128,16 @@ def into_bins(x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
                   'xlabel':'Frequency [Hz]',
                   'ylabel':'AU',
                   'linewidth': 0.5,
-                  'legend' : 'before binning'
+                  'legend': 'before binning'
                   }
     >>> ax,fig = maad.util.plot1d(frequency,amplitude,**fig_kwargs)
-    >>> amplitude_bin,frequency_bin = maad.util.into_bins(amplitude,frequency,bin_step=1000) 
+    >>> amplitude_bin,frequency_bin = maad.util.into_bins(amplitude,frequency,bin_step=1000)
     >>> fig_kwargs = {'figtitle':'',
                   'xlabel':'Frequency [Hz]',
                   'ylabel':'AU',
                   'linewidth': 0.5,
-                  'color' :'red',
-                  'legend' : 'after binning'
+                  'color':'red',
+                  'legend': 'after binning'
                   }
     >>> ax,fig = maad.util.plot1d(frequency_bin, amplitude_bin, ax, **fig_kwargs)
 
@@ -201,19 +196,17 @@ def into_bins(x, an, bin_step, axis=0, bin_min=None, bin_max=None, display=False
 
     return xbin, bins
 
-# %%
-
 
 def rle(x):
     """
     Compute the Run-Length encoding (RLE) of a vector.
 
-    Run-length encoding is a lossless data compression in which runs of data 
-    (sequences in which the same data value occurs in many consecutive data elements) 
-    are stored as a single data value and count. This is useful on data 
-    that contains many repeated values, for example, simple graphic 
-    images such as icons, line drawings, and animations. It is not useful with files that 
-    don't have many runs as it could greatly increase the file size [1]_. 
+    Run-length encoding is a lossless data compression in which runs of data
+    (sequences in which the same data value occurs in many consecutive data elements)
+    are stored as a single data value and count. This is useful on data
+    that contains many repeated values, for example, simple graphic
+    images such as icons, line drawings, and animations. It is not useful with files that
+    don't have many runs as it could greatly increase the file size [1]_.
 
     Parameters
     ----------
@@ -251,12 +244,10 @@ def rle(x):
         values = x[i]
     return lengths, values
 
-# %%
-
 
 def linear_scale(x, minval=0.0, maxval=1.0, axis=0):
-    """ 
-    Scale the values of a vector or matrix from a user specified 
+    """
+    Scale the values of a vector or matrix from a user specified
     minimum to a user specified maximum.
 
     Parameters
@@ -264,12 +255,12 @@ def linear_scale(x, minval=0.0, maxval=1.0, axis=0):
     x : array-like
         numpy.array like with numbers, list or dataframe
     minval : scalar, optional, default : 0
-        This minimum value is attributed to the minimum value of 
+        This minimum value is attributed to the minimum value of
         - the array if axis = None
         - each column if axis =0
         - each row if axis = 1
     maxval : scalar, optional, default : 1
-        This maximum value is attributed to the maximum value of  
+        This maximum value is attributed to the maximum value of
         - the array if axis = None
         - each column if axis =0
         - each row if axis = 1
@@ -284,7 +275,7 @@ def linear_scale(x, minval=0.0, maxval=1.0, axis=0):
 
     References
     ----------
-    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB, adapted by S. Haupert 
+    Written by Aniruddha Kembhavi, July 11, 2007 for MATLAB, adapted by S. Haupert
     Dec 12, 2017 for Python
 
 
@@ -313,29 +304,27 @@ def linear_scale(x, minval=0.0, maxval=1.0, axis=0):
     y = y + minval
     return y
 
-# %%
-
 
 def amplitude2dB(x, db_range=None, db_gain=0):
     """
-    Transform amplitude data (signal, scalar) into decibel scale within the 
-    dB range (db_range). A gain (db_gain) could be added at the end.    
+    Transform amplitude data (signal, scalar) into decibel scale within the
+    dB range (db_range). A gain (db_gain) could be added at the end.
 
     Parameters
     ----------
     x : array-like or scalar
-        data to rescale in dB  
+        data to rescale in dB
     db_range : scalar, optional, default : None
-        if db_range is a number, anything lower than -db_range is set to 
+        if db_range is a number, anything lower than -db_range is set to
         -db_range and anything larger than 0 is set to 0
     db_gain : scalar, optional, default is 0
-        Gain added to the results 
-        amplitude --> 20*log10(x) + db_gain  
+        Gain added to the results
+        amplitude --> 20*log10(x) + db_gain
 
     Returns
     -------
     y : array-like or scalar
-        y = 20*log10(x) + db_gain  
+        y = 20*log10(x) + db_gain
 
     Examples
     --------
@@ -368,29 +357,27 @@ def amplitude2dB(x, db_range=None, db_gain=0):
 
     return y
 
-# %%
-
 
 def power2dB(x, db_range=None, db_gain=0):
     """
-    Transform power (amplitude²) signal or scalar into decibel scale 
-    within the dB range (db_range). A gain (db_gain) can be added at the end.    
+    Transform power (amplitude²) signal or scalar into decibel scale
+    within the dB range (db_range). A gain (db_gain) can be added at the end.
 
     Parameters
     ----------
     x : array-like
-        data to rescale in dB  
+        data to rescale in dB
     db_range : scalar, optional, default : None
-        if db_range is a number, anything lower than -db_range is set to 
+        if db_range is a number, anything lower than -db_range is set to
         -db_range and anything larger than 0 is set to 0
     db_gain : scalar, optional, default is 0
-        Gain added to the results 
-        amplitude --> 20*log10(x) + db_gain  
+        Gain added to the results
+        amplitude --> 20*log10(x) + db_gain
 
     Returns
     -------
     y : array-like or scalar
-        y = 10*log10(x) + db_gain  
+        y = 10*log10(x) + db_gain
 
     Examples
     --------
@@ -423,20 +410,18 @@ def power2dB(x, db_range=None, db_gain=0):
 
     return y
 
-# %%
-
 
 def dB2amplitude(x, db_gain=0):
     """
     Transform data in dB scale into amplitude
-    A gain (db_gain) could be added at the end.    
+    A gain (db_gain) could be added at the end.
 
     Parameters
     ----------
     x : array-like or scalar
-        data in dB to rescale in amplitude 
+        data in dB to rescale in amplitude
     db_gain : scalar, optional, default is 0
-        Gain that was added to the result 
+        Gain that was added to the result
         --> 20*log10(x) + db_gain
 
     Returns
@@ -455,20 +440,18 @@ def dB2amplitude(x, db_gain=0):
 
     return y
 
-# %%
-
 
 def dB2power(x, db_gain=0):
     """
     Transform data in dB scale into power (amplitude²)
-    A gain (db_gain) could be added at the end.    
+    A gain (db_gain) could be added at the end.
 
     Parameters
     ----------
     x : array-like or scalar
-        data in dB to rescale in power 
+        data in dB to rescale in power
     db_gain : scalar, optional, default is 0
-        Gain that was added to the result 
+        Gain that was added to the result
         --> 10*log10(x) + db_gain
 
     Returns
@@ -480,13 +463,11 @@ def dB2power(x, db_gain=0):
     --------
     >>> a = np.array([ 0.        ,  6.02059991,  9.54242509, 12.04119983, 13.97940009])
     >>> maad.util.dB2power(a)
-        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])        
+        array([ 1.        ,  4.        ,  8.99999999, 16.00000001, 25.00000002])
     """
     y = 10**((x - db_gain)/10)
 
     return y
-
-# %%
 
 
 def add_dB(*argv, axis=0):
@@ -496,7 +477,7 @@ def add_dB(*argv, axis=0):
     Parameters
     ----------
     *argv : ndarray-like of floats
-        Arrays containing the sound waveform in dB 
+        Arrays containing the sound waveform in dB
 
     axis : integer, optional, default is 0
         if addition of multiple arrays, select the axis on which the sum is done
@@ -511,10 +492,10 @@ def add_dB(*argv, axis=0):
 
     Example with an audio file
 
-    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> L = maad.spl.power2dBSPL(Sxx_power,gain=42)
-    >>> L_sum = maad.util.add_dB(L, axis=1)  
+    >>> L_sum = maad.util.add_dB(L, axis=1)
     >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
@@ -529,7 +510,7 @@ def add_dB(*argv, axis=0):
 
     Example with arrays
 
-    >>> L1 = [90,80,70]
+    >>> L1 = [90, 80,70]
     >>> maad.util.add_dB(L1,L1,axis=1)
         array([90.45322979, 90.45322979])
     >>> maad.util.add_dB(L1,L1,axis=0)
@@ -560,8 +541,6 @@ def add_dB(*argv, axis=0):
 
     return L_sum
 
-# %%
-
 
 def mean_dB(*argv, axis=0):
     """
@@ -585,10 +564,10 @@ def mean_dB(*argv, axis=0):
 
     Example with an audio file
 
-    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
+    >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> L = maad.util.power2dBSPL(Sxx_power,gain=42)
-    >>> L_mean = maad.util.mean_dB(L, axis=1)  
+    >>> L_mean = maad.util.mean_dB(L, axis=1)
     >>> fig_kwargs = {'figtitle':'Power spectrum (PSD)',
                       'xlabel':'Frequency [Hz]',
                       'ylabel':'Power [dB]',
@@ -604,11 +583,11 @@ def mean_dB(*argv, axis=0):
 
     Example with arrays
 
-    >>> L1 = [90,80,70]
+    >>> L1 = [90, 80,70]
     >>> maad.util.mean_dB(L1,L1, axis=1)
         array([85.68201724, 85.68201724])
-    >>> maad.util.mean_dB(L1,L1, axis=0)  
-        array([90., 80., 70.]) 
+    >>> maad.util.mean_dB(L1,L1, axis=0)
+        array([90., 80., 70.])
 
     """
     # force to be ndarray
@@ -640,8 +619,6 @@ def mean_dB(*argv, axis=0):
 
     return e_mean
 
-# %%
-
 
 def shift_bit_length(x):
     """
@@ -664,11 +641,9 @@ def shift_bit_length(x):
     y = 1 << (x-1).bit_length()
     return y
 
-# %%
-
 
 def nearest_idx(array, value):
-    """ 
+    """
     Find nearest value on array and return its index.
 
     Parameters
@@ -696,12 +671,10 @@ def nearest_idx(array, value):
     idx = (np.abs(array-value)).argmin()
     return idx
 
-# %%
-
 
 def get_df_single_row(df, index, mode='iloc'):
     """
-    Extract a single row from a dataframe keeping the DataFrame type 
+    Extract a single row from a dataframe keeping the DataFrame type
     (instead of becoming a Series).
 
     Parameters
@@ -729,11 +702,11 @@ def get_df_single_row(df, index, mode='iloc'):
                   ('insect', 4, 'No','NYC' ) ,
                   ('mammal', 2, 'No','NYC' ) ,
                   ('frog', 3, 'Yes',"LA" ) ]
-    >>> df = pd.DataFrame(species, 
+    >>> df = pd.DataFrame(species,
                           columns = ['category',
                                      'abundance',
                                      'presence',
-                                     'location']) 
+                                     'location'])
     >>> print(df)
           category  abundance presence location
         0     bird          8      Yes      NYC
@@ -750,17 +723,17 @@ def get_df_single_row(df, index, mode='iloc'):
           category abundance presence location
         0     bird         8      Yes      NYC
 
-     Now with index   
+     Now with index
 
     >>> df_modified=df.set_index("category")
     >>> print(df_modified)
                     abundance presence location
-        category                             
+        category
         bird              8      Yes      NYC
         insect            4       No      NYC
         mammal            2       No      NYC
-        frog              3      Yes       LA 
-    >>> df_modified.loc['insect']  
+        frog              3      Yes       LA
+    >>> df_modified.loc['insect']
         abundance      4
         presence      No
         location     NYC
@@ -768,7 +741,7 @@ def get_df_single_row(df, index, mode='iloc'):
     >>> maad.util.get_df_single_row (df_modified, index='insect', mode='loc')
                abundance presence location
         insect         4       No      NYC
-    >>> maad.util.get_df_single_row (df_modified, index=1, mode='iloc')    
+    >>> maad.util.get_df_single_row (df_modified, index=1, mode='iloc')
                abundance presence location
         insect         4       No      NYC
     """
@@ -782,11 +755,9 @@ def get_df_single_row(df, index, mode='iloc'):
 
     return df_out
 
-# %%
-
 
 def format_features(df, tn, fn):
-    """ 
+    """
     Format features such as bounding box coordinates and centroids coordinates
     to predifined format : time-frequency to pixels or pixels to time-frequency
     units.
@@ -794,7 +765,7 @@ def format_features(df, tn, fn):
     Parameters
     ----------
     df : pandas DataFrame
-        df with bounding box coordinates and/or centroids coordinates       
+        df with bounding box coordinates and/or centroids coordinates
         array must have a valid input format with column names.
 
         - bounding box: min_y, min_x, max_y, max_x
@@ -815,21 +786,21 @@ def format_features(df, tn, fn):
 
     Notes
     -----
-    Use this function after using functions such as ``maad.rois.select_rois``, 
-    ``maad.features.centroid_features``, ``maad.util.read_audacity_annot``, or before using 
-    functions such as ``maad.util.overlay_rois``, ``maad.util.overlay_centroid`` in order to 
+    Use this function after using functions such as ``maad.rois.select_rois``,
+    ``maad.features.centroid_features``, ``maad.util.read_audacity_annot``, or before using
+    functions such as ``maad.util.overlay_rois``, ``maad.util.overlay_centroid`` in order to
     format the coordinates into pixels and/or time-frequency units.
 
     See also
     --------
-    select_rois, centroid_features, read_audacity_annot, overlay_rois, 
+    select_rois, centroid_features, read_audacity_annot, overlay_rois,
     overlay_centroid
-    
+
     Examples
     --------
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(s, fs)
-    >>> df_rois = maad.util.read_audacity_annot('../data/cold_forest_daylight_label.txt') 
+    >>> Sxx_power, tn, fn, extent = maad.sound.spectrogram(s, fs)
+    >>> df_rois = maad.util.read_audacity_annot('../data/cold_forest_daylight_label.txt')
     >>> list(df_rois)
     >>> df_rois = maad.util.format_features(df_rois, tn, fn)
     >>> list(df_rois)
@@ -840,7 +811,7 @@ def format_features(df, tn, fn):
         raise TypeError('Rois must be of type pandas DataFrame')
 
     # Do the loop twice in order to force updating coordinates and parameters
-    # in pixels unit (time and frequency do not change when the time and 
+    # in pixels unit (time and frequency do not change when the time and
     # frequency vectors resolution change)
     count = 0
     while (count < 2):
@@ -868,7 +839,7 @@ def format_features(df, tn, fn):
                     df_bbox.append((min_y, min_x, max_y, max_x))
                 else:
                     df = df.drop(idx)
-            
+
             # check if new columns
             if not (('min_y' and 'min_x' and 'max_y' and 'max_x') in df):
                 df = df.join(pd.DataFrame(df_bbox,
@@ -881,7 +852,7 @@ def format_features(df, tn, fn):
                                        columns=['min_y', 'min_x',
                                                 'max_y', 'max_x'],
                                        index=df.index))
-         
+
 
         # if ('min_y' and 'min_x' and 'max_y' and 'max_x') in df and not (('min_t' and 'min_f' and 'max_t' and 'max_f') in df):
         if ('min_y' and 'min_x' and 'max_y' and 'max_x') in df:
@@ -903,7 +874,7 @@ def format_features(df, tn, fn):
                                           columns=['min_f', 'min_t',
                                                    'max_f', 'max_t'],
                                           index=df.index))
-            
+
 
         # if ('centroid_y' and 'centroid_x') in df and not (('centroid_f' and 'centroid_t') in df):
         if ('centroid_y' and 'centroid_x') in df:
@@ -912,7 +883,7 @@ def format_features(df, tn, fn):
                 centroid_f = fn[int(round(row.centroid_y))]
                 centroid_t = tn[int(round(row.centroid_x))]
                 df_centroid.append((centroid_f, centroid_t))
-                
+
             # check if new columns
             if not (('centroid_f' and 'centroid_t') in df) :
                 df = df.join(pd.DataFrame(df_centroid,
@@ -937,7 +908,7 @@ def format_features(df, tn, fn):
                 df.update(pd.DataFrame(df_centroid,
                                        columns=['centroid_y', 'centroid_x'],
                                        index=df.index))
-                
+
         # =============
         # if ('duration_x' and 'bandwidth_y' and 'area_xy') in df and not (('duration_t' and 'bandwidth_f' and 'area_tf') in df):
         if ('duration_x' and 'bandwidth_y' and 'area_xy') in df:
@@ -947,14 +918,14 @@ def format_features(df, tn, fn):
                 duration_t = row.duration_x * (tn[1]-tn[0])
                 area_tf = row.area_xy * (fn[1]-fn[0]) * (tn[1]-tn[0])
                 df_area.append((duration_t, bandwidth_f, area_tf))
-                
+
             # check if new columns
             if not (('duration_t' and 'bandwidth_f' and 'area_tf') in df) :
                 df = df.join(pd.DataFrame(df_area,
                                           columns=['duration_t',
                                                     'bandwidth_f', 'area_tf'],
                                           index=df.index))
- 
+
         # if ('duration_t' and 'bandwidth_f' and 'area_tf') in df and not (('duration_x' and 'bandwidth_y' and 'area_xy') in df):
         if ('duration_t' and 'bandwidth_f' and 'area_tf') in df:
             df_area = []
@@ -984,14 +955,12 @@ def format_features(df, tn, fn):
     return df
 
 
-# %%
-
 def crossfade(s1, s2, fs, fade_len=1):
     """
     Add a smooth transition (cross-fade) between two audio signals.
-    The function applies a squared function to apply the transition between signals. 
+    The function applies a squared function to apply the transition between signals.
     The signals must have the same sampling rate.
-    
+
     Parameters
     ----------
     s1 : numpy.ndarray
@@ -999,18 +968,18 @@ def crossfade(s1, s2, fs, fade_len=1):
     s2 : numpy.ndarray
         Second audio signal.
     fs: int
-        Sampling frequency of signals. 
+        Sampling frequency of signals.
 
     Returns
     -------
     s_out: numpy.ndarray
-        Signal with the resulting crossfade between s1 and s2. The length in seconds 
-        of the resulting signal is: `len(s1)/fs + len(s1)/fs - fade_len`. 
+        Signal with the resulting crossfade between s1 and s2. The length in seconds
+        of the resulting signal is: `len(s1)/fs + len(s1)/fs - fade_len`.
 
     See also
     --------
     crossfade_list
-    
+
     Examples
     --------
     >>> from maad import sound, util
@@ -1018,7 +987,7 @@ def crossfade(s1, s2, fs, fade_len=1):
     >>> s1 = sound.trim(s, fs, 0, 4)
     >>> s2 = sound.trim(s, fs, 15, 19)
     >>> s_out = util.crossfade(s1, s2, fs, fade_len=1)
-    
+
     """
     fade_in = np.sqrt(np.arange(0, fs * fade_len) / (fs * fade_len))
     fade_out = np.flip(fade_in)
@@ -1031,13 +1000,11 @@ def crossfade(s1, s2, fs, fade_len=1):
     )
     return s_out
 
-# %%
-
 
 def crossfade_list(s_list, fs, fade_len=1):
     """
     Apply a cross-fade to a list of audio signals.
-    Audio signals must be numpy arrays with the same sampling rate. The function applies 
+    Audio signals must be numpy arrays with the same sampling rate. The function applies
     a squared function to apply the transition between signals.
 
     Parameters
@@ -1048,16 +1015,16 @@ def crossfade_list(s_list, fs, fade_len=1):
         sampling frequency
     fade_len: float
         length of fade between audio in seconds
-    
+
     Returns
     -------
     s_out : ndarray
-    
+
     See also
     --------
     crossfade
-    
-    """    
+
+    """
     for idx, s in enumerate(s_list):
         if idx == 0:
             s_out = s_list[idx]

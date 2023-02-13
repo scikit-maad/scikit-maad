@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" 
+"""
 Acoustic features
 =================
 
@@ -10,7 +10,7 @@ Spectro-temporal features
 -------------------------
 .. autosummary::
     :toctree: generated/
-    
+
     shape_features
     shape_features_raw
     opt_shape_presets
@@ -23,7 +23,7 @@ Alpha acoustic indices
 ----------------------
 .. autosummary::
     :toctree: generated/
-        
+
     temporal_median
     temporal_entropy
     acoustic_richness_index
@@ -56,15 +56,15 @@ Temporal features
 -----------------
 .. autosummary::
     :toctree: generated/
-    
+
     temporal_moments
     zero_crossing_rate
-    
+
 Spectral features
 -----------------
 .. autosummary::
     :toctree: generated/
-        
+
     spectral_moments
     peak_frequency
     spectral_quantile
@@ -116,7 +116,7 @@ from .alpha_indices import (temporal_median,
 
 __all__ = [
            # shape
-           'filter_multires', 
+           'filter_multires',
            'filter_bank_2d_nodc',
            'opt_shape_presets',
            'shape_features',

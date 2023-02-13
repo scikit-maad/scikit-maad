@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" 
+"""
 Sound processing
 ================
 
@@ -14,7 +14,7 @@ Input and output
     load_url
     load_spectrogram
     write
-    
+
 Preprocess audio
 -----------------
 .. autosummary::
@@ -30,12 +30,12 @@ Preprocess audio
     remove_background_along_axis
     median_equalizer
     wave2frames
-   
+
 Transform audio
 ---------------
 .. autosummary::
     :toctree: generated/
-    
+
     spectrogram
     avg_power_spectro
     avg_amplitude_spectro
@@ -51,7 +51,7 @@ Metrics
 -------
 .. autosummary::
     :toctree: generated/
-    
+
     temporal_snr
     spectral_snr
     sharpness
@@ -87,7 +87,7 @@ from .spectro_func import (spectrogram,
                            avg_power_spectro,
                            avg_amplitude_spectro,
                            linear_to_octave)
-                          
+
 from .metrics import (temporal_snr,
                       spectral_snr,
                       sharpness)
@@ -105,7 +105,7 @@ __all__ = [
         'smooth',
         # spectral_subtraction.py
         'pcen',
-        'remove_background', 
+        'remove_background',
         'remove_background_morpho',
         'remove_background_along_axis',
         'median_equalizer',

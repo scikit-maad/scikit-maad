@@ -14,16 +14,16 @@ import pandas as pd
 import os
 import numpy as np
 
-#%%
+
 def check_file_format(path_audio):
     """
-    Check Wave file consistency. Check if WAVE format is correct and if file name 
-    follows standard format. The standard format is SITENAME_DATE_TIME.WAV, with 
+    Check Wave file consistency. Check if WAVE format is correct and if file name
+    follows standard format. The standard format is SITENAME_DATE_TIME.WAV, with
     DATE as YYYYMMDD and TIME as HHMMSS.
 
     Parameters
     ----------
-    path_audio : str
+    path_audio: str
         Location of audio filename.
 
     Raises
@@ -33,7 +33,7 @@ def check_file_format(path_audio):
 
     Returns
     -------
-    error : int
+    error: int
         0 if no error is found, 1 if WAVE format is incorrect and 2 if filename has no
         standard format.
 
@@ -49,7 +49,7 @@ def check_file_format(path_audio):
     except FileNotFoundError as fnfe:
         raise fnfe
 
-    except:
+    except Exception:
         error = 1
         return error
 
@@ -75,23 +75,23 @@ def check_file_format(path_audio):
 
     return error
 
-#%% 
+
 def audio_header(path_audio):
     """
-    Get audio header information from WAVE file. 
-    Header information includes, sample rate, bit depth, number of channels, 
+    Get audio header information from WAVE file.
+    Header information includes, sample rate, bit depth, number of channels,
     number of samples, file size and duration.
-    
+
     Parameters
     ----------
-    path_audio : str
+    path_audio: str
         Location of audio file.
 
     Returns
     -------
-    metadata : dictionary
+    metadata: dictionary
         header information.
-    
+
     Examples
     --------
     >>> from maad import util
@@ -114,7 +114,7 @@ def audio_header(path_audio):
                 'length': meta.nframes / meta.framerate}
     return metadata
 
-#%% 
+
 def filename_info(path_audio, verbose =False):
     """
     Get information from filename when using standard format. The standard format is
@@ -122,12 +122,12 @@ def filename_info(path_audio, verbose =False):
 
     Parameters
     ----------
-    path_audio : str
+    path_audio: str
         Location of audio file.
 
     Returns
     -------
-    metadata : dictionary
+    metadata: dictionary
         file name information.
 
 
@@ -148,24 +148,24 @@ def filename_info(path_audio, verbose =False):
             'File name format not supported. The standard format must be SITENAME_DATE_TIME.WAV, with DATE as YYYYMMDD and TIME as HHMMSS.')
     return metadata
 
-#%%
+
 def get_metadata_file(path_audio, verbose=False):
     """
-    Get metadata asociated with audio recordings in audio file. Metadata includes basic 
-    information of the audio file format (sample rate, number of channels, bit depth and 
-    file size), and date information from the filename. Note however, that this function 
+    Get metadata asociated with audio recordings in audio file. Metadata includes basic
+    information of the audio file format (sample rate, number of channels, bit depth and
+    file size), and date information from the filename. Note however, that this function
     is intended for use only with audio files with a self-describing header.
 
     Parameters
     ----------
-    path_audio : str
+    path_audio: str
         Path to the audio file name.
-    verbose : boolean, optional
+    verbose: boolean, optional
         Display error messages. The default is False.
 
     Returns
     -------
-    metadata : dictionary
+    metadata: dictionary
         Dictionary with metadata.
 
     """
@@ -208,31 +208,31 @@ def get_metadata_file(path_audio, verbose=False):
                     'time': info_fname['time']}
     return metadata
 
-# %%
+
 def get_metadata_dir(path_dir, verbose=False):
     """
-    Get metadata asociated with audio recordings in a directory. Metadata includes basic 
-    information of the audio file format (sample rate, number of channels, bit depth and 
-    file size), and date information from the filename. Note however, that this function 
+    Get metadata asociated with audio recordings in a directory. Metadata includes basic
+    information of the audio file format (sample rate, number of channels, bit depth and
+    file size), and date information from the filename. Note however, that this function
     is intended for use only with audio files with a self-describing header.
 
     Parameters
     ----------
-    path_dir : str
+    path_dir: str
         Path of either a directory or a file. it will select all wav files in the parent folder
         (of either the file or directory in path_dir). The search for file is performed recursively.
-    verbose : boolean, optional
+    verbose: boolean, optional
         Output file progress. The default is False.
 
     Returns
     -------
-    df_metadata : pandas.DataFrame
+    df_metadata: pandas.DataFrame
         Dataframe with metadata, files as rows and metadata as columns.
-    
+
     See Also
     --------
     maad.util.get_metadata_file, maad.util.audio_header, maad.util.filename_info
-    
+
     Examples
     --------
     >>> from maad import util
@@ -254,15 +254,13 @@ def get_metadata_dir(path_dir, verbose=False):
         df_metadata = pd.concat([df_metadata, pd.DataFrame.from_records([data])])
 
     df_metadata.reset_index(drop=True, inplace=True)
-    
+
     return df_metadata
 
 
-
-#%% Examples of use
+# Examples of use
 """
-Test functions 
-
+Test functions
 
 # 1. Read metadata from a valid file with correct name format -> read ok
 path_audio = './test_data/S4A03895_20190522_000000.wav'
@@ -291,7 +289,4 @@ get_metadata_file(path_audio)
 audio_header(path_audio)
 filename_info(path_audio)
 check_file_format(path_audio)  # should be error=1
-
 """
-
-
