@@ -9,6 +9,7 @@
 
 [![DOI](https://zenodo.org/badge/148142520.svg)](https://zenodo.org/badge/latestdoi/148142520)
 [![Downloads](https://static.pepy.tech/badge/scikit-maad)](https://pepy.tech/project/scikit-maad)
+[![PyPI version](https://badge.fury.io/py/scikit-maad.svg)](https://badge.fury.io/py/scikit-maad)
 ## Installation
 scikit-maad dependencies:
 
