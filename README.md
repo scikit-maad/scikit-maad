@@ -1,3 +1,6 @@
+
+# scikit-maad
+
 <div align="center">
     <img src="./docs/logo/maad_key_visual_blue.png" alt="drawing"/>
 </div>
