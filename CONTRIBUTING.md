@@ -1,12 +1,31 @@
 # Contributors Guide
 
-There are multiple ways to contribute to this collaborative project:
+Whether you are a novice or experienced software developer, all contributions and suggestions are welcome!
+The main ways to contribute are:
 
-- Reporting issues.
-- Present a solution to a reported issue.
-- Add a tutorial to the example gallery showing how to use scikit-maad functionalities.
-- Improve the API documentation.
-- Develop new features.
+- [Reporting bugs](#reporting-bugs)
+- [Present a solution to a reported issue](#solution-to-issue)
+- [Add a tutorial to the example gallery](#add-tutorial-to-the-example-gallery)
+- [Improve the documentation](#improve-documentation)
+- [Develop new features](#develop-new-features)
+
+Please note that any contributions you make will be under the BSD-3-Clause software license.
+
+## Reporting bugs
+
+Bugs are reported using the bug template, so if you find a bug create a new issue [here](https://github.com/scikit-maad/scikit-maad/issues/new?assignees=&labels=bug&template=bug_report.md&title=BUG%3A+). Please try to fill out the template with as much detail as you can.
+
+## Solution to issue
+
+If you know the solution to an issue, you can give feedback on the issues list and submit a fix through a pull request. See section [Develop new features](#develop-new-features) for a detailed step by step to submit a pull request.
+
+## Add tutorial to the example gallery
+
+Tutorials are a great way to show the functionalities of scikit-maad. If you have ideas, please create an issue using the [feature request template](https://github.com/scikit-maad/scikit-maad/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=ENH%3A+).
+
+## Improve documentation
+
+If you’re browsing the documentation and notice a typo or something that could be improved, please consider letting us know by creating an issue or submitting a fix.
 
 ## Develop new Features
 Improvements and new features are greatly appreciated. If you would like to contribute developing new features or making improvements to the available package, please follow the following steps:
@@ -32,7 +51,9 @@ You can test the docstring format with:
 
 python -m doctest -v filename.py
 ```
-### Variable names
+### Standard variable names
+
+When developing new functionalities, please use the consistent variable names:
 - audio signal: `s`
 - Frequency sampling or sampling frequency: `fs`
 - Spectrogram: `Sxx`
