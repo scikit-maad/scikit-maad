@@ -16,23 +16,65 @@
 <!--[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)-->
 
 ## Installation
-scikit-maad dependencies:
 
-- Python >= 3.5
-- NumPy >= 1.13
-- SciPy >= 0.18
-- scikit-image >= 0.14
-
-**scikit-maad** is hosted on PyPI. To install, run the following command in your Python environment:
+### From binaries
+**scikit-maad** is hosted on PyPI. To easiest way to install the package is using `pip` the standard package installer for Python:
 
 ```bash
 $ pip install scikit-maad
 ```
 
-To install the latest version from source clone the master repository and from the top-level folder call:
+### From source
+To install the latest development version from source: 
 
+1. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+2. Clone the repository from the *production branch*
+```bash
+git clone https://github.com/scikit-maad/scikit-maad.git
+```
+
+
+3. From the top-level folder call:
 ```bash
 $ python setup.py install
+```
+
+## Quick start
+
+The full package is imported as `maad`:
+
+```python
+import maad
+```
+
+All functions are organized within five main modules. 
+
+1. `maad.sound` has functions to load and preprocess audio signals.
+2. `maad.rois` provides tools to find regions of interest in audio (**1D**) and spectrogram signals (**2D**).
+3. `maad.features` include functions to compute robust descriptors to characterize audio signals.
+4. `maad.spl` provides tools to describe the physics of acoustic waves.
+5. `maad.util` has a handfull of useful set of tools used in the audio analysis framework.
+
+To load submodules juste type::
+
+```python
+from maad import sound, rois
+```
+
+To use scikit-maad tools, audio must be loaded as a numpy array. The function `maad.sound.load` is a simple and effective way to load audio from disk. For example, download the [spinetail audio example](https://github.com/scikit-maad/scikit-maad/blob/production/data/spinetail.wav) to your working directory and type::
+
+```python
+s, fs = sound.load_url('spinetail')
+```
+
+You can then apply any analysis to find regions of interest or characterize your audio signals.
+
+```python
+rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
 ```
 
 ## Examples and documentation
@@ -64,7 +106,10 @@ If you find scikit-maad usefull for your research, please consider citing it as:
 ````
 
 ## Contributions and bug report
-Improvements and new features are greatly appreciated. If you would like to contribute developing new features or making improvements to the available package, please refer to our [wiki](https://github.com/scikit-maad/scikit-maad/wiki/How-to-contribute-to-scikit-maad). Bug reports and especially tested patches may be submitted directly to the [bug tracker](https://github.com/scikit-maad/scikit-maad/issues). 
+Improvements and new features are greatly appreciated. If you would like to contribute developing new features or making improvements to `scikit-maad`, please refer to our [contributors guide](CONTRIBUTING.md). To create a positive social atmosphere for our community, we ask contributors to adopt and enforce our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## About the project
-In 2018, we began to translate a set of audio processing functions from Matlab to an open-source programming language, namely, Python. These functions provided the necessary tools to replicate the Multiresolution Analysis of Acoustic Diversity (MAAD), a method to estimate animal acoustic diversity using unsupervised learning (Ulloa et al., 2018). We soon realized that Python provided a suitable environment to extend these core functions and to develop a flexible toolbox for our research. During the past few years, we added over 50 acoustic indices, plus a module to estimate the sound pressure level of audio events. Furthermore, we updated, organized, and fully documented the code to make this development accessible to a much wider audience. This work was initiated by [Juan Sebastian Ulloa](https://www.researchgate.net/profile/Juan_Ulloa), supervised by Jérôme Sueur and Thierry Aubin at the [Muséum National d'Histoire Naturelle](http://isyeb.mnhn.fr/fr) and the [Université Paris Saclay](http://neuro-psi.cnrs.fr/) respectively. Python functions have been added by [Sylvain Haupert](https://www.researchgate.net/profile/Sylvain_Haupert), [Juan Felipe Latorre](https://www.researchgate.net/profile/Juan_Latorre_Gil) ([Universidad Nacional de Colombia](https://unal.edu.co/)) and Juan Sebastián Ulloa ([Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/)).
+In 2018, we began to translate a set of audio processing functions from Matlab to an open-source programming language, namely, Python. These functions provided the necessary tools to replicate the Multiresolution Analysis of Acoustic Diversity (MAAD), a method to estimate animal acoustic diversity using unsupervised learning (Ulloa et al., 2018). We soon realized that Python provided a suitable environment to extend these core functions and to develop a flexible toolbox for our research. During the past few years, we added over 50 acoustic indices, plus a module to estimate the sound pressure level of audio events. Furthermore, we updated, organized, and fully documented the code to make this development accessible to a much wider audience. This work was initiated by [Juan Sebastian Ulloa](https://www.researchgate.net/profile/Juan_Ulloa), supervised by Jérôme Sueur and Thierry Aubin at the [Muséum National d'Histoire Naturelle](http://isyeb.mnhn.fr/fr) and the [Université Paris Saclay](http://neuro-psi.cnrs.fr/) respectively. Python functions have been added by [Sylvain Haupert](https://www.researchgate.net/profile/Sylvain_Haupert), [Juan Felipe Latorre](https://www.researchgate.net/profile/Juan_Latorre_Gil) ([Universidad Nacional de Colombia](https://unal.edu.co/)) and Juan Sebastián Ulloa ([Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/)). For an updated list of collaborators, check the [contributors list](https://github.com/scikit-maad/scikit-maad/graphs/contributors).
+
+## License
+To support reproducible research, the package is released under the [BSD open-source licence](LICENSE.md), which allows unrestricted redistribution for commercial and private use.
