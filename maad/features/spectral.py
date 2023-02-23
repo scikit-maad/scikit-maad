@@ -22,6 +22,24 @@ from scipy.optimize import root
 from maad.util import moments, power2dB
 from maad import sound
 
+# define internal functions
+def _interpolate_peak_location(pxx):
+    """ Estimate peak using quadratic interpolation """
+    idxmax = pxx.index.get_loc(pxx.idxmax())
+    if (idxmax==0) | (idxmax+1==len(pxx)):
+        # if maximum is at beginning or at the end os spectrum, take maximum
+        peak = pxx.idxmax()
+        amplitude = pxx[peak]
+    else:
+        # use interpolation
+        x = pxx.iloc[[idxmax-1, idxmax, idxmax+1]].index.values
+        y = pxx.iloc[[idxmax-1, idxmax, idxmax+1]].values
+        f = interpolate.interp1d(x,y, kind='quadratic')
+        xnew = np.arange(x[0], x[2], 1)
+        ynew = f(xnew)
+        peak = xnew[ynew.argmax()]
+        amplitude = ynew[ynew.argmax()]
+    return peak, amplitude
 #%%
 # =============================================================================
 # public functions
@@ -103,8 +121,7 @@ def peak_frequency(s, fs, method='best', nperseg=1024, roi=None, amp=False, as_p
         Return data as a pandas.Series or pandas.DataFrame, when amp
         is False or True, respectively. Default is False.
     kwargs : additional keyword arguments
-        If `window='hann'`, additional keyword arguments to pass to
-        `sound.spectrum`.
+        Additional keyword arguments to pass to `sound.spectrum`.
 
     Returns
     -------
@@ -118,10 +135,10 @@ def peak_frequency(s, fs, method='best', nperseg=1024, roi=None, amp=False, as_p
     >>> from maad import features, sound
     >>> s, fs = sound.load('../../data/spinetail.wav')
 
-    Compute peak frequency with the fast method
+    Compute peak frequency
 
     >>> peak_freq, peak_freq_amp = features.peak_frequency(s, fs, amp=True)
-    >>> print('Peak Frequency: {:.5f}, Amplitud: {:.5f}'.format(peak_freq, peak_freq_amp))
+    >>> print('Peak Frequency: {:.5f}, Amplitude: {:.5f}'.format(peak_freq, peak_freq_amp))
     Peak Frequency: 6634.16016, Amplitud: 0.00012
 
     """
@@ -134,21 +151,14 @@ def peak_frequency(s, fs, method='best', nperseg=1024, roi=None, amp=False, as_p
                                    **kwargs)
     pxx = pd.Series(pxx, index=fidx)
 
-    # simplest form to get peak frequency, but less precise
     if method=='fast':
+        # simplest form to get peak frequency, but less precise
         peak_freq = pxx.idxmax()
         amp_peak_freq = pxx[peak_freq]
 
     elif method=='best':
-        # use interpolation get more precise peak frequency estimation
-        idxmax = pxx.index.get_loc(pxx.idxmax())
-        x = pxx.iloc[[idxmax-1, idxmax, idxmax+1]].index.values
-        y = pxx.iloc[[idxmax-1, idxmax, idxmax+1]].values
-        f = interpolate.interp1d(x,y, kind='quadratic')
-        xnew = np.arange(x[0], x[2], 1)
-        ynew = f(xnew)
-        peak_freq = xnew[ynew.argmax()]
-        amp_peak_freq = ynew[ynew.argmax()]
+        # use interpolation get better estimate of peak frequency
+        peak_freq, amp_peak_freq = _interpolate_peak_location(pxx)
 
     else:
         raise Exception("Invalid method. Method should be 'fast' or 'best' ")
