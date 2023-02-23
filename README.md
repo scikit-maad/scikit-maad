@@ -17,55 +17,21 @@
 
 ## Installation
 
-### From binaries
 **scikit-maad** is hosted on PyPI. To easiest way to install the package is using `pip` the standard package installer for Python:
 
 ```bash
 $ pip install scikit-maad
 ```
 
-### From source
-To install the latest development version from source: 
-
-1. Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-2. Clone the repository from the *production branch*
-```bash
-git clone https://github.com/scikit-maad/scikit-maad.git
-```
-
-
-3. From the top-level folder call:
-```bash
-$ python setup.py install
-```
-
 ## Quick start
 
-The full package is imported as `maad`:
-
-```python
-import maad
-```
-
-All functions are organized within five main modules. 
-
-1. `maad.sound` has functions to load and preprocess audio signals.
-2. `maad.rois` provides tools to find regions of interest in audio (**1D**) and spectrogram signals (**2D**).
-3. `maad.features` include functions to compute robust descriptors to characterize audio signals.
-4. `maad.spl` provides tools to describe the physics of acoustic waves.
-5. `maad.util` has a handfull of useful set of tools used in the audio analysis framework.
-
-To load submodules juste type::
+The package is imported as `maad`:
 
 ```python
 from maad import sound, rois
 ```
 
-To use scikit-maad tools, audio must be loaded as a numpy array. The function `maad.sound.load` is a simple and effective way to load audio from disk. For example, download the [spinetail audio example](https://github.com/scikit-maad/scikit-maad/blob/production/data/spinetail.wav) to your working directory and type::
+To use scikit-maad tools, audio must be loaded as a numpy array. The function `maad.sound.load` is a simple and effective way to load audio from disk. For example, download the [spinetail audio example](https://github.com/scikit-maad/scikit-maad/blob/production/data/spinetail.wav) to your working directory and type:
 
 ```python
 s, fs = sound.load_url('spinetail')
@@ -105,8 +71,8 @@ If you find scikit-maad usefull for your research, please consider citing it as:
 }
 ````
 
-## Contributions and bug report
-Improvements and new features are greatly appreciated. If you would like to contribute developing new features or making improvements to `scikit-maad`, please refer to our [contributors guide](CONTRIBUTING.md). To create a positive social atmosphere for our community, we ask contributors to adopt and enforce our [code of conduct](CODE_OF_CONDUCT.md).
+## Feedback and contributions
+Improvements and new features are greatly appreciated. If you would like to contribute submitting issues, developing new features or making improvements to `scikit-maad`, please refer to our [contributors guide](CONTRIBUTING.md). To create a positive social atmosphere for our community, we ask contributors to adopt and enforce our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## About the project
 In 2018, we began to translate a set of audio processing functions from Matlab to an open-source programming language, namely, Python. These functions provided the necessary tools to replicate the Multiresolution Analysis of Acoustic Diversity (MAAD), a method to estimate animal acoustic diversity using unsupervised learning (Ulloa et al., 2018). We soon realized that Python provided a suitable environment to extend these core functions and to develop a flexible toolbox for our research. During the past few years, we added over 50 acoustic indices, plus a module to estimate the sound pressure level of audio events. Furthermore, we updated, organized, and fully documented the code to make this development accessible to a much wider audience. This work was initiated by [Juan Sebastian Ulloa](https://www.researchgate.net/profile/Juan_Ulloa), supervised by Jérôme Sueur and Thierry Aubin at the [Muséum National d'Histoire Naturelle](http://isyeb.mnhn.fr/fr) and the [Université Paris Saclay](http://neuro-psi.cnrs.fr/) respectively. Python functions have been added by [Sylvain Haupert](https://www.researchgate.net/profile/Sylvain_Haupert), [Juan Felipe Latorre](https://www.researchgate.net/profile/Juan_Latorre_Gil) ([Universidad Nacional de Colombia](https://unal.edu.co/)) and Juan Sebastián Ulloa ([Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/)). For an updated list of collaborators, check the [contributors list](https://github.com/scikit-maad/scikit-maad/graphs/contributors).
