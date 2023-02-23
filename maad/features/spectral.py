@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 """
 Collection of functions to extract spectral features from audio signals
+License: New BSD License
 """
-#
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
-# License: New BSD License
 
 # =============================================================================
 # Load the modules
 # =============================================================================
 # Import external modules
+
 import numpy as np
 import pandas as pd
 from scipy import interpolate
@@ -454,7 +451,7 @@ def bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
         `sound.spectrum`.
     Returns
     -------
-    bandwidth : float
+    bandwidth_50 : float
         Bandwidth 50% of the audio
     bandwidth_90 : float
         Bandwidth 90%  of the audio

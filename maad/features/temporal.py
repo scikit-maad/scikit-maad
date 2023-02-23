@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 """
-Collection of functions to extract features from music
+Collection of functions to extract features from audio signals
+License: New BSD License
 """
-#
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
-# License: New BSD License
 
 # =============================================================================
 # Load the modules
