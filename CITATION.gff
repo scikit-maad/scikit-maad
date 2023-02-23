@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+title: >-
+  scikit‐maad: An open‐source and modular toolbox for
+  quantitative soundscape analysis in Python
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: article
+authors:
+  - orcid: 'https://orcid.org/0000-0001-5666-6942'
+    given-names: Juan Sebastián
+    family-names: Ulloa
+    affiliation: >-
+      Instituto de Investigación de Recursos Biológicos
+      Alexander von Humboldt, Bogotá, Colombia.
+    email: julloa@humboldt.org.co
+  - given-names: Sylvain
+    family-names: Haupert
+    affiliation: >-
+      Institut Systématique Évolution Biodiversité (ISYEB),
+      Muséum National d'Histoire Naturelle, CNRS, Sorbonne
+      Université, EPHE, Paris, France
+    orcid: 'https://orcid.org/0000-0003-4705-4527'
+  - given-names: Juan Felipe
+    family-names: Latorre
+    affiliation: >-
+      Departamento de Física, Universidad Nacional de
+      Colombia, Bogotá, Colombia
+    orcid: 'https://orcid.org/0000-0003-1115-2969'
+  - given-names: Thierry
+    family-names: Aubin
+    affiliation: >-
+      Équipe Communications Acoustiques, UMR 9197,
+      Neuro-PSI-CNRS, Université Paris-Saclay, Orsay, France
+    orcid: 'https://orcid.org/0000-0002-7190-8978'
+  - given-names: Jérôme
+    family-names: Sueur
+    affiliation: >-
+      Institut Systématique Évolution Biodiversité (ISYEB),
+      Muséum National d'Histoire Naturelle, CNRS, Sorbonne
+      Université, EPHE, Paris, France
+identifiers:
+  - type: doi
+    value: 10.1111/2041-210X.13711
+    description: Article DOI on Methods in Ecology and Evolution
