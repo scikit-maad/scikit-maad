@@ -25,23 +25,14 @@ $ pip install scikit-maad
 
 ## Quick start
 
-The package is imported as `maad`:
+The package is imported as `maad`. To use scikit-maad tools, audio must be loaded as a numpy array. The function `maad.sound.load` is a simple and effective way to load audio from disk. For example, download the [spinetail audio example](https://github.com/scikit-maad/scikit-maad/blob/production/data/spinetail.wav) to your working directory. You can load it and then apply any analysis to find regions of interest or characterize your audio signals:
 
 ```python
 from maad import sound, rois
-```
-
-To use scikit-maad tools, audio must be loaded as a numpy array. The function `maad.sound.load` is a simple and effective way to load audio from disk. For example, download the [spinetail audio example](https://github.com/scikit-maad/scikit-maad/blob/production/data/spinetail.wav) to your working directory and type:
-
-```python
-s, fs = sound.load_url('spinetail')
-```
-
-You can then apply any analysis to find regions of interest or characterize your audio signals.
-
-```python
+s, fs = sound.load('spinetail.wav')
 rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
 ```
+
 
 ## Examples and documentation
 - See https://scikit-maad.github.io for a complete reference manual and example gallery.
@@ -53,23 +44,7 @@ If you find scikit-maad usefull for your research, please consider citing it as:
 
 - Ulloa, J. S., Haupert, S., Latorre, J. F., Aubin, T., & Sueur, J. (2021). scikit‐maad: An open‐source and modular toolbox for quantitative soundscape analysis in Python. Methods in Ecology and Evolution, 2041-210X.13711. https://doi.org/10.1111/2041-210X.13711
 
-```bibtex
-
-@article{ulloa_etal_scikitmaad_2021,
-	title = {scikit‐maad: {An} open‐source and modular toolbox for quantitative soundscape analysis in {Python}},
-	issn = {2041-210X, 2041-210X},
-	shorttitle = {scikit‐maad},
-	url = {https://onlinelibrary.wiley.com/doi/10.1111/2041-210X.13711},
-	doi = {10.1111/2041-210X.13711},
-	language = {en},
-	urldate = {2021-10-04},
-	journal = {Methods in Ecology and Evolution},
-	author = {Ulloa, Juan Sebastián and Haupert, Sylvain and Latorre, Juan Felipe and Aubin, Thierry and Sueur, Jérôme},
-	month = sep,
-	year = {2021},
-	pages = {2041--210X.13711},
-}
-````
+or use our [citing file](CITATION.bib) for custom citation formats.
 
 ## Feedback and contributions
 Improvements and new features are greatly appreciated. If you would like to contribute submitting issues, developing new features or making improvements to `scikit-maad`, please refer to our [contributors guide](CONTRIBUTING.md). To create a positive social atmosphere for our community, we ask contributors to adopt and enforce our [code of conduct](CODE_OF_CONDUCT.md).
