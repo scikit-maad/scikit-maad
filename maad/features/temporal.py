@@ -15,7 +15,6 @@ Collection of functions to extract features from music
 import numpy as np
 import pandas as pd
 from scipy import interpolate
-from scipy.signal import find_peaks
 from scipy.optimize import root
 
 # Import internal modules
@@ -126,7 +125,7 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     nperseg : int, optional
         Length of segment to compute the FFT. The default is 1024.
     roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed.
+        Region of interest where temporal duration will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     mode : str, optional, default is 'spectrum'
@@ -184,7 +183,7 @@ def pulse_rate(s, fs, roi=None, threshold1=3, threshold2=None, mode='fast', dmin
     fs : float
         Sampling frequency of audio signal
     roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed. Series must
+        Region of interest where pulse rate will be computed. Series must
         have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     threshold1 : float, optional
@@ -290,7 +289,7 @@ def all_temporal_features(s, fs, nperseg=5000, roi=None, threshold1=3,
     nperseg : int, optional
         Length of segment to compute the FFT. The default is 1024.
     roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed.
+        Region of interest where temporal features will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     threshold1 : float, optional
