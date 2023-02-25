@@ -646,7 +646,7 @@ def plot1d(x, y, ax=None, **kwargs):
     xlabel = kwargs.pop("xlabel", "Time [s]")
     ylabel = kwargs.pop("ylabel", "Amplitude [AU]")
     legend = kwargs.pop("legend", None)
-    now = kwargs.pop("now", True)
+    now = kwargs.pop("now", False)
 
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -908,7 +908,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
     vmin = kwargs.pop("vmin", None)
     vmax = kwargs.pop("vmax", None)
     extent = kwargs.pop("extent", None)
-    now = kwargs.pop("now", True)
+    now = kwargs.pop("now", False)
 
     if extent is not None:
         figsize = kwargs.pop(

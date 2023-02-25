@@ -18,7 +18,7 @@ from maad import util
 
 s, fs = sound.load('../../data/spinetail.wav')
 util.plot_wave(s, fs)
-
+plt.show()
 #%% 
 # It can be noticed that in this audio there are four consecutive songs of the spinetail 
 # *Cranioleuca erythorps*, every song lasting of approximatelly two seconds. 
@@ -41,3 +41,4 @@ util.plot_wave(s_trim, fs, ax=ax[0])
 util.plot_wave(env, fs, ax=ax[1])
 util.plot_spectrum(pxx, fidx, ax=ax[2])
 util.plot_spectrogram(Sxx, extent=ext, ax=ax[3], colorbar=False)
+plt.show()

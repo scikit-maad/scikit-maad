@@ -115,7 +115,7 @@ def single_file_processing (audio_path,
      
         # Compute the Power Spectrogram Density (PSD) : Sxx_power
         Sxx_power,tn,fn,ext = sound.spectrogram (
-                                        wave, fs, window='hanning', 
+                                        wave, fs, window='hann', 
                                         nperseg = 1024, noverlap=1024//2, 
                                         verbose = False, display = False, 
                                         savefig = None)   
