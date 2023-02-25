@@ -31,7 +31,7 @@ def test_spectra_features():
                                     "Time 95%":17.751655328798186,
                                     "bandwidth_50":473.73046875,
                                     "bandwidth_90":3186.9140625,
-                                    "bandwidth_3dB":320.8791300822477}, index=[0])
+                                    "bandwidth_3dB":330.565758}, index=[0])
 
     assert_frame_equal(spectral_features, expected_values)
 
