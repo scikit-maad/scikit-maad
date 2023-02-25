@@ -51,11 +51,11 @@ p0_noise = p0[int(8.32*fs):int(10.12*fs)]
 #%%
 # We convert the spinetail signal into spectrogram
 Sxx_power, tn, fn, ext = sound.spectrogram(p0_sig ,fs, 
-                                           display = True, figsize=[2,4], title = 'signal + noise')
+                                           display = True, figsize=[4,10], title = 'signal + noise')
 #%%
 # We convert the background signal into spectrogram
 Sxx_power_noise, tn, fn, ext = sound.spectrogram(p0_noise ,fs, 
-                                                 display = True, figsize=[2,4], title = 'noise alone')
+                                                 display = True, figsize=[4,10], title = 'noise alone')
 #%%
 # Then, we convert both spectrograms into dB. We choose a dB range of 96dB which
 # is the maximal range for a 16 bits signal.
@@ -167,7 +167,7 @@ Sxx_dB_att_200m = util.add_dB(Sxx_dB_att_200m,Sxx_dB_noise)
 # We can also observe that at 200m, almost none of the spinetail signal is still
 # visible. Only the background noise, with the call of another species remains
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4, sharex=True, figsize=(15,3))
-util.plot2d(Sxx_dB_att_10m, title='10m', ax=ax1, extent=ext, vmin=0, vmax=96, figsize=[3,3])
-util.plot2d(Sxx_dB_att_50m, title='50m', ax=ax2, extent=ext, vmin=0, vmax=96, figsize=[3,3])
+util.plot2d(Sxx_dB_att_10m, title='10m',   ax=ax1, extent=ext, vmin=0, vmax=96, figsize=[3,3])
+util.plot2d(Sxx_dB_att_50m, title='50m',   ax=ax2, extent=ext, vmin=0, vmax=96, figsize=[3,3])
 util.plot2d(Sxx_dB_att_100m, title='100m', ax=ax3, extent=ext, vmin=0, vmax=96, figsize=[3,3])
 util.plot2d(Sxx_dB_att_200m, title='200m', ax=ax4, extent=ext, vmin=0, vmax=96, figsize=[3,3])  

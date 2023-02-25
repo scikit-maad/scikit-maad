@@ -94,7 +94,7 @@ def xc_query(searchTerms,
         # check number of pages
         numPages = jsondata['numPages']
         # Append pandas dataframe of records & convert to .csv file
-        df_dataset = df_dataset.append(pd.DataFrame(jsondata['recordings']))
+        df_dataset = pd.concat([df_dataset, pd.DataFrame(jsondata['recordings'])]) #df_dataset.append(pd.DataFrame(jsondata['recordings']))
         # increment the current page
         page = page+1
                 
@@ -221,12 +221,12 @@ def xc_multi_query(df_query,
     df_dataset = pd.DataFrame()
     for index, row in df_query.iterrows():
         searchTerms = row.tolist()
-        df_dataset = df_dataset.append(xc_query(searchTerms, 
+        df_dataset = pd.concat([df_dataset, xc_query(searchTerms, 
                                                 max_nb_files,
                                                 format_time,
                                                 format_date,
                                                 random_seed,
-                                                verbose))
+                                                verbose)]) # df_dataset.append
 
     # rearrange index to be sure to have unique and increasing index
     df_dataset.reset_index(drop=True, inplace=True)

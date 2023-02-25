@@ -120,7 +120,7 @@ for species in list_species :
     df_temp = pd.DataFrame()
     df_temp['count'] = df[df['en']==species].set_index(['time']).resample('30T').count().iloc[:,0]
     df_temp['species'] = species
-    df_count = df_count.append(df_temp)
+    df_count = pd.concat([df_count, df_temp]) # df_count.append(df_temp)
 
 # create a column with time only
 df_count['time'] = df_count.index.strftime('%H:%M')
@@ -146,7 +146,7 @@ for species in list_species :
     df_temp = pd.DataFrame()
     df_temp['count'] = df[df['en']==species].set_index(['week']).index.value_counts()
     df_temp['species'] = species
-    df_week_count = df_week_count.append(df_temp)
+    df_week_count = pd.concat([df_week_count, df_temp]) #df_week_count.append(df_temp)
     
 # create a column with time only
 df_week_count["week"] = df_week_count.index

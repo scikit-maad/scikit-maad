@@ -39,7 +39,7 @@ s, fs = sound.load('../../data/spinetail.wav')
 Sxx, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=512)
 
 Sxx_db = power2dB(Sxx, db_range=70)
-Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, multichannel=False)  # rescale for faster computation
+Sxx_db = transform.rescale(Sxx_db, 0.5, anti_aliasing=True, channel_axis=None)  # rescale for faster computation # multichannel=False change by  channel_axis=None
 plot2d(Sxx_db, figsize=(4,10), extent=ext)
 
 #%% 

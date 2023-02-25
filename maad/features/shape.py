@@ -18,7 +18,7 @@ Ensemble of functions to compute acoustic descriptors from 2D spectrograms.
 from __future__ import print_function 
 import numpy as np 
 import pandas as pd 
-from scipy import ndimage as ndi 
+from scipy import ndimage as ndi
 import itertools as it 
 import matplotlib.pyplot as plt 
 from skimage import transform, measure 
@@ -106,7 +106,7 @@ def _gabor_kernel_nodc(frequency, theta=0, bandwidth=1, gamma=1,
     rotx = x * np.cos(theta) + y * np.sin(theta) 
     roty = -x * np.sin(theta) + y * np.cos(theta) 
     # combine gambor and  
-    g = np.zeros(y.shape, dtype=np.complex) 
+    g = np.zeros(y.shape, dtype=complex) 
     g[:] = np.exp(-0.5 * (rotx ** 2 / sigma_x ** 2 + roty ** 2 / sigma_y ** 2)) 
     g /= 2 * np.pi * sigma_x * sigma_y # gaussian envelope 
     oscil = np.exp(1j * (2 * np.pi * frequency * rotx + offset)) # harmonic / oscilatory function 
@@ -338,10 +338,10 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     if npyr<2: 
         print('Warning: npyr should be int and larger than 2 for multiresolution') 
         im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,  
-                                                  max_layer=1, multichannel=False))  
+                                                  max_layer=1, multichannel=False))
     else:     
         im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,  
-                                                  max_layer=npyr-1, multichannel=False))  
+                                                  max_layer=npyr-1, multichannel=False))
  
     # filter 2d array at multiple resolutions using gabor kernels 
     im_filt=[] 
@@ -357,7 +357,7 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
             ratio = np.array(dims_raw)/np.array(im.shape) 
             if ratio[0] > 1: 
                 im = transform.rescale(im, scale = ratio, mode='reflect', 
-                                       multichannel=False, anti_aliasing=True) 
+                                       multichannel=False, anti_aliasing=True)
             else: 
                 pass 
             Sxx_out.append(im) 
@@ -1024,4 +1024,3 @@ def all_shape_features(s, fs, rois, resolution='low',
         print(list(features))
      
     return features 
- 
