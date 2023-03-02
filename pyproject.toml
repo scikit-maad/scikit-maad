@@ -37,3 +37,11 @@ Documentation = "https://scikit-maad.github.io/"
 
 [tool.flit.module]
 name = "maad"
+
+[tool.flit.sdist]
+exclude = [
+    "docs/",
+    "data/",
+    "example_gallery",
+    "tests"
+    ]
