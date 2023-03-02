@@ -60,6 +60,7 @@ Temporal features
     temporal_moments
     zero_crossing_rate
     temporal_duration
+    temporal_quantile
     pulse_rate
     all_temporal_features
     
@@ -69,10 +70,8 @@ Spectral features
     :toctree: generated/
         
     spectral_moments
-    min_frequency
     peak_frequency
     spectral_quantile
-    temporal_quantile
     bandwidth
     all_spectral_features
 
