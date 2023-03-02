@@ -412,11 +412,11 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
         raise Exception("Invalid mode. Mode should be 'spectrum' or 'envelope'")
 
 #%%
-def bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
+def spectral_bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
               reference="peak", dB=3, as_pandas=False, amp=False, **kwargs):
     """
     Compute the bandwith of the power spectrum. If a region of interest with time
-    and spectral limits is provided, the bandwidth is computed on the selection.
+    and spectral limits is provided, the spectral bandwidth is computed on the selection.
 
     Parameters
     ----------
@@ -455,8 +455,8 @@ def bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
         Bandwidth 50% of the audio
     bandwidth_90 : float
         Bandwidth 90%  of the audio
-    bandwidth_xdB : float
-        Bandwidth x-dB of the audio
+    bandwidth_3dB : float
+        Bandwidth 3dB of the audio
     Examples
     --------
     >>> from maad import features, sound
@@ -464,13 +464,13 @@ def bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
 
     Compute the bandwidth of the power spectrum using quantiles
 
-    >>> bw, bw_90 = features.bandwidth(s, fs, mode="quantile")
+    >>> bw, bw_90 = features.spectral_bandwidth(s, fs, mode="quantile")
     >>> print("Bandwidth 50% : {:.4f} / Bandwidth 90% : {:.4f}".format(bw, bw_90))
     Bandwidth 50% : 473.7305 / Bandwidth 90% : 3186.9141
 
     Compute the 3-dB bandwidth of the power spectrum using the peak frequency as reference
 
-    >>> bw_xdB = features.bandwidth(s, fs, mode="3dB", reference="peak", dB=3, as_pandas=True)
+    >>> bw_xdB = features.spectral_bandwidth(s, fs, mode="3dB", reference="peak", dB=3, as_pandas=True)
     >>> print("{} : {:.4f} ".format(bw_xdB.index[0], bw_xdB.values[0]))
     bandwidth_3dB : 320.8791 
 
@@ -600,9 +600,9 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', dB=3, di
 
     qs = spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, **kwargs)
     qt = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, mode="spectrum", **kwargs)
-    bw_50, bw_90 = bandwidth(s, fs, nperseg, roi, 'quantile', method, "peak", **kwargs)
+    bw_50, bw_90 = spectral_bandwidth(s, fs, nperseg, roi, 'quantile', method, "peak", **kwargs)
     peak_freq = peak_frequency(s, fs, method, nperseg, roi, **kwargs)
-    bw_3dB = bandwidth(s, fs, nperseg, roi, '3dB', method, "peak", dB, **kwargs)
+    bw_3dB = spectral_bandwidth(s, fs, nperseg, roi, '3dB', method, "peak", dB, **kwargs)
 
     spectral_features = pd.DataFrame({"sm":sm[0], "sv":sm[1], "ss":sm[2], "sk":sm[3],
                                       "Freq 5%":qs[0], "Freq 25%":qs[1], "Freq 50%":qs[2], 

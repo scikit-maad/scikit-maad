@@ -72,7 +72,7 @@ Spectral features
     spectral_moments
     peak_frequency
     spectral_quantile
-    bandwidth
+    spectral_bandwidth
     all_spectral_features
 
 """
@@ -89,7 +89,7 @@ from .spectral import (spectral_moments,
                        peak_frequency,
                        spectral_quantile,
                        temporal_quantile,
-                       bandwidth,
+                       spectral_bandwidth,
                        all_spectral_features)
 
 from .temporal import (temporal_moments,
@@ -141,7 +141,7 @@ __all__ = [
            'peak_frequency',
            'spectral_quantile',
            'temporal_quantile',
-           'bandwidth',
+           'spectral_bandwidth',
            'all_spectral_features',
            # temporal
            'temporal_moments',
