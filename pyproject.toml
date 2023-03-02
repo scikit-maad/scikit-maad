@@ -1,0 +1,39 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "scikit-maad"
+authors = [{name = "scikit-maad development team", email = "scikit.maad@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.8"
+description = "Soundscape analysis in Python"
+dynamic = ["version"]
+license = {file = "LICENSE"}
+keywords = ["ecoacoustics", "bioacoustics", "ecology", "sound pressure level", "signal processing"]
+dependencies = [
+    "numpy>=1.23",
+    "scipy>=1.10", 
+    "scikit-image>=0.19",
+    "pandas>=1.1",
+    "resampy>=0.4",
+    "matplotlib>=3.7"
+    ]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+    ]
+
+[project.urls]
+Home = "https://github.com/scikit-maad/scikit-maad"
+Source = "https://github.com/scikit-maad/scikit-maad"
+Documentation = "https://scikit-maad.github.io/"
+
+[tool.flit.module]
+name = "maad"
