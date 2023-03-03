@@ -19,14 +19,6 @@ dependencies = [
     "resampy>=0.4.0",
     "matplotlib>=3.6.2"
     ]
-[project.optional-dependencies]
-test = [
-    "pytest >=2.7.3",
-    "pytest-cov",
-]
-doc = ["sphinx"]
-build = ["flit"]
-
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
@@ -41,6 +33,14 @@ classifiers = [
     'Topic :: Software Development :: Libraries',
     "Topic :: Scientific/Engineering :: Artificial Intelligence"
     ]
+
+[project.optional-dependencies]
+test = [
+    "pytest >=2.7.3",
+    "pytest-cov",
+]
+doc = ["sphinx"]
+build = ["flit"]
 
 [project.urls]
 Home = "https://github.com/scikit-maad/scikit-maad"
