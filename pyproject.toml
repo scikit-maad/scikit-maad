@@ -12,12 +12,12 @@ dynamic = ["version"]
 license = {file = "LICENSE"}
 keywords = ["ecoacoustics", "bioacoustics", "ecology", "sound pressure level", "signal processing"]
 dependencies = [
-    "numpy>=1.21.1",
-    "scipy>=1.8", 
-    "scikit-image>=0.19.3",
-    "pandas>=1.5.0",
-    "resampy>=0.4.0",
-    "matplotlib>=3.6.2"
+    "numpy>1.21",
+    "scipy>1.8", 
+    "scikit-image>0.19",
+    "pandas>1.5",
+    "resampy>0.4",
+    "matplotlib>3.6"
     ]
 classifiers = [
     "Development Status :: 4 - Beta",
