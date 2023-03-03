@@ -11,6 +11,15 @@ The main ways to contribute are:
 
 Please note that any contributions you make will be under the BSD-3-Clause software license.
 
+## Development installation
+
+Clone repository and symlink the module into site-packages with `flit`.
+```
+git clone https://github.com/scikit-maad/scikit-maad.git
+cd ~/scikit-maad
+flit install --symlink
+```
+
 ## Reporting bugs
 
 Bugs are reported using the bug template, so if you find a bug create a new issue [here](https://github.com/scikit-maad/scikit-maad/issues/new?assignees=&labels=bug&template=bug_report.md&title=BUG%3A+). Please try to fill out the template with as much detail as you can.

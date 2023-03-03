@@ -12,12 +12,12 @@ dynamic = ["version"]
 license = {file = "LICENSE"}
 keywords = ["ecoacoustics", "bioacoustics", "ecology", "sound pressure level", "signal processing"]
 dependencies = [
-    "numpy>1.21",
-    "scipy>1.8", 
-    "scikit-image>0.19",
-    "pandas>1.5",
-    "resampy>0.4",
-    "matplotlib>3.6"
+    "numpy >=1.21",
+    "scipy >=1.8", 
+    "scikit-image >=0.19",
+    "pandas >=1.5",
+    "resampy >=0.4",
+    "matplotlib >=3.6"
     ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -36,11 +36,11 @@ classifiers = [
 
 [project.optional-dependencies]
 test = [
-    "pytest >=2.7.3",
-    "pytest-cov",
+    "pytest >=7.1",
+    "pytest-cov >=4.0",
 ]
-doc = ["sphinx"]
-build = ["flit"]
+doc = ["sphinx >=5.0"]
+build = ["flit >=3.6"]
 
 [project.urls]
 Home = "https://github.com/scikit-maad/scikit-maad"
