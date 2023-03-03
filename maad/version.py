@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 """Version info"""
 
-__version__ = '1.3.13'
+__version__ = '1.3.14'

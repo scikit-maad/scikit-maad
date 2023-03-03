@@ -2,7 +2,7 @@
 # scikit-maad
 
 <div align="center">
-    <img src="./docs/logo/maad_key_visual_blue.png" alt="scikit-maad logo"/>
+    <img src="https://github.com/scikit-maad/scikit-maad/blob/production/docs/logo/maad_key_visual_blue.png" alt="scikit-maad logo"/>
 </div>
 
 **scikit-maad** is an open source Python package dedicated to the quantitative analysis of environmental audio recordings. This package was designed to (1) load and process digital audio, (2) segment and find regions of interest, (3) compute acoustic features, and (4) estimate sound pressure level. This workflow opens the possibility to scan large audio datasets and use powerful machine learning techniques, allowing to measure acoustic properties and identify key patterns in all kinds of soundscapes.
