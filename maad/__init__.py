@@ -28,8 +28,8 @@ util
 """
 from .version import __version__
 
-# from . import spl
-# from . import features
-# from . import rois
-# from . import sound
-# from . import util
+from . import spl
+from . import features
+from . import rois
+from . import sound
+from . import util
