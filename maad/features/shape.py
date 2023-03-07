@@ -338,10 +338,10 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     if npyr<2: 
         print('Warning: npyr should be int and larger than 2 for multiresolution') 
         im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,  
-                                                  max_layer=1, multichannel=False))
+                                                  max_layer=1))
     else:     
         im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,  
-                                                  max_layer=npyr-1, multichannel=False))
+                                                  max_layer=npyr-1))
  
     # filter 2d array at multiple resolutions using gabor kernels 
     im_filt=[] 
@@ -357,7 +357,7 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
             ratio = np.array(dims_raw)/np.array(im.shape) 
             if ratio[0] > 1: 
                 im = transform.rescale(im, scale = ratio, mode='reflect', 
-                                       multichannel=False, anti_aliasing=True)
+                                       anti_aliasing=True)
             else: 
                 pass 
             Sxx_out.append(im) 
