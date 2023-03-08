@@ -334,37 +334,37 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
      
     """     
  
-    # Downscale image using gaussian pyramid 
-    if npyr<2: 
-        print('Warning: npyr should be int and larger than 2 for multiresolution') 
-        im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,  
-                                                  max_layer=1, multichannel=False))
-    else:     
-        im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,  
-                                                  max_layer=npyr-1, multichannel=False))
- 
-    # filter 2d array at multiple resolutions using gabor kernels 
-    im_filt=[] 
-    for im in im_pyr:  # for each pyramid 
-        for kernel, param in kernels:  # for each kernel 
-            im_filt.append(_filter_mag(im, kernel))  #  magnitude response of filter 
-     
-    # Rescale image using gaussian pyramid 
-    if rescale: 
-        dims_raw = Sxx.shape 
-        Sxx_out=[] 
-        for im in im_filt: 
-            ratio = np.array(dims_raw)/np.array(im.shape) 
-            if ratio[0] > 1: 
-                im = transform.rescale(im, scale = ratio, mode='reflect', 
-                                       multichannel=False, anti_aliasing=True)
-            else: 
-                pass 
-            Sxx_out.append(im) 
-    else: 
-        pass 
- 
-    return Sxx_out 
+    # Downscale image using gaussian pyramid  
+    if npyr<2:  
+        print('Warning: npyr should be int and larger than 2 for multiresolution')  
+        im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,   
+                                                  max_layer=1)) 
+    else:      
+        im_pyr = tuple(transform.pyramid_gaussian(Sxx, downscale=2,   
+                                                  max_layer=npyr-1)) 
+  
+    # filter 2d array at multiple resolutions using gabor kernels  
+    im_filt=[]  
+    for im in im_pyr:  # for each pyramid  
+        for kernel, param in kernels:  # for each kernel  
+            im_filt.append(_filter_mag(im, kernel))  #  magnitude response of filter  
+      
+    # Rescale image using gaussian pyramid  
+    if rescale:  
+        dims_raw = Sxx.shape  
+        Sxx_out=[]  
+        for im in im_filt:  
+            ratio = np.array(dims_raw)/np.array(im.shape)  
+            if ratio[0] > 1:  
+                im = transform.rescale(im, scale = ratio, mode='reflect',  
+                                       anti_aliasing=True) 
+            else:  
+                pass  
+            Sxx_out.append(im)  
+    else:  
+        pass  
+  
+    return Sxx_out  
  
 #%%
 def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, **kwargs): 
