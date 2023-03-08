@@ -50,11 +50,11 @@ from .conversion_SPL import (wav2volt,
                         psd2leq)
 
 from .active_space import (attenuation_dB,
-                           dBSPL_per_bin,
-                           detection_distance,
-                           pressure_at_r0,
-                           dBSPL_at_r0,
-                           apply_attenuation)
+                        dBSPL_per_bin,
+                        detection_distance,
+                        pressure_at_r0,
+                        dBSPL_at_r0,
+                        apply_attenuation)
 
 __all__ = [
            # conversion_SPL        
@@ -68,7 +68,7 @@ __all__ = [
            'wav2dBSPL',
            'wav2leq',
            'pressure2leq',
-           'psd2leq'
+           'psd2leq',
            #active_space
            'attenuation_dB',
            'dBSPL_per_bin',
