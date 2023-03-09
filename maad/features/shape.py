@@ -333,7 +333,6 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     >>> util.plot2d(Sxx_out[5], **{'extension':ext})
      
     """     
- 
     # Downscale image using gaussian pyramid  
     if npyr<2:  
         print('Warning: npyr should be int and larger than 2 for multiresolution')  
