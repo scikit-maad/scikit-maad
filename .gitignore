@@ -116,9 +116,10 @@ maad/__pycache__/__init__.cpython-36.pyc
 # Ignore *.pyc files resulting from compilation of module
 *.pyc
 
-
+# VSCODE
 .vscode/
+*.code-workspace
 
 data/.fuse_hidden000376a500000043
-
 data/.Rhistory
+
