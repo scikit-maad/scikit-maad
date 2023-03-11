@@ -107,7 +107,7 @@ def zero_crossing_rate(s, fs, roi=None):
 
 #%%
 def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
-                      env_mode="fast", as_pandas_series=False, **kwargs):
+                      env_mode="fast", as_pandas=False, **kwargs):
     """
     Compute the temporal duration of the waveform. If a region of interest with time
     and spectral limits is provided, the temporal duration is computed on the selection.
@@ -125,8 +125,8 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
     mode : str, optional, default is 'spectrum'
-        - 'spectrum' : The quantile is calculated in the espectrum.
-        - 'amplitude' : The quantile is calculated in the sound wave.
+        - 'spectrum' : The quantile is calculated using the spectrum.
+        - 'amplitude' : The quantile is calculated using the enveloppe sound wave.
     env_mode : str, optional, default is `fast`
         - `fast` : The sound is first divided into frames (2d) using the
             function wave2timeframes(s), then the max of each frame gives a
@@ -156,12 +156,12 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     """
     # Compute temporal quantile
     q = temporal_quantile(s, fs, [0.05, 0.25, 0.75, 0.95], nperseg, roi, mode, 
-                          env_mode, as_pandas_series, **kwargs)
+                          env_mode, as_pandas, **kwargs)
 
     # Compute temporal duration
-    if as_pandas_series:
+    if as_pandas:
         out = pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])],
-                         index=["duration", "duration_90"])
+                         index=["duration_50", "duration_90"])
     else:
         out = np.array([np.abs(q[2]-q[1]), np.abs(q[3]-q[0])])
 
