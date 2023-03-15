@@ -271,147 +271,6 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     return out
 
 #%%
-def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=None, mode="spectrum",
-                      env_mode="fast", as_pandas=False, amp=False, **kwargs):
-    """
-    Compute the q-th temporal quantile of the waveform or spectrum. If a
-    region of interest with time and spectral limits is provided, the q-th
-    temporal quantile is computed on the selection.
-
-    Parameters
-    ----------
-    s : 1D array
-        Input audio signal
-    fs : float
-        Sampling frequency of audio signal
-    q : array or float, optional
-        Quantile or sequence of quantiles to compute, which must be between 0 and 1
-        inclusive.
-        The defaul is [0.05, 0.25, 0.5, 0.75, 0.95].
-    nperseg : int, optional
-        Length of segment to compute the FFT when mode is spectrum. The default is 1024.
-        Size of each frame to compute the envelope. The largest, the highest is
-        the approximation. The default is 5000.
-    roi : pandas.Series, optional
-        Region of interest where peak frequency will be computed.
-        Series must have a valid input format with index: min_t, min_f, max_t, max_f.
-        The default is None.
-    mode : str, optional, default is 'spectrum'
-        - 'spectrum' : The quantile is calculated in the espectrum.
-        - 'envelope' : The quantile is calculated in the sound wave.
-    env_mode : str, optional, default is `fast`
-        - `fast` : The sound is first divided into frames (2d) using the
-            function wave2timeframes(s), then the max of each frame gives a
-            good approximation of the envelope.
-        - `Hilbert` : estimation of the envelope from the Hilbert transform.
-            The method is slow
-    as_pandas: bool
-        Return data as a pandas.Series. This is usefull when computing multiple features
-        over a signal. Default is False.
-    amp : bool, default is False
-        Return the quantiles with its amplitude. 
-    Returns
-    -------
-    Pandas Series/DataFrame or Numpy array/Matrix
-        Temporal quantiles of waveform and its amplitude (optional).
-
-    Examples
-    --------
-    >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
-
-    Compute the q-th temporal quantile in the spectrum
-
-    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], as_pandas=True)
-    >>> print(qt)
-    0.05     1.219048
-    0.25     5.712109
-    0.50    11.818957
-    0.75    16.555828
-    0.95    17.751655
-    dtype: float64
-
-    Compute the q-th temporal quantile in the waveform, using the envelope
-
-    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], mode="envelope", as_pandas=True)
-    >>> print(qt)
-    0.05     1.215429
-    0.25     5.707076
-    0.50    11.816876
-    0.75    16.356414
-    0.95    17.760507
-    dtype: float64
-
-    """
-    q = np.asanyarray(q)
-    if not _quantile_is_valid(q):
-        raise ValueError("Percentiles must be in the range [0, 1]")
-
-    if mode=="envelope" and nperseg==1024: nperseg=5000
-
-    # compute quantiles in the time amp
-    if mode=="envelope":
-        if roi is None:
-            min_t = 0
-        else:
-            s = sound.trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
-            min_t = roi.min_t
-
-        env = sound.envelope(s**2, env_mode, nperseg)
-        t = min_t+np.arange(0,len(env),1)*len(s)/fs/len(env)
-        energy = pd.Series(env, index=t)
-
-        # Compute temporal quantile
-        norm_cumsum = energy.cumsum()/energy.sum()
-        spec_quantile = []
-        for quantile in q:
-            spec_quantile.append(energy.index[np.where(norm_cumsum>=quantile)[0][0]])
-
-        if amp:
-            if as_pandas:
-                out = pd.DataFrame({"time":spec_quantile, "amp":energy[spec_quantile].values}, index=q)
-            else:
-                out = np.transpose(np.array([q, spec_quantile, energy[spec_quantile]]))
-        else:
-            if as_pandas:
-                out = pd.Series(spec_quantile, index=q)
-            else:
-                out = np.array(spec_quantile)
-
-        return out
-
-    elif mode=="spectrum":
-        if roi is None:
-            Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg, **kwargs)
-        else:
-            Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg,
-                                           tlims=[roi.min_t, roi.max_t],
-                                           flims=[roi.min_f, roi.max_f],
-                                           **kwargs)
-        Sxx = pd.Series(np.average(Sxx,axis=0), index=tn)
-
-        # Compute spectral q
-        norm_cumsum = Sxx.cumsum()/Sxx.sum()
-        spec_quantile = []
-        for quantile in q:
-            spec_quantile.append(Sxx.index[np.where(norm_cumsum>=quantile)[0][0]])
-  
-        if amp:
-            if as_pandas:
-                out = pd.DataFrame({"time":spec_quantile, "amp":Sxx[spec_quantile].values}, index=q)
-            else:
-                out = np.transpose(np.array([q, spec_quantile, Sxx[spec_quantile]]))
-        else:
-            if as_pandas:
-                out = pd.Series(spec_quantile, index=q)
-            else:
-                out = np.array(spec_quantile)
-
-        return out
-    else:
-        raise Exception("Invalid mode. Mode should be 'spectrum' or 'envelope'")
-
-#%%
 def spectral_bandwidth(s, fs, nperseg=1024, roi=None, mode="quantile", method='fast',
               reference="peak", dB=3, as_pandas=False, amp=False, **kwargs):
     """
@@ -599,7 +458,6 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', dB=3, di
     sm = spectral_moments(S_power)
 
     qs = spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, **kwargs)
-    qt = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, mode="spectrum", **kwargs)
     bw_50, bw_90 = spectral_bandwidth(s, fs, nperseg, roi, 'quantile', method, "peak", **kwargs)
     peak_freq = peak_frequency(s, fs, method, nperseg, roi, **kwargs)
     bw_3dB = spectral_bandwidth(s, fs, nperseg, roi, '3dB', method, "peak", dB, **kwargs)
@@ -607,8 +465,6 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', dB=3, di
     spectral_features = pd.DataFrame({"sm":sm[0], "sv":sm[1], "ss":sm[2], "sk":sm[3],
                                       "Freq 5%":qs[0], "Freq 25%":qs[1], "Freq 50%":qs[2], 
                                       "Freq 75%":qs[3], "Freq 95%":qs[4], "peak_freq":peak_freq,
-                                      "Time 5%":qt[0], "Time 25%":qt[1], "Time 50%":qt[2], 
-                                      "Time 75%":qt[3], "Time 95%":qt[4],
                                       "bandwidth_50":bw_50, "bandwidth_90":bw_90,
                                       "bandwidth_3dB":bw_3dB}, index=[0])
 

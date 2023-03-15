@@ -15,8 +15,9 @@ from scipy.optimize import root
 
 # Import internal modules
 from maad.util import moments
-from maad.features import temporal_quantile
 from maad.sound import envelope, trim
+from maad import sound
+from spectral import _quantile_is_valid
 
 #%%
 # =============================================================================
@@ -106,6 +107,145 @@ def zero_crossing_rate(s, fs, roi=None):
     return zcr
 
 #%%
+def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=None, mode="spectrum",
+                      env_mode="fast", as_pandas=False, amp=False, **kwargs):
+    """
+    Compute the q-th temporal quantile of the waveform or spectrum. If a
+    region of interest with time and spectral limits is provided, the q-th
+    temporal quantile is computed on the selection.
+
+    Parameters
+    ----------
+    s : 1D array
+        Input audio signal
+    fs : float
+        Sampling frequency of audio signal
+    q : array or float, optional
+        Quantile or sequence of quantiles to compute, which must be between 0 and 1
+        inclusive.
+        The defaul is [0.05, 0.25, 0.5, 0.75, 0.95].
+    nperseg : int, optional
+        Length of segment to compute the FFT when mode is spectrum. The default is 1024.
+        Size of each frame to compute the envelope. The largest, the highest is
+        the approximation. The default is 5000.
+    roi : pandas.Series, optional
+        Region of interest where peak frequency will be computed.
+        Series must have a valid input format with index: min_t, min_f, max_t, max_f.
+        The default is None.
+    mode : str, optional, default is 'spectrum'
+        - 'spectrum' : The quantile is calculated in the espectrum.
+        - 'envelope' : The quantile is calculated in the sound wave.
+    env_mode : str, optional, default is `fast`
+        - `fast` : The sound is first divided into frames (2d) using the
+            function wave2timeframes(s), then the max of each frame gives a
+            good approximation of the envelope.
+        - `Hilbert` : estimation of the envelope from the Hilbert transform.
+            The method is slow
+    as_pandas: bool
+        Return data as a pandas.Series. This is usefull when computing multiple features
+        over a signal. Default is False.
+    amp : bool, default is False
+        Return the quantiles with its amplitude. 
+    Returns
+    -------
+    Pandas Series/DataFrame or Numpy array/Matrix
+        Temporal quantiles of waveform and its amplitude (optional).
+
+    Examples
+    --------
+    >>> from maad import features, sound
+    >>> s, fs = sound.load('../../data/spinetail.wav')
+
+    Compute the q-th temporal quantile in the spectrum
+
+    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], as_pandas=True)
+    >>> print(qt)
+    0.05     1.219048
+    0.25     5.712109
+    0.50    11.818957
+    0.75    16.555828
+    0.95    17.751655
+    dtype: float64
+
+    Compute the q-th temporal quantile in the waveform, using the envelope
+
+    >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], mode="envelope", as_pandas=True)
+    >>> print(qt)
+    0.05     1.215429
+    0.25     5.707076
+    0.50    11.816876
+    0.75    16.356414
+    0.95    17.760507
+    dtype: float64
+
+    """
+    q = np.asanyarray(q)
+    if not _quantile_is_valid(q):
+        raise ValueError("Percentiles must be in the range [0, 1]")
+
+    # compute quantiles in the time amp
+    if mode=="envelope":
+        if roi is None:
+            min_t = 0
+        else:
+            s = sound.trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
+            min_t = roi.min_t
+
+        env = sound.envelope(s**2, env_mode, nperseg)
+        t = min_t+np.arange(0,len(env),1)*len(s)/fs/len(env)
+        energy = pd.Series(env, index=t)
+
+        # Compute temporal quantile
+        norm_cumsum = energy.cumsum()/energy.sum()
+        spec_quantile = []
+        for quantile in q:
+            spec_quantile.append(energy.index[np.where(norm_cumsum>=quantile)[0][0]])
+
+        if amp:
+            if as_pandas:
+                out = pd.DataFrame({"time":spec_quantile, "amp":energy[spec_quantile].values}, index=q)
+            else:
+                out = np.transpose(np.array([q, spec_quantile, energy[spec_quantile]]))
+        else:
+            if as_pandas:
+                out = pd.Series(spec_quantile, index=q)
+            else:
+                out = np.array(spec_quantile)
+
+        return out
+
+    elif mode=="spectrum":
+        if roi is None:
+            Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg, **kwargs)
+        else:
+            Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg,
+                                           tlims=[roi.min_t, roi.max_t],
+                                           flims=[roi.min_f, roi.max_f],
+                                           **kwargs)
+        Sxx = pd.Series(np.average(Sxx,axis=0), index=tn)
+
+        # Compute spectral q
+        norm_cumsum = Sxx.cumsum()/Sxx.sum()
+        spec_quantile = []
+        for quantile in q:
+            spec_quantile.append(Sxx.index[np.where(norm_cumsum>=quantile)[0][0]])
+  
+        if amp:
+            if as_pandas:
+                out = pd.DataFrame({"time":spec_quantile, "amp":Sxx[spec_quantile].values}, index=q)
+            else:
+                out = np.transpose(np.array([q, spec_quantile, Sxx[spec_quantile]]))
+        else:
+            if as_pandas:
+                out = pd.Series(spec_quantile, index=q)
+            else:
+                out = np.array(spec_quantile)
+
+        return out
+    else:
+        raise Exception("Invalid mode. Mode should be 'spectrum' or 'envelope'")
+    
+#%%
 def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
                       env_mode="fast", as_pandas=False, **kwargs):
     """
@@ -168,111 +308,8 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     return out
 
 #%%
-def pulse_rate(s, fs, roi=None, threshold1=3, threshold2=None, mode='fast', dmin=0.1, Nt=5000):
-    """
-    Find the events in the dB p 
-    
-    Parameters
-    ----------
-    s : 1D array
-        Input audio signal
-    fs : float
-        Sampling frequency of audio signal
-    roi : pandas.Series, optional
-        Region of interest where pulse rate will be computed. Series must
-        have a valid input format with index: min_t, min_f, max_t, max_f.
-        The default is None.
-    threshold1 : float, optional
-        The X dB threshold for events detections, the time at which 
-        the signal amplitudereduces by x dB
-        Default is 3.
-    threshold2 : float, optional
-        The X dB threshold for start/end events detections.
-        Default is None.
-    mode : str, optional, default is `fast`
-        - `fast` : The sound is first divided into frames (2d) using the
-            function wave2timeframes(s), then the max of each frame gives a
-            good approximation of the envelope.
-        - `Hilbert` : estimation of the envelope from the Hilbert transform.
-            The method is slow
-    dmin : float, optinal, default is 0.1
-        Minimum time allowed for an event.
-    Nt : integer, optional, default is `5000`
-        Size of each frame. The largest, the highest is the approximation.
-    Returns
-    -------
-    events : pandas DataFrame
-        DataFrame with detected events: minimum time, maximum time and duration.
-    amp : int
-        Threshold amplitude for the event detection.
-    Examples
-    --------
-    >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
-
-    Detect events 15-dB below the peak with a minimum distance of 0.5 s.
-
-    >>> events, amp = features.pulse_rate(s, fs, dmin=0.5, threshold1=15)
-
-    Display events detected
-
-    >>> print(events)
-           min_t      max_t  duration
-    0   0.754612   2.625429  1.870817
-    1   5.388269   7.209351  1.821081
-    2  11.467152  13.260148  1.792995
-    3  16.318792  17.956873  1.638081
-    """
-    if roi is None:
-        min_t = 0
-    else:
-        s = trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
-        min_t = roi.min_t
-
-    t = np.arange(0,len(s),1)/fs
-    s_dB = 20*np.log10(np.abs(s))
-    s_dB_mean = np.mean(s_dB)
-    s_dB = np.clip(s_dB, s_dB_mean,0)-s_dB_mean
-
-    env = envelope(s_dB, mode, Nt)
-    t_env = np.arange(0,len(env),1)*len(s)/fs/len(env)
-
-    s_dB_env = pd.Series(env, index=t_env)
-    s_dB_ref = s_dB_env[s_dB_env.idxmax()]
-
-    threshold_array = (s_dB_ref-threshold1)*np.ones_like(s_dB_env)
-
-    s_dB_shifted = env-threshold_array
-    index = np.where(np.diff(np.sign(s_dB_shifted)))[0]
-    x,y = [], []
-    for i in index:
-        ind = np.argmin([s_dB_shifted[i]*s_dB_shifted[i-1],
-                         s_dB_shifted[i]*s_dB_shifted[i+1]])
-        ind1, ind2 = i, i-1+2*ind
-
-        xi = t_env[np.sort([ind1, ind2])]
-
-        f = interpolate.interp1d([t_env[ind1], t_env[ind2]], 
-                                 [s_dB_shifted[ind1], s_dB_shifted[ind2]], 
-                                 kind='linear')
-        x0 = root(f, xi[0])["x"][0]
-        x.append(x0); y.append(float(f(x0)))
-
-    detected_events = [[x[i], x[i+1], x[i+1]-x[i]] for i in range(0,len(x),2)]
-    events = np.array([x for x in detected_events if x[2]>dmin])
-
-    events = pd.DataFrame({"min_t":events[:,0], "max_t":events[:,1], 
-                           "duration":events[:,2]}, index=range(events.shape[0]))
-    amp = s_dB_mean+threshold_array[0]
-
-    if threshold2 is not None:
-        events2 = []
-
-    return events, amp
-
-#%%
-def all_temporal_features(s, fs, nperseg=5000, roi=None, threshold1=3, 
-                          threshold2=None, dmin=0.1, display=False):
+def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3, 
+                          threshold2=None, dmin=0.1, display=False, **kwargs):
     """
     Compute all the temporal features for a signal.
 
@@ -322,7 +359,7 @@ def all_temporal_features(s, fs, nperseg=5000, roi=None, threshold1=3,
 
     tm  = temporal_moments(s, fs, roi)
     zcr = zero_crossing_rate(s, fs, roi)
-    qt  = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, "envelope")
+    qt = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, mode="spectrum", **kwargs)
     duration_50, duration_90 = temporal_duration(s, fs, nperseg, roi, mode="envelope")
 
     temporal_features = pd.DataFrame({"sm":tm[0], "sv":tm[1], "ss":tm[2], "sk":tm[3],

@@ -61,7 +61,6 @@ Temporal features
     zero_crossing_rate
     temporal_duration
     temporal_quantile
-    pulse_rate
     all_temporal_features
     
 Spectral features
@@ -88,7 +87,6 @@ from .shape import (filter_multires,
 from .spectral import (spectral_moments,
                        peak_frequency,
                        spectral_quantile,
-                       temporal_quantile,
                        spectral_bandwidth,
                        all_spectral_features)
 
@@ -96,7 +94,6 @@ from .temporal import (temporal_moments,
                        zero_crossing_rate,
                        temporal_duration,
                        temporal_quantile,
-                       pulse_rate,
                        all_temporal_features)
 
 from .alpha_indices import (temporal_median,
@@ -147,7 +144,6 @@ __all__ = [
            'temporal_moments',
            'zero_crossing_rate',
            'temporal_duration',
-           'pulse_rate',
            'all_temporal_features',
            # alpha_indices
            'temporal_moments',
