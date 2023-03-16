@@ -17,7 +17,7 @@ from scipy.optimize import root
 from maad.util import moments
 from maad.sound import envelope, trim
 from maad import sound
-from spectral import _quantile_is_valid
+from numpy.lib.function_base import _quantile_is_valid
 
 #%%
 # =============================================================================
