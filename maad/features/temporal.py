@@ -24,7 +24,7 @@ from numpy.lib.function_base import _quantile_is_valid
 # public functions
 # =============================================================================
 #%%
-def temporal_moments(s, fs, roi=None):
+def temporal_moments(s, fs=None, roi=None):
     """
     Computes the first 4th moments of an audio signal, mean, variance, skewness, kurtosis.
 
@@ -32,6 +32,13 @@ def temporal_moments(s, fs, roi=None):
     ----------
     s : 1D array
         Audio to process
+    fs : float, optional
+        Sampling frequency of audio signal
+        The default is None
+    roi : pandas.Series, optional
+        Region of interest where peak frequency will be computed.
+        Series must have a valid input format with index: min_t, min_f, max_t, max_f.
+        The default is None.        
 
     Returns
     -------
@@ -56,9 +63,12 @@ def temporal_moments(s, fs, roi=None):
     # force s to be ndarray
     s = np.asarray(s)
 
-    if roi is not None:
-        s = trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
-
+    if (roi is not None):
+        if (fs is not None) :
+            s = trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
+        else : 
+            raise ValueError("If 'roi' is not None, 'fs' must be defined")     
+        
     return moments(s)
 
 #%%
@@ -77,7 +87,11 @@ def zero_crossing_rate(s, fs, roi=None):
     s : 1D array
         Audio to process (wav)
     fs : float
-        Sampling frequency of the audio (Hz)
+        Sampling frequency of audio signal
+    roi : pandas.Series, optional
+        Region of interest where peak frequency will be computed.
+        Series must have a valid input format with index: min_t, min_f, max_t, max_f.
+        The default is None.        
 
     Returns
     -------
@@ -97,7 +111,7 @@ def zero_crossing_rate(s, fs, roi=None):
 
     """
 
-    if roi is not None:
+    if (roi is not None):
         s = trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
 
     zero_crosses = np.nonzero(np.diff(s > 0))[0]
@@ -187,9 +201,11 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     if mode=="envelope":
         if roi is None:
             min_t = 0
-        else:
+        elif fs is not None:
             s = sound.trim(s, fs, min_t=roi.min_t, max_t=roi.max_t)
             min_t = roi.min_t
+        else :
+            raise ValueError("If 'roi' is not None, 'fs' must be defined")
 
         env = sound.envelope(s**2, env_mode, nperseg)
         t = min_t+np.arange(0,len(env),1)*len(s)/fs/len(env)
@@ -219,9 +235,9 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
             Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg, **kwargs)
         else:
             Sxx,tn,_,_ = sound.spectrogram(s, fs, nperseg=nperseg,
-                                           tlims=[roi.min_t, roi.max_t],
-                                           flims=[roi.min_f, roi.max_f],
-                                           **kwargs)
+                                        tlims=[roi.min_t, roi.max_t],
+                                        flims=[roi.min_f, roi.max_f],
+                                        **kwargs)
         Sxx = pd.Series(np.average(Sxx,axis=0), index=tn)
 
         # Compute spectral q
@@ -229,7 +245,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
         spec_quantile = []
         for quantile in q:
             spec_quantile.append(Sxx.index[np.where(norm_cumsum>=quantile)[0][0]])
-  
+
         if amp:
             if as_pandas:
                 out = pd.DataFrame({"time":spec_quantile, "amp":Sxx[spec_quantile].values}, index=q)
@@ -273,8 +289,6 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
             good approximation of the envelope.
         - `Hilbert` : estimation of the envelope from the Hilbert transform.
             The method is slow
-    Nt : integer, optional, default is `32`
-        Size of each frame. The largest, the highest is the approximation.
     as_pandas_series: bool
         Return data as a pandas.Series. This is usefull when computing multiple features
         over a signal. Default is False.
@@ -301,15 +315,14 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     # Compute temporal duration
     if as_pandas:
         out = pd.Series([np.abs(q.iloc[2]-q.iloc[1]), np.abs(q.iloc[3]-q.iloc[0])],
-                         index=["duration_50", "duration_90"])
+                        index=["duration_50", "duration_90"])
     else:
         out = np.array([np.abs(q[2]-q[1]), np.abs(q[3]-q[0])])
 
     return out
 
 #%%
-def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3, 
-                          threshold2=None, dmin=0.1, display=False, **kwargs):
+def all_temporal_features(s, fs, nperseg=1024, roi=None, display=False, **kwargs):
     """
     Compute all the temporal features for a signal.
 
@@ -325,24 +338,13 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3,
         Region of interest where temporal features will be computed.
         Series must have a valid input format with index: min_t, min_f, max_t, max_f.
         The default is None.
-    threshold1 : float, optional
-        The X dB threshold for events detections, the time at which 
-        the signal amplitudereduces by x dB
-        Default is 3.
-    threshold2 : float, optional
-        The X dB threshold for start/end events detections.
-        Default is None.
-    dmin : float, optinal, default is 0.1
-        Minimum time allowed for an event.
-    Nt : integer, optional, default is `5000`
-        Size of each frame. The largest, the highest is the approximation.
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
     Returns
     -------
     temporal_features : pandas DataFrame
-        DataFrame with all spectral features computed in the spectrum
+        DataFrame with all temporal features computed in the spectrum
     Examples
     --------
     >>> from maad import features, sound
@@ -351,21 +353,21 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, threshold1=3,
     Compute all the temporal features
 
     >>> temporal_features = features.all_temporal_features(s,fs,display=True)
-                 sm        sv        ss         sk   Time 5%  ...   Time 75%   Time 95%           zcr  duration_50  duration_90
+                sm        sv        ss         sk   Time 5%  ...   Time 75%   Time 95%           zcr  duration_50  duration_90
     0 -2.043264e-19  0.001167 -0.006548  24.711611  1.215429  ...  16.356414  17.760507  10500.397192    10.649338    16.545078
     <BLANKLINE>
     [1 rows x 12 columns]
     """
 
-    tm  = temporal_moments(s, fs, roi)
+    tm  = temporal_moments(s fs, roi)
     zcr = zero_crossing_rate(s, fs, roi)
     qt = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, mode="spectrum", **kwargs)
     duration_50, duration_90 = temporal_duration(s, fs, nperseg, roi, mode="envelope")
 
     temporal_features = pd.DataFrame({"sm":tm[0], "sv":tm[1], "ss":tm[2], "sk":tm[3],
-                                      "Time 5%":qt[0], "Time 25%":qt[1], "Time 50%":qt[2], 
-                                      "Time 75%":qt[3], "Time 95%":qt[4], "zcr":zcr,
-                                      "duration_50":duration_50, "duration_90":duration_90}, index=[0])
+                                    "Time 5%":qt[0], "Time 25%":qt[1], "Time 50%":qt[2], 
+                                    "Time 75%":qt[3], "Time 95%":qt[4], "zcr":zcr,
+                                    "duration_50":duration_50, "duration_90":duration_90}, index=[0])
 
     if display: print(temporal_features)
 
