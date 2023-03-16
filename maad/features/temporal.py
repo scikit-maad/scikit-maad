@@ -359,7 +359,7 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, display=False, **kwargs
     [1 rows x 12 columns]
     """
 
-    tm  = temporal_moments(s fs, roi)
+    tm  = temporal_moments(s, fs, roi)
     zcr = zero_crossing_rate(s, fs, roi)
     qt = temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], nperseg, roi, mode="spectrum", **kwargs)
     duration_50, duration_90 = temporal_duration(s, fs, nperseg, roi, mode="envelope")
