@@ -180,7 +180,7 @@ with tqdm(total=len(df), desc="unique cpu indices calculation...") as pbar:
     for index, row in df.iterrows() :
         df_indices_temp = single_file_processing(row["file"], row["Date"])
         pbar.update(1)
-        df_indices = df_indices.append(df_indices_temp)
+        df_indices = pd.concat([df_indices, df_indices_temp])
 toc = time.perf_counter()
 
 # time duration of the process
@@ -215,7 +215,7 @@ with tqdm(total=len(df), desc="multi cpu indices calculation...") as pbar:
             df["Date"].to_list()
         ):
             pbar.update(1)
-            df_indices = df_indices.append(df_indices_temp)
+            df_indices = pd.concat([df_indices, df_indices_temp])
 toc = time.perf_counter()
 
 # time duration of the process
