@@ -242,15 +242,23 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
         raise ValueError("Percentiles must be in the range [0, 1]")
 
     # Compute spectrum
+    # if roi is None:
+    #     pxx, fidx = sound.spectrum(s, fs, nperseg, **kwargs)
+    # else:
+    #     pxx, fidx = sound.spectrum(s, fs, nperseg,
+    #                                tlims=[roi.min_t, roi.max_t],
+    #                                flims=[roi.min_f, roi.max_f],
+    #                                **kwargs)
+    # pxx = pd.Series(pxx, index=fidx)
     if roi is None:
-        pxx, fidx = sound.spectrum(s, fs, nperseg, **kwargs)
+        Sxx,_,fn,_ = sound.spectrogram(s, fs, nperseg=nperseg, **kwargs)
     else:
-        pxx, fidx = sound.spectrum(s, fs, nperseg,
-                                   tlims=[roi.min_t, roi.max_t],
-                                   flims=[roi.min_f, roi.max_f],
-                                   **kwargs)
-    pxx = pd.Series(pxx, index=fidx)
-
+        Sxx,_,fn,_ = sound.spectrogram(s, fs, nperseg=nperseg,
+                                       tlims=[roi.min_t, roi.max_t],
+                                       flims=[roi.min_f, roi.max_f],
+                                        **kwargs)
+    pxx = pd.Series(np.average(Sxx,axis=1), index=fn)
+    
     # Compute spectral q
     norm_cumsum = pxx.cumsum()/pxx.sum()
     spec_quantile = []
