@@ -138,7 +138,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
             Postfix of the figure filename 
@@ -321,7 +321,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlayrois.png' 
             Postfix of the figure filename 
@@ -561,7 +561,7 @@ def plot1d(x, y, ax=None, **kwargs):
         Draw the signal on this specific axis. Allow multiple plots on the same
         axis.
             
-    \*\*kwargs, optional
+    kwargs, optional
         - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
         - facecolor : matplotlib color, optional, default: 'w' (white)
@@ -836,7 +836,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
         Draw the image on this specific axis. Allow multiple plots on the same
         figure.
             
-    \*\*kwargs, optional
+    kwargs, optional
         - figsize : tuple of integers, optional, default: (4,13)
             width, height in inches.  
         - title : string, optional, default : 'Spectrogram'
@@ -1656,7 +1656,7 @@ def false_Color_Spectro(
         if not None, figures will be safe. Savefig is the prefix of the save
         filename.
     
-    \*\*kwargs, optional
+    kwargs, optional
        - dpi : scalar, optional, default 96
        - format : str, optional, default .png
     

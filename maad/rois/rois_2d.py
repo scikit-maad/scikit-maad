@@ -63,7 +63,7 @@ def _double_threshold_rel (im, bin_std=6, bin_per=0.5,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
              
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
@@ -231,7 +231,7 @@ def _double_threshold_abs(im, bin_h=0.7, bin_l=0.2,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
            
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
@@ -365,9 +365,9 @@ def create_mask(im, mode_bin = 'relative',
  
     mode_bin : string in {'relative', 'absolute'}, optional, default is 'relative' 
         if 'absolute' [1]_ , a double threshold with absolute value is performed 
-        with two parameters (see \*\*kwargs section)
+        with two parameters (see kwargs section)
         if 'relative' [2]_, a relative double threshold is performed with two 
-        parameters (see \*\*kwargs section)
+        parameters (see kwargs section)
 
     verbose : boolean, optional, default is False
         print messages
@@ -379,7 +379,7 @@ def create_mask(im, mode_bin = 'relative',
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by the maad functions as well 
+    kwargs, optional. This parameter is used by the maad functions as well 
         as the plt.plot and savefig functions. 
         All the input arguments required or optional in the signature of the 
         functions above can be passed as kwargs : 
@@ -493,7 +493,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 

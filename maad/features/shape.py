@@ -885,7 +885,7 @@ def all_shape_features(s, fs, rois, resolution='low',
     display: boolean, optional, default is False 
         Flag. If display is True, plot results 
         
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
             Postfix of the figure filename 

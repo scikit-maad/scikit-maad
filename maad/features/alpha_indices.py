@@ -718,7 +718,7 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
         Size of each frame. The largest, the highest is the approximation.
     display : boolean, optional, default is False
         Display the selected events on the audio waveform
-    \*\*kwargs, optional. 
+    kwargs, optional. 
         This parameter is used by plt.plot
 
     Returns
@@ -1279,7 +1279,7 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     display : boolean, optional, default is false
         Display a plot with the number of events per s (EVNspCount) and
         a binary image with the detected events.
-    \*\*kwargs : optional. See matplotlib documentation
+    kwargs : optional. See matplotlib documentation
 
     Returns
     -------    
@@ -2428,7 +2428,7 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         print indices on the default terminal
     display : boolean, default is False
         Display graphs
-    \*\*kwargs : arguments for functions:
+    kwargs : arguments for functions:
         
         - temporal_leq(s, fs, gain, Vadc, sensitivity, dBref, dt)
         - temporal_snr(s, mode, Nt) 
@@ -2641,7 +2641,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print indices on the default terminal
     display : boolean, default is False
         Display graphs
-    \*\*kwargs : arguments for functions:
+    kwargs : arguments for functions:
     
         - spectral_leq
         - frequency_entropy

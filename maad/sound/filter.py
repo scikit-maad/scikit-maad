@@ -281,7 +281,7 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
              
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 

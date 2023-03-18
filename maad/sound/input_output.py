@@ -50,7 +50,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
     savefig : string, optional, default is None
         Root filename (with full path) is required to save the figures. Postfix
         is added to the root filename.
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions    
+    kwargs, optional. This parameter is used by plt.plot and savefig functions    
         - savefilename : str, optional, default :'_audiogram.png'
             Postfix of the figure filename
         - figsize : tuple of integers, optional, default: (4,10)
@@ -187,7 +187,7 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
     display : boolean, optional, default is False 
         if True, display the image 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot  
+    kwargs, optional. This parameter is used by plt.plot  
         - figsize : tuple of integers, optional, default: (4,10) 
             width, height in inches.   
          
