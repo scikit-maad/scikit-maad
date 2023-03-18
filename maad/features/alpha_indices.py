@@ -19,7 +19,7 @@ import numbers
 import numpy as np 
 from numpy import sum, log, min, max, abs, mean, median, sqrt, diff, var
 from skimage.morphology import opening
-from scipy.ndimage.morphology import binary_erosion, binary_dilation
+from scipy.ndimage import binary_erosion, binary_dilation
 from scipy.stats import rankdata
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
