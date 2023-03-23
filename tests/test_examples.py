@@ -44,3 +44,5 @@ def test_script_execution(script):
         runpy.run_path(script)
     except Exception as e:
         print(f"An error occurred: {e}")
+
+os.chdir(pathlib.Path(__file__, '..').resolve())
