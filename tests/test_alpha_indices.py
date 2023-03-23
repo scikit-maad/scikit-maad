@@ -98,8 +98,13 @@ def test_temporal_alpha_indices(test_filename, expected):
     output.insert(0, "filename", test_filename)
     
     for param in list(output) :
-        assert output[param].values == expected[param].values, \
-            '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+        # test if it's a string
+        if isinstance(expected[param].to_numpy()[0], str) :
+            assert output[param].to_numpy()[0] == expected[param].to_numpy()[0], \
+                '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+        else :
+            assert np.isclose(output[param].to_numpy()[0], expected[param].to_numpy()[0]), \
+                '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
 
 
 # %%
@@ -152,6 +157,12 @@ def test_spectral_alpha_indices(test_filename, expected):
     output.insert(0, "filename", test_filename)
     
     for param in list(output) :
-        assert output[param].values == expected[param].values, \
-            '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+        # test if it's a string
+        if isinstance(expected[param].to_numpy()[0], str) :
+            assert output[param].to_numpy()[0] == expected[param].to_numpy()[0], \
+                '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+        else :
+            assert np.isclose(output[param].to_numpy()[0], expected[param].to_numpy()[0]), \
+                '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+
 
