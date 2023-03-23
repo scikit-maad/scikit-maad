@@ -45,4 +45,4 @@ def test_script_execution(script):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-os.chdir(pathlib.Path(__file__, '..','tests').resolve())
+os.chdir(pathlib.Path(__file__, '..','.').resolve())
