@@ -6,7 +6,10 @@ Test module for alpha acoustic indices
 """
 
 import numpy as np
+import os
+import pandas as pd
 from maad import sound, features
+import pytest
 
 #%% Temporal indices
 
@@ -60,3 +63,95 @@ def test_spectral_entropy():
     assert np.allclose(spectral_entropy_indices,expected_values)
 
 #%% Spectro-temporal indices
+
+EXPECTED_VALUES = np.load(os.path.join('tests','data','indices_temporal_values.npy'), allow_pickle=True)
+EXPECTED_NAMES = np.load(os.path.join('tests','data','indices_temporal_names.npy'), allow_pickle=True)
+EXPECTED_DATAFRAME = pd.DataFrame(data=EXPECTED_VALUES, columns=EXPECTED_NAMES)
+
+@pytest.mark.parametrize(
+    "test_filename, expected",
+    [
+        ('cold_forest_daylight.wav',    EXPECTED_DATAFRAME.iloc[[0]]),
+        ('cold_forest_night.wav',       EXPECTED_DATAFRAME.iloc[[1]]),
+        ('rock_savanna.wav',            EXPECTED_DATAFRAME.iloc[[2]]),
+        ('tropical_forest_morning.wav', EXPECTED_DATAFRAME.iloc[[3]]),
+    ]
+)
+
+def test_temporal_alpha_indices(test_filename, expected):
+
+    SENSITIVITY = -35         
+    GAIN = 26+16       
+    THRESHOLD = 3
+    REJECT_DURATION = 0.01
+
+    wave,fs = sound.load(filename = os.path.join('data',test_filename))
+
+    wave = sound.trim(wave, fs, 0, 10)
+
+    output = features.all_temporal_alpha_indices(wave, fs, 
+                                            gain            = GAIN, 
+                                            sensibility     = SENSITIVITY,
+                                            dB_threshold    = THRESHOLD, 
+                                            rejectDuration  = REJECT_DURATION)
+    
+    output.insert(0, "filename", test_filename)
+    
+    for param in list(output) :
+        assert output[param].values == expected[param].values, \
+            '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+
+
+# %%
+EXPECTED_VALUES = np.load(os.path.join('tests','data','indices_spectral_values.npy'), allow_pickle=True)
+EXPECTED_NAMES = np.load(os.path.join('tests','data','indices_spectral_names.npy'), allow_pickle=True)
+EXPECTED_DATAFRAME = pd.DataFrame(data=EXPECTED_VALUES, columns=EXPECTED_NAMES)
+
+@pytest.mark.parametrize(
+    "test_filename, expected",
+    [
+        ('cold_forest_daylight.wav',    EXPECTED_DATAFRAME.iloc[[0]]),
+        ('cold_forest_night.wav',       EXPECTED_DATAFRAME.iloc[[1]]),
+        ('rock_savanna.wav',            EXPECTED_DATAFRAME.iloc[[2]]),
+        ('tropical_forest_morning.wav', EXPECTED_DATAFRAME.iloc[[3]]),
+    ]
+)
+
+def test_spectral_alpha_indices(test_filename, expected):
+
+    SENSITIVITY = -35         # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)   
+    GAIN = 26+16       # Amplification gain (26dB (SM4 preamplifier))
+    WINDOW = 'hann'
+    N_FFT = 1024
+    FLIM_LOW = [0,1000]
+    FLIM_MED = [1000,6000]
+    FLIM_HIG = [6000,20000]
+    MASK_PARAM1 = 6
+    MASK_PARAM2 = 0.5
+
+    wave,fs = sound.load(filename = os.path.join('data',test_filename))
+
+    wave = sound.trim(wave, fs, 0, 10)
+
+    Sxx_power,tn,fn,ext = sound.spectrogram (wave, fs, 
+                                            window      =WINDOW, 
+                                            nperseg     = N_FFT, 
+                                            noverlap    =N_FFT//2)   
+    
+    output, _ = features.all_spectral_alpha_indices(Sxx_power,
+                                                    tn,fn,
+                                                    flim_low = FLIM_LOW, 
+                                                    flim_mid = FLIM_MED, 
+                                                    flim_hi  = FLIM_HIG, 
+                                                    gain = GAIN, 
+                                                    sensitivity = SENSITIVITY,
+                                                    R_compatible = 'soundecology',
+                                                    mask_param1 = MASK_PARAM1, 
+                                                    mask_param2=MASK_PARAM2)
+    
+    output.insert(0, "filename", test_filename)
+    
+    for param in list(output) :
+        assert output[param].values == expected[param].values, \
+            '{} : output value {} is not equal to expected value {}'.format(param, output[param].values,expected[param].values)
+
