@@ -39,11 +39,15 @@ matplotlib.use('Agg')
 )
 
 def test_script_execution(script):
+    # get the current dir
+    current_dir = os.getcwd()
+    # change dir to data directory
     os.chdir(pathlib.Path(__file__, '..','data').resolve())
+    
     try :
         runpy.run_path(script)
     except Exception as e:
         print(f"An error occurred: {e}")
         
     # Go back to the initial path
-    os.chdir(pathlib.Path(__file__, '..','.').resolve())
+    os.chdir(current_dir)
