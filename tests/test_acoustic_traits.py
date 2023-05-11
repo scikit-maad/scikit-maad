@@ -4,14 +4,12 @@ Test module for acoustic traits
 """
 import os
 import numpy as np
-import pandas as pd
-from pandas.testing import assert_frame_equal
 from maad import sound, features
 
 #%% Spectral features
 def test_spectral_features():
     s, fs = sound.load('./data/spinetail.wav')
-    spectral_features = features.all_spectral_features(s, fs)
+    spectral_features = features.all_spectral_features(s, fs, nperseg=1024, roi=None)
     EXPECTED_SPECTRAL = np.load(os.path.join('tests','data','spectral_features.npy'))
     assert np.allclose(spectral_features.values, EXPECTED_SPECTRAL)
 
