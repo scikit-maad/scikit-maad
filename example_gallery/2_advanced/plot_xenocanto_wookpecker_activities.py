@@ -178,7 +178,7 @@ for species in list_species:
 # Display the heatmap to see when (time of the day) the woodpeckers are active.
 # Woodpeckers are the most active during the morning, between 6:00am till 
 # 10:00am.
-df = df.pivot( 'species', 'time', "count")
+df = df.pivot(index='species', columns='time', values='count')
 df = df.fillna(0)
 
 # plot figure
@@ -214,16 +214,22 @@ fig.tight_layout()
 df = df_week_count.copy()
 #%%
 # create a new dataframe with the normalized number of audio files per week
+df['count'] = df['count'].astype(float)
 for species in list_species:
-    df.loc[df['species'] == species, 'count'] = (df[df['species'] == species]['count']
-                                                 /
-                                                 np.max(df[df['species'] == species]['count']))
+    # filter the rows with specific species and its count
+    sub_df = df.loc[df['species'] == species, 'count']
+    
+    # scale the count values using MinMaxScaler
+    scaled_counts = df[df['species'] == species]['count'] / np.max(df[df['species'] == species]['count'])
+    
+    # update the original DataFrame with scaled count values
+    df.loc[df['species'] == species, 'count'] = scaled_counts
 
 #%%
 # Display the heatmap to see when (annually) the woodpeckers are active.
 # Woodpeckers are the most active during the winter and beginning of spring 
 # (Februrary to April).
-df = df.pivot( 'species', 'week', "count")
+df = df.pivot(index='species', columns='week', values='count')
 df = df.fillna(0)
 
 # plot figure
