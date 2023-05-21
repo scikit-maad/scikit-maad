@@ -2284,26 +2284,29 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
         The larger is the number, the smoother will be the image and the longer 
         it takes. Standard values should fall between 0.5 to 3 
     mask_mode : string in {'relative', 'absolute'}, optional, default is 'relative'
-        if 'relative':
+        | if 'relative':
             Binarize an image based on a double relative threshold.  
             The values used for the thresholding depends on the values found 
             in the image. => relative threshold 
-        if 'absolute' :
+        | if 'absolute' :
             Binarize an image based on a double relative threshold.  
             The values used for the thresholding are independent of the values 
-            in the image => absolute threshold 
-        .. warning:: The default ``mask_mode`` parameter is deprecated in 
-        version 1.3 and will be changed to ``absolute`` in 1.4.
+            in the image => absolute threshold
+
+        .. warning:: The default ``mask_mode`` parameter is deprecated in version 1.3 and will be changed to ``absolute`` in version 1.4.
+
     mask_param1 : scalar, default is 6
-        if 'relative' : bin_std 
-        if 'absolute' : bin_h
-        .. warning:: The default ``mask_param1`` parameter is deprecated in 
-        version 1.3 and will be changed to ``10`` in 1.4.
+        | if 'relative' : bin_std 
+        | if 'absolute' : bin_h
+
+        .. warning:: The default ``mask_param1`` parameter is deprecated in version 1.3 and will be changed to ``10`` in version 1.4.
+
     mask_param2 : scalar, default is 0.5
-        if 'relative' : bin_per
-        if 'absolute' : bin_l
-        .. warning:: The default ``mask_param2`` parameter is deprecated in 
-        version 1.3 and will be changed to ``3`` in 1.4.
+        | if 'relative' : bin_per
+        | if 'absolute' : bin_l
+        
+        .. warning:: The default ``mask_param2`` parameter is deprecated in version 1.3 and will be changed to ``3`` in 1.4.
+    
     min_roi, max_roi : scalars, optional, default : 9,  512*10000
         Define the minimum and the maximum area possible for a ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
