@@ -429,11 +429,13 @@ def xc_download(df,
                     fullpath, _ = urllib.request.urlretrieve(fileaddress, path / filename)
                     fullpath_list += [str(fullpath)]
                     if verbose : 
+                        numfiles = len(df)
                         print("Saving file ", count, "/", numfiles, ": " + fileaddress)
                 except:
                     # can't download the audio file (it does not exist (anymore) in
                     # xeno-canto)
                     if verbose :
+                        numfiles = len(df)
                         print("***WARNING*** Can't save the file ", 
                               count, "/", numfiles, ": " + fileaddress)
                     # drop the row of this recordings
