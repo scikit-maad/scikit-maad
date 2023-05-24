@@ -59,11 +59,15 @@ EXPECTED_FIELDS = [
 def test_metadata_fields():
 
     output = util.xc_query(['gen:Picoides', 'ssp:tridactylus'])
+
+    # list of fields
+    found_fields = list(output)
     
-    # check if lists are different
-    if len(list(set(EXPECTED_FIELDS) - set(output))) >0 :
+    # Check if lists are different
+    conflicted_fields = list(set(EXPECTED_FIELDS) - set(found_fields)) # type: ignore
+    if conflicted_fields:
         assert 'The list of fields is not identical', \
-        'The CONFLICTED fields are : {}'.format(list(set(EXPECTED_FIELDS) - set(output)))
+        'The CONFLICTED fields are : {}'.format(list(set(EXPECTED_FIELDS) - set(found_fields))) # type: ignore
 
 # %%
 
