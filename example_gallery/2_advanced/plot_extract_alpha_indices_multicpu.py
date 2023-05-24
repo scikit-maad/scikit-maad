@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-USE MULTICPU FUNCTIONALITY TO COMPUTE INDICES
+Use multicpu functionality to compute indices
 ==============================================
 
 Acoustic indices can summarize aspects of the acoustic energy distribution in
@@ -15,6 +15,7 @@ example can be downloaded from the open GitHub repository
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_extract_alpha_indices_multicpu_001.png'
 
+#%%
 import pandas as pd
 import os
 import time
@@ -240,3 +241,5 @@ ax.set_title("Comparison between sequential\n and parallel processing")
 
 fig.tight_layout()
 
+
+# %%
