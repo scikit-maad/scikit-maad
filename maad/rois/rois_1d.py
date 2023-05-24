@@ -97,7 +97,7 @@ def _energy_windowed(s, wl=512, fs=None):
 # =============================================================================
 # Public functions
 # =============================================================================
-def find_rois_cwt(s, fs, flims, tlen, th=0, display=False, save_df=False, 
+def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False, 
                   savefilename='rois.csv', **kwargs):
     """
     Find region of interest using known estimates of signal length and frequency limits.

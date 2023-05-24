@@ -15,8 +15,10 @@ domains.
 # Import external modules
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import (sosfiltfilt, convolve, iirfilter, get_window, 
-                          kaiserord, firwin, lfilter)
+from scipy.signal import (
+    sosfiltfilt, convolve, iirfilter, get_window, 
+    kaiserord, firwin, lfilter
+    )
 from skimage import filters
 
 # Import internal modules 
@@ -27,7 +29,7 @@ from maad.util import plot2d
 # public functions
 # =============================================================================
 def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass', 
-                     rp=None, rs=None):
+                    rp=None, rs=None):
     """
     Use a lowpass, highpass, bandpass or bandstop filter to process a 1d signal with an iir filter.
         
@@ -77,13 +79,13 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB 
     >>> fig_kwargs = {'vmax': Sxx_dB.max(),
-                      'vmin':-90,
-                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                      'figsize':(4,13),
-                      'title':'Power spectrogram density (PSD)',
-                      'xlabel':'Time [sec]',
-                      'ylabel':'Frequency [Hz]',
-                      }
+                    'vmin':-90,
+                    'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                    'figsize':(4,13),
+                    'title':'Power spectrogram density (PSD)',
+                    'xlabel':'Time [sec]',
+                    'ylabel':'Frequency [Hz]',
+                    }
     >>> fig1, ax1 = maad.util.plot2d(Sxx_dB, **fig_kwargs)
     
     Filter the waveform : keep the bandwidth between 6-10kHz
@@ -95,11 +97,11 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
     
     """
     sos = iirfilter(N=forder, Wn=np.asarray(fcut)/(fs/2), btype=ftype,ftype=fname, rp=rp, 
-                     rs=rs, output='sos')
+                    rs=rs, output='sos')
     # use sosfiltfilt insteasd of sosfilt to keep the phase of y matches x
     y = sosfiltfilt(sos, x)
     return y
- 
+
 #%%
 def fir_filter(x, kernel, axis=0):
     """
@@ -155,13 +157,13 @@ def fir_filter(x, kernel, axis=0):
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
-                      'vmin':0,
-                      'extent': ext,
-                      'figsize': (4,13),
-                      'title': 'Power spectrogram density (PSD)',
-                      'xlabel': 'Time [sec]',
-                      'ylabel': 'Frequency [Hz]',
-                      }
+                    'vmin':0,
+                    'extent': ext,
+                    'figsize': (4,13),
+                    'title': 'Power spectrogram density (PSD)',
+                    'xlabel': 'Time [sec]',
+                    'ylabel': 'Frequency [Hz]',
+                    }
     >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)
     
     Smooth the waveform (lowpass)
@@ -251,21 +253,27 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     width = (cutoff[1] - cutoff[0]) * transition_bw
     numtaps, beta = kaiserord(atten, width/(0.5*fs))
     np.ceil(numtaps-1) // 2 * 2 + 1  # round to nearest odd to have Type I filter
-    taps = firwin(numtaps, cutoff, window=('kaiser', beta), 
-                         scale=False, nyq=0.5*fs, pass_zero=not(bandpass))
+    taps = firwin(
+        numtaps, 
+        cutoff, 
+        window=('kaiser', beta), 
+        scale=False, 
+        nyq=0.5*fs, 
+        pass_zero=not(bandpass)
+        )
     s_filt = lfilter(taps, 1, s)
     return s_filt
 
 #%%
-def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs): 
+def smooth (Sxx, std: float=1, verbose=False, display = False, savefig=None, **kwargs): 
     """ 
     Smooth a spectrogram with a gaussian filter.
-     
+    
     Parameters 
     ---------- 
     Sxx : 2d ndarray of scalars 
         Spectrogram (or image) 
-     
+    
     std : scalar, optional, default is 1 
         Standard deviation of the gaussian kernel used to smooth the spectrogram.
         The larger is the number, the smoother will be the image and the longer 
@@ -276,56 +284,56 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
     
     display : boolean, optional, default is False 
         Display the signal if True 
-         
+        
     savefig : string, optional, default is None 
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
-         
+        
     kwargs, optional. This parameter is used by plt.plot and savefig functions 
-             
+        
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
-          
+        
         - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-         
+        
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
-         
+        
         - xlabel : string, optional, default : 'Time [s]' 
             label of the horizontal axis 
-         
+        
         - ylabel : string, optional, default : 'Amplitude [AU]' 
             label of the vertical axis 
-         
+        
         - cmap : string or Colormap object, optional, default is 'gray' 
             See https://matplotlib.org/examples/color/colormaps_reference.html 
             in order to get all the  existing colormaps 
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
             'viridis'... 
-         
+        
         - vmin, vmax : scalar, optional, default: None 
             `vmin` and `vmax` are used in conjunction with norm to normalize 
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
-         
+        
         - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
-         
+        
         - dpi : integer, optional, default is 96 
             Dot per inch.  
             For printed version, choose high dpi (i.e. dpi=300) => slow 
             For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
+        
         - format : string, optional, default is 'png' 
             Format to save the figure 
-             
+            
         ... and more, see matplotlib    
-         
+        
     Returns 
     ------- 
     im_out: smothed or blurred image  
@@ -364,10 +372,10 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
     if verbose:
         print(72 * '_') 
         print('Smooth the image with a gaussian filter (std = %.1f)' %std) 
-     
+    
     # use scikit image (faster than scipy) 
     Sxx_out = filters.gaussian(Sxx,std) 
-     
+    
     # Display 
     if display :  
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
@@ -405,4 +413,4 @@ def smooth (Sxx, std=1, verbose=False, display = False, savefig=None, **kwargs):
             fig.savefig(filename, bbox_inches='tight', dpi=dpi, format=format, 
                         **kwargs)    
     return Sxx_out 
- 
+

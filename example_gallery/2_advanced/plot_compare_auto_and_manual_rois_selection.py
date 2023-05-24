@@ -20,9 +20,13 @@ scikit-image, scikit-learn and pandas Python packages.
 
 import numpy as np
 import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
 from maad import sound, rois, features
-from maad.util import (power2dB, plot2d, format_features, read_audacity_annot, 
-                       overlay_rois, overlay_centroid)
+from maad.util import (
+   power2dB, plot2d, format_features, read_audacity_annot, 
+   overlay_rois, overlay_centroid
+   )
 
 #%%
 # First, load and audio file and compute the power spectrogram.
@@ -30,12 +34,25 @@ s, fs = sound.load('../../data/cold_forest_daylight.wav')
 
 dB_max = 96
 
-Sxx_power, tn, fn, ext = sound.spectrogram(s, fs, nperseg=1024, noverlap=1024//2)
+Sxx_power, tn, fn, ext = sound.spectrogram(
+   x=s, 
+   fs=fs, 
+   nperseg=1024, 
+   noverlap=1024//2
+   )
 
 # Convert the power spectrogram into dB, add dB_max which is the maximum decibel
 # range when quantification bit is 16bits and display the result
 Sxx_db = power2dB(Sxx_power) + dB_max
-plot2d(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
+
+plot2d(
+   im=Sxx_db, 
+   **{
+      'vmin':0, 
+      'vmax':dB_max, 
+      'extent':ext
+      }
+   )
 
 #%% 
 # Then, relevant acoustic events are extracted directly from the power 
@@ -51,40 +68,96 @@ plot2d(Sxx_db, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
 
 # First we remove the stationary background in order to increase the contrast [1]
 # Then we convert the spectrogram into dB
-Sxx_power_noNoise= sound.median_equalizer(Sxx_power, display=True, **{'extent':ext})
+Sxx_power_noNoise= sound.median_equalizer(
+   Sxx=Sxx_power, 
+   display=True, 
+   **{'extent':ext}
+   )
 Sxx_db_noNoise = power2dB(Sxx_power_noNoise)
 
 # Then we smooth the spectrogram in order to facilitate the creation of masks as
 # small sparse details are merged if they are close to each other
-Sxx_db_noNoise_smooth = sound.smooth(Sxx_db_noNoise, std=0.5, 
-                         display=True, savefig=None, 
-                         **{'vmin':0, 'vmax':dB_max, 'extent':ext})
+Sxx_db_noNoise_smooth = sound.smooth(
+   Sxx=Sxx_db_noNoise, 
+   std=0.5, 
+   display=True, 
+   savefig=None, 
+   **{
+      'vmin':0, 
+      'vmax':dB_max, 
+      'extent':ext
+      }
+   )
 
 # Then we create a mask (i.e. binarization of the spectrogram) by using the 
 # double thresholding technique
-im_mask = rois.create_mask(im=Sxx_db_noNoise_smooth, mode_bin ='relative', 
-                           bin_std=8, bin_per=0.5,
-                           verbose=False, display=False)
+im_mask = rois.create_mask(
+   im=Sxx_db_noNoise_smooth, 
+   mode_bin='relative', 
+   bin_std=8, 
+   bin_per=0.5,
+   verbose=False, 
+   display=False
+   )
 
 # Finaly, we put together pixels that belong to the same acoustic event, and 
 # remove very small events (<=25 pixel²)
-im_rois, df_rois = rois.select_rois(im_mask, min_roi=25, max_roi=None, 
-                                 display= True,
-                                 **{'extent':ext})
-    
+im_rois, df_rois = rois.select_rois(
+   im_bin=im_mask, 
+   min_roi=25, 
+   max_roi=None, 
+   display= True,
+   **{'extent':ext}
+   )
+
 # format dataframe df_rois in order to convert pixels into time and frequency
-df_rois = format_features(df_rois, tn, fn)
+df_rois = format_features(
+   df=df_rois, 
+   tn=tn, 
+   fn=fn
+   )
 
 # overlay bounding box on the original spectrogram
-ax0, fig0 = overlay_rois(Sxx_db, df_rois, **{'vmin':0, 'vmax':dB_max, 'extent':ext})
+ax0, fig0 = overlay_rois(
+   im_ref=Sxx_db, 
+   rois=df_rois, 
+   **{
+      'vmin':0, 
+      'vmax':dB_max, 
+      'extent':ext
+      }
+   )
 
-# Compute and visualize centroids
-df_centroid = features.centroid_features(Sxx_db, df_rois, im_rois)
-df_centroid = format_features(df_centroid, tn, fn)
-ax0, fig0 = overlay_centroid(Sxx_db, df_centroid, savefig=None,
-                             **{'vmin':0,'vmax':dB_max,'extent':ext,'ms':4, 
-                                'marker':'+', 'color':'red',
-                                'fig':fig0, 'ax':ax0})
+# Compute centroids
+df_centroid = features.centroid_features(
+   Sxx=Sxx_db, 
+   rois=df_rois, 
+   im_rois=im_rois
+   )
+
+# format dataframe df_centroid in order to convert pixels into time and frequency
+df_centroid = format_features(
+   df=df_centroid, 
+   tn=tn, 
+   fn=fn
+   )
+
+# overlay centroids on the original spectrogram
+ax0, fig0 = overlay_centroid(
+   im_ref=Sxx_db, 
+   centroid=df_centroid, 
+   savefig=None,
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext,
+      'ms':4, 
+      'marker':'+', 
+      'color':'red',
+      'fig':fig0, 
+      'ax':ax0
+      }
+   )
 
 
 #%% 
@@ -104,15 +177,45 @@ df_rois_GT = df_rois_GT[(df_rois_GT.min_t >= tn.min()) &
 df_rois_GT = format_features(df_rois_GT, tn, fn)
 
 # overlay bounding box on the original spectrogram
-ax1, fig1 = overlay_rois(Sxx_db, df_rois_GT, **{'vmin':0,'vmax':dB_max,'extent':ext})
-    
-# Compute and visualize centroids
-df_centroid_GT = features.centroid_features(Sxx_db, df_rois_GT)
-df_centroid_GT = format_features(df_centroid_GT, tn, fn)
-ax1, fig1 = overlay_centroid(Sxx_db, df_centroid_GT, savefig=None, 
-                             **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                'ms':2, 'marker':'+','color':'red',
-                                'fig':fig1, 'ax':ax1})
+ax1, fig1 = overlay_rois(
+   im_ref=Sxx_db, 
+   rois=df_rois_GT, 
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext
+      }
+   )
+
+# Compute centroids
+df_centroid_GT = features.centroid_features(
+   Sxx=Sxx_db, 
+   rois=df_rois_GT
+   )
+
+# format dataframe df_centroid_GT in order to convert pixels into time and frequency
+df_centroid_GT = format_features(
+   df=df_centroid_GT, 
+   tn=tn, 
+   fn=fn
+   )
+
+# overlay centroids on the original spectrogram
+ax1, fig1 = overlay_centroid(
+   im_ref=Sxx_db, 
+   centroid=df_centroid_GT, 
+   savefig=None, 
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext,
+      'ms':2, 
+      'marker':'+',
+      'color':'red',
+      'fig':fig1, 
+      'ax':ax1
+      }
+   )
 
 # print informations about the rois
 print ('Total number of ROIs : %2.0f' %len(df_rois_GT))
@@ -128,8 +231,6 @@ print ('Number of different ROIs : %2.0f' %len(np.unique(df_rois_GT['label'])))
 # manual annotation.
 # Finally, each rois is labeled with the corresponding cluster number predicted
 # by KMeans
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
 
 # select features to perform KMeans clustering
 FEATURES = ['centroid_f','duration_t','bandwidth_f','area_tf']
@@ -139,18 +240,42 @@ X = StandardScaler().fit_transform(df_centroid[FEATURES])
 
 # perform KMeans with the same number of clusters as with the manual annotation  
 NN_CLUSTERS = len(np.unique(df_rois_GT['label'])) 
-labels = KMeans(n_clusters=NN_CLUSTERS, random_state=0).fit_predict(X)
+labels = KMeans(
+   n_clusters=NN_CLUSTERS, 
+   random_state=0, 
+   n_init='auto'
+   ).fit_predict(X)
 
 # Replace the unknow label by the cluster number predicted by KMeans
 df_centroid['label'] = [str(i) for i in labels] 
 
 # overlay color bounding box corresponding to the label, and centroids
 # on the original spectrogram
-ax2, fig2 = overlay_rois(Sxx_db, df_centroid, **{'vmin':0,'vmax':dB_max,'extent':ext})
-ax2, fig2 = overlay_centroid(Sxx_db, df_centroid, savefig=None, 
-                             **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                'ms':2, 'marker':'+', 'color':'red',
-                                'fig':fig2, 'ax':ax2})
+ax2, fig2 = overlay_rois(
+   im_ref=Sxx_db, 
+   rois=df_centroid, 
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext
+      }
+   )
+
+ax2, fig2 = overlay_centroid(
+   im_ref=Sxx_db, 
+   centroid=df_centroid, 
+   savefig=None, 
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext,
+      'ms':2, 
+      'marker':'+', 
+      'color':'red',
+      'fig':fig2, 
+      'ax':ax2
+      }
+   )
 
 #%% 
 # It is possible to extract Rois directly from the audio waveform without 
@@ -162,7 +287,7 @@ ax2, fig2 = overlay_centroid(Sxx_db, df_centroid, savefig=None,
 # We know that we have mostly short (ie. s) acoustic events in low, med and high
 # frequency bandwidths but also a long (ie l) acoustic events in med.
 # To extract 
-       
+
 df_rois_sh = rois.find_rois_cwt(s, fs, flims=[7000, 8000], tlen=0.2, th=0.000001)
 df_rois_sm = rois.find_rois_cwt(s, fs, flims=[3500, 5500], tlen=0.2, th=0.000001)
 df_rois_lm = rois.find_rois_cwt(s, fs, flims=[2000, 7500], tlen=2,   th=0.0001)
@@ -172,40 +297,99 @@ df_rois_sl = rois.find_rois_cwt(s, fs, flims=[1800, 3000], tlen=0.2, th=0.000001
 df_rois_WAV =pd.concat([df_rois_sh, df_rois_sm, df_rois_lm, df_rois_sl], ignore_index=True)
 
 # drop rows with frequency and time outside of tn and fn
-df_rois_WAV = df_rois_WAV[(df_rois_WAV.min_t >= tn.min()) & 
-                                      (df_rois_WAV.max_t <= tn.max()) & 
-                                      (df_rois_WAV.min_f >= fn.min()) & 
-                                      (df_rois_WAV.max_f <= fn.max())]
-    
-# get features: centroid, 
-df_rois_WAV = format_features(df_rois_WAV, tn, fn)
-df_centroid_WAV = features.centroid_features(Sxx_db, df_rois_WAV)
+df_rois_WAV = df_rois_WAV[
+   (df_rois_WAV.min_t >= tn.min()) & 
+   (df_rois_WAV.max_t <= tn.max()) & 
+   (df_rois_WAV.min_f >= fn.min()) & 
+   (df_rois_WAV.max_f <= fn.max())
+   ]
 
-ax3, fig3 = overlay_rois(Sxx_db, df_rois_WAV, **{'vmin':0,'vmax':dB_max,
-                                                      'extent':ext})
-df_centroid_WAV = format_features(df_centroid_WAV, tn, fn)
-ax3, fig3 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
-                             **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                'ms':2,'marker':'+', 'color':'red',
-                                'fig':fig3, 'ax':ax3})
+# format dataframe df_rois_WAV in order to convert pixels into time and frequency
+df_rois_WAV = format_features(
+   df=df_rois_WAV, 
+   tn=tn, 
+   fn=fn
+   )
+
+# display rois
+ax3, fig3 = overlay_rois(
+   im_ref=Sxx_db, 
+   rois=df_rois_WAV,
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext
+      }
+   )
+
+# get features: centroids
+df_centroid_WAV = features.centroid_features(
+   Sxx=Sxx_db,
+   rois=df_rois_WAV
+   )
+
+# format dataframe df_centroid_WAV in order to convert pixels into time and frequency
+df_centroid_WAV = format_features(
+   df=df_centroid_WAV,
+   tn=tn, 
+   fn=fn
+   )
+
+# display centroids
+ax3, fig3 = overlay_centroid(
+   im_ref=Sxx_db, 
+   centroid=df_centroid_WAV,
+   savefig=None, 
+   **{'vmin':0,
+      'vmax':dB_max,
+      'extent':ext,
+      'ms':2,
+      'marker':'+', 
+      'color':'red',
+      'fig':fig3, 
+      'ax':ax3
+      }
+   )
 
 #%%
 # Prepare the features in order to have zero mean and same variance
 X = StandardScaler().fit_transform(df_centroid_WAV[FEATURES])
 
 # perform KMeans with the same number of clusters as with the manual annotation  
-labels = KMeans(n_clusters=NN_CLUSTERS, random_state=0).fit_predict(X)
+labels = KMeans(
+   n_clusters=NN_CLUSTERS, 
+   random_state=0,
+   n_init='auto'
+   ).fit_predict(X)
 
 # Replace the unknow label by the cluster number predicted by KMeans
 df_centroid_WAV['label'] = [str(i) for i in labels] 
 
 # overlay color bounding box corresponding to the label, and centroids
 # on the original spectrogram
-ax4, fig4 = overlay_rois(Sxx_db, df_centroid_WAV, **{'vmin':0,'vmax':dB_max,
-                                                          'extent':ext})
-ax4, fig4 = overlay_centroid(Sxx_db, df_centroid_WAV, savefig=None, 
-                             **{'vmin':0,'vmax':dB_max,'extent':ext,
-                                'ms':2,'fig':fig4, 'ax':ax4})
+ax4, fig4 = overlay_rois(
+   im_ref=Sxx_db, 
+   rois=df_centroid_WAV, 
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext
+      }
+   )
+
+ax4, fig4 = overlay_centroid(
+   im_ref=Sxx_db, 
+   centroid=df_centroid_WAV, 
+   savefig=None, 
+   **{
+      'vmin':0,
+      'vmax':dB_max,
+      'extent':ext,
+      'ms':2,
+      'fig':fig4, 
+      'ax':ax4
+      }
+   )
 
 #%%
 # **References** 
