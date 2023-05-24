@@ -11,85 +11,34 @@ apply basic transformations to better understand its features in time and freque
 """
 
 #%% 
+# Load an audio file and plot the waveform
 import matplotlib.pyplot as plt
 from maad import sound
 from maad import util
 
-# Load an audio file and plot the waveform
-signal, sample_rate = sound.load(
-    filename='../../data/spinetail.wav'
-)
-
-# Plot and show the waveform
-util.plot_wave(
-    s=signal, 
-    fs=sample_rate
-)
+s, fs = sound.load('../../data/spinetail.wav')
+util.plot_wave(s, fs)
 plt.show()
-
 #%% 
 # It can be noticed that in this audio there are four consecutive songs of the spinetail 
 # *Cranioleuca erythorps*, every song lasting of approximatelly two seconds. 
+# Let's trim the signal to zoom in on the details of the song.
 
-# Trim the signal to zoom in on the details of the song.
-signal_trimmed = sound.trim(
-    s=signal, 
-    fs=sample_rate, 
-    min_t=5, 
-    max_t=8
-)
+s_trim = sound.trim(s, fs, 5, 8)
 
 #%% 
-# Compute the envelope of the trimmed signal
-envelope = sound.envelope(
-    s=signal_trimmed, 
-    mode='fast', 
-    Nt=128
-)
-
-# Compute the power spectrum density estimate using the Fourier transform (fft)
-psd_estimate, sample_frequency_indices = sound.spectrum(
-    s=signal,
-    fs=sample_rate,
-    nperseg=1024,
-    method='welch',
-)
-
-# Compute the power spectrogram using the short-time Fourier transform (stft)
-Sxx_power, tn, fn, box_extend = sound.spectrogram(
-    x=signal_trimmed,
-    fs=sample_rate,
-    window='hann',
-    nperseg=1024,
-    noverlap=512,
-)
+# Onced trimmed, lets compute the envelope of the signal, the Fourier and short-time Fourier transforms.
+env = sound.envelope(s_trim, mode='fast', Nt=128)
+pxx, fidx = sound.spectrum(s, fs, nperseg=1024, method='welch')
+Sxx, tn, fn, ext = sound.spectrogram(s_trim, fs, window='hann', nperseg=1024, noverlap=512)
 
 #%% 
-# Visualize the signal characteristics in the temporal and spectral domains
-figure, axes = plt.subplots(
-    nrows=4,
-    ncols=1,
-    figsize=(8, 10),
-)
-util.plot_wave(
-    s=signal_trimmed,
-    fs=sample_rate,
-    ax=axes[0],
-)
-util.plot_wave(
-    s=envelope,
-    fs=sample_rate,
-    ax=axes[1],
-)
-util.plot_spectrum(
-    pxx=psd_estimate,
-    f_idx=sample_frequency_indices,
-    ax=axes[2],
-)
-util.plot_spectrogram(
-    Sxx=Sxx_power,
-    extent=box_extend,
-    ax=axes[3],
-    colorbar=False,
-)
+# Finally, we can visualize the signal characteristics in the temporal and 
+# spectral domains.
+
+fig, ax = plt.subplots(4,1, figsize=(8,10))
+util.plot_wave(s_trim, fs, ax=ax[0])
+util.plot_wave(env, fs, ax=ax[1])
+util.plot_spectrum(pxx, fidx, ax=ax[2])
+util.plot_spectrogram(Sxx, extent=ext, ax=ax[3], colorbar=False)
 plt.show()
