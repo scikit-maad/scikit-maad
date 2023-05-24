@@ -158,9 +158,9 @@ filelist = grab_audio(XC_ROOTDIR+XC_DIR)
 df = pd.DataFrame()
 for file in filelist:
     df = df.append({'fullfilename': file,
-                    'filename': Path(file).parts[-1][:-4],
-                    'species': Path(file).parts[-2]},
-                   ignore_index=True)
+                'filename': Path(file).parts[-1][:-4],
+                'species': Path(file).parts[-2]},
+                ignore_index=True)
 
 print('=====================================================')
 print('number of files : %2.0f' % len(df))

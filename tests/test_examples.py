@@ -34,7 +34,7 @@ matplotlib.use('Agg')
         (pathlib.Path(__file__, '..', '..', 'example_gallery','2_advanced','plot_sound_degradation_due_to_attenuation.py').resolve()),
         (pathlib.Path(__file__, '..', '..', 'example_gallery','2_advanced','plot_sound_pressure_level.py').resolve()),
         (pathlib.Path(__file__, '..', '..', 'example_gallery','2_advanced','plot_unsupervised_sound_classification.py').resolve()),
-        (pathlib.Path(__file__, '..', '..', 'example_gallery','2_advanced','plot_xenocanto_wookpecker_activities.py').resolve()),
+        (pathlib.Path(__file__, '..', '..', 'example_gallery','2_advanced','plot_xenocanto_woodpecker_activities.py').resolve()),
         (pathlib.Path(__file__, '..', '..', 'example_gallery','2_advanced','plot_wookpecker_drumming_characteristics.py').resolve()),
     ]
 )

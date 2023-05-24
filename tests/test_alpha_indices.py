@@ -31,7 +31,7 @@ def test_temporal_entropy():
     # Load expected values
     expected_values = 0.7518917279549968
 
-    assert np.allclose(temporal_entropy_index, expected_values)
+    assert np.allclose(temporal_entropy_index, expected_values) # type: ignore
 
 def test_temporal_activity():
     # Compute temporal median
@@ -41,7 +41,7 @@ def test_temporal_activity():
     # Load expected values
     expected_values = (0.36838978015448604, 620, 24.41347313621499)
 
-    assert np.allclose(temporal_activity_index, expected_values)
+    assert np.allclose(temporal_activity_index, expected_values) # type: ignore
 
 
 #%% Spectral indices
@@ -53,14 +53,15 @@ def test_spectral_entropy():
     spectral_entropy_indices = features.spectral_entropy(
         Sxx_power, fn, flim=(2000,10000))
 
-    expected_values = (0.26807540760637083,
-                       0.488351529652562,
-                       0.24146196318401625,
-                       0.2536420606912331,
-                       17.580495975968567,
-                       3.5452699010615505)
+    expected_values = (
+        0.26807540760637083,
+        0.488351529652562,
+        0.24146196318401625,
+        0.2536420606912331,
+        17.580495975968567,
+        3.5452699010615505)
 
-    assert np.allclose(spectral_entropy_indices,expected_values)
+    assert np.allclose(spectral_entropy_indices,expected_values) # type: ignore
 
 #%% Spectro-temporal indices
 
