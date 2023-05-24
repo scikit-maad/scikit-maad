@@ -62,7 +62,7 @@ def _corresp_onset_offset(onset, offset, tmin, tmax):
     return onset, offset
 
 #%%
-def _energy_windowed(s, wl=512, fs=None):
+def _energy_windowed(s, fs: float, wl: int=512):
     """ 
     Computse windowed energy on an audio signal.
     
@@ -72,10 +72,10 @@ def _energy_windowed(s, wl=512, fs=None):
     ----------
     s : ndarray
         input signal
-    wl : float
-        length of the window to summarize the rms value
     fs : float
         frequency sampling of the signal, used to keep track of temporal information of the signal
+    wl : int, default is 512
+        length of the window to summarize the rms value
 
     Returns
     -------
@@ -114,6 +114,8 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
     ----------
     s : ndarray
         input signal
+    fs : float
+        frequency sampling of the signal, used to keep track of temporal information of the signal
     flims : int
         upper and lower frequencies (in Hz) 
     tlen : int 
@@ -151,7 +153,7 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
     s_filt = sinc(s, flims, fs, atten=80, transition_bw=0.8)
     # rms: calculate window of maximum 5% of tlen. improves speed of cwt
     wl = 2**np.floor(np.log2(tlen*fs*0.05)) 
-    t, s_rms = _energy_windowed(s_filt, int(wl), fs)
+    t, s_rms = _energy_windowed(s_filt, fs, int(wl))
     # find peaks
     cwt_width = [round(tlen*fs/wl/2)]
     npad = 5 ## seems to work with 3, but not sure
@@ -205,11 +207,15 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
         ax2.set_xlabel('Time (s)')
         if not(df.empty):
             for idx, _ in df.iterrows():
-                xy = (df.min_t[idx],df.min_f[idx])
-                width = df.max_t[idx] - df.min_t[idx]
-                height = df.max_f[idx] - df.min_f[idx]
+                # xy = (df.min_t[idx],df.min_f[idx])
+                # width = df.max_t[idx] - df.min_t[idx]
+                # height = df.max_f[idx] - df.min_f[idx]
+
+                xy = (df[idx].min_t, df[idx].min_f)
+                width = df[idx].max_t- df[idx].min_t
+                height = df[idx].max_f- df[idx].min_f
                 rect = patches.Rectangle(xy, width, height, lw=1, 
-                                         edgecolor='yellow', facecolor='none')
+                                        edgecolor='yellow', facecolor='none')
                 ax2.add_patch(rect)
         plt.show()
     
