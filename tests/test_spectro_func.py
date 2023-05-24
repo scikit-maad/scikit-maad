@@ -28,7 +28,7 @@ def test_spectrogram_dims(test_signal):
 
 def test_spectrogram_consistency(test_signal):
     x, fs = test_signal
-    EXPECTED_SXX = np.load(os.path.join('tests','data','Sxx.npy'))
+    EXPECTED_SXX = np.load(os.path.join('tests','data','Sxx.npy'), allow_pickle = True)
 
     # compute the spectrogram
     Sxx,tn,fn,ext = spectrogram(x, fs=fs, window='hann', nperseg=int(fs*0.01), noverlap=int(fs*0.005))
