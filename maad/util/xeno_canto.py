@@ -157,7 +157,7 @@ def xc_query(searchTerms,
         
         if (format_time == True) and (format_date == True) :         
             # add a column with the week number
-            df_dataset['week'] = pd.to_datetime(df_dataset['date']).dt.isocalendar()['week']
+            df_dataset['week'] = pd.to_datetime(df_dataset['date']).dt.isocalendar()['week'] # type: ignore
             # add a column with datetime in DateTime format
             df_dataset['datetime'] =  pd.to_datetime(df_dataset['time']+' '+ df_dataset['date'])
 
