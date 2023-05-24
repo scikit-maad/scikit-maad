@@ -14,7 +14,7 @@ its time-frequency representation
 # =============================================================================
 # Import external modules
 import numpy as np
-from warnings import warn
+import warnings
 import io
 from urllib.request import urlopen
 from scipy.io import wavfile 
@@ -80,7 +80,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
             For screen version, choose low dpi (i.e. dpi=96) => fast
         - format : string, optional, default is 'png'
             Format to save the figure
-           
+
         ... and more, see matplotlib     
         
     Returns
@@ -108,10 +108,14 @@ def load(filename, channel='left', detrend=True, verbose=False,
         print(72 * '_' )
         print("loading %s..." %filename)   
     
-    # read the .wav file and return the sampling frequency fs (Hz) 
+    # Read the .wav file and return the sampling frequency fs (Hz) 
     # and the audiogram s as a 1D array of integer
-    fs, s = wavfile.read(filename)
-    if verbose :print("Sampling frequency: %dHz" % fs)
+    # Execute the function wavfile.read with warnings suppressed in order to avoid the 
+    # common warning "WavFileWarning: Chunk (non-data) not understood, skipping it"
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore")  # Ignore all warnings
+        fs, s = wavfile.read(filename)
+        if verbose :print("Sampling frequency: %dHz" % fs)
     
     # Normalize the signal between -1 to 1 depending on the type (number of bits)
     if s.dtype == np.int32:
@@ -155,7 +159,7 @@ def load(filename, channel='left', detrend=True, verbose=False,
             if verbose :print('\n''save figure : %s' %filename)
             fig.savefig(fname=filename, dpi=dpi, bbox_inches=bbox_inches,
                         format=format, **kwargs)  
-                           
+            
     return s_out, fs
 
 #%%
@@ -163,15 +167,15 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
                 verbose=False, display=False, **kwargs): 
     """ 
     Load an image from a file or an URL 
-     
+
     Parameters 
     ----------   
     filename : string 
         Image file name, e.g. ``test.jpg`` or URL. 
-     
+
     fs : scalar 
         Sampling frequency of the audiogram (in Hz) 
-     
+
     duration : scalar 
         Duration of the audiogram (in s) 
         
@@ -183,49 +187,49 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         
     verbose : boolean, optional, default is False
         if True, print message in terminal
-     
+
     display : boolean, optional, default is False 
         if True, display the image 
-         
+
     kwargs, optional. This parameter is used by plt.plot  
         - figsize : tuple of integers, optional, default: (4,10) 
             width, height in inches.   
-         
+
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
-         
+
         - xlabel : string, optional, default : 'Time [s]' 
             label of the horizontal axis 
-         
+
         - ylabel : string, optional, default : 'Amplitude [AU]' 
             label of the vertical axis 
-         
+
         - cmap : string or Colormap object, optional, default is 'gray' 
             See https://matplotlib.org/examples/color/colormaps_reference.html 
             in order to get all the  existing colormaps 
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
             'viridis'... 
-         
+
         - vmin, vmax : scalar, optional, default: None 
             `vmin` and `vmax` are used in conjunction with norm to normalize 
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
-         
+
         - extent : scalars (left, right, bottom, top), optional, default: None 
             The location, in data-coordinates, of the lower-left and 
             upper-right corners. If `None`, the image is positioned such that 
             the pixel centers fall on zero-based (row, column) indices. 
-         
+
         - dpi : integer, optional, default is 96 
             Dot per inch.  
             For printed version, choose high dpi (i.e. dpi=300) => slow 
             For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
+
         - format : string, optional, default is 'png' 
             Format to save the figure  
-         
+
         ... and more, see matplotlib  
-         
+
     Returns 
     ------- 
     Sxx : ndarray 
@@ -244,10 +248,10 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
     --------
     >>> xenocanto_link = 'https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png'
     >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename= xenocanto_link,
-                                          fs=44100,            
-                                          flims=[0,15000],
-                                          duration = 10
-                                          )
+                                        fs=44100,            
+                                        flims=[0,15000],
+                                        duration = 10
+                                        )
     >>> import matplotlib.pyplot as plt
     >>> maad.util.plot2d(Sxx,extent=ext)
     
@@ -256,17 +260,17 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
     if verbose :
         print(72 * '_' ) 
         print("loading %s..." %filename)  
-     
+    
     # Load image 
-    Sxx  = imread(filename, as_gray=True) 
-     
+    Sxx = imread(filename, as_gray=True) 
+    
     # if 3D, convert into 2D 
     if len(Sxx.shape) == 3: 
         Sxx = Sxx[:,:,0] 
-         
+    
     # Rescale the image between 0 to 1 
     Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0) 
-             
+    
     # Get the resolution 
     if flims is None :
         df = fs/(Sxx.shape[0]-1) 
@@ -280,13 +284,13 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
     else:
         fn = np.arange(flims[0],flims[1],df)  
     tn = np.arange(0,Sxx.shape[1],1) * dt
-     
+    
     # Extent 
     extent = [tn[0], tn[-1], fn[0], fn[-1]] 
-     
+    
     # flip the image vertically 
     if flipud: Sxx = np.flip(Sxx, 0) 
-     
+    
     # Display 
     if display :  
         ylabel =kwargs.pop('ylabel','Frequency [Hz]') 
@@ -296,11 +300,11 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         figsize=kwargs.pop('figsize',(4, 0.33*(extent[1]-extent[0])))  
         vmin=kwargs.pop('vmin',Sxx.min())  
         vmax=kwargs.pop('vmax',Sxx.max())  
-         
+        
         _, fig = plot2d (Sxx, extent=extent, figsize=figsize,title=title,  
-                         ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
-                         cmap=cmap, **kwargs) 
-     
+                        ylabel = ylabel, xlabel = xlabel,vmin=vmin, vmax=vmax, 
+                        cmap=cmap, **kwargs) 
+    
     return Sxx, tn, fn, extent 
 #%%
 def write(filename, fs, data, bit_depth=None):
@@ -371,7 +375,7 @@ def write(filename, fs, data, bit_depth=None):
     if (data.dtype == 'float64') | (data.dtype == 'float32'):
         # Check that the array has values between -1 and 1
         if (data.min() < -1) | (data.max() > 1):
-            warn('Values should be between [-1, 1]. Clipping signal.')
+            warnings.warn('Values should be between [-1, 1]. Clipping signal.')
             data[data<-1] = -1
             data[data>1] = 1
         
@@ -387,7 +391,7 @@ def write(filename, fs, data, bit_depth=None):
             data = (data * 2147483647).astype(np.int32)
         
         else:
-            warn('Values for bit depth should be 8, 16 or 32. Argument ignored.')
+            warnings.warn('Values for bit depth should be 8, 16 or 32. Argument ignored.')
             pass
         
     if data.ndim > 1:
