@@ -66,14 +66,13 @@ rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
 ## For advance users
 ### Installing from source
 
-If you want to work on `scikit-maad`itself, clone and install it:
+If you are interested in developing new features for `scikit-maad` or working with the latest version, clone and install it:
 
 ```bash
 $ git clone https://github.com/scikit-maad/scikit-maad.git
 $ cd scikit-maad
 $ pip install --editable .
 ```
-> Note: We expect all following commands to be run in the `scikit-maad` folder.
 
 ### Running tests
 
@@ -86,6 +85,7 @@ $ pip install pytest
 And run the tests:
 
 ```bash
+$ cd scikit-maad
 $ pytest
 ```
 
