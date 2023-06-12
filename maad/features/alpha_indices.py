@@ -473,9 +473,10 @@ def temporal_median (s, mode ='fast', Nt=512) :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> med = maad.features.temporal_median(s)
-    >>> print(med)
+    >>> print(med) # doctest: +NORMALIZE_WHITESPACE
     0.007934564717486147
     
     """
@@ -527,9 +528,10 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Ht = maad.features.temporal_entropy (s)
-    >>> print(Ht)
+    >>> print(Ht) # doctest: +NORMALIZE_WHITESPACE
     0.7518917279549968
 
     """
@@ -572,6 +574,8 @@ def acoustic_richness_index (Ht_array, M_array):
 
     Examples
     --------
+    >>> import maad
+
     >>> s, fs = maad.sound.load('../data/indices/S4A03895_20190522_060000.wav')
     >>> Ht_6h00 = maad.features.temporal_entropy(s)
     >>> M_6h00 = maad.features.temporal_median(s)
@@ -584,10 +588,9 @@ def acoustic_richness_index (Ht_array, M_array):
     >>> Ht_10h00 = maad.features.temporal_entropy(s)
     >>> M_10h00 = maad.features.temporal_median(s)
     
-    >>> maad.features.acoustic_richness_index(
-                                            [Ht_6h00,Ht_8h00,Ht_10h00],
-                                            [M_6h00,M_8h00,M_10h00])
-    array([0.11111111, 0.44444444, 1.        ])
+    >>> result = maad.features.acoustic_richness_index([Ht_6h00,Ht_8h00,Ht_10h00],[M_6h00,M_8h00,M_10h00]) 
+    >>> print(result) # doctest: +NORMALIZE_WHITESPACE
+    [0.11111111 0.44444444 1.        ]
     
     """    
     if len(Ht_array) != len(M_array) : 
@@ -645,9 +648,10 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> ACTfract, ACTcount, ACTmean = maad.features.temporal_activity (s, 6)
-    >>> print('ACTfract: %2.2f / ACTcount: %2.0f / ACTmean: %2.2f' % (ACTfract, ACTcount, ACTmean))
+    >>> print('ACTfract: %2.2f / ACTcount: %2.0f / ACTmean: %2.2f' % (ACTfract, ACTcount, ACTmean)) # doctest: +NORMALIZE_WHITESPACE
     ACTfract: 0.37 / ACTcount: 620 / ACTmean: 24.41
     
     """ 
@@ -742,9 +746,10 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> EVNtFract, EVNmean, EVNcount, _ = maad.features.temporal_events (s, fs, 6)
-    >>> print('EVNtFract: %2.2f / EVNmean: %2.2f / EVNcount: %2.0f' % (EVNtFract, EVNmean, EVNcount))
+    >>> print('EVNtFract: %2.2f / EVNmean: %2.2f / EVNcount: %2.0f' % (EVNtFract, EVNmean, EVNcount)) # doctest: +NORMALIZE_WHITESPACE
     EVNtFract: 0.37 / EVNmean: 0.08 / EVNcount:  5
     
     """  
@@ -830,16 +835,20 @@ def frequency_entropy (X, compatibility="QUT") :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)   
     >>> Hf, Ht_per_bin = maad.features.frequency_entropy(Sxx_power)
-    >>> print(Hf)
-    0.6313982665877063
-    >>> print('Length of Ht_per_bin is : %2.0f' % len(Ht_per_bin))
+    >>> print(Hf) # doctest: +NORMALIZE_WHITESPACE
+    0.631398266587706
+
+    >>> print('Length of Ht_per_bin is : %2.0f' % len(Ht_per_bin)) # doctest: +NORMALIZE_WHITESPACE
     Length of Ht_per_bin is : 512
-    >>> print(Ht_per_bin)
+    
+    print only the first ten values of the vector
+    >>> print(Ht_per_bin [0:9]) # doctest: +NORMALIZE_WHITESPACE
     [0.73458664 0.73476487 0.87981728 0.9161413  0.90153962 0.91684881
-    0.91816039 0.93453925 0.92958317 0.93763948 0.93524745 0.93736222...]
+    0.91816039 0.93453925 0.92958317]
     
     """
     # Force to be an array
@@ -921,9 +930,11 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
-    >>> maad.features.number_of_peaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) 
+    >>> maad.features.number_of_peaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) # doctest: +NORMALIZE_WHITESPACE
+    14
 
     """
     # Force to be an array
@@ -1038,11 +1049,12 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
     >>> EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = maad.features.spectral_entropy(Sxx_power, fn, flim=(2000,10000)) 
-    >>> print('EAS: %2.2f / ECU: %2.2f / ECV: %2.2f / EPS: %2.2f / EPS_KURT: %2.2f / EPS_SKEW: %2.2f' % (EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW))
-    EAS: 0.27 / ECU: 0.49 / ECV: 0.24 / EPS: 1.00 / EPS_KURT: 17.58 / EPS_SKEW: 3.55
+    >>> print('EAS: %2.2f / ECU: %2.2f / ECV: %2.2f / EPS: %2.2f / EPS_KURT: %2.2f / EPS_SKEW: %2.2f' % (EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW)) # doctest: +NORMALIZE_WHITESPACE
+    EAS: 0.27 / ECU: 0.49 / ECV: 0.24 / EPS: 0.25 / EPS_KURT: 17.58 / EPS_SKEW: 3.55
     
     """
     
@@ -1158,12 +1170,13 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> LFC, MFC, HFC = maad.features.spectral_cover(Sxx_dB_noNoise, fn) 
-    >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC))
+    >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC)) # doctest: +NORMALIZE_WHITESPACE
     LFC: 0.15 / MFC: 0.19 / HFC: 0.13
     
     """ 
@@ -1225,13 +1238,14 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
 
     Examples
     --------
+    >>> import maad
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ACTspfract_per_bin, ACTspcount_per_bin, ACTspmean_per_bin = maad.features.spectral_activity(Sxx_dB_noNoise)  
-    >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %np.mean(ACTspfract_per_bin))
+    >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %np.mean(ACTspfract_per_bin)) # doctest: +NORMALIZE_WHITESPACE
     Mean proportion of spectrogram above threshold : 0.07%
     
     """ 
@@ -1302,14 +1316,15 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
     Examples
     --------
+    >>> import maad
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)  
-    >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %np.mean(EVNspFract_per_bin))
-    Mean proportion of spectrogram with events : 0.01%
+    >>> print('Mean proportion of spectrogram with events: %2.2f%%' %np.mean(EVNspFract_per_bin)) # doctest: +NORMALIZE_WHITESPACE
+    Mean proportion of spectrogram with events: 0.01%
     
     """  
     ### For wave to be a ndarray
@@ -1400,10 +1415,11 @@ def acoustic_complexity_index(Sxx):
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
     >>> _, _ , ACI  = maad.features.acoustic_complexity_index(Sxx)
-    >>> print('ACI : %2.0f ' %ACI)
+    >>> print('ACI : %2.0f ' %ACI) # doctest: +NORMALIZE_WHITESPACE
     ACI : 306
     """   
     ACI_xx = ((np.abs(diff(Sxx,1)).transpose())/(np.sum(Sxx,1)).transpose()).transpose()       
@@ -1471,13 +1487,14 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     Examples
     --------
+    >>> import maad
     
     Load the signal and compute the spectrogram to give the same result as soundecology
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False)
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False) 
     >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000)
-    >>> print('ADI : %2.2f ' %ADI)
+    >>> print('ADI : %2.2f ' %ADI) # doctest: +NORMALIZE_WHITESPACE
     ADI : 2.05
     
     Load the signal and compute the spectrogram as usual (detrend ON) such that
@@ -1486,9 +1503,9 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
-    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -30)
-    >>> print('ADI : %2.2f ' %ADI)
-    ADI : 1.46
+    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -47)
+    >>> print('ADI : %2.2f ' %ADI) # doctest: +NORMALIZE_WHITESPACE
+    ADI : 2.06
     
     """
         
@@ -1573,13 +1590,14 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     
     Examples
     --------
-    
+    >>> import maad
+
     Load the signal and compute the spectrogram to give the same result as soundecology
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False) 
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)   
     >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000)
-    >>> print('AEI : %2.2f ' %AEI)
+    >>> print('AEI : %2.2f ' %AEI) # doctest: +NORMALIZE_WHITESPACE
     AEI : 0.39   
     
     Load the signal and compute the spectrogram as usual (detrend ON) such that
@@ -1588,8 +1606,8 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
-    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -30)
-    >>> print('AEI : %2.2f ' %AEI)
+    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -47)
+    >>> print('AEI : %2.2f ' %AEI) # doctest: +NORMALIZE_WHITESPACE
     AEI : 0.39   
     
     """
@@ -1660,14 +1678,15 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscape_index(Sxx_power,fn)
-    >>> print('NDSI Soundecology : %2.2f ' %NDSI)
+    >>> print('NDSI Soundecology : %2.2f ' %NDSI) # doctest: +NORMALIZE_WHITESPACE
     NDSI Soundecology : 0.10
     >>> NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscape_index(Sxx_power,fn,R_compatible=None)
-    >>> print('NDSI MAAD: %2.2f ' %NDSI)
-    NDSI MAAD : 0.99
+    >>> print('NDSI MAAD: %2.2f ' %NDSI) # doctest: +NORMALIZE_WHITESPACE
+    NDSI MAAD: 0.99
     
     """
     
@@ -1734,13 +1753,14 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs,mode='amplitude')  
     >>> BI = maad.features.bioacoustics_index(Sxx,fn)
-    >>> print('BI Soundecology : %2.2f ' %BI)
+    >>> print('BI Soundecology : %2.2f ' %BI) # doctest: +NORMALIZE_WHITESPACE
     BI Soundecology : 52.84
     >>> BI  = maad.features.bioacoustics_index(Sxx,fn,R_compatible=None)
-    >>> print('BI MAAD: %2.2f ' %BI)
+    >>> print('BI MAAD : %2.2f ' %BI) # doctest: +NORMALIZE_WHITESPACE
     BI MAAD : 17.05
     
     """    
@@ -1814,9 +1834,10 @@ def temporal_leq (s, fs, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1):
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Leq = maad.features.temporal_leq (s, fs, gain=42)
-    >>> print('Leq is %2.1fdB SPL' % Leq)
+    >>> print('Leq is %2.1fdB SPL' % Leq) # doctest: +NORMALIZE_WHITESPACE
     Leq is 63.7dB SPL
     
     """
@@ -1857,10 +1878,11 @@ def spectral_leq (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6):
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)
     >>> Leqf, Leqf_per_bin = maad.features.spectral_leq(Sxx_power, gain=42)
-    >>> print('Leq (from spectrogram) is %2.1fdB SPL' % Leqf)
+    >>> print('Leq (from spectrogram) is %2.1fdB SPL' % Leqf) # doctest: +NORMALIZE_WHITESPACE
     Leq (from spectrogram) is 63.7dB SPL
     
     """
@@ -1926,13 +1948,14 @@ def more_entropy(x, order=3, axis=0) :
     
     Examples
     --------
+    >>> import maad
     
     Compute entropy in time domain.
     
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> env = maad.sound.envelope(s)
     >>> Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson = maad.features.more_entropy(env**2, order=3)
-    >>> print('Ht_Havrda: %2.2f / Ht_Renyi: %2.2f / Ht_pairedShannon: %2.2f / Ht_gamma: %2.0f / Ht_GiniSimpson: %2.2f' % (Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson))
+    >>> print('Ht_Havrda: %2.2f / Ht_Renyi: %2.2f / Ht_pairedShannon: %2.2f / Ht_gamma: %2.0f / Ht_GiniSimpson: %2.2f' % (Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson)) # doctest: +NORMALIZE_WHITESPACE
     Ht_Havrda: 0.33 / Ht_Renyi: 7.20 / Ht_pairedShannon: 9.04 / Ht_gamma: 24223924 / Ht_GiniSimpson: 1.00
     
     Compute entropy in spectral domain.
@@ -1940,7 +1963,7 @@ def more_entropy(x, order=3, axis=0) :
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power)
     >>> Hf_Havrda, Hf_Renyi, Hf_pairedShannon, Hf_gamma, Hf_GiniSimpson = maad.features.more_entropy(S_power, order=3)
-    >>> print('Hf_Havrda: %2.2f / Hf_Renyi: %2.2f / Hf_pairedShannon: %2.2f / Hf_gamma: %2.0f / Hf_GiniSimpson: %2.2f' % (Hf_Havrda, Hf_Renyi, Hf_pairedShannon, Hf_gamma, Hf_GiniSimpson))
+    >>> print('Hf_Havrda: %2.2f / Hf_Renyi: %2.2f / Hf_pairedShannon: %2.2f / Hf_gamma: %2.0f / Hf_GiniSimpson: %2.2f' % (Hf_Havrda, Hf_Renyi, Hf_pairedShannon, Hf_gamma, Hf_GiniSimpson)) # doctest: +NORMALIZE_WHITESPACE
     Hf_Havrda: 0.33 / Hf_Renyi: 3.23 / Hf_pairedShannon: 4.92 / Hf_gamma: 7931 / Hf_GiniSimpson: 0.97
     
     """
@@ -2000,10 +2023,11 @@ def frequency_raoq (S_power, fn, bin_step=1000):
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power) 
-    >>> maad.features.frequency_raoq(S_power, fn)
+    >>> maad.features.frequency_raoq(S_power, fn) # doctest: +NORMALIZE_WHITESPACE
     0.10556621228886422
     
     """
@@ -2064,18 +2088,20 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), log=True, mode='thirdOctave', display=F
     
     Examples
     --------
+    >>> import maad
+
     During the day
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    >>> maad.features.tfsd(Sxx_power,fn, tn)  
+    >>> maad.features.tfsd(Sxx_power,fn, tn)  # doctest: +NORMALIZE_WHITESPACE 
     0.4637352908292768
     
     During the night
     
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    >>> maad.features.tfsd(Sxx_power,fn, tn)  
+    >>> maad.features.tfsd(Sxx_power,fn, tn)   # doctest: +NORMALIZE_WHITESPACE
     0.42435773298811824
     
     """
@@ -2185,21 +2211,22 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
     
     Examples
     --------
+    >>> import maad
     
     During the day
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> _, _, AGI_mean, _ = maad.features.acoustic_gradient_index(Sxx_power,tn[1]-tn[0])
-    >>> AGI_mean
-    5.026112548525072
+    >>> AGI_mean # doctest: +NORMALIZE_WHITESPACE
+    5.026112548525073
     
     During the night
     
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> _, _, AGI_mean, _ = maad.features.acoustic_gradient_index(Sxx_power,tn[1]-tn[0])
-    >>> AGI_mean
+    >>> AGI_mean # doctest: +NORMALIZE_WHITESPACE
     1.45631461307782  
     
     """     
@@ -2341,15 +2368,16 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
         the higher is the acoustic richness expected.
         
     Examples
-    -------- 
+    --------
+    >>> import maad 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ROItotal, ROIcover = maad.features.region_of_interest_index(Sxx_dB_noNoise, tn, fn, display=True)
-    >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal)
+    >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal) # doctest: +NORMALIZE_WHITESPACE
     The total number of ROIs found in the spectrogram is 265
-    >>> print('The percentage of spectrogram covered by ROIs is %2.0f%%' %ROIcover)
+    >>> print('The percentage of spectrogram covered by ROIs is %2.0f%%' %ROIcover) # doctest: +NORMALIZE_WHITESPACE
     The percentage of spectrogram covered by ROIs is 12%
     
     """ 
@@ -2497,24 +2525,26 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
 
     Examples
     --------
+    >>> import maad
+
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
-    >>> df_tempora_indices_NIGHT = maad.features.all_temporal_alpha_indices (s,fs)
+    >>> df_temporal_indices_NIGHT = maad.features.all_temporal_alpha_indices (s,fs)
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> df_temporal_indices_DAY = maad.features.all_temporal_alpha_indices (s,fs)
     
     Variation between night and day
     
-    >>> var = abs(df_temporal_indices_DAY - df_temporal_indices_NIGHT)/df_temporal_indices_NIGHT*100
-    >>> print('LEQt var night vs day: %2.2f %%' % var.LEQt)
-    LEQt var : 29.66 %
-    >>> print('Ht var night vs day: %2.2f %%' % var.Ht)
-    Ht var : 2.33 %
-    >>> print('MEANt var night vs day: %2.2f %%' % var.MEANt)
-    MEANt var night vs day: 299.62 %
-    >>> print('VARt var night vs day: %2.2f %%' % var.VARt)
-    VARt var night vs day: 1664.02 %
-    >>> print('EVNtFraction var night vs day: %2.2f %%' % var.EVNtFraction)
-    EVNtFraction var night vs day: 98.48 %
+    >>> variation = abs(df_temporal_indices_DAY - df_temporal_indices_NIGHT)/df_temporal_indices_NIGHT*100
+    >>> print('LEQt variation night vs day: %2.2f %%' % variation['LEQt'][0]) # doctest: +NORMALIZE_WHITESPACE
+    LEQt variation night vs day: 29.66 %
+    >>> print('Ht variation night vs day: %2.2f %%' % variation.Ht.iloc[0]) # doctest: +NORMALIZE_WHITESPACE
+    Ht variation night vs day: 2.33 %
+    >>> print('MEANt variation night vs day: %2.2f %%' % variation['MEANt'][0]) # doctest: +NORMALIZE_WHITESPACE
+    MEANt variation night vs day: 299.62 %
+    >>> print('VARt variation night vs day: %2.2f %%' % variation['VARt'][0]) # doctest: +NORMALIZE_WHITESPACE
+    VARt variation night vs day: 1664.02 %
+    >>> print('EVNtFraction variation night vs day: %2.2f %%' % variation['EVNtFraction'][0]) # doctest: +NORMALIZE_WHITESPACE
+    EVNtFraction variation night vs day: 98.48 %
     
     """
     
@@ -2761,7 +2791,9 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         For a complete example, see the examples of the functions acoustic_eveness_index and acoustic_diversity_index
 
     Examples
-    --------    
+    --------
+    >>> import maad
+
     Spectral indices on a daylight recording
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
@@ -2776,17 +2808,17 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     
     Variation between night and day
     
-    >>> var = abs(df_spectral_indices_DAY - df_spectral_indices_NIGHT)/df_spectral_indices_NIGHT*100
-    >>> print('LEQf var night vs day: %2.2f %%' % var.LEQf)
-    LEQf var night vs day: 34.94 %
-    >>> print('Hf var night vs day: %2.2f %%' % var.Hf)
-    Hf var night vs day: 105.61 %
-    >>> print('ACI var night vs day: %2.2f %%' % var.ACI)
-    ACI var night vs day: 3.39 %
-    >>> print('AGI var night vs day: %2.2f %%' % var.AGI)
-    AGI var night vs day: 20.50 %
-    >>> print('ROItotal var night vs day: %2.2f %%' % var.ROItotal)
-    ROItotal var night vs day: 248.68 %
+    >>> variation = abs(df_spectral_indices_DAY - df_spectral_indices_NIGHT)/df_spectral_indices_NIGHT*100
+    >>> print('LEQf variation night vs day: %2.2f %%' % variation['LEQf'][0]) # doctest: +NORMALIZE_WHITESPACE
+    LEQf variation night vs day: 34.94 %
+    >>> print('Hf variation night vs day: %2.2f %%' % variation['Hf'][0]) # doctest: +NORMALIZE_WHITESPACE
+    Hf variation night vs day: 105.61 %
+    >>> print('ACI variation night vs day: %2.2f %%' % variation['ACI'][0]) # doctest: +NORMALIZE_WHITESPACE
+    ACI variation night vs day: 3.39 %
+    >>> print('AGI variation night vs day: %2.2f %%' % variation['AGI'][0]) # doctest: +NORMALIZE_WHITESPACE
+    AGI variation night vs day: 20.50 %
+    >>> print('ROItotal variation night vs day: %2.2f %%' % variation['ROItotal'][0]) # doctest: +NORMALIZE_WHITESPACE
+    ROItotal variation night vs day: 264.47 %
     
     """
     
@@ -3184,3 +3216,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                                     
     return df_spectral_indices, df_per_bin_indices
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
