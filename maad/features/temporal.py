@@ -54,7 +54,7 @@ def temporal_moments(s, fs=None, roi=None):
     Examples
     --------
     >>> from maad import sound, features
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
     >>> sm, sv, ss, sk = features.temporal_moments (s, fs)
     >>> print('mean: %2.2f / var: %2.5f / skewness: %2.4f / kurtosis: %2.2f' % (sm, sv, ss, sk))
     mean: -0.00 / var: 0.00117 / skewness: -0.0065 / kurtosis: 24.71
@@ -105,7 +105,7 @@ def zero_crossing_rate(s, fs, roi=None):
     Examples
     --------
     >>> from maad import sound, features
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
     >>> features.zero_crossing_rate(s,fs)
     10500.397192384766
 
@@ -168,7 +168,7 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
 
     Compute the q-th temporal quantile in the spectrum
 
@@ -185,11 +185,11 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
 
     >>> qt = features.temporal_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], mode="envelope", as_pandas=True)
     >>> print(qt)
-    0.05     1.215429
-    0.25     5.707076
-    0.50    11.816876
-    0.75    16.356414
-    0.95    17.760507
+    0.05     1.208300
+    0.25     5.716188
+    0.50    11.804161
+    0.75    15.731135
+    0.95    17.752714
     dtype: float64
 
     """
@@ -299,13 +299,13 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
 
     Compute the temporal duration of the time energy
 
     >>> duration, duration_90 = features.temporal_duration(s, fs)
-    >>> print("Duration: {:.4f} / Duration 90% {:.4f}".format(duration, duration_90))
-    Duration: 10.8437 / Duration 90% 16.5326
+    >>> print("Duration: {:.4f} / Duration 90%: {:.4f}".format(duration, duration_90))
+    Duration: 10.8437 / Duration 90%: 16.5326
 
     """
     # Compute temporal quantile
@@ -348,15 +348,25 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, display=False, **kwargs
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
 
     Compute all the temporal features
 
-    >>> temporal_features = features.all_temporal_features(s,fs,display=True)
-                sm        sv        ss         sk   Time 5%  ...   Time 75%   Time 95%           zcr  duration_50  duration_90
-    0 -2.043264e-19  0.001167 -0.006548  24.711611  1.215429  ...  16.356414  17.760507  10500.397192    10.649338    16.545078
-    <BLANKLINE>
-    [1 rows x 12 columns]
+    >>> temporal_features = features.all_temporal_features(s,fs)
+    >>> print(temporal_features.iloc[0])
+    sm            -2.043264e-19
+    sv             1.167074e-03
+    ss            -6.547980e-03
+    sk             2.471161e+01
+    Time 5%        1.219048e+00
+    Time 25%       5.712109e+00
+    Time 50%       1.181896e+01
+    Time 75%       1.655583e+01
+    Time 95%       1.775166e+01
+    zcr            1.050040e+04
+    duration_50    1.001495e+01
+    duration_90    1.654441e+01
+    Name: 0, dtype: float64
     """
 
     tm  = temporal_moments(s, fs, roi)
@@ -372,3 +382,7 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, display=False, **kwargs
     if display: print(temporal_features)
 
     return temporal_features
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

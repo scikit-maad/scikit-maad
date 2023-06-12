@@ -318,19 +318,20 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
      
     Examples 
     -------- 
+    >>> import maad
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import filter_bank_2d_nodc, filter_multires 
     >>> from maad import util
     >>> s, fs = load('../data/spinetail.wav') 
     >>> Sxx, dt, df, ext = spectrogram(s, fs) 
     >>> Sxx_db = util.power2dB(Sxx, db_range=80) + 80
-    >>> util.plot2d(Sxx_db, **{'extension':ext})
+    >>> fig, ax = util.plot2d(Sxx_db, **{'extent':ext})
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2) 
     >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
     
     Plot one of the resulting spectrograms.
     
-    >>> util.plot2d(Sxx_out[5], **{'extension':ext})
+    >>> fig, ax = util.plot2d(Sxx_out[5], **{'extent':ext})
      
     """     
     # Downscale image using gaussian pyramid  
@@ -426,6 +427,8 @@ def filter_bank_2d_nodc(frequency, ntheta, bandwidth=1, gamma=2, display=False, 
     
     Examples 
     -------- 
+    >>> import maad
+
     Build a filter bank using predefined parameters with the function maad.features.opt_shape_presets.
  
     >>> from maad.features import filter_bank_2d_nodc, opt_shape_presets 
@@ -484,24 +487,26 @@ def opt_shape_presets(resolution, opt_shape=None):
          
     Examples 
     -------- 
+    >>> import maad
+
     Get parameters to analyse at low, med and high shape resolutions.
      
     >>> from maad.features import opt_shape_presets 
-    >>> opt_shape_presets('low') 
+    >>> opt_shape_presets('low')  # doctest: +NORMALIZE_WHITESPACE
     {'ntheta': 2,
      'bandwidth': 0.8,
      'frequency': (0.35, 0.5),
      'gamma': 2,
      'npyr': 4}
     
-    >>> opt_shape_presets('med') 
+    >>> opt_shape_presets('med')  # doctest: +NORMALIZE_WHITESPACE
     {'ntheta': 4,
      'bandwidth': 0.8,
      'frequency': (0.35, 0.5),
      'gamma': 2,
      'npyr': 6}
     
-    >>> opt_shape_presets('high')
+    >>> opt_shape_presets('high') # doctest: +NORMALIZE_WHITESPACE
     {'ntheta': 8,
      'bandwidth': 0.8,
      'frequency': (0.35, 0.5),
@@ -596,9 +601,9 @@ def shape_features(Sxx, resolution='low', rois=None):
 
     Examples 
     -------- 
- 
+
     Get shape features from the whole power spectrogram 
- 
+
     >>> from maad.sound import load, spectrogram 
     >>> from maad.features import shape_features
     >>> from maad.util import format_features, power2dB, plot_shape 
@@ -607,9 +612,9 @@ def shape_features(Sxx, resolution='low', rois=None):
     >>> Sxx_db = power2dB(Sxx, db_range=100)
     >>> shape, params = shape_features(Sxx_db, resolution='med') 
     >>> ax = plot_shape(shape.mean(), params) 
-     
+    
     Or get shape features from specific regions of interest 
-     
+    
     >>> from maad.util import read_audacity_annot
     >>> rois = read_audacity_annot('../data/spinetail.txt') 
     >>> rois = format_features(rois, tn, fn) 
@@ -620,10 +625,11 @@ def shape_features(Sxx, resolution='low', rois=None):
     audio file, the spinetail song and the background calls.
     
     >>> shape_crer, shape_sp = shape.groupby('label')
-    >>> ax1 = plot_shape(shape_crer[1].mean(), params) 
-    >>> ax1.set_title('Spinetail song')
-    >>> ax2 = plot_shape(shape_sp[1].mean(), params) 
-    >>> ax2.set_title('Background call')
+    >>> ax1 = plot_shape(shape_crer[1].filter(regex=r'^shp_').mean(), params) 
+    >>> ax1 = ax1.set_title('Spinetail song')
+    >>> ax2 = plot_shape(shape_sp[1].filter(regex=r'^shp_').mean(), params) 
+    >>> ax2 = ax2.set_title('Background call') # doctest: +NORMALIZE_WHITESPACE
+
     """     
  
     # Check input data and unpack settings 
@@ -713,7 +719,8 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     
     Examples
     --------
-    
+    >>> import maad
+
     Scatter the spectrogram acoustic components using 2D Gabor filters.
 
     >>> from maad.sound import load, spectrogram 
@@ -723,10 +730,10 @@ def shape_features_raw(im, resolution='low', opt_shape=None):
     >>> Sxx, tn, fn, ext = spectrogram(s, fs, db_range=80, display=True) 
     >>> Sxx_db = power2dB(Sxx, db_range=80)
     >>> shape_raw, params = shape_features_raw(Sxx_db, resolution='low')
-    >>> plot2d(shape_raw[0], **{'extent':ext, 'title': 'High-frequency vertical component'})
-    >>> plot2d(shape_raw[13], **{'extent':ext, 'title': 'Low-frequency vertical components'})
-    >>> plot2d(shape_raw[2], **{'extent':ext, 'title': 'High-frequency horizontal components'})
-    >>> plot2d(shape_raw[15], **{'extent':ext, 'title': 'Low-frequency horizontal components'})
+    >>> fig, ax = plot2d(shape_raw[0], **{'extent':ext, 'title': 'High-frequency vertical component'})
+    >>> fig, ax = plot2d(shape_raw[13], **{'extent':ext, 'title': 'Low-frequency vertical components'})
+    >>> fig, ax = plot2d(shape_raw[2], **{'extent':ext, 'title': 'High-frequency horizontal components'})
+    >>> fig, ax = plot2d(shape_raw[15], **{'extent':ext, 'title': 'Low-frequency horizontal components'}) # doctest: +NORMALIZE_WHITESPACE
     """     
      
     # unpack settings 
@@ -776,13 +783,13 @@ def centroid_features(Sxx, rois=None, im_rois=None):
  
     Examples
     --------
+    >>> import maad
  
     Get centroid from the whole power spectrogram 
  
     >>> from maad.sound import load, spectrogram
     >>> from maad.features import centroid_features
-    >>> from maad.util import (power2dB, format_features, overlay_rois, plot2d,
-                               overlay_centroid)
+    >>> from maad.util import (power2dB, format_features, overlay_rois, plot2d, overlay_centroid)
      
     Load audio and compute spectrogram 
      
@@ -930,34 +937,60 @@ def all_shape_features(s, fs, rois, resolution='low',
      
     Examples 
     -------- 
+    >>> import maad
     >>> from maad.util import read_audacity_annot 
     >>> from maad.sound import load 
     >>> from maad.features import all_shape_features 
     >>> s, fs = load('../data/spinetail.wav')
     >>> rois = read_audacity_annot('../data/spinetail.txt')
-    >>> features = all_shape_features(s, fs, rois, resolution='low', display=True)
-    >>> features
-        label      min_t     ...       duration_x  bandwidth_y
-        0     SP   0.101385     ...              0.0          0.0
-        1   CRER   0.506924     ...              0.0          0.0
-        2     SP   1.203945     ...              0.0          0.0
-        3     SP   2.724718     ...              0.0          0.0
-        4   CRER   5.221319     ...              0.0          0.0
-        5     SP   6.260514     ...              0.0          0.0
-        6     SP   7.946037     ...              0.0          0.0
-        7     SP   8.896519     ...              0.0          0.0
-        8     SP   9.973733     ...              0.0          0.0
-        9   CRER  11.329756     ...              0.0          0.0
-        10    SP  11.773314     ...              0.0          0.0
-        ....
-    >>> features.columns
-    Index(['label', 'min_t', 'min_f', 'max_t', 'max_f', 'min_y', 'min_x', 'max_y',
-           'max_x', 'shp_001', 'shp_002', 'shp_003', 'shp_004', 'shp_005',
-           'shp_006', 'shp_007', 'shp_008', 'shp_009', 'shp_010', 'shp_011',
-           'shp_012', 'shp_013', 'shp_014', 'shp_015', 'shp_016', 'centroid_y',
-           'centroid_x', 'duration_x', 'bandwidth_y', 'area_xy', 'centroid_f',
-           'centroid_t', 'duration_t', 'bandwidth_f', 'area_tf'],
-          dtype='object')
+    >>> features = all_shape_features(s, fs, rois, resolution='low', display=True)  # doctest: +NORMALIZE_WHITESPACE
+        number of rois : 18
+    >>> print(features.iloc[0]) # doctest: +NORMALIZE_WHITESPACE
+        label                    SP
+        min_t              0.101385
+        min_f           6441.064453
+        max_t               0.36752
+        max_f          12296.577148
+        min_y                   150
+        min_x                     8
+        max_y                   286
+        max_x                    31
+        shp_001            0.160656
+        shp_002            0.155573
+        shp_003            0.064787
+        shp_004            0.066215
+        shp_005            0.158675
+        shp_006            0.125203
+        shp_007            0.044987
+        shp_008            0.043188
+        shp_009            0.218268
+        shp_010            0.158725
+        shp_011            0.043553
+        shp_012            0.031206
+        shp_013            0.268222
+        shp_014             0.21718
+        shp_015            0.059112
+        shp_016            0.038394
+        centroid_y            220.0
+        centroid_x             19.0
+        duration_x       135.999274
+        bandwidth_y             0.0
+        area_xy               12512
+        centroid_f      9474.609375
+        centroid_t           0.2322
+        duration_t         0.267029
+        bandwidth_f      5857.03125
+        area_tf              1564.0
+        Name: 0, dtype: object
+    >>> features.columns # doctest: +NORMALIZE_WHITESPACE
+        Index(['label', 'min_t', 'min_f', 'max_t', 'max_f', 'min_y', 'min_x', 'max_y',
+            'max_x', 'shp_001', 'shp_002', 'shp_003', 'shp_004', 'shp_005',
+            'shp_006', 'shp_007', 'shp_008', 'shp_009', 'shp_010', 'shp_011',
+            'shp_012', 'shp_013', 'shp_014', 'shp_015', 'shp_016', 'centroid_y',
+            'centroid_x', 'duration_x', 'bandwidth_y', 'area_xy', 'centroid_f',
+            'centroid_t', 'duration_t', 'bandwidth_f', 'area_tf'],
+            dtype='object')
+
     """    
    
     # Spectro computing
@@ -984,7 +1017,7 @@ def all_shape_features(s, fs, rois, resolution='low',
     # format rois to bbox 
     rois = format_features(rois, tn, fn) 
     
-    # if rois becomes empty aveter format_features
+    # if rois becomes empty after format_features
     if rois.empty :
         print ('rois is empty')
         features = rois
@@ -1012,7 +1045,7 @@ def all_shape_features(s, fs, rois, resolution='low',
         overlay_centroid(Sxx, centroid, savefig=None, 
                          fig=fig, ax=ax, **kwargs)
         # plot shape
-        plot_shape(shape.mean(), params)
+        plot_shape(shape.filter(regex=r'^shp_').mean(), params)
     
     # combine into a single df without columns duplication
     features = pd.concat([rois, shape, centroid], axis=1, sort=False)
@@ -1023,3 +1056,7 @@ def all_shape_features(s, fs, rois, resolution='low',
         print(list(features))
      
     return features 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

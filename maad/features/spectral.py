@@ -68,7 +68,7 @@ def spectral_moments (X, axis=None):
     Examples
     --------
     >>> from maad import sound, features
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
     >>> Sxx_power,_,_,_ = sound.spectrogram(s, fs)
 
     Compute spectral moments on the mean spectrum
@@ -130,13 +130,13 @@ def peak_frequency(s, fs, method='best', nperseg=1024, roi=None, amp=False, as_p
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
 
     Compute peak frequency
 
     >>> peak_freq, peak_freq_amp = features.peak_frequency(s, fs, amp=True)
     >>> print('Peak Frequency: {:.5f}, Amplitude: {:.5f}'.format(peak_freq, peak_freq_amp))
-    Peak Frequency: 6634.16016, Amplitud: 0.00012
+    Peak Frequency: 6634.16016, Amplitude: 0.00013
 
     """
     if roi is None:
@@ -212,7 +212,7 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     Examples
     --------
     >>> from maad import sound, features
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
 
     Compute the q-th quantile of the power spectrum
 
@@ -230,11 +230,11 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     >>> qs = features.spectral_quantile(s, fs, [0.05, 0.25, 0.5, 0.75, 0.95], amp=True, as_pandas=True)
     >>> print(qs)
                  freq       amp
-    0.05  6029.296875  0.000009
-    0.25  6416.894531  0.000092
-    0.50  6632.226562  0.000123
-    0.75  6890.625000  0.000029
-    0.95  9216.210938  0.000005
+    0.05  6029.296875  0.000007
+    0.25  6416.894531  0.000067
+    0.50  6632.226562  0.000087
+    0.75  6890.625000  0.000022
+    0.95  9216.210938  0.000004
 
     """
     q = np.asanyarray(q)
@@ -311,7 +311,7 @@ def spectral_bandwidth(s, fs, nperseg=1024, roi=None, as_pandas=False, **kwargs)
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
     >>> bw_50, bw_90 = features.spectral_bandwidth(s, fs, nperseg=1024)
     >>> print("Bandwidth 50% : {:.4f} / Bandwidth 90% : {:.4f}".format(bw_50, bw_90))
     Bandwidth 50% : 473.7305 / Bandwidth 90% : 3186.9141
@@ -358,11 +358,11 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', **kwargs
     Examples
     --------
     >>> from maad import features, sound
-    >>> s, fs = sound.load('../../data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
 
     Compute all the spectral features
 
-    >>> all_spectral_features = features.all_spectral_features(s, fs, nperseg=1024, roi=None)
+    >>> features.all_spectral_features(s, fs, nperseg=1024, roi=None)
     sm           2.276330e-06
     sv           8.118042e-11
     ss           5.844664e+00
@@ -404,3 +404,7 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', **kwargs
         "bw_90":bw_90})
 
     return spectral_features
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
