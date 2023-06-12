@@ -141,7 +141,7 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
     Examples
     --------
     >>> from maad import sound, rois
-    >>> s, fs = sound.load('./data/spinetail.wav')
+    >>> s, fs = sound.load('../data/spinetail.wav')
     >>> rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
         min_f     min_t   max_f     max_t
     0  4500.0   0.74304  8000.0   2.50776
@@ -211,12 +211,16 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
                 # width = df.max_t[idx] - df.min_t[idx]
                 # height = df.max_f[idx] - df.min_f[idx]
 
-                xy = (df[idx].min_t, df[idx].min_f)
-                width = df[idx].max_t- df[idx].min_t
-                height = df[idx].max_f- df[idx].min_f
+                xy = (df.iloc[idx].min_t, df.iloc[idx].min_f)
+                width = df.iloc[idx].max_t- df.iloc[idx].min_t
+                height = df.iloc[idx].max_f- df.iloc[idx].min_f
                 rect = patches.Rectangle(xy, width, height, lw=1, 
                                         edgecolor='yellow', facecolor='none')
                 ax2.add_patch(rect)
         plt.show()
     
     return df
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

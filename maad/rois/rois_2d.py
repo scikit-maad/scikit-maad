@@ -422,6 +422,8 @@ def create_mask(im, mode_bin = 'relative',
      
     Examples 
     -------- 
+
+    >>> import maad
     
     Load audio recording and convert it into spectrogram
     
@@ -444,8 +446,8 @@ def create_mask(im, mode_bin = 'relative',
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2) = plt.subplots(2, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2d(im_bin, ax=ax2, extent=ext, title='mask')
+    >>> ax1, fig = maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
+    >>> ax2, fig = maad.util.plot2d(im_bin, ax=ax2, extent=ext, title='mask')
     >>> fig.set_size_inches(13,8)
     >>> fig.tight_layout() 
     
@@ -550,12 +552,13 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         correctly.
         
     Examples 
-    -------- 
+    --------
+    >>> import maad
     
     Load audio recording compute the spectrogram in dB.
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
-    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, fcrop=(0,20000), display=True)           
+    >>> Sxx,tn,fn,ext = maad.sound.spectrogram (s, fs, flims=(0,20000), display=True)           
     >>> Sxx_dB = maad.util.power2dB(Sxx) +96
     
     Smooth the spectrogram
@@ -569,7 +572,17 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     Select ROIs from the binary mask.
     
     >>> im_rois, df_rois = maad.rois.select_rois(im_bin, display=True)
-    
+    >>> print('Without subtracted the background noise, only {} ROIs have been segmented'.format(len(df_rois)))
+    Without subtracted the background noise, only 13 ROIs have been segmented
+    >>> df_rois.iloc[-1]
+    labelID         13
+    label      unknown
+    min_y          162
+    min_x         1105
+    max_y          193
+    max_x         1127
+    Name: 12, dtype: object
+
     We detected the background noise as a ROI, and that multiple ROIs are mixed in a single region. To have better results, it is adviced to preprocess the spectrogram to remove the background noise before creating the mask.
     
     >>> Sxx_noNoise = maad.sound.median_equalizer(Sxx)
@@ -577,7 +590,16 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
     >>> Sxx_noNoise_dB_blurred = maad.sound.smooth(Sxx_noNoise_dB)        
     >>> im_bin2 = maad.rois.create_mask(Sxx_noNoise_dB_blurred, bin_std=6, bin_per=0.5, mode='relative') 
     >>> im_rois2, df_rois2 = maad.rois.select_rois(im_bin2, display=True)
-    
+    >>> print('{} ROIs have been segmented'.format(len(df_rois2)))
+    274 ROIs have been segmented
+    >>> df_rois2.iloc[-1]
+    labelID        274
+    label      unknown
+    min_y          214
+    min_x         4485
+    max_y          230
+    max_x         4494
+    Name: 273, dtype: object
     """ 
  
     # test if max_roi and min_roi are defined 
@@ -649,6 +671,7 @@ def select_rois(im_bin, min_roi=None ,max_roi=None,
         cmap   =kwargs.pop('cmap','tab20') 
          
         _, fig = plot2d (im_rois, 
+                         interpolation = 'none',
                          extent = extent,
                          title  = title,  
                          ylabel = ylabel, 
@@ -693,7 +716,7 @@ def rois_to_imblobs(im_zeros, rois):
     >>> im_zeros = np.zeros((100,300))
     >>> df_rois = pd.DataFrame({'min_y': [10, 40], 'min_x': [10, 200], 'max_y': [60, 80], 'max_x': [110, 250]})
     >>> im_blobs = rois.rois_to_imblobs(im_zeros, df_rois)
-    >>> util.plot2d(im_blobs)
+    >>> ax, fig = util.plot2d(im_blobs)
     """ 
     # Check format of the input data 
     if type(rois) is not pd.core.frame.DataFrame : 
@@ -712,5 +735,6 @@ def rois_to_imblobs(im_zeros, rois):
      
     return im_blobs 
 
- 
- 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

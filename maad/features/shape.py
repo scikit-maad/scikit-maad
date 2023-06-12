@@ -325,13 +325,13 @@ def filter_multires(Sxx, kernels, npyr=4, rescale=True):
     >>> s, fs = load('../data/spinetail.wav') 
     >>> Sxx, dt, df, ext = spectrogram(s, fs) 
     >>> Sxx_db = util.power2dB(Sxx, db_range=80) + 80
-    >>> fig, ax = util.plot2d(Sxx_db, **{'extent':ext})
+    >>> ax, fig = util.plot2d(Sxx_db, **{'extent':ext})
     >>> params, kernels = filter_bank_2d_nodc(frequency=(0.5, 0.25), ntheta=2,gamma=2) 
     >>> Sxx_out = filter_multires(Sxx, kernels, npyr=2)
     
     Plot one of the resulting spectrograms.
     
-    >>> fig, ax = util.plot2d(Sxx_out[5], **{'extent':ext})
+    >>> ax, fig = util.plot2d(Sxx_out[5], **{'extent':ext})
      
     """     
     # Downscale image using gaussian pyramid  
