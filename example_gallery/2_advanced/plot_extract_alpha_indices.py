@@ -168,7 +168,7 @@ for index, row in df.iterrows() :
     # add vector indices into the df_indices_per_bin dataframe
     df_indices_per_bin = pd.concat([df_indices_per_bin, row_vector_indices])
 
-# Set back Date as index
+# # Set back Date as index
 df_indices = df_indices.set_index('Date')
 df_indices_per_bin = df_indices_per_bin.set_index('Date')
 
@@ -199,7 +199,7 @@ fig, ax[0,0] = plot_features(df_indices[['Hf']],norm=True,mode='24h', ax=ax[0,0]
 fig, ax[0,1] = plot_features(df_indices[['AEI']],norm=True,mode='24h', ax=ax[0,1])
 fig, ax[1,0] = plot_features(df_indices[['NDSI']],norm=True,mode='24h', ax=ax[1,0])
 fig, ax[1,1] = plot_features(df_indices[['ACI']],norm=True,mode='24h', ax=ax[1,1])
-fig, ax[2,0] = plot_features(df_indices[['MED']],norm=True,mode='24h', ax=ax[2,0])
+fig, ax[2,0] = plot_features(df_indices[['TFSD']],norm=True,mode='24h', ax=ax[2,0])
 fig, ax[2,1] = plot_features(df_indices[['ROItotal']],norm=True,mode='24h', ax=ax[2,1])
 
 #%%
