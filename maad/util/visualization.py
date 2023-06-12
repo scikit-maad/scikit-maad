@@ -1563,8 +1563,9 @@ def plot_correlation_map(df, R_threshold=0.75, method="spearman", **kwargs):
     >>> df.columns = indices
     >>> maad.util.plot_correlation_map(df, R_threshold=0)
     """
-    # Correlation matrix
-    corr_matrix = df.corr(method)
+    # Correlation matrix with only the columns that contain numeric values
+    numeric_columns = df.select_dtypes(include='number')
+    corr_matrix = numeric_columns.corr()
 
     # pop kwargs
     figsize = kwargs.pop("figsize", (10, 8))
