@@ -92,16 +92,21 @@ def load(filename, channel='left', detrend=True, verbose=False,
         
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load("../data/tropical_forest_morning.wav", channel='left')
+    >>> print("The sampling frequency of the audio file is {} Hz".format(fs))
+    The sampling frequency of the audio file is 48000 Hz
     >>> import numpy as np
     >>> tn = np.arange(0,len(s))/fs
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax0, ax1) = plt.subplots(2,1, sharex=True, squeeze=True)
     >>> ax0, _ = maad.util.plot1d(tn,s,ax=ax0, figtitle='ground level')
-    >>> ax0.set_ylim((-0.075,0.0751))
+    >>> ax0.set_ylim((-0.075,0.075))
+    (-0.075, 0.075)
     >>> s, fs = maad.sound.load("../data/tropical_forest_morning.wav", channel='right')
     >>> ax1, _ = maad.util.plot1d(tn,s,ax=ax1, figtitle='canopy level')
     >>> ax1.set_ylim((-0.075,0.075))
+    (-0.075, 0.075)
     >>> fig.tight_layout()
     """
     if verbose :
@@ -246,14 +251,17 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         
     Examples
     --------
+    >>> import maad
     >>> xenocanto_link = 'https://www.xeno-canto.org/sounds/uploaded/DTKJSKMKZD/ffts/XC445081-med.png'
-    >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename= xenocanto_link,
-                                        fs=44100,            
-                                        flims=[0,15000],
-                                        duration = 10
-                                        )
+    >>> Sxx, tn, fn, ext = maad.sound.load_spectrogram(filename=xenocanto_link, \
+                                                        fs=44100,               \
+                                                        flims=[0,15000],        \
+                                                        duration = 10,          \
+                                                        )
+    >>> print("The time resolution of the spectrogram is {} s and the frequency resolution is {} Hz".format(tn[1]-tn[0], fn[1]-fn[0]))
+    The time resolution of the spectrogram is 0.020876826722338204 s and the frequency resolution is 94.33962264150944 Hz
     >>> import matplotlib.pyplot as plt
-    >>> maad.util.plot2d(Sxx,extent=ext)
+    >>> ax, fig = maad.util.plot2d(Sxx,extent=ext)
     
     """ 
     
@@ -269,7 +277,7 @@ def load_spectrogram(filename, fs, duration, flims = None, flipud = True,
         Sxx = Sxx[:,:,0] 
     
     # Rescale the image between 0 to 1 
-    Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0) 
+    Sxx = linear_scale(Sxx, minval= 0.0, maxval=1.0, axis=None) 
     
     # Get the resolution 
     if flims is None :
@@ -355,6 +363,7 @@ def write(filename, fs, data, bit_depth=None):
 
     Examples
     --------
+    >>> from maad import sound
     
     Synthesize a 440Hz sine wave at 44100 Hz and write it to disk.
     
@@ -362,11 +371,10 @@ def write(filename, fs, data, bit_depth=None):
     >>> fs = 44100; T = 2.0
     >>> t = np.linspace(0, T, int(T*fs))
     >>> data = np.sin(2. * np.pi * 440. *t)
-    >>> maad.sound.write('example.wav', fs, data)
+    >>> sound.write('example.wav', fs, data, bit_depth=16)
     
     Open an audio file, filter a frequency band and write to disk specifying the bit depth.
-    
-    >>> from maad import sound
+
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> s_filt = sound.sinc(s, (3000, 10000), fs)
     >>> sound.write('spinetail_filtered.wav', fs, s_filt, bit_depth=16)
@@ -424,11 +432,14 @@ def load_url(url):
     
     >>> from maad import sound
     >>> s, fs = sound.load_url('spinetail')
-    
+    >>> print('The samping rate of the audio file is {} Hz'.format(fs))
+    The samping rate of the audio file is 44100 Hz
+
     Load an audio example using the full web address.
     
-    >>> from maad import sound
     >>> s, fs = sound.load_url('https://github.com/scikit-maad/scikit-maad/raw/production/data/spinetail.wav')
+    >>> print('The samping rate of the audio file is {} Hz'.format(fs))
+    The samping rate of the audio file is 44100 Hz
     """
 
     # set dictionary for examples from the audio dataset
@@ -449,3 +460,8 @@ def load_url(url):
     
     s, fs = load(io.BytesIO(urlopen(url_path).read()))
     return s, fs
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
