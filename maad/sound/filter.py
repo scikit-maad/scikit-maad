@@ -73,28 +73,34 @@ def select_bandwidth (x, fs, fcut, forder, fname ='butter', ftype='bandpass',
     
     Examples
     --------
+    >>> import maad
+
     Load and display the spectrogram of a sound waveform
     
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
-    >>> Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB 
-    >>> fig_kwargs = {'vmax': Sxx_dB.max(),
-                    'vmin':-90,
-                    'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                    'figsize':(4,13),
-                    'title':'Power spectrogram density (PSD)',
-                    'xlabel':'Time [sec]',
-                    'ylabel':'Frequency [Hz]',
+    >>> Sxx_dB = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
+    >>> fig_kwargs = {'vmax': Sxx_dB.max(),\
+                    'vmin':0,\
+                    'extent':(tn[0], tn[-1], fn[0], fn[-1]),\
+                    'figsize':(4,13),\
+                    'title':'Power spectrogram density (PSD)',\
+                    'xlabel':'Time [sec]',\
+                    'ylabel':'Frequency [Hz]',\
                     }
-    >>> fig1, ax1 = maad.util.plot2d(Sxx_dB, **fig_kwargs)
+    >>> ax, fig = maad.util.plot2d(Sxx_dB, **fig_kwargs)
+    >>> print('The energy in the spectrogram is {} dB SPL'.format(maad.util.add_dB(maad.util.add_dB(Sxx_dB))))
+    The energy in the spectrogram is 90.68996875800728 dB SPL
     
     Filter the waveform : keep the bandwidth between 6-10kHz
     
     >>> w_filtered = maad.sound.select_bandwidth(w,fs,fcut=(6000,10000), forder=5, fname ='butter', ftype='bandpass')
     >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
-    >>> Sxx_dB_filtered = maad.util.power2dB(Sxx_power_filtered) # convert into dB 
-    >>> maad.util.plot2d(Sxx_dB_filtered, **fig_kwargs)
-    
+    >>> Sxx_dB_filtered = maad.spl.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL
+    >>> ax, fig = maad.util.plot2d(Sxx_dB_filtered, **fig_kwargs)
+    >>> print('The energy in the spectrogram is {} dB SPL'.format(maad.util.add_dB(maad.util.add_dB(Sxx_dB_filtered))))
+    The energy in the spectrogram is 72.75045485363799 dB SPL
+
     """
     sos = iirfilter(N=forder, Wn=np.asarray(fcut)/(fs/2), btype=ftype,ftype=fname, rp=rp, 
                     rs=rs, output='sos')
@@ -150,33 +156,43 @@ def fir_filter(x, kernel, axis=0):
     
     Examples
     --------  
+    >>> import maad
     
     Load and display the spectrogram of a sound waveform
     
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
-    >>> fig_kwargs = {'vmax': Lxx.max(),
-                    'vmin':0,
-                    'extent': ext,
-                    'figsize': (4,13),
-                    'title': 'Power spectrogram density (PSD)',
-                    'xlabel': 'Time [sec]',
-                    'ylabel': 'Frequency [Hz]',
+    >>> fig_kwargs = {'vmax': Lxx.max(),\
+                    'vmin':0,\
+                    'extent': ext,\
+                    'figsize': (4,13),\
+                    'title': 'Power spectrogram density (PSD)',\
+                    'xlabel': 'Time [sec]',\
+                    'ylabel': 'Frequency [Hz]',\
                     }
-    >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)
+    >>> ax, fig = maad.util.plot2d(Lxx,**fig_kwargs)
+
+    >>> print('The energy in the spectrogram is {} dB SPL'.format(maad.util.add_dB(maad.util.add_dB(Lxx))))
+    The energy in the spectrogram is 90.68996875800728 dB SPL
     
     Smooth the waveform (lowpass)
     
     >>> w_filtered = maad.sound.fir_filter(w, kernel=(('gaussian', 2), 5))
     >>> Sxx_power_filtered,tn,fn,_ = maad.sound.spectrogram(w_filtered,fs)
     >>> Lxx_filtered = maad.spl.power2dBSPL(Sxx_power_filtered, gain=42) # convert into dB SPL
-    >>> fig, ax = maad.util.plot2d(Lxx_filtered,**fig_kwargs)
+    >>> ax, fig = maad.util.plot2d(Lxx_filtered,**fig_kwargs)
+
+    >>> print('The energy in the spectrogram is {} dB SPL'.format(maad.util.add_dB(maad.util.add_dB(Lxx_filtered))))
+    The energy in the spectrogram is 89.51776241848223 dB SPL
     
     Smooth the spectrogram, frequency by frequency (blurr)
     
     >>> Lxx_blurr = maad.sound.fir_filter(Lxx, kernel=(('gaussian', 1), 5), axis=1)
-    >>> fig, ax = maad.util.plot2d(Lxx_blurr,**fig_kwargs)
+    >>> ax, fig = maad.util.plot2d(Lxx_blurr,**fig_kwargs)
+
+    >>> print('The energy in the spectrogram is {} dB SPL'.format(maad.util.add_dB(maad.util.add_dB(Lxx_blurr))))
+    The energy in the spectrogram is 88.83611122906812 dB SPL
     
     """
     if isinstance(kernel,tuple) :
@@ -237,6 +253,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> import numpy as np
     >>> tn = np.arange(0,len(s))/fs
@@ -244,9 +261,9 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
     >>> s_filt_4_8kHz = maad.sound.sinc(s, cutoff=[4500,8000], fs=fs, atten=80, transition_bw=0.8)
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax0, ax1,ax2) = plt.subplots(3,1, sharex=True, squeeze=True)
-    >>> maad.util.plot1d(tn,s,ax=ax0, figtitle='original')
-    >>> maad.util.plot1d(tn,s_filt_7_12kHz,ax=ax1, figtitle='Kaiser-windowed filter 7-12kHz')
-    >>> maad.util.plot1d(tn,s_filt_4_8kHz,ax=ax2, figtitle='Kaiser-windowed filter 4.5-8kHz')
+    >>> ax0, fig = maad.util.plot1d(tn,s,ax=ax0, figtitle='original')
+    >>> ax1, fig = maad.util.plot1d(tn,s_filt_7_12kHz,ax=ax1, figtitle='Kaiser-windowed filter 7-12kHz')
+    >>> a2 , fig = maad.util.plot1d(tn,s_filt_4_8kHz,ax=ax2, figtitle='Kaiser-windowed filter 4.5-8kHz')
     >>> fig.tight_layout()
     
     """
@@ -340,6 +357,7 @@ def smooth (Sxx, std: float=1, verbose=False, display = False, savefig=None, **k
     
     Examples
     --------
+    >>> import maad
     
     Load audio recording and convert it into spectrogram
     
@@ -360,10 +378,10 @@ def smooth (Sxx, std: float=1, verbose=False, display = False, savefig=None, **k
     
     >>> import matplotlib.pyplot as plt 
     >>> fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
-    >>> maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
-    >>> maad.util.plot2d(Sxx_dB_std05, ax=ax2, extent=ext, title='smooth (std=0.5)', vmin=10, vmax=70)
-    >>> maad.util.plot2d(Sxx_dB_std10, ax=ax3, extent=ext, title='smooth (std=1)', vmin=10, vmax=70)
-    >>> maad.util.plot2d(Sxx_dB_std15, ax=ax4, extent=ext, title='smooth (std=1.5)', vmin=10, vmax=70)
+    >>> ax1, fig = maad.util.plot2d(Sxx_dB, ax=ax1, extent=ext, title='original', vmin=10, vmax=70)
+    >>> ax2, fig = maad.util.plot2d(Sxx_dB_std05, ax=ax2, extent=ext, title='smooth (std=0.5)', vmin=10, vmax=70)
+    >>> ax3, fig = maad.util.plot2d(Sxx_dB_std10, ax=ax3, extent=ext, title='smooth (std=1)', vmin=10, vmax=70)
+    >>> ax4, fig = maad.util.plot2d(Sxx_dB_std15, ax=ax4, extent=ext, title='smooth (std=1.5)', vmin=10, vmax=70)
     >>> fig.set_size_inches(7,9)
     >>> fig.tight_layout() 
     
@@ -414,3 +432,6 @@ def smooth (Sxx, std: float=1, verbose=False, display = False, savefig=None, **k
                         **kwargs)    
     return Sxx_out 
 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
