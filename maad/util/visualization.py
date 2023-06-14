@@ -530,11 +530,12 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
                     fontvariant='small-caps',
                     bbox=textbox
                     )
-
-    fig.canvas.draw()
+            
+    if fig is not None:
+        fig.canvas.draw()
 
     # SAVE FIGURE
-    if savefig is not None:
+    if savefig is not None and fig is not None:
         dpi = kwargs.pop("dpi", 96)
         format = kwargs.pop("format", "png")
         filename = kwargs.pop("filename", "_spectro_overlayrois")
