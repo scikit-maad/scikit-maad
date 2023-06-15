@@ -13,7 +13,7 @@ example can be downloaded from the open GitHub repository
 (https://github.com/scikit-maad/scikit-maad/tree/production/data).
 
 """
-# sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_extract_alpha_indices_multicpu_001.png'
+# sphinx_gallery_thumbnail_path = '_auto_examples/2_advanced/images/sphx_glr_plot_extract_alpha_indices_multicpu_001.png'
 
 #%%
 import pandas as pd
@@ -28,7 +28,8 @@ from concurrent import futures
 
 from maad import sound, features
 from maad.util import date_parser
-                       
+import multiprocessing as mp  
+mp.set_start_method("fork")   # This start method is necessary for macOS, and the default method on Linux
 #%%
 # Set Variables
 # -------------
