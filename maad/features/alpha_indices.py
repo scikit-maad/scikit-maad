@@ -19,7 +19,7 @@ import numbers
 import numpy as np 
 from numpy import sum, log, min, max, abs, mean, median, sqrt, diff, var
 from skimage.morphology import opening
-from scipy.ndimage.morphology import binary_erosion, binary_dilation
+from scipy.ndimage import binary_erosion, binary_dilation
 from scipy.stats import rankdata
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
@@ -30,11 +30,11 @@ _MIN_ = sys.float_info.min
 
 # Import internal modules
 from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
-                       skewness, kurtosis, format_features, into_bins, entropy, 
-                       linear_scale, plot1d, plot2d, overlay_rois)
+                        skewness, kurtosis, format_features, into_bins, entropy, 
+                        linear_scale, plot1d, plot2d, overlay_rois)
 from maad.spl import wav2leq, psd2leq, power2dBSPL
 from maad.features import (centroid_features, zero_crossing_rate, temporal_moments, 
-                           spectral_moments)
+                        spectral_moments)
 from maad.sound import (envelope, smooth, temporal_snr, linear_to_octave, 
                         avg_amplitude_spectro, avg_power_spectro, spectral_snr, 
                         median_equalizer)
@@ -84,7 +84,7 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
     
     ### For x to be a ndarray
     xdB = np.asarray(xdB)
-   
+
     ### compute _score
     ACTfract, ACTcount = _score(xdB, dB_threshold, axis=axis)
     ACTfract= ACTfract.tolist()
@@ -268,7 +268,7 @@ def _gini(x, corr=False):
     Ported from ineq library in R
     """
     if sum(x) == 0:
-       G = 0 # null gini
+        G = 0 # null gini
     else:
         n = len(x)
         x.sort()
@@ -469,13 +469,14 @@ def temporal_median (s, mode ='fast', Nt=512) :
     Returns
     -------
     MED: float
-       Median of the envelope 
+        Median of the envelope 
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> med = maad.features.temporal_median(s)
-    >>> print(med)
+    >>> print(med) # doctest: +NORMALIZE_WHITESPACE
     0.007934564717486147
     
     """
@@ -507,12 +508,12 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
         - "Hilbert" : estimation of the envelope from the Hilbert transform. The method is slow.
     Nt : integer, optional, default is 512
         Size of each frame. The largest, the highest is the approximation.
-   
+
     Returns
     -------
     Ht: float
-       Temporal entropy of the audio 
-       
+        Temporal entropy of the audio 
+    
     References
     ----------
     .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
@@ -527,9 +528,10 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Ht = maad.features.temporal_entropy (s)
-    >>> print(Ht)
+    >>> print(Ht) # doctest: +NORMALIZE_WHITESPACE
     0.7518917279549968
 
     """
@@ -572,6 +574,8 @@ def acoustic_richness_index (Ht_array, M_array):
 
     Examples
     --------
+    >>> import maad
+
     >>> s, fs = maad.sound.load('../data/indices/S4A03895_20190522_060000.wav')
     >>> Ht_6h00 = maad.features.temporal_entropy(s)
     >>> M_6h00 = maad.features.temporal_median(s)
@@ -584,9 +588,9 @@ def acoustic_richness_index (Ht_array, M_array):
     >>> Ht_10h00 = maad.features.temporal_entropy(s)
     >>> M_10h00 = maad.features.temporal_median(s)
     
-    >>> maad.features.acoustic_richness_index([Ht_6h00,Ht_8h00,Ht_10h00],
-                                              [M_6h00,M_8h00,M_10h00])
-    array([0.11111111, 0.44444444, 1.        ])
+    >>> result = maad.features.acoustic_richness_index([Ht_6h00,Ht_8h00,Ht_10h00],[M_6h00,M_8h00,M_10h00]) 
+    >>> print(result) # doctest: +NORMALIZE_WHITESPACE
+    [0.11111111 0.44444444 1.        ]
     
     """    
     if len(Ht_array) != len(M_array) : 
@@ -619,7 +623,7 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
         data >Threshold is considered to be an activity 
     mode : str, optional, default is "fast"
         Select the mode to compute the envelope of the audio waveform
-       
+    
         - "fast" : The sound is first divided into frames (2d) using the 
             function _wave2timeframes(s), then the max of each frame gives a 
             good approximation of the envelope.
@@ -644,9 +648,10 @@ def temporal_activity (s, dB_threshold=3, mode='fast', Nt=512):
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> ACTfract, ACTcount, ACTmean = maad.features.temporal_activity (s, 6)
-    >>> print('ACTfract: %2.2f / ACTcount: %2.0f / ACTmean: %2.2f' % (ACTfract, ACTcount, ACTmean))
+    >>> print('ACTfract: %2.2f / ACTcount: %2.0f / ACTmean: %2.2f' % (ACTfract, ACTcount, ACTmean)) # doctest: +NORMALIZE_WHITESPACE
     ACTfract: 0.37 / ACTcount: 620 / ACTmean: 24.41
     
     """ 
@@ -718,7 +723,7 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
         Size of each frame. The largest, the highest is the approximation.
     display : boolean, optional, default is False
         Display the selected events on the audio waveform
-    \*\*kwargs, optional. 
+    kwargs, optional. 
         This parameter is used by plt.plot
 
     Returns
@@ -741,9 +746,10 @@ def temporal_events (s, fs, dB_threshold=3, rejectDuration=None,
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> EVNtFract, EVNmean, EVNcount, _ = maad.features.temporal_events (s, fs, 6)
-    >>> print('EVNtFract: %2.2f / EVNmean: %2.2f / EVNcount: %2.0f' % (EVNtFract, EVNmean, EVNcount))
+    >>> print('EVNtFract: %2.2f / EVNmean: %2.2f / EVNcount: %2.0f' % (EVNtFract, EVNmean, EVNcount)) # doctest: +NORMALIZE_WHITESPACE
     EVNtFract: 0.37 / EVNmean: 0.08 / EVNcount:  5
     
     """  
@@ -803,23 +809,23 @@ def frequency_entropy (X, compatibility="QUT") :
         conservation
     compatibility : string {'QUT', 'seewave'}, default is 'QUT'
         Select the way to compute the spectral entropy.
-           
+        
         - QUT [2]_ : entropy of P
         - seewave [1]_ : entropy of sqrt(P)   
     
     Returns
     -------
     Hf: float
-       spectral entropy of the audio 
+        spectral entropy of the audio 
     Ht_per_bin : array of floats
         temporal entropy along time axis for each frequency when P is a 
         spectrogram (2d) otherwise Ht_per_bin is empty   
-       
+    
     References
     ----------
     .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
     .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
-  
+
     Notes
     -----
     The spectral entropy of a signal measures the energy dispersion along frequencies. Low values 
@@ -829,16 +835,20 @@ def frequency_entropy (X, compatibility="QUT") :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram (s, fs)   
     >>> Hf, Ht_per_bin = maad.features.frequency_entropy(Sxx_power)
-    >>> print(Hf)
-    0.6313982665877063
-    >>> print('Length of Ht_per_bin is : %2.0f' % len(Ht_per_bin))
+    >>> print(Hf) # doctest: +NORMALIZE_WHITESPACE
+    0.631398266587706
+
+    >>> print('Length of Ht_per_bin is : %2.0f' % len(Ht_per_bin)) # doctest: +NORMALIZE_WHITESPACE
     Length of Ht_per_bin is : 512
-    >>> print(Ht_per_bin)
+    
+    print only the first ten values of the vector
+    >>> print(Ht_per_bin [0:9]) # doctest: +NORMALIZE_WHITESPACE
     [0.73458664 0.73476487 0.87981728 0.9161413  0.90153962 0.91684881
-     0.91816039 0.93453925 0.92958317 0.93763948 0.93524745 0.93736222...]
+    0.91816039 0.93453925 0.92958317]
     
     """
     # Force to be an array
@@ -920,9 +930,11 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
-    >>> maad.features.number_of_peaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) 
+    >>> maad.features.number_of_peaks(Sxx_power, fn, slopes=6, min_freq_dist=100, display=True) # doctest: +NORMALIZE_WHITESPACE
+    14
 
     """
     # Force to be an array
@@ -943,8 +955,8 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
     # Find peaks
     min_pix_distance = min_freq_dist/(fn[1]-fn[0])
     index, prop = find_peaks(S, height = min_peak_val, 
-                             distance = min_pix_distance, 
-                             prominence=prominence)
+                            distance = min_pix_distance, 
+                            prominence=prominence)
     
     # keep peaks with with slopes higher than the limit
     if slopes is None :
@@ -978,10 +990,10 @@ def number_of_peaks(X, fn, mode='dB', min_peak_val=None, min_freq_dist=200,
         else:
             ylabel = 'Amplitude [AU]'
         fig_kwargs = {
-                      'figtitle':'Mean Spectrum with detected peaks',
-                      'xlabel': kwargs.pop('xlabel','Frequency [Hz]'),
-                      'ylabel': kwargs.pop('ylabel',ylabel)
-                      }
+                    'figtitle':'Mean Spectrum with detected peaks',
+                    'xlabel': kwargs.pop('xlabel','Frequency [Hz]'),
+                    'ylabel': kwargs.pop('ylabel',ylabel)
+                    }
 
         ax, _ = plot1d(fn,S, **fig_kwargs)
         ax.plot(fn[index_select], S[index_select], '+', mfc=None, mec='r', 
@@ -1037,11 +1049,12 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, _ = maad.sound.spectrogram (s, fs)  
     >>> EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = maad.features.spectral_entropy(Sxx_power, fn, flim=(2000,10000)) 
-    >>> print('EAS: %2.2f / ECU: %2.2f / ECV: %2.2f / EPS: %2.2f / EPS_KURT: %2.2f / EPS_SKEW: %2.2f' % (EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW))
-    EAS: 0.27 / ECU: 0.49 / ECV: 0.24 / EPS: 1.00 / EPS_KURT: 17.58 / EPS_SKEW: 3.55
+    >>> print('EAS: %2.2f / ECU: %2.2f / ECV: %2.2f / EPS: %2.2f / EPS_KURT: %2.2f / EPS_SKEW: %2.2f' % (EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW)) # doctest: +NORMALIZE_WHITESPACE
+    EAS: 0.27 / ECU: 0.49 / ECV: 0.24 / EPS: 0.25 / EPS_KURT: 17.58 / EPS_SKEW: 3.55
     
     """
     
@@ -1115,7 +1128,7 @@ def spectral_entropy (Sxx, fn, flim=None, display=False) :
 #=============================================================================
 
 def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,10000), 
-                   flim_HF=(10000,20000)):
+                flim_HF=(10000,20000)):
     """
     Compute the proportion (cover) of the spectrogram above a threshold for 
     three bandwidths : low frequency band (LF), medium frequency band (MF) and 
@@ -1157,12 +1170,13 @@ def spectral_cover (Sxx, fn, dB_threshold=3, flim_LF=(0,1000), flim_MF=(1000,100
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> LFC, MFC, HFC = maad.features.spectral_cover(Sxx_dB_noNoise, fn) 
-    >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC))
+    >>> print('LFC: %2.2f / MFC: %2.2f / HFC: %2.2f' % (LFC, MFC, HFC)) # doctest: +NORMALIZE_WHITESPACE
     LFC: 0.15 / MFC: 0.19 / HFC: 0.13
     
     """ 
@@ -1224,13 +1238,14 @@ def spectral_activity (Sxx_dB, dB_threshold=6):
 
     Examples
     --------
+    >>> import maad
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power, display=True, extent=ext) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ACTspfract_per_bin, ACTspcount_per_bin, ACTspmean_per_bin = maad.features.spectral_activity(Sxx_dB_noNoise)  
-    >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %np.mean(ACTspfract_per_bin))
+    >>> print('Mean proportion of spectrogram above threshold : %2.2f%%' %np.mean(ACTspfract_per_bin)) # doctest: +NORMALIZE_WHITESPACE
     Mean proportion of spectrogram above threshold : 0.07%
     
     """ 
@@ -1256,7 +1271,7 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     below the threshold). Acoustic events are calculated frequency by frequency
     along time axis
     This function computes:
-      
+    
         - EVNspFraction : Fraction of events duration over total duration
         - EVNspmean : mean events duration (s)
         - EVNspcount : number of events per s
@@ -1279,7 +1294,7 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
     display : boolean, optional, default is false
         Display a plot with the number of events per s (EVNspCount) and
         a binary image with the detected events.
-    \*\*kwargs : optional. See matplotlib documentation
+    kwargs : optional. See matplotlib documentation
 
     Returns
     -------    
@@ -1301,22 +1316,23 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
 
     Examples
     --------
+    >>> import maad
     >>> import numpy as np
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> EVNspFract_per_bin, EVNspMean_per_bin, EVNspCount_per_bin, EVNsp = maad.features.spectral_events(Sxx_dB_noNoise, dt=tn[1]-tn[0], dB_threshold=6, rejectDuration=0.1, display=True, extent=ext)  
-    >>> print('Mean proportion of spectrogram with event s: %2.2f%%' %np.mean(EVNspFract_per_bin))
-    Mean proportion of spectrogram with events : 0.01%
+    >>> print('Mean proportion of spectrogram with events: %2.2f%%' %np.mean(EVNspFract_per_bin)) # doctest: +NORMALIZE_WHITESPACE
+    Mean proportion of spectrogram with events: 0.01%
     
     """  
     ### For wave to be a ndarray
     Sxx_dB = np.asarray(Sxx_dB) 
         
     EVNspSum, EVNspMean, EVNspCount, EVNsp = _acoustic_events (Sxx_dB, dt, 
-                                                               dB_threshold, 
-                                                               rejectDuration=rejectDuration)
+                                                            dB_threshold, 
+                                                            rejectDuration=rejectDuration)
     
     # EVNspFract = EVNspSum  * total_duration
     EVNspFract = EVNspSum / (dt * Sxx_dB.shape[1])
@@ -1353,8 +1369,8 @@ def spectral_events (Sxx_dB, dt, dB_threshold=6, rejectDuration=None,
         vmax=kwargs.pop('vmax',1)
         
         ax, fig = plot2d (EVNsp*1, extent=extent, now=False, figsize=figsize, 
-                          title=title, ylabel=ylabel,xlabel=xlabel,
-                          vmin=vmin,vmax=vmax,  cmap=cmap, **kwargs) 
+                        title=title, ylabel=ylabel,xlabel=xlabel,
+                        vmin=vmin,vmax=vmax,  cmap=cmap, **kwargs) 
     
     return EVNspFract, EVNspMean, EVNspCount, EVNsp
 
@@ -1399,10 +1415,11 @@ def acoustic_complexity_index(Sxx):
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')  
     >>> _, _ , ACI  = maad.features.acoustic_complexity_index(Sxx)
-    >>> print('ACI : %2.0f ' %ACI)
+    >>> print('ACI : %2.0f ' %ACI) # doctest: +NORMALIZE_WHITESPACE
     ACI : 306
     """   
     ACI_xx = ((np.abs(diff(Sxx,1)).transpose())/(np.sum(Sxx,1)).transpose()).transpose()       
@@ -1470,13 +1487,14 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     Examples
     --------
+    >>> import maad
     
     Load the signal and compute the spectrogram to give the same result as soundecology
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False)
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False) 
     >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000)
-    >>> print('ADI : %2.2f ' %ADI)
+    >>> print('ADI : %2.2f ' %ADI) # doctest: +NORMALIZE_WHITESPACE
     ADI : 2.05
     
     Load the signal and compute the spectrogram as usual (detrend ON) such that
@@ -1485,9 +1503,9 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
-    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -30)
-    >>> print('ADI : %2.2f ' %ADI)
-    ADI : 1.46
+    >>> ADI  = maad.features.acoustic_diversity_index(Sxx,fn,fmax=10000, dB_threshold = -47)
+    >>> print('ADI : %2.2f ' %ADI) # doctest: +NORMALIZE_WHITESPACE
+    ADI : 2.06
     
     """
         
@@ -1523,7 +1541,7 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
 
 #=============================================================================
 def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500, 
-                          dB_threshold=-50):
+                        dB_threshold=-50):
     
     """
     Compute the Acoustic Eveness Index (AEI) from a spectrogram [1]_.
@@ -1572,13 +1590,14 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     
     Examples
     --------
-    
+    >>> import maad
+
     Load the signal and compute the spectrogram to give the same result as soundecology
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav', detrend=False) 
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, nperseg=int(fs/10), noverlap=0, mode='amplitude', detrend=False)   
     >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000)
-    >>> print('AEI : %2.2f ' %AEI)
+    >>> print('AEI : %2.2f ' %AEI) # doctest: +NORMALIZE_WHITESPACE
     AEI : 0.39   
     
     Load the signal and compute the spectrogram as usual (detrend ON) such that
@@ -1587,8 +1606,8 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs, mode='amplitude')   
-    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -30)
-    >>> print('AEI : %2.2f ' %AEI)
+    >>> AEI  = maad.features.acoustic_eveness_index(Sxx,fn,fmax=10000, dB_threshold = -47)
+    >>> print('AEI : %2.2f ' %AEI) # doctest: +NORMALIZE_WHITESPACE
     AEI : 0.39   
     
     """
@@ -1618,7 +1637,7 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
 ####    Indices based on the energy
 #=============================================================================
 def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000), 
-                     R_compatible = 'soundecology'):
+                    R_compatible = 'soundecology'):
     """
     Compute the Normalized Difference Soundscape Index from a power spectrogram [1]_.
         
@@ -1659,14 +1678,15 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power, tn, fn, ext = maad.sound.spectrogram (s, fs)  
     >>> NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscape_index(Sxx_power,fn)
-    >>> print('NDSI Soundecology : %2.2f ' %NDSI)
+    >>> print('NDSI Soundecology : %2.2f ' %NDSI) # doctest: +NORMALIZE_WHITESPACE
     NDSI Soundecology : 0.10
     >>> NDSI, ratioBA, antroPh, bioPh  = maad.features.soundscape_index(Sxx_power,fn,R_compatible=None)
-    >>> print('NDSI MAAD: %2.2f ' %NDSI)
-    NDSI MAAD : 0.99
+    >>> print('NDSI MAAD: %2.2f ' %NDSI) # doctest: +NORMALIZE_WHITESPACE
+    NDSI MAAD: 0.99
     
     """
     
@@ -1675,13 +1695,13 @@ def soundscape_index (Sxx_power,fn,flim_bioPh=(1000,10000),flim_antroPh=(0,1000)
         bin_step = flim_antroPh[1] - flim_antroPh[0]
         #Convert into bins
         Sxx_bins, bins = into_bins(Sxx_power, fn, bin_min=fn[0], bin_max=fn[-1], 
-                                  bin_step=bin_step, axis=0)   
+                                bin_step=bin_step, axis=0)   
     else:
         # Frequency resolution is 1000 Hz
         bin_step = 1000
         #Convert into bins
         Sxx_bins, bins = into_bins(Sxx_power, fn, bin_min=fn[0], bin_max=fn[-1], 
-                                  bin_step=bin_step, axis=0) 
+                                bin_step=bin_step, axis=0) 
         # In Seewave, the first bin (0kHz) is removed
         Sxx_bins = Sxx_bins[bins>=1000,]
         bins = bins[bins>=1000]
@@ -1733,13 +1753,14 @@ def bioacoustics_index (Sxx, fn, flim=(2000, 15000), R_compatible ='soundecology
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx, tn, fn, ext = maad.sound.spectrogram (s, fs,mode='amplitude')  
     >>> BI = maad.features.bioacoustics_index(Sxx,fn)
-    >>> print('BI Soundecology : %2.2f ' %BI)
+    >>> print('BI Soundecology : %2.2f ' %BI) # doctest: +NORMALIZE_WHITESPACE
     BI Soundecology : 52.84
     >>> BI  = maad.features.bioacoustics_index(Sxx,fn,R_compatible=None)
-    >>> print('BI MAAD: %2.2f ' %BI)
+    >>> print('BI MAAD : %2.2f ' %BI) # doctest: +NORMALIZE_WHITESPACE
     BI MAAD : 17.05
     
     """    
@@ -1813,9 +1834,10 @@ def temporal_leq (s, fs, gain, Vadc=2, sensitivity=-35, dBref=94, dt=1):
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Leq = maad.features.temporal_leq (s, fs, gain=42)
-    >>> print('Leq is %2.1fdB SPL' % Leq)
+    >>> print('Leq is %2.1fdB SPL' % Leq) # doctest: +NORMALIZE_WHITESPACE
     Leq is 63.7dB SPL
     
     """
@@ -1856,10 +1878,11 @@ def spectral_leq (X, gain, Vadc=2, sensitivity=-35, dBref=94, pRef = 20e-6):
 
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)
     >>> Leqf, Leqf_per_bin = maad.features.spectral_leq(Sxx_power, gain=42)
-    >>> print('Leq (from spectrogram) is %2.1fdB SPL' % Leqf)
+    >>> print('Leq (from spectrogram) is %2.1fdB SPL' % Leqf) # doctest: +NORMALIZE_WHITESPACE
     Leq (from spectrogram) is 63.7dB SPL
     
     """
@@ -1925,13 +1948,14 @@ def more_entropy(x, order=3, axis=0) :
     
     Examples
     --------
+    >>> import maad
     
     Compute entropy in time domain.
     
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> env = maad.sound.envelope(s)
     >>> Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson = maad.features.more_entropy(env**2, order=3)
-    >>> print('Ht_Havrda: %2.2f / Ht_Renyi: %2.2f / Ht_pairedShannon: %2.2f / Ht_gamma: %2.0f / Ht_GiniSimpson: %2.2f' % (Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson))
+    >>> print('Ht_Havrda: %2.2f / Ht_Renyi: %2.2f / Ht_pairedShannon: %2.2f / Ht_gamma: %2.0f / Ht_GiniSimpson: %2.2f' % (Ht_Havrda, Ht_Renyi, Ht_pairedShannon, Ht_gamma, Ht_GiniSimpson)) # doctest: +NORMALIZE_WHITESPACE
     Ht_Havrda: 0.33 / Ht_Renyi: 7.20 / Ht_pairedShannon: 9.04 / Ht_gamma: 24223924 / Ht_GiniSimpson: 1.00
     
     Compute entropy in spectral domain.
@@ -1939,7 +1963,7 @@ def more_entropy(x, order=3, axis=0) :
     >>> Sxx_power,_,_,_ = maad.sound.spectrogram(s,fs)
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power)
     >>> Hf_Havrda, Hf_Renyi, Hf_pairedShannon, Hf_gamma, Hf_GiniSimpson = maad.features.more_entropy(S_power, order=3)
-    >>> print('Hf_Havrda: %2.2f / Hf_Renyi: %2.2f / Hf_pairedShannon: %2.2f / Hf_gamma: %2.0f / Hf_GiniSimpson: %2.2f' % (Hf_Havrda, Hf_Renyi, Hf_pairedShannon, Hf_gamma, Hf_GiniSimpson))
+    >>> print('Hf_Havrda: %2.2f / Hf_Renyi: %2.2f / Hf_pairedShannon: %2.2f / Hf_gamma: %2.0f / Hf_GiniSimpson: %2.2f' % (Hf_Havrda, Hf_Renyi, Hf_pairedShannon, Hf_gamma, Hf_GiniSimpson)) # doctest: +NORMALIZE_WHITESPACE
     Hf_Havrda: 0.33 / Hf_Renyi: 3.23 / Hf_pairedShannon: 4.92 / Hf_gamma: 7931 / Hf_GiniSimpson: 0.97
     
     """
@@ -1999,10 +2023,11 @@ def frequency_raoq (S_power, fn, bin_step=1000):
     
     Examples
     --------
+    >>> import maad
     >>> s, fs = maad.sound.load('../data/spinetail.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> S_power = maad.sound.avg_power_spectro(Sxx_power) 
-    >>> maad.features.frequency_raoq(S_power, fn)
+    >>> maad.features.frequency_raoq(S_power, fn) # doctest: +NORMALIZE_WHITESPACE
     0.10556621228886422
     
     """
@@ -2013,7 +2038,7 @@ def frequency_raoq (S_power, fn, bin_step=1000):
     #Convert into bins
     X_bins, bins = into_bins(X, fn, bin_min=fn[0], bin_max=fn[-1], 
                             bin_step=bin_step, axis=None) 
-              
+    
     # Compute Rao Quadratic Entropy
     RAOQ = _raoQ(X_bins,bins)
     
@@ -2021,20 +2046,23 @@ def frequency_raoq (S_power, fn, bin_step=1000):
 
 #=============================================================================    
 
-def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
+def tfsd (Sxx, fn, tn, flim=(2000,8000), log=True, mode='thirdOctave', display=False):
     """
     Compute the Time frequency derivation index (tfsd) from a spectrogram. [1]_ [2]_
         
     Parameters
     ----------
     Sxx : ndarray of floats
-        matrix : Spectrogram  
+        matrix : Amplitude spectrogram  
     fn : vector
         frequency vector corresponding to the spectrogram
     tn : vector
         time vector corresponding to the spectrogram 
     flim : tupple (fmin, fmax), optional, default is (2000, 8000)
         Frequency band used to compute tfsd. 
+    log : boolean, optional, default is True
+        If True, the log of Sxx is taken before calculating the TFSD as it was defined in [1]_ [2]_
+        if False, no log is applied, TFSD > 0.3 indicates the presence of birds 
     mode : string {'thirdOctave','Octave'}, default is thirdOctave  
         Select the way to transform the spectrogram with linear bands into 
         octave bands    
@@ -2048,12 +2076,11 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
         
     Notes
     -----
-    The higher the TFSD varies between 0 and 1, the greater the temporal 
-    presence of avian or human vocalizations.  
-    With the default configuration, a TFSD > 0.3 indicates a very important 
-    presence time of the vocalizations in the signal. 
-    The TFSD is always greater than 0.
-       
+    The TFSD varies between 0 and 1, where 1 indicates sound events on the full spectrogram. 
+    When flim=(2000,8000), TFSD mostly indicates the presence of birds in the signal
+    When flim=(0,1000), TFSD mostly indicates the presence of human voice in the signal
+    When log=False and flim=(2000,8000), a TFSD > 0.3 indicates the presence of birds in the signal
+
     References 
     ----------
     .. [1] Aumond, P., Can, A., De Coensel, B., Botteldooren, D., Ribeiro, C., & Lavandier, C. (2017). Modeling soundscape pleasantness using perceptual assessments and acoustic measurements along paths in urban context. Acta Acustica united with Acustica. `DOI: 10.3813/AAA.919073 <https://doi.org/10.3813/AAA.919073>`_ 
@@ -2061,24 +2088,27 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
     
     Examples
     --------
+    >>> import maad
+
     During the day
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    >>> maad.features.tfsd(Sxx_power,fn, tn)  
-    0.5002113200343906
+    >>> maad.features.tfsd(Sxx_power,fn, tn)  # doctest: +NORMALIZE_WHITESPACE 
+    0.4637352908292768
     
     During the night
     
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
-    >>> maad.features.tfsd(Sxx_power,fn, tn)  
-    0.012818445992714088
+    >>> maad.features.tfsd(Sxx_power,fn, tn)   # doctest: +NORMALIZE_WHITESPACE
+    0.42435773298811824
     
     """
     
-    # tfsd must be computed on dB scale
-    Sxx = np.log10(Sxx)
+    # In order to be complient with the definition of the tfsd, it must be computed on dB scale
+    # But t
+    if log : Sxx = np.log10(Sxx)
     
     # convert into 1/3 octave
     if mode == 'thirdOctave' : 
@@ -2114,10 +2144,10 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
                     
             # display image
             _im1 = ax1.imshow(power2dB(GRADdt), 
-                              vmax = max(power2dB(GRADdt)), 
-                              vmin = min(power2dB(GRADdt)),
-                              interpolation='none', origin='lower', 
-                              cmap='gray', extent=extent)
+                            vmax = max(power2dB(GRADdt)), 
+                            vmin = min(power2dB(GRADdt)),
+                            interpolation='none', origin='lower', 
+                            cmap='gray', extent=extent)
             plt.colorbar(_im1, ax=ax1)
             
             # set the parameters of the subplot
@@ -2128,20 +2158,19 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), mode='thirdOctave', display=False):
             
             # display image
             _im2 = ax2.imshow(power2dB(GRADdf), 
-                              vmax = max(power2dB(GRADdf)), 
-                              vmin = min(power2dB(GRADdf)),
-                              interpolation='none', origin='lower', 
-                              cmap='gray', extent=extent)
+                            vmax = max(power2dB(GRADdf)), 
+                            vmin = min(power2dB(GRADdf)),
+                            interpolation='none', origin='lower', 
+                            cmap='gray', extent=extent)
             plt.colorbar(_im2, ax=ax2)
-       
             # set the parameters of the subplot
             ax2.set_title('Derivation along frequency axis')
             ax2.set_xlabel('Time [sec]')
             ax2.set_ylabel('Frequency [Hz]')
             ax2.axis('tight') 
-         
+        
             fig.tight_layout()
-             
+            
             # Display the figure now
             plt.show()
     
@@ -2182,23 +2211,24 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
     
     Examples
     --------
+    >>> import maad
     
     During the day
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> _, _, AGI_mean, _ = maad.features.acoustic_gradient_index(Sxx_power,tn[1]-tn[0])
-    >>> AGI_mean
-    5.026112548525072
+    >>> AGI_mean # doctest: +NORMALIZE_WHITESPACE
+    5.026112548525073
     
     During the night
     
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> _, _, AGI_mean, _ = maad.features.acoustic_gradient_index(Sxx_power,tn[1]-tn[0])
-    >>> AGI_mean
+    >>> AGI_mean # doctest: +NORMALIZE_WHITESPACE
     1.45631461307782  
-     
+    
     """     
     # derivative (order = 1, 2, 3...)
     AGI_xx = abs(diff(Sxx, order, axis=1)) / (dt**order )
@@ -2234,18 +2264,18 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
                 
         # display image
         _im = ax4.imshow(power2dB(Sxx**2), 
-                         interpolation='none', origin='lower', 
-                         vmin =20, vmax=70, cmap='gray')
+                        interpolation='none', origin='lower', 
+                        vmin =20, vmax=70, cmap='gray')
         plt.colorbar(_im, ax=ax4)
- 
+
         # set the parameters of the subplot
         ax4.set_title('Spectrogram')
         ax4.set_xlabel('Time [sec]')
         ax4.set_ylabel('Frequency [Hz]')
         ax4.axis('tight') 
-     
+    
         fig4.tight_layout()
-         
+        
         # Display the figure now
         plt.show()
         
@@ -2254,15 +2284,15 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
 #=============================================================================
 
 def region_of_interest_index(Sxx_dB_noNoise, tn, fn, 
-                             smooth_param1=1, 
-                             mask_mode='relative', 
-                             mask_param1=6, 
-                             mask_param2=0.5, 
-                             min_roi=9, 
-                             max_roi=512*10000, 
-                             max_ratio_xy = None,
-                             remove_rain = False,
-                             display=False, **kwargs):
+                            smooth_param1=1, 
+                            mask_mode='relative', 
+                            mask_param1=6, 
+                            mask_param2=0.5, 
+                            min_roi=9, 
+                            max_roi=512*10000, 
+                            max_ratio_xy = None,
+                            remove_rain = False,
+                            display=False, **kwargs):
     """
     Compute an acoustic activity index based on the regions of interested 
     detected on a spectrogram.
@@ -2284,26 +2314,29 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
         The larger is the number, the smoother will be the image and the longer 
         it takes. Standard values should fall between 0.5 to 3 
     mask_mode : string in {'relative', 'absolute'}, optional, default is 'relative'
-        if 'relative':
+        | if 'relative':
             Binarize an image based on a double relative threshold.  
             The values used for the thresholding depends on the values found 
             in the image. => relative threshold 
-        if 'absolute' :
+        | if 'absolute' :
             Binarize an image based on a double relative threshold.  
             The values used for the thresholding are independent of the values 
-            in the image => absolute threshold 
-        .. warning:: The default ``mask_mode`` parameter is deprecated in 
-        version 1.3 and will be changed to ``absolute`` in 1.4.
+            in the image => absolute threshold
+
+        .. warning:: The default ``mask_mode`` parameter is deprecated in version 1.3 and will be changed to ``absolute`` in version 1.4.
+
     mask_param1 : scalar, default is 6
-        if 'relative' : bin_std 
-        if 'absolute' : bin_h
-        .. warning:: The default ``mask_param1`` parameter is deprecated in 
-        version 1.3 and will be changed to ``10`` in 1.4.
+        | if 'relative' : bin_std 
+        | if 'absolute' : bin_h
+
+        .. warning:: The default ``mask_param1`` parameter is deprecated in version 1.3 and will be changed to ``10`` in version 1.4.
+
     mask_param2 : scalar, default is 0.5
-        if 'relative' : bin_per
-        if 'absolute' : bin_l
-        .. warning:: The default ``mask_param2`` parameter is deprecated in 
-        version 1.3 and will be changed to ``3`` in 1.4.
+        | if 'relative' : bin_per
+        | if 'absolute' : bin_l
+        
+        .. warning:: The default ``mask_param2`` parameter is deprecated in version 1.3 and will be changed to ``3`` in 1.4.
+    
     min_roi, max_roi : scalars, optional, default : 9,  512*10000
         Define the minimum and the maximum area possible for a ROI. If None,  
         the minimum ROI area is 1 pixel and the maximum ROI area is the area of  
@@ -2328,22 +2361,23 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     Returns
     -------    
     ROItotal : float
-         Total number of ROIs found. The higher is the number of ROI, the higher
-         is the acoustic abondance and/or richness expected
+        Total number of ROIs found. The higher is the number of ROI, the higher
+        is the acoustic abondance and/or richness expected
     ROIcover : float
         Percentage of spectrogram cover. The higher is the cover percentage, 
         the higher is the acoustic richness expected.
         
     Examples
-    -------- 
+    --------
+    >>> import maad 
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
     >>> ROItotal, ROIcover = maad.features.region_of_interest_index(Sxx_dB_noNoise, tn, fn, display=True)
-    >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal)
+    >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal) # doctest: +NORMALIZE_WHITESPACE
     The total number of ROIs found in the spectrogram is 265
-    >>> print('The percentage of spectrogram covered by ROIs is %2.0f%%' %ROIcover)
+    >>> print('The percentage of spectrogram covered by ROIs is %2.0f%%' %ROIcover) # doctest: +NORMALIZE_WHITESPACE
     The percentage of spectrogram covered by ROIs is 12%
     
     """ 
@@ -2357,28 +2391,28 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
 
     # Smooth the spectrogram in order to facilitate the creation of masks
     Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, std=smooth_param1, 
-                                   display=display, savefig=None,**kwargs) 
+                                display=display, savefig=None,**kwargs) 
     # binarization of the spectrogram to select part of the spectrogram with 
     # acoustic activity
     if mask_mode == 'relative' :
         im_mask = create_mask(Sxx_dB_noNoise_smooth,  
-                              mode_bin = 'relative', bin_std=mask_param1, 
-                              bin_per=mask_param2,
-                              display=display, savefig=None, **kwargs) 
+                            mode_bin = 'relative', bin_std=mask_param1, 
+                            bin_per=mask_param2,
+                            display=display, savefig=None, **kwargs) 
     elif  mask_mode == 'absolute' :   
         im_mask = create_mask(Sxx_dB_noNoise_smooth,  
-                              mode_bin = 'absolute', bin_h=mask_param1, 
-                              bin_l=mask_param2,
-                              display=display, savefig=None, **kwargs)    
+                            mode_bin = 'absolute', bin_h=mask_param1, 
+                            bin_l=mask_param2,
+                            display=display, savefig=None, **kwargs)    
     else:
         raise TypeError ('mask_mode should be selected in {relative, absolute}')
             
     # get the mask with rois (im_rois) and the bounding box for each rois (rois_bbox) 
     # and an unique index for each rois => in the pandas dataframe rois
     im_rois, rois  = select_rois(im_mask,
-                                 min_roi=min_roi, 
-                                 max_roi=max_roi,
-                                 display= display, **kwargs)
+                                min_roi=min_roi, 
+                                max_roi=max_roi,
+                                display= display, **kwargs)
     
     ##### Extract centroids features of each roi from the spectrogram in dB without noise 
     X = dB2power(Sxx_dB_noNoise)
@@ -2412,7 +2446,6 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     
     return  ROItotal, ROIcover
 
-
 #=============================================================================
 def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
     """
@@ -2428,7 +2461,7 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         print indices on the default terminal
     display : boolean, default is False
         Display graphs
-    \*\*kwargs : arguments for functions:
+    kwargs : arguments for functions:
         
         - temporal_leq(s, fs, gain, Vadc, sensitivity, dBref, dt)
         - temporal_snr(s, mode, Nt) 
@@ -2477,14 +2510,14 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
             data >Threshold is considered to be an event if the length is > rejectLength
         rejectDuration : scalar, optional, default is None
             event shorter than rejectDuration are discarded duration is in s
-   
+
     Returns
     -------
     df_temporal_indices: Pandas dataframe
-       Dataframe containing of the calculated audio indices : ZCR, MEANt, 
-       VARt, SKEWt, KURTt, LEQt, BGNt, SNRt, MED, Ht, ACTtFraction, 
-       ACTtCount, ACTtMean, EVNtFraction, EVNtMean, EVNtCount
-           
+        Dataframe containing of the calculated audio indices : ZCR, MEANt, 
+        VARt, SKEWt, KURTt, LEQt, BGNt, SNRt, MED, Ht, ACTtFraction, 
+        ACTtCount, ACTtMean, EVNtFraction, EVNtMean, EVNtCount
+    
     See also
     --------
     temporal_moments, temporal_events, temporal_activity, temporal_entropy, 
@@ -2492,24 +2525,26 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
 
     Examples
     --------
+    >>> import maad
+
     >>> s, fs = maad.sound.load('../data/cold_forest_night.wav')
-    >>> df_tempora_indices_NIGHT = maad.features.all_temporal_alpha_indices (s,fs)
+    >>> df_temporal_indices_NIGHT = maad.features.all_temporal_alpha_indices (s,fs)
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
     >>> df_temporal_indices_DAY = maad.features.all_temporal_alpha_indices (s,fs)
     
     Variation between night and day
     
-    >>> var = abs(df_temporal_indices_DAY - df_temporal_indices_NIGHT)/df_temporal_indices_NIGHT*100
-    >>> print('LEQt var night vs day: %2.2f %%' % var.LEQt)
-    LEQt var : 29.66 %
-    >>> print('Ht var night vs day: %2.2f %%' % var.Ht)
-    Ht var : 2.33 %
-    >>> print('MEANt var night vs day: %2.2f %%' % var.MEANt)
-    MEANt var night vs day: 299.62 %
-    >>> print('VARt var night vs day: %2.2f %%' % var.VARt)
-    VARt var night vs day: 1664.02 %
-    >>> print('EVNtFraction var night vs day: %2.2f %%' % var.EVNtFraction)
-    EVNtFraction var night vs day: 98.48 %
+    >>> variation = abs(df_temporal_indices_DAY - df_temporal_indices_NIGHT)/df_temporal_indices_NIGHT*100
+    >>> print('LEQt variation night vs day: %2.2f %%' % variation['LEQt'][0]) # doctest: +NORMALIZE_WHITESPACE
+    LEQt variation night vs day: 29.66 %
+    >>> print('Ht variation night vs day: %2.2f %%' % variation.Ht.iloc[0]) # doctest: +NORMALIZE_WHITESPACE
+    Ht variation night vs day: 2.33 %
+    >>> print('MEANt variation night vs day: %2.2f %%' % variation['MEANt'][0]) # doctest: +NORMALIZE_WHITESPACE
+    MEANt variation night vs day: 299.62 %
+    >>> print('VARt variation night vs day: %2.2f %%' % variation['VARt'][0]) # doctest: +NORMALIZE_WHITESPACE
+    VARt variation night vs day: 1664.02 %
+    >>> print('EVNtFraction variation night vs day: %2.2f %%' % variation['EVNtFraction'][0]) # doctest: +NORMALIZE_WHITESPACE
+    EVNtFraction variation night vs day: 98.48 %
     
     """
     
@@ -2586,9 +2621,9 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
         print("ACTtMean %2.5f" % ACTtMean)
     
     EVNtFraction, EVNtMean, EVNtCount, _ = temporal_events (s, fs, dB_threshold,
-                                                         rejectDuration,
-                                                         mode, Nt,
-                                                         display=display)
+                                                        rejectDuration,
+                                                        mode, Nt,
+                                                        display=display)
     df_temporal_indices += [EVNtFraction, EVNtMean, EVNtCount]
     if verbose :    
         print("EVNtFraction %2.5f" % EVNtFraction)
@@ -2616,10 +2651,10 @@ def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
 
 
 def all_spectral_alpha_indices (Sxx_power, tn, fn,
-                      flim_low=[0,1000], 
-                      flim_mid=[1000,10000], 
-                      flim_hi=[10000,20000], 
-                      verbose=False, display=False, **kwargs):
+                    flim_low=[0,1000], 
+                    flim_mid=[1000,10000], 
+                    flim_hi=[10000,20000], 
+                    verbose=False, display=False, **kwargs):
     """
     Computes the acoustic indices in spectral (spectrum (1d) or spectrogram (2d)) domain.
 
@@ -2641,7 +2676,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print indices on the default terminal
     display : boolean, default is False
         Display graphs
-    \*\*kwargs : arguments for functions:
+    kwargs : arguments for functions:
     
         - spectral_leq
         - frequency_entropy
@@ -2654,7 +2689,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         - spectral_events
         - tfsd
         - region_of_interest_index
-               
+        
         For soundscape_index, bioacoustics_index, acoustic_diversity_index, acoustic_eveness_index
         
         R_compatible : string, optional, default is "soundecology"
@@ -2673,7 +2708,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         pRef : float
             Sound pressure reference in the medium (air : 20e-6, water : 1e-6)
         
-        For spectral activity and events, ADI, AEI
+        For spectral activity and events
         
         dB_threshold : scalar, optional, default is 3dB
             data >Threshold is considered to be an event 
@@ -2721,9 +2756,16 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         
         For ADI, AEI, RAOQ
         
-        bin_step : scalar, optional, default is 500
-            Frequency step in Hz        
-  
+        bin_step : scalar, optional, default is 1000
+            Frequency step in Hz   
+
+        For ADI and AEI
+        
+        ADI_dB_threshold : scalar, optional, default is -50   
+            Threshold in dB
+        AEI_dB_threshold : scalar, optional, default is -50   
+            Threshold in dB
+
     Returns
     -------
     df_spectral_indices: Panda dataframe
@@ -2731,7 +2773,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     df_per_bin_indices : Panda dataframe
         Dataframe containing of the calculated spectral indices  per frequency
         bin :
-           
+    
     See Also
     --------
     number_of_peaks, spectral_leq, spectral_snr, frequency_entropy, 
@@ -2740,8 +2782,18 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     spectral_activity, spectral_events, tfsd, more_entropy, frequency_raoq, 
     acoustic_gradient_index, region_of_interest_index
 
+    Notes
+    -----
+    In order to obtain the same output for AEI and ADI as for soundecology,
+        the signal and the spectrogram need to be processed without detrend on.
+        maad.sound.load("myfile.wav", ..., detrend = False)
+        maad.sound.spectrogram(s, fs, ..., detrend = False)
+        For a complete example, see the examples of the functions acoustic_eveness_index and acoustic_diversity_index
+
     Examples
-    --------    
+    --------
+    >>> import maad
+
     Spectral indices on a daylight recording
     
     >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
@@ -2756,17 +2808,17 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     
     Variation between night and day
     
-    >>> var = abs(df_spectral_indices_DAY - df_spectral_indices_NIGHT)/df_spectral_indices_NIGHT*100
-    >>> print('LEQf var night vs day: %2.2f %%' % var.LEQf)
-    LEQf var night vs day: 34.94 %
-    >>> print('Hf var night vs day: %2.2f %%' % var.Hf)
-    Hf var night vs day: 105.61 %
-    >>> print('ACI var night vs day: %2.2f %%' % var.ACI)
-    ACI var night vs day: 3.39 %
-    >>> print('AGI var night vs day: %2.2f %%' % var.AGI)
-    AGI var night vs day: 20.50 %
-    >>> print('ROItotal var night vs day: %2.2f %%' % var.ROItotal)
-    ROItotal var night vs day: 248.68 %
+    >>> variation = abs(df_spectral_indices_DAY - df_spectral_indices_NIGHT)/df_spectral_indices_NIGHT*100
+    >>> print('LEQf variation night vs day: %2.2f %%' % variation['LEQf'][0]) # doctest: +NORMALIZE_WHITESPACE
+    LEQf variation night vs day: 34.94 %
+    >>> print('Hf variation night vs day: %2.2f %%' % variation['Hf'][0]) # doctest: +NORMALIZE_WHITESPACE
+    Hf variation night vs day: 105.61 %
+    >>> print('ACI variation night vs day: %2.2f %%' % variation['ACI'][0]) # doctest: +NORMALIZE_WHITESPACE
+    ACI variation night vs day: 3.39 %
+    >>> print('AGI variation night vs day: %2.2f %%' % variation['AGI'][0]) # doctest: +NORMALIZE_WHITESPACE
+    AGI variation night vs day: 20.50 %
+    >>> print('ROItotal variation night vs day: %2.2f %%' % variation['ROItotal'][0]) # doctest: +NORMALIZE_WHITESPACE
+    ROItotal variation night vs day: 264.47 %
     
     """
     
@@ -2799,6 +2851,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     
     ### for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
+    ### for ADI, AEI
     ADI_dB_threshold = kwargs.pop('ADI_dB_threshold',-50) # in dB 
     AEI_dB_threshold = kwargs.pop('AEI_dB_threshold',-50) # in dB 
     # => for same result as soundecology, we have to compute AEI and ADI outside
@@ -2837,15 +2890,17 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print("VARf %2.5f" % VARf)
         print("SKEWf %2.5f" % SKEWf)
         print("KURTf %2.5f" % KURTf)
-     
+    
     """*********************** 4 audio moments per bin ********************""" 
     MEANt_per_bin, VARt_per_bin, SKEWt_per_bin, KURTt_per_bin = spectral_moments(Sxx_amplitude, axis=1) 
     MEANt_per_bin = np.asarray(MEANt_per_bin).tolist()
     VARt_per_bin = np.asarray(VARt_per_bin).tolist()
     SKEWt_per_bin = np.asarray(SKEWt_per_bin).tolist()
     KURTt_per_bin = np.asarray(KURTt_per_bin).tolist()
-    df_per_bin_indices += [MEANt_per_bin,VARt_per_bin,
-                           SKEWt_per_bin,KURTt_per_bin]
+    df_per_bin_indices += [
+                        MEANt_per_bin,VARt_per_bin,
+                        SKEWt_per_bin,KURTt_per_bin
+                        ]
     """**************************** Number of peaks ************************"""
     NBPEAKS = number_of_peaks(S_amplitude,fn,display=display)
     df_spectral_indices += [NBPEAKS]
@@ -2863,9 +2918,11 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     """ SNRf [TOWSEY] """
     ENRf, BGNf, SNRf, ENRf_per_bin, BGNf_per_bin, SNRf_per_bin = spectral_snr(Sxx_power)
     df_spectral_indices += [ENRf, BGNf, SNRf]
-    df_per_bin_indices += [np.asarray(ENRf_per_bin).tolist(),
-                           np.asarray(BGNf_per_bin).tolist(),
-                           np.asarray(SNRf_per_bin).tolist()]
+    df_per_bin_indices += [
+                        np.asarray(ENRf_per_bin).tolist(),
+                        np.asarray(BGNf_per_bin).tolist(),
+                        np.asarray(SNRf_per_bin).tolist()
+                        ]
     if verbose :
         print("ENRf %2.5f" % ENRf)
         print("BGNf %2.5f" % BGNf)
@@ -2889,9 +2946,9 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     """ EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  """
     #### Does not take into account low frequencies.
     EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = spectral_entropy (Sxx_power_noNoise,
-                                                               fn,
-                                                               flim=(flim_mid[0],flim_hi[1]),
-                                                               display=display)
+                                                            fn,
+                                                            flim=(flim_mid[0],flim_hi[1]),
+                                                            display=display)
     df_spectral_indices += [EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW] 
     if verbose :
         print("EAS %2.5f" % EAS)
@@ -2921,20 +2978,20 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     #### energy repartition in the frequency bins
     """ NDSI & rBA """
     NDSI, rBA, AnthroEnergy, BioEnergy = soundscape_index(Sxx_power, fn, 
-                                                         flim_bioPh=flim_mid,
-                                                         flim_antroPh=flim_low,
-                                                         R_compatible=R_compatible) 
+                                                        flim_bioPh=flim_mid,
+                                                        flim_antroPh=flim_low,
+                                                        R_compatible=R_compatible) 
     df_spectral_indices += [NDSI, rBA, AnthroEnergy, BioEnergy]
     if verbose :                                         
         if R_compatible == 'soundecology' :
             print("NDSI {soundecology} %2.5f" %NDSI)
         else :
             print("NDSI {seewave} %2.5f" %NDSI)
-   
+
     ###### Bioacoustics Index : the calculation in R from soundecology is weird...
     """ BI """
     BI = bioacoustics_index(Sxx_amplitude, fn, 
-                           flim=flim_mid, R_compatible=R_compatible) 
+                        flim=flim_mid, R_compatible=R_compatible) 
     df_spectral_indices += [BI]
     if verbose :
         if R_compatible == 'soundecology' :
@@ -2957,19 +3014,19 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     """ 
         COMMENT :
                 - threshold : -50dB when norm by the max (as soundecology)
-                              6dB if PSDxxdB_SansNoise
+                            6dB if PSDxxdB_SansNoise
     """  
     ADI = acoustic_diversity_index(Sxx_amplitude, fn, fmin=flim_low[0], 
-                                 fmax=flim_mid[1], bin_step=bin_step, 
-                                 dB_threshold=ADI_dB_threshold, index="shannon") 
+                                fmax=flim_mid[1], bin_step=bin_step, 
+                                dB_threshold=ADI_dB_threshold, index="shannon") 
     AEI = acoustic_eveness_index(Sxx_amplitude, fn, fmin=flim_low[0], 
-                               fmax=flim_mid[1], bin_step=bin_step, 
-                               dB_threshold=AEI_dB_threshold) 
+                            fmax=flim_mid[1], bin_step=bin_step, 
+                            dB_threshold=AEI_dB_threshold) 
     df_spectral_indices += [ADI, AEI]
     if verbose :
         print("ADI %2.5f" %ADI)
         print("AEI %2.5f" %AEI)
-               
+    
     """************************** SPECTRAL COVER ***************************"""
     #### frequency cover 
     """ LFC, MFC, HFC [TOWSEY] """
@@ -2993,8 +3050,10 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     ACTspFract_avg = np.mean(ACTspFract)
     ACTspCount_avg = np.mean(ACTspCount)
     df_spectral_indices += [ACTspFract_avg, ACTspCount_avg, ACTspMean]
-    df_per_bin_indices += [np.asarray(ACTspFract).tolist(),
-                           np.asarray(ACTspCount).tolist()]
+    df_per_bin_indices += [
+                        np.asarray(ACTspFract).tolist(),
+                        np.asarray(ACTspCount).tolist()
+                        ]
     if verbose :
         print("ACTspFract %2.5f" %ACTspFract_avg)
         print("ACTspCount %2.5f" %ACTspCount_avg)
@@ -3010,18 +3069,20 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     EVNspMean_avg = np.mean(EVNspMean)
     EVNspCount_avg = np.mean(EVNspCount)
     df_spectral_indices += [EVNspFract_avg, EVNspMean_avg, EVNspCount_avg]
-    df_per_bin_indices += [np.asarray(EVNspFract).tolist(),
-                           np.asarray(EVNspMean).tolist(),
-                           np.asarray(EVNspCount).tolist()]
+    df_per_bin_indices += [
+                        np.asarray(EVNspFract).tolist(),
+                        np.asarray(EVNspMean).tolist(),
+                        np.asarray(EVNspCount).tolist()
+                        ]
     if verbose :
         print("EVNspFract %2.5f" %mean(EVNspFract))
         print("EVNspMean %2.5f" %mean(EVNspMean))
         print("EVNspCount %2.5f" %mean(EVNspCount))
-          
+
     """**************************** New indices*****************************""" 
     """ TFSD """
     # compute TFSD with mode = ThirdOctave and flim
-    TFSD= tfsd(Sxx_amplitude,fn,tn,flim=flim_mid,mode='thirdOctave')
+    TFSD= tfsd(Sxx_amplitude,fn,tn,flim=flim_mid,mode='thirdOctave', log=True)
     df_spectral_indices += [TFSD]
     if verbose :
         print("TFSD %2.5f" % TFSD)
@@ -3049,8 +3110,10 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     # Time resolution (in s)
     DELTA_T = tn[1]-tn[0]
     X = Sxx_amplitude
-    _, AGI_per_bin, AGI, _ = acoustic_gradient_index(X, dt=DELTA_T, 
-                                                   order=1, norm='per_bin')
+    _, AGI_per_bin, AGI, _ = acoustic_gradient_index(
+                                                X, dt=DELTA_T, 
+                                                order=1, norm='per_bin'
+                                                )
     df_spectral_indices += [AGI]
     df_per_bin_indices += [np.asarray(AGI_per_bin).tolist()]
     if verbose :
@@ -3069,16 +3132,16 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     if min_roi_area is None :
         min_roi_area = int(MIN_EVENT_DUR/DELTA_T * MIN_FREQ_BW / DELTA_F)
     ROItotal, ROIcover = region_of_interest_index(Sxx_dB_noNoise, 
-                                               tn, fn, 
-                                               smooth_param1, 
-                                               mask_mode,
-                                               mask_param1, 
-                                               mask_param2, 
-                                               min_roi=min_roi_area, 
-                                               max_roi=max_roi_area,
-                                               remove_rain = remove_rain,
-                                               max_ratio_xy = max_ratio_xy,
-                                               display=display)
+                                            tn, fn, 
+                                            smooth_param1, 
+                                            mask_mode,
+                                            mask_param1, 
+                                            mask_param2, 
+                                            min_roi=min_roi_area, 
+                                            max_roi=max_roi_area,
+                                            remove_rain = remove_rain,
+                                            max_ratio_xy = max_ratio_xy,
+                                            display=display)
     df_spectral_indices += [ROItotal, ROIcover]
     if verbose :
         print("ROItotal %2.3f" % ROItotal)
@@ -3086,49 +3149,49 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         
     df_spectral_indices = pd.DataFrame([df_spectral_indices], 
                                     columns=['MEANf', 
-                                             'VARf', 
-                                             'SKEWf', 
-                                             'KURTf', 
-                                             'NBPEAKS', 
-                                             'LEQf', 
-                                             'ENRf', 
-                                             'BGNf', 
-                                             'SNRf',
-                                             'Hf', 
-                                             'EAS',
-                                             'ECU',
-                                             'ECV',
-                                             'EPS',
-                                             'EPS_KURT',
-                                             'EPS_SKEW',
-                                             'ACI',
-                                             'NDSI',
-                                             'rBA',
-                                             'AnthroEnergy',
-                                             'BioEnergy',
-                                             'BI',
-                                             'ROU',
-                                             'ADI',
-                                             'AEI',
-                                             'LFC',
-                                             'MFC',
-                                             'HFC',
-                                             'ACTspFract',
-                                             'ACTspCount',
-                                             'ACTspMean', 
-                                             'EVNspFract',
-                                             'EVNspMean',
-                                             'EVNspCount',
-                                             'TFSD',
-                                             'H_Havrda',
-                                             'H_Renyi',
-                                             'H_pairedShannon', 
-                                             'H_gamma', 
-                                             'H_GiniSimpson',
-                                             'RAOQ',
-                                             'AGI',
-                                             'ROItotal',
-                                             'ROIcover'])
+                                            'VARf', 
+                                            'SKEWf', 
+                                            'KURTf', 
+                                            'NBPEAKS', 
+                                            'LEQf', 
+                                            'ENRf', 
+                                            'BGNf', 
+                                            'SNRf',
+                                            'Hf', 
+                                            'EAS',
+                                            'ECU',
+                                            'ECV',
+                                            'EPS',
+                                            'EPS_KURT',
+                                            'EPS_SKEW',
+                                            'ACI',
+                                            'NDSI',
+                                            'rBA',
+                                            'AnthroEnergy',
+                                            'BioEnergy',
+                                            'BI',
+                                            'ROU',
+                                            'ADI',
+                                            'AEI',
+                                            'LFC',
+                                            'MFC',
+                                            'HFC',
+                                            'ACTspFract',
+                                            'ACTspCount',
+                                            'ACTspMean', 
+                                            'EVNspFract',
+                                            'EVNspMean',
+                                            'EVNspCount',
+                                            'TFSD',
+                                            'H_Havrda',
+                                            'H_Renyi',
+                                            'H_pairedShannon', 
+                                            'H_gamma', 
+                                            'H_GiniSimpson',
+                                            'RAOQ',
+                                            'AGI',
+                                            'ROItotal',
+                                            'ROIcover'])
         
     df_per_bin_indices = pd.DataFrame([df_per_bin_indices], 
                                     columns=['frequencies',
@@ -3153,3 +3216,7 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                                     
     return df_spectral_indices, df_per_bin_indices
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

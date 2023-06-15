@@ -235,10 +235,11 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
         Target sampling rate.
 
     res_type : str, optional
-        Resample method. By default 'kaiser_best', is a high-quality method.
-        `res_type='kaiser_fast'` is a faster method.
-        `res_type='sinc_window'` is an advanced and custom method of resampling. 
-        `res_type='scipy'` is a Fourier transforms method based.
+        Resample method. By default 'kaiser_best'.
+        'kaiser_best' method that applies a Kaiser windowed sinc interpolation.
+        'kaiser_fast' similar to kaiser_best, but faster.
+        'scipy' is a Fourier transform method implemented in scipy.
+        'scipy_poly' Resample using polyphase filtering and an FIR filter. 
 
     kwargs : additional keyword arguments
         If `res_type='sinc_window'`, additional keyword arguments to pass to
@@ -269,15 +270,28 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
     """
     if fs == target_fs:
         return s
-    
-    ratio = float(target_fs) / fs
-    n_samples = int(np.ceil(s.shape[-1] * ratio))
 
     if res_type == 'scipy':
-        res_data = scipy.signal.resample(s, n_samples, axis = -1)
+        # Calculate the resampling ratio and get the number of output samples
+        ratio = float(target_fs) / fs
+        n_samples = int(np.round(s.shape[-1] * ratio))
+        res_data = scipy.signal.resample(s, n_samples, axis=-1, **kwargs)
+    
+    elif res_type == 'scipy_poly':
+        # Calculate the resampling ratio and get the common denominator
+        gcd = np.gcd(int(fs), int(target_fs))
+        num = target_fs // gcd
+        den = fs // gcd
+        # Resample the signal using SciPy's resample_poly function
+        res_data = scipy.signal.resample_poly(s, num, den)
+    
+    elif res_type in ('kaiser_best', 'kaiser_fast'):
+        warn("Methods 'kaiser_fast' and 'kaiser_best' are deprecated and will be removed from future versions.", DeprecationWarning)
+        res_data = resampy.resample(s, fs, target_fs, filter=res_type, axis=-1, **kwargs)
     
     else:
-        res_data = resampy.resample(s, fs, target_fs, filter=res_type, axis=-1, **kwargs)
+        raise ValueError("Valid resample methods are 'scipy', 'scipy_poly', 'kaiser_best', 'kaiser_fast', not res_type={}".format(res_type))
+                         
     return np.ascontiguousarray(res_data, dtype=s.dtype)
 
 #%%

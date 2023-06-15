@@ -2,12 +2,6 @@
 """ 
 Mathematical tools for audio signal processing.
 """
-#
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
-#           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
-#
-# License: New BSD License
-
 # =============================================================================
 # Load the modules
 # =============================================================================
@@ -15,7 +9,7 @@ Mathematical tools for audio signal processing.
 import matplotlib.pyplot as plt
 import numpy as np 
 from numpy import mean, median, var
-from scipy.ndimage.filters import uniform_filter1d # for fast running mean
+from scipy.ndimage import uniform_filter1d # for fast running mean
 from scipy.signal import periodogram, welch
 import pandas as pd
 # min value

@@ -1,5 +1,5 @@
-Quickstart
-^^^^^^^^^^
+Quick start
+^^^^^^^^^^^
 
 The full package is imported as ``maad``::
 

@@ -68,15 +68,15 @@ def xc_query(searchTerms,
         Dataframe containing all the recordings metadata matching search terms
     """
     
-    #*** HACK *** to remove the parameter 'type' from query as it does
-    # not work at the time 10 Nov 2022
-    params = searchTerms
-    searchTerms = []
-    if params is not None :
-        for param in params:
-            if 'type' not in param :  
-                searchTerms.append(param)    
-    #*** END HACK *** 
+    # #*** HACK *** to remove the parameter 'type' from query as it does
+    # # not work at the time 10 Nov 2022
+    # params = searchTerms
+    # searchTerms = []
+    # if params is not None :
+    #     for param in params:
+    #         if 'type' not in param :  
+    #             searchTerms.append(param)    
+    # #*** END HACK *** 
     
     # initialization of 
     numPages = 1
@@ -94,23 +94,23 @@ def xc_query(searchTerms,
         # check number of pages
         numPages = jsondata['numPages']
         # Append pandas dataframe of records & convert to .csv file
-        df_dataset = df_dataset.append(pd.DataFrame(jsondata['recordings']))
+        df_dataset = pd.concat([df_dataset, pd.DataFrame(jsondata['recordings'])]) #df_dataset.append(pd.DataFrame(jsondata['recordings']))
         # increment the current page
         page = page+1
                 
     # test if the dataset is not empty
     if len(df_dataset)>0:
         
-        #*** HACK *** to filter the dataset with the parameter 'type' as it does
-        # not work for regular query at the time 10 Nov 2022
-        if verbose :
-            print("searchTerms {}".format(searchTerms))
-        if params is not None :
-            for param in params  :
-                if 'type' in param :
-                    value =  param.split(':')[1] 
-                    df_dataset = df_dataset[df_dataset.type.apply(lambda type: value in type)]
-        #*** END HACK *** 
+        # #*** HACK *** to filter the dataset with the parameter 'type' as it does
+        # # not work for regular query at the time 10 Nov 2022
+        # if verbose :
+        #     print("searchTerms {}".format(searchTerms))
+        # if params is not None :
+        #     for param in params  :
+        #         if 'type' in param :
+        #             value =  param.split(':')[1] 
+        #             df_dataset = df_dataset[df_dataset.type.apply(lambda type: value in type)]
+        # #*** END HACK *** 
 
         # convert latitude and longitude coordinates into float
         df_dataset['lat'] = df_dataset['lat'].astype(float)
@@ -157,7 +157,7 @@ def xc_query(searchTerms,
         
         if (format_time == True) and (format_date == True) :         
             # add a column with the week number
-            df_dataset['week'] = pd.to_datetime(df_dataset['date']).dt.isocalendar()['week']
+            df_dataset['week'] = pd.to_datetime(df_dataset['date']).dt.isocalendar()['week'] # type: ignore
             # add a column with datetime in DateTime format
             df_dataset['datetime'] =  pd.to_datetime(df_dataset['time']+' '+ df_dataset['date'])
 
@@ -221,12 +221,12 @@ def xc_multi_query(df_query,
     df_dataset = pd.DataFrame()
     for index, row in df_query.iterrows():
         searchTerms = row.tolist()
-        df_dataset = df_dataset.append(xc_query(searchTerms, 
+        df_dataset = pd.concat([df_dataset, xc_query(searchTerms, 
                                                 max_nb_files,
                                                 format_time,
                                                 format_date,
                                                 random_seed,
-                                                verbose))
+                                                verbose)]) # df_dataset.append
 
     # rearrange index to be sure to have unique and increasing index
     df_dataset.reset_index(drop=True, inplace=True)
@@ -308,7 +308,7 @@ def xc_selection(df_dataset,
                 df_temp = subdf_dataset[mask1].sort_values(
                     by='length', ascending=False).iloc[0:requested_nb_files]
                 # add the rows to the output dataframe
-                df_dataset_out = df_dataset_out.append(df_temp)
+                df_dataset_out = pd.concat([df_dataset_out, df_temp], axis=0)
                 # drop the selected rows to avoid future selection
                 subdf_dataset.drop(df_temp.index, axis=0, inplace=True)
             else :  
@@ -316,7 +316,7 @@ def xc_selection(df_dataset,
                 df_temp = subdf_dataset[mask1].sort_values(
                     by='length', ascending=False)
                 # add the rows to the output dataframe
-                df_dataset_out = df_dataset_out.append(df_temp)
+                df_dataset_out = pd.concat([df_dataset_out, df_temp], axis=0)
                 # drop the selected rows to avoid future selection
                 subdf_dataset.drop(df_temp.index, axis=0, inplace=True)
             if verbose : 
@@ -429,11 +429,13 @@ def xc_download(df,
                     fullpath, _ = urllib.request.urlretrieve(fileaddress, path / filename)
                     fullpath_list += [str(fullpath)]
                     if verbose : 
+                        numfiles = len(df)
                         print("Saving file ", count, "/", numfiles, ": " + fileaddress)
                 except:
                     # can't download the audio file (it does not exist (anymore) in
                     # xeno-canto)
                     if verbose :
+                        numfiles = len(df)
                         print("***WARNING*** Can't save the file ", 
                               count, "/", numfiles, ": " + fileaddress)
                     # drop the row of this recordings

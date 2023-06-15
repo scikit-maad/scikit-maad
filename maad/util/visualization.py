@@ -138,7 +138,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
             Postfix of the figure filename 
@@ -321,7 +321,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
          
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlayrois.png' 
             Postfix of the figure filename 
@@ -530,11 +530,12 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
                     fontvariant='small-caps',
                     bbox=textbox
                     )
-
-    fig.canvas.draw()
+            
+    if fig is not None:
+        fig.canvas.draw()
 
     # SAVE FIGURE
-    if savefig is not None:
+    if savefig is not None and fig is not None:
         dpi = kwargs.pop("dpi", 96)
         format = kwargs.pop("format", "png")
         filename = kwargs.pop("filename", "_spectro_overlayrois")
@@ -561,7 +562,7 @@ def plot1d(x, y, ax=None, **kwargs):
         Draw the signal on this specific axis. Allow multiple plots on the same
         axis.
             
-    \*\*kwargs, optional
+    kwargs, optional
         - figsize : tuple of integers, optional, default: (4,10)
             width, height in inches.  
         - facecolor : matplotlib color, optional, default: 'w' (white)
@@ -646,7 +647,7 @@ def plot1d(x, y, ax=None, **kwargs):
     xlabel = kwargs.pop("xlabel", "Time [s]")
     ylabel = kwargs.pop("ylabel", "Amplitude [AU]")
     legend = kwargs.pop("legend", None)
-    now = kwargs.pop("now", True)
+    now = kwargs.pop("now", False)
 
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -836,7 +837,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
         Draw the image on this specific axis. Allow multiple plots on the same
         figure.
             
-    \*\*kwargs, optional
+    kwargs, optional
         - figsize : tuple of integers, optional, default: (4,13)
             width, height in inches.  
         - title : string, optional, default : 'Spectrogram'
@@ -908,7 +909,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
     vmin = kwargs.pop("vmin", None)
     vmax = kwargs.pop("vmax", None)
     extent = kwargs.pop("extent", None)
-    now = kwargs.pop("now", True)
+    now = kwargs.pop("now", False)
 
     if extent is not None:
         figsize = kwargs.pop(
@@ -1563,8 +1564,9 @@ def plot_correlation_map(df, R_threshold=0.75, method="spearman", **kwargs):
     >>> df.columns = indices
     >>> maad.util.plot_correlation_map(df, R_threshold=0)
     """
-    # Correlation matrix
-    corr_matrix = df.corr(method)
+    # Correlation matrix with only the columns that contain numeric values
+    numeric_columns = df.select_dtypes(include='number')
+    corr_matrix = numeric_columns.corr()
 
     # pop kwargs
     figsize = kwargs.pop("figsize", (10, 8))
@@ -1656,7 +1658,7 @@ def false_Color_Spectro(
         if not None, figures will be safe. Savefig is the prefix of the save
         filename.
     
-    \*\*kwargs, optional
+    kwargs, optional
        - dpi : scalar, optional, default 96
        - format : str, optional, default .png
     

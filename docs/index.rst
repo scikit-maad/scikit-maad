@@ -10,11 +10,10 @@
 Soundscape analysis in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**scikit-maad** is an open source Python package dedicated to the quantitative analysis of environmental audio recordings. This package was designed to (1) load and process digital audio, (2) segment and find regions of interest, (3) compute acoustic features, and (4) estimate sound pressure level. This workflow opens the possibility to scan large audio datasets and use powerful machine learning techniques, allowing to measure acoustic properties and identify key patterns in all kinds of soundscapes.
+**scikit-maad** is an open source Python package dedicated to the quantitative analysis of environmental audio recordings. This package was designed to (1) load and process digital audio, (2) segment and find regions of interest, (3) compute acoustic features, and (4) estimate sound pressure levels. This workflow opens the possibility to scan large audio datasets and use powerful machine learning techniques, allowing to measure acoustic properties and identify key patterns in all kinds of soundscapes.
 
 .. note::
-  A new stable release of scikit-maad is now available (v1.3), including a wrapper to download xeno-canto recordings, functions to estimate the detection distance of signals, new display functions and much more.
-  See full details on `GitHub <https://github.com/scikit-maad/scikit-maad/releases/tag/1.3>`_.
+  A new stable release of scikit-maad is now available (v1.4) This new release adheres to the guidelines for a more robust, stable, and responsive package, aiming to enhance performance and enable more reproducible scientific research. `GitHub <https://github.com/scikit-maad/scikit-maad/releases/tag/1.4>`_.
 
 .. toctree::
    :maxdepth: 1

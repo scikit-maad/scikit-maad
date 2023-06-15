@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-USE MULTICPU FUNCTIONALITY TO COMPUTE INDICES
+Use multicpu functionality to compute indices
 ==============================================
 
 Acoustic indices can summarize aspects of the acoustic energy distribution in
@@ -13,8 +13,9 @@ example can be downloaded from the open GitHub repository
 (https://github.com/scikit-maad/scikit-maad/tree/production/data).
 
 """
-# sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_extract_alpha_indices_multicpu_001.png'
+# sphinx_gallery_thumbnail_path = '_auto_examples/2_advanced/images/sphx_glr_plot_extract_alpha_indices_multicpu_001.png'
 
+#%%
 import pandas as pd
 import os
 import time
@@ -27,7 +28,8 @@ from concurrent import futures
 
 from maad import sound, features
 from maad.util import date_parser
-                       
+import multiprocessing as mp  
+mp.set_start_method("fork")   # This start method is necessary for macOS, and the default method on Linux
 #%%
 # Set Variables
 # -------------
@@ -180,7 +182,7 @@ with tqdm(total=len(df), desc="unique cpu indices calculation...") as pbar:
     for index, row in df.iterrows() :
         df_indices_temp = single_file_processing(row["file"], row["Date"])
         pbar.update(1)
-        df_indices = df_indices.append(df_indices_temp)
+        df_indices = pd.concat([df_indices, df_indices_temp])
 toc = time.perf_counter()
 
 # time duration of the process
@@ -215,7 +217,7 @@ with tqdm(total=len(df), desc="multi cpu indices calculation...") as pbar:
             df["Date"].to_list()
         ):
             pbar.update(1)
-            df_indices = df_indices.append(df_indices_temp)
+            df_indices = pd.concat([df_indices, df_indices_temp])
 toc = time.perf_counter()
 
 # time duration of the process
@@ -240,3 +242,5 @@ ax.set_title("Comparison between sequential\n and parallel processing")
 
 fig.tight_layout()
 
+
+# %%

@@ -74,7 +74,7 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
 
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
 
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
@@ -290,7 +290,7 @@ def remove_background_morpho(Sxx, q=0.1, display=False, savefig=None, **kwargs):
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
 
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
 
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
@@ -497,7 +497,7 @@ def remove_background_along_axis(Sxx, mode='median', axis=1, N=25, N_bins=50,
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
 
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
 
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
@@ -670,7 +670,7 @@ def median_equalizer(Sxx, display=False, savefig=None, **kwargs):
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
 
-    \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions 
+    kwargs, optional. This parameter is used by plt.plot and savefig functions 
 
         - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png' 
             Postfix of the figure filename 
@@ -846,7 +846,7 @@ def pcen(Sxx, gain=0.98, bias=2, power=0.5, b=0.025, eps=1e-6,
            Root filename (with full path) is required to save the figures. Postfix
            is added to the root filename.
 
-       \*\*kwargs, optional. This parameter is used by plt.plot and savefig functions
+       kwargs, optional. This parameter is used by plt.plot and savefig functions
 
            - savefilename : str, optional, default :'_spectro_after_noise_subtraction.png'
                Postfix of the figure filename

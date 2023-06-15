@@ -3,7 +3,7 @@
 """
 Download metadata from Xeno-Canto to infer species activities
 =============================================================
- 
+
 The goal of this example is to show how to download metadata from Xeno-Canto
 to infer species activities. 
 We focus on the activity of european woodpeckers.
@@ -59,8 +59,10 @@ data = [['Eurasian Three-toed', 'Picoides tridactylus'],
 
 #%%
 # creation of a dataframe for the array with species names
-df_species = pd.DataFrame(data,columns =['english name',
-                                         'scientific name'])
+df_species = pd.DataFrame(
+    data=data,
+    columns=['english name','scientific name']
+    )
 
 #%%
 # get the genus and species needed for Xeno-Canto
@@ -76,8 +78,7 @@ for name in df_species['scientific name']:
 # cnt : country
 # area : continent (europe, america, asia, africa)
 # q : quality (q_gt => quality equal or greater than)
-# len : length of the audio file (len_lt => length lower than; 
-#                                 len_gt => length greater than )
+# len : length of the audio file (len_lt => length lower than; len_gt => length greater than )
 # type : type of sound : 'song' or 'call' or 'drumming'
 # Please have a look here to know all the parameters and how to use them :
 # https://xeno-canto.org/help/search
@@ -90,10 +91,12 @@ df_query['param5'] ='area:europe'
 
 #%%
 # Get recordings metadata corresponding to the query
-df_dataset = util.xc_multi_query(df_query, 
-                                 format_time = True,
-                                 format_date = True,
-                                 verbose=True)
+df_dataset = util.xc_multi_query(
+    df_query=df_query, 
+    format_time=True,
+    format_date=True,
+    verbose=True
+    )
 
 #%%
 # Creation of a dataframe with the number of files per species per 30mins
@@ -106,9 +109,15 @@ df_dataset = util.xc_multi_query(df_query,
 # make a copy of the dataset to avoid any modification of the original dataset
 df = df_dataset.copy()
 # remove all rows where data is missing (NA)
-df.dropna(subset=['time'], inplace=True)
+df.dropna(
+    subset=['time'], 
+    inplace=True
+    )
 # Convert time into datetime
-df['time'] = pd.to_datetime(df['time'], format="%H:%M")
+df['time'] = pd.to_datetime(
+    arg=df['time'], 
+    format="%H:%M"
+    )
 
 #%%
 # New dataframe with the number of audio files per time slot.
@@ -120,10 +129,10 @@ for species in list_species :
     df_temp = pd.DataFrame()
     df_temp['count'] = df[df['en']==species].set_index(['time']).resample('30T').count().iloc[:,0]
     df_temp['species'] = species
-    df_count = df_count.append(df_temp)
+    df_count = pd.concat([df_count, df_temp]) 
 
 # create a column with time only
-df_count['time'] = df_count.index.strftime('%H:%M')
+df_count['time'] = df_count.index.strftime('%H:%M') # type: ignore
 
 #%% 
 # Creation of a dataframe with the number of files per species per week
@@ -135,18 +144,24 @@ df_count['time'] = df_count.index.strftime('%H:%M')
 
 # make a copy of the dataset to avoid any modification of the original dataset
 df = df_dataset.copy()
+
 # remove all rows where data is missing (NA)
-df.dropna(subset=['week'], inplace=True)
+df.dropna(
+    subset=['week'], 
+    inplace=True
+    )
 
 #%%
 # New dataframe with the number of audio files per week
 df_week_count = pd.DataFrame()
+
 list_species = df['en'].unique()
+
 for species in list_species :
     df_temp = pd.DataFrame()
     df_temp['count'] = df[df['en']==species].set_index(['week']).index.value_counts()
     df_temp['species'] = species
-    df_week_count = df_week_count.append(df_temp)
+    df_week_count = pd.concat([df_week_count, df_temp]) 
     
 # create a column with time only
 df_week_count["week"] = df_week_count.index
@@ -178,7 +193,7 @@ for species in list_species:
 # Display the heatmap to see when (time of the day) the woodpeckers are active.
 # Woodpeckers are the most active during the morning, between 6:00am till 
 # 10:00am.
-df = df.pivot( 'species', 'time', "count")
+df = df.pivot(index='species', columns='time', values='count')
 df = df.fillna(0)
 
 # plot figure
@@ -191,19 +206,39 @@ ax.set_xticks(np.arange(0, len(list(df)), 1))
 ax.set_yticks(np.arange(0, len(df.index), 1))
 
 # Labels for major ticks
-ax.set_xticklabels(list(df),
-                   fontsize=9,
-                   rotation=90)
-ax.set_yticklabels(df.index,
-                   fontsize=9)
+ax.set_xticklabels(
+    list(df),
+    fontsize=9,
+    rotation=90
+    )
+ax.set_yticklabels(
+    df.index,
+    fontsize=9
+    )
 
 # Minor ticks
-ax.set_xticks(np.arange(-0.5, len(list(df)), 1), minor=True)
-ax.set_yticks(np.arange(-0.5, len(df.index), 1), minor=True)
+ax.set_xticks(
+    np.arange(-0.5, len(list(df)), 1), 
+    minor=True)
+
+ax.set_yticks(
+    np.arange(-0.5, len(df.index), 1), 
+    minor=True)
 
 # Gridlines based on minor ticks
-ax.grid(which='major', color='w', linestyle='-', linewidth=0)
-ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
+ax.grid(
+    which='major', 
+    color='w', 
+    linestyle='-', 
+    linewidth=0
+    )
+
+ax.grid(
+    which='minor', 
+    color='w', 
+    linestyle='-', 
+    linewidth=1
+    )
 
 fig.tight_layout()
 
@@ -214,23 +249,38 @@ fig.tight_layout()
 df = df_week_count.copy()
 #%%
 # create a new dataframe with the normalized number of audio files per week
+df['count'] = df['count'].astype(float)
+
 for species in list_species:
-    df.loc[df['species'] == species, 'count'] = (df[df['species'] == species]['count']
-                                                 /
-                                                 np.max(df[df['species'] == species]['count']))
+    # filter the rows with specific species and its count
+    sub_df = df.loc[df['species'] == species, 'count']
+    
+    # scale the count values using MinMaxScaler
+    scaled_counts = df[df['species'] == species]['count'] / np.max(df[df['species'] == species]['count'])
+    
+    # update the original DataFrame with scaled count values
+    df.loc[df['species'] == species, 'count'] = scaled_counts
 
 #%%
 # Display the heatmap to see when (annually) the woodpeckers are active.
 # Woodpeckers are the most active during the winter and beginning of spring 
 # (Februrary to April).
-df = df.pivot( 'species', 'week', "count")
+df = df.pivot(
+    index='species', 
+    columns='week', 
+    values='count')
 df = df.fillna(0)
 
 # plot figure
-fig = plt.figure(figsize= (11,2.5))
+fig = plt.figure(figsize=(11,2.5))
 ax = fig.add_subplot(111)
 
-ax.imshow(df, aspect="auto", interpolation="None", cmap="Reds")
+ax.imshow(
+    df, 
+    aspect="auto", 
+    interpolation="None", 
+    cmap="Reds"
+    )
 
 # Major ticks
 ax.set_xticks(np.arange(0, len(list(df)), 1))
@@ -244,12 +294,29 @@ ax.set_yticklabels(df.index,
                    fontsize=8)
 
 # Minor ticks
-ax.set_xticks(np.arange(-0.5, len(list(df)), 1), minor=True)
-ax.set_yticks(np.arange(-0.5, len(df.index), 1), minor=True)
+ax.set_xticks(
+    np.arange(-0.5, len(list(df)), 1), 
+    minor=True
+    )
+
+ax.set_yticks(
+    np.arange(-0.5, len(df.index), 1), 
+    minor=True
+    )
 
 # Gridlines based on minor ticks
-ax.grid(which='major', color='w', linestyle='-', linewidth=0)
-ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
+ax.grid(
+    which='major', 
+    color='w', 
+    linestyle='-', 
+    linewidth=0)
+
+ax.grid(
+    which='minor', 
+    color='w', 
+    linestyle='-', 
+    linewidth=1
+    )
 
 # add the title of the x-axis
 ax.set_xlabel("week number")

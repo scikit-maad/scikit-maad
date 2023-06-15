@@ -38,6 +38,7 @@ Middle Spotted : Dendrocoptes medius
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_woodpeckers_drumming_clusters.png'
 
+# %%
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D 
@@ -94,7 +95,7 @@ data = [['Eurasian Three-toed', 'Picoides tridactylus'],
 # ----------------
 # get the genus and species needed for Xeno-Canto
 df_species = pd.DataFrame(data,columns =['english name',
-                                         'scientific name'])
+                                        'scientific name'])
 gen = []
 sp = []
 for name in df_species['scientific name']:
@@ -121,9 +122,9 @@ df_query['param4'] ='area:europe'
 
 # Get recordings metadata corresponding to the query
 df_dataset= util.xc_multi_query(df_query, 
-                                 format_time = False,
-                                 format_date = False,
-                                 verbose=True)
+                                format_time = False,
+                                format_date = False,
+                                verbose=True)
 
 #%%
 # Download audio Xeno-Canto
@@ -131,21 +132,21 @@ df_dataset= util.xc_multi_query(df_query,
 # From the metadata that was collected in the previous section, 
 # select a maximum of 20 files per species, regarding the quality and the length
 df_dataset = util.xc_selection(df_dataset,
-                               max_nb_files=20,
-                               max_length='01:00',
-                               min_length='00:10',
-                               min_quality='B',
-                               verbose = True )
+                            max_nb_files=20,
+                            max_length='01:00',
+                            min_length='00:10',
+                            min_quality='B',
+                            verbose = True )
 
 #%%
 # download all the audio files into a directory with a subdirectory for each 
 # species
 util.xc_download(df_dataset,
-                 rootdir = XC_ROOTDIR,
-                 dataset_name= XC_DIR,
-                 overwrite=False,
-                 save_csv= True,
-                 verbose = True)
+                rootdir = XC_ROOTDIR,
+                dataset_name= XC_DIR,
+                overwrite=False,
+                save_csv= True,
+                verbose = True)
 
 # %%
 # Grab all audio filenames in the directory
