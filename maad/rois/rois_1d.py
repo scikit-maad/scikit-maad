@@ -206,14 +206,10 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
         ax2.set_ylabel('Frequency (Hz)')
         ax2.set_xlabel('Time (s)')
         if not(df.empty):
-            for idx, _ in df.iterrows():
-                # xy = (df.min_t[idx],df.min_f[idx])
-                # width = df.max_t[idx] - df.min_t[idx]
-                # height = df.max_f[idx] - df.min_f[idx]
-
-                xy = (df.iloc[idx].min_t, df.iloc[idx].min_f)
-                width = df.iloc[idx].max_t- df.iloc[idx].min_t
-                height = df.iloc[idx].max_f- df.iloc[idx].min_f
+            for idx, row in df.iterrows():
+                xy = (row.min_t, row.min_f)
+                width = row.max_t- row.min_t
+                height = row.max_f- row.min_f
                 rect = patches.Rectangle(xy, width, height, lw=1, 
                                         edgecolor='yellow', facecolor='none')
                 ax2.add_patch(rect)
