@@ -68,6 +68,12 @@ docs/_build/
 docs/generated
 docs/_autosummary
 docs/_auto_examples
+docs/_auto_examples/**
+docs/_auto_examples/1_basic/images
+docs/_auto_examples/2_advanced/images
+
+# Data for examples
+data/woodpecker_dataset
 
 # PyBuilder
 target/
