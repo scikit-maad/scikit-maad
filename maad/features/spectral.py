@@ -204,6 +204,7 @@ def spectral_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
+        
     Returns
     -------
     Pandas Series or Numpy array
@@ -302,12 +303,14 @@ def spectral_bandwidth(s, fs, nperseg=1024, roi=None, as_pandas=False, **kwargs)
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
+
     Returns
     -------
     bandwidth_50 : float
         Bandwidth 50% of the audio
     bandwidth_90 : float
         Bandwidth 90%  of the audio
+    
     Examples
     --------
     >>> from maad import features, sound
@@ -351,10 +354,12 @@ def all_spectral_features(s, fs, nperseg=1024, roi=None, method='fast', **kwargs
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
+
     Returns
     -------
     spectral_features : pandas DataFrame
         DataFrame with all spectral features computed in the spectrum
+    
     Examples
     --------
     >>> from maad import features, sound
