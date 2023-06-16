@@ -29,39 +29,6 @@ from concurrent import futures
 from maad import sound, features
 from maad.util import date_parser
 import multiprocessing as mp  
-mp.set_start_method("fork")   # This start method is necessary for macOS, and the default method on Linux
-#%%
-# Set Variables
-# -------------
-# We list all spectral and temporal acoustic indices that will be computed.
-
-SPECTRAL_FEATURES=['MEANf','VARf','SKEWf','KURTf','NBPEAKS','LEQf', 
-'ENRf','BGNf','SNRf','Hf', 'EAS','ECU','ECV','EPS','EPS_KURT','EPS_SKEW','ACI',
-'NDSI','rBA','AnthroEnergy','BioEnergy','BI','ROU','ADI','AEI','LFC','MFC','HFC',
-'ACTspFract','ACTspCount','ACTspMean', 'EVNspFract','EVNspMean','EVNspCount',
-'TFSD','H_Havrda','H_Renyi','H_pairedShannon', 'H_gamma', 'H_GiniSimpson','RAOQ',
-'AGI','ROItotal','ROIcover']
-
-TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
-               'LEQt','BGNt', 'SNRt','MED', 'Ht','ACTtFraction', 'ACTtCount', 
-               'ACTtMean','EVNtFraction', 'EVNtMean', 'EVNtCount']
-
-# Parameters of the audio recorder. This is not a mandatory but it allows
-# to compute the sound pressure level of the audio file (dB SPL) as a 
-# sonometer would do.
-S = -35         # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)   
-G = 26+16       # Amplification gain (26dB (SM4 preamplifier))
-
-#%%
-# We parse the directory were the audio dataset is located in order to get a df with date 
-# and fullfilename. As the data were collected with a SM4 audio recording device
-# we set the dateformat agument to 'SM4' in order to be able to parse the date
-# from the filename. In case of Audiomoth, the date is coded as Hex in the 
-# filename. The path to the audio dataset is "../../data/indices/".
-df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
-
-# Date is used as index. Reset the index in order to get back Date as column
-df.reset_index(inplace = True)
 
 #%%
 # Define the function that will be used for batch processing
@@ -95,12 +62,12 @@ def single_file_processing (audio_path,
     # Load the original sound (16bits) and get the sampling frequency fs
     try :
         wave,fs = sound.load(filename=audio_path, 
-                             channel='left', 
-                             detrend=True, 
-                             verbose=False)
+                            channel='left', 
+                            detrend=True, 
+                            verbose=False)
 
         """ ===================================================================
-                         Computation in the time domain 
+                        Computation in the time domain 
         ====================================================================""" 
     
         # compute all the audio indices and store them into a DataFrame
@@ -112,9 +79,9 @@ def single_file_processing (audio_path,
                                     verbose = False, display = False)
         
         """ ===================================================================
-                         Computation in the frequency domain 
+                        Computation in the frequency domain 
         ===================================================================="""
-     
+    
         # Compute the Power Spectrogram Density (PSD) : Sxx_power
         Sxx_power,tn,fn,ext = sound.spectrogram (
                                         wave, fs, window='hann', 
@@ -144,7 +111,7 @@ def single_file_processing (audio_path,
                                                 display = False)
         
         """ ===================================================================
-                         Create a dataframe 
+                        Create a dataframe 
         ===================================================================="""        
         # add scalar indices into the df_indices dataframe
         df_indices = pd.concat([df_audio_ind,
@@ -160,87 +127,122 @@ def single_file_processing (audio_path,
         
     return df_indices
 
+#%%
+# Set Variables
+# -------------
+# We list all spectral and temporal acoustic indices that will be computed.
 
+SPECTRAL_FEATURES=['MEANf','VARf','SKEWf','KURTf','NBPEAKS','LEQf', 
+'ENRf','BGNf','SNRf','Hf', 'EAS','ECU','ECV','EPS','EPS_KURT','EPS_SKEW','ACI',
+'NDSI','rBA','AnthroEnergy','BioEnergy','BI','ROU','ADI','AEI','LFC','MFC','HFC',
+'ACTspFract','ACTspCount','ACTspMean', 'EVNspFract','EVNspMean','EVNspCount',
+'TFSD','H_Havrda','H_Renyi','H_pairedShannon', 'H_gamma', 'H_GiniSimpson','RAOQ',
+'AGI','ROItotal','ROIcover']
+
+TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
+            'LEQt','BGNt', 'SNRt','MED', 'Ht','ACTtFraction', 'ACTtCount', 
+            'ACTtMean','EVNtFraction', 'EVNtMean', 'EVNtCount']
+
+# Parameters of the audio recorder. This is not a mandatory but it allows
+# to compute the sound pressure level of the audio file (dB SPL) as a 
+# sonometer would do.
+S = -35         # Sensbility microphone-35dBV (SM4) / -18dBV (Audiomoth)   
+G = 26+16       # Amplification gain (26dB (SM4 preamplifier))
 
 #%%
-""" ===========================================================================
-                 Mono CPU 
-============================================================================"""
-# Only one cpu is used to process all data in dataframe, row by row.
-# This is the common way to process the data but it has some limitations :
-# - only 1 CPU is used even if the computer has more CPUs.
-# - data are sequentially processed which means each file will wait for the 
-# completion of the previous file in the list. If 1 file requires more time to
-# be processed, the time to complete the overall process will take longer.
+# We parse the directory were the audio dataset is located in order to get a df with date 
+# and fullfilename. As the data were collected with a SM4 audio recording device
+# we set the dateformat agument to 'SM4' in order to be able to parse the date
+# from the filename. In case of Audiomoth, the date is coded as Hex in the 
+# filename. The path to the audio dataset is "../../data/indices/".
+    
+if __name__ == '__main__':  # Multiprocessing should be declared under the main entry point
+    mp.set_start_method("fork")   # This start method is necessary for macOS. It is the default method on Linux
+    
+    df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 
-# create an empty dataframe. It will contain all ROIs found for each
-# audio file in the directory
-df_indices = pd.DataFrame()     
-  
-tic = time.perf_counter()
-with tqdm(total=len(df), desc="unique cpu indices calculation...") as pbar:          
-    for index, row in df.iterrows() :
-        df_indices_temp = single_file_processing(row["file"], row["Date"])
-        pbar.update(1)
-        df_indices = pd.concat([df_indices, df_indices_temp])
-toc = time.perf_counter()
+    # Date is used as index. Reset the index in order to get back Date as column
+    df.reset_index(inplace = True)
 
-# time duration of the process
-monocpu_duration = toc - tic
+    #%%
+    """ ===========================================================================
+                    Mono CPU 
+    ============================================================================"""
+    # Only one cpu is used to process all data in dataframe, row by row.
+    # This is the common way to process the data but it has some limitations :
+    # - only 1 CPU is used even if the computer has more CPUs.
+    # - data are sequentially processed which means each file will wait for the 
+    # completion of the previous file in the list. If 1 file requires more time to
+    # be processed, the time to complete the overall process will take longer.
 
-print(f"Elapsed time is {monocpu_duration:0.1f} seconds")
-
-#%%%
-""" ===========================================================================
-                 Multi CPU
-============================================================================"""
-# At least 2 CPUs will be used in parallel and the files to process will be 
-# distributed on each CPU depending on their availability. This will speed up
-# the process.
-
-# create an empty dataframe. It will contain all ROIs found for each
-# audio file in the directory
-df_indices = pd.DataFrame()
-
-# Number of CPU used for the calculation. 
-nb_cpu = os.cpu_count()
-
-tic = time.perf_counter()
-# Multicpu process
-with tqdm(total=len(df), desc="multi cpu indices calculation...") as pbar:
-    with futures.ProcessPoolExecutor(max_workers=nb_cpu) as pool:
-        # give the function to map on several CPUs as well its arguments as 
-        # as list
-        for df_indices_temp in pool.map(
-            single_file_processing, 
-            df["file"].to_list(), 
-            df["Date"].to_list()
-        ):
+    # create an empty dataframe. It will contain all ROIs found for each
+    # audio file in the directory
+    df_indices = pd.DataFrame()     
+    
+    tic = time.perf_counter()
+    with tqdm(total=len(df), desc="unique cpu indices calculation...") as pbar:          
+        for index, row in df.iterrows() :
+            df_indices_temp = single_file_processing(row["file"], row["Date"])
             pbar.update(1)
             df_indices = pd.concat([df_indices, df_indices_temp])
-toc = time.perf_counter()
+    toc = time.perf_counter()
 
-# time duration of the process
-multicpu_duration = toc - tic
+    # time duration of the process
+    monocpu_duration = toc - tic
 
-print(f"Elapsed time is {multicpu_duration:0.1f} seconds")
+    print(f"Elapsed time is {monocpu_duration:0.1f} seconds")
 
-#%%
-# Display the comparison between to methods
-# -----------------------------------------
+    #%%%
+    """ ===========================================================================
+                    Multi CPU
+    ============================================================================"""
+    # At least 2 CPUs will be used in parallel and the files to process will be 
+    # distributed on each CPU depending on their availability. This will speed up
+    # the process.
 
-plt.style.use('ggplot')
-fig, ax = plt.subplots(1,1,figsize=(6,2))
+    # create an empty dataframe. It will contain all ROIs found for each
+    # audio file in the directory
+    df_indices = pd.DataFrame()
 
-# bar graphs
-width = 0.75
-x = ['sequential (mono CPU)', 'parallel (multi CPU)']
-y = [monocpu_duration, multicpu_duration]
-ax.barh(x, y, width, color=('tab:blue','tab:orange'))
-ax.set_xlabel('Elapsed time (s)')
-ax.set_title("Comparison between sequential\n and parallel processing")
+    # Number of CPU used for the calculation. 
+    nb_cpu = os.cpu_count()
 
-fig.tight_layout()
+    tic = time.perf_counter()
+    # Multicpu process
+    with tqdm(total=len(df), desc="multi cpu indices calculation...") as pbar:
+        with futures.ProcessPoolExecutor(max_workers=nb_cpu) as pool:
+            # give the function to map on several CPUs as well its arguments as 
+            # as list
+            for df_indices_temp in pool.map(
+                single_file_processing, 
+                df["file"].to_list(), 
+                df["Date"].to_list()
+            ):
+                pbar.update(1)
+                df_indices = pd.concat([df_indices, df_indices_temp])
+    toc = time.perf_counter()
+
+    # time duration of the process
+    multicpu_duration = toc - tic
+
+    print(f"Elapsed time is {multicpu_duration:0.1f} seconds")
+
+    #%%
+    # Display the comparison between to methods
+    # -----------------------------------------
+
+    plt.style.use('ggplot')
+    fig, ax = plt.subplots(1,1,figsize=(6,2))
+
+    # bar graphs
+    width = 0.75
+    x = ['sequential (mono CPU)', 'parallel (multi CPU)']
+    y = [monocpu_duration, multicpu_duration]
+    ax.barh(x, y, width, color=('tab:blue','tab:orange'))
+    ax.set_xlabel('Elapsed time (s)')
+    ax.set_title("Comparison between sequential\n and parallel processing")
+
+    fig.tight_layout()
 
 
-# %%
+    # %%
