@@ -10,9 +10,30 @@ for example:
 """
 
 import wave
-import pandas as pd
+import glob
 import os
+import pandas as pd
+from pathlib import Path
 import numpy as np
+
+#%%
+def _ensure_directory(path_str):
+    # Create a Path object from the input string
+    path = Path(path_str)
+    
+    # Check if the path exists and is a directory
+    if path.is_dir():
+        return path
+    elif path.exists():
+        # If the path exists but is not a directory, raise an error
+        raise ValueError(f"'{path_str}' exists but is not a directory.")
+    else:
+        # If the path does not exist, try adding a '/' at the end and check again
+        path_with_slash = path / ''
+        if path_with_slash.is_dir():
+            return path_with_slash
+        else:
+            raise ValueError(f"'{path_str}' does not exist as a directory.")
 
 #%%
 def check_file_format(path_audio):
@@ -238,11 +259,11 @@ def get_metadata_dir(path_dir, verbose=False):
     >>> from maad import util
     >>> df_metadata = util.get_metadata_dir('../data/indices/')
     """
+    # Verify that input is a directory
+    path_dir = _ensure_directory(path_dir)
 
     # List all files recursively and select only wav files.
-    root = os.path.dirname(path_dir)  # if filename is given, look for the directory.
-    flist = [os.path.join(path_dir, name) for path_dir, subdirs, files in os.walk(root) for name in files]
-    flist_wav = [k for k in flist if '.WAV' in k] + [k for k in flist if '.wav' in k]
+    flist_wav = glob.glob(f"{path_dir}/**/*.[Ww][Aa][Vv]", recursive=True)
 
     # Get metadata for each file
     df_metadata = pd.DataFrame()
