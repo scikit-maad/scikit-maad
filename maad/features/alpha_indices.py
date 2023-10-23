@@ -2387,7 +2387,7 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     
     # if remove rain => remove frequential spikes (rain)
     if remove_rain == True :
-        Sxx_dB_noNoise = opening(Sxx_dB_noNoise, selem=np.ones([1,5]))
+        Sxx_dB_noNoise = opening(Sxx_dB_noNoise, footprint=np.ones([1,5]))
 
     # Smooth the spectrogram in order to facilitate the creation of masks
     Sxx_dB_noNoise_smooth = smooth(Sxx_dB_noNoise, std=smooth_param1, 
