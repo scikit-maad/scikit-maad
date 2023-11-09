@@ -395,9 +395,9 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
                 if dateformat == "SM4":
                     c_date.append(_date_from_filename(file_stem))      
                 elif dateformat == "POSIX" :
-                    posix_time = int(file_stem, 16)
-                    dd = datetime.utcfromtimestamp(posix_time).strftime('%Y-%m-%d %H:%M:%S')
-                    c_date.append(dd)                          
+                    date_format = '%Y%m%d_%H%M%S'
+                    dd = datetime.strptime(file_stem, date_format).strftime('%Y-%m-%d %H:%M:%S')
+                    c_date.append(dd)                         
                 
     ####### SORTED BY DATE
     # create a Pandas dataframe with date as index
