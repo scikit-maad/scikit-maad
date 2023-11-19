@@ -211,13 +211,13 @@ def write_audacity_annot(fname, df_rois, save_file=True):
     else:
         # if there is no label, create a vector with incremental values
         if 'label' not in df_rois :
-            label = np.arange(0,len(df_rois))
+            df_rois['label'] = np.arange(0,len(df_rois))
         
         # if no frequency coordinates, only temporal annotations
         if ('min_f' not in df_rois) or ('max_f' not in df_rois) :
             df_to_save = pd.DataFrame({'min_t':df_rois.min_t, 
                                        'max_t':df_rois.max_t, 
-                                       'label':label})
+                                       'label':df_rois.label})
         
         elif ('min_f' in df_rois) and ('max_f'  in df_rois) :
             df_to_save_odd = pd.DataFrame({'index': np.arange(0,len(df_rois)*2,2),
