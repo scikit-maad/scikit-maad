@@ -15,12 +15,14 @@ Segmentation methods to find regions of interest in the time and frequency domai
 import numpy as np  
 from scipy.stats import iqr 
 from skimage import measure
+from skimage.feature import peak_local_max
 import pandas as pd 
 import sys 
+import matplotlib.pyplot as plt
 _MIN_ = sys.float_info.min 
  
 # Import internal modules 
-from maad.util import (plot2d, rand_cmap)
+from maad.util import (plot2d, rand_cmap, plot_spectrogram)
 
 #%%
 #**************************************************************************** 
@@ -734,6 +736,72 @@ def rois_to_imblobs(im_zeros, rois):
     im_blobs = im_zeros.astype(int) 
      
     return im_blobs 
+
+def spectrogram_local_max(
+    Sxx, tn, fn, ext,
+    min_distance,
+    threshold_abs,
+    display=False,
+    **kwargs
+):
+    """
+    Find peaks on spectrogram as coordinate list in time and frequency
+
+    Parameters
+    ----------
+    Sxx : ndarray
+        Spectrogram of audio signal.
+    tn : 1d array
+        Time vector of target audio, which results from the maad.sound.spectrogram function.
+    fn : 1d array
+        Frecuency vector of target audio, which results from the maad.sound.spectrogram function.
+    ext : list of scalars [left, right, bottom, top]
+        Extent keyword arguments controls the bounding box in data coordinates for the spectrogram of the target audio, which results from the maad.sound.spectrogram function.
+    min_distance : int
+        Minimum number of time-frequency coefficients (or pixels) separating peaks. This parameter controls how close peaks can be to each other. Peaks that are closer than min_distance will be merged into a single peak.
+    threshold_abs : float
+        Minimum amplitude threshold for peak detection. Must be above Sxx.min().
+    display : bool, optional
+        Option to display the resulting figure.
+
+    Returns
+    -------
+    peak_time: numpy.array
+        The temporal coordinates of local peaks (maxima) in a spectrogram. 
+    peak_frequency: numpy.array
+        The spectral coordinates of local peaks (maxima) in a spectrogram.
+
+    Examples
+    --------
+    >>> from maad import sound, rois, util
+    >>> s, fs = sound.load('../data/spinetail.wav')
+    >>> Sxx, tn ,fn ,ext = sound.spectrogram (s, fs, nperseg=512, noverlap=256)
+    >>> Sxx_db = util.power2dB(Sxx, db_range=80)
+    >>> peak_time, peak_freq = rois.spectrogram_local_max(Sxx_db, tn, fn, ext, min_distance=1, threshold_abs=-40, display=True)
+    """
+
+    # Validate input
+    if threshold_abs is not None:
+        if threshold_abs < Sxx.min():
+            raise ValueError(f'Value for minimum peak amplitude is below minimum value on spectrogram')
+
+    # Find peaks in spectrogram
+    peaks = peak_local_max(
+        Sxx, min_distance=min_distance, threshold_abs=threshold_abs, **kwargs
+    )
+
+    if display == True:
+        fig, ax = plt.subplots(nrows=1, figsize=(10, 5))
+        plot_spectrogram(Sxx, ext, log_scale=False, db_range=80, ax=ax)
+        ax.scatter(
+            tn[peaks[:, 1]],
+            fn[peaks[:, 0]],
+            marker="o",
+            facecolor="none",
+            edgecolor="yellow",
+        )
+
+    return tn[peaks[:, 1]], fn[peaks[:, 0]] 
 
 if __name__ == "__main__":
     import doctest
