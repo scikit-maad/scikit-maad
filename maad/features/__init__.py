@@ -74,6 +74,14 @@ Spectral features
     spectral_bandwidth
     all_spectral_features
 
+Composite acoustic features
+---------------------------
+.. autosummary::
+    :toctree: generated/
+
+    graphical_soundscape
+    plot_graph    
+
 """
 
 from .shape import (filter_multires,
@@ -124,6 +132,9 @@ from .alpha_indices import (temporal_median,
                             all_temporal_alpha_indices,
                             all_spectral_alpha_indices)
 
+from .composite_soundscape_descriptors import (graphical_soundscape,
+                                               plot_graph)
+
 __all__ = [
            # shape
            'filter_multires', 
@@ -133,6 +144,7 @@ __all__ = [
            'shape_features_raw',
            'centroid_features',
            'all_shape_features',
+           
            # spectral
            'spectral_moments',
            'peak_frequency',
@@ -140,11 +152,13 @@ __all__ = [
            'temporal_quantile',
            'spectral_bandwidth',
            'all_spectral_features',
+           
            # temporal
            'temporal_moments',
            'zero_crossing_rate',
            'temporal_duration',
            'all_temporal_features',
+           
            # alpha_indices
            'temporal_moments',
            'temporal_median',
@@ -174,4 +188,9 @@ __all__ = [
            "frequency_raoq",
            "region_of_interest_index",
            'all_temporal_alpha_indices',
-           'all_spectral_alpha_indices']
+           'all_spectral_alpha_indices',
+           
+           # composite features
+           'graphical_soundscape',
+           'plot_graph',
+           ]
