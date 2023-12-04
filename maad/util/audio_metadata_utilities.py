@@ -269,7 +269,7 @@ def get_metadata_dir(path_dir, verbose=False):
     df_metadata = pd.DataFrame()
     for count, file in enumerate(flist_wav):
         if verbose:
-            print(count, '/', len(flist_wav), ':', os.path.basename(file))
+            print(f'{count} / {len(flist_wav)} : {os.path.basename(file)}', end='\r')
 
         data = get_metadata_file(file, verbose)
         df_metadata = pd.concat([df_metadata, pd.DataFrame.from_records([data])])
