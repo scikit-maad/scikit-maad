@@ -20,7 +20,6 @@ def test_spectrogram_local_max(example_spectrogram):
         Sxx_db, tn, fn, ext, min_distance=1, threshold_abs=-40, display=False)
 
     # Create a dictionary with the actual results
-    #actual_result = {'peak_time': peak_time.tolist(), 'peak_freq': peak_freq.tolist()}
     actual_result = np.array([peak_time, peak_freq])
 
     # Compare the actual result with the saved snapshot
