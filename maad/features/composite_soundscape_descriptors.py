@@ -12,7 +12,8 @@ from maad import sound, util, rois
 def _input_validation(data_input):
     """ Validate dataframe or path input argument """
     if isinstance(data_input, pd.DataFrame):
-        df = data_input
+        df = data_input        
+
     elif isinstance(data_input, str):
         if os.path.isdir(data_input):
             print('Collecting metadata from directory path...')
@@ -22,12 +23,14 @@ def _input_validation(data_input):
             print('Loading metadata from csv file')
             try:
                 # Attempt to read all wav data from the provided file path.
-                df = pd.read_csv(data_input) 
+                df = pd.read_csv(data_input, dtype={'time': str}) 
             except FileNotFoundError:
                 raise FileNotFoundError(f"File not found: {data_input}")
             print('Done!')
+    
     else:
         raise ValueError("Input 'data' must be either a Pandas DataFrame or a file path string")
+    
     return df
 
 def _validate_n_jobs(n_jobs):
@@ -158,6 +161,7 @@ def graphical_soundscape(
     >>> plot_graph(gs)
     """
     df = _input_validation(data)
+    df[time] = df[time].astype(str)
     df.sort_values(by=path_audio, inplace=True)
     total_files = len(df)
     print(f'{total_files} files found to process...')
