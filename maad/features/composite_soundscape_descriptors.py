@@ -212,7 +212,7 @@ def plot_graph(graph, ax=None, savefig=False, fname=None):
     ax.set_ylabel('Frequency (Hz)')
     ytick_idx = np.arange(0, graph.shape[1], 20).astype(int)
     ax.set_yticks(ytick_idx)
-    ax.set_yticklabels(graph.columns[ytick_idx].astype(int).values)
+    ax.set_yticklabels(graph.columns[ytick_idx].astype(float).astype(int).values)
 
     if savefig:
         plt.savefig(fname, bbox_inches='tight')
