@@ -184,7 +184,7 @@ def graphical_soundscape(
         results = [future.result() for future in futures]
         
     res = pd.concat(results)
-    res["time"] = df[time].str[0:2].astype(int).to_numpy()
+    res["time"] = df[time].str[0:2].astype(float).astype(int).to_numpy()
     print('\nComputation completed!')
     return res.groupby("time").mean()
 
