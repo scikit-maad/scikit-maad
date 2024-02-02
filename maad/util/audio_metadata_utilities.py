@@ -162,7 +162,7 @@ def filename_info(path_audio, verbose =False):
         metadata = {'path_audio': path_audio,
                     'fname': basename,
                     'sensor_name': basename.split("_")[0],
-                    'date': date_fmt,
+                    'date': pd.to_datetime(date_fmt),
                     'time': basename.split("_")[2][0:6]}
     else:
         raise TypeError(
