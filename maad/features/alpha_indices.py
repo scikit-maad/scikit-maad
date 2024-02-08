@@ -90,6 +90,9 @@ def _acoustic_activity (xdB, dB_threshold, axis=1):
     ACTfract= ACTfract.tolist()
     ACTcount = ACTcount.tolist()
     ACTmean = mean_dB(xdB[xdB>dB_threshold])
+    # Test if ACTmean is nan
+    if np.isnan(ACTmean):
+        ACTmean = 0
     return ACTfract, ACTcount, ACTmean 
 
 #%%    
@@ -2127,9 +2130,13 @@ def tfsd (Sxx, fn, tn, flim=(2000,8000), log=True, mode='thirdOctave', display=F
     else :
         GRADdf_select = GRADdf    
     
-    # calcul of the tfsdt : sum of the pseudo-gradient in the frequency bandwidth
+    # calcul of the tfsd : sum of the pseudo-gradient in the frequency bandwidth
     # which is normalized by the total sum of the pseudo-gradient
     tfsd =  sum(abs(GRADdf_select))/sum(abs(GRADdf)) 
+
+    # in case tfsd is a NaN set to 0
+    if np.isnan(tfsd) :
+        tfsd = 0
     
     if display :
         
