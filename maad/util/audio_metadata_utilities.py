@@ -193,9 +193,9 @@ def get_metadata_file(path_audio, verbose=False):
     path_audio = path_audio.replace('\\', '/')  # for compatibility with Windows
 
     basename = os.path.basename(path_audio)
-    error = check_file_format(path_audio)
+    flag = check_file_format(path_audio)
 
-    if error != 0:
+    if flag == 1:  # unreadable audio file
         metadata = {'path_audio': path_audio,
                     'fname': basename,
                     'sample_rate': np.nan,
@@ -211,9 +211,22 @@ def get_metadata_file(path_audio, verbose=False):
             print('Incorrect name or wave format. Return null values for: ', path_audio)
         return metadata
 
+    elif flag == 2:  # filename format error (for passive acoustic monitoring only)
+        info_header = audio_header(path_audio)
+        metadata = {'path_audio': path_audio,
+                    'fname': info_header['fname'],
+                    'sample_rate': info_header['sample_rate'],
+                    'channels': info_header['channels'],
+                    'bits': info_header['bits'],
+                    'samples': info_header['samples'],
+                    'length': info_header['length'],
+                    'fsize': info_header['fsize'],
+                    'sensor_name': np.nan,
+                    'date': np.nan,
+                    'time': np.nan}
+        return metadata
 
-    # Execute function if no error
-    else:
+    else:  # No error,execute function
         info_header = audio_header(path_audio)
         info_fname = filename_info(path_audio)
         metadata = {'path_audio': path_audio,
