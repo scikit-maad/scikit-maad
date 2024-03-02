@@ -23,11 +23,7 @@ This workflow opens the possibility to scan large audio datasets and use powerfu
 
 ## Operating Systems
 
-`scikit-maad` supports these operating systems:
-
-- Linux (tested on Ubuntu in CI)
-- macOS (Intel CPUs only; Apple Silicon not supported)
-- Windows
+`scikit-maad` seamlessly supports Linux, macOS, and Windows operating systems.
 
 ## Interpreter
 

@@ -12,18 +12,21 @@ from maad import sound, util, rois
 def _input_validation(data_input):
     """ Validate dataframe or path input argument """
     if isinstance(data_input, pd.DataFrame):
-        df = data_input        
+        df = data_input
 
     elif isinstance(data_input, str):
         if os.path.isdir(data_input):
             print('Collecting metadata from directory path...')
             df = util.get_metadata_dir(data_input)
+            df['time'] = df.date.dt.hour
             print('Done!')
         elif os.path.isfile(data_input) and data_input.lower().endswith(".csv"):
             print('Loading metadata from csv file')
             try:
                 # Attempt to read all wav data from the provided file path.
                 df = pd.read_csv(data_input, dtype={'time': str}) 
+                df['date'] = pd.to_datetime(df.date)
+                df['time'] = df.date.dt.hour
             except FileNotFoundError:
                 raise FileNotFoundError(f"File not found: {data_input}")
             print('Done!')
@@ -128,6 +131,7 @@ def graphical_soundscape(
     ----------
     data : pandas DataFrame
         A Pandas DataFrame containing information about the audio files.
+        If a string is passed with a directory location or a csv file, parameters 'path_audio' and 'time' will be set as default and can't be customized.
     threshold_abs : float
         Minimum amplitude threshold for peak detection in decibels.
     path_audio : str
@@ -157,11 +161,11 @@ def graphical_soundscape(
     >>> from maad.util import get_metadata_dir
     >>> from maad.features import graphical_soundscape, plot_graph
     >>> df = get_metadata_dir('../../data/indices')
-    >>> gs = graphical_soundscape(data=df, threshold_abs=-80)
+    >>> df['hour'] = df.date.dt.hour
+    >>> gs = graphical_soundscape(data=df, threshold_abs=-80, time='hour')
     >>> plot_graph(gs)
     """
     df = _input_validation(data)
-    df[time] = df[time].astype(str)
     df.sort_values(by=path_audio, inplace=True)
     total_files = len(df)
     print(f'{total_files} files found to process...')
@@ -184,9 +188,9 @@ def graphical_soundscape(
         results = [future.result() for future in futures]
         
     res = pd.concat(results)
-    res["time"] = df[time].str[0:2].astype(float).astype(int).to_numpy()
+    res['time'] = df[time].values
     print('\nComputation completed!')
-    return res.groupby("time").mean()
+    return res.groupby('time').mean()
 
 #%%
 def plot_graph(graph, ax=None, savefig=False, fname=None):
