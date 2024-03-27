@@ -16,7 +16,7 @@ of non-negative matrices. Audio spectrograms are in essence sparse and
 non-negative matrices, and hence well suited to be decomposed with NMF. This 
 decomposition can be further used to generate false-color spectrograms to 
 rapidly identify patterns in soundscapes and increase the interpretability of 
-the signal [3]. This example shows how to use the scikit-maad package to easily 
+the signal [3]. This example shows how to use scikit-maad to easily 
 decompose audio signals and visualize false-colour spectrograms.
 
 **Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.

@@ -374,6 +374,19 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     P : ndarray-like or scalar
         ndarray-like or scalar containing the power signal (P), for instance 
         Sxx_power, the power spectral density (PSD)
+
+    gain : integer
+        Total gain applied to the sound (preamplifer + amplifier)
+        
+    Vadc : scalar, optional, default is 2Vpp (=>+/-1V)
+        Maximal voltage (peak to peak) converted by the analog to digital convertor ADC     
+
+    sensitivity : float, optional, default is -35 (dB/V)
+        Sensitivity of the microphone
+    
+    dBref : integer, optional, default is 94 (dBSPL)
+        Pressure sound level used for the calibration of the microphone 
+        (usually 94dB, sometimes 114dB)
                 
     pRef : Sound pressure reference in the medium (air:20e-6 Pa, water:1e-6 Pa)
                 
@@ -415,7 +428,7 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 
 ################################## Leq ########################################
 #%%
-def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94): 
+def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94, pRef = 20e-6): 
     """
     Convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL]).
     
@@ -444,7 +457,9 @@ def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     dBref : integer, optional, default is 94 (dBSPL)
         Pressure sound level used for the calibration of the microphone 
         (usually 94dB, sometimes 114dB)
-                
+    
+    pRef : Sound pressure reference in the medium (air:20e-6, water:1e-6 Pa)
+
     Returns
     -------
     Leq : float
@@ -475,7 +490,7 @@ def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94):
     # if volt_RMS ==0 set to MIN
     volt_RMS[volt_RMS==0] = _MIN_
     # RMS to Leq (Equivalent Continuous Sound level)
-    Leq = 20*log10(volt_RMS) - sensitivity + dBref - gain
+    Leq = 20*log10(volt_RMS) - sensitivity - gain + dBref - 20*np.log10(pRef/20e-6)
     return Leq
 
 #%%
@@ -604,64 +619,71 @@ if __name__ == "__main__":
     # Go to the root directory where is the module maad and import maad
     maad_path = Path(dir_path).parents[1]
     os.sys.path.append(maad_path.as_posix())
-    import maad
+    from maad import sound, util, spl
     
     ####### Variables
-    S = -35     #  Sensbility microphone (for SM4 it is -35dBV)
-    G = 42      # total amplification gain : preamplifier gain = 26dB and gain = 16dB
-    P_REF = 20e-6   # Reference pressure (in the air : 20µPa)
-    deltaT = 1  # Leq integration time dt in s
-    NFFT = 1024  # length of the fft
-    VADC = 2    # Maximal voltage (peak to peak) converted by the analog to digital convertor ADC (i.e : +/- 1V peak to peak => Vadc=2V)
+    SENSITIVITY     = -35       # Sensbility microphone (for SM4 it is -35dBV)
+    GAIN_TOTAL      = 42        # total amplification gain : preamplifier gain = 26dB and gain = 16dB
+    PREF            = 20e-6     # Reference pressure (in the air : 20µPa)
+    DELTA_T         = 1         # Leq integration time dt in s
+    NFFT            = 1024      # length of the fft
+    VADC            = 2         # Maximal voltage (peak to peak) converted by the analog to digital convertor ADC (i.e : +/- 1V peak to peak => Vadc=2V)
     
     # Load the sound
-    wav,fs = maad.sound.load(filename=filename, channel='right', detrend=False, verbose=False)
+    wav,fs = sound.load(filename=filename, channel='right', detrend=False, verbose=False)
     
+    ## conversion into dB SPL 
+
     print('-------------------------------------------------------------------------')
     print('Leq calculation directly from the sound file (in time or frequency domain)')
-    
+
     # convert sounds (wave) into SPL and subtract DC offset
-    wav = wav - mean(wav)
+    wav = wav - np.mean(wav)
     # wav -> pressure -> Leq
-    p = wav2pressure(wav, gain=G, Vadc=VADC, sensitivity=S, dBref=94)
-    Leq = pressure2leq(p, fs, dt=deltaT)
-    print('Leq from volt', maad.util.mean_dB(Leq))
-    
+    p = spl.wav2pressure(wav, gain=GAIN_TOTAL, Vadc=VADC, sensitivity=SENSITIVITY, dBref=94)
+    Leq = spl.pressure2leq(p, fs, dt=DELTA_T, pRef=PREF)
+    print('Leq from volt', util.mean_dB(Leq))
+
     # wav -> Leq
-    wav_Leq2 = wav2leq(wav, f=fs, gain=G, Vadc=VADC, dt=deltaT, sensitivity=S, dBref = 94) 
-    print('Leq from wav', maad.util.mean_dB(wav_Leq2))
-        
+    wav_Leq2 = spl.wav2leq(wav, f=fs, gain=GAIN_TOTAL, Vadc=VADC, dt=DELTA_T, 
+                    sensitivity=SENSITIVITY, dBref=94, pRef=PREF) 
+    print('Leq from wav', util.mean_dB(wav_Leq2))
+
     # Power Density Spectrum : PSD
-    # with p
+    # with wav
     from numpy import fft
-    P = abs(fft.fft(p)/len(p))**2
+    P = abs(fft.fft(wav)/len(wav))**2
     # average Leq from PSD
-    P_Leq3  = psd2leq(P, G)
+    P_Leq3  = spl.psd2leq(P, gain=GAIN_TOTAL, Vadc=VADC, 
+                    sensitivity=SENSITIVITY, dBref=94, pRef=PREF)
     print('Leq from PSD',P_Leq3)
-       
-    ########################################################################
+
+    ##
     # Leq from spectrogram Sxx_power : 
     print('-------------------------------------------------------------------------')
     print('Leq calculation from Spectrogram (time-frequency representation of a sound)')
-    
+
     # Power Density Spectrogram : Sxx_power
-    # with p
-    Sxx_power,tn,fn,_ = maad.sound.spectrogram (p, fs=fs, nperseg=NFFT, mode='psd')  
+    # with wav
+    Sxx_power,tn,fn,_ = sound.spectrogram (wav, fs=fs, nperseg=NFFT, mode='psd')  
     # Sxx_power to S_power
-    S_power = mean(Sxx_power,axis=1)
+    S_power = np.mean(Sxx_power,axis=1)
     # average Leq from S_power
-    P_Leq5  = psd2leq(S_power, G)
+    P_Leq5  = spl.psd2leq(S_power, gain=GAIN_TOTAL, Vadc=VADC, 
+                    sensitivity=SENSITIVITY, dBref=94, pRef=PREF) 
     print('Leq from Sxx_power spectrogram',P_Leq5)
 
     # total energy from S_power
-    energy  = sum(S_power)
-    P_Leq6  = pressure2dBSPL(sqrt(energy))
+    energy  = np.sum(S_power)
+    P_Leq6  = spl.wav2dBSPL(np.sqrt(energy), gain=GAIN_TOTAL, Vadc=VADC, 
+                    sensitivity=SENSITIVITY, dBref=94, pRef=PREF)
     print('Leq from S_power energy',P_Leq6)
-    
+
     print('')
-    print('> The difference with previous Leq calculation is due to the average of the Sxx_power along the time axis which reduces the noise contribution into the total energy.')
+    print('> The difference with previous Leq calculation is due to the average of '+ 
+            'the Sxx_power along the time axis which reduces the noise contribution into the total energy.')
     print('> By increasing the NFFT length (i.e. NFFT=4096), Leq value converges towards previous Leq values') 
- 
+
 
 
     

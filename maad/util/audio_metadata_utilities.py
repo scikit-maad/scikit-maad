@@ -10,9 +10,30 @@ for example:
 """
 
 import wave
-import pandas as pd
+import glob
 import os
+import pandas as pd
+from pathlib import Path
 import numpy as np
+
+#%%
+def _ensure_directory(path_str):
+    # Create a Path object from the input string
+    path = Path(path_str)
+    
+    # Check if the path exists and is a directory
+    if path.is_dir():
+        return path
+    elif path.exists():
+        # If the path exists but is not a directory, raise an error
+        raise ValueError(f"'{path_str}' exists but is not a directory.")
+    else:
+        # If the path does not exist, try adding a '/' at the end and check again
+        path_with_slash = path / ''
+        if path_with_slash.is_dir():
+            return path_with_slash
+        else:
+            raise ValueError(f"'{path_str}' does not exist as a directory.")
 
 #%%
 def check_file_format(path_audio):
@@ -141,7 +162,7 @@ def filename_info(path_audio, verbose =False):
         metadata = {'path_audio': path_audio,
                     'fname': basename,
                     'sensor_name': basename.split("_")[0],
-                    'date': date_fmt,
+                    'date': pd.to_datetime(date_fmt),
                     'time': basename.split("_")[2][0:6]}
     else:
         raise TypeError(
@@ -172,9 +193,9 @@ def get_metadata_file(path_audio, verbose=False):
     path_audio = path_audio.replace('\\', '/')  # for compatibility with Windows
 
     basename = os.path.basename(path_audio)
-    error = check_file_format(path_audio)
+    flag = check_file_format(path_audio)
 
-    if error != 0:
+    if flag == 1:  # unreadable audio file
         metadata = {'path_audio': path_audio,
                     'fname': basename,
                     'sample_rate': np.nan,
@@ -190,9 +211,22 @@ def get_metadata_file(path_audio, verbose=False):
             print('Incorrect name or wave format. Return null values for: ', path_audio)
         return metadata
 
+    elif flag == 2:  # filename format error (for passive acoustic monitoring only)
+        info_header = audio_header(path_audio)
+        metadata = {'path_audio': path_audio,
+                    'fname': info_header['fname'],
+                    'sample_rate': info_header['sample_rate'],
+                    'channels': info_header['channels'],
+                    'bits': info_header['bits'],
+                    'samples': info_header['samples'],
+                    'length': info_header['length'],
+                    'fsize': info_header['fsize'],
+                    'sensor_name': np.nan,
+                    'date': np.nan,
+                    'time': np.nan}
+        return metadata
 
-    # Execute function if no error
-    else:
+    else:  # No error,execute function
         info_header = audio_header(path_audio)
         info_fname = filename_info(path_audio)
         metadata = {'path_audio': path_audio,
@@ -238,17 +272,17 @@ def get_metadata_dir(path_dir, verbose=False):
     >>> from maad import util
     >>> df_metadata = util.get_metadata_dir('../data/indices/')
     """
+    # Verify that input is a directory
+    path_dir = _ensure_directory(path_dir)
 
     # List all files recursively and select only wav files.
-    root = os.path.dirname(path_dir)  # if filename is given, look for the directory.
-    flist = [os.path.join(path_dir, name) for path_dir, subdirs, files in os.walk(root) for name in files]
-    flist_wav = [k for k in flist if '.WAV' in k] + [k for k in flist if '.wav' in k]
+    flist_wav = glob.glob(f"{path_dir}/**/*.[Ww][Aa][Vv]", recursive=True)
 
     # Get metadata for each file
     df_metadata = pd.DataFrame()
     for count, file in enumerate(flist_wav):
         if verbose:
-            print(count, '/', len(flist_wav), ':', os.path.basename(file))
+            print(f'{count +1} / {len(flist_wav)} : {os.path.basename(file)}', end='\r')
 
         data = get_metadata_file(file, verbose)
         df_metadata = pd.concat([df_metadata, pd.DataFrame.from_records([data])])

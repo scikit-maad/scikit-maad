@@ -36,7 +36,7 @@ Green : Picus viridis
 Middle Spotted : Dendrocoptes medius
 
 """
-# sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_woodpeckers_drumming_clusters.png'
+# sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_woodpecker_drumming_characteristics_002.png'
 
 # %%
 import pandas as pd

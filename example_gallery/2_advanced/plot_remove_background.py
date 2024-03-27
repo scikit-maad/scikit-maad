@@ -13,7 +13,7 @@ We use the sharpness metric to have a quantitative estimation of how well is the
 reduction. For a more comprehensive analysis, other metrics should be use in complement.
 
 """
-# sphinx_gallery_thumbnail_path = './_images/sphx_glr_remove_background.png'
+# sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_remove_background_002.png'
 
 from maad.util import plot2d, power2dB
 from maad.sound import (load, spectrogram, 

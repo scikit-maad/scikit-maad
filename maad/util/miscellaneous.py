@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """ Ensemble of usefull functions for scikit-maad. """
 #
-# Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
+# Authors:  Juan Sebastian ULLOA 
 #           Sylvain HAUPERT <sylvain.haupert@mnhn.fr>
 #
 # License: New BSD License
@@ -1066,3 +1066,31 @@ def crossfade_list(s_list, fs, fade_len=1):
             s_out = crossfade(s_out, s, fs)
 
     return s_out
+
+import os
+import urllib.request
+import zipfile
+
+def download_audio_dataset(save_location=None, unzip=True):
+    url = "https://github.com/juansulloa/audio_dataset/archive/refs/heads/main.zip"
+    try:
+        # Determine the file name from the URL
+        file_name = os.path.basename(url)
+        
+        # If save_location is None, save to the user's home directory
+        if save_location is None:
+            home_directory = os.path.expanduser("~")
+            save_location = os.path.join(home_directory, 'maad_dataset.zip')
+        
+        # Download the zip file
+        urllib.request.urlretrieve(url, save_location)
+        
+        print(f"Downloaded and saved {file_name} to {save_location}")
+    
+        if unzip:
+            # Unzip the file if specified
+            with zipfile.ZipFile(save_location, 'r') as zipf:
+                zipf.extractall(os.path.splitext(save_location)[0])
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")

@@ -203,23 +203,21 @@ def write_audacity_annot(fname, df_rois, save_file=True):
     Import the wav file then the label file in Audacity
     
     """
-    if df_rois.size==0:
-        print(fname, '> No detection found')
-        df = pd.DataFrame(data=None)
-        df.to_csv(fname, sep='\t', header=False, index=False)
+    if df_rois.empty:  # empty DataFrame
+        print(f'{fname} > No detection found')
+        df_to_save = pd.DataFrame(data=None)
         
-    else:
+    else:  
         # if there is no label, create a vector with incremental values
-        if 'label' not in df_rois :
-            label = np.arange(0,len(df_rois))
+        if 'label' not in df_rois:
+            df_rois['label'] = np.arange(0,len(df_rois))
         
         # if no frequency coordinates, only temporal annotations
-        if ('min_f' not in df_rois) or ('max_f' not in df_rois) :
+        if ('min_f' not in df_rois) or ('max_f' not in df_rois):
             df_to_save = pd.DataFrame({'min_t':df_rois.min_t, 
                                        'max_t':df_rois.max_t, 
-                                       'label':label})
-        
-        elif ('min_f' in df_rois) and ('max_f'  in df_rois) :
+                                       'label':df_rois.label})
+        else:
             df_to_save_odd = pd.DataFrame({'index': np.arange(0,len(df_rois)*2,2),
                                         'min_t':df_rois.min_t, 
                                         'max_t':df_rois.max_t, 
@@ -232,10 +230,10 @@ def write_audacity_annot(fname, df_rois, save_file=True):
             df_to_save = df_to_save.set_index('index')
             df_to_save = df_to_save.sort_index()
             
-        if save_file:
-            df_to_save.to_csv(fname, index=False, header=False, sep='\t') 
-        else:
-            pass
+    if save_file:
+        df_to_save.to_csv(fname, index=False, header=False, sep='\t') 
+    else:
+        pass
     
     return df_to_save
 

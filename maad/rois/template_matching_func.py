@@ -163,7 +163,8 @@ def template_matching(
     rois.loc[rois.max_t > tn[-1] , "max_t"] = tn[-1]
 
     if display == True:
-
+        rois['min_f'] = ext[2]
+        rois['max_f'] = ext[3]
         # plot spectrogram
         fig, ax = plt.subplots(2, 1, figsize=(8, 5), sharex=True)
         util.plot_spectrogram(Sxx, ext, log_scale=False, ax=ax[0], colorbar=False)
@@ -173,7 +174,7 @@ def template_matching(
                 width = rois.max_t[idx] - rois.min_t[idx]
                 height = rois.max_f[idx] - rois.min_f[idx]
                 rect = patches.Rectangle(
-                    xy, width, height, lw=1, edgecolor="yellow", facecolor="none"
+                    xy, width, height, lw=1, edgecolor="yellow", facecolor="yellow", alpha=0.25
                 )
                 ax[0].add_patch(rect)
 

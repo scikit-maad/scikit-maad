@@ -158,11 +158,12 @@ def temporal_quantile(s, fs, q=[0.05, 0.25, 0.5, 0.75, 0.95], nperseg=1024, roi=
     as_pandas: bool
         Return data as a pandas.Series. This is usefull when computing multiple features
         over a signal. Default is False.
-    amp : bool, default is False
-        Return the quantiles with its amplitude. 
+    amp: bool, default is False
+        Return the quantiles with its amplitude.
+
     Returns
     -------
-    Pandas Series/DataFrame or Numpy array/Matrix
+    quantiles: pandas Series/DataFrame or Numpy array
         Temporal quantiles of waveform and its amplitude (optional).
 
     Examples
@@ -292,9 +293,11 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     as_pandas_series: bool
         Return data as a pandas.Series. This is usefull when computing multiple features
         over a signal. Default is False.
+
     Returns
     -------
-    
+    duration: pandas Series/DataFrame or Numpy array
+        Temporal duration of signal using energy quantiles.
 
     Examples
     --------
@@ -304,8 +307,8 @@ def temporal_duration(s, fs, nperseg=1024, roi=None, mode="spectrum",
     Compute the temporal duration of the time energy
 
     >>> duration, duration_90 = features.temporal_duration(s, fs)
-    >>> print("Duration: {:.4f} / Duration 90%: {:.4f}".format(duration, duration_90))
-    Duration: 10.8437 / Duration 90%: 16.5326
+    >>> print("Duration 50%: {:.4f} / Duration 90%: {:.4f}".format(duration, duration_90))
+    Duration 50%: 10.8437 / Duration 90%: 16.5326
 
     """
     # Compute temporal quantile
@@ -341,10 +344,12 @@ def all_temporal_features(s, fs, nperseg=1024, roi=None, display=False, **kwargs
     kwargs : additional keyword arguments
         If `window='hann'`, additional keyword arguments to pass to
         `sound.spectrum`.
+
     Returns
     -------
     temporal_features : pandas DataFrame
         DataFrame with all temporal features computed in the spectrum
+    
     Examples
     --------
     >>> from maad import features, sound

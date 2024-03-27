@@ -1478,7 +1478,7 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     ax.grid()
     ax.legend()
     fig.tight_layout()
-    plt.show()
+    # plt.show()
 
     return fig, ax
 
