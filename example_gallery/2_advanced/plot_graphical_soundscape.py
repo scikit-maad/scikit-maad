@@ -34,6 +34,7 @@ df = util.get_metadata_dir('../../data/indices')
 gs = features.graphical_soundscape(data=df, threshold_abs=-80, target_fs=22000)
 features.plot_graph(gs)
 
+#%%
 # This representation can be computed at various locations, and comparisons can be made among these sites for similarity. For further details on this approach, refer to sources [2] and [3]. It is important to note that the method implemented in scikit-maad is akin but not identical. In the original approach, peaks are calculated on the mean spectrogram.
 
 #%% 
