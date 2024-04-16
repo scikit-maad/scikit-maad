@@ -22,6 +22,9 @@ rois
 
 sound
     Load, preprocess and transform (e.g. stft) audio signals - :ref:`maad.sound`
+
+spl
+    Compute Sound Pressure Level (SPL) - :ref:`maad.spl`
     
 util
     Miscelaneous and useful set of tools used in the audio analysis framework - :ref:`maad.util`    
