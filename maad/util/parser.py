@@ -13,7 +13,9 @@
 # Import external modules
 import numpy as np 
 import pandas as pd
+import re
 import os
+import glob
 from datetime import datetime
 from pathlib import Path # in order to be Windows/linux/MacOS compatible
 
@@ -126,32 +128,34 @@ def read_audacity_annot (audacity_filename):
             # arrange data
             t_info = tab_in.loc[np.arange(0, len(tab_in), 2), :]
             t_info = t_info.rename(index=str, columns={
-                                   0: 'min_t', 1: 'max_t', 2: 'label'})
+                                0: 'min_t', 1: 'max_t', 2: 'label'})
             t_info = t_info.reset_index(drop=True)
     
             f_info = tab_in.loc[np.arange(1, len(tab_in)+1, 2), :]
             f_info = f_info.rename(index=str, columns={
-                                   0: 'slash', 1: 'min_f', 2: 'max_f'})
+                                0: 'slash', 1: 'min_f', 2: 'max_f'})
             f_info = f_info.reset_index(drop=True)
     
             # return dataframe
-            tab_out = pd.concat([t_info['label'].astype('str'),
-                                 t_info['min_t'].astype('float32'),
-                                 f_info['min_f'].astype('float32'),
-                                 t_info['max_t'].astype('float32'),
-                                 f_info['max_f'].astype('float32')],  axis=1)
+            tab_out = pd.concat(
+                                [t_info['label'].astype('str'),
+                                t_info['min_t'].astype('float32'),
+                                f_info['min_f'].astype('float32'),
+                                t_info['max_t'].astype('float32'),
+                                f_info['max_f'].astype('float32')],  axis=1)
         else :
             tab_in = tab_in.rename(index=str, columns={
-                                   0: 'min_t', 1: 'max_t', 2: 'label'})
+                                0: 'min_t', 1: 'max_t', 2: 'label'})
             tab_in['min_f'] = np.nan
             tab_in['max_f'] = np.nan
             
             # return dataframe
-            tab_out = pd.concat([tab_in['label'].astype('str'),
-                                 tab_in['min_t'].astype('float32'),
-                                 tab_in['min_f'].astype('float32'),
-                                 tab_in['max_t'].astype('float32'),
-                                 tab_in['max_f'].astype('float32')],  axis=1)
+            tab_out = pd.concat([
+                                tab_in['label'].astype('str'),
+                                tab_in['min_t'].astype('float32'),
+                                tab_in['min_f'].astype('float32'),
+                                tab_in['max_t'].astype('float32'),
+                                tab_in['max_f'].astype('float32')],  axis=1)
     except :
         tab_out = pd.DataFrame()
 
@@ -177,7 +181,9 @@ def write_audacity_annot(fname, df_rois, save_file=True):
         the columns 'mint_t', 'max_t' 
         In case of bounding box (temporal eand frequency limits) :: df_rois 
         must contain at least the columns 'min_t', 'max_t', 'min_f', 'max_f'
-            
+    save_file: bool, optional, default=True
+        If True, the file is saved. If False, the file is not saved.
+
     Returns
     -------
     df_to_save
@@ -215,17 +221,17 @@ def write_audacity_annot(fname, df_rois, save_file=True):
         # if no frequency coordinates, only temporal annotations
         if ('min_f' not in df_rois) or ('max_f' not in df_rois):
             df_to_save = pd.DataFrame({'min_t':df_rois.min_t, 
-                                       'max_t':df_rois.max_t, 
-                                       'label':df_rois.label})
+                                    'max_t':df_rois.max_t, 
+                                    'label':df_rois.label})
         else:
             df_to_save_odd = pd.DataFrame({'index': np.arange(0,len(df_rois)*2,2),
                                         'min_t':df_rois.min_t, 
                                         'max_t':df_rois.max_t, 
                                         'label':df_rois.label})
             df_to_save_even = pd.DataFrame({'index': np.arange(1,len(df_rois)*2,2),
-                                         'min_t':'\\', 
-                                         'max_t':df_rois.min_f, 
-                                         'label':df_rois.max_f})
+                                        'min_t':'\\', 
+                                        'max_t':df_rois.min_f, 
+                                        'label':df_rois.max_f})
             df_to_save = pd.concat([df_to_save_odd,df_to_save_even])
             df_to_save = df_to_save.set_index('index')
             df_to_save = df_to_save.sort_index()
@@ -315,14 +321,15 @@ def write_raven_annot(fname, df_rois, save_file=True):
             df_out['Channel'] = 1
         
         # change column names
-        df_out.rename(columns={'min_t': 'Begin Time (s)', 
-                           'max_t': 'End Time (s)',
-                           'min_f': 'Low Freq (Hz)',
-                           'max_f': 'High Freq (Hz)'}, inplace=True)
+        df_out.rename(columns={
+                        'min_t': 'Begin Time (s)', 
+                        'max_t': 'End Time (s)',
+                        'min_f': 'Low Freq (Hz)',
+                        'max_f': 'High Freq (Hz)'}, inplace=True)
         
         # reorder column names
         colname_raven = ['Selection', 'View', 'Channel', 'Begin Time (s)',
-                         'End Time (s)', 'Low Freq (Hz)', 'High Freq (Hz)']
+                        'End Time (s)', 'Low Freq (Hz)', 'High Freq (Hz)']
         colname_order = colname_raven + df_out.columns[~df_out.columns.isin(colname_raven)].tolist()
         df_out = df_out.reindex(columns=colname_order)
         
@@ -333,40 +340,60 @@ def write_raven_annot(fname, df_rois, save_file=True):
     
     return df_out
 
-
 #%%
-def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
+def date_parser(datadir, dateformat='%Y%m%d_%H%M%S', extension='.wav', prefix = '', verbose=False):
     """
-    Parse all filenames contained in a directory and its subdirectories.
-    
-    Keeps only filenames corresponding to extension.
-    Filenames must follow :
-        
-    - SM4 format (XXXX_yyyymmdd_hhmmss.wav) 
-    - or POSIX format (for audiomoth)  
-    
-    The result is a panda dataframe with 'Date' as index and 'File' (with full path as column) 
-    
+    Extracts dates from filenames in a given folder and subfolders.
+
     Parameters
     ----------
-    filename : string
-        filename must follow 
-        - SM4 format : XXXX_yyyymmdd_hhmmss.wav, ex: S4A03895_20190522_191500.wav
-        - Audiomoth format : 8 Hexa, ex: 5EE84AC8.wav
-            
+    datadir : str
+        Path to the folder to search for files.
+    dateformat : str, optional
+        Format string specifying the datetime pattern to extract.
+        The default is'%Y%m%d_%H%M%S'
+        For more information about the format codes, refer to the
+        `strftime format documentation <https://strftime.org/>`_.
+    extension : str, optional, 
+        File extension to filter files by (e.g., '.wav', '.mp3').
+        The default is '.wav'.
+    prefix : str, optional, 
+        Prefix of the filenames to match.
+        The default is ''.
+    verbose : bool, optional
+        If True, print the filenames as they are processed.
+        The default is False.
+
     Returns
     -------
-    df : Pandas dataframe
-        This dataframe has one column
-        - 'file' => full path + filename
-        and a index 'Date' with the type Datetime
-    
+    pandas.DataFrame
+        DataFrame containing the extracted dates as the index,
+        the filenames in a 'Filename' column, and the full file paths
+        in a 'FullFilename' column.
+
+    Raises
+    ------
+    ValueError
+        If the datetime_format is invalid or does not match the filenames.
+
+    Notes
+    -----
+    This function searches for files in the specified folder and its subfolders
+    that have the given extension and match the specified prefix. It extracts
+    the dates from the filenames using the provided datetime_format.
+
+    The extracted dates are set as the index of the resulting DataFrame. The
+    'Filename' column contains the filenames, and the 'FullFilename' column
+    contains the full file paths.
+
     Examples
     --------
-    >>> df = maad.util.date_parser("../data/indices/", dateformat='SM4', verbose=True)
-    >>> list(df)
+    >>> folder_path = '../../data/indices/'
+    >>> ext = '.wav'
+    >>> datetime_format = '%Y%m%d_%H%M%S'
+    >>> df = maad.util.date_parser(datadir=folder_path, dateformat=datetime_format, extension=ext)
     >>> df
-                                                                 file
+                                                                file
     Date                                                             
     2019-05-22 00:00:00  ../data/indices/S4A03895_20190522_000000.wav
     2019-05-22 00:15:00  ../data/indices/S4A03895_20190522_001500.wav
@@ -378,30 +405,105 @@ def date_parser (datadir, dateformat ="SM4", extension ='.wav', verbose=False):
     2019-05-22 01:45:00  ../data/indices/S4A03895_20190522_014500.wav
     2019-05-22 02:00:00  ../data/indices/S4A03895_20190522_020000.wav
     ...
-    """
     
-    c_file = []
-    c_date = []
-    # find a file in subdirectories
-    for root, subFolders, files in os.walk(datadir):
-        for count, file in enumerate(files):
-            if verbose: print(file)
-            if extension.upper() in file or extension.lower() in file :
-                filename = os.path.join(root, file)
-                file_stem = Path(filename).stem
-                c_file.append(filename) 
-                if dateformat == "SM4":
-                    c_date.append(_date_from_filename(file_stem))      
-                elif dateformat == "POSIX" :
-                    posix_time = int(file_stem, 16)
-                    dd = datetime.utcfromtimestamp(posix_time).strftime('%Y-%m-%d %H:%M:%S')
-                    c_date.append(dd)                          
-                
-    ####### SORTED BY DATE
-    # create a Pandas dataframe with date as index
-    df = pd.DataFrame({'file':c_file, 'Date':c_date})
-    # define Date as index
-    df.set_index('Date', inplace=True)
-    # sort dataframe by date
-    df = df.sort_index(axis=0)
+    >>> df = maad.util.date_parser("../../data/indices/", dateformat='SM4', verbose=False)
+    >>> list(df)
+    >>> df
+                                                                file
+    Date                                                             
+    2019-05-22 00:00:00  ../data/indices/S4A03895_20190522_000000.wav
+    2019-05-22 00:15:00  ../data/indices/S4A03895_20190522_001500.wav
+    2019-05-22 00:30:00  ../data/indices/S4A03895_20190522_003000.wav
+    2019-05-22 00:45:00  ../data/indices/S4A03895_20190522_004500.wav
+    2019-05-22 01:00:00  ../data/indices/S4A03895_20190522_010000.wav
+    2019-05-22 01:15:00  ../data/indices/S4A03895_20190522_011500.wav
+    2019-05-22 01:30:00  ../data/indices/S4A03895_20190522_013000.wav
+    2019-05-22 01:45:00  ../data/indices/S4A03895_20190522_014500.wav
+    2019-05-22 02:00:00  ../data/indices/S4A03895_20190522_020000.wav
+    ...
+    """    
+
+    file_pattern = os.path.join(datadir, f'**/{prefix}*{extension}')
+    file_list = glob.glob(file_pattern, recursive=True)
+    data = []
+
+    for file_path in file_list:
+
+        # Extract the filename from the full path
+        filename = os.path.basename(file_path)
+
+        if dateformat == 'SM4':
+            date =_date_from_filename(filename)
+            data.append({'Date': date, 'Filename': filename, 'FullFilename': file_path})
+        
+        elif dateformat == 'POSIX':
+            posix_time = int(Path(filename).stem, 16)
+            date = datetime.utcfromtimestamp(posix_time).strftime('%Y-%m-%d %H:%M:%S')
+            data.append({'Date': date, 'Filename': filename, 'FullFilename': file_path})
+
+        else: 
+            # Construct a regex pattern to extract the date from the filename
+            pattern = _construct_pattern(dateformat)
+            # Search for the date in the filename
+            match = pattern.search(filename)
+            # If a match is found, extract the date
+            if match:
+                if verbose:
+                    print(f'File: {filename}')
+                # Extract the date from the filename
+                date_str = match.group()
+                # Parse the date string
+                try:
+                    date = datetime.strptime(date_str, dateformat)
+                    data.append({'Date': date, 'Filename': filename, 'FullFilename': file_path})
+                except ValueError:
+                    print(f"Error parsing date: {date_str} in file: {file_path}. The default date and time 1900-01-01 00:00:00 will be used.")
+                    # date by default
+                    data.append({'Date': "1900-01-01 00:00:01", 'Filename': filename, 'FullFilename': file_path})
+            else:
+                print(f"No date found in file: {file_path}. The default date and time 1900-01-01 00:00:00 will be used.")
+                # date by default 1900-01-01 00:00:00
+                data.append({'Date': "1900-01-01 00:00:01", 'Filename': filename, 'FullFilename': file_path})
+    if len(data) > 0:
+        df = pd.DataFrame(data)
+        df.set_index('Date', inplace=True)
+        # convert index to datetime 
+        df.index = pd.DatetimeIndex(df.index)
+        # sort dataframe by date
+        df = df.sort_index(axis=0)
+    else:
+        df = pd.DataFrame()
+
     return df
+
+def _construct_pattern(datetime_format):
+    format_dict = {
+        '%Y': r'(\d{4})',
+        '%y': r'(\d{2})',
+        '%m': r'(0[1-9]|1[0-2])',
+        '%d': r'(0[1-9]|1\d|2[0-9]|3[01])',
+        '%H': r'([01]\d|2[0-3])',
+        '%I': r'(0[1-9]|1[0-2])',
+        '%p': r'(AM|PM)',
+        '%M': r'([0-5]\d)',
+        '%S': r'([0-5]\d)',
+        '%f': r'(\d{6})',
+        '%j': r'(\d{3})',
+        '%U': r'(\d{2})',
+        '%W': r'(\d{2})',
+        '%w': r'(\d)',
+        '%A': r'(\w+)',
+        '%a': r'(\w+)',
+        '%B': r'(\w+)',
+        '%b': r'(\w+)',
+        '%c': r'(.+)',
+        '%x': r'(.+)',
+        '%X': r'(.+)',
+        '%%': r'%',
+    }
+    pattern = datetime_format
+    for code, regex in format_dict.items():
+        pattern = pattern.replace(code, regex)
+    pattern = re.compile(pattern)
+
+    return pattern
