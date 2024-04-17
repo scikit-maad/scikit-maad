@@ -81,9 +81,12 @@ def _filter_dataframe_by_datetime(df, date_format, date_range):
 
     Parameters:
     -----------
-        df (pandas.DataFrame): The DataFrame to be filtered.
-        date_format (str): The format of the date to be extracted from the DataFrame's index.
-        date_range (int, str, list): The range of dates to filter the DataFrame by.
+        df : pandas.DataFrame
+            The DataFrame to be filtered.
+        date_format :str
+            The format of the date to be extracted from the DataFrame's index.
+        date_range : int, str, list
+            The range of dates to filter the DataFrame by.
 
     Returns:
     --------
@@ -112,22 +115,10 @@ def _filter_dataframe_by_datetime(df, date_format, date_range):
 
     """
     # Extract the date portion from the DatetimeIndex based on the specified date format
-    if date_format == "%V":
-        df['date_type'] = df.index.strftime('%V')  # Week number
-    elif date_format == "%Y":
-        df['date_type'] = df.index.strftime('%Y')  # Year
-    elif date_format == "%m-%d":
-        df['date_type'] = df.index.strftime('%m-%d')  # Month and day
-    elif date_format == "%a":
-        df['date_type'] = df.index.strftime('%a')  # Weekday
-    elif date_format == "%m":
-        df['date_type'] = df.index.strftime('%m')  # Month
-    elif date_format == "%d":
-        df['date_type'] = df.index.strftime('%d')  # Day
-    elif date_format == "%y-%m-%d":
-        df['date_type'] = df.index.strftime('%y-%m-%d')  # Year, Month, and Day
-    elif date_format == "%H:%M":
-        df['date_type'] = df.index.strftime("%H:%M")  # hour:minute such as 13:42
+    try:
+        df['date_type'] = df.index.strftime(date_format)
+    except :
+        raise ValueError('Error in the date_format. Check the date_format parameter')
 
     if _is_single_value(date_range) == True :
         if (date_format == "%V") or (date_format == "%Y") or (date_format == "%m") or (date_format == "%d"):
@@ -1507,7 +1498,7 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
     return fig, ax
 
 #%%
-def plot_heatmap (
+def heatmap_by_date_and_time (
                     dataframe,
                     disp_column,
                     date_format = "%V", # see https://docs.python.org/3/library/datetime.html 
@@ -1519,6 +1510,7 @@ def plot_heatmap (
                     date_min_to_disp = 1,
                     date_max_to_disp = 53,
                     cb_legend = "",
+                    display = True,
                     verbose = False,
                     **kwargs,
                     ) :
@@ -1529,6 +1521,7 @@ def plot_heatmap (
     ----------
     dataframe : pandas.DataFrame
         The input DataFrame containing the data.
+        Must contain a column (or index) date in the format %Y-%m-%d %H:%M%S
     disp_column : str
         The name of the column to be displayed.
     date_format : str, optional
@@ -1573,18 +1566,18 @@ def plot_heatmap (
 
     Returns
     -------
+    df_mean : pd.DataFrame
+        The heatmap with mean values.
+    
+    df_std :pd.DataFrame
+        The heatmap with standard deviation values.
+
     fig : matplotlib.figure.Figure
         The generated matplotlib figure.
 
     ax : matplotlib.axes.Axes
         The generated matplotlib axis.
     """
-    try:
-        import seaborn as sns
-        sns.set_theme("paper")
-    except ImportError as e:
-        if verbose :
-            print("seaborn is not installed, use default settings")
     
     # test if dataframe is not a pd.DataFrame
     if isinstance(dataframe, pd.DataFrame) == False:
@@ -1596,29 +1589,22 @@ def plot_heatmap (
     df = dataframe.copy()
 
     # keep some columns
-    df = df.filter([disp_column,'time'])
+    df = df.filter([disp_column,'date'])
 
     try :
         if not('date' in df)  :  
             df = df.reset_index(['date'])
-        ## Date into Datetime type
-        # df_date = pd.to_datetime(df.date)
-        ## round Date 
-        # df.date = df_date.round(time_resolution) # "30T"
-        ## set index as DatetimeIndex
-        # df = df.set_index(pd.DatetimeIndex(df.date))
-
-        df = df.set_index(pd.DatetimeIndex(pd.to_datetime(df.date)))
-
-        # remove Date column
-        df.drop('date', axis=1, inplace=True)
+        # convert date to datetime
+        df['date'] = pd.to_datetime(df['date'])
+        # set the index to date
+        df.set_index(['date'], inplace=True)
+        # convert index to datetime 
+        df.index = pd.DatetimeIndex(df.index)
         # sort dataframe by date
         df = df.sort_index(axis=0)
     except :
-        if verbose :
-            print("***WARNING*** df must have a valid date index that could be " +
-                "converted in Datetime type")
-    
+        raise Exception("***WARNING*** df must have a valid date index that could be converted in Datetime type")
+
     # filter by time
     df = _filter_dataframe_by_datetime(df, "%H:%M", time_range)
     # filter by date_type
@@ -1638,106 +1624,120 @@ def plot_heatmap (
     df_mean.index = pd.to_datetime(df_mean['time'], format='%H:%M')
     df_mean.drop(columns=['time'], inplace = True)
     df_mean = df_mean.resample(time_resolution).mean()
+    df_std = df_mean.resample(time_resolution).std()
     df_mean.index = df_mean.index.strftime("%H:%M")
+    df_std.index = df_std.index.strftime("%H:%M")
 
-    if full_display == True :
-        # Create a list of unique index of type 'hour' for x axis
-        time_min = datetime.strptime("00:00", "%H:%M")
-        time_max = datetime.strptime("23:59", "%H:%M")
-        x_label = pd.date_range(time_min, time_max, freq=time_resolution).strftime("%H:%M")
-        x_label = x_label.values
-        # Create a vector for y axis depending on date_format
-        if date_format == "%V" :
-            y_label = [f'{x:02d}' for x in np.arange(date_min_to_disp,date_max_to_disp+1)]
-        elif date_format == "%m" :
-            y_label = [f'{x:02d}' for x in np.arange(date_min_to_disp,date_max_to_disp+1)]   
-        elif (date_format == "%y-%m-%d") or (date_format == "%m-%d") or (date_format == "%d"):
-            date_min_to_disp = datetime.strptime(str(date_min_to_disp), date_format)
-            date_max_to_disp = datetime.strptime(str(date_max_to_disp), date_format)
-            y_label = pd.date_range(date_min_to_disp, date_max_to_disp, freq='D').strftime(date_format)
-            y_label = y_label.values
-        else:
-            # by default per week
-            y_label = [f'{x:02d}' for x in np.arange(1,53)]
-        # create an prefilled dataframe with all weeks and time
-        df2 = pd.DataFrame(index=x_label, 
-                        columns=y_label,
-                        dtype = 'float')
-        df2.reset_index(inplace=True)
-        df2 = df2.rename(columns={"index":"time"})
-        df2.set_index("time", inplace=True)
+    if display == True : 
+        # try to use seaborn if installed
+        try:
+            import seaborn as sns
+            sns.set_theme("paper")
+        except ImportError as e:
+            if verbose :
+                print("seaborn is not installed, use default settings")
 
-        for idx, row in df_mean.iterrows() :
-            df2.loc[idx] = row
-        
-        df_mean=df2
-    
-    # rename the unique column with the corresponding name
-    if date_format == "%V" : df_mean.columns.name='Week number'
-    if date_format == "%m" : df_mean.columns.name='Month'
-    if date_format == "%d" : df_mean.columns.name='Day'
-    if date_format == "%m-%d" : df_mean.columns.name='Date'
-    if date_format == "%y-%m-%d" : df_mean.columns.name='Date'
+        if full_display == True :
+            # Create a list of unique index of type 'hour' for x axis
+            time_min = datetime.strptime("00:00", "%H:%M")
+            time_max = datetime.strptime("23:59", "%H:%M")
+            x_label = pd.date_range(time_min, time_max, freq=time_resolution).strftime("%H:%M")
+            x_label = x_label.values
+            # Create a vector for y axis depending on date_format
+            if date_format == "%V" :
+                y_label = [f'{x:02d}' for x in np.arange(date_min_to_disp,date_max_to_disp+1)]
+            elif date_format == "%m" :
+                y_label = [f'{x:02d}' for x in np.arange(date_min_to_disp,date_max_to_disp+1)]   
+            elif (date_format == "%y-%m-%d") or (date_format == "%m-%d") or (date_format == "%d"):
+                date_min_to_disp = datetime.strptime(str(date_min_to_disp), date_format)
+                date_max_to_disp = datetime.strptime(str(date_max_to_disp), date_format)
+                y_label = pd.date_range(date_min_to_disp, date_max_to_disp, freq='D').strftime(date_format)
+                y_label = y_label.values
+            else:
+                # by default per week
+                y_label = [f'{x:02d}' for x in np.arange(1,53)]
+            # create an prefilled dataframe with all weeks and time
+            df2 = pd.DataFrame(index=x_label, 
+                            columns=y_label,
+                            dtype = 'float')
+            df2.reset_index(inplace=True)
+            df2 = df2.rename(columns={"index":"time"})
+            df2.set_index("time", inplace=True)
 
-    # shift the time to start at start_hour and finish at start_hour, in order to center
-    # the graph at start_hour + 12h
-    df_part1 = df_mean[df_mean.index >= start_hour]
-    df_part2 = df_mean[df_mean.index < start_hour]
-    df_part2.sort_index(inplace=True)
-    df = pd.concat([df_part1,df_part2])  
-    
-    # Get the list of unique index of type 'hour'
-    x_label = [i + j for i, j in zip(map(str, df.index.values), [" "] * len(df))]
-
-    # plot
-    vmin = kwargs.pop("vmin", np.nanpercentile(df,1))
-    vmax = kwargs.pop("vmax", np.nanpercentile(df,99))
-    cmap = kwargs.pop("cmap", "RdPu")
-    figsize = kwargs.pop("figsize", (len(df)*0.33*0.75, len(list(df))*0.26*0.75 +0.75))
-        
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_subplot(111)
-    caxes = ax.matshow(df.transpose(), 
-                    interpolation = "None",
-                    aspect="auto", 
-                    cmap = cmap,
-                    vmin = vmin,
-                    vmax = vmax,
-                    )
-    if cb_legend =="" :
-        fig.colorbar(caxes, shrink=0.75, label=disp_column)
-    else:
-        fig.colorbar(caxes, shrink=0.75, label=cb_legend)
-    # Set ticks on both sides of axes on
-    ax.tick_params(which='major', axis="x", bottom=False, top=False, 
-                labelbottom=True, labeltop=False)
-    ax.tick_params(which='minor', axis="x", length = 0)
-    # We want to show all ticks...
-    ax.set_yticks(np.arange(len(df.columns)))
-    ax.set_xticks(np.arange(len(x_label)))
-    # ... and label them with the respective list entries
-    ax.set_yticklabels(df.columns)
-    ax.set_xticklabels(x_label)
-    
-    # Minor ticks
-    ax.set_xticks(np.arange(-0.5, len(df.index), 1), minor=True)
-    ax.set_yticks(np.arange(-0.5, len(list(df)), 1), minor=True)
-
-    # Gridlines based on minor ticks
-    ax.grid(which='major', color='w', linestyle='-', linewidth=0)
-    ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
-    
-    # add title to the axis
-    ax.set_xlabel("Time")
-    ax.set_ylabel(df_mean.columns.name)
+            for idx, row in df_mean.iterrows() :
+                df2.loc[idx] = row
             
-    # Rotate the tick labels and set their alignment.
-    plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=10)
-    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=10)
-    plt.tight_layout()
-    plt.show()
+            df_mean=df2
+        
+        # rename the unique column with the corresponding name
+        if date_format == "%V" : df_mean.columns.name='Week number'
+        if date_format == "%m" : df_mean.columns.name='Month'
+        if date_format == "%d" : df_mean.columns.name='Day'
+        if date_format == "%m-%d" : df_mean.columns.name='Date'
+        if date_format == "%y-%m-%d" : df_mean.columns.name='Date'
 
-    return fig, ax
+        # shift the time to start at start_hour and finish at start_hour, in order to center
+        # the graph at start_hour + 12h
+        df_part1 = df_mean[df_mean.index >= start_hour]
+        df_part2 = df_mean[df_mean.index < start_hour]
+        df_part2.sort_index(inplace=True)
+        df = pd.concat([df_part1,df_part2])  
+        
+        # Get the list of unique index of type 'hour'
+        x_label = [i + j for i, j in zip(map(str, df.index.values), [" "] * len(df))]
+
+        # plot
+        vmin = kwargs.pop("vmin", np.nanpercentile(df,1))
+        vmax = kwargs.pop("vmax", np.nanpercentile(df,99))
+        cmap = kwargs.pop("cmap", "RdPu")
+        figsize = kwargs.pop("figsize", (len(df)*0.33*0.75, len(list(df))*0.26*0.75 +0.75))
+            
+        fig = plt.figure(figsize=figsize)
+        ax = fig.add_subplot(111)
+        caxes = ax.matshow(df.transpose(), 
+                        interpolation = "None",
+                        aspect="auto", 
+                        cmap = cmap,
+                        vmin = vmin,
+                        vmax = vmax,
+                        )
+        if cb_legend =="" :
+            fig.colorbar(caxes, shrink=0.75, label=disp_column)
+        else:
+            fig.colorbar(caxes, shrink=0.75, label=cb_legend)
+        # Set ticks on both sides of axes on
+        ax.tick_params(which='major', axis="x", bottom=False, top=False, 
+                    labelbottom=True, labeltop=False)
+        ax.tick_params(which='minor', axis="x", length = 0)
+        # We want to show all ticks...
+        ax.set_yticks(np.arange(len(df.columns)))
+        ax.set_xticks(np.arange(len(x_label)))
+        # ... and label them with the respective list entries
+        ax.set_yticklabels(df.columns)
+        ax.set_xticklabels(x_label)
+        
+        # Minor ticks
+        ax.set_xticks(np.arange(-0.5, len(df.index), 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, len(list(df)), 1), minor=True)
+
+        # Gridlines based on minor ticks
+        ax.grid(which='major', color='w', linestyle='-', linewidth=0)
+        ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
+        
+        # add title to the axis
+        ax.set_xlabel("Time")
+        ax.set_ylabel(df_mean.columns.name)
+                
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=10)
+        plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=10)
+        plt.tight_layout()
+        plt.show()
+    else :
+        fig = None
+        ax = None
+
+    return df_mean, df_std, fig, ax
 
 # =============================================================================
 

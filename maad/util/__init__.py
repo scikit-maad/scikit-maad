@@ -22,7 +22,7 @@ Visualization
     overlay_centroid
     plot_features_map
     plot_features
-    plot_heatmap
+    heatmap_by_date_and_time
     plot_correlation_map
     plot_shape
     false_Color_Spectro
@@ -126,7 +126,7 @@ from .visualization import (
                         overlay_rois,
                         overlay_centroid,
                         plot_features_map,
-                        plot_heatmap,
+                        heatmap_by_date_and_time,
                         plot_features,
                         plot_correlation_map,
                         plot_shape,
@@ -195,7 +195,7 @@ __all__ = [
             'overlay_centroid',
             'plot_features_map',
             'plot_features',
-            'plot_heatmap',
+            'heatmap_by_date_and_time',
             'plot_correlation_map',
             'plot_shape',
             'false_Color_Spectro',
