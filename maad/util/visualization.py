@@ -1505,7 +1505,7 @@ def heatmap_by_date_and_time (
                     date_range = [1,53],
                     time_resolution = "30T",
                     time_range = ["00:00", "23:59"],
-                    start_hour = "12:00",
+                    start_hour = "00:00",
                     full_display = False,
                     date_min_to_disp = 1,
                     date_max_to_disp = 53,
