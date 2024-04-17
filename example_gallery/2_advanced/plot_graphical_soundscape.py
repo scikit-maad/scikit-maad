@@ -7,7 +7,9 @@ Acoustic fingerprinting and graphical soundscapes
 
 Acoustic fingerprinting is a technique that captures unique features of audio signals. For example, Shazam employs a spectrogram-based approach, converting audio into a visual representation and then identifying peaks on the spectrogram [1]. This fingerprint is matched against a vast database to identify the corresponding song. The method is robust in presence of noise, allowing accurate recognition of diverse audio sources in real-time. This approach is versatile, finding application in characterizing soundscapes. It has been successfully employed to evaluate FSC forest certification [2] and Neotropical oil palm landscapes [3].
 """
-
+#%%
+# Load required modules
+# ---------------------
 from maad import sound, util, rois, features
 
 #%%

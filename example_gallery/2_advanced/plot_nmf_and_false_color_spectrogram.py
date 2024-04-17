@@ -23,6 +23,9 @@ decompose audio signals and visualize false-colour spectrograms.
 
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_nmf_and_false_color_spectrogram_003.png'
+#%%
+# Load required modules
+# ---------------------
 import numpy as np
 import matplotlib.pyplot as plt
 from maad import sound, features

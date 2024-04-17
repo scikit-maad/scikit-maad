@@ -21,6 +21,9 @@ of the ambient sound in a cold temperate forest in France during 24h.
 
 """
 
+#%%
+# Load required modules
+# ---------------------
 # Load required packages
 import pandas as pd
 import os
@@ -82,14 +85,14 @@ for index, row in df.iterrows() :
         continue
     
     """ =======================================================================
-                     Computation in the frequency domain 
+                    Computation in the frequency domain 
     ========================================================================"""
- 
+
     # Compute the Power Spectrogram Density (PSD) : Sxx_power
     Sxx_power,tn,fn,ext = sound.spectrogram (wave, fs, window='hann', 
-                                             nperseg = 1024, noverlap=1024//2, 
-                                             verbose = False, display = False, 
-                                             savefig = None)   
+                                            nperseg = 1024, noverlap=1024//2, 
+                                            verbose = False, display = False, 
+                                            savefig = None)   
     
     
     #### Average PSD (It's a mandatory to compute the mean on the PSD for 
@@ -98,68 +101,67 @@ for index, row in df.iterrows() :
     
     #### Compute the Leq of each frequency band (1kHz step)
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(0,1000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(1000,2000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[ spl.psd2leq(mean_PSD[util.index_bw(fn,(2000,3000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(3000,4000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(4000,5000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(5000,6000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(6000,7000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(7000,8000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(8000,9000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(9000,10000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     leq_list+=[spl.psd2leq(mean_PSD[util.index_bw(fn,(10000,11000))], 
-                               gain=G, 
-                               sensitivity=S, 
-                               Vadc=VADC)]
+                            gain=G, 
+                            sensitivity=S, 
+                            Vadc=VADC)]
     
     #### Create a dataframe from the list
     df_leq = pd.DataFrame([leq_list],
-                          columns = ['0-1kHz', 
-                                     '1-2kHz',
-                                     '2-3kHz',
-                                     '3-4kHz',
-                                     '4-5kHz',
-                                     '5-6kHz',
-                                     '6-7kHz',
-                                     '7-8kHz',
-                                     '8-9kHz',
-                                     '9-10kHz',
-                                     '10-11kHz',
-                                     ])
-    
-    #%%
+                        columns = ['0-1kHz', 
+                                    '1-2kHz',
+                                    '2-3kHz',
+                                    '3-4kHz',
+                                    '4-5kHz',
+                                    '5-6kHz',
+                                    '6-7kHz',
+                                    '7-8kHz',
+                                    '8-9kHz',
+                                    '9-10kHz',
+                                    '10-11kHz',
+                                    ])
+
     """ =======================================================================
-                     Create a dataframe 
+                    Create a dataframe 
     ========================================================================"""
     #### We create a dataframe from row that contains the date and the 
     # full filename. This is done by creating a DataFrame from row (ie. TimeSeries)
@@ -170,10 +172,13 @@ for index, row in df.iterrows() :
     df_row = df_row.reset_index()
 
     #### add Leq values into the df_spl dataframe
-    df_spl = df_spl.append(pd.concat([df_row, df_leq], axis=1))
+    df_spl = pd.concat([df_spl,pd.concat([df_row, df_leq], axis=1)], axis=0)
 
 #### When the loop ends, set Date as index
 df_spl = df_spl.set_index('Date')
+
+#### remove the column file
+df_spl = df_spl.drop(columns=['file'])
 
 #%%
 # Display results
@@ -189,8 +194,6 @@ df_spl = df_spl.set_index('Date')
 plt.style.use('ggplot')
 df_spl_rev = df_spl.iloc[:,::-1]
 util.plot_features_map(df_spl_rev, norm=False, cmap='RdPu')
-plt.xlabel('Hours')
-plt.ylabel('Frequency')
 plt.tight_layout()
 
 #%%
@@ -198,8 +201,8 @@ plt.tight_layout()
 # mainly to the anthropophony (frequency band 0-1kHz) and the biophony 
 # (frequency band 1-12kHz)
 plt.figure(figsize=[7,4])
-df_spl.iloc[:,1].apply(util.add_dB, axis=1).plot()
-df_spl.iloc[:,2:].apply(util.add_dB, axis=1).plot()
+df_spl.iloc[:,0].apply(util.add_dB, axis=1).plot()
+df_spl.iloc[:,1:].apply(util.add_dB, axis=1).plot()
 plt.xlabel('Hours')
 plt.ylabel('Sound Pressure Level (dB SPL)')
 plt.legend(['anthropophony', 'biophony'])

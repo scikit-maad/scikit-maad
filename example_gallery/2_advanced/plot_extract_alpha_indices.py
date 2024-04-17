@@ -14,7 +14,9 @@ example can be downloaded from the open GitHub repository
 
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_extract_alpha_indices_002.png'
-
+#%%
+# Load required modules
+# ---------------------
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
