@@ -76,7 +76,41 @@ MAX_H = 23 # max hour number possible
 MAX_M = 59 # max minute number possible
 
 def _filter_dataframe_by_datetime(df, date_format, date_range):
+    """
+    Filter a DataFrame based on a specified date format and date range.
 
+    Parameters:
+    -----------
+        df (pandas.DataFrame): The DataFrame to be filtered.
+        date_format (str): The format of the date to be extracted from the DataFrame's index.
+        date_range (int, str, list): The range of dates to filter the DataFrame by.
+
+    Returns:
+    --------
+        pandas.DataFrame: The filtered DataFrame.
+
+    Raises:
+    -------
+        ValueError: If the date_format is not allowed or if the date_range is not a single value or a list.
+
+    Note:
+    -----
+        The date_format parameter can be one of the following:
+        - "%V": Week number
+        - "%Y": Year
+        - "%m-%d": Month and day
+        - "%a": Weekday
+        - "%m": Month
+        - "%d": Day
+        - "%y-%m-%d": Year, Month, and Day
+        - "%H:%M": Hour and minute (e.g., "13:42")
+
+        The date_range parameter can be one of the following:
+        - A single value (int or str) representing a specific date or time.
+        - A list of values (int or str) representing a range of dates or times.
+        For example, ["01-01", "01-31"] represents a range of dates from January 1st to January 31st.
+
+    """
     # Extract the date portion from the DatetimeIndex based on the specified date format
     if date_format == "%V":
         df['date_type'] = df.index.strftime('%V')  # Week number
@@ -1544,7 +1578,6 @@ def plot_heatmap (
 
     ax : matplotlib.axes.Axes
         The generated matplotlib axis.
-
     """
     try:
         import seaborn as sns
@@ -1597,7 +1630,7 @@ def plot_heatmap (
     # # Extract week, year, weekday or date
     df['date_type'] = df.index.strftime(date_format) 
 
-    # create a matrix with week as columns and time (hour) as rows
+    # create a matrix with date_type (week, year, weekday, date) as columns and time (hour) as rows
     df_mean = df.groupby(['time', 'date_type'])[disp_column].aggregate('mean').unstack()
 
     # Resample the timeline. Need to reformat the time in datetime before resampling
@@ -1707,7 +1740,6 @@ def plot_heatmap (
     return fig, ax
 
 # =============================================================================
-
 
 def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     """
