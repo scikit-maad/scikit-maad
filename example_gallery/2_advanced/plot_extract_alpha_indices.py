@@ -50,7 +50,7 @@ TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
 # we set the dateformat agument to 'SM4' in order to be able to parse the date
 # from the filename. In case of Audiomoth, the date is coded as Hex in the 
 # filename. The path to the audio dataset is "../../data/indices/".
-df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
+df = date_parser("../../data/indices/", dateformat='%Y%m%d_%H%M%S', verbose=True)
 
 # remove index => Date becomes a column instead of an index. This is
 # required as df_audio_ind, df_spec_ind and df_spec_ind_per_bin do not have 
