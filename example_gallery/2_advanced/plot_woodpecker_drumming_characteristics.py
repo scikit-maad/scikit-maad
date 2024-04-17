@@ -157,10 +157,13 @@ filelist = grab_audio(XC_ROOTDIR+XC_DIR)
 # Create new columns with short filename and species names
 df = pd.DataFrame()
 for file in filelist:
-    df = df.append({'fullfilename': file,
-                    'filename': Path(file).parts[-1][:-4],
-                    'species': Path(file).parts[-2]},
-                   ignore_index=True)
+    df = pd.concat([df, pd.DataFrame({
+                            'fullfilename': [file],
+                            'filename': Path(file).parts[-1][:-4],
+                            'species': Path(file).parts[-2]
+                            })
+                    ],
+                    ignore_index=True)    
 
 print('=====================================================')
 print('number of files : %2.0f' % len(df))
@@ -212,19 +215,19 @@ for species in df.species.unique():
         # 3. bandpass filter around drumming frequencies 
         fcut = (25, 5000)
         s = sound.select_bandwidth(s,
-                                   fs,
-                                   fcut=fcut,
-                                   forder=1,
-                                   fname='butter',
-                                   ftype='bandpass')
+                                fs,
+                                fcut=fcut,
+                                forder=1,
+                                fname='butter',
+                                ftype='bandpass')
         
         # 4. find portions of the signal (ROIs) that contain a drumming
         df_rois = rois.find_rois_cwt(s, 
-                                     fs, 
-                                     flims=(50,4000), 
-                                     tlen=4, 
-                                     th=1e-3, 
-                                     display=False)
+                                    fs, 
+                                    flims=(50,4000), 
+                                    tlen=4, 
+                                    th=1e-3, 
+                                    display=False)
         
         # 5. Loop to process each ROI previously found 
         pulseRateMedian = []
@@ -319,8 +322,8 @@ for species in df.species.unique():
             df_drums_temp['Amp_pulses_last'] = Amp_pulses_last
             df_drums_temp['species'] = species 
             df_drums_temp['filename'] = file 
-            df_drums = df_drums.append(df_drums_temp, ignore_index=True)                   
-      
+            df_drums = pd.concat([df_drums,df_drums_temp], 
+                                ignore_index=True)                   
         # counter
         sys.stdout.write('\r')
         sys.stdout.write('%2.0f%%' %np.round(((idx+1)/len(current_df)*100))) 
@@ -345,14 +348,14 @@ n = 0
 # loop to build a boxplot for each species based on the feature "pulseRateMedian"
 for species in df_drums.species.unique():
     ax.boxplot(df_drums[df_drums.species == species]['pulseRateMedian'], 
-               positions=[n+1],
-               widths = 0.75,
-               vert = False,
-               notch=True)
+            positions=[n+1],
+            widths = 0.75,
+            vert = False,
+            notch=True)
     n += 1
 ax.set_yticks(np.arange(1,len(df_drums.species.unique())+1))
 ax.set_yticklabels(df_drums.species.unique(),
-                   fontsize=9)
+                fontsize=9)
 ax.set_xlabel('pulseRateMedian [Hz]')
 ax.set_ylabel('species')
 ax.set_xlim(0,30)
@@ -401,3 +404,5 @@ plt.legend(g,
            fontsize=8,
            frameon = True)
 plt.tight_layout()
+
+# %%

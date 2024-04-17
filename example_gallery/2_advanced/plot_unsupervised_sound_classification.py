@@ -11,6 +11,10 @@ In this example, we will use unsupervised learning to automatically annotate mul
 **Dependencies**: This example requires the Python package scikit-learn v0.24 or greater.
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_unsupervised_sound_classification_004.png'
+
+#%%
+# Load required modules
+# ---------------------
 import numpy as np
 import matplotlib.pyplot as plt
 from maad import sound, features, rois
