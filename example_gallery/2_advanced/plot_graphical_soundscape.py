@@ -33,7 +33,9 @@ peak_time, peak_freq = rois.spectrogram_local_max(
 # available [here](https://github.com/scikit-maad/scikit-maad/tree/production/data/indices).
 
 df = util.get_metadata_dir('../../data/indices')
-gs = features.graphical_soundscape(data=df, threshold_abs=-80, target_fs=22000)
+df['time'] = df.date.dt.hour
+gs = features.graphical_soundscape(
+    data=df, time='time', threshold_abs=-80, target_fs=22000)
 features.plot_graph(gs)
 
 #%%

@@ -211,12 +211,11 @@ def plot_graph(graph, ax=None, savefig=False, fname=None):
     if ax == None:
         fig, ax = plt.subplots()
 
-    ax.imshow(graph.values.T, aspect='auto', origin='lower')
+    ax.imshow(graph.values.T, aspect='auto', origin='lower', 
+              extent=[int(graph.index[0]), int(graph.index[-1]), 
+                      graph.columns[0], graph.columns[-1]])
     ax.set_xlabel('Time (h)')
     ax.set_ylabel('Frequency (Hz)')
-    ytick_idx = np.arange(0, graph.shape[1], 20).astype(int)
-    ax.set_yticks(ytick_idx)
-    ax.set_yticklabels(graph.columns[ytick_idx].astype(float).astype(int).values)
 
     if savefig:
         plt.savefig(fname, bbox_inches='tight')
