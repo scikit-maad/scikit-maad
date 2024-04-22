@@ -1894,6 +1894,7 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
 
     figsize = kwargs.pop("figsize", (5, 5))
     kwargs.pop("label", None)
+    now = kwargs.pop("now", True)
 
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
