@@ -1562,7 +1562,50 @@ def heatmap_by_date_and_time (
     verbose : bool, optional
         If True, display verbose information. The default is False.
     **kwargs
-        Additional keyword arguments for the plot.
+        Specific to this function:
+        
+        - ftime : Time format to display as x label by default '%Y-%m-%d'(see https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior)
+            
+        Specific to matplotlib:
+            
+        - figsize : tuple of integers, optional, default: (4,10) width, height in inches.  
+        
+        - title : string, optional, default : 'Spectrogram' title of the figure
+        
+        - xlabel : string, optional, default : 'Time [s]' label of the horizontal axis
+
+        - ylabel : string, optional, default : 'Amplitude [AU]' label of the vertical axis
+            
+        - xticks : tuple of ndarrays, optional, default : none
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
+            
+        - yticks : tuple of ndarrays, optional, default : none
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+        
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
+        
+        - now : boolean, optional, default : True
+            if True, display now. Cannot display multiple images. 
+            To display mutliple images, set now=False until the last call for 
+            the last image      
+            
+        ... and more, see matplotlib
 
     Returns
     -------
@@ -1578,7 +1621,7 @@ def heatmap_by_date_and_time (
     ax : matplotlib.axes.Axes
         The generated matplotlib axis.
     """
-    
+
     # test if dataframe is not a pd.DataFrame
     if isinstance(dataframe, pd.DataFrame) == False:
         if verbose :
@@ -1629,6 +1672,7 @@ def heatmap_by_date_and_time (
     df_std.index = df_std.index.strftime("%H:%M")
 
     if display == True : 
+
         # try to use seaborn if installed
         try:
             import seaborn as sns
@@ -1687,19 +1731,31 @@ def heatmap_by_date_and_time (
         x_label = [i + j for i, j in zip(map(str, df.index.values), [" "] * len(df))]
 
         # plot
+        # matplotlib parameters
+        fig = kwargs.pop("fig", None)
+        ax = kwargs.pop("ax", None) 
+        xlabel = kwargs.pop("xlabel", "Hours")
+        ylabel = kwargs.pop("ylabel", df_mean.columns.name)
+        now = kwargs.pop("now", True)
         vmin = kwargs.pop("vmin", np.nanpercentile(df,1))
         vmax = kwargs.pop("vmax", np.nanpercentile(df,99))
         cmap = kwargs.pop("cmap", "RdPu")
+        title = kwargs.pop("title", None)
         figsize = kwargs.pop("figsize", (len(df)*0.33*0.75, len(list(df))*0.26*0.75 +0.75))
-            
-        fig = plt.figure(figsize=figsize)
-        ax = fig.add_subplot(111)
+        
+        # Create a figure and a subplot associated
+        if (fig is None) or (ax is None) :
+            fig = plt.figure(figsize=figsize)
+            ax = fig.add_subplot(111)
+
+        # display image
         caxes = ax.matshow(df.transpose(), 
                         interpolation = "None",
                         aspect="auto", 
                         cmap = cmap,
                         vmin = vmin,
                         vmax = vmax,
+                        **kwargs
                         )
         if cb_legend =="" :
             fig.colorbar(caxes, shrink=0.75, label=disp_column)
@@ -1725,14 +1781,20 @@ def heatmap_by_date_and_time (
         ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
         
         # add title to the axis
-        ax.set_xlabel("Time")
-        ax.set_ylabel(df_mean.columns.name)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
                 
         # Rotate the tick labels and set their alignment.
         plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=10)
         plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=10)
         plt.tight_layout()
-        plt.show()
+
+        # Adding a title to the figure
+        if title is not None:
+            fig.suptitle(title)
+
+        if now :
+            plt.show()
     else :
         fig = None
         ax = None
@@ -1857,7 +1919,10 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     ax.grid()
     ax.legend()
     fig.tight_layout()
-    # plt.show()
+
+    # Display the figure now
+    if now:
+        plt.show()
 
     return fig, ax
 
