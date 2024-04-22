@@ -367,9 +367,9 @@ def date_parser(datadir, dateformat='%Y%m%d_%H%M%S', extension='.wav', prefix = 
     Returns
     -------
     pandas.DataFrame
-        DataFrame containing the extracted dates as the index,
-        the filenames in a 'Filename' column, and the full file paths
-        in a 'FullFilename' column.
+        DataFrame containing the extracted dates as the index 'Date',
+        the filenames in a 'file' column, and the full file paths
+        in a 'file_path' column.
 
     Raises
     ------
@@ -383,7 +383,7 @@ def date_parser(datadir, dateformat='%Y%m%d_%H%M%S', extension='.wav', prefix = 
     the dates from the filenames using the provided datetime_format.
 
     The extracted dates are set as the index of the resulting DataFrame. The
-    'Filename' column contains the filenames, and the 'FullFilename' column
+    'file' column contains the filenames, and the 'file_path' column
     contains the full file paths.
 
     Examples
@@ -393,34 +393,37 @@ def date_parser(datadir, dateformat='%Y%m%d_%H%M%S', extension='.wav', prefix = 
     >>> datetime_format = '%Y%m%d_%H%M%S'
     >>> df = maad.util.date_parser(datadir=folder_path, dateformat=datetime_format, extension=ext)
     >>> df
-                                                                file
-    Date                                                             
-    2019-05-22 00:00:00  ../data/indices/S4A03895_20190522_000000.wav
-    2019-05-22 00:15:00  ../data/indices/S4A03895_20190522_001500.wav
-    2019-05-22 00:30:00  ../data/indices/S4A03895_20190522_003000.wav
-    2019-05-22 00:45:00  ../data/indices/S4A03895_20190522_004500.wav
-    2019-05-22 01:00:00  ../data/indices/S4A03895_20190522_010000.wav
-    2019-05-22 01:15:00  ../data/indices/S4A03895_20190522_011500.wav
-    2019-05-22 01:30:00  ../data/indices/S4A03895_20190522_013000.wav
-    2019-05-22 01:45:00  ../data/indices/S4A03895_20190522_014500.wav
-    2019-05-22 02:00:00  ../data/indices/S4A03895_20190522_020000.wav
-    ...
-    
+                                                file	                                      file_path
+    Date		
+    2019-05-22 00:00:00	S4A03895_20190522_000000.wav	../../data/indices/S4A03895_20190522_000000.wav
+    2019-05-22 00:15:00	S4A03895_20190522_001500.wav	../../data/indices/S4A03895_20190522_001500.wav
+    2019-05-22 00:30:00	S4A03895_20190522_003000.wav	../../data/indices/S4A03895_20190522_003000.wav
+    2019-05-22 00:45:00	S4A03895_20190522_004500.wav	../../data/indices/S4A03895_20190522_004500.wav
+    2019-05-22 01:00:00	S4A03895_20190522_010000.wav	../../data/indices/S4A03895_20190522_010000.wav
+                    ...	                         ...	                                            ...
+    2019-05-22 22:45:00	S4A03895_20190522_224500.wav	../../data/indices/S4A03895_20190522_224500.wav
+    2019-05-22 23:00:00	S4A03895_20190522_230000.wav	../../data/indices/S4A03895_20190522_230000.wav
+    2019-05-22 23:15:00	S4A03895_20190522_231500.wav	../../data/indices/S4A03895_20190522_231500.wav
+    2019-05-22 23:30:00	S4A03895_20190522_233000.wav	../../data/indices/S4A03895_20190522_233000.wav
+    2019-05-22 23:45:00	S4A03895_20190522_234500.wav	../../data/indices/S4A03895_20190522_234500.wav
+
     >>> df = maad.util.date_parser("../../data/indices/", dateformat='SM4', verbose=False)
     >>> list(df)
     >>> df
-                                                                file
-    Date                                                             
-    2019-05-22 00:00:00  ../data/indices/S4A03895_20190522_000000.wav
-    2019-05-22 00:15:00  ../data/indices/S4A03895_20190522_001500.wav
-    2019-05-22 00:30:00  ../data/indices/S4A03895_20190522_003000.wav
-    2019-05-22 00:45:00  ../data/indices/S4A03895_20190522_004500.wav
-    2019-05-22 01:00:00  ../data/indices/S4A03895_20190522_010000.wav
-    2019-05-22 01:15:00  ../data/indices/S4A03895_20190522_011500.wav
-    2019-05-22 01:30:00  ../data/indices/S4A03895_20190522_013000.wav
-    2019-05-22 01:45:00  ../data/indices/S4A03895_20190522_014500.wav
-    2019-05-22 02:00:00  ../data/indices/S4A03895_20190522_020000.wav
-    ...
+                                                file	                                      file_path
+    Date		
+    2019-05-22 00:00:00	S4A03895_20190522_000000.wav	../../data/indices/S4A03895_20190522_000000.wav
+    2019-05-22 00:15:00	S4A03895_20190522_001500.wav	../../data/indices/S4A03895_20190522_001500.wav
+    2019-05-22 00:30:00	S4A03895_20190522_003000.wav	../../data/indices/S4A03895_20190522_003000.wav
+    2019-05-22 00:45:00	S4A03895_20190522_004500.wav	../../data/indices/S4A03895_20190522_004500.wav
+    2019-05-22 01:00:00	S4A03895_20190522_010000.wav	../../data/indices/S4A03895_20190522_010000.wav
+                    ...	                         ...	                                            ...
+    2019-05-22 22:45:00	S4A03895_20190522_224500.wav	../../data/indices/S4A03895_20190522_224500.wav
+    2019-05-22 23:00:00	S4A03895_20190522_230000.wav	../../data/indices/S4A03895_20190522_230000.wav
+    2019-05-22 23:15:00	S4A03895_20190522_231500.wav	../../data/indices/S4A03895_20190522_231500.wav
+    2019-05-22 23:30:00	S4A03895_20190522_233000.wav	../../data/indices/S4A03895_20190522_233000.wav
+    2019-05-22 23:45:00	S4A03895_20190522_234500.wav	../../data/indices/S4A03895_20190522_234500.wav
+
     """    
 
     file_pattern = os.path.join(datadir, f'**/{prefix}*{extension}')
@@ -434,12 +437,12 @@ def date_parser(datadir, dateformat='%Y%m%d_%H%M%S', extension='.wav', prefix = 
 
         if dateformat == 'SM4':
             date =_date_from_filename(filename)
-            data.append({'Date': date, 'Filename': filename, 'FullFilename': file_path})
+            data.append({'Date': date, 'file': filename, 'file_path': file_path})
         
         elif dateformat == 'POSIX':
             posix_time = int(Path(filename).stem, 16)
             date = datetime.utcfromtimestamp(posix_time).strftime('%Y-%m-%d %H:%M:%S')
-            data.append({'Date': date, 'Filename': filename, 'FullFilename': file_path})
+            data.append({'Date': date, 'file': filename, 'file_path': file_path})
 
         else: 
             # Construct a regex pattern to extract the date from the filename
@@ -455,15 +458,15 @@ def date_parser(datadir, dateformat='%Y%m%d_%H%M%S', extension='.wav', prefix = 
                 # Parse the date string
                 try:
                     date = datetime.strptime(date_str, dateformat)
-                    data.append({'Date': date, 'Filename': filename, 'FullFilename': file_path})
+                    data.append({'Date': date, 'file': filename, 'file_path': file_path})
                 except ValueError:
                     print(f"Error parsing date: {date_str} in file: {file_path}. The default date and time 1900-01-01 00:00:00 will be used.")
                     # date by default
-                    data.append({'Date': "1900-01-01 00:00:01", 'Filename': filename, 'FullFilename': file_path})
+                    data.append({'Date': "1900-01-01 00:00:01", 'file': filename, 'file_path': file_path})
             else:
                 print(f"No date found in file: {file_path}. The default date and time 1900-01-01 00:00:00 will be used.")
                 # date by default 1900-01-01 00:00:00
-                data.append({'Date': "1900-01-01 00:00:01", 'Filename': filename, 'FullFilename': file_path})
+                data.append({'Date': "1900-01-01 00:00:01", 'file': filename, 'file_path': file_path})
     if len(data) > 0:
         df = pd.DataFrame(data)
         df.set_index('Date', inplace=True)
