@@ -157,7 +157,9 @@ G = 26+16       # Amplification gain (26dB (SM4 preamplifier))
 # filename. The path to the audio dataset is "../../data/indices/".
     
 if __name__ == '__main__':  # Multiprocessing should be declared under the main entry point
-    mp.set_start_method("fork")   # This start method is necessary for macOS. It is the default method on Linux
+    # Check if the start method is already set
+    if mp.get_start_method(allow_none=True) is None:
+        mp.set_start_method("fork")  # or "spawn" or "forkserver" depending on your needs
     
     df = date_parser("../../data/indices/", dateformat='SM4', verbose=True)
 
