@@ -39,7 +39,7 @@ gs = features.graphical_soundscape(
 features.plot_graph(gs)
 
 #%%
-# This representation can be computed at various locations, and comparisons can be made among these sites for similarity. For further details on this approach, refer to sources [2] and [3]. It is important to note that the method implemented in scikit-maad is akin but not identical. In the original approach, peaks are calculated on the mean spectrogram.
+# This representation can be computed at various locations, and comparisons can be made among these sites for similarity. For further details on this approach, refer to sources [2] and [3]. It is important to note that the method implemented in scikit-maad is akin but not identical. In the original approach, peaks were calculated based on the mean spectrogram. In this version, we identify local maxima directly within the spectrogram.
 
 #%% 
 # References
