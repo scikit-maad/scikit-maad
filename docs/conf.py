@@ -43,6 +43,7 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
     'sphinx_autodoc_typehints', # Automatically document param types (less noise in class signature)
     'sphinx.ext.githubpages',
 #    'sphinx.ext.napoleon',
+    'sphinx_rtd_theme',
     'numpydoc',  # docstring examples
     'sphinx.ext.autosectionlabel',
     'sphinx_gallery.gen_gallery',
