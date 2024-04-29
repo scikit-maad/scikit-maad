@@ -34,7 +34,7 @@ Middle Spotted : Dendrocoptes medius
 
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_xenocanto_woodpecker_activities_002.png'
-
+# %%
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -252,8 +252,6 @@ df = df_week_count.copy()
 df['count'] = df['count'].astype(float)
 
 for species in list_species:
-    # filter the rows with specific species and its count
-    sub_df = df.loc[df['species'] == species, 'count']
     
     # scale the count values using MinMaxScaler
     scaled_counts = df[df['species'] == species]['count'] / np.max(df[df['species'] == species]['count'])
@@ -288,10 +286,10 @@ ax.set_yticks(np.arange(0, len(df.index), 1))
 
 # Labels for major ticks
 ax.set_xticklabels(list(df),
-                   fontsize=9,
-                   rotation=90)
+                fontsize=9,
+                rotation=90)
 ax.set_yticklabels(df.index,
-                   fontsize=8)
+                fontsize=8)
 
 # Minor ticks
 ax.set_xticks(

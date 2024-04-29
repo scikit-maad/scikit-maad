@@ -18,6 +18,9 @@ scikit-image, scikit-learn and pandas Python packages.
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_compare_auto_and_manual_rois_selection_005.png'
 
+#%%
+# Load required modules
+# ---------------------
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans

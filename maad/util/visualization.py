@@ -13,6 +13,7 @@ import pandas as pd
 from skimage.io import imsave
 import colorsys
 from ast import literal_eval
+from datetime import datetime
 
 # min value
 import sys
@@ -38,29 +39,174 @@ def _check_axes(axes):
 
 
 #%%
+def _is_single_value(value):
+    """
+    Check if a value is a single numeric value or a single character.
+
+    Parameters:
+    -----------
+        value (int, float, str): The value to be checked.
+
+    Returns:
+    --------
+        bool: True if the value is a single numeric value or a single character, False otherwise.
+    """
+    if isinstance(value, (int, float, str)):
+        if isinstance(value, (int, float)):
+            return True  # It's a numeric value
+        elif isinstance(value, str):
+            # Check if it's a single numeric character (0-9)
+            if len(value) == 1 and value.isdigit():
+                return True  # It's a single numeric character
+            else:
+                return False  # It's a string, but not a single character
+    return False  # It's not a single value
+
+#%%
+MIN_V = 1 # min week number possible
+MIN_m = 1 # min month number possible
+MIN_d = 1 # min day number possible
+MIN_H = 0 # min hour number possible
+MIN_M = 0 # min minute number possible
+
+MAX_V = 53 # max week number possible
+MAX_m = 12 # max month number possible
+MAX_d = 31 # max day number possible
+MAX_H = 23 # max hour number possible
+MAX_M = 59 # max minute number possible
+
+def _filter_dataframe_by_datetime(df, date_format, date_range):
+    """
+    Filter a DataFrame based on a specified date format and date range.
+
+    Parameters:
+    -----------
+        df : pandas.DataFrame
+            The DataFrame to be filtered.
+        date_format :str
+            The format of the date to be extracted from the DataFrame's index.
+        date_range : int, str, list
+            The range of dates to filter the DataFrame by.
+
+    Returns:
+    --------
+        pandas.DataFrame: The filtered DataFrame.
+
+    Raises:
+    -------
+        ValueError: If the date_format is not allowed or if the date_range is not a single value or a list.
+
+    Note:
+    -----
+        The date_format parameter can be one of the following:
+        - "%V": Week number
+        - "%Y": Year
+        - "%m-%d": Month and day
+        - "%a": Weekday
+        - "%m": Month
+        - "%d": Day
+        - "%y-%m-%d": Year, Month, and Day
+        - "%H:%M": Hour and minute (e.g., "13:42")
+
+        The date_range parameter can be one of the following:
+        - A single value (int or str) representing a specific date or time.
+        - A list of values (int or str) representing a range of dates or times.
+        For example, ["01-01", "01-31"] represents a range of dates from January 1st to January 31st.
+
+    """
+    # Extract the date portion from the DatetimeIndex based on the specified date format
+    try:
+        df['date_type'] = df.index.strftime(date_format)
+    except :
+        raise ValueError('Error in the date_format. Check the date_format parameter')
+
+    if _is_single_value(date_range) == True :
+        if (date_format == "%V") or (date_format == "%Y") or (date_format == "%m") or (date_format == "%d"):
+            # Filter by week number or by year or by month
+            df_filtered = df[df['date_type'].astype(int) == date_range]
+        elif (date_format == "%m-%d") or (date_format == "%H:%M") or (date_format == "%a") or (date_format == "%y-%m-%d"):
+            # Filter by time (hour:minutes)
+            # Filter by weekday (e.g., "Mon" for Monday)
+            # Filter by year-month-day (e.g., "23-01-01" for January 1, 2023)
+            # Filter by month and day (e.g., "01-01" for January 1)
+            df_filtered = df[df['date_type'] == date_range]
+        else :
+            print("Filtering was no possible. date_format {} is not allowed".format(date_format))
+            df_filtered = df
+
+    elif (len(date_range)==1) or(len(date_range)>2):
+        if (date_format == "%V") or (date_format == "%Y") or (date_format == "%m") or (date_format == "%d"):
+            # Filter by week number or by year or by month
+            df_filtered = df[df['date_type'].astype(int).isin(date_range)]
+        elif (date_format == "%m-%d") or (date_format == "%H:%M") or (date_format == "%a") or (date_format == "%y-%m-%d"):
+            # Filter by time (hour:minutes)
+            # Filter by weekday (e.g., "Mon" for Monday)
+            # Filter by year-month-day (e.g., "23-01-01" for January 1, 2023)
+            # Filter by month and day (e.g., "01-01" for January 1)
+            df_filtered = df[df['date_type'].isin(date_range)]
+        else :
+            print("Filtering was no possible. date_format {} is not allowed".format(date_format))
+            df_filtered = df
+    else:
+        if isinstance(date_range, list) : 
+            if (date_format == "%V") or (date_format == "%Y") or (date_format == "%m") or (date_format == "%d"):
+                # Filter by week number or by year or by month
+                df_filtered = df[df['date_type'].astype(int).between(date_range[0], date_range[1])]
+            elif (date_format == "%m-%d") or (date_format == "%H:%M") or (date_format == "%a") or (date_format == "%y-%m-%d"):
+                # Filter by time (hour:minutes)
+                # Filter by weekday (e.g., "Mon" for Monday)
+                # Filter by year-month-day (e.g., "23-01-01" for January 1, 2023)
+                # Filter by month and day (e.g., "01-01" for January 1)
+                if date_range[0] <= date_range[1] :
+                    df_filtered = df[df['date_type'].between(str(date_range[0]), str(date_range[1]))]
+                else :
+                    if date_format == "%H:%M" : 
+                        MAX = f'{MAX_H:02}:{MAX_M:02}'
+                        df_filtered_part1 = df[df['date_type'].between(str(date_range[0]), MAX)] 
+                        MIN = f'{MIN_H:02}:{MIN_M:02}'
+                        df_filtered_part2 = df[df['date_type'].between(MIN, str(date_range[1]))]  
+                        df_filtered = pd.concat([df_filtered_part1, df_filtered_part2], axis = 0)
+                    else :
+                        print("Filtering was no possible. The range must increase")
+                        df_filtered = df
+            else :
+                print("Filtering was no possible. date_format {} is not allowed".format(date_format))
+                df_filtered = df
+        else :
+            print("Filtering was no possible. date_range must be a single value or a list")
+            df_filtered = df
+
+    # Check if 'data_type' is in the DataFrame's columns
+    if 'date_type' in df_filtered.columns:
+        # If it exists, drop the column
+        df_filtered = df_filtered.drop('date_type', axis=1)
+
+    return df_filtered
+
+#%%
 def plot_shape(shape, params, row=0, ax=None, display_values=False):
     """ 
     Plot shape features in a bidimensional plot.
-     
+    
     Parameters 
     ---------- 
     shape: 1D array, pd.Series or pd.DataFrame 
         Shape features computed with shape_features function. 
-     
+    
     params: pd.DataFrame 
         Pandas dataframe returned by maad.features_rois.shape_features 
-     
+    
     row: int 
         Observation to be visualized 
-     
+    
     display_values: bool 
         Set to True to display the coefficient values. Default is False. 
-     
+    
     Returns 
     ------- 
     ax: matplotlib.axes 
         Axes of the figure 
-         
+    
     Examples 
     -------- 
     >>> from maad.sound import load, spectrogram 
@@ -70,7 +216,7 @@ def plot_shape(shape, params, row=0, ax=None, display_values=False):
     >>> Sxx, ts, f, ext = spectrogram(s, fs) 
     >>> shape, params = shape_features(np.log10(Sxx), resolution='high') 
     >>> plot_shape(shape, params) 
- 
+
     """
 
     # compute shape of matrix
@@ -118,89 +264,88 @@ def plot_shape(shape, params, row=0, ax=None, display_values=False):
 
     return ax
 
-
 #%%
 def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     """ 
     Overlay centroids on the original spectrogram 
-     
+    
     Parameters 
     ---------- 
     Sxx :  2D array 
         Spectrogram 
-               
+        
     centroid: pandas DataFrame 
         DataFrame with centroid descriptors (centroid_f, centroid_t) 
         Do format_features(rois,tn,fn) before using overlay_centroid to be sure that 
         the format of the DataFrame is correct 
-             
+            
     savefig : string, optional, default is None 
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
-         
+        
     kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlaycentroid.png' 
             Postfix of the figure filename 
-         
+        
         - extent : list of scalars [left, right, bottom, top], optional, default: None
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.
-         
+        
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
-         
+        
         - xlabel : string, optional, default : 'Time [s]' 
             label of the horizontal axis 
-         
+        
         - ylabel : string, optional, default : 'Amplitude [AU]' 
             label of the vertical axis 
-         
+        
         - cmap : string or Colormap object, optional, default is 'gray' 
             See https://matplotlib.org/examples/color/colormaps_reference.html 
             in order to get all the  existing colormaps 
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
             'viridis'... 
-         
+        
         - vmin, vmax : scalar, optional, default: None 
             `vmin` and `vmax` are used in conjunction with norm to normalize 
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
-                 
+        
         - dpi : integer, optional, default is 96 
             Dot per inch.  
             For printed version, choose high dpi (i.e. dpi=300) => slow 
             For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
+        
         - format : string, optional, default is 'png' 
             Format to save the figure  
-         
+        
         ... and more, see matplotlib  
- 
+
     Returns 
     ------- 
     ax  
         axis object (see matplotlib) 
     fig  
         figure object (see matplotlib) 
- 
+
     Examples
     --------
- 
+
     Get centroid from the whole power spectrogram 
- 
+
     >>> from maad.sound import load, spectrogram
     >>> from maad.features import centroid_features
     >>> from maad.util import (power2dB, format_features, overlay_rois, plot2d,
-                               overlay_centroid)
-     
+                            overlay_centroid)
+    
     Load audio and compute spectrogram 
-     
+    
     >>> s, fs = load('../data/spinetail.wav') 
     >>> Sxx,tn,fn,ext = spectrogram(s, fs, db_range=80) 
     >>> Sxx = power2dB(Sxx, db_range=80)
-     
+    
     Load annotations and plot
     
     >>> from maad.util import read_audacity_annot
@@ -211,7 +356,7 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
     
     Compute the centroid of each rois, format to get results in the 
     temporal and spectral domain and overlay the centroids.
-     
+    
     >>> centroid = centroid_features(Sxx, rois) 
     >>> centroid = format_features(centroid, tn, fn)
     >>> ax, fig = overlay_centroid(Sxx,centroid, extent=ext, ax=ax, fig=fig)
@@ -273,7 +418,6 @@ def overlay_centroid(im_ref, centroid, savefig=None, **kwargs):
 
     return ax, fig
 
-
 #%%
 def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None, 
                  textbox_label=False, savefig=None, **kwargs):
@@ -281,12 +425,12 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
     Display bounding boxes with time-frequency regions of interest over a spectrogram.
     
     Regions of interest (ROIs) must be provided. They can be loaded as manual annotations or computed using automated methods (see the example section).
-     
+    
     Parameters 
     ---------- 
     im_ref : 2d ndarray of scalars 
         Spectrogram (or image) 
- 
+
     rois_bbox : pandas.DataFrame
         Contains the bounding box of each ROI. The pandas.DataFrame must have columns
         ['min_x', 'max_x', 'min_y', 'max_y']. If your data is in the time-frequency
@@ -316,11 +460,11 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         Display a text box above the bounding box indicating the name of the label.
         The rois_bbox pandas.DataFrame must have a column called 'label' with names
         assigned to each ROI.
- 
+
     savefig : string, optional, default is None 
         Root filename (with full path) is required to save the figures. Postfix 
         is added to the root filename. 
-         
+        
     kwargs, optional. This parameter is used by plt.plot and savefig functions 
             
         - savefilename : str, optional, default :'_spectro_overlayrois.png' 
@@ -330,41 +474,41 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
             The location, in data-coordinates, of the lower-left and
             upper-right corners. If `None`, the image is positioned such that
             the pixel centers fall on zero-based (row, column) indices.  
-         
+        
         - title : string, optional, default : 'Spectrogram' 
             title of the figure 
-         
+        
         - xlabel : string, optional, default : 'Time [s]' 
             label of the horizontal axis 
-         
+        
         - ylabel : string, optional, default : 'Amplitude [AU]' 
             label of the vertical axis 
-         
+        
         - cmap : string or Colormap object, optional, default is 'gray' 
             See https://matplotlib.org/examples/color/colormaps_reference.html 
             in order to get all the  existing colormaps 
             examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic',  
             'viridis'... 
-         
+        
         - vmin, vmax : scalar, optional, default: None 
             `vmin` and `vmax` are used in conjunction with norm to normalize 
             luminance data.  Note if you pass a `norm` instance, your 
             settings for `vmin` and `vmax` will be ignored. 
-         
+        
         - dpi : integer, optional, default is 96 
             Dot per inch.  
             For printed version, choose high dpi (i.e. dpi=300) => slow 
             For screen version, choose low dpi (i.e. dpi=96) => fast 
-         
+        
         - format : string, optional, default is 'png' 
             Format to save the figure  
-         
+        
         ... and more, see matplotlib  
- 
+
     Returns 
     ------- 
     ax : axis object (see matplotlib) 
-         
+        
     fig : figure object (see matplotlib) 
     
     Examples 
@@ -520,7 +664,7 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
         
         if textbox_label:
             textbox = dict(boxstyle='square', fc=color[ii], 
-                           ec=color[ii], alpha=1, pad=0, linewidth=2)
+                        ec=color[ii], alpha=1, pad=0, linewidth=2)
             ax.text(x0*x_scaling + xmin, (y1+2)*y_scaling + ymin, 
                     str(row.label), 
                     color='white',
@@ -544,7 +688,6 @@ def overlay_rois(im_ref, rois, edge_color=None, unique_labels= None,
 
     return ax, fig
 
-
 #%%
 def plot1d(x, y, ax=None, **kwargs):
     """
@@ -554,7 +697,7 @@ def plot1d(x, y, ax=None, **kwargs):
     ----------
     x : 1d ndarray of integer
         Vector containing the abscissa values (horizontal axis)
-             
+        
     y : 1d ndarray of scalar
         Vector containing the ordinate values (vertical axis)  
     
@@ -625,15 +768,15 @@ def plot1d(x, y, ax=None, **kwargs):
     Convert spectrogram into dB SPL
     
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) 
-       
+    
     Plot the spectrum at t = 7s
     
     >>> index = maad.util.nearest_idx(tn,7)
     >>> fig_kwargs = {'figtitle':'Spectrum (PSD)',
-                      'xlabel':'Frequency [Hz]',
-                      'ylabel':'Power [dB]',
-                      'linewidth': 0.5
-                      }
+                    'xlabel':'Frequency [Hz]',
+                    'ylabel':'Power [dB]',
+                    'linewidth': 0.5
+                    }
     
     >>> fig, ax = maad.util.plot1d(fn, Lxx[:,index], **fig_kwargs)
     """
@@ -683,7 +826,6 @@ def plot1d(x, y, ax=None, **kwargs):
         plt.show()
 
     return ax, fig
-
 
 #%%
 def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
@@ -740,7 +882,6 @@ def plot_wave(s, fs, tlims=None, ax=None, **kwargs):
     ax, fig = plot1d(t, s, ax, **kwargs)
 
     return ax
-
 
 #%%
 def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, **kwargs):
@@ -819,7 +960,6 @@ def plot_spectrum(pxx, f_idx, ax=None, flims=None, log_scale=False, fill=True, *
 
     return ax
 
-
 #%%
 def plot2d(im, ax=None, colorbar=True, **kwargs):
     """
@@ -832,7 +972,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
     ----------
     im : 2D numpy array 
         Image or Spectrogram
-             
+        
     ax : axis, optional, default is None
         Draw the image on this specific axis. Allow multiple plots on the same
         figure.
@@ -870,9 +1010,9 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
             To display mutliple images, set now=False until the last call for 
             the last image    
         - interpolation : list of string [None, 'none', 'nearest', 'bilinear', 
-           'bicubic', 'spline16','spline36', 'hanning', 'hamming', 'hermite', 
-           'kaiser', 'quadric','catrom', 'gaussian', 'bessel', 'mitchell', 
-           'sinc', 'lanczos'], optional, default : None
+            'bicubic', 'spline16','spline36', 'hanning', 'hamming', 'hermite', 
+            'kaiser', 'quadric','catrom', 'gaussian', 'bessel', 'mitchell', 
+            'sinc', 'lanczos'], optional, default : None
             
         ... and more, see matplotlib
         
@@ -889,12 +1029,12 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
-                      'vmin':0,
-                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                      'title':'Power spectrogram density (PSD) in dB SPL',
-                      'xlabel':'Time [s]',
-                      'ylabel':'Frequency [Hz]',
-                      }
+                    'vmin':0,
+                    'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                    'title':'Power spectrogram density (PSD) in dB SPL',
+                    'xlabel':'Time [s]',
+                    'ylabel':'Frequency [Hz]',
+                    }
     >>> fig, ax = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)      
         
     """
@@ -1048,7 +1188,7 @@ def rand_cmap(
     last_color_black : bool, optional   
         Option to use last color as black. Default is False
     seed : int, optional
-         Fix the seed of the random engine. Default is 321   
+        Fix the seed of the random engine. Default is 321   
     verbose  : bool, optional   
         Prints the number of labels and shows the colormap. Default is False
     
@@ -1166,21 +1306,21 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(w,fs)
     >>> Lxx = maad.spl.power2dBSPL(Sxx_power, gain=42) # convert into dB SPL
     >>> fig_kwargs = {'vmax': Lxx.max(),
-                      'vmin':0,
-                      'extent':(tn[0], tn[-1], fn[0], fn[-1]),
-                      'title':'Power spectrogram density (PSD)',
-                      'xlabel':'Time [s]',
-                      'ylabel':'Frequency [Hz]',
-                      }
+                    'vmin':0,
+                    'extent':(tn[0], tn[-1], fn[0], fn[-1]),
+                    'title':'Power spectrogram density (PSD)',
+                    'xlabel':'Time [s]',
+                    'ylabel':'Frequency [Hz]',
+                    }
     >>> fig, ax = maad.util.plot2d(Lxx,**fig_kwargs)      
     >>> Lxx_crop, tn_crop, fn_crop = maad.util.crop_image(Lxx, tn, fn, fcrop=(2000,10000), tcrop=(0,30))
     >>> fig_kwargs = {'vmax': Lxx.max(),
-                      'vmin':0,
-                      'extent':(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),
-                      'title':'Crop of the power spectrogram density (PSD)',
-                      'xlabel':'Time [s]',
-                      'ylabel':'Frequency [Hz]',
-                      }
+                    'vmin':0,
+                    'extent':(tn_crop[0], tn_crop[-1], fn_crop[0], fn_crop[-1]),
+                    'title':'Crop of the power spectrogram density (PSD)',
+                    'xlabel':'Time [s]',
+                    'ylabel':'Frequency [Hz]',
+                    }
     >>> fig, ax = maad.util.plot2d(Lxx_crop,**fig_kwargs)  
     """
 
@@ -1200,7 +1340,7 @@ def crop_image(im, tn, fn, fcrop=None, tcrop=None):
     return im, tn, fn
 
 
-# =============================================================================
+#%%
 def save_figlist(fname, figlist):
     """
     Save a list of figures or spectrograms to disk.
@@ -1220,8 +1360,7 @@ def save_figlist(fname, figlist):
         fname_save = "%d_%s" % (i, fname)
         imsave(fname_save, fig)
 
-
-# =============================================================================
+#%%
 def plot_features_map(df, norm=True, mode="24h", **kwargs):
     """
     Plot features values on a heatmap.
@@ -1294,7 +1433,7 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
         The Figure instance 
     ax : Axis
         The Axis instance   
-       
+    
     Examples
     --------
     see plot_extract_alpha_indices.py advanced example for a complete example
@@ -1358,9 +1497,311 @@ def plot_features_map(df, norm=True, mode="24h", **kwargs):
 
     return fig, ax
 
+#%%
+def heatmap_by_date_and_time (
+                    dataframe,
+                    disp_column,
+                    date_format = "%V", # see https://docs.python.org/3/library/datetime.html 
+                    date_range = [1,53],
+                    time_resolution = "30T",
+                    time_range = ["00:00", "23:59"],
+                    start_hour = "00:00",
+                    full_display = False,
+                    date_min_to_disp = 1,
+                    date_max_to_disp = 53,
+                    cb_legend = "",
+                    display = True,
+                    verbose = False,
+                    **kwargs,
+                    ) :
+    """
+    Plot a heatmap of a features by time (x-axis) and date (y-axis).
+
+    Parameters
+    ----------
+    dataframe : pandas.DataFrame
+        The input DataFrame containing the data.
+        Must contain a column (or index) date in the format %Y-%m-%d %H:%M%S
+    disp_column : str
+        The name of the column to be displayed.
+    date_format : str, optional
+        The format of the date. The default is "%V".
+        (See https://docs.python.org/3/library/datetime.html for format codes)
+        Possible format are :
+        - "%V" for week number (from 1 to 53)
+        - "%m" for Month (from 1 to 12)
+        - "%d" for Day (from 1 to 31 depending on the month)
+        - "%m-%d" for Date without year (from 01-01 to 12-31)
+        - "%y-%m-%d" for Date with year 
+    date_range : list of int, optional
+        The range of date types to include. The default is [1, 53].
+        The format of the range depends on date_format.
+        For instance, to get all the samples in the March, date_range would be 
+        [03-01, 03-31] and date_format would be "%m-%d"
+    time_resolution : str, optional
+        The time resolution. The default is "30T".
+        T is for minute. 30T means a time resolution of 30 min. 
+        Everything within this intervale is averaged
+        Other time formats are H for hour and D for day.
+    time_range : list of str, optional
+        The time range to consider. The default is ["00:00", "23:59"].
+    start_hour : str, optional
+        The start hour. The default is "12:00".
+    full_display : bool, optional
+        Whether to display the full date range. The default is False.
+    date_min_to_disp : int, optional
+        The minimum date on the y-axis. The default is 1.
+        The value depends on the date_format. 
+        See date_format to know the possible formats and the range of possible values
+    date_max_to_disp : int, optional
+        The maximum date on the y-axis. The default is 53.
+        The value depends on the date_format. 
+        See date_format to know the possible formats and the range of possible values
+    cb_legend : str, optional
+        The colorbar legend label. The default is "".
+    verbose : bool, optional
+        If True, display verbose information. The default is False.
+    **kwargs
+        Specific to this function:
+        
+        - ftime : Time format to display as x label by default '%Y-%m-%d'(see https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-strptime-behavior)
+            
+        Specific to matplotlib:
+            
+        - figsize : tuple of integers, optional, default: (4,10) width, height in inches.  
+        
+        - title : string, optional, default : 'Spectrogram' title of the figure
+        
+        - xlabel : string, optional, default : 'Time [s]' label of the horizontal axis
+
+        - ylabel : string, optional, default : 'Amplitude [AU]' label of the vertical axis
+            
+        - xticks : tuple of ndarrays, optional, default : none
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
+            
+        - yticks : tuple of ndarrays, optional, default : none
+            * ticks : array_like => A list of positions at which ticks should be placed. You can pass an empty list to disable yticks.
+            * labels : array_like, optional =>  A list of explicit labels to place at the given locs.
+        
+        - cmap : string or Colormap object, optional, default is 'gray'
+            See https://matplotlib.org/examples/color/colormaps_reference.html
+            in order to get all the  existing colormaps
+            examples: 'hsv', 'hot', 'bone', 'tab20c', 'jet', 'seismic', 
+            'viridis'...
+        
+        - vmin, vmax : scalar, optional, default: None
+            `vmin` and `vmax` are used in conjunction with norm to normalize
+            luminance data.  Note if you pass a `norm` instance, your
+            settings for `vmin` and `vmax` will be ignored.
+        
+        - extent : list of scalars [left, right, bottom, top], optional, default: None
+            The location, in data-coordinates, of the lower-left and
+            upper-right corners. If `None`, the image is positioned such that
+            the pixel centers fall on zero-based (row, column) indices.
+        
+        - now : boolean, optional, default : True
+            if True, display now. Cannot display multiple images. 
+            To display mutliple images, set now=False until the last call for 
+            the last image      
+            
+        ... and more, see matplotlib
+
+    Returns
+    -------
+    df_mean : pd.DataFrame
+        The heatmap with mean values.
+    
+    df_std :pd.DataFrame
+        The heatmap with standard deviation values.
+
+    fig : matplotlib.figure.Figure
+        The generated matplotlib figure.
+
+    ax : matplotlib.axes.Axes
+        The generated matplotlib axis.
+    """
+
+    # test if dataframe is not a pd.DataFrame
+    if isinstance(dataframe, pd.DataFrame) == False:
+        if verbose :
+            print("***WARNING*** dataframe must be a valid pandas dataframe")
+        return
+    
+    # copy the dataframe
+    df = dataframe.copy()
+
+    # keep some columns
+    df = df.filter([disp_column,'date'])
+
+    try :
+        if not('date' in df)  :  
+            df = df.reset_index(['date'])
+        # convert date to datetime
+        df['date'] = pd.to_datetime(df['date'])
+        # set the index to date
+        df.set_index(['date'], inplace=True)
+        # convert index to datetime 
+        df.index = pd.DatetimeIndex(df.index)
+        # sort dataframe by date
+        df = df.sort_index(axis=0)
+    except :
+        raise Exception("***WARNING*** df must have a valid date index that could be converted in Datetime type")
+
+    # filter by time
+    df = _filter_dataframe_by_datetime(df, "%H:%M", time_range)
+    # filter by date_type
+    df = _filter_dataframe_by_datetime(df, date_format, date_range)
+
+    # # Extract hour and minute
+    df['time'] = df.index.strftime("%H:%M")
+
+    # # Extract week, year, weekday or date
+    df['date_type'] = df.index.strftime(date_format) 
+
+    # create a matrix with date_type (week, year, weekday, date) as columns and time (hour) as rows
+    df_mean = df.groupby(['time', 'date_type'])[disp_column].aggregate('mean').unstack()
+
+    # Resample the timeline. Need to reformat the time in datetime before resampling
+    df_mean = df_mean.reset_index()
+    df_mean.index = pd.to_datetime(df_mean['time'], format='%H:%M')
+    df_mean.drop(columns=['time'], inplace = True)
+    df_mean = df_mean.resample(time_resolution).mean()
+    df_std = df_mean.resample(time_resolution).std()
+    df_mean.index = df_mean.index.strftime("%H:%M")
+    df_std.index = df_std.index.strftime("%H:%M")
+
+    if display == True : 
+
+        # try to use seaborn if installed
+        try:
+            import seaborn as sns
+            sns.set_theme("paper")
+        except ImportError as e:
+            if verbose :
+                print("seaborn is not installed, use default settings")
+
+        if full_display == True :
+            # Create a list of unique index of type 'hour' for x axis
+            time_min = datetime.strptime("00:00", "%H:%M")
+            time_max = datetime.strptime("23:59", "%H:%M")
+            x_label = pd.date_range(time_min, time_max, freq=time_resolution).strftime("%H:%M")
+            x_label = x_label.values
+            # Create a vector for y axis depending on date_format
+            if date_format == "%V" :
+                y_label = [f'{x:02d}' for x in np.arange(date_min_to_disp,date_max_to_disp+1)]
+            elif date_format == "%m" :
+                y_label = [f'{x:02d}' for x in np.arange(date_min_to_disp,date_max_to_disp+1)]   
+            elif (date_format == "%y-%m-%d") or (date_format == "%m-%d") or (date_format == "%d"):
+                date_min_to_disp = datetime.strptime(str(date_min_to_disp), date_format)
+                date_max_to_disp = datetime.strptime(str(date_max_to_disp), date_format)
+                y_label = pd.date_range(date_min_to_disp, date_max_to_disp, freq='D').strftime(date_format)
+                y_label = y_label.values
+            else:
+                # by default per week
+                y_label = [f'{x:02d}' for x in np.arange(1,53)]
+            # create an prefilled dataframe with all weeks and time
+            df2 = pd.DataFrame(index=x_label, 
+                            columns=y_label,
+                            dtype = 'float')
+            df2.reset_index(inplace=True)
+            df2 = df2.rename(columns={"index":"time"})
+            df2.set_index("time", inplace=True)
+
+            for idx, row in df_mean.iterrows() :
+                df2.loc[idx] = row
+            
+            df_mean=df2
+        
+        # rename the unique column with the corresponding name
+        if date_format == "%V" : df_mean.columns.name='Week number'
+        if date_format == "%m" : df_mean.columns.name='Month'
+        if date_format == "%d" : df_mean.columns.name='Day'
+        if date_format == "%m-%d" : df_mean.columns.name='Date'
+        if date_format == "%y-%m-%d" : df_mean.columns.name='Date'
+
+        # shift the time to start at start_hour and finish at start_hour, in order to center
+        # the graph at start_hour + 12h
+        df_part1 = df_mean[df_mean.index >= start_hour]
+        df_part2 = df_mean[df_mean.index < start_hour]
+        df_part2.sort_index(inplace=True)
+        df = pd.concat([df_part1,df_part2])  
+        
+        # Get the list of unique index of type 'hour'
+        x_label = [i + j for i, j in zip(map(str, df.index.values), [" "] * len(df))]
+
+        # plot
+        # matplotlib parameters
+        fig = kwargs.pop("fig", None)
+        ax = kwargs.pop("ax", None) 
+        xlabel = kwargs.pop("xlabel", "Hours")
+        ylabel = kwargs.pop("ylabel", df_mean.columns.name)
+        now = kwargs.pop("now", True)
+        vmin = kwargs.pop("vmin", np.nanpercentile(df,1))
+        vmax = kwargs.pop("vmax", np.nanpercentile(df,99))
+        cmap = kwargs.pop("cmap", "RdPu")
+        title = kwargs.pop("title", None)
+        figsize = kwargs.pop("figsize", (len(df)*0.33*0.75, len(list(df))*0.26*0.75 +0.75))
+        
+        # Create a figure and a subplot associated
+        if (fig is None) or (ax is None) :
+            fig = plt.figure(figsize=figsize)
+            ax = fig.add_subplot(111)
+
+        # display image
+        caxes = ax.matshow(df.transpose(), 
+                        interpolation = "None",
+                        aspect="auto", 
+                        cmap = cmap,
+                        vmin = vmin,
+                        vmax = vmax,
+                        **kwargs
+                        )
+        if cb_legend =="" :
+            fig.colorbar(caxes, shrink=0.75, label=disp_column)
+        else:
+            fig.colorbar(caxes, shrink=0.75, label=cb_legend)
+        # Set ticks on both sides of axes on
+        ax.tick_params(which='major', axis="x", bottom=False, top=False, 
+                    labelbottom=True, labeltop=False)
+        ax.tick_params(which='minor', axis="x", length = 0)
+        # We want to show all ticks...
+        ax.set_yticks(np.arange(len(df.columns)))
+        ax.set_xticks(np.arange(len(x_label)))
+        # ... and label them with the respective list entries
+        ax.set_yticklabels(df.columns)
+        ax.set_xticklabels(x_label)
+        
+        # Minor ticks
+        ax.set_xticks(np.arange(-0.5, len(df.index), 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, len(list(df)), 1), minor=True)
+
+        # Gridlines based on minor ticks
+        ax.grid(which='major', color='w', linestyle='-', linewidth=0)
+        ax.grid(which='minor', color='w', linestyle='-', linewidth=1)
+        
+        # add title to the axis
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+                
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_yticklabels(), rotation=0, ha="right", fontsize=10)
+        plt.setp(ax.get_xticklabels(), rotation=90, ha="center", fontsize=10)
+        plt.tight_layout()
+
+        # Adding a title to the figure
+        if title is not None:
+            fig.suptitle(title)
+
+        if now :
+            plt.show()
+    else :
+        fig = None
+        ax = None
+
+    return df_mean, df_std, fig, ax
 
 # =============================================================================
-
 
 def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     """
@@ -1453,6 +1894,7 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
 
     figsize = kwargs.pop("figsize", (5, 5))
     kwargs.pop("label", None)
+    now = kwargs.pop("now", True)
 
     # if no ax, create a figure and a subplot associated a figure otherwise
     # find the figure that belongs to ax
@@ -1478,7 +1920,10 @@ def plot_features(df, ax=None, norm=True, mode="24h", **kwargs):
     ax.grid()
     ax.legend()
     fig.tight_layout()
-    # plt.show()
+
+    # Display the figure now
+    if now:
+        plt.show()
 
     return fig, ax
 

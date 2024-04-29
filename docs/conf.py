@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../maad/'))
 # -- Project information -----------------------------------------------------
 
 project = 'scikit-maad'
-copyright = '2023, scikit-maad development team'
+copyright = '2024, scikit-maad development team'
 author = 'scikit-maad development team'
 
 # The full version, including alpha/beta/rc tags
@@ -47,7 +47,7 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
     'sphinx.ext.autosectionlabel',
     'sphinx_gallery.gen_gallery',
 ]
-html4_writer = True
+html4_writer = False
 autosummary_generate = True
 
 # -- Example Gallery --

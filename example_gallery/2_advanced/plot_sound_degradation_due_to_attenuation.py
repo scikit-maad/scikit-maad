@@ -17,6 +17,9 @@ dispersion,
 attenuation and might be seen as a proxy.
 
 """
+#%%
+# Load required modules
+# ---------------------
 import matplotlib.pyplot as plt
 from maad import sound, spl, util
 
