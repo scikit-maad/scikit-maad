@@ -12,7 +12,6 @@ License: New BSD License
 import numpy as np
 import pandas as pd
 from scipy import interpolate
-from numpy.lib.function_base import _quantile_is_valid
 from scipy.optimize import root
 
 # Import internal modules
@@ -37,6 +36,18 @@ def _interpolate_peak_location(pxx):
         peak = xnew[ynew.argmax()]
         amplitude = ynew[ynew.argmax()]
     return peak, amplitude
+
+def _quantile_is_valid(q):
+    # avoid expensive reductions, relevant for arrays with < O(1000) elements
+    if q.ndim == 1 and q.size < 10:
+        for i in range(q.size):
+            if not (0.0 <= q[i] <= 1.0):
+                return False
+    else:
+        if not (np.all(0 <= q) and np.all(q <= 1)):
+            return False
+    return True
+
 #%%
 # =============================================================================
 # public functions
