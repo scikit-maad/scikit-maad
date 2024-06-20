@@ -38,6 +38,9 @@ def _interpolate_peak_location(pxx):
     return peak, amplitude
 
 def _quantile_is_valid(q):
+    """ Check if quantile is valid
+        function from version <2.0.0 of numpy
+    """
     # avoid expensive reductions, relevant for arrays with < O(1000) elements
     if q.ndim == 1 and q.size < 10:
         for i in range(q.size):
