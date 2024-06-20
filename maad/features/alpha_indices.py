@@ -1445,9 +1445,10 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     Sxx : ndarray of floats
         2d : amplitude spectrogram. In order to obtain the same output as for soundecology,
         the signal and the spectrogram need to be processed without detrend on.
-        maad.sound.load("myfile.wav", ..., detrend = False)
-        maad.sound.spectrogram(s, fs, ..., detrend = False)
-        For a complete example, see the example below
+        - maad.sound.load("myfile.wav", ..., detrend = False)
+        - maad.sound.spectrogram(s, fs, ..., detrend = False)
+        
+        See the example below, or the complete example here [2]_. 
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1487,7 +1488,8 @@ def acoustic_diversity_index (Sxx, fn, fmin=0, fmax=20000, bin_step=1000,
     References
     ----------
     .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.`DOI: 10.1007/s10980-011-9636-9 <https://doi.org/10.1007/s10980-011-9636-9>`_ 
-    
+    .. [2] Colab script : https://colab.research.google.com/drive/1xoErUfqN1_AX0ibujOlnt8bKO23DUXFR
+
     Examples
     --------
     >>> import maad
@@ -1554,9 +1556,10 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     Sxx: ndarray of floats
         2d : amplitude spectrogram. In order to obtain the same output as for soundecology,
         the signal and the spectrogram need to be processed without detrend on.
-        maad.sound.load("myfile.wav", ..., detrend = False)
-        maad.sound.spectrogram(s, fs, ..., detrend = False)
-        For a complete example, see the example below
+        - maad.sound.load("myfile.wav", ..., detrend = False)
+        - maad.sound.spectrogram(s, fs, ..., detrend = False)
+
+        See the example below, or the complete example here [2]_. 
     
     fn : 1d ndarray of floats
         frequency vector
@@ -1590,7 +1593,8 @@ def acoustic_eveness_index (Sxx, fn, fmin=0, fmax=20000, bin_step=500,
     References 
     ----------
     .. [1] Villanueva-Rivera, L. J., B. C. Pijanowski, J. Doucette, and B. Pekin. 2011. A primer of acoustic analysis for landscape ecologists. Landscape Ecology 26: 1233-1246.`DOI: 10.1007/s10980-011-9636-9 <https://doi.org/10.1007/s10980-011-9636-9>`_ 
-    
+    .. [2] Colab script : https://colab.research.google.com/drive/1xoErUfqN1_AX0ibujOlnt8bKO23DUXFR
+
     Examples
     --------
     >>> import maad
