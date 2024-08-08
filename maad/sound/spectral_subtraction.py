@@ -175,7 +175,7 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
     mean_profile = np.mean(Sxx, 1)
 
     # White Top Hat (to remove non uniform background) = i - opening(i)
-    selem = signal.gaussian(gauss_win, gauss_std)
+    selem = signal.windows.gaussian(gauss_win, gauss_std)
     noise_profile = morphology.grey_opening(mean_profile, structure=selem)
 
     # Remove the artefact at the end of the spectrum (2 highest frequencies)
