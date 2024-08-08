@@ -275,7 +275,7 @@ def sinc(s, cutoff, fs, atten=80, transition_bw=0.05, bandpass=True):
         cutoff, 
         window=('kaiser', beta), 
         scale=False, 
-        nyq=0.5*fs, 
+        fs=fs, 
         pass_zero=not(bandpass)
         )
     s_filt = lfilter(taps, 1, s)
