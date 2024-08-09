@@ -17,7 +17,7 @@ from maad.util import (plot1d, plot2d, running_mean,
                        get_unimode, mean_dB, power2dB)
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.ndimage import morphology
+from scipy import ndimage
 from skimage.morphology import reconstruction
 from scipy import signal
 # min value
@@ -175,8 +175,8 @@ def remove_background(Sxx, gauss_win=50, gauss_std=25, beta1=1, beta2=1,
     mean_profile = np.mean(Sxx, 1)
 
     # White Top Hat (to remove non uniform background) = i - opening(i)
-    selem = signal.gaussian(gauss_win, gauss_std)
-    noise_profile = morphology.grey_opening(mean_profile, structure=selem)
+    selem = signal.windows.gaussian(gauss_win, gauss_std)
+    noise_profile = ndimage.grey_opening(mean_profile, structure=selem)
 
     # Remove the artefact at the end of the spectrum (2 highest frequencies)
     noise_profile[-2:] = mean_profile[-2:]

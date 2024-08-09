@@ -85,7 +85,7 @@ def _energy_windowed(s, fs: float, wl: int=512):
         windowed rms signal
     """
     
-    s_aux = np.lib.pad(s, (0, wl-len(s)%wl), 'reflect')  # padding
+    s_aux = np.pad(s, (0, wl-len(s)%wl), 'reflect')  # padding
     s_aux = s_aux**2 
     #  s_aux = np.abs(s_aux) # absolute value. alternative option
     s_aux = np.reshape(s_aux,(int(len(s_aux)/wl),wl))
