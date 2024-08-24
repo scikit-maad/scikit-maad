@@ -30,7 +30,7 @@ This workflow opens the possibility to scan large audio datasets and use powerfu
 
 `scikit-maad` requires one of these interpreters:
 
-- Python >= 3.8 < 3.11
+- Python 3.8, 3.9, 3.10 and 3.11
 
 ## Packages dependency
 
