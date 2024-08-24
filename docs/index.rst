@@ -17,7 +17,7 @@ Soundscape analysis in Python
    :alt: DOI
    :target: https://zenodo.org/badge/latestdoi/148142520
 
-.. image:: https://img.shields.io/badge/Python-3.8 | 3.9 | 3.10-blue
+.. image:: https://img.shields.io/badge/Python-3.8 | 3.9 | 3.10 | 3.11-blue
    :alt: Supported Python Versions
 
 .. image:: https://api.juleskreuer.eu/citation-badge.php?doi=10.1111/2041-210X.13711
