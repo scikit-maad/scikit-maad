@@ -213,7 +213,7 @@ def plot_graph(graph, ax=None, savefig=False, fname=None):
 
     ax.imshow(graph.values.T, aspect='auto', origin='lower', 
               extent=[int(graph.index[0]), int(graph.index[-1]), 
-                      graph.columns[0], graph.columns[-1]])
+                      float(graph.columns[0]), float(graph.columns[-1])])
     ax.set_xlabel('Time (h)')
     ax.set_ylabel('Frequency (Hz)')
 
