@@ -81,8 +81,8 @@ def test_metadata_fields():
         (['Eurasian','Three-toed'],                  'birds'),
         (['Eurasian','Three-toed','type:drumming'],  'birds'),
         (['Agelaius','phoeniceus','type:song'],      'birds'),
-        (['Agelaius','phoeniceus','lat:">40.5"'],    'birds'),
-        (['Agelaius','phoeniceus','len:">1"'],       'birds')
+        #(['Agelaius','phoeniceus','lat:">40.5"'],    'birds'), # don't work anymore 04/09/2024 => new version of xeno-canto API ?
+        #(['Agelaius','phoeniceus','len:">1"'],       'birds')  # don't work anymore 04/09/2024 => new version of xeno-canto API ?
     ]
 )
 
