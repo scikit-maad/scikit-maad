@@ -412,8 +412,9 @@ def xc_download(df,
                 os.makedirs(path)
             #------------------------------------------------------------------
             # get filenames
-            filename = 'XC' + str(index) + '.mp3'
-            # test if the mp3 file already exists
+            audio_format = '.' + row['file-name'].split('.')[-1]
+            filename = 'XC' + str(index) + audio_format
+            # test if the file already exists
             if os.path.exists(rootdir / dataset_name / name_dir / filename) == True:
                 fullpath_list += [path / filename]
                 if verbose :
