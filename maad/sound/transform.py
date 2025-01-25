@@ -14,11 +14,9 @@ Collection of functions to transform audio signals : Take the envelope
 # Import external modules
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy.signal import hilbert
 from scipy.signal import periodogram, welch
 import scipy
-import resampy
 from warnings import warn
 
 # import internal modules
@@ -219,7 +217,7 @@ def spectrum(s, fs, nperseg=256, noverlap=None, nfft=None, window='hann', method
     return pxx, f_idx
 
 #%%
-def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
+def resample(s, fs, target_fs, res_type = 'scipy_poly', **kwargs):
     """
     Changes the sample rate of an audio file or any time series.
 
@@ -242,8 +240,8 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
         'scipy_poly' Resample using polyphase filtering and an FIR filter. 
 
     kwargs : additional keyword arguments
-        If `res_type='sinc_window'`, additional keyword arguments to pass to
-        `resampy.resample`.
+        If `res_type='scipy'`, additional keyword arguments to pass to
+        `scipy.signal.resample`.
 
     Returns
     -------
@@ -252,7 +250,6 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
 
     See Also
     --------
-    resampy.resample
     scipy.signal.resample
     
     Examples
@@ -260,6 +257,7 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
     
     Resample an audio file from sample rate of 44100 kHz to 22050.
     
+    >>> from maad import sound
     >>> s, fs = sound.load('../data/spinetail.wav')
     >>> s_resamp = sound.resample(s, fs, target_fs=fs/2)
     >>> print('Number of samples - original audio:', s.shape[0],
@@ -286,11 +284,10 @@ def resample(s, fs, target_fs, res_type = 'kaiser_best', **kwargs):
         res_data = scipy.signal.resample_poly(s, num, den)
     
     elif res_type in ('kaiser_best', 'kaiser_fast'):
-        warn("Methods 'kaiser_fast' and 'kaiser_best' are deprecated and will be removed from future versions.", DeprecationWarning)
-        res_data = resampy.resample(s, fs, target_fs, filter=res_type, axis=-1, **kwargs)
+        raise ValueError("'kaiser_best' and 'kaiser_fast' methods are deprecated. Valid resample methods are 'scipy', 'scipy_poly', not res_type={}".format(res_type))
     
     else:
-        raise ValueError("Valid resample methods are 'scipy', 'scipy_poly', 'kaiser_best', 'kaiser_fast', not res_type={}".format(res_type))
+        raise ValueError("Valid resample methods are 'scipy', 'scipy_poly', not res_type={}".format(res_type))
                          
     return np.ascontiguousarray(res_data, dtype=s.dtype)
 

@@ -6,6 +6,3 @@ pandas>=1.5
 
 # -- plotting -- #
 matplotlib>=3.6
-
-# -- resample -- #
-resampy>=0.4
