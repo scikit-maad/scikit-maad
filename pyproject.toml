@@ -16,7 +16,7 @@ dependencies = [
     "scipy >=1.8", 
     "scikit-image >=0.19",
     "pandas >=1.5",
-    "matplotlib >=3.6"
+    "matplotlib >=3.6",
     "pywavelets >=1.4"
     ]
 classifiers = [
