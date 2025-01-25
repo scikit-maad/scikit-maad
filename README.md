@@ -39,7 +39,6 @@ This workflow opens the possibility to scan large audio datasets and use powerfu
 - matplotlib >=3.6
 - numpy >= 1.21
 - pandas >= 1.5
-- resampy >= 0.4
 - scikit-image >= 0.19
 - scipy >= 1.8
 
