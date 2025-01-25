@@ -1,3 +1,5 @@
+.. _audio-dataset:
+
 Audio dataset
 ^^^^^^^^^^^^^
 
