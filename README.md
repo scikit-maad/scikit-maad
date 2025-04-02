@@ -28,9 +28,9 @@ This workflow opens the possibility to scan large audio datasets and use powerfu
 
 ## Interpreter
 
-`scikit-maad` requires one of these interpreters:
+The latest version of `scikit-maad` requires one of these interpreters:
 
-- Python >= 3.8 < 3.11
+- Python 3.9, 3.10, 3.11 or 3.12
 
 ## Packages dependency
 
@@ -39,8 +39,7 @@ This workflow opens the possibility to scan large audio datasets and use powerfu
 - matplotlib >=3.6
 - numpy >= 1.21
 - pandas >= 1.5
-- resampy >= 0.4
-- scikit-image >= 0.19
+- scikit-image >= 0.23.1
 - scipy >= 1.8
 
 ## Installing from PyPI

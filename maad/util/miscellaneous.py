@@ -962,7 +962,7 @@ def format_features(df, tn, fn):
                 bandwidth_y = round(
                     df.loc[idx, 'bandwidth_f']) / ((fn[1]-fn[0]))
                 duration_x = round(df.loc[idx, 'duration_t']) / (tn[1]-tn[0])
-                area_xy = round(df.loc[idx, 'area_xy'] /
+                area_xy = round(df.loc[idx, 'area_tf'] /
                                 ((fn[1]-fn[0]) * (tn[1]-tn[0])))
                 area.append((bandwidth_y, duration_x, area_xy))
 

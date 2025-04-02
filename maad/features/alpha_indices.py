@@ -18,7 +18,7 @@ Collection of functions to compute alpha acoustic indices to chracterise audio s
 import numbers
 import numpy as np 
 from numpy import sum, log, min, max, abs, mean, median, sqrt, diff, var
-from skimage.morphology import opening
+from skimage.morphology import opening, closing
 from scipy.ndimage import binary_erosion, binary_dilation
 from scipy.stats import rankdata
 from scipy.signal import find_peaks
@@ -28,22 +28,50 @@ import pandas as pd # for csv
 import sys
 _MIN_ = sys.float_info.min
 
+import warnings 
+import functools
+
 # Import internal modules
 from maad.util import (rle, index_bw, amplitude2dB, power2dB, dB2power, mean_dB,
                         skewness, kurtosis, format_features, into_bins, entropy, 
-                        linear_scale, plot1d, plot2d, overlay_rois)
+                        linear_scale, plot1d, plot2d, overlay_rois, plot_spectrogram,
+                        add_dB)
 from maad.spl import wav2leq, psd2leq, power2dBSPL
 from maad.features import (centroid_features, zero_crossing_rate, temporal_moments, 
                         spectral_moments)
 from maad.sound import (envelope, smooth, temporal_snr, linear_to_octave, 
                         avg_amplitude_spectro, avg_power_spectro, spectral_snr, 
-                        median_equalizer)
+                        median_equalizer, remove_background_along_axis)
 from maad.rois import select_rois, create_mask
 
 #%%
 # =============================================================================
 # Private functions
 # =============================================================================
+def deprecated(reason):
+    """
+    Decorator to mark functions as deprecated.
+
+    Args:
+        reason: The reason for deprecation.  This will be included in the warning message.
+    """
+    def decorator(func):
+        if __debug__:  # Only warn in debug mode (default behavior of warnings)
+            @functools.wraps(func)  # Preserve original function metadata
+            def wrapper(*args, **kwargs):
+                warnings.warn_explicit(
+                    f"Call to deprecated function {func.__name__}: {reason}",
+                    category=DeprecationWarning,
+                    filename=func.__code__.co_filename,  # Correct filename
+                    lineno=func.__code__.co_firstlineno,  # Correct line number
+                )
+                return func(*args, **kwargs)
+            return wrapper
+        return func  # Return original function in non-debug mode
+
+    return decorator
+
+
 def _acoustic_activity (xdB, dB_threshold, axis=1):
     """
     Acoustic Activity [1]_ [2]_:
@@ -2293,8 +2321,8 @@ def acoustic_gradient_index(Sxx, dt, order=1, norm='per_bin', display=False):
     return AGI_xx, AGI_per_bin, AGI_mean, AGI_sum
 
 #=============================================================================
-
-def region_of_interest_index(Sxx_dB_noNoise, tn, fn, 
+@deprecated("'region_of_interest_index_deprecated()' is no longer supported. Use the new 'region_of_interest_index()' instead.")
+def region_of_interest_index_deprecated(Sxx_dB_noNoise, tn, fn, 
                             smooth_param1=1, 
                             mask_mode='relative', 
                             mask_param1=6, 
@@ -2305,12 +2333,11 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
                             remove_rain = False,
                             display=False, **kwargs):
     """
-    Compute an acoustic activity index based on the regions of interested 
+    Compute an acoustic activity index based on the regions of interest 
     detected on a spectrogram.
     
     The function first find regions of interest (ROI) and then compute the number
-    or ROIs and the cover area of these ROIS
-    on the spectrogram.
+    or ROIs and the cover area of these ROIS on the spectrogram.
     
     Parameters
     ----------
@@ -2385,7 +2412,7 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> Sxx_noNoise= maad.sound.median_equalizer(Sxx_power) 
     >>> Sxx_dB_noNoise = maad.util.power2dB(Sxx_noNoise)
-    >>> ROItotal, ROIcover = maad.features.region_of_interest_index(Sxx_dB_noNoise, tn, fn, display=True)
+    >>> ROItotal, ROIcover = maad.features.region_of_interest_index_deprecated(Sxx_dB_noNoise, tn, fn, display=True)
     >>> print('The total number of ROIs found in the spectrogram is %2.0f' %ROItotal) # doctest: +NORMALIZE_WHITESPACE
     The total number of ROIs found in the spectrogram is 265
     >>> print('The percentage of spectrogram covered by ROIs is %2.0f%%' %ROIcover) # doctest: +NORMALIZE_WHITESPACE
@@ -2456,6 +2483,303 @@ def region_of_interest_index(Sxx_dB_noNoise, tn, fn,
     ROIcover = sum(area) / total_area *100
     
     return  ROItotal, ROIcover
+
+
+def region_of_interest_index(Sxx_power, tn, fn, 
+                            seed_level=13, 
+                            low_level=6, 
+                            fusion_rois=None,
+                            remove_rois_flim_min = 50,
+                            remove_rois_flim_max = None,
+                            remove_rain = True,
+                            min_event_duration=0.025, 
+                            max_event_duration=None, 
+                            min_freq_bw=50, 
+                            max_freq_bw=None, 
+                            max_ratio_xy=10,
+                            display=False,
+                            verbose=False,
+                            **kwargs):
+
+    """
+    Compute acoustic activity indices based on the regions of interest
+    detected on a spectrogram.
+    
+    The function first find regions of interest (ROI) and then compute the number
+    or ROIs and the cover area of these ROIS on the spectrogram.
+    
+    Parameters
+    ----------
+    Sxx_power : ndarray of floats
+        Power spectrogram (i.e matrix of spectrum)
+    tn : 1d ndarray of floats
+        time vector (horizontal x-axis)
+    fn : 1d ndarray of floats
+        Frequency vector (vertical y-axis) 
+    seed_level : scalar, default is 13
+        Higher threshold (in dB) for the absolute binarization. Pixels with 
+        values above this threshold are considered part of a potential ROI.
+    low_level : scalar, default is 6
+        Lower threshold (in dB) for the absolute binarization.  Pixels with 
+        values above this threshold and connected to a "seed" pixel are also 
+        considered part of a potential ROI.
+    fusion_rois : tuple of scalars, default is (0.05, 100)
+        Tuple defining the temporal (in seconds) and frequency (in Hz) 
+        dimensions for morphological closing.  This operation fuses nearby ROIs.
+    remove_rois_flim_min : scalar or tuple of scalars, default is 50
+        Frequency limit (in Hz) below which ROIs are removed. Can be a single 
+        value or a tuple defining a range (min_freq, max_freq).
+    remove_rois_flim_max : scalar, default is none
+        Frequency limit (in Hz) above which ROIs are removed.
+    remove_rain : boolean, default is True
+        If True, vertical frequency spikes due to rain are removed as possible
+        by applying a morphological mathematical image processing : grey opening
+    min_event_duration : scalar, optional
+        Minimum time duration of an event (in s). ROIs shorter than this are removed.
+    max_event_duration : scalar, optional
+        Maximum time duration of an event (in s). ROIs longer than this are removed.
+    min_freq_bw : scalar, optional
+        Minimum frequency bandwidth (in Hz). ROIs with smaller bandwidth than this are removed.
+    max_freq_bw : scalar, optional
+        Maximum frequency bandwidth (in Hz). ROIs with larger bandwidth than this are removed.
+    max_ratio_xy : scalar, optional
+        Maximum ratio between the vertical axis (y) and horizontal 
+        axis (x) that is allowed for a ROI. This is very convenient to remove
+        vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
+        of spikes due to light to medium rainfall.
+    display : boolean, default is False
+        If True, plot graphs and spectrograms.
+    verbose : boolean, default is False
+        If True, print additional information during processing.
+    **kwargs : optional
+        This parameter is used by plt.plot and savefig functions.
+
+    Returns
+    -------    
+    nROI : float
+        Total number of ROIs found per minute. The higher is the number of ROI, the higher
+        is the acoustic abondance and/or richness expected
+    aROI : float
+        Percentage of spectrogram cover. The higher is the cover percentage, 
+        the higher is the acoustic richness expected.
+        
+    Examples
+    --------
+    >>> import maad 
+    >>> s, fs = maad.sound.load('../data/cold_forest_daylight.wav')
+    >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
+    >>> nROI, aROI = maad.features.region_of_interest_index(Sxx_power, tn, fn, display=True)
+    >>> print('The total number of ROIs found in the spectrogram is %2.0f' % nROI) # doctest: +NORMALIZE_WHITESPACE
+    The total number of ROIs found in the spectrogram is 241
+    >>> print('The percentage of spectrogram covered by ROIs is%2.0f%%' % aROI) # doctest: +NORMALIZE_WHITESPACE
+    The percentage of spectrogram covered by ROIs is 5%
+    
+    """
+
+    FUSION_ROIS = fusion_rois
+    REMOVE_ROIS_FLIM_MIN = remove_rois_flim_min
+    REMOVE_ROIS_FLIM_MAX = remove_rois_flim_max
+    REMOVE_RAIN = remove_rain
+    MIN_EVENT_DUR = min_event_duration # Minimum time duration of an event (in s)
+    MAX_EVENT_DUR = max_event_duration
+    MIN_FREQ_BW = min_freq_bw # Minimum frequency bandwidth (in Hz)
+    MAX_FREQ_BW = max_freq_bw
+    if (MIN_EVENT_DUR is not None) and (MIN_FREQ_BW is not None):  
+        MIN_ROI_AREA = MIN_EVENT_DUR * MIN_FREQ_BW 
+    else :
+        MIN_ROI_AREA = None
+    if (MAX_EVENT_DUR is not None) and (MAX_FREQ_BW is not None):  
+        MAX_ROI_AREA = MAX_EVENT_DUR * MAX_FREQ_BW 
+    else :
+        MAX_ROI_AREA = None
+    
+    MAX_XY_RATIO = max_ratio_xy
+    
+    BIN_H = seed_level
+    BIN_L = low_level
+    
+    DISPLAY = display
+    EXT = kwargs.pop('ext',(tn[0], tn[-1], fn[0], fn[-1])) 
+
+    """*********************** Convert into dB********* ********************"""
+    #
+    Sxx_dB = power2dB(Sxx_power, db_range=96) + 96
+
+    """*********************** Remove stationnary noise ********************"""       
+    #### Use median_equalizer function as it is fast reliable
+    if REMOVE_RAIN: 
+        # remove single vertical lines
+        Sxx_dB_without_rain, _ = remove_background_along_axis(Sxx_dB.T,
+                                                            mode='mean',
+                                                            N=1,
+                                                            display=False)
+        Sxx_dB = Sxx_dB_without_rain.T
+
+    # ==================================================================================> TO COMMENT
+    # remove single horizontal lines
+    Sxx_dB_noNoise, _ = remove_background_along_axis(Sxx_dB,
+                                                    mode='median',
+                                                    N=1,
+                                                    display=False)
+    # ==================================================================================> END TO COMMENT (change)
+
+    Sxx_dB_noNoise[Sxx_dB_noNoise<=0] = 0
+    
+    """**************************** Find ROIS ******************************"""  
+    # Time resolution (in s)
+    DELTA_T = tn[1]-tn[0]
+    # Frequency resolution (in Hz)
+    DELTA_F = fn[1]-fn[0]
+
+    # snr estimation to threshold the spectrogram
+    _,bgn,snr,_,_,_ = spectral_snr(dB2power(Sxx_dB_noNoise))
+        
+    # binarization of the spectrogram to select part of the spectrogram with 
+    # acoustic activity
+    im_mask = create_mask(
+        Sxx_dB_noNoise,  
+        mode_bin = 'absolute', 
+        bin_h=BIN_H, 
+        bin_l=BIN_L
+        )    
+    
+    if verbose :
+        print('seed_level {}dB / low_level {}dB'.format(BIN_H, BIN_L))
+        
+    """**************************** Fusion ROIS ******************************"""  
+    # if type(FUSION_ROIS) is tuple :
+    if isinstance(FUSION_ROIS, (tuple, list, np.ndarray)):
+        Ny_elements = round(FUSION_ROIS[0] / DELTA_T)
+        Nx_elements = round(FUSION_ROIS[1] / DELTA_F)
+        im_mask = closing(im_mask, footprint=np.ones([Nx_elements,Ny_elements]))
+
+    # get the mask with rois (im_rois) and the bounding box for each rois (rois_bbox) 
+    # and an unique index for each rois => in the pandas dataframe rois
+    im_rois, df_rois  = select_rois(
+        im_mask,
+        min_roi=MIN_ROI_AREA, 
+        max_roi=MAX_ROI_AREA)
+    
+    # print the number of ROIs
+    if verbose :
+        print('===> Number of ROIs before cleaning : {}'.format(len(df_rois)))
+    
+    """**************************** add a column ratio_xy ****************************"""  
+    # add ratio x/y
+    df_rois['ratio_xy'] = (df_rois.max_y -df_rois.min_y) / (df_rois.max_x -df_rois.min_x) 
+
+    """************ remove some ROIs based on duration and bandwidth *****************"""  
+    # remove min and max duration 
+    df_rois['duration'] = (df_rois.max_x -df_rois.min_x) * DELTA_T 
+    if MIN_EVENT_DUR is not None :
+        df_rois = df_rois[df_rois['duration'] >= MIN_EVENT_DUR]
+    if MAX_EVENT_DUR is not None :    
+        df_rois = df_rois[df_rois['duration'] <= MAX_EVENT_DUR]
+    df_rois.drop(columns=['duration'])
+
+    # remove min and max frequency bandwidth 
+    df_rois['bw'] = (df_rois.max_y -df_rois.min_y) * DELTA_F 
+    if MIN_FREQ_BW is not None :
+        df_rois = df_rois[df_rois['bw'] >= MIN_FREQ_BW]
+    if MAX_FREQ_BW is not None :    
+        df_rois = df_rois[df_rois['bw'] <= MAX_FREQ_BW]
+    df_rois.drop(columns=['bw'])
+    
+    """**************************** Remove some ROIS ******************************"""  
+    if len(df_rois) >0 :
+        # initialize the variable
+        low_frequency_threshold_in_pixels=None
+        high_frequency_threshold_in_pixels=None
+
+        if REMOVE_ROIS_FLIM_MIN is not None:
+            if isinstance(REMOVE_ROIS_FLIM_MIN, (float, int)) :
+                low_frequency_threshold_in_pixels = max([1, round(REMOVE_ROIS_FLIM_MIN / DELTA_F)])
+            elif isinstance(REMOVE_ROIS_FLIM_MIN, (tuple, list, np.ndarray)) and len(REMOVE_ROIS_FLIM_MIN) == 2 :
+                low_frequency_threshold_in_pixels = max([1, round(REMOVE_ROIS_FLIM_MIN[0] / DELTA_F)])
+                high_frequency_threshold_in_pixels = min([im_rois.shape[1]-1, round(REMOVE_ROIS_FLIM_MIN[1] / DELTA_F)])
+            else:
+                raise ValueError ('REMOVE_ROIS_FMAX_LIM should be {None, a single value or a tuple of 2 values')
+
+            # retrieve the list of labels that match the condition
+            list_labelID = df_rois[df_rois['min_y']<=low_frequency_threshold_in_pixels]['labelID']
+            # set to 0 all the pixel that match the labelID that we want to remove
+            for labelID in list_labelID.astype(int).tolist() :
+                im_rois[im_rois==labelID] = 0
+            # delete the rois corresponding to the labelID that we removed in im_mask
+            df_rois = df_rois[~df_rois['labelID'].isin(list_labelID)]
+
+            if high_frequency_threshold_in_pixels is not None :
+                # retrieve the list of labels that match the condition  
+                list_labelID = df_rois[df_rois['min_y']>=high_frequency_threshold_in_pixels]['labelID']
+                # set to 0 all the pixel that match the labelID that we want to remove
+                for labelID in list_labelID.astype(int).tolist() :
+                    im_rois[im_rois==labelID] = 0
+                # delete the rois corresponding to the labelID that we removed in im_mask
+                df_rois = df_rois[~df_rois['labelID'].isin(list_labelID)]
+
+        if REMOVE_ROIS_FLIM_MAX is not None:
+            if isinstance(REMOVE_ROIS_FLIM_MAX, (float, int)) :
+                low_frequency_threshold_in_pixels = min([im_rois.shape[1]-1, round(REMOVE_ROIS_FLIM_MAX / DELTA_F)])
+            elif isinstance(REMOVE_ROIS_FLIM_MAX, (tuple, list, np.ndarray)) and len(REMOVE_ROIS_FLIM_MAX) == 2 :
+                print("list of 2 values")
+                low_frequency_threshold_in_pixels = min([im_rois.shape[1]-1, round(REMOVE_ROIS_FLIM_MAX[0] / DELTA_F)])
+                high_frequency_threshold_in_pixels = round(REMOVE_ROIS_FLIM_MAX[1] / DELTA_F)+1
+            else:
+                raise ValueError ('remove_rois_fmax_lim should be {None, a single value or a tuple of 2 values')
+
+            # retrieve the list of labels that match the condition  
+            list_labelID = df_rois[df_rois['max_y']<=low_frequency_threshold_in_pixels]['labelID']
+            # set to 0 all the pixel that match the labelID that we want to remove
+            for labelID in list_labelID.astype(int).tolist() :
+                im_rois[im_rois==labelID] = 0
+            # delete the rois corresponding to the labelID that we removed in im_mask
+            df_rois = df_rois[~df_rois['labelID'].isin(list_labelID)]
+
+            if high_frequency_threshold_in_pixels is not None :
+                # retrieve the list of labels that match the condition  
+                list_labelID = df_rois[df_rois['max_y']>=high_frequency_threshold_in_pixels]['labelID']
+                # set to 0 all the pixel that match the labelID that we want to remove
+                for labelID in list_labelID.astype(int).tolist() :
+                    im_rois[im_rois==labelID] = 0
+                # delete the rois corresponding to the labelID that we removed in im_mask
+                df_rois = df_rois[~df_rois['labelID'].isin(list_labelID)]           
+                    
+        if MAX_XY_RATIO is not None:
+            df_rois = df_rois[df_rois['ratio_xy'] < MAX_XY_RATIO]  
+        
+    # print the number of ROIs
+    if verbose :
+        print('===> Number of ROIs after cleaning : {}'.format(len(df_rois)))
+
+    """**************************** Index calculation ******************************""" 
+
+    # Convert boolean (True or False) into integer (0 or 1)
+    im_mask_filtered = im_rois>0 * 1
+    # number of ROIs / min
+    nROI = len(df_rois) / (tn[-1] / 60) 
+    # ROIs coverage in %
+    aROI = im_mask_filtered.sum() / (im_mask_filtered.shape[0]*im_mask_filtered.shape[1]) *100 
+
+    if verbose :
+        print('===> nROI : {:.0f}#/min | aROI : {:.2f}%'.format(round(nROI), aROI))
+
+        """**************************** Display process ******************************"""
+
+    if DISPLAY : 
+        fig, ax = plt.subplots(4,1,figsize=(6/10*tn[-1],8), sharex=True)
+        plot_spectrogram(Sxx_power, extent=EXT, ax=ax[0], ylabel ='', xlabel='', colorbar=False)
+        plot_spectrogram(Sxx_dB_noNoise, log_scale=False, vmax = np.percentile(Sxx_dB_noNoise,99.9), vmin = np.percentile(Sxx_dB_noNoise,0.1), ylabel ='', xlabel='', extent=EXT, ax=ax[1], colorbar=False)
+        plot2d(im_mask, ylabel ='', xlabel='', extent=EXT, ax=ax[2], colorbar=False)
+        plot_spectrogram(Sxx_power, ylabel ='', extent=EXT, ax=ax[3], colorbar=False)
+        if len(df_rois) > 0 :
+            overlay_rois(im_ref=Sxx_power, 
+                        rois = df_rois,
+                        ylabel ='', 
+                        extent=EXT, 
+                        ax=ax[3], 
+                        colorbar=False,)
+            
+    return nROI, aROI
 
 #=============================================================================
 def all_temporal_alpha_indices(s, fs, verbose=False, display=False, **kwargs):
@@ -2731,8 +3055,45 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
             event shorter than rejectDuration are discarded
             duration is in s
             
-        For Roi
+        For ROI
+
+        **new function region_of_interest_index**
         
+        seed_level : scalar, default is 13
+            Higher threshold (in dB) for the absolute binarization. Pixels with 
+            values above this threshold are considered part of a potential ROI.
+        low_level : scalar, default is 6
+            Lower threshold (in dB) for the absolute binarization.  Pixels with 
+            values above this threshold and connected to a "seed" pixel are also 
+            considered part of a potential ROI.
+        fusion_rois : tuple of scalars, default is (0.05, 100)
+            Tuple defining the temporal (in seconds) and frequency (in Hz) 
+            dimensions for morphological closing.  This operation fuses nearby ROIs.
+        remove_rois_flim_min : scalar or tuple of scalars, default is 50
+            Frequency limit (in Hz) below which ROIs are removed. Can be a single 
+            value or a tuple defining a range (min_freq, max_freq).
+        remove_rois_flim_max : scalar, default is none
+            Frequency limit (in Hz) above which ROIs are removed.
+        remove_rain : boolean, default is True
+            If True, vertical frequency spikes due to rain are removed as possible
+            by applying a morphological mathematical image processing : grey opening
+        min_event_duration : scalar, optional
+            Minimum time duration of an event (in s). ROIs shorter than this are removed.
+        max_event_duration : scalar, optional
+            Maximum time duration of an event (in s). ROIs longer than this are removed.
+        min_freq_bw : scalar, optional
+            Minimum frequency bandwidth (in Hz). ROIs with smaller bandwidth than this are removed.
+        max_freq_bw : scalar, optional
+            Maximum frequency bandwidth (in Hz). ROIs with larger bandwidth than this are removed.
+        max_ratio_xy : scalar, optional
+            Maximum ratio between the vertical axis (y) and horizontal 
+            axis (x) that is allowed for a ROI. This is very convenient to remove
+            vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
+            of spikes due to light to medium rainfall.
+        
+        set DEPRECATED_ROI to True to use the old version of the function (which is now 
+        called region_of_interest_index_deprecated)
+
         smooth_param1 : scalar, default is 1
             Standard deviation of the gaussian kernel used to smooth the image 
             The larger is the number, the smoother will be the image and the longer 
@@ -2851,15 +3212,29 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     rejectDuration = kwargs.pop('rejectDuration',None) # if None => 3 pixels
     
     ### for Roi
-    min_roi_area    = kwargs.pop('min_roi_area',None) # if None =>  30ms * 100Hz
-    max_roi_area    = kwargs.pop('max_roi_area',None) # 
-    smooth_param1   = kwargs.pop('smooth_param1',1)
-    mask_mode       = kwargs.pop('mask_mode','relative')
-    mask_param1     = kwargs.pop('mask_param1',6)
-    mask_param2     = kwargs.pop('mask_param2',0.5)
-    remove_rain     = kwargs.pop('remove_rain',False)
-    max_ratio_xy    = kwargs.pop('max_ratio_xy',10)
-    
+    DEPRECATED_ROI  = kwargs.pop('DEPRECATED_ROI',False)
+    if DEPRECATED_ROI :
+        min_roi_area    = kwargs.pop('min_roi_area',None) # if None =>  30ms * 100Hz
+        max_roi_area    = kwargs.pop('max_roi_area',None) # 
+        smooth_param1   = kwargs.pop('smooth_param1',1)
+        mask_mode       = kwargs.pop('mask_mode','relative')
+        mask_param1     = kwargs.pop('mask_param1',6)
+        mask_param2     = kwargs.pop('mask_param2',0.5)
+        remove_rain     = kwargs.pop('remove_rain',False)
+        max_ratio_xy    = kwargs.pop('max_ratio_xy',10)
+    else :
+        min_event_duration      = kwargs.pop('min_event_duration',0.025) 
+        max_event_duration      = kwargs.pop('max_event_duration',None) 
+        min_freq_bw             = kwargs.pop('min_freq_bw',50) 
+        max_freq_bw             = kwargs.pop('max_freq_bw',None) 
+        remove_rois_flim_min    = kwargs.pop('remove_rois_flim_min',50) 
+        remove_rois_flim_max    = kwargs.pop('remove_rois_flim_max',None)
+        fusion_rois     = kwargs.pop('fusion_rois',None)
+        remove_rain     = kwargs.pop('remove_rain',True)
+        max_ratio_xy    = kwargs.pop('max_ratio_xy',10)
+        seed_level      = kwargs.pop('seed_level',13) 
+        low_level       = kwargs.pop('low_level',6)
+
     ### for ADI, AEI, RAOQ
     bin_step = kwargs.pop('bin_step',1000) # in Hz
     ### for ADI, AEI
@@ -2956,10 +3331,11 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
     """******** Spectral indices from Spectrum (Amplitude or Energy) *******"""  
     """ EAS, ECU, ECV, EPS, KURT, SKEW [TOWSEY]  """
     #### Does not take into account low frequencies.
-    EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = spectral_entropy (Sxx_power_noNoise,
-                                                            fn,
-                                                            flim=(flim_mid[0],flim_hi[1]),
-                                                            display=display)
+    EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW = spectral_entropy (
+                                                        Sxx_power_noNoise,
+                                                        fn,
+                                                        flim=(flim_mid[0],flim_hi[1]),
+                                                        display=display)
     df_spectral_indices += [EAS, ECU, ECV, EPS, EPS_KURT, EPS_SKEW] 
     if verbose :
         print("EAS %2.5f" % EAS)
@@ -3131,33 +3507,57 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
         print("AGI %2.3f" % AGI)
     
     """ ROI index """
-    # Time resolution (in s)
-    DELTA_T = tn[1]-tn[0]
-    # Frequency resolution (in Hz)
-    DELTA_F = fn[1]-fn[0]
-    # Minimum time duration of an event (in s)
-    MIN_EVENT_DUR = 30e-3
-    # Minimum frequency bandwidth (in Hz)
-    MIN_FREQ_BW = 100
-    # Min Region Of Interest ROI
-    if min_roi_area is None :
-        min_roi_area = int(MIN_EVENT_DUR/DELTA_T * MIN_FREQ_BW / DELTA_F)
-    ROItotal, ROIcover = region_of_interest_index(Sxx_dB_noNoise, 
-                                            tn, fn, 
-                                            smooth_param1, 
-                                            mask_mode,
-                                            mask_param1, 
-                                            mask_param2, 
-                                            min_roi=min_roi_area, 
-                                            max_roi=max_roi_area,
-                                            remove_rain = remove_rain,
-                                            max_ratio_xy = max_ratio_xy,
-                                            display=display)
-    df_spectral_indices += [ROItotal, ROIcover]
-    if verbose :
-        print("ROItotal %2.3f" % ROItotal)
-        print("ROIcover %2.3f" % ROIcover)
-        
+
+    if DEPRECATED_ROI :
+        # Time resolution (in s)
+        DELTA_T = tn[1]-tn[0]
+        # Frequency resolution (in Hz)
+        DELTA_F = fn[1]-fn[0]
+        # Minimum time duration of an event (in s)
+        MIN_EVENT_DUR = 30e-3
+        # Minimum frequency bandwidth (in Hz)
+        MIN_FREQ_BW = 100
+        # Min Region Of Interest ROI
+        if min_roi_area is None :
+            min_roi_area = int(MIN_EVENT_DUR/DELTA_T * MIN_FREQ_BW / DELTA_F)
+
+        ROItotal, ROIcover = region_of_interest_index_deprecated(Sxx_dB_noNoise, 
+                                                tn, fn, 
+                                                smooth_param1, 
+                                                mask_mode,
+                                                mask_param1, 
+                                                mask_param2, 
+                                                min_roi=min_roi_area, 
+                                                max_roi=max_roi_area,
+                                                remove_rain = remove_rain,
+                                                max_ratio_xy = max_ratio_xy,
+                                                display=display)
+        df_spectral_indices += [ROItotal, ROIcover]
+        if verbose :
+            print("ROItotal %2.3f" % ROItotal)
+            print("ROIcover %2.3f" % ROIcover)
+
+    else :
+        nROI, aROI = region_of_interest_index(
+                                        Sxx_power, 
+                                        tn, fn, 
+                                        seed_level=seed_level, 
+                                        low_level=low_level, 
+                                        fusion_rois=fusion_rois,
+                                        remove_rain = remove_rain,
+                                        max_ratio_xy=max_ratio_xy,
+                                        remove_rois_flim_min = remove_rois_flim_min,
+                                        remove_rois_flim_max = remove_rois_flim_max,
+                                        min_event_duration=min_event_duration, 
+                                        max_event_duration=max_event_duration, 
+                                        min_freq_bw=min_freq_bw, 
+                                        max_freq_bw=max_freq_bw, 
+                                        display=display)
+        df_spectral_indices += [nROI, aROI]
+        if verbose :
+            print("nROI %2.3f" % nROI)
+            print("aROI %2.3f" % aROI)
+            
     df_spectral_indices = pd.DataFrame([df_spectral_indices], 
                                     columns=['MEANf', 
                                             'VARf', 
@@ -3201,8 +3601,13 @@ def all_spectral_alpha_indices (Sxx_power, tn, fn,
                                             'H_GiniSimpson',
                                             'RAOQ',
                                             'AGI',
-                                            'ROItotal',
-                                            'ROIcover'])
+                                            'nROI',
+                                            'aROI',
+                                            ])
+    
+    if DEPRECATED_ROI :
+        # change the name of the columns nROI and aROI to ROItotal and ROIcover
+        df_spectral_indices.rename(columns={'nROI':'ROItotal', 'aROI':'ROIcover'}, inplace=True)
         
     df_per_bin_indices = pd.DataFrame([df_per_bin_indices], 
                                     columns=['frequencies',

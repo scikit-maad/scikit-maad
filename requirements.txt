@@ -1,11 +1,8 @@
 # -- base -- #
 numpy>=1.21
 scipy>=1.8.0
-scikit-image>=0.19
+scikit-image>=0.23.1
 pandas>=1.5
 
 # -- plotting -- #
 matplotlib>=3.6
-
-# -- resample -- #
-resampy>=0.4

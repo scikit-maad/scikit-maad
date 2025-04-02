@@ -16,7 +16,7 @@ in the temporal domain.
 # =============================================================================
 # Import external modules
 import numpy as np
-from scipy import signal
+import pywt
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import pandas as pd
@@ -158,7 +158,7 @@ def find_rois_cwt(s, fs, flims, tlen, th: float=0, display=False, save_df=False,
     cwt_width = [round(tlen*fs/wl/2)]
     npad = 5 ## seems to work with 3, but not sure
     s_rms = np.pad(s_rms, np.int64(cwt_width[0]*npad), 'reflect')  ## add pad
-    s_cwt = signal.cwt(s_rms, signal.ricker, cwt_width)
+    s_cwt, _ = pywt.cwt(s_rms, cwt_width, 'mexh')
     s_cwt = s_cwt[0][np.int64(cwt_width[0]*npad):len(s_cwt[0])-np.int64(cwt_width[0]*npad)] ## rm pad
     # find onset and offset of sound
     segments_bin = np.array(s_cwt > th)
