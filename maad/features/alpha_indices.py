@@ -2633,8 +2633,6 @@ def region_of_interest_index(Sxx_power, tn, fn,
 
     # snr estimation to threshold the spectrogram
     _,bgn,snr,_,_,_ = spectral_snr(dB2power(Sxx_dB_noNoise))
-    if verbose :
-        print('BGN {}dB / SNR {}dB'.format(bgn,snr))
         
     # binarization of the spectrogram to select part of the spectrogram with 
     # acoustic activity
