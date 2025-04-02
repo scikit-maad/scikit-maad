@@ -188,7 +188,7 @@ __all__ = [
         "more_entropy",
         "acoustic_gradient_index",
         "frequency_raoq",
-        "region_of_interest_index_deprecated"
+        "region_of_interest_index_deprecated",
         "region_of_interest_index",
         'all_temporal_alpha_indices',
         'all_spectral_alpha_indices',
