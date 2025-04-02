@@ -39,7 +39,7 @@ The latest version of `scikit-maad` requires one of these interpreters:
 - matplotlib >=3.6
 - numpy >= 1.21
 - pandas >= 1.5
-- scikit-image >= 0.19
+- scikit-image >= 0.23.1
 - scipy >= 1.8
 
 ## Installing from PyPI
