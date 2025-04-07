@@ -9,19 +9,22 @@ import matplotlib.pyplot as plt
 from maad import sound, util, rois
 
 #%% Function argument validation
-def _input_validation(data_input):
+def _input_validation(data_input, verbose=True):
     """ Validate dataframe or path input argument """
     if isinstance(data_input, pd.DataFrame):
         df = data_input
 
     elif isinstance(data_input, str):
         if os.path.isdir(data_input):
-            print('Collecting metadata from directory path...')
+            if verbose:
+                print('Collecting metadata from directory path...')
             df = util.get_metadata_dir(data_input)
             df['time'] = df.date.dt.hour
-            print('Done!')
+            if verbose:
+                print('Done!')
         elif os.path.isfile(data_input) and data_input.lower().endswith(".csv"):
-            print('Loading metadata from csv file')
+            if verbose:
+                print('Loading metadata from csv file')
             try:
                 # Attempt to read all wav data from the provided file path.
                 df = pd.read_csv(data_input, dtype={'time': str}) 
@@ -29,14 +32,15 @@ def _input_validation(data_input):
                 df['time'] = df.date.dt.hour
             except FileNotFoundError:
                 raise FileNotFoundError(f"File not found: {data_input}")
-            print('Done!')
+            if verbose:
+                print('Done!')
     
     else:
         raise ValueError("Input 'data' must be either a Pandas DataFrame or a file path string")
     
     return df
 
-def _validate_n_jobs(n_jobs):
+def _validate_n_jobs(n_jobs, verbose=True):
     """ Validate number of jobs """
     if not isinstance(n_jobs, int):
         raise ValueError("n_jobs must be an integer.")
@@ -44,22 +48,25 @@ def _validate_n_jobs(n_jobs):
     if n_jobs <= 0 or n_jobs == -1:
         # Use all available CPUs
         n_jobs = os.cpu_count()
-        print(f"Using all available CPUs: {n_jobs}")
+        if verbose:
+            print(f"Using all available CPUs: {n_jobs}")
     else:
         # Validate that the number is not larger than available CPUs
         available_cpus = os.cpu_count()
         if n_jobs > available_cpus:
             # Set n_jobs to the maximum number of available CPUs
             n_jobs = available_cpus
-            print(f"Adjusted n_jobs to maximum available CPUs: {n_jobs}")
+            if verbose:
+                print(f"Adjusted n_jobs to maximum available CPUs: {n_jobs}")
         else:
-            print(f"Using specified number of CPUs: {n_jobs}")
+            if verbose:
+                print(f"Using specified number of CPUs: {n_jobs}")
 
     return n_jobs
 
 #%%
 def _spectral_peak_density(
-        path_audio, target_fs, nperseg, noverlap, db_range, min_distance, threshold_abs):
+        path_audio, target_fs, nperseg, noverlap, db_range, min_distance, threshold_abs, verbose=True):
     """
     Computes the spectral peak density for an audio file, representing the number of peaks per time step within each frequency bin.
 
@@ -88,7 +95,8 @@ def _spectral_peak_density(
     """
 
     filename = os.path.basename(path_audio)
-    print(f'Processing file {filename}', end='\r')
+    if verbose:
+        print(f'Processing file {filename}', end='\r')
 
     # Load data
     s, fs = sound.load(path_audio)
@@ -116,7 +124,7 @@ def _spectral_peak_density(
 
 #%%
 def graphical_soundscape(
-    data, threshold_abs, path_audio='path_audio', time='time', target_fs=48000, nperseg=256, noverlap=128, db_range=80, min_distance=1, n_jobs=1):
+    data, threshold_abs, path_audio='path_audio', time='time', target_fs=48000, nperseg=256, noverlap=128, db_range=80, min_distance=1, n_jobs=1, verbose=True):
     """
     Computes a graphical soundscape from a given DataFrame of audio files.
 
@@ -150,6 +158,8 @@ def graphical_soundscape(
         Minimum number of indices separating peaks.
     n_jobs : int
         Number of processes to use for parallel computing. Default is 1.
+    verbose : bool
+        Whether to print messages. Default is True.
 
     Returns
     -------
@@ -165,23 +175,24 @@ def graphical_soundscape(
     >>> gs = graphical_soundscape(data=df, threshold_abs=-80, time='hour')
     >>> plot_graph(gs)
     """
-    df = _input_validation(data)
+    df = _input_validation(data, verbose=verbose)
     df.sort_values(by=path_audio, inplace=True)
     total_files = len(df)
-    print(f'{total_files} files found to process...')
+    if verbose:
+        print(f'{total_files} files found to process...')
     flist = df[path_audio].to_list()
 
-    if n_jobs==1:
+    if n_jobs == 1:
         # Use sequential processing
         results = []
         for path_audio in flist:
-            result = _spectral_peak_density(path_audio, target_fs, nperseg, noverlap, db_range, min_distance, threshold_abs)
+            result = _spectral_peak_density(path_audio, target_fs, nperseg, noverlap, db_range, min_distance, threshold_abs, verbose=verbose)
             results.append(result)
     else:
         # Use parallel processing
-        _validate_n_jobs(n_jobs)
+        _validate_n_jobs(n_jobs, verbose=verbose)
         with ProcessPoolExecutor() as executor:
-            futures = [executor.submit(_spectral_peak_density, path_audio, target_fs, nperseg, noverlap, db_range, min_distance, threshold_abs)
+            futures = [executor.submit(_spectral_peak_density, path_audio, target_fs, nperseg, noverlap, db_range, min_distance, threshold_abs, verbose)
                        for path_audio in flist]
 
         # Wait for all tasks to complete
@@ -189,7 +200,8 @@ def graphical_soundscape(
         
     res = pd.concat(results)
     res['time'] = df[time].values
-    print('\nComputation completed!')
+    if verbose:
+        print('\nComputation completed!')
     return res.groupby('time').mean()
 
 #%%
