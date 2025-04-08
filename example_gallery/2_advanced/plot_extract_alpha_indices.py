@@ -36,7 +36,7 @@ SPECTRAL_FEATURES=['MEANf','VARf','SKEWf','KURTf','NBPEAKS','LEQf',
     'NDSI','rBA','AnthroEnergy','BioEnergy','BI','ROU','ADI','AEI','LFC','MFC','HFC',
     'ACTspFract','ACTspCount','ACTspMean', 'EVNspFract','EVNspMean','EVNspCount',
     'TFSD','H_Havrda','H_Renyi','H_pairedShannon', 'H_gamma', 'H_GiniSimpson','RAOQ',
-    'AGI','ROItotal','ROIcover'
+    'AGI','nROI','aROI'
     ]
 
 TEMPORAL_FEATURES=['ZCR','MEANt', 'VARt', 'SKEWt', 'KURTt',
@@ -197,12 +197,12 @@ plot_features_map(df_indices[TEMPORAL_FEATURES], mode='24h')
 
 fig, ax = plt.subplots(3,2, sharex=True, squeeze=True, figsize=(5,5))
 
-fig, ax[0,0] = plot_features(df_indices[['Hf']],norm=True,mode='24h', ax=ax[0,0])  
-fig, ax[0,1] = plot_features(df_indices[['AEI']],norm=True,mode='24h', ax=ax[0,1])
-fig, ax[1,0] = plot_features(df_indices[['NDSI']],norm=True,mode='24h', ax=ax[1,0])
-fig, ax[1,1] = plot_features(df_indices[['ACI']],norm=True,mode='24h', ax=ax[1,1])
-fig, ax[2,0] = plot_features(df_indices[['TFSD']],norm=True,mode='24h', ax=ax[2,0])
-fig, ax[2,1] = plot_features(df_indices[['ROItotal']],norm=True,mode='24h', ax=ax[2,1])
+fig, ax[0,0] = plot_features(df_indices[['Hf']],norm=True,mode='24h', now=False, ax=ax[0,0])  
+fig, ax[0,1] = plot_features(df_indices[['AEI']],norm=True,mode='24h', now=False, ax=ax[0,1])
+fig, ax[1,0] = plot_features(df_indices[['NDSI']],norm=True,mode='24h', now=False, ax=ax[1,0])
+fig, ax[1,1] = plot_features(df_indices[['ACI']],norm=True,mode='24h', now=False, ax=ax[1,1])
+fig, ax[2,0] = plot_features(df_indices[['TFSD']],norm=True,mode='24h', now=False, ax=ax[2,0])
+fig, ax[2,1] = plot_features(df_indices[['nROI']],norm=True,mode='24h', now=True, ax=ax[2,1])
 
 #%%
 # Create false color spectrograms with 3 indices
