@@ -30,7 +30,7 @@ peak_time, peak_freq = rois.spectrogram_local_max(
 # we can have a graphical representation of the most prominent spectro-temporal 
 # dynamics over a 24-hour window. To illustrate this, we will 
 # use 96 audio recordings that were collected in a temperate forest, and that are 
-# available [here](https://github.com/scikit-maad/scikit-maad/tree/production/data/indices).
+# available `here <https://github.com/scikit-maad/scikit-maad/tree/production/data/indices>`_.
 
 df = util.get_metadata_dir('../../data/indices')
 df['time'] = df.date.dt.hour
