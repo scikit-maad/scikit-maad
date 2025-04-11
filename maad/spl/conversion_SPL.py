@@ -4,7 +4,9 @@
 """ 
 Collection of functions to convert audio and voltage data to Sound Pressure 
 Level (SPL in Pascal) and Leq (Continuous Equivalent SPL).
-Functions are adapted from the algorithm proposed in Merchant, N.D., Fristrup, K.M., Johnson, M.P., Tyack, P.L., Witt, M.J., Blondel, P. and Parks, S.E. (2015), Measuring acoustic habitats. Methods Ecol Evol, 6: 257-265. `DOI: 10.1111/2041-210X.12330 <https://doi.org/10.1111/2041-210X.12330>`_
+Functions are adapted from the algorithm proposed in 
+Merchant, N.D., Fristrup, K.M., Johnson, M.P., Tyack, P.L., Witt, M.J., Blondel, P. and Parks, S.E. (2015), 
+Measuring acoustic habitats. Methods Ecol Evol, 6: 257-265. `DOI: 10.1111/2041-210X.12330 <https://doi.org/10.1111/2041-210X.12330>`_
 """   
 #
 # Authors:  Juan Sebastian ULLOA <lisofomia@gmail.com>
@@ -34,6 +36,18 @@ _MIN_ = sys.float_info.min
 def wav2volt (wave, Vadc=2): 
     """
     Convert an audio signal amplitude to Volts.
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        voltage conversion by omitting the division by 2 for the `Vadc` parameter.
+        This resulted in voltage values that were twice as large as they should.
+        If you want to correct the voltage values obtained with the previous version,
+        you can simply divide the results by 2. 
+        In dB SPL, this lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate voltage values.
     
     Parameters
     ----------
@@ -55,12 +69,12 @@ def wav2volt (wave, Vadc=2):
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> maad.spl.wav2volt(wave=w, Vadc=2)
         array([ 0.02155849,  0.02570888,  0.02583096, ..., -0.0082877 ,
-       -0.00438145, -0.00755528])
+        -0.00219072, -0.00377764])
     """
     # force to be ndarray
     wave = np.asarray(wave)
     
-    volt =wave * Vadc
+    volt =wave * Vadc/2
     return volt
 
 #%%
@@ -93,14 +107,14 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> v = maad.spl.wav2volt(wave=w)
     >>> maad.spl.volt2pressure(volt=v, gain=42) 
-        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,
-       -0.00195712, -0.00337482])      
+        array([ 0.00481491,  0.00574187,  0.00576913, ..., -0.00185099,
+        -0.00097856, -0.00168741])   
     
     Same result with the function wav2pressure
     
     >>> maad.spl.wav2pressure(wave=w, gain=42)
-        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,
-       -0.00195712, -0.00337482])
+        array([ 0.00481491,  0.00574187,  0.00576913, ..., -0.00185099,
+        -0.00097856, -0.00168741])
     
     """
     # force to be ndarray
@@ -116,6 +130,18 @@ def volt2pressure(volt, gain, sensitivity=-35, dBref=94):
 def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94): 
     """
     Convert wave amplitude to instantaneous sound pressure (p [Pa]).
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        pressure conversion by omitting the division by 2 for the `Vadc` parameter.
+        This resulted in pressure values that were twice as large as they should.
+        If you want to correct the pressure values obtained with the previous version,
+        you can simply divide the results by 2. 
+        In dB SPL, this would lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate pressure values.
     
     Parameters
     ----------
@@ -147,15 +173,15 @@ def wav2pressure (wave, gain, Vadc = 2, sensitivity=-35, dBref=94):
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> maad.spl.wav2pressure(wave=w, gain=42)
-        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,
-       -0.00195712, -0.00337482])
+        array([ 0.00481491,  0.00574187,  0.00576913, ..., -0.00185099,
+        -0.00097856, -0.00168741])
     
     Same result with 2 functions
     
     >>> v = maad.spl.wav2volt(wave=w)
     >>> maad.spl.volt2pressure(volt=v, gain=42) 
-        array([ 0.00962983,  0.01148374,  0.01153826, ..., -0.00370198,
-       -0.00195712, -0.00337482]) 
+        array([ 0.00481491,  0.00574187,  0.00576913, ..., -0.00185099,
+        -0.00097856, -0.00168741])        
     
     """
     # force to be ndarray
@@ -191,14 +217,14 @@ def pressure2dBSPL (p, pRef=20e-6):
     Get instantaneous sound pressure level (L)
     
     >>> maad.spl.pressure2dBSPL(abs(p))
-        array([53.65176859, 55.18106489, 55.22220942, ..., 45.3480775 ,
-        39.81175156, 44.54440589])
+        array([47.63116868, 49.16046498, 49.20160951, ..., 39.32747759,
+        33.79115165, 38.52380598])
     
     Get equivalent sound pressure level (Leq) from the RMS of the pressure signal
     
     >>> p_rms = maad.util.rms(p)
     >>> maad.spl.pressure2dBSPL(p_rms)  
-        54.53489077674256      
+        48.51429086346293
         
     """    
     # force to be ndarray
@@ -234,10 +260,10 @@ def dBSPL2pressure (L, pRef=20e-6):
     >>> p = maad.spl.wav2pressure(wave=w, gain=42)
     >>> p_rms = maad.util.rms(p)
     >>> print(p_rms)
-        0.010660425378341332
+        0.0053302126891706676
     >>> L = maad.spl.pressure2dBSPL(p_rms)  
     >>> maad.spl.dBSPL2pressure(L)
-        0.010660425378341332 
+        spl.dBSPL2pressure(L)
     """    
     # force to be ndarray
     L = np.asarray(L)
@@ -250,6 +276,15 @@ def dBSPL2pressure (L, pRef=20e-6):
 def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
     Convert wave amplitude to instantaneous sound pressure level (L [dB SPL]).
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        pressure conversion by omitting the division by 2 for the `Vadc` parameter.
+        In dB SPL, this would lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate dB SPL values.
     
     Parameters
     ----------
@@ -287,14 +322,14 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     Get an approximate of the equivalent sound pressure level (Leq)
         
     >>> maad.util.mean_dB(L)
-        54.53489077674256
+        48.51429086346294
         
     Get equivalent sound pressure level (Leq) from the dedicated function
         
     >>> Leq = maad.spl.wav2leq(w, fs, gain=42, dt=1)
     >>> Leq_mean = maad.util.mean_dB(Leq)
     >>> Leq_mean
-        54.575482584140005   
+        48.55488267086038
     
     """       
     # force to be ndarray
@@ -309,6 +344,15 @@ def wav2dBSPL (wave, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
     Convert signal (amplitude) to instantaneous sound pressure level (L [dB SPL]).
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        volt conversion by omitting the division by 2 for the `Vadc` parameter.
+        In dB SPL, this would lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate dB SPL values.
     
     Parameters
     ----------
@@ -334,7 +378,7 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     -------
     L : ndarray-like or scalar
         ndarray-like or scalar containing the sound waveform in dB SPL (Sound Pressure level in dB)
-      
+    
     See also
     --------
     power2dBSPL
@@ -349,12 +393,12 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     Get instantaneous sound pressure level (L).
     
     >>> maad.spl.amplitude2dBSPL(S_amplitude_mean, gain=42)    
-    array([39.56422048, 44.37117437, 41.95705677, 39.60547011, 36.43237323,
-           33.24966066, 31.44139953, 30.4473799 , 28.91589639, 27.26962076,
-           26.7722199 , 26.27328293, 25.69373328, 24.73880674, 23.85828781,
-           ...
-           -6.30767022, -6.46481481, -6.49907112, -6.52754376, -6.52476444,
-           -6.73617834, -6.75685948])
+        array([ 33.54362056,  38.35057445,  35.93645686,  33.5848702 ,
+                30.41177332,  27.22906075,  25.42079962,  24.42677998,
+                22.89529647,  21.24902085,  20.75161999,  20.25268302,
+                ...
+                -12.18064124, -12.32827014, -12.48541472, -12.51967103,
+                -12.54814367, -12.54536435, -12.75677825, -12.77745939])
     """       
     # force to be ndarray
     s = np.asarray(s)
@@ -368,6 +412,15 @@ def amplitude2dBSPL (s, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6): 
     """
     Convert power (amplitude²) to sound pressure level (L [dB]).
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        volt conversion by omitting the division by 2 for the `Vadc` parameter.
+        In dB SPL, this would lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate dB SPL values.    
     
     Parameters
     ----------
@@ -409,13 +462,12 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
     Get instantaneous sound pressure level (L).
     
     >>> maad.spl.power2dBSPL(S_power_mean, gain=42)    
-    array([41.56456034, 45.44257539, 43.17154534, 41.50665519, 38.08392914,
-           34.52770543, 32.57142163, 31.68137318, 30.32861314, 28.46111069,
-           27.88530431, 27.48595098, 26.96673216, 25.88241843, 24.93524547,
-           ...
-           -5.24972979, -5.38796789, -5.42812278, -5.47003443, -5.47740917,
-           -5.67015921, -5.68214822])
-
+        array([ 3.55439604e+01,  3.94219755e+01,  3.71509454e+01,  3.54860553e+01,
+                3.20633292e+01,  2.85071055e+01,  2.65508217e+01,  2.56607733e+01,
+                2.43080132e+01,  2.24405108e+01,  2.18647044e+01,  2.14653511e+01,
+                ...
+                -1.11242771e+01, -1.12703297e+01, -1.14085678e+01, -1.14487227e+01,
+                -1.14906343e+01, -1.14980091e+01, -1.16907591e+01, -1.17027481e+01])
     """    
     # force to be ndarray
     P = np.asarray(P)
@@ -431,6 +483,15 @@ def power2dBSPL (P, gain, Vadc=2, sensitivity=-35, dBref=94, pRef=20e-6):
 def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94, pRef = 20e-6): 
     """
     Convert wave to Equivalent Continuous Sound Pressure level (Leq [dB SPL]).
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        volt conversion by omitting the division by 2 for the `Vadc` parameter.
+        In dB SPL, this would lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate dB SPL values. 
     
     Parameters
     ----------
@@ -464,13 +525,13 @@ def wav2leq (wave, f, gain, Vadc=2, dt=1, sensitivity=-35, dBref = 94, pRef = 20
     -------
     Leq : float
         Equivalent Continuous Sound pressure level (Leq [dB SPL])
-       
+
     Examples
     --------
     >>> w, fs = maad.sound.load('../data/cold_forest_daylight.wav') 
     >>> Leq = maad.spl.wav2leq (w, fs, gain=42)  
     >>> maad.util.mean_dB(Leq)
-        54.575482584140005
+        48.55488267086038
     """    
     # force to be ndarray
     wave = np.asarray(wave)
@@ -511,7 +572,7 @@ def pressure2leq (p, fs, dt=1, pRef = 20e-6):
         Integration step to compute the Leq (Equivalent Continuous Sound level)
 
     pRef : Sound pressure reference in the medium (air:20e-6, water:1e-6 Pa)
-           
+    
     Returns
     -------
     Leq : float
@@ -523,7 +584,7 @@ def pressure2leq (p, fs, dt=1, pRef = 20e-6):
     >>> p = maad.spl.wav2pressure(wave=w, gain=42)
     >>> Leq = maad.spl.pressure2leq (p, fs)
     >>> maad.util.mean_dB(Leq)
-        54.55488267086038
+        48.534282757580755
         
     """     
     # be sure they are ndarray
@@ -550,6 +611,15 @@ def psd2leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     """
     Convert Power spectral density (PSD, amplitude²) into 
     Equivalent Continuous Sound pressure level (Leq [dB SPL])
+
+    .. warning::
+       **Important:** Previous versions of this function incorrectly calculated the
+        volt conversion by omitting the division by 2 for the `Vadc` parameter.
+        In dB SPL, this would lead to a 6 dB increase in the calculated sound pressure level.
+        If you want to correct the SPL values obtained with the previous version,
+        you can simply subtract 6 dB from the old results.
+        This has been corrected in the version 1.5.1. Ensure you are using the
+        latest version (>=1.5.1) to obtain accurate dB SPL values. 
     
     Parameters
     ----------
@@ -570,7 +640,7 @@ def psd2leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
         (usually 94dB, sometimes 114dB)
 
     pRef : Sound pressure reference in the medium (air:20e-6, water:1e-6 Pa)
-           
+
     Returns
     -------
     Leq : float
@@ -582,7 +652,7 @@ def psd2leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram (w, fs)
     >>> S_power_mean = maad.sound.avg_power_spectro(Sxx_power) 
     >>> maad.spl.psd2leq(S_power_mean, gain=42)
-        53.55842473963429
+        47.537824826354665
         
     """  
     # be sure they are ndarray
@@ -598,7 +668,7 @@ def psd2leq (P, gain, Vadc=2, sensitivity=-35, dBref = 94, pRef = 20e-6):
     # if the sum is performed on the whole PSD)
     Leq = 10*log10(sum(P)/pRef**2)
     return Leq
-   
+    
 ################################ TEST ########################################
     
 ## Test the current operating system

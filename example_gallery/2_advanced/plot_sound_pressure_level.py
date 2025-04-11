@@ -39,9 +39,20 @@ from maad import sound, util, spl
 # pressure level of the audio file (dB SPL) as a sound meter level would do.
 # For this experiment, we used a Songmeter 4 (SM4, from Wildlife Acoustics) 
 # with an amplification gain of 16dB.
-S = -35         # Sensibility of the microphone -35dBV (SM4) / -18dBV (Audiomoth)   
-G = 26+16       # Total amplification gain in dB (SM4 has a +26dB preamplifier)
-VADC = 2        # Voltage range of the analog to digital converter (ADC)
+
+# From Sam Lapp (thank you very much Sam for your help)
+# in case of audiomoth the gain is
+#              Gain (dB) 
+# low gain     12.7     
+#              16.9
+# medium gain  23.5
+#              28.0
+# high gain    30.4
+
+S = -35                 # Sensibility of the microphone -35dBV (SM4) / -38dBV (Audiomoth)  / -35dBV (SM Mini) / -35dBV (SM Mini 2)  
+PREANPLIFIER = 26       # Preamplifier gain +26dB (SM4) / +20.8 (Audiomoth 1.2.0) / +20dB (Audiomoth 1.1.0) / +23dB (SM Mini) / +23dB (SM Mini 2)
+G = PREANPLIFIER+16     # Total amplification gain in dB (preamplifier Gain + Gain)
+VADC = 2                # Voltage range of the analog to digital converter (ADC)
 
 #%%
 # First, we parse the directory /indices in order to get a DataFrame with date 
