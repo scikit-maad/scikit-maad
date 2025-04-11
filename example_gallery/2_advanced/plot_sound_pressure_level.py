@@ -49,8 +49,8 @@ from maad import sound, util, spl
 #              28.0
 # high gain    30.4
 
-S = -35                 # Sensibility of the microphone -35dBV (SM4) / -38dBV (Audiomoth)  / -12dBV (SM Mini) / -6dBV (SM Mini 2)  
-PREANPLIFIER = 26       # Preamplifier gain +26dB (SM4) / +20.8 (Audiomoth 1.2.0) / +20dB (Audiomoth 1.1.0) / +0dB (SM Mini) / +0dB (SM Mini 2)
+S = -35                 # Sensibility of the microphone -35dBV (SM4) / -38dBV (Audiomoth)  / -35dBV (SM Mini) / -35dBV (SM Mini 2)  
+PREANPLIFIER = 26       # Preamplifier gain +26dB (SM4) / +20.8 (Audiomoth 1.2.0) / +20dB (Audiomoth 1.1.0) / +23dB (SM Mini) / +29dB (SM Mini 2)
 G = PREANPLIFIER+16     # Total amplification gain in dB (preamplifier Gain + Gain)
 VADC = 2                # Voltage range of the analog to digital converter (ADC)
 
