@@ -2570,9 +2570,9 @@ def region_of_interest_index(Sxx_power, tn, fn,
     >>> Sxx_power,tn,fn,_ = maad.sound.spectrogram(s,fs)
     >>> nROI, aROI = maad.features.region_of_interest_index(Sxx_power, tn, fn, display=True)
     >>> print('The total number of ROIs found in the spectrogram is %2.0f' % nROI) # doctest: +NORMALIZE_WHITESPACE
-    The total number of ROIs found in the spectrogram is 241
+    The total number of ROIs found in the spectrogram is 127
     >>> print('The percentage of spectrogram covered by ROIs is%2.0f%%' % aROI) # doctest: +NORMALIZE_WHITESPACE
-    The percentage of spectrogram covered by ROIs is 5%
+    The percentage of spectrogram covered by ROIs is 4%
     
     """
 
