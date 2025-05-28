@@ -2486,13 +2486,13 @@ def region_of_interest_index_deprecated(Sxx_dB_noNoise, tn, fn,
 
 
 def region_of_interest_index(Sxx_power, tn, fn, 
-                            seed_level=13, 
+                            seed_level=16, 
                             low_level=6, 
-                            fusion_rois=None,
+                            fusion_rois=[0.05, 100],
                             remove_rois_flim_min = 50,
                             remove_rois_flim_max = None,
                             remove_rain = True,
-                            min_event_duration=0.025, 
+                            min_event_duration=0.1, 
                             max_event_duration=None, 
                             min_freq_bw=50, 
                             max_freq_bw=None, 
@@ -2516,7 +2516,7 @@ def region_of_interest_index(Sxx_power, tn, fn,
         time vector (horizontal x-axis)
     fn : 1d ndarray of floats
         Frequency vector (vertical y-axis) 
-    seed_level : scalar, default is 13
+    seed_level : scalar, default is 16
         Higher threshold (in dB) for the absolute binarization. Pixels with 
         values above this threshold are considered part of a potential ROI.
     low_level : scalar, default is 6
@@ -2534,15 +2534,15 @@ def region_of_interest_index(Sxx_power, tn, fn,
     remove_rain : boolean, default is True
         If True, vertical frequency spikes due to rain are removed as possible
         by applying a morphological mathematical image processing : grey opening
-    min_event_duration : scalar, optional
+    min_event_duration : scalar, default is 0.1
         Minimum time duration of an event (in s). ROIs shorter than this are removed.
     max_event_duration : scalar, optional
         Maximum time duration of an event (in s). ROIs longer than this are removed.
-    min_freq_bw : scalar, optional
+    min_freq_bw : scalar, default is 50
         Minimum frequency bandwidth (in Hz). ROIs with smaller bandwidth than this are removed.
     max_freq_bw : scalar, optional
         Maximum frequency bandwidth (in Hz). ROIs with larger bandwidth than this are removed.
-    max_ratio_xy : scalar, optional
+    max_ratio_xy : scalar, default is 10
         Maximum ratio between the vertical axis (y) and horizontal 
         axis (x) that is allowed for a ROI. This is very convenient to remove
         vertical spikes (e.g. rain). 10 seems a reasonable value to remove most
@@ -2721,7 +2721,6 @@ def region_of_interest_index(Sxx_power, tn, fn,
             if isinstance(REMOVE_ROIS_FLIM_MAX, (float, int)) :
                 low_frequency_threshold_in_pixels = min([im_rois.shape[1]-1, round(REMOVE_ROIS_FLIM_MAX / DELTA_F)])
             elif isinstance(REMOVE_ROIS_FLIM_MAX, (tuple, list, np.ndarray)) and len(REMOVE_ROIS_FLIM_MAX) == 2 :
-                print("list of 2 values")
                 low_frequency_threshold_in_pixels = min([im_rois.shape[1]-1, round(REMOVE_ROIS_FLIM_MAX[0] / DELTA_F)])
                 high_frequency_threshold_in_pixels = round(REMOVE_ROIS_FLIM_MAX[1] / DELTA_F)+1
             else:
