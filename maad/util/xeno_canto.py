@@ -460,12 +460,13 @@ def xc_download(df,
                 else :
                     # try to read the file and add a row corresponding to the index
                     try :
-                        pd.concat([pd.read_csv(filename_csv,sep=';',index_col='id'), 
-                                   df.loc[index].to_frame().T], 
-                                  ignore_index=False).drop_duplicates().to_csv(filename_csv, 
-                                                                               sep=";", 
-                                                                               index=True,
-                                                                               index_label='id')       
+                        df_csv = pd.concat([pd.read_csv(filename_csv,sep=';',index_col='id'), 
+                                            df.loc[index].to_frame().T], 
+                                           ignore_index=False)
+                        df_csv[~df_csv.index.duplicated(keep='first')].to_csv(filename_csv, 
+                                                                              sep=";", 
+                                                                              index=True,
+                                                                              index_label='id')       
                     except :
                         pass
             
