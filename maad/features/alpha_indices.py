@@ -527,7 +527,7 @@ def temporal_entropy (s, compatibility="QUT", mode ='fast', Nt=512) :
     ----------
     s : 1D array
         Audio to process (wav)
-        compatibility : string {'QUT', 'seewave'}, default is 'QUT'
+    compatibility : string {'QUT', 'seewave'}, default is 'QUT'
         Select the way to compute the temporal entropy.
         
         - QUT [2]_: entropy of the squared envelope

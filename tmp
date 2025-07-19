@@ -1,0 +1,110 @@
+ ----------------------------------------------------------------------------
+ENH: Add the total entropy H #74 - https://github.com/scikit-maad/scikit-maad/issues/74
+https://cran.r-project.org/web/packages/seewave/seewave.pdf
+
+Total entropy: 94 - H = Ht * Hf
+  This function computes the product between the values obtained with sh and th functions.
+
+Temporal entropy: 202
+  https://scikit-maad.github.io/generated/maad.features.temporal_entropy.html#maad.features.temporal_entropy
+Shannon and Renyi spectral entropy: 166
+frequency_entropy: https://scikit-maad.github.io/generated/maad.features.frequency_entropy.html#maad.features.frequency_entropy
+
+maad.features.total_entropy 
+#=============================================================================
+def total_entropy (s, compatibility="QUT", mode ='fast', Nt=512, order=3, axis=0) :
+    """
+    Computes the total entropy of an audio signal
+
+    Parameters
+    ----------
+    s : 1D array
+        Audio to process (wav)
+    compatibility : string {'QUT', 'seewave'}, default is 'QUT'
+        Select the way to compute the temporal entropy.
+        
+        - QUT [2]_: entropy of the squared envelope
+        - seewave [1]_ : entropy of the envelope
+    mode : str, optional, default is "fast"
+        Select the mode to compute the envelope of the audio waveform.
+        
+        - "fast" : The sound is first divided into frames (2d) using the function _wave2timeframes(s), then the max of each frame gives a good approximation of the envelope.
+        - "Hilbert" : estimation of the envelope from the Hilbert transform. The method is slow.
+    Nt : integer, optional, default is 512
+        Size of each frame. The largest, the highest is the approximation.
+    order : integer, default is 3
+        determine the order of the entropy in case of Havrda, Renyi and gamma 
+        entropy. if order =2, Havrda is equal to Gini Simpson entropy
+    axis : integer, default is 0
+        In case of x is a matrix, select the row (axis=0) or the columns (axis=1)
+        of the matrix to compute the entropies.  
+
+    Returns
+    -------
+    H: float
+        Total entropy of the audio 
+    
+    References
+    ----------
+    .. [1] Seewave : http://rug.mnhn.fr/seewave. Sueur, J., Aubin, T., & Simonis, C. (2008). Seewave, a free modular tool for sound analysis and synthesis. Bioacoustics, 18(2), 213-226. `DOI: 10.1080/09524622.2008.9753600 <https://doi.org/10.1080/09524622.2008.9753600>`_ 
+    .. [2] QUT : https://github.com/QutEcoacoustics/audio-analysis. Michael Towsey, Anthony Truskinger, Mark Cottman-Fields, & Paul Roe. (2018, March 5). Ecoacoustics Audio Analysis Software v18.03.0.41 (Version v18.03.0.41). Zenodo. http://doi.org/10.5281/zenodo.1188744
+    
+    Notes
+    -----
+    
+
+    Examples
+    --------
+    >>> import maad
+    >>> s, fs = maad.sound.load('../data/spinetail.wav')
+    >>> Ht = maad.features.temporal_entropy (s)
+    >>> print(Ht) # doctest: +NORMALIZE_WHITESPACE
+    0.7518917279549968
+
+    """
+    # Envelope
+    env = envelope(s, mode=mode, Nt=Nt)
+    # Temporal entropy
+    if compatibility == 'QUT':
+        Ht = entropy(env**2)
+        _, H_Renyi, _, _, _ = more_entropy(env**2, order=order, axis=axis)
+    elif compatibility == 'seewave':
+        Ht = entropy(env)
+        _, H_Renyi, _, _, _ = more_entropy(env, order=order, axis=axis)
+    else:
+        raise TypeError('compatibility must be selected in {QUT, seewave}')  
+
+    return Ht * H_Renyi
+
+
+
+----------------------------------------------------------------------------
+ENH: Support for LAeq #97 - https://github.com/scikit-maad/scikit-maad/issues/97
+file:///home/saguileran/Downloads/noise-measurement-terminology-guide-english.pdf
+how to imlplement the A wieght? should I implement also B and C weight? What is the difference between these weights?
+
+
+----------------------------------------------------------------------------
+ENH: Example with the same indices as in the soundecology R library #79 - https://github.com/scikit-maad/scikit-maad/issues/79
+What indixes should we calculate?
+- ADI: maad.features.acoustic_diversity_index
+- ACI : maad.features.acoustic_complexity_index
+- AEI: maad.features.acoustic_eveness_index
+- bioacustics_index: maad.features.bioacoustics_index
+
+https://cran.r-project.org/web/packages/soundecology/soundecology.pdf
+https://scikit-maad.github.io/_auto_examples/2_advanced/plot_extract_alpha_indices.html
+
+
+----------------------------------------------------------------------------
+Make showing all plots optional by using parameters #69 - https://github.com/scikit-maad/scikit-maad/issues/69
+THe simple solution is to add a parameter to all the plotting functions as follow:
+def ...(show=False)
+
+if not show:
+  plt.close(fig)
+
+This paramter close the figure, is it a good solution? Is it convenience to close the plots?
+
+
+# how documentation is createid, with SPhinx?
