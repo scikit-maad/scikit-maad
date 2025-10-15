@@ -46,7 +46,7 @@ extensions = ['sphinx.ext.autodoc',  # Core Sphinx library for auto html doc gen
     'sphinx_rtd_theme',
     'numpydoc',  # docstring examples
     'sphinx.ext.autosectionlabel',
-    'sphinx_gallery.gen_gallery',
+    #'sphinx_gallery.gen_gallery',
 ]
 html4_writer = False
 autosummary_generate = True
