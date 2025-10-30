@@ -8,6 +8,8 @@ The goal of this example is to show how to download metadata from Xeno-Canto
 to infer species activities. 
 We focus on the activity of european woodpeckers.
 
+**Note**: To run this example you need to have a Xeno-Canto API key. You can get a key by
+registering for free on Xeno-Canto website (https://xeno-canto.org/account/register).
 **Dependencies**: To execute this example you need to have installed 
 pandas package.
 
@@ -34,11 +36,12 @@ Middle Spotted : Dendrocoptes medius
 
 """
 # sphinx_gallery_thumbnail_path = './_images/sphx_glr_plot_xenocanto_woodpecker_activities_002.png'
-# %%
+
+#%% 
+# Load required packages
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
 from maad import util
 
 #%%
@@ -69,8 +72,8 @@ df_species = pd.DataFrame(
 gen = []
 sp = []
 for name in df_species['scientific name']:
-    gen.append(name.rpartition(' ')[0])
-    sp.append(name.rpartition(' ')[2])
+    gen.append('gen:' + name.rpartition(' ')[0])
+    sp.append('sp:' + name.rpartition(' ')[2])
 
 #%%
 # Build the query dataframe with columns paramXXX
@@ -91,7 +94,9 @@ df_query['param5'] ='area:europe'
 
 #%%
 # Get recordings metadata corresponding to the query
+key = "YOUR XC API KEY HERE"  # A key is available to all registered XC members
 df_dataset = util.xc_multi_query(
+    key=key,
     df_query=df_query, 
     format_time=True,
     format_date=True,
@@ -127,7 +132,7 @@ df_count = pd.DataFrame()
 list_species = df['en'].unique()
 for species in list_species :
     df_temp = pd.DataFrame()
-    df_temp['count'] = df[df['en']==species].set_index(['time']).resample('30T').count().iloc[:,0]
+    df_temp['count'] = df[df['en']==species].set_index(['time']).resample('30min').count().iloc[:,0]
     df_temp['species'] = species
     df_count = pd.concat([df_count, df_temp]) 
 

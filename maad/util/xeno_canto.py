@@ -23,6 +23,7 @@ import os
 
 # %%
 def xc_query(searchTerms,
+             key = None,
              max_nb_files = None,
              format_time = False,
              format_date = False,
@@ -66,6 +67,13 @@ def xc_query(searchTerms,
     -------
     df_dataset : pandas DataFrame
         Dataframe containing all the recordings metadata matching search terms
+
+    Examples
+    --------
+    >>> from maad.util.xeno_canto import xc_query
+    >>> key = "YOUR XC API KEY HERE"  # A key is available to all registered XC members
+    >>> searchTerms = ["gen:Chlorochrysa", "sp:nitidissima"]
+    >>> df = xc_query(searchTerms, key = key, verbose=True)
     """
     
     # #*** HACK *** to remove the parameter 'type' from query as it does
@@ -85,11 +93,19 @@ def xc_query(searchTerms,
     while page < numPages+1:
         if verbose:
             print("Loading page "+str(page)+"...")
-        url = 'https://www.xeno-canto.org/api/2/recordings?query={0}&page={1}'.format(
-            '%20'.join(searchTerms), page)
+        url = 'https://www.xeno-canto.org/api/3/recordings?query={0}&page={1}&key={2}'.format(
+            '%20'.join(searchTerms), page, key)
         if verbose:
             print(url)
-        jsonPage = urllib.request.urlopen(url)
+        
+        # try to open the url
+        try:
+            jsonPage = urllib.request.urlopen(url)
+        except urllib.error.HTTPError as e:
+            # HTTP errors (e.g., 404, 500)
+            if verbose:
+                raise RuntimeError(f"Failed to access Xeno-Canto API (HTTP {e.code}: {e.reason})") from e
+        
         jsondata = json.loads(jsonPage.read().decode('utf-8'))
         # check number of pages
         numPages = jsondata['numPages']
@@ -114,7 +130,7 @@ def xc_query(searchTerms,
 
         # convert latitude and longitude coordinates into float
         df_dataset['lat'] = df_dataset['lat'].astype(float)
-        df_dataset['lng'] = df_dataset['lng'].astype(float)
+        df_dataset['lon'] = df_dataset['lon'].astype(float)
         
         # rearrange index to be sure to have unique and increasing index
         df_dataset.reset_index(drop=True, inplace=True)
@@ -180,6 +196,7 @@ def xc_query(searchTerms,
 
 # %%
 def xc_multi_query(df_query,
+                   key          = None,
                    max_nb_files = None,
                    format_time  = False,
                    format_date  = False,
@@ -222,6 +239,7 @@ def xc_multi_query(df_query,
     for index, row in df_query.iterrows():
         searchTerms = row.tolist()
         df_dataset = pd.concat([df_dataset, xc_query(searchTerms, 
+                                                key,
                                                 max_nb_files,
                                                 format_time,
                                                 format_date,
