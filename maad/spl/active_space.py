@@ -548,7 +548,7 @@ def attenuation_dB (f, r, r0, t=20, rh=60, pa=101325, a0=0.02):
   
   >>> df_att[(df_att.f==2000) & (df_att.r==50)]
               f   r  Ageo_dB   Aatm_dB   Ahab_dB    Asum_dB
-      310  2000  50  33.9794  0.454776      1.96  36.394176
+      340  2000  50  33.9794  0.454776      1.96  36.394176
   
   For 10Hz @100m, the attenuation due to the atmosphere and the habitat is no
   negligible
@@ -707,39 +707,39 @@ def detection_distance (L_bkg, L0, f, r0= 1, delta_r=1, t=20, rh=60, pa=101325,
   Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
   with a background noise of 50dB SPL
     
-  >>> f, r = maad.spl.active_distance (L_bkg=50, L0=90, f=2000) 
+  >>> f, r = maad.spl.detection_distance (L_bkg=50, L0=90, f=2000) 
   >>> print('Max active distance is %2.1fm' %r)
-  Max active distance is 70.0m
+  Max active distance is 68.0m
   
   Estimation of the active distance for an initial sound of 90dB SPL @10kHz 
   with a background noise of 50dB SPL
     
-  >>> f, r = maad.spl.active_distance (L_bkg=50, L0=90, f=10000) 
+  >>> f, r = maad.spl.detection_distance (L_bkg=50, L0=90, f=10000) 
   >>> print('Max active distance is %2.1fm' %r)
-  Max active distance is 32.0m
+  Max active distance is 31.0m
   
   Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
   with a background noise of 30dB SPL
     
-  >>> f, r = maad.spl.active_distance (L_bkg=30, L0=90, f=2000) 
+  >>> f, r = maad.spl.detection_distance (L_bkg=30, L0=90, f=2000) 
   >>> print('Max active distance is %2.1fm' %r)
-  Max active distance is 263.0m
+  Max active distance is 247.0m
   
   Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
   with a background noise of 30dB SPL, in tropical rain forest atmosphere 
   (t=30, rh=99)
     
-  >>> f, r = maad.spl.active_distance(L_bkg=30,L0=90,f=2000,t=30,rh=99) 
+  >>> f, r = maad.spl.detection_distance(L_bkg=30,L0=90,f=2000,t=30,rh=99) 
   >>> print('Max active distance is %2.1fm' %r)
-  Max active distance is 247.0m
+  Max active distance is 233.0m
   
   Estimation of the active distance for an initial sound of 90dB SPL @2kHz 
   with a background noise of 30dB SPL, in cold dry forest atmosphere 
   (t=5, rh=40)
     
-  >>> f, r = maad.spl.active_distance(L_bkg=30,L0=90,f=2000,t=5,rh=40) 
+  >>> f, r = maad.spl.detection_distance(L_bkg=30,L0=90,f=2000,t=5,rh=40) 
   >>> print('Max active distance is %2.1fm' %r)
-  Max active distance is 225.0m
+  Max active distance is 214.0m
   
   """
     
@@ -828,14 +828,14 @@ def pressure_at_r0 (f, r, p, r0=1, t=20, rh=60, pa=101325, a0=0.02) :
   >>> p0 = maad.spl.pressure_at_r0(100,60,p)
   >>> L0 = maad.spl.pressure2dBSPL(p0)
   >>> L0
-  85.68036510289447
+  85.60012778541267
   
   Estimation of L0, knowing L=50dB SPL @100m @10000Hz
   
   >>> p0 = maad.spl.pressure_at_r0(10000,100,p)
   >>> L0 = maad.spl.pressure2dBSPL(p0)
   >>> L0
-  120.53306313162624
+  107.06951324908744
   
   Estimation of L0, knowing L=50dB SPL @10m @100Hz
   
@@ -843,8 +843,7 @@ def pressure_at_r0 (f, r, p, r0=1, t=20, rh=60, pa=101325, a0=0.02) :
   >>> p0 = maad.spl.pressure_at_r0(100,10,p)
   >>> L0 = maad.spl.pressure2dBSPL(p0)
   >>> L0
-  70.01789933655922
-      
+  70.00565974575692
   """
   # if vectors, test if r and L have same length 
   if (hasattr(r, "__len__") and hasattr(p, "__len__")) :
