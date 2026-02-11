@@ -133,7 +133,7 @@ def _atmospheric_att_coef_dB (f, t=20, rh=60, pa=101325):
   psat = pr*10**(-6.8346 * (To1/t)**1.261 + 4.6151) #saturation vapor pressure equals
   h = rh * (psat / pa) # molar concentration of water vapor, as a percentage
   frO = (pa / pr) * (24 + 4.04e4 * h * ((0.02 + h) / (0.391 + h))) # oxygen relaxation frequency
-  frN = (pa / pr) * sqrt(t / To) * (9 + 280 * h * exp(-4.170*((t/To)**(-1/3) -1))) # nitrogen relaxation frequency
+  frN = (pa / pr) * (t / To)**(-1/2) * (9 + 280 * h * exp(-4.170*((t/To)**(-1/3) -1))) # nitrogen relaxation frequency
   
   z = 0.1068 * exp (-3352/t) / (frN+f**2 /frN)
   y = (t/To)**(-5/2) * (0.01275 * exp(-2239.1/t) * 1/(frO+f**2/frO) + z)
@@ -830,7 +830,7 @@ def pressure_at_r0 (f, r, p, r0=1, t=20, rh=60, pa=101325, a0=0.02) :
   >>> L0
   85.68036510289447
   
-  Estimation of L0, knowing L=50dB SPL @60m @10000Hz
+  Estimation of L0, knowing L=50dB SPL @100m @10000Hz
   
   >>> p0 = maad.spl.pressure_at_r0(10000,100,p)
   >>> L0 = maad.spl.pressure2dBSPL(p0)
