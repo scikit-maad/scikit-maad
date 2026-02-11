@@ -138,7 +138,7 @@ def _atmospheric_att_coef_dB (f, t=20, rh=60, pa=101325):
   z = 0.1068 * exp (-3352/t) / (frN+f**2 /frN)
   y = (t/To)**(-5/2) * (0.01275 * exp(-2239.1/t) * 1/(frO+f**2/frO) + z)
   Aatm_coef_dB = 8.686 * f**2 * ((1.84e-11 * 1/(pa/pr) * sqrt(t/To)) + y)
-  
+
   return Aatm_coef_dB 
 
 #%%
