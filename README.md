@@ -1,4 +1,7 @@
 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 # scikit-maad
 
 <div align="center">
@@ -112,3 +115,25 @@ In 2018, we began to translate a set of audio processing functions from Matlab t
 
 ## License
 To support reproducible research, the package is released under the [BSD open-source licence](https://raw.githubusercontent.com/scikit-maad/scikit-maad/production/LICENSE.md), which allows unrestricted redistribution for commercial and private use.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rpetrovska"><img src="https://avatars.githubusercontent.com/u/76253379?v=4?s=100" width="100px;" alt="rpetrovska"/><br /><sub><b>rpetrovska</b></sub></a><br /><a href="https://github.com/scikit-maad/scikit-maad/issues?q=author%3Arpetrovska" title="Bug reports">🐛</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
