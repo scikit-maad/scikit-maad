@@ -1035,7 +1035,7 @@ def plot2d(im, ax=None, colorbar=True, **kwargs):
                     'xlabel':'Time [s]',
                     'ylabel':'Frequency [Hz]',
                     }
-    >>> fig, ax = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)      
+    >>> ax, fig = maad.util.plot2d(Lxx,interpolation=None,**fig_kwargs)      
         
     """
 

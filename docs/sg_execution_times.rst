@@ -6,7 +6,8 @@
 
 Computation times
 =================
-**00:01.085** total execution time for 16 files **from all galleries**:
+**05:22.337** total execution time for 16 files **from all galleries**:
+
 
 .. container::
 
@@ -32,23 +33,50 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_graphical_soundscape.py` (``../example_gallery/2_advanced/plot_graphical_soundscape.py``)
-     - 00:01.085
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_woodpecker_drumming_characteristics.py` (``../example_gallery/2_advanced/plot_woodpecker_drumming_characteristics.py``)
+     - 01:51.417
      - 0.0
-   * - :ref:`sphx_glr__auto_examples_1_basic_plot_audio_representation.py` (``../example_gallery/1_basic/plot_audio_representation.py``)
-     - 00:00.000
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_xenocanto_woodpecker_activities.py` (``../example_gallery/2_advanced/plot_xenocanto_woodpecker_activities.py``)
+     - 01:20.727
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_extract_alpha_indices.py` (``../example_gallery/2_advanced/plot_extract_alpha_indices.py``)
+     - 00:34.812
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_compare_auto_and_manual_rois_selection.py` (``../example_gallery/2_advanced/plot_compare_auto_and_manual_rois_selection.py``)
+     - 00:26.626
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_unsupervised_sound_classification.py` (``../example_gallery/2_advanced/plot_unsupervised_sound_classification.py``)
+     - 00:25.007
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_nmf_and_false_color_spectrogram.py` (``../example_gallery/2_advanced/plot_nmf_and_false_color_spectrogram.py``)
+     - 00:14.526
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_remove_background.py` (``../example_gallery/2_advanced/plot_remove_background.py``)
+     - 00:10.572
      - 0.0
    * - :ref:`sphx_glr__auto_examples_1_basic_plot_circadian_spectrogram.py` (``../example_gallery/1_basic/plot_circadian_spectrogram.py``)
-     - 00:00.000
+     - 00:04.953
      - 0.0
-   * - :ref:`sphx_glr__auto_examples_1_basic_plot_detection_distance.py` (``../example_gallery/1_basic/plot_detection_distance.py``)
-     - 00:00.000
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_sound_pressure_level.py` (``../example_gallery/2_advanced/plot_sound_pressure_level.py``)
+     - 00:04.642
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_graphical_soundscape.py` (``../example_gallery/2_advanced/plot_graphical_soundscape.py``)
+     - 00:03.012
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_2_advanced_plot_sound_degradation_due_to_attenuation.py` (``../example_gallery/2_advanced/plot_sound_degradation_due_to_attenuation.py``)
+     - 00:02.125
      - 0.0
    * - :ref:`sphx_glr__auto_examples_1_basic_plot_find_rois_simple.py` (``../example_gallery/1_basic/plot_find_rois_simple.py``)
-     - 00:00.000
+     - 00:01.700
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_1_basic_plot_audio_representation.py` (``../example_gallery/1_basic/plot_audio_representation.py``)
+     - 00:01.008
      - 0.0
    * - :ref:`sphx_glr__auto_examples_1_basic_plot_template_matching_example.py` (``../example_gallery/1_basic/plot_template_matching_example.py``)
-     - 00:00.000
+     - 00:00.865
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_1_basic_plot_detection_distance.py` (``../example_gallery/1_basic/plot_detection_distance.py``)
+     - 00:00.345
      - 0.0
    * - :ref:`sphx_glr__auto_examples_2_advanced_extract_alpha_indices_multicpu.py` (``../example_gallery/2_advanced/extract_alpha_indices_multicpu.py``)
      - 00:00.000

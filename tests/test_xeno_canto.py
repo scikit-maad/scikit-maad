@@ -56,6 +56,7 @@ EXPECTED_FIELDS = [
 # %%
 
 # test if the fields in the metadata are still the same
+@pytest.mark.skipif(os.getenv("API_KEY") is None, reason="API key not set")
 def test_metadata_fields():
 
     output = util.xc_query(['gen:Picoides', 'ssp:tridactylus'])
@@ -86,6 +87,7 @@ def test_metadata_fields():
     ]
 )
 
+@pytest.mark.skipif(os.getenv("API_KEY") is None, reason="API key not set")
 def test_xc_query(searchTerms, expected):
 
     output = util.xc_query(searchTerms)
