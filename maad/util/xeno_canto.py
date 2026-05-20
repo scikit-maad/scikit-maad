@@ -23,7 +23,7 @@ import os
 
 # %%
 def xc_query(searchTerms,
-             key = None,
+             key,
              max_nb_files = None,
              format_time = False,
              format_date = False,
@@ -47,6 +47,8 @@ def xc_query(searchTerms,
         - len : length
         - area : continent (europe, africa, america, asia)
         see more here : https://www.xeno-canto.org/help/search
+    key : string
+        Xeno-Canto API key. A key is available to all registered XC members.
     max_nb_files: integer, optional
         Maximum number of audio files requested. The default is None
     format_time : boolean, optional
@@ -196,7 +198,7 @@ def xc_query(searchTerms,
 
 # %%
 def xc_multi_query(df_query,
-                   key          = None,
+                   key,
                    max_nb_files = None,
                    format_time  = False,
                    format_date  = False,
@@ -211,6 +213,17 @@ def xc_multi_query(df_query,
     df_query : pandas DataFrame
         Dataframe with search terms. Each row corresponds to a new query. 
         Columns corresponds to the search terms allowed by Xeno-Canto
+            - grp : birds
+            - gen : genus
+            - ssp : subspecies
+            - en  : english name
+            - q   : quality
+            - cnt : country 
+            - len : length
+            - area : continent (europe, africa, america, asia)
+            see more here : https://www.xeno-canto.org/help/search
+    key : string
+        Xeno-Canto API key. A key is available to all registered XC members.
     max_nb_files: integer, optional
         Maximum number of audio files requested. The default is None
     format_time : boolean, optional

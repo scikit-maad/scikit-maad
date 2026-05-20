@@ -40,6 +40,7 @@ Middle Spotted : Dendrocoptes medius
 
 # %%
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D 
 import numpy as np
@@ -50,6 +51,7 @@ import time
 import warnings
 # suppress all warnings
 warnings.filterwarnings("ignore")
+matplotlib.use('Agg')
 
 from scipy import signal
 import librosa
@@ -113,15 +115,18 @@ for name in df_species['scientific name']:
 # Please have a look here to know all the parameters and how to use them :
 # https://xeno-canto.org/help/search
 df_query = pd.DataFrame()
-df_query['param1'] = gen
-df_query['param2'] = sp
-df_query['param3'] ='type:drumming'
-df_query['param4'] ='area:europe'
-# df_query['param5 ='len:"5-120"'
-# df_query['param6'] ='q:">C"'
+df_query['param1'] = [f'gen:{g}' for g in gen]
+df_query['param2'] = [f'sp:{s}' for s in sp]
+df_query['param3'] = 'type:drumming'
+df_query['param4'] = 'area:europe'
+# df_query['param5'] = 'len:"5-120"'
+# df_query['param6'] = 'q:">C"'
+
+key = "YOUR XC API KEY HERE"  # A key is available to all registered XC members
 
 # Get recordings metadata corresponding to the query
 df_dataset= util.xc_multi_query(df_query, 
+                                key=key,
                                 format_time = False,
                                 format_date = False,
                                 verbose=True)
@@ -342,8 +347,7 @@ df_drums = df_drums.dropna()
 plt.style.use('ggplot')
 
 # create a figure
-fig = plt.figure(figsize= (7,3))
-ax = fig.add_subplot(111)
+fig, ax = plt.subplots(nrows=1, ncols=1,figsize= (7,3))
 n = 0
 # loop to build a boxplot for each species based on the feature "pulseRateMedian"
 for species in df_drums.species.unique():
@@ -380,9 +384,6 @@ X = scaler.fit_transform(X)
 
 # compute the dimensionality reduction
 tsne = TSNE(n_components=2, 
-            perplexity=30, 
-            init='pca', 
-            n_iter = 5000,
             n_jobs = -1,
             verbose=True)
 Y = tsne.fit_transform(X)
