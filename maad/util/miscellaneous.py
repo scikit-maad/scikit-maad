@@ -82,6 +82,9 @@ def index_bw(fn, bw):
         index = np.zeros(len(fn))
         index[(abs(fn-bw)).argmin()] = 1
         index = [bool(x) for x in index]
+    else:
+        index = (np.ones(len(fn)))
+        index = [bool(x) for x in index]
     return index
 
 # %%
