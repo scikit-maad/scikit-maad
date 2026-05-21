@@ -120,9 +120,9 @@ def spectral_snr (Sxx_power) :
     
     """
     # average Sxx_power along time axis
-    ENRf_per_bin = avg_power_spectro(Sxx_power)
+    ENRf_per_bin = power2dB(avg_power_spectro(Sxx_power))
     # compute total energy in dB
-    ENRf = power2dB(sum(ENRf_per_bin))
+    ENRf = power2dB(sum(avg_power_spectro(Sxx_power)))
     # Extract the noise profile (BGNf_per_bin) from the spectrogram Sxx_power
     _, noise_profile = remove_background_along_axis(Sxx_power, mode='median',axis=1) 
     # smooth the profile by removing spurious thin peaks (less than 5 pixels wide)
@@ -134,9 +134,9 @@ def spectral_snr (Sxx_power) :
     # compute signal to noise ratio
     SNRf = ENRf - BGNf 
     # compute SNR_per_bin
-    SNRf_per_bin = ENRf_per_bin - ENRf_per_bin
+    SNRf_per_bin = ENRf_per_bin - BGNf_per_bin
 
-    return ENRf, BGNf, SNRf, ENRf_per_bin, BGNf_per_bin,SNRf_per_bin 
+    return ENRf, BGNf, SNRf, ENRf_per_bin, BGNf_per_bin, SNRf_per_bin 
 
 #%%
 def sharpness (Sxx) :
@@ -168,4 +168,3 @@ def sharpness (Sxx) :
     S = np.sqrt(Gt**2+ Gf**2)
     sharpness=sum(sum(S))/(Gt.shape[0]*Gt.shape[1])
     return sharpness   
- 
