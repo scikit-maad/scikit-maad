@@ -11,7 +11,7 @@ Code name               Date       Time       Location                  Habitat
 spinetail               2018-09-19 11:00      Valle del Cauca, Colombia Scrub vegetation near cloud forest edge
 cold_forest_daylight    2019-04-12 11:00      Jura, France              Temperate cold mountain forest covered by spruce forest
 cold_forest_night       2019-08-25 04:00      Jura, France              Temperate cold mountain forest covered by spruce forest
-rock_savanna_night      2014-12-05 22:17      French Guiana             Tropical rock savanna on a granite hill
+rock_savanna            2014-12-05 22:17      French Guiana             Tropical rock savanna on a granite hill
 tropical_forest_morning 2019-06-29 6:15       French Guiana             Lowland tropical rainforest
 indices                 2019-05-22 24-h cycle Jura, France              Temperate cold mountain forest covered by spruce forest
 ======================= ========== ========== ========================= =======================================================

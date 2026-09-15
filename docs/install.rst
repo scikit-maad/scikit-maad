@@ -14,7 +14,7 @@ Installation instructions
 2. Development installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To install the latest deveopment version from source clone the master repository from `GitHub <https://github.com/scikit-maad/scikit-maad>`_ ::
+To install the latest development version from source clone the master repository from `GitHub <https://github.com/scikit-maad/scikit-maad>`_ ::
 
     git clone https://github.com/scikit-maad/scikit-maad.git
     cd scikit-maad  # enter the cloned directory
