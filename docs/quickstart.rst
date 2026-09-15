@@ -11,9 +11,9 @@ All functions are organized within five main modules.
 2. :any:`maad.rois` provides tools to find regions of interest in audio (**1D**) and spectrogram signals (**2D**).
 3. :any:`maad.features` include functions to compute robust descriptors to characterize audio signals.
 4. :any:`maad.spl` provides tools to describe the physics of acoustic waves.
-5. :any:`maad.util` has a handfull of useful set of tools used in the audio analysis framework.
+5. :any:`maad.util` has a handful of useful tools used in the audio analysis framework.
 
-To load submodules juste type::
+To load submodules just type::
 
     from maad import sound, rois
     
@@ -28,4 +28,4 @@ You can then apply any analysis to find regions of interest or characterize your
 .. image:: _images/sphx_glr_plot_find_rois_simple_002.png
    :align: center
 
-We provide a diversified audio dataset in our `repository <https://scikit-maad.github.io/scikit-maad/>`_ to test the package functions. For more information, visit the :ref:`modindex` and the :ref:`Example gallery`.
+We provide a diversified audio dataset in our `repository <https://github.com/scikit-maad/scikit-maad>`_ to test the package functions (see :ref:`audio-dataset`). For more information, visit the :ref:`modindex` and the :ref:`Example gallery`.

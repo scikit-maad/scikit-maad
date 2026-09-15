@@ -3,6 +3,7 @@ numpy>=1.21
 scipy>=1.8.0
 scikit-image>=0.23.1
 pandas>=1.5
+pywavelets>=1.4
 
 # -- plotting -- #
 matplotlib>=3.6

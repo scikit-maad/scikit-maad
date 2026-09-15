@@ -22,7 +22,7 @@ This workflow opens the possibility to scan large audio datasets and use powerfu
 [![DOI](https://zenodo.org/badge/148142520.svg)](https://zenodo.org/badge/latestdoi/148142520)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![Downloads](https://static.pepy.tech/badge/scikit-maad)](https://pepy.tech/project/scikit-maad)
-[![Citation Badge](https://api.juleskreuer.eu/citation-badge.php?doi=10.1111/2041-210X.13711)](https://juleskreuer.eu/projekte/citation-badge/)
+[![Citation Badge](https://api.juleskreuer.eu/citation-badge.php?doi=10.1111/2041-210X.13711)](https://juleskreuer.eu/projects/citation-badge)
 <!--[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)-->
 
 ## Operating Systems
@@ -42,6 +42,7 @@ The latest version of `scikit-maad` requires one of these interpreters:
 - matplotlib >=3.6
 - numpy >= 1.21
 - pandas >= 1.5
+- pywavelets >= 1.4
 - scikit-image >= 0.23.1
 - scipy >= 1.8
 
@@ -62,7 +63,7 @@ from maad import sound, rois
 s, fs = sound.load('spinetail.wav')
 rois.find_rois_cwt(s, fs, flims=(4500,8000), tlen=2, th=0, display=True)
 ```
-## For advance users
+## For advanced users
 ### Installing from source
 
 If you are interested in developing new features for `scikit-maad` or working with the latest version, clone and install it:
@@ -91,7 +92,7 @@ $ pytest
 ## Examples and documentation
 - See https://scikit-maad.github.io for a complete reference manual and example gallery.
 
-Runnin all examples requires to install the following packages :
+Running all examples requires to install the following packages :
 - `scikit-learn`, a popular Python package for machine learning: [link](https://scikit-learn.org/stable/install.html)
 - `librosa`, a popular package for audio and music analysis: [link](https://librosa.org/doc/latest/install.html)
 - `tqdm`, a package that provides a fast, extensible progress bar for loops and other iterable tasks: [link](https://pypi.org/project/tqdm/)
@@ -100,7 +101,7 @@ Runnin all examples requires to install the following packages :
 
 ## Citing this work
 
-If you find `scikit-maad` usefull for your research, please consider citing it as:
+If you find `scikit-maad` useful for your research, please consider citing it as:
 
 - Ulloa, J. S., Haupert, S., Latorre, J. F., Aubin, T., & Sueur, J. (2021). scikit‐maad: An open‐source and modular toolbox for quantitative soundscape analysis in Python. Methods in Ecology and Evolution, 2041-210X.13711. https://doi.org/10.1111/2041-210X.13711
 
@@ -114,7 +115,7 @@ To create a positive social atmosphere for our community, we ask contributors to
 In 2018, we began to translate a set of audio processing functions from Matlab to an open-source programming language, namely, Python. These functions provided the necessary tools to replicate the Multiresolution Analysis of Acoustic Diversity (MAAD), a method to estimate animal acoustic diversity using unsupervised learning (Ulloa et al., 2018). We soon realized that Python provided a suitable environment to extend these core functions and to develop a flexible toolbox for our research. During the past few years, we added over 50 acoustic indices, plus a module to estimate the sound pressure level of audio events. Furthermore, we updated, organized, and fully documented the code to make this development accessible to a much wider audience. This work was initiated by [Juan Sebastian Ulloa](https://www.researchgate.net/profile/Juan_Ulloa), supervised by Jérôme Sueur and Thierry Aubin at the [Muséum National d'Histoire Naturelle](http://isyeb.mnhn.fr/fr) and the [Université Paris Saclay](http://neuro-psi.cnrs.fr/) respectively. Python functions have been added by [Sylvain Haupert](https://www.researchgate.net/profile/Sylvain_Haupert), [Juan Felipe Latorre](https://www.researchgate.net/profile/Juan_Latorre_Gil) ([Universidad Nacional de Colombia](https://unal.edu.co/)) and Juan Sebastián Ulloa ([Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/)). For an updated list of collaborators, check the [contributors list](https://github.com/scikit-maad/scikit-maad/graphs/contributors).
 
 ## License
-To support reproducible research, the package is released under the [BSD open-source licence](https://raw.githubusercontent.com/scikit-maad/scikit-maad/production/LICENSE.md), which allows unrestricted redistribution for commercial and private use.
+To support reproducible research, the package is released under the [BSD open-source licence](https://raw.githubusercontent.com/scikit-maad/scikit-maad/production/LICENSE), which allows unrestricted redistribution for commercial and private use.
 
 ## Contributors ✨
 
